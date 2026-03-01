@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>API Docs | Jonathan Harris eBooks</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="index, follow" name="robots"/>
+<meta content="#0D1420" name="theme-color"/>
+
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<script defer="" src="/assets/js/site-ui.js"></script>
+<meta content="API documentation for the Jonathan Harris eBooks public catalogue endpoint." name="description"/><link href="https://jonathan-harris.online/api/docs/" rel="canonical"/><meta content="US" name="geo.region"/><meta content="website" property="og:type"/><meta content="Jonathan Harris eBooks" property="og:site_name"/><meta content="API Docs | Jonathan Harris eBooks" property="og:title"/><meta content="API documentation for the Jonathan Harris eBooks public catalogue endpoint." property="og:description"/><meta content="https://jonathan-harris.online/api/docs/" property="og:url"/><link href="https://jonathan-harris.online/api/docs/" hreflang="en-us" rel="alternate"/><link href="https://jonathan-harris.online/en-gb/api/docs/" hreflang="en-gb" rel="alternate"/><link href="https://jonathan-harris.online/en-ca/api/docs/" hreflang="en-ca" rel="alternate"/><link href="https://jonathan-harris.online/en-au/api/docs/" hreflang="en-au" rel="alternate"/><link href="https://jonathan-harris.online/api/docs/" hreflang="x-default" rel="alternate"/><script id="person-schema" type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://jonathan-harris.online/#person",
+  "name": "Jonathan Harris",
+  "jobTitle": "AI Technology Author",
+  "url": "https://jonathan-harris.online",
+  "knowsAbout": [
+    "Artificial Intelligence",
+    "Machine Learning",
+    "Practical AI Applications",
+    "Technology Strategy"
+  ],
+  "description": "Technology author specialising in practical artificial intelligence applications across industries."
+}</script><meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="API Docs | Jonathan Harris eBooks" name="twitter:title"/><meta content="API documentation for the Jonathan Harris eBooks public catalogue endpoint." name="twitter:description"/><meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/></head><body>
+<div aria-hidden="true" class="page-loader" id="pageLoader">
+<div aria-hidden="true" class="spinner"></div>
+</div>
+<header aria-label="Ebooks catalogue header" class="hero" role="banner">
+<div class="wrap">
+<img alt="Jonathan Harris site logo" class="logo-plain" src="https://images.jonathan-harris.online/site-logo"/>
+<h1>AI, Without the Hype</h1>
+<p>
+        Cut through the noise. These ebooks break down artificial intelligence with clear thinking,
+        real-world context, and zero buzzwords.
+      </p>
+<p>
+        Whether you’re starting out or already deep in the weeds, you’ll find practical guides,
+        sharp analysis, and grounded takes on ethics, safety, and where AI is actually heading.
+      </p>
+<p>
+        Explore the library. Build real understanding. Stay ahead of the curve.
+      </p>
+</div>
+</header>
+<main class="wrap">
+<h1>Public API</h1>
+<p>This site exposes a simple, read-only JSON catalogue so tools (including AI assistants) can discover the full list of titles.</p>
+<h2>Endpoints</h2>
+<ul>
+<li><code>/api/v1/books.json</code> — full catalogue (array of 36 books)</li>
+</ul>
+<h2>Fields</h2>
+<ul>
+<li><code>id</code>, <code>title</code>, <code>slug</code>, <code>short</code>, <code>cover</code>, <code>tags</code>, <code>filter</code>, <code>keywords</code>, <code>buy_url</code></li>
+</ul>
+<p>Example (truncated):</p>
+<pre><code>[
+  {
+    "id": 1,
+    "title": "…",
+    "slug": "…",
+    "tags": ["…"]
+  }
+]</code></pre>
+</main>
+<div id="siteFooter"></div>
+</body></html>
