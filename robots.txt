@@ -1,0 +1,8 @@
+# This file is redirected in production via _redirects.
+# Canonical robots.txt:
+# https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt
+
+User-agent: *
+Disallow:
+
+Sitemap: https://assets.jonathan-harris.online/site-map.xml

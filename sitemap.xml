@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This file is redirected in production via _redirects.
+  Canonical sitemap:
+  https://assets.jonathan-harris.online/site-map.xml
+-->
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://assets.jonathan-harris.online/site-map.xml</loc>
+  </sitemap>
+</sitemapindex>

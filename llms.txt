@@ -1,0 +1,3 @@
+# This file is redirected in production via _redirects.
+# Canonical llms.txt:
+# https://pub-5b0d7477c1184fc2a6e497642d7fe520.r2.dev/llms.txt
