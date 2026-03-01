@@ -1,0 +1,85 @@
+# ============================================================
+# books.jonathan-harris.online — Domain-level _redirects
+# Deploy this file to the OLD books.jonathan-harris.online Netlify site
+# All traffic redirects permanently to jonathan-harris.online
+# ============================================================
+
+# Root → ebooks listing
+/    https://jonathan-harris.online/ebooks/  301
+
+# Slug-based redirects → new branded ebook pages
+/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology   https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/  301
+/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/  https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/  301
+/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation   https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/  301
+/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/  301
+/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation   https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/  301
+/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/  https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/  301
+/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability   https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/  301
+/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/  301
+/artificial-intelligence-and-the-law-case-studies-and-future-trends   https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/  301
+/artificial-intelligence-and-the-law-case-studies-and-future-trends/  https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/  301
+/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention   https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/  301
+/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/  https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/  301
+/the-artificial-intelligence-revolution-from-algorithms-to-consciousness   https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/  301
+/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/  https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/  301
+/ai-in-aviation-transforming-safety-and-sustainability   https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/  301
+/ai-in-aviation-transforming-safety-and-sustainability/  https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/  301
+/ai-in-maritime-revolutionizing-shipping-for-sustainability   https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/  301
+/ai-in-maritime-revolutionizing-shipping-for-sustainability/  https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/  301
+/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
+/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
+/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry   https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/  301
+/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/  https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/  301
+/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future   https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/  301
+/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/  https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/  301
+/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery   https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/  301
+/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/  https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/  301
+/artificial-intelligence-in-industry-a-comprehensive-guide   https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/  301
+/artificial-intelligence-in-industry-a-comprehensive-guide/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/  301
+/the-dumbening-how-ai-is-reshaping-our-minds   https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/  301
+/the-dumbening-how-ai-is-reshaping-our-minds/  https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/  301
+/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future   https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/  301
+/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/  https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/  301
+/ai-in-education-reimagining-learning-for-every-student   https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/  301
+/ai-in-education-reimagining-learning-for-every-student/  https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/  301
+/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security   https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/  301
+/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/  301
+/digital-diagnosis-how-ai-is-revolutionizing-healthcare   https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/  301
+/digital-diagnosis-how-ai-is-revolutionizing-healthcare/  https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/  301
+/artificial-intelligence-in-construction-building-a-sustainable-future   https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/  301
+/artificial-intelligence-in-construction-building-a-sustainable-future/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/  301
+/the-artificial-intelligence-job-shift-navigating-the-future-of-work   https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/  301
+/the-artificial-intelligence-job-shift-navigating-the-future-of-work/  https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/  301
+/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information   https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/  301
+/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/  https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/  301
+/smart-buildings-ai-powered-efficiency-and-sustainability   https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/  301
+/smart-buildings-ai-powered-efficiency-and-sustainability/  https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/  301
+/digital-defense-the-role-of-ai-in-modern-warfare   https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/  301
+/digital-defense-the-role-of-ai-in-modern-warfare/  https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/  301
+/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology   https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/  301
+/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/  https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/  301
+/climate-intelligence-harnessing-ai-for-a-greener-future   https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/  301
+/climate-intelligence-harnessing-ai-for-a-greener-future/  https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/  301
+/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future   https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/  301
+/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/  https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/  301
+/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
+/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k/  https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
+/lights-camera-algorithm-ais-role-in-modern-filmmaking   https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
+/lights-camera-algorithm-ais-role-in-modern-filmmaking/  https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
+/the-ai-music-revolution-creativity-controversy-and-collaboration   https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/  301
+/the-ai-music-revolution-creativity-controversy-and-collaboration/  https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/  301
+/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/  301
+/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead/  https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/  301
+/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming   https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/  301
+/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/  https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/  301
+/beyond-earth-how-ai-is-transforming-space-exploration   https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/  301
+/beyond-earth-how-ai-is-transforming-space-exploration/  https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/  301
+/from-reporters-to-robots-how-ai-is-reshaping-journalism   https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/  301
+/from-reporters-to-robots-how-ai-is-reshaping-journalism/  https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/  301
+/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media   https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/  301
+/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/  https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/  301
+/game-ai-unleashed-from-finite-state-machines-to-machine-learning   https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/  301
+/game-ai-unleashed-from-finite-state-machines-to-machine-learning/  https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/  301
+
+# Catch-all: any unmatched path → ebooks listing
+/*   https://jonathan-harris.online/ebooks/  301
