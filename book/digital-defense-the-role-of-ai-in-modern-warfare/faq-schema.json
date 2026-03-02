@@ -1,0 +1,38 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is this book suitable for non-technical readers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It’s written to be readable without a technical background, focusing on clear explanations and practical context."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What will I learn from this book?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You’ll learn the key ideas, real-world use cases, and trade-offs involved in AI for creativity."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long is it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "296."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I buy it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the buy link on the page to purchase the eBook via Amazon."
+      }
+    }
+  ]
+}
