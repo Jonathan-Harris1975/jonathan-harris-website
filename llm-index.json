@@ -1,0 +1,567 @@
+{
+  "generated_utc": "2026-03-02T01:25:17.945829Z",
+  "books": [
+    {
+      "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
+      "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "url": "/book/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
+      "summary": "Artificial intelligence enhances formula 1 with real-time strategy optimization, predictive analytics, and improved safety, changing racing performance and team efficiency. Pages: 227.",
+      "topic": "Transportation",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Transportation",
+        "AI in Sports"
+      ],
+      "keywords": "[Transportation, Ai In Sports, Ai And Formula 1: Redefining Speed And Strategy With Intelligent Technology, Ai Trends, Transportation, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/Gi93rOF",
+      "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
+      "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
+      "url": "/book/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
+      "summary": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments, improving animal welfare and clinical outcomes. Pages: 235.",
+      "topic": "Healthcare",
+      "tags": [
+        "Healthcare",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Healthcare, Creativity, Ai Trends, Artificial Intelligence In Veterinary Medicine: Transforming Animal Healthcare Through Innovation, Artificial Intelligence, Healthcare]",
+      "buy_url": "https://mybook.to/SOjUE",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp"
+    },
+    {
+      "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
+      "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
+      "url": "/book/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
+      "summary": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity distribution and generation. Pages: 338.",
+      "topic": "Creativity",
+      "tags": [
+        "Energy",
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, Creativity, Ai Trends, Energy, Ai-Powered Smart Grid: Revolutionizing Electricity Distribution And Generation, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/sntL",
+      "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability",
+      "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "url": "/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
+      "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs and environmental impact for sustainable operations. Pages: 339.",
+      "topic": "Transportation",
+      "tags": [
+        "Energy",
+        "Transportation",
+        "Artificial Intelligence"
+      ],
+      "keywords": "[Creativity, Artificial Intelligence, Creativity, Artificial Intelligence In Logistics: Optimizing Efficiency And Sustainability, Energy, Transportation]",
+      "buy_url": "https://mybook.to/zSKnSW",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp"
+    },
+    {
+      "title": "Artificial Intelligence and the Law: Case Studies and Future Trends",
+      "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "url": "/book/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
+      "summary": "Explores ai's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial processes. Pages: 224.",
+      "topic": "Law",
+      "tags": [
+        "Law",
+        "General AI",
+        "Artificial Intelligence"
+      ],
+      "keywords": "[General Ai, Law, Artificial Intelligence And The Law: Case Studies And Future Trends, Creativity, Law, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/bWpjeB",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp"
+    },
+    {
+      "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
+      "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "url": "/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
+      "summary": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection strategies. Pages: 269.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Automation"
+      ],
+      "keywords": "[Creativity, Creativity, Ai Trends, Artificial Intelligence For Cyber Security: A Practical Guide To Data Breach Prevention, Artificial Intelligence, Automation]",
+      "buy_url": "https://mybook.to/9Wvf",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp"
+    },
+    {
+      "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
+      "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
+      "url": "/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
+      "summary": "Chronicles ai's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. Pages: 14.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI & Creativity"
+      ],
+      "keywords": "[Creativity, Ai & Creativity, Creativity, Ai Trends, The Artificial Intelligence Revolution: From Algorithms To Consciousness, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/YYLW",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp"
+    },
+    {
+      "title": "AI in Aviation: Transforming Safety and Sustainability",
+      "slug": "ai-in-aviation-transforming-safety-and-sustainability",
+      "url": "/book/ai-in-aviation-transforming-safety-and-sustainability/",
+      "summary": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight planning, promoting sustainability. Pages: 284.",
+      "topic": "Ethics",
+      "tags": [
+        "Energy",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, Ai Trends, Energy, Ai In Aviation: Transforming Safety And Sustainability, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/13VF",
+      "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp"
+    },
+    {
+      "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
+      "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "url": "/book/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
+      "summary": "Artificial intelligence revolutionizes maritime shipping with autonomous vessels, route optimization, and emissions tracking, fostering sustainable global trade. Pages: 312.",
+      "topic": "Transportation",
+      "tags": [
+        "Energy",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, Ai Trends, Ai In Maritime: Revolutionizing Shipping For Sustainability, Energy, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/yANzV8",
+      "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Pharmaceuticals:Revolutionizing Healthcare",
+      "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
+      "url": "/book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
+      "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments, changing pharmaceutical innovation and healthcare delivery. Pages: 328.",
+      "topic": "Healthcare",
+      "tags": [
+        "Healthcare",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Artificial Intelligence In Pharmaceuticals:Revolutionizing Healthcare, Healthcare, Creativity, Ai Trends, Artificial Intelligence, Healthcare]",
+      "buy_url": "https://mybook.to/3cA8",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp"
+    },
+    {
+      "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
+      "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
+      "url": "/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
+      "summary": "Artificial intelligence drives the automotive industry with self-driving cars, predictive maintenance, and smart manufacturing, reshaping mobility and safety. Pages: 324.",
+      "topic": "Transportation",
+      "tags": [
+        "Transportation",
+        "General AI",
+        "Artificial Intelligence"
+      ],
+      "keywords": "[Creativity, Artificial Intelligence, General Ai, The Autonomous Revolution: Artificial Intelligence And The Future Of The Automotive Industry, Creativity, Transportation]",
+      "buy_url": "https://mybook.to/DS4Ag",
+      "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp"
+    },
+    {
+      "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
+      "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "url": "/book/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
+      "summary": "Artificial intelligence enhances retail with personalized shopping, inventory optimization, and sustainable supply chains, improving customer experience and eco-efficiency. Pages: 234.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Retail",
+        "General AI",
+        "Artificial Intelligence"
+      ],
+      "keywords": "[Retail, Creativity, General Ai, Creativity, Artificial Intelligence Powered Retail: Revolutionizing Customer Experience For A Sustainable Future, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/POYR",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp"
+    },
+    {
+      "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
+      "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "url": "/book/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
+      "summary": "Artificial intelligence modernizes manufacturing with predictive maintenance, automated production, and optimized supply chains, boosting efficiency and innovation. Pages: 369.",
+      "topic": "Transportation",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Transportation"
+      ],
+      "keywords": "[Creativity, Artificial Intelligence Revolution In Manufacturing: Modernizing Operations, Maintenance, And Service Delivery, Creativity, Ai Trends, Transportation, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/SOAEb",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
+      "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
+      "url": "/book/artificial-intelligence-in-industry-a-comprehensive-guide/",
+      "summary": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations for industrial transformation. Pages: 347.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Automation"
+      ],
+      "keywords": "[Creativity, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence In Industry: A Comprehensive Guide, Automation]",
+      "buy_url": "https://mybook.to/t2Au28",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp"
+    },
+    {
+      "title": "The Dumbening: How AI is Reshaping Our Minds",
+      "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
+      "url": "/book/the-dumbening-how-ai-is-reshaping-our-minds/",
+      "summary": "Examines ai's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.",
+      "topic": "Artificial Intelligence",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Automation",
+        "Robotics"
+      ],
+      "keywords": "[Robotics, Ai Trends, Artificial Intelligence, Artificial Intelligence, The Dumbening: How Ai Is Reshaping Our Minds, Automation]",
+      "buy_url": "https://mybook.to/YcRiCRp",
+      "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp"
+    },
+    {
+      "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+      "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "url": "/book/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+      "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. Pages: 333.",
+      "topic": "Creativity",
+      "tags": [
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Creativity"
+      ],
+      "keywords": "[General Ai, Creativity, Ai Trends, Ai In Agriculture: Revolutionizing Farming For A Sustainable Future, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/PsciMD5",
+      "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp"
+    },
+    {
+      "title": "AI in Education: Reimagining Learning for Every Student",
+      "slug": "ai-in-education-reimagining-learning-for-every-student",
+      "url": "/book/ai-in-education-reimagining-learning-for-every-student/",
+      "summary": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible and tailored for all. Pages: 323.",
+      "topic": "Education",
+      "tags": [
+        "Education",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Education, Creativity, Ai Trends, Ai In Education: Reimagining Learning For Every Student, Artificial Intelligence, Education]",
+      "buy_url": "https://mybook.to/Ldhe41",
+      "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+      "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+      "url": "/book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+      "summary": "Artificial intelligence revolutionizes banking with fraud detection, personalized services, and secure data management, enhancing financial efficiency and trust. Pages: 286.",
+      "topic": "Creativity",
+      "tags": [
+        "Finance",
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, Artificial Intelligence In Banking: Revolutionizing Finance And Data Security, Finance, Creativity, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/8VjT",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp"
+    },
+    {
+      "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
+      "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
+      "url": "/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
+      "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes and efficiency. Pages: 348.",
+      "topic": "Healthcare",
+      "tags": [
+        "Healthcare",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Digital Diagnosis: How Ai Is Revolutionizing Healthcare, Healthcare, Creativity, Ai Trends, Artificial Intelligence, Healthcare]",
+      "buy_url": "https://mybook.to/hrnKOD",
+      "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
+      "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "url": "/book/artificial-intelligence-in-construction-building-a-sustainable-future/",
+      "summary": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs and environmental impact. Pages: 319.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, General Ai, Creativity, Ai Trends, Artificial Intelligence In Construction: Building A Sustainable Future, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/v98RD",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp"
+    },
+    {
+      "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
+      "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "url": "/book/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+      "summary": "Explores ai's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. Pages: 315.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, General Ai, Creativity, The Artificial Intelligence Job Shift: Navigating The Future Of Work, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/unBJY7",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp"
+    },
+    {
+      "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+      "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
+      "url": "/book/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+      "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity, improving public trust and safety. Pages: 328.",
+      "topic": "Creativity",
+      "tags": [
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Creativity"
+      ],
+      "keywords": "[General Ai, Creativity, The Future Of Government: Leveraging Ai To Enhance Services And Safeguard Information, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/3TwcUA",
+      "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp"
+    },
+    {
+      "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
+      "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
+      "url": "/book/smart-buildings-ai-powered-efficiency-and-sustainability/",
+      "summary": "Artificial intelligence optimizes smart buildings with energy management, predictive maintenance, and occupant comfort, promoting sustainability and efficiency. Pages: 345.",
+      "topic": "Creativity",
+      "tags": [
+        "Energy",
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, Smart Buildings: Ai-Powered Efficiency And Sustainability, Creativity, Ai Trends, Energy, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/QEcdy",
+      "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp"
+    },
+    {
+      "title": "Digital Defense: The Role of AI in Modern Warfare",
+      "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
+      "url": "/book/digital-defense-the-role-of-ai-in-modern-warfare/",
+      "summary": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy and ethics. Pages: 296.",
+      "topic": "Creativity",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Creativity",
+        "AI & Creativity"
+      ],
+      "keywords": "[Ai & Creativity, Digital Defense: The Role Of Ai In Modern Warfare, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/8jAITc",
+      "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp"
+    },
+    {
+      "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
+      "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
+      "url": "/book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
+      "summary": "Artificial intelligence aids wildlife conservation with species monitoring, poaching prevention, and habitat analysis, protecting biodiversity through technology. Pages: 221.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI & Creativity"
+      ],
+      "keywords": "[Creativity, Ai & Creativity, Artificial Intelligence For Wildlife Conservation: Revolutionizing Biodiversity Protection Through Technology, Creativity, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/8jAITc",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp"
+    },
+    {
+      "title": "Climate Intelligence: Harnessing AI for a Greener Future",
+      "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
+      "url": "/book/climate-intelligence-harnessing-ai-for-a-greener-future/",
+      "summary": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modeling for sustainability. Pages: 338.",
+      "topic": "Artificial Intelligence",
+      "tags": [
+        "Energy",
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[General Ai, Climate Intelligence: Harnessing Ai For A Greener Future, Ai Trends, Energy, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/aKj8Fh",
+      "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp"
+    },
+    {
+      "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
+      "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "url": "/book/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
+      "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety and efficiency. Pages: 254.",
+      "topic": "Transportation",
+      "tags": [
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Creativity, General Ai, Creativity, Ai Trends, Ai Revolution In Railways: Modernizing Travel For A Smarter Future, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/JkJfDp",
+      "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp"
+    },
+    {
+      "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
+      "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
+      "url": "/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
+      "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences, changing athletics and engagement. Pages: 229.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI & Creativity"
+      ],
+      "keywords": "[Creativity, Ai & Creativity, Artificial Intelligence In Sports: Revolutionizing Performance And Fan Engagement K, Creativity, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/73M1",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp"
+    },
+    {
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
+      "slug": "lights-camera-algorithm-ais-role-in-modern-filmmaking",
+      "url": "/book/lights-camera-algorithm-ais-role-in-modern-filmmaking/",
+      "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity. Pages: 336.",
+      "topic": "Creativity",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Creativity",
+        "AI & Creativity"
+      ],
+      "keywords": "[Ai & Creativity, Lights, Camera, Algorithm: Aiâ_x0080__x0099_S Role In Modern Filmmaking, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/EcO2DI",
+      "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp"
+    },
+    {
+      "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
+      "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
+      "url": "/book/the-ai-music-revolution-creativity-controversy-and-collaboration/",
+      "summary": "Explores ai's role in music creation, from composition to production, addressing creativity, ethics, and artist-artificial intelligence collaboration. Pages: 320.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI & Creativity"
+      ],
+      "keywords": "[The Ai Music Revolution: Creativity, Controversy, And Collaboration, Creativity, Ai & Creativity, Creativity, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/Io32sC3",
+      "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp"
+    },
+    {
+      "title": "The Architects of AI_ Pioneers_ Breakthroughs_ and the Road Ahead",
+      "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
+      "url": "/book/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+      "summary": "Chronicles ai's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. Pages: 315.",
+      "topic": "Artificial Intelligence",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[Artificial Intelligence, The Architects Of Ai_ Pioneers_ Breakthroughs_ And The Road Ahead, Ai Trends, None, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/qFAI",
+      "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp"
+    },
+    {
+      "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+      "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+      "url": "/book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+      "summary": "Examines ai's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. Pages: 327.",
+      "topic": "Law",
+      "tags": [
+        "Law",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI Governance"
+      ],
+      "keywords": "[The House Always Knows: Ai, Gambling, And The Ethics Of Personalized Gaming, Law, Ethics, Ai Governance, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/K7nVJGv",
+      "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp"
+    },
+    {
+      "title": "Beyond Earth How AI is Transforming Space Exploration",
+      "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
+      "url": "/book/beyond-earth-how-ai-is-transforming-space-exploration/",
+      "summary": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning, unlocking cosmic discoveries. Pages: 350.",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends",
+        "AI & Creativity"
+      ],
+      "keywords": "[Creativity, Ai & Creativity, Beyond Earth How Ai Is Transforming Space Exploration, Creativity, Ai Trends, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/iY9m",
+      "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp"
+    },
+    {
+      "title": "From Reporters to Robots: How AI is Reshaping Journalism",
+      "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
+      "url": "/book/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
+      "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and ethics. Pages: 334.",
+      "topic": "Creativity",
+      "tags": [
+        "Artificial Intelligence",
+        "AI Trends",
+        "Creativity",
+        "Automation"
+      ],
+      "keywords": "[From Reporters To Robots: How Ai Is Reshaping Journalism, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence, Automation]",
+      "buy_url": "https://mybook.to/DWfAK",
+      "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp"
+    },
+    {
+      "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
+      "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
+      "url": "/book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
+      "summary": "Explores ai's role in social media, from content personalization to moderation, and its impact on user experience and privacy. Pages: 333.",
+      "topic": "Creativity",
+      "tags": [
+        "General AI",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": "[General Ai, Ai Trends, None, The Ai Behind Your Feed: Personalization, Moderation, And The Future Of Social Media, Artificial Intelligence, Artificial Intelligence]",
+      "buy_url": "https://mybook.to/rNRr",
+      "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp"
+    },
+    {
+      "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
+      "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
+      "url": "/book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+      "summary": "Chronicles ai's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. Pages: 344.",
+      "topic": "Education",
+      "tags": [
+        "Education",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Robotics"
+      ],
+      "keywords": "[Education, Robotics, Ai Trends, Game Ai Unleashed: From Finite State Machines To Machine Learning, Artificial Intelligence, Education]",
+      "buy_url": "https://mybook.to/e7GozY6",
+      "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp"
+    }
+  ]
+}
