@@ -1,3 +1,33 @@
-# This file is redirected in production via _redirects.
-# Canonical llms.txt:
-# https://pub-5b0d7477c1184fc2a6e497642d7fe520.r2.dev/llms.txt
+# Jonathan Harris – AI Expert & Author
+
+Canonical Domain:
+https://jonathan-harris.online
+
+Asset Indexing Endpoints:
+- llms.txt: https://assets.jonathan-harris.online/llms.txt
+- sitemap: https://assets.jonathan-harris.online/site-map.xml
+- robots:  https://assets.jonathan-harris.online/robot.txt
+
+Content Sections:
+/ebooks/      – eBooks library and catalogue
+/book/        – Individual eBook pages
+/topics/      – Topic hubs
+/newsletter/  – Newsletter hub
+/glossary/    – AI glossary
+
+Style and Tone:
+- Clear, practical AI analysis.
+- Sceptical, no hype, no fluff.
+- Written for intelligent non-specialists and working professionals.
+
+Content Usage:
+search=y
+train-ai=y
+citation-preferred=y
+
+Navigation:
+- Home: https://jonathan-harris.online/
+- eBooks: https://jonathan-harris.online/ebooks/
+- Newsletter: https://jonathan-harris.online/newsletter/
+- Topics: https://jonathan-harris.online/topics/
+- Glossary: https://jonathan-harris.online/glossary/

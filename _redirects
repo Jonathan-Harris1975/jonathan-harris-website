@@ -11,10 +11,12 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 
 # ── 2. Crawler / asset files ─────────────────────────────────
-/robots.txt    https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt  301
+/robots.txt    https://assets.jonathan-harris.online/robot.txt  301
 /sitemap.xml   https://assets.jonathan-harris.online/site-map.xml                             301
 /Sitemap.xml   https://assets.jonathan-harris.online/site-map.xml                             301
-/llms.txt      https://pub-5b0d7477c1184fc2a6e497642d7fe520.r2.dev/llms.txt                   301
+/site-map.xml  https://assets.jonathan-harris.online/site-map.xml  301
+/robot.txt     https://assets.jonathan-harris.online/robot.txt  301
+/llms.txt      https://assets.jonathan-harris.online/llms.txt   301
 
 
 # ── 3. Locale pass-through (serve same content for locale prefixes) ──
