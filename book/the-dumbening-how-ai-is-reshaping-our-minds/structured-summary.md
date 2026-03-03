@@ -14,9 +14,9 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in artificial intelligence — the practical use cases that matter.
+- How AI shows up in cognitive science, society, and AI's effects on thinking — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Artificial Intelligence, AI Trends, Automation, Robotics.
+- Key themes, including: Society, Cognitive Science, AI Ethics, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
@@ -25,7 +25,7 @@ Because AI decisions in artificial intelligence have real consequences: cost, sa
 
 ## Topics and tags
 
-- Topic: Artificial Intelligence
+- Topic: Society
 - Tags: Artificial Intelligence, AI Trends, Automation, Robotics
 - Length: 277 pages
 
