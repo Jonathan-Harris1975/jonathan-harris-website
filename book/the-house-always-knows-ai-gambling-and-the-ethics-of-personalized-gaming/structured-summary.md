@@ -14,14 +14,14 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in law — the practical use cases that matter.
+- How AI shows up in gambling regulation and AI ethics — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Law, Artificial Intelligence, AI Trends, AI Governance.
+- Key themes, including: Law, AI Ethics, AI Governance, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in law have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in personalised gambling have real consequences: addiction risk, regulatory fairness, the ethics of behavioural targeting, and what responsible gambling actually means in an AI-driven world.
 
 ## Topics and tags
 
