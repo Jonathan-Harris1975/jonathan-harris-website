@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in the trajectory and implications of artificial intelligence — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Artificial Intelligence, AI Trends, AI & Creativity.
+- Key themes, including: General AI, AI Ethics, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+Understanding where AI is heading — from narrow tools to increasingly general systems — has real consequences for policy, governance, civil liberties, and humanity's long-term future.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: General AI
 - Tags: Creativity, Artificial Intelligence, AI Trends, AI & Creativity
 - Length: 14 pages
 
