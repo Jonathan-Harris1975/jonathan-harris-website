@@ -14,14 +14,14 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in healthcare — the practical use cases that matter.
+- How AI shows up in healthcare and medical diagnostics — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Healthcare, Artificial Intelligence, AI Trends.
+- Key themes, including: Healthcare, Medical Diagnostics, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in healthcare have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in healthcare have real consequences: diagnostic accuracy, patient safety, treatment access, speed of care, and the overall cost and equity of health systems.
 
 ## Topics and tags
 
