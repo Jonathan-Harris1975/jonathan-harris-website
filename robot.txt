@@ -17,4 +17,9 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
+# Explicitly allow blog and ebooks sections
+Allow: /blog/
+Allow: /ebooks/
+Allow: /newsletter/
+
 Sitemap: https://assets.jonathan-harris.online/site-map.xml

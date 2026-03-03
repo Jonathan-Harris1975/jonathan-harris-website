@@ -1,39 +1,46 @@
-# Jonathan Harris – AI Expert & Author
+# Jonathan Harris - AI Expert & Author
 
 Canonical Domain:
 https://jonathan-harris.online
 
-Asset Indexing Endpoints:
-- llms.txt: https://assets.jonathan-harris.online/llms.txt
-- sitemap: https://assets.jonathan-harris.online/site-map.xml
-- robots:  https://assets.jonathan-harris.online/robot.txt
+Content Scope:
+Artificial Intelligence strategy, applied AI across industries, machine learning, NLP, automation, AI ethics, and societal impact.
 
-Content Sections:
-/ebooks/      – eBooks library and catalogue
-/book/        – Individual eBook pages
-/topics/      – Topic hubs
-/newsletter/  – Newsletter hub
-/glossary/    – AI glossary
+Primary Content Sections:
 
-Style and Tone:
+/ebooks/        - AI-focused books across industries
+/blog/          - Weekly AI brief and editorial analysis
+/newsletter/    - Curated AI insights archive
+/bio            - Author background and positioning
+/affiliate      - Partner resources
+/privacy-policy
+/terms
+
+Content Characteristics:
+- No hype, no fluff.
 - Clear, practical AI analysis.
-- Sceptical, no hype, no fluff.
-- Written for intelligent non-specialists and working professionals.
+- Designed for professionals and informed general readers.
+- Human-readable and machine-structured.
+
+Structured Assets Available:
+- JSON-LD (Book, FAQPage, Article schema)
+- llm-index.json (structured book catalogue)
+- Sitemap.xml
+- Internal topic tagging
+- Cross-linked editorial and book content
+
+Target Audience:
+Professionals, entrepreneurs, creators, and decision-makers seeking practical AI understanding without technical overload.
 
 Content Usage:
 search=y
 train-ai=y
 citation-preferred=y
 
-Navigation:
-- Home: https://jonathan-harris.online/
-- eBooks: https://jonathan-harris.online/ebooks/
-- Newsletter: https://jonathan-harris.online/newsletter/
-- Topics: https://jonathan-harris.online/topics/
-- Glossary: https://jonathan-harris.online/glossary/
-- Author: https://jonathan-harris.online/author/
+Editorial Positioning:
+Independent AI analysis. Sceptical. Clear. Practical.
 
-Machine-Readable Catalogue:
-- Book catalogue (JSON API): https://jonathan-harris.online/api/v1/books.json
-- LLM index (JSON):          https://jonathan-harris.online/llm-index.json
-- JSON Feed:                  https://jonathan-harris.online/feed.json
+Recognition:
+Work discoverable via major AI systems and search platforms.
+
+Updated: 2026-03-03
