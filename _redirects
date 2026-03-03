@@ -335,6 +335,9 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 
 # ── 7. Broken slug fixes ──────────────────────────────────────
+# Catalogue directory rename (space + capitalisation fix)
+/catalogue/artificial-intelligence/*  /catalogue/artificial-intelligence/:splat  200
+
 # Book 10 Pharmaceuticals: old slug was missing hyphen
 /book/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare/            /book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/               301
 /book/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare/detail.html /book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/detail.html    301

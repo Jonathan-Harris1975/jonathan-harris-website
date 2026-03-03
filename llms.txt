@@ -31,3 +31,9 @@ Navigation:
 - Newsletter: https://jonathan-harris.online/newsletter/
 - Topics: https://jonathan-harris.online/topics/
 - Glossary: https://jonathan-harris.online/glossary/
+- Author: https://jonathan-harris.online/author/
+
+Machine-Readable Catalogue:
+- Book catalogue (JSON API): https://jonathan-harris.online/api/v1/books.json
+- LLM index (JSON):          https://jonathan-harris.online/llm-index.json
+- JSON Feed:                  https://jonathan-harris.online/feed.json
