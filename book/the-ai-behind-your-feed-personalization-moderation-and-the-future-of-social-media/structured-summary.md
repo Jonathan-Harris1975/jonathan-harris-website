@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in social media and online platforms — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: General AI, Artificial Intelligence, AI Trends.
+- Key themes, including: Social Media, Digital Platforms, AI Governance, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions on social platforms have real consequences: what information reaches people, mental health impacts, radicalisation risk, political discourse, and democratic integrity.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Social Media
 - Tags: General AI, Artificial Intelligence, AI Trends
 - Length: 333 pages
 
