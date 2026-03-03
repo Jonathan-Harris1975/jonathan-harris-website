@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in transportation — the practical use cases that matter.
+- How AI shows up in manufacturing and industrial operations — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Artificial Intelligence, AI Trends, Transportation.
+- Key themes, including: Manufacturing, Industry, Automation, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in transportation have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in manufacturing have real consequences: product quality, worker safety, downtime costs, environmental compliance, and the pace of industrial modernisation.
 
 ## Topics and tags
 
-- Topic: Transportation
+- Topic: Manufacturing
 - Tags: Artificial Intelligence, AI Trends, Transportation
 - Length: 369 pages
 
