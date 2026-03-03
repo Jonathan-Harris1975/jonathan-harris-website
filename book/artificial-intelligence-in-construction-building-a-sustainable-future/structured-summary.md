@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in construction and built environment — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, General AI, Artificial Intelligence, AI Trends.
+- Key themes, including: Construction, Sustainability, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in construction have real consequences: structural safety, project timelines, budget overruns, worker safety, and the environmental footprint of buildings.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Construction
 - Tags: Creativity, General AI, Artificial Intelligence, AI Trends
 - Length: 319 pages
 
