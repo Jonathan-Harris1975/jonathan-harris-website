@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in sports and athletics — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Artificial Intelligence, AI Trends, AI & Creativity.
+- Key themes, including: Sports, Athletics, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in sports have real consequences: competitive fairness, athlete welfare and injury prevention, fan experience, broadcast quality, and commercial value.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Sports
 - Tags: Creativity, Artificial Intelligence, AI Trends, AI & Creativity
 - Length: 229 pages
 
