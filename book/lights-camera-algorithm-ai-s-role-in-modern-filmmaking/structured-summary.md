@@ -14,14 +14,14 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in filmmaking and creative production — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Artificial Intelligence, AI Trends, Creativity, AI & Creativity.
+- Key themes, including: Creativity, Filmmaking, Arts, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in filmmaking have real consequences: intellectual property rights, the livelihoods of creative professionals, audience authenticity expectations, and the future of storytelling.
 
 ## Topics and tags
 
