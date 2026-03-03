@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in space exploration and aerospace — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Artificial Intelligence, AI Trends, AI & Creativity.
+- Key themes, including: Space, Aerospace, Science, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in space exploration have real consequences: mission safety, scientific discovery, cost and feasibility of deep-space programmes, and long-term human progress beyond Earth.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Space
 - Tags: Creativity, Artificial Intelligence, AI Trends, AI & Creativity
 - Length: 350 pages
 
