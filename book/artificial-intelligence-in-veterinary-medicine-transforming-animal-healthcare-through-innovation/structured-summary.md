@@ -14,14 +14,14 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in healthcare — the practical use cases that matter.
+- How AI shows up in veterinary medicine and animal healthcare — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Healthcare, Artificial Intelligence, AI Trends.
+- Key themes, including: Healthcare, Veterinary Medicine, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in healthcare have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in veterinary medicine have real consequences: diagnostic accuracy, treatment outcomes for animals, cost to pet owners, and the broader efficiency of animal healthcare systems.
 
 ## Topics and tags
 
