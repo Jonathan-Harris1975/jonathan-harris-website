@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in journalism and media — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Artificial Intelligence, AI Trends, Creativity, Automation.
+- Key themes, including: Media, Journalism, Automation, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in journalism have real consequences: public trust in news, information quality, the spread of misinformation, editorial independence, and democratic discourse.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Media
 - Tags: Artificial Intelligence, AI Trends, Creativity, Automation
 - Length: 334 pages
 
