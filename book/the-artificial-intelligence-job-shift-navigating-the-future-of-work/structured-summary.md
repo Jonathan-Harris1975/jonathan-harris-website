@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in the future of work and employment — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, General AI, Artificial Intelligence, AI Trends.
+- Key themes, including: Workforce, Economics, Automation, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions about automation and hiring have real consequences: employment levels, skills gaps, income distribution, social stability, and the kind of economy future generations inherit.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Workforce
 - Tags: Creativity, General AI, Artificial Intelligence, AI Trends
 - Length: 315 pages
 
