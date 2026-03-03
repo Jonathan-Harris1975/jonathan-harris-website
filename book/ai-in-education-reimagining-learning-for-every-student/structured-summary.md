@@ -21,7 +21,7 @@ Readers who want practical, plain-English AI insight with real-world examples â€
 
 ## Why it matters
 
-Because AI decisions in education have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in education have real consequences: learning outcomes, equity of access, student wellbeing, and how future workforces are prepared.
 
 ## Topics and tags
 
