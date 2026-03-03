@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in retail and e-commerce — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Retail, General AI, Artificial Intelligence.
+- Key themes, including: Retail, Commerce, Sustainability, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in retail have real consequences: customer privacy, pricing fairness, inventory waste, supply chain efficiency, and long-term brand trust.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Retail
 - Tags: Creativity, Retail, General AI, Artificial Intelligence
 - Length: 234 pages
 
