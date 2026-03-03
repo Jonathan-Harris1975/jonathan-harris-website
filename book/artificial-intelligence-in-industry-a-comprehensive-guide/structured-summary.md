@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in creativity — the practical use cases that matter.
+- How AI shows up in industry and manufacturing — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Artificial Intelligence, AI Trends, Automation.
+- Key themes, including: Industry, Automation, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in creativity have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in industry have real consequences: operational efficiency, workforce safety, supply chain resilience, product quality, and competitive advantage.
 
 ## Topics and tags
 
-- Topic: Creativity
+- Topic: Industry
 - Tags: Creativity, Artificial Intelligence, AI Trends, Automation
 - Length: 347 pages
 
