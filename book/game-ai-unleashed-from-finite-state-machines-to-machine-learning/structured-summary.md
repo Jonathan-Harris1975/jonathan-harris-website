@@ -14,18 +14,18 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in education — the practical use cases that matter.
+- How AI shows up in game development and interactive entertainment — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Education, Artificial Intelligence, AI Trends, Robotics.
+- Key themes, including: Gaming, Interactive Entertainment, Artificial Intelligence, AI Trends.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-Because AI decisions in education have real consequences: cost, safety, trust, and competitive edge.
+AI decisions in game development have real consequences: player experience and immersion, competitive fairness, monetisation ethics, and the direction of creative storytelling in games.
 
 ## Topics and tags
 
-- Topic: Education
+- Topic: Gaming
 - Tags: Education, Artificial Intelligence, AI Trends, Robotics
 - Length: 344 pages
 
