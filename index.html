@@ -168,94 +168,7 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
 </script>
 
 <!-- Styles -->
-<style>
-body {
-margin: 0;
-font-family: Arial, Helvetica, sans-serif;
-line-height: 1.6;
-color: #374151;
-text-align: center;
-}
-section {
-padding: 32px 16px;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-}
-h1, h2 {
-font-family: Arial, Helvetica, sans-serif;
-color: #4F46E5;
-}
-a.button {
-display: inline-block;
-background: #4F46E5;
-color: #FFFFFF;
-padding: 14px 28px;
-font-size: 1rem;
-border-radius: 14px;
-text-decoration: none;
-box-shadow: 0 0 10px rgba(99,102,241,0.45);
-margin: 0 auto;
-font-weight: 700;
-}
-a.button:hover {
-background:#4338CA;
-}
-img {
-max-width: 100%;
-height: auto;
-display: block;
-margin: 0 auto;
-}
-
-/* Testimonials */
-.testimonials-container {
-max-width: 800px;
-margin: 0 auto;
-display: flex;
-flex-direction: column;
-gap: 20px;
-align-items: center;
-}
-.testimonial {
-background: #FFFFFF;
-padding: 20px;
-border-radius: 14px;
-box-shadow: 0 10px 26px rgba(0,0,0,0.10);
-width: 100%;
-max-width: 700px;
-text-align: center;
-}
-
-
-/* Responsive */
-@media (max-width: 600px) {
-h1 { font-size: 2rem; }
-p { font-size: 1rem; }
-img { max-width: 120px; }
-a.button { padding: 10px 20px; font-size: 0.9rem; }
-}
-
-/* About-style layout */
-.main{
-background:#F5F7FA;
-padding:54px 16px 64px;
-width:100%;
-}
-.card{
-background:#FFFFFF;
-max-width:900px;
-margin:0 auto 18px;
-padding:30px 18px;
-border-radius:18px;
-box-shadow:0 14px 40px rgba(0,0,0,0.12);
-border:1px solid rgba(0,0,0,0.06);
-text-align:center;
-}
-.card p{margin:0 auto 12px; max-width:720px;}
-.small-note{font-size:0.95rem; color:#374151;}
-</style>
+<link rel="stylesheet" href="/assets/css/site.css"/>
 
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="theme-color" content="#0D1420">
@@ -339,18 +252,31 @@ text-align:center;
 
 
   <!-- FEATURED EBOOKS -->
-  <section class="card" role="region" aria-label="Featured Ebooks">
-    <h2>Featured Ebooks</h2>
-    <p>
-      Each ebook is written for busy, non-technical readers who want practical AI knowledge — not textbooks.
-      Topics covered include generative AI for beginners, AI ethics in everyday decisions, machine learning
-      explained in plain English, and how large language models actually work.
+  <section class="card" role="region" aria-label="Featured Ebook">
+    <h2>Featured Ebook</h2>
+    <p class="small-note" style="max-width:720px;margin:0 auto 14px;">
+      Rotates weekly. Same library. New angle. No hype.
     </p>
-    <p class="small-note" style="max-width:720px;margin:0 auto 12px;">
-      Whether you're a business leader navigating AI strategy, a professional curious about AI productivity tools,
-      or simply AI-curious — there's a practical AI guide written for you.
-    </p>
-    <a href="https://jonathan-harris.online/ebooks/" class="button">Browse All AI Ebooks</a>
+
+    <div id="featuredEbook" class="featured-ebook">
+      <a id="featuredEbookLink" href="/ebooks/" aria-label="Featured ebook overview">
+        <img id="featuredEbookCover" src="https://images.jonathan-harris.online/site-logo" alt="Featured ebook cover" loading="lazy">
+      </a>
+
+      <div style="text-align:left;">
+        <h3 id="featuredEbookTitle">Loading…</h3>
+        <p id="featuredEbookDesc" class="small-note"></p>
+        <div class="cta-row">
+          <a id="featuredEbookPage" class="button secondary" href="/ebooks/">Read overview</a>
+          <a id="featuredEbookBuy" class="button" href="/ebooks/" target="_blank" rel="noopener noreferrer">View on Amazon</a>
+        </div>
+        <div id="featuredEbookMeta" class="micro-meta" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <a href="https://jonathan-harris.online/ebooks/" class="button secondary">Browse all AI eBooks</a>
+    </div>
   </section>
 
   <!-- PODCAST -->
@@ -411,60 +337,8 @@ text-align:center;
 <!-- /Chatbot -->
 
 
-<!-- Animated Footer with Hover Effects -->
-<footer style="background-color:#0D1420; color:#D1D5DB; font-family:Arial, Helvetica, sans-serif; font-size:14px; padding:20px 15px;" role="contentinfo" aria-label="Website Footer">
-
-  <div style="max-width:1200px; margin:0 auto;">
-    <div style="display:flex; flex-direction:column; gap:30px; align-items:center; text-align:center;">
-
-      <!-- Navigation Links -->
-      <nav aria-label="Footer navigation">
-        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 40px;">
-          <li><a href="https://jonathan-harris.online/" style="color:#93C5FD; text-decoration:none;">Home</a></li>
-          <li><a href="https://jonathan-harris.online/bio" style="color:#93C5FD; text-decoration:none;">More About Me</a></li>
-          <li><a href="https://jonathan-harris.online/terms-of-use" style="color:#93C5FD; text-decoration:none;">Terms of Use</a></li>
-          <li><a href="https://jonathan-harris.online/privacy-policy" style="color:#93C5FD; text-decoration:none;">Privacy Policy</a></li>
-          <li><a href="https://jonathan-harris.online/affiliate" style="color:#93C5FD; text-decoration:none;">Affiliate Partners</a></li>
-          <li><a href="https://jonathan-harris.online/contact" style="color:#93C5FD; text-decoration:none;">Contact Me</a></li>
-        </ul>
-      </nav>
-
-      <!-- Social Media Links -->
-      <nav aria-label="Social media links">
-        <ul style="list-style:none; padding:0; margin:0; display:flex; justify-content:center; gap:25px;">
-          <li>
-            <a href="https://youtube.com/@jonathanharris-r7i" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/youtube-logo" alt="YouTube" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/spotify-logo" alt="Spotify Podcast" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.tiktok.com/@jonathan_harris_01" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/tiktok-icon" alt="TikTok" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.facebook.com/share/1G7v4P69xa" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/facebook-icon" alt="Facebook" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/jonathan.harris1975" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/insta-logo" alt="Instagram" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <div style="font-size:12px;">© 2026 Jonathan Harris. All rights reserved.</div>
-
-    </div>
-  </div>
-</footer>
-
+<div id="siteFooter"></div>
+<script defer src="/assets/js/site-ui.js"></script>
+<script defer src="/assets/js/featured-book.js"></script>
 </body>
 </html>
