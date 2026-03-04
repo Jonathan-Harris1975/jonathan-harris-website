@@ -551,8 +551,7 @@ details.facts li{margin:6px 0; color:var(--text)}
 
 /* JH Header */
 .jh-header{
-  position:sticky;
-  top:0;
+  position:relative;
   z-index:2500;
   background:rgba(13,20,32,0.92);
   backdrop-filter:saturate(1.2) blur(10px);
@@ -561,82 +560,38 @@ details.facts li{margin:6px 0; color:var(--text)}
 .jh-header__inner{
   max-width:1200px;
   margin:0 auto;
-  padding:12px 15px;
+  padding:10px 15px;
   display:flex;
   align-items:center;
-  gap:14px;
+  justify-content:center;
 }
-.jh-logo img{ display:block; height:auto; }
-.jh-nav{
-  margin-left:auto;
+.jh-topnav{
   display:flex;
+  flex-wrap:wrap;
   align-items:center;
-  gap:14px;
+  justify-content:center;
+  gap:16px;
 }
-.jh-nav a{
+.jh-topnav a{
   color:#E5E7EB;
   text-decoration:none;
   font-weight:600;
   font-size:14px;
-  padding:8px 10px;
-  border-radius:12px;
+  line-height:1.1;
+  padding:6px 0;
+  border-bottom:1px solid transparent;
 }
-.jh-nav a:hover, .jh-nav a:focus{
-  background:rgba(255,255,255,0.08);
+.jh-topnav a:hover,
+.jh-topnav a:focus{
+  border-bottom-color:rgba(199,210,254,0.75);
   outline:none;
 }
-.jh-nav__toggle{
-  margin-left:auto;
-  display:none;
-  width:44px;
-  height:44px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,0.14);
-  background:rgba(255,255,255,0.06);
-  color:#E5E7EB;
+@media (max-width: 520px){
+  .jh-header__inner{ padding:10px 12px; }
+  .jh-topnav{ gap:12px; }
+  .jh-topnav a{ font-size:13px; }
 }
-.jh-nav__toggle-bars{
-  display:block;
-  width:18px;
-  height:2px;
-  background:#E5E7EB;
-  margin:0 auto;
-  position:relative;
-}
-.jh-nav__toggle-bars:before,
-.jh-nav__toggle-bars:after{
-  content:"";
-  position:absolute;
-  left:0;
-  width:18px;
-  height:2px;
-  background:#E5E7EB;
-}
-.jh-nav__toggle-bars:before{ top:-6px; }
-.jh-nav__toggle-bars:after{ top:6px; }
 
-/* Mobile nav */
-@media (max-width: 860px){
-  .jh-nav__toggle{ display:inline-flex; align-items:center; justify-content:center; }
-  .jh-nav{
-    position:fixed;
-    top:64px;
-    right:12px;
-    left:12px;
-    background:#0D1420;
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:18px;
-    padding:10px;
-    display:none;
-    flex-direction:column;
-    align-items:stretch;
-    gap:4px;
-    box-shadow:0 18px 50px rgba(0,0,0,0.45);
-  }
-  .jh-nav.is-open{ display:flex; }
-  .jh-nav a{ padding:12px 12px; font-size:15px; }
-  html.jh-nav-open{ overflow:hidden; }
-}
 
 /* Catalogue topic chip on cards */
 .card .topic-chip{
