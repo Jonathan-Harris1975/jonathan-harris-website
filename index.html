@@ -188,7 +188,13 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
   </p>
   <p style="color:#D1D5DB;font-size:1.02rem;max-width:720px;margin:8px auto 0;">
     I write ebooks, publish a daily newsletter, and host <strong>Turing’s Torch AI Weekly</strong> — so you can understand AI, use it properly, and ignore the nonsense.
-  </p>
+  
+  <div class="home-hero-actions" role="group" aria-label="Primary actions">
+    <a class="btn btn-primary" href="/newsletter/">Join the AI Edge newsletter</a>
+    <a class="btn btn-ghost" href="/ebooks/">Browse eBooks</a>
+    <a class="btn btn-ghost" href="/podcast/">Listen to the podcast</a>
+  </div>
+</p>
 </section>
 
 <!-- MAIN -->
@@ -244,19 +250,27 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
     </p>
   </section>
 
-  <!-- NEWSLETTER -->
-  <section class="card" role="region" aria-label="Daily Newsletter">
-    <h2>Daily Newsletter</h2>
-    <p>
-      Short, useful AI updates — what changed, what matters, and what you can safely ignore.
-      Built for busy people with limited patience.
+  <!-- NEWSLETTER (CONVERSION) -->
+  <section class="card card--cta" role="region" aria-label="AI Edge Newsletter">
+    <h2>AI Edge Newsletter</h2>
+    <p class="section-lead" style="margin-top:6px;">
+      Daily AI updates for busy people with limited patience. What changed, why it matters, and what to ignore.
     </p>
 
-    <a href="https://jonathan-harris.online/newsletter" title="Subscribe to the Daily Newsletter">
-      <img src="https://images.jonathan-harris.online/hp-newsletter" alt="Daily AI Newsletter by Jonathan Harris" style="max-width:160px;border-radius:12px;box-shadow:0 6px 14px rgba(0,0,0,0.2);margin:0 auto 16px;" loading="lazy">
-    </a>
+    <ul class="bullets" aria-label="Newsletter benefits">
+      <li><strong>Fast:</strong> read it in 2 minutes.</li>
+      <li><strong>Grounded:</strong> real-world impact, not stage demos.</li>
+      <li><strong>Useful:</strong> links, takeaways, and practical context.</li>
+    </ul>
 
-    <a href="https://jonathan-harris.online/newsletter" class="button">Subscribe to the Daily Newsletter</a>
+    <div class="actions" style="justify-content:center;margin-top:14px;">
+      <a class="btn btn-primary" href="/newsletter/">Subscribe to AI Edge</a>
+      <a class="btn btn-ghost" href="/blog/">Read the latest posts</a>
+    </div>
+
+    <p class="micro-meta" style="margin-top:12px;">
+      No spam. No hype. Just signal. Unsubscribe whenever you like.
+    </p>
   </section>
 
   <!-- EBOOKS -->
@@ -305,6 +319,41 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
     </div>
   </section>
 
+
+  <!-- LATEST EPISODE -->
+  <section class="card" role="region" aria-label="Latest podcast episode">
+    <h2>Latest podcast episode</h2>
+    <p class="section-lead" style="margin-top:6px;">
+      The weekly reality-check — now with a handy “press play” option. Brave.
+    </p>
+
+    <div id="latestEpisode" class="latest-episode" aria-live="polite">
+      <div class="latest-episode__meta">
+        <div class="tag" id="latestEpisodeDate" style="display:inline-flex;margin-bottom:10px;">Updating…</div>
+        <h3 id="latestEpisodeTitle" style="margin:0 0 8px;">Loading…</h3>
+        <p id="latestEpisodeDesc" class="small-note" style="margin:0 0 12px;"></p>
+
+        <audio id="latestEpisodeAudio" controls preload="none" style="width:100%; display:none;"></audio>
+
+        <div class="actions" style="margin-top:12px;">
+          <a class="btn btn-primary" href="/podcast/">See all episodes</a>
+          <a class="btn btn-ghost" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener">Open on Spotify</a>
+          <a class="btn btn-ghost" href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" target="_blank" rel="noopener">RSS</a>
+        </div>
+      </div>
+
+      <div class="latest-episode__embed" aria-label="Spotify player">
+        <iframe
+          title="Turing’s Torch on Spotify"
+          style="border-radius:14px; width:100%; min-height:352px; border:0; box-shadow:0 10px 24px rgba(0,0,0,0.12);"
+          src="https://open.spotify.com/embed/show/4NluRPjuAIGK59vVf7GcoF?utm_source=generator"
+          loading="lazy"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- PODCAST -->
   <section class="card" role="region" aria-label="Podcast">
     <h2>Turing’s Torch AI Weekly</h2>
@@ -318,6 +367,44 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
     <p style="max-width:720px;color:#374151;font-size:0.95rem;margin:14px auto 0;">
       Also available on Apple Podcasts, Amazon Music, and other major platforms.
     </p>
+  </section>
+
+
+  <!-- LATEST INSIGHTS -->
+  <section class="card" role="region" aria-label="Latest AI insights">
+    <h2>Latest AI insights</h2>
+    <p class="section-lead" style="margin-top:6px;">
+      Quick reads with a sceptical eye. If you’re looking for “AI will solve everything”, you’ve taken a wrong turn.
+    </p>
+
+    <div class="trio" role="list" aria-label="Insight entry points" style="margin-top:14px;">
+      <div class="card card--mini" role="listitem">
+        <h3 style="margin-top:0;">New posts</h3>
+        <p class="small-note">Fresh analysis as the blog publishes. Short, sharp, and usable.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/blog/">Read the blog</a>
+          <a class="btn btn-ghost" href="/newsletter/">Get AI Edge</a>
+        </div>
+      </div>
+
+      <div class="card card--mini" role="listitem">
+        <h3 style="margin-top:0;">Browse by topic</h3>
+        <p class="small-note">Healthcare, finance, education, and the bits in between.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/topics/">Explore topics</a>
+          <a class="btn btn-ghost" href="/ebooks/">Find a book</a>
+        </div>
+      </div>
+
+      <div class="card card--mini" role="listitem">
+        <h3 style="margin-top:0;">AI glossary</h3>
+        <p class="small-note">Definitions in plain English. No secret handshake required.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/glossary/">Open glossary</a>
+          <a class="btn btn-ghost" href="/compare/">Compare tools</a>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- TESTIMONIALS -->
@@ -366,5 +453,6 @@ beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
 <div id="siteFooter"></div>
 <script defer src="/assets/js/site-ui.js"></script>
 <script defer src="/assets/js/featured-book.js"></script>
+<script defer src="/assets/js/home.js"></script>
 </body>
 </html>
