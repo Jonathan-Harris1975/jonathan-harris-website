@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>{{TITLE}} | Jonathan Harris</title>
+<meta name="description" content="{{DESCRIPTION}}"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="{{CANONICAL}}"/>
+<meta name="theme-color" content="#0D1420"/>
+<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" href="/assets/css/site.css"/>
+
+<meta name="ai-role" content="AI blog post"/>
+<meta name="ai-target-audience" content="Curious professionals and non-technical readers who want practical AI insight"/>
+<meta name="ai-style" content="Plain-English, sceptical, no-hype"/>
+<meta name="content-usage" content="search=y, train-ai=y, citation-preferred=y"/>
+
+<meta property="og:title" content="{{TITLE}} | Jonathan Harris"/>
+<meta property="og:description" content="{{DESCRIPTION}}"/>
+<meta property="og:type" content="article"/>
+<meta property="og:url" content="{{CANONICAL}}"/>
+<meta property="og:image" content="{{IMAGE}}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BlogPosting",
+  "headline":"{{TITLE}}",
+  "description":"{{DESCRIPTION}}",
+  "image":"{{IMAGE}}",
+  "datePublished":"{{PUBLISHED}}",
+  "dateModified":"{{MODIFIED}}",
+  "author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"},
+  "publisher":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"},
+  "mainEntityOfPage":{"@type":"WebPage","@id":"{{CANONICAL}}"}
+}
+</script>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="hero" role="banner">
+  <div class="wrap">
+    <p class="tag" style="display:inline-flex;">{{PUBLISHED_HUMAN}}</p>
+    <h1 style="margin-top:10px;">{{TITLE}}</h1>
+    <p class="muted">{{DESCRIPTION}}</p>
+    <div class="cta-row">
+      <a class="button secondary" href="/blog/">Back to blog</a>
+      <a class="button primary" href="/newsletter/">Subscribe</a>
+    </div>
+  </div>
+</header>
+
+<main id="main" class="wrap" role="main">
+  <article class="card" style="padding:18px;">
+    {{CONTENT}}
+  </article>
+
+  <section class="card" style="padding:18px; margin-top:18px;">
+    <h2 style="margin-top:0;">Want the deeper version?</h2>
+    <p>There’s usually an eBook that goes further than a blog post can without turning into a novel. Browse by topic and pick your poison.</p>
+    <a class="button secondary" href="/topics/">Browse by topic</a>
+  </section>
+</main>
+
+<div id="siteFooter"></div>
+<script src="/assets/js/site-ui.js"></script>
+</body>
+</html>
