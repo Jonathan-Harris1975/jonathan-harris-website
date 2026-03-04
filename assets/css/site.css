@@ -557,6 +557,27 @@ details.facts li{margin:6px 0; color:var(--text)}
   backdrop-filter:saturate(1.2) blur(10px);
   border-bottom:1px solid rgba(255,255,255,0.10);
 }
+.jh-header.jh-header--overlay{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-18px;
+  z-index:2600;
+  background:transparent;
+  backdrop-filter:none;
+  border-bottom:0;
+}
+.jh-header.jh-header--overlay .jh-header__inner{
+  padding:0 12px;
+}
+.jh-header.jh-header--overlay .jh-topnav{
+  background:rgba(13,20,32,0.92);
+  backdrop-filter:saturate(1.2) blur(10px);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:16px;
+  box-shadow:0 10px 28px rgba(0,0,0,0.35);
+  padding:10px 14px;
+}
 .jh-header__inner{
   max-width:1200px;
   margin:0 auto;
