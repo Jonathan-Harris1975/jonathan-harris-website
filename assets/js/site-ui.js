@@ -30,8 +30,11 @@
           
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:10px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header{position:relative;z-index:2500;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);}
+          .jh-header{position:relative;z-index:2500;}
           .jh-header__inner{max-width:1200px;margin:0 auto;padding:10px 15px;display:flex;align-items:center;justify-content:center;}
+          .jh-header.jh-header--overlay{position:absolute;left:0;right:0;bottom:-18px;z-index:2600;}
+          .jh-header.jh-header--overlay .jh-header__inner{padding:0 12px;}
+          .jh-header.jh-header--overlay .jh-topnav{background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border:1px solid rgba(255,255,255,0.12);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,0.35);padding:10px 14px;}
           .jh-topnav{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;}
           .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;line-height:1.1;padding:6px 0;border-bottom:1px solid transparent;}
           .jh-topnav a:hover,.jh-topnav a:focus{border-bottom-color:rgba(199,210,254,0.75);outline:none;}
@@ -67,6 +70,32 @@
       const headerEl = wrap.firstElementChild;
       if (!headerEl) return;
 
+      // Prefer mounting navigation at the bottom of the page "hero" so it feels
+      // like part of the header section rather than a separate strip.
+      const heroMount = document.querySelector(
+        'section[role="region"][aria-label="Page Header"], header.hero, header[role="banner"]'
+      );
+
+      if (heroMount && !heroMount.querySelector('header.jh-header')){
+        // Make the hero a positioning context for the floating nav.
+        try{
+          const cs = window.getComputedStyle(heroMount);
+          if (!cs || cs.position === 'static') heroMount.style.position = 'relative';
+
+          // Ensure there's breathing room for the floating nav to sit at the bottom.
+          const pb = cs && cs.paddingBottom ? parseFloat(cs.paddingBottom) : 0;
+          if (!Number.isNaN(pb) && pb < 40) heroMount.style.paddingBottom = '54px';
+        }catch(_){
+          heroMount.style.position = 'relative';
+          heroMount.style.paddingBottom = '54px';
+        }
+
+        headerEl.classList.add('jh-header--overlay');
+        heroMount.appendChild(headerEl);
+        return;
+      }
+
+      // Fallback: insert near the top of the body.
       // Ensure skip-link stays first if present
       const first = document.body.firstElementChild;
       if (first && first.classList && first.classList.contains("skip-link")){
