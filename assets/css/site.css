@@ -364,3 +364,161 @@ main section > h2{ margin-bottom: .6rem; }
   font-size: .95rem;
   line-height: 1;
 }
+
+
+
+/* ===== Books: cleaner, calmer layout ===== */
+.book-hero{padding:56px 18px 34px}
+.logo-small{width:72px;height:72px;margin:0 0 18px;border-radius:14px}
+.book-hero-grid{
+  display:grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap:22px;
+  align-items:center;
+}
+.book-hero-logo{grid-column:1 / -1; justify-self:center; text-decoration:none}
+.book-hero-media{display:flex; justify-content:center}
+.book-cover-hero{
+  width:min(360px, 86vw);
+  aspect-ratio:2/3;
+  object-fit:contain;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(0,0,0,0.18);
+}
+.book-hero-copy{ text-align:left; }
+.book-hero-copy h1{margin:0 0 12px; font-size:2.05rem}
+.book-lede{margin:12px 0 0; color:var(--text-light); max-width:720px}
+.micro-meta{margin-top:12px; color:rgba(209,213,219,.9); font-size:.95rem}
+.cta-row{margin-top:14px; display:flex; flex-wrap:wrap; gap:10px}
+
+.book-main{padding-top:34px}
+.panel{
+  background:#fff;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px 18px;
+  margin:16px 0;
+  text-align:left;
+}
+.panel h2{margin:0 0 10px; color:#111827; letter-spacing:-.2px}
+.panel .subhead{margin-top:18px}
+.subhook{color:var(--text); margin:0 0 10px}
+
+.learn-grid{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:14px;
+  margin-top:10px;
+}
+.learn-card{
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
+  padding:14px 14px;
+  background:#F9FAFB;
+}
+.learn-card h3{margin:0 0 6px; font-size:1.02rem; color:#111827}
+.learn-card p{margin:0; color:var(--text)}
+.tag-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+
+details.facts{
+  margin-top:12px;
+  border-top:1px solid var(--border);
+  padding-top:12px;
+}
+details.facts summary{
+  cursor:pointer;
+  font-weight:800;
+  color:var(--accent);
+  list-style:none;
+}
+details.facts summary::-webkit-details-marker{display:none}
+details.facts summary:before{content:"▶"; margin-right:8px}
+details.facts[open] summary:before{content:"▼"}
+details.facts ul{margin:12px 0 0; padding-left:18px}
+details.facts li{margin:6px 0; color:var(--text)}
+
+.bullet-list{margin:10px 0 0; padding-left:18px}
+.bullet-list li{margin:8px 0; color:var(--text)}
+.faq-list details{border-top:1px solid var(--border); padding:12px 0}
+.faq-list details:first-child{border-top:0}
+.faq-list summary{cursor:pointer; font-weight:800; color:#111827}
+
+.rel-grid{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0, 1fr));
+  gap:12px;
+}
+.rel-card{
+  display:block;
+  border:1px solid rgba(0,0,0,0.06);
+  border-radius:16px;
+  padding:12px;
+  background:#fff;
+  text-decoration:none;
+}
+.rel-card:hover{box-shadow:0 12px 28px rgba(0,0,0,0.10); text-decoration:none}
+.rel-cover{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:contain;
+  border-radius:12px;
+  background:var(--bg-dark);
+  border:1px solid rgba(0,0,0,0.06);
+}
+.rel-title{margin-top:10px; font-weight:800; color:#111827; font-size:.95rem; line-height:1.25}
+
+@media (max-width: 980px){
+  .book-hero-grid{grid-template-columns:1fr; text-align:center}
+  .book-hero-copy{text-align:center}
+  .learn-grid{grid-template-columns:1fr}
+  .rel-grid{grid-template-columns:repeat(2, minmax(0, 1fr))}
+}
+@media (max-width: 620px){
+  .book-hero-copy h1{font-size:1.75rem}
+  .rel-grid{grid-template-columns:1fr}
+}
+
+/* ===== Home: featured ebook ===== */
+.featured-ebook{
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  gap:18px;
+  align-items:center;
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+}
+.featured-ebook img{
+  width:100%;
+  aspect-ratio:2/3;
+  object-fit:contain;
+  border-radius:16px;
+  border:1px solid rgba(0,0,0,0.06);
+  background:var(--bg-dark);
+}
+.featured-ebook h3{margin:0 0 8px; color:#111827}
+.featured-ebook p{margin:0 0 10px}
+@media (max-width: 700px){
+  .featured-ebook{grid-template-columns:1fr; text-align:center}
+}
+
+/* Testimonials (moved from inline home styles) */
+.testimonials-container{
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+.testimonial{
+  background: #FFFFFF;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
