@@ -1,41 +1,42 @@
 # ============================================================
-# jonathan-harris.online — Production Redirects (Cloudflare Pages)
+# jonathan-harris.online — Redirects (Cloudflare Pages)
+# Production clean + slug-compatible
 # ============================================================
 
-# Canonical host
+# 1) Canonical host (no www)
 https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
-# Robots / crawler assets
-/robots.txt   https://assets.jonathan-harris.online/robot.txt 301
-/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml 301
-/site-map.xml https://assets.jonathan-harris.online/site-map.xml 301
-/llms.txt     https://assets.jonathan-harris.online/llms.txt 301
+# 2) Crawler / discovery assets
+/robots.txt    https://assets.jonathan-harris.online/robot.txt       301
+/sitemap.xml   https://assets.jonathan-harris.online/site-map.xml    301
+/site-map.xml  https://assets.jonathan-harris.online/site-map.xml    301
+/Sitemap.xml   https://assets.jonathan-harris.online/site-map.xml    301
+/llms.txt      https://assets.jonathan-harris.online/llms.txt        301
 
-# Locale pass-through
+# 3) Locale pass-through (serve same content under locale prefixes)
 /en-gb/*  /:splat  200
 /en-us/*  /:splat  200
 /en-ca/*  /:splat  200
 /en-au/*  /:splat  200
 
-# Category alias
+# 4) Category alias
 /category/*  /catalogue/:splat  301
 
-# Ensure trailing slash for ebooks root
+# 5) Ensure trailing slash for /ebooks
 /ebooks  /ebooks/  301
 
-# Fix known legacy slugs (typos) — keep these BEFORE the rewrite
+# 6) Known legacy slug fixes (keep BEFORE the rewrite)
 /ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
 /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
 /ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
 /ebooks/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   /ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/  301
 
-# NEW BRANDED URL: serve /book content under /ebooks (internal rewrite, no redirect)
-# This makes /ebooks/<slug>/ and /ebooks/<slug>/detail.html work even though files live in /book/
+# 7) NEW BRANDED URL: serve /book content under /ebooks (internal rewrite, no redirect)
 /ebooks/*  /book/:splat  200
 
-# CANONICAL: old /book URLs permanently redirect to /ebooks
+# 8) CANONICAL: old /book URLs permanently redirect to /ebooks
 /book/*  /ebooks/:splat  301
 
-# Terms page
-/terms  /terms-of-use/ 301
-/terms/ /terms-of-use/ 301
+# 9) Terms
+/terms   /terms-of-use/  301
+/terms/  /terms-of-use/  301

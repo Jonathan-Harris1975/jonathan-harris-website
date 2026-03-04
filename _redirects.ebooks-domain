@@ -1,16 +1,29 @@
 # ============================================================
-# ebooks.jonathan-harris.online → main domain
+# ebooks.jonathan-harris.online — Domain redirects (Netlify-style)
+# Redirect ALL traffic to the main domain
 # ============================================================
 
-/   https://jonathan-harris.online/ebooks/ 301
-/book/*   https://jonathan-harris.online/ebooks/:splat 301
-/catalogue/* https://jonathan-harris.online/catalogue/:splat 301
-/category/*  https://jonathan-harris.online/catalogue/:splat 301
-/author/*   https://jonathan-harris.online/author/:splat 301
-/topics/*   https://jonathan-harris.online/topics/:splat 301
-/glossary/* https://jonathan-harris.online/glossary/:splat 301
-/api/*      https://jonathan-harris.online/api/:splat 301
-/robots.txt https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt 301
-/sitemap.xml https://assets.jonathan-harris.online/site-map.xml 301
-/llms.txt https://assets.jonathan-harris.online/llms.txt 301
-/*  https://jonathan-harris.online/:splat 301
+# Canonical host (no www)
+https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
+
+# Root → ebooks catalogue
+/          https://jonathan-harris.online/ebooks/  301
+/ebooks    https://jonathan-harris.online/ebooks/  301
+/ebooks/   https://jonathan-harris.online/ebooks/  301
+
+# Old paths → new site
+/book/*       https://jonathan-harris.online/ebooks/:splat       301
+/catalogue/*  https://jonathan-harris.online/catalogue/:splat    301
+/category/*   https://jonathan-harris.online/catalogue/:splat    301
+/author/*     https://jonathan-harris.online/author/:splat       301
+/topics/*     https://jonathan-harris.online/topics/:splat       301
+/glossary/*   https://jonathan-harris.online/glossary/:splat     301
+/api/*        https://jonathan-harris.online/api/:splat          301
+
+# Crawler files
+/robots.txt   https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt  301
+/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml                             301
+/llms.txt     https://assets.jonathan-harris.online/llms.txt                                 301
+
+# Catch-all
+/*  https://jonathan-harris.online/:splat  301

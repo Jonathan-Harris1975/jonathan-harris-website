@@ -1,8 +1,13 @@
 # ============================================================
-# books.jonathan-harris.online → new ebook URLs
+# books.jonathan-harris.online — Domain redirects (Netlify-style)
+# Redirect ALL traffic to the new /ebooks/ URLs on main domain
 # ============================================================
 
-/  https://jonathan-harris.online/ebooks/ 301
+# Canonical host (no www)
+https://www.books.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
+
+# Root → ebooks catalogue
+/  https://jonathan-harris.online/ebooks/  301
 
 # Any slug (including nested paths) → same path on new site
-/*  https://jonathan-harris.online/ebooks/:splat 301
+/*  https://jonathan-harris.online/ebooks/:splat  301
