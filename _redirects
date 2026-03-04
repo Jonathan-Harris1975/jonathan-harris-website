@@ -1,6 +1,5 @@
 # ============================================================
-# jonathan-harris.online — Production Redirects
-# Clean version (Cloudflare Pages compatible)
+# jonathan-harris.online — Production Redirects (Cloudflare Pages)
 # ============================================================
 
 # Canonical host
@@ -24,7 +23,17 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 # Ensure trailing slash for ebooks root
 /ebooks  /ebooks/  301
 
-# Canonical ebook path
+# Fix known legacy slugs (typos) — keep these BEFORE the rewrite
+/ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
+/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
+/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
+/ebooks/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   /ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/  301
+
+# NEW BRANDED URL: serve /book content under /ebooks (internal rewrite, no redirect)
+# This makes /ebooks/<slug>/ and /ebooks/<slug>/detail.html work even though files live in /book/
+/ebooks/*  /book/:splat  200
+
+# CANONICAL: old /book URLs permanently redirect to /ebooks
 /book/*  /ebooks/:splat  301
 
 # Terms page

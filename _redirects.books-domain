@@ -2,8 +2,7 @@
 # books.jonathan-harris.online → new ebook URLs
 # ============================================================
 
-# Root → ebook catalogue
 /  https://jonathan-harris.online/ebooks/ 301
 
-# Any slug → same slug on new site
-/* https://jonathan-harris.online/ebooks/:splat 301
+# Any slug (including nested paths) → same path on new site
+/*  https://jonathan-harris.online/ebooks/:splat 301

@@ -2,26 +2,15 @@
 # ebooks.jonathan-harris.online → main domain
 # ============================================================
 
-# Root → ebooks catalogue
 /   https://jonathan-harris.online/ebooks/ 301
-
-# Book paths
 /book/*   https://jonathan-harris.online/ebooks/:splat 301
-
-# Catalogue
 /catalogue/* https://jonathan-harris.online/catalogue/:splat 301
 /category/*  https://jonathan-harris.online/catalogue/:splat 301
-
-# Other sections
 /author/*   https://jonathan-harris.online/author/:splat 301
 /topics/*   https://jonathan-harris.online/topics/:splat 301
 /glossary/* https://jonathan-harris.online/glossary/:splat 301
 /api/*      https://jonathan-harris.online/api/:splat 301
-
-# Crawler files
 /robots.txt https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt 301
 /sitemap.xml https://assets.jonathan-harris.online/site-map.xml 301
 /llms.txt https://assets.jonathan-harris.online/llms.txt 301
-
-# Catch‑all
 /*  https://jonathan-harris.online/:splat 301
