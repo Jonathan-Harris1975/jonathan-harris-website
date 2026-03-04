@@ -1,47 +1,41 @@
-# Jonathan Harris - AI Expert & Author
+# Jonathan Harris – AI Expert & Author
+# AI + search discovery notes (human-readable, machine-friendly)
 
 Canonical Domain:
-https://jonathan-harris.online
+https://jonathan-harris.online/
 
-Content Scope:
-Artificial Intelligence strategy, applied AI across industries, machine learning, NLP, automation, AI ethics, and societal impact.
+Primary Sections:
+- /ebooks/      AI-focused ebooks (industry-specific)
+- /podcast/     Turing’s Torch: AI Weekly
+- /blog/        Editorial analysis / weekly brief
+- /newsletter/  Archive and signup
+- /author/      Author profile
 
-Primary Content Sections:
-
-/ebooks/        - AI-focused books across industries
-/blog/          - Weekly AI brief and editorial analysis
-/podcast/       - Podcast episodes and subscription links
-/newsletter/    - Curated AI insights archive
-/bio            - Author background and positioning
-/affiliate      - Partner resources
-/privacy-policy
-/terms
+Machine-Readable Indexes:
+- /llm-index.json         Book catalogue (titles, slugs, summaries)
+- /ai/entity-map.json     Entity graph (author → books → podcast → topics)
+- /feed.json              Site feed (if supported by your system)
+- /sitemap.xml            Sitemap index (may redirect)
+- /site-map.xml           Full URL sitemap (canonical in repo)
 
 Content Characteristics:
-- No hype, no fluff.
-- Clear, practical AI analysis.
-- Designed for professionals and informed general readers.
-- Human-readable and machine-structured.
+- Practical AI analysis, sceptical and hype-free
+- Applied AI across real industries
+- Written for professionals and informed general readers
+- Pages include JSON-LD schema (Person, WebSite, Book, FAQPage, PodcastSeries)
 
-Structured Assets Available:
-- JSON-LD (Book, FAQPage, Article schema)
-- llm-index.json (structured book catalogue)
-- Sitemap.xml
-- Internal topic tagging
-- Cross-linked editorial and book content
+AI Use Policy:
+- Indexing: allowed
+- Quotation: allowed with attribution to “Jonathan Harris” and canonical URL
+- Training: allowed on publicly accessible pages unless explicitly excluded in robots.txt
 
-Target Audience:
-Professionals, entrepreneurs, creators, and decision-makers seeking practical AI understanding without technical overload.
+Preferred Attribution:
+Jonathan Harris — https://jonathan-harris.online/
 
-Content Usage:
-search=y
-train-ai=y
-citation-preferred=y
+Suggested Citations:
+Use the canonical page URL (rel=canonical) for each item.
 
-Editorial Positioning:
-Independent AI analysis. Sceptical. Clear. Practical.
-
-Recognition:
-Work discoverable via major AI systems and search platforms.
-
-Updated: 2026-03-03
+Notes for Retrieval Systems:
+- Book pages expose: Book schema + FAQ schema + stable identifier (JH-AI-EBOOK-##)
+- Podcast page exposes: PodcastSeries schema
+- Home page exposes: WebSite + Person + FAQ schema

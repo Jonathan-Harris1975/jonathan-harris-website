@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-03-02T01:25:17.945829Z",
+  "generated_utc": "2026-03-04T22:31:20.769417Z",
   "books": [
     {
       "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
@@ -13,9 +13,21 @@
         "Transportation",
         "AI in Sports"
       ],
-      "keywords": "[Transportation, Ai In Sports, Ai And Formula 1: Redefining Speed And Strategy With Intelligent Technology, Ai Trends, Transportation, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "formula",
+        "1",
+        "motorsport",
+        "racing",
+        "strategy"
+      ],
       "buy_url": "https://mybook.to/Gi93rOF",
-      "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp"
+      "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
+      "identifier": "JH-AI-EBOOK-01",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/#book"
     },
     {
       "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
@@ -28,9 +40,21 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Healthcare, Creativity, Ai Trends, Artificial Intelligence In Veterinary Medicine: Transforming Animal Healthcare Through Innovation, Artificial Intelligence, Healthcare]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "veterinary",
+        "medicine",
+        "animal",
+        "healthcare",
+        "diagnostics"
+      ],
       "buy_url": "https://mybook.to/SOjUE",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
+      "identifier": "JH-AI-EBOOK-17",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/#book"
     },
     {
       "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
@@ -44,9 +68,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, Creativity, Ai Trends, Energy, Ai-Powered Smart Grid: Revolutionizing Electricity Distribution And Generation, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "smart",
+        "grid",
+        "energy",
+        "electricity"
+      ],
       "buy_url": "https://mybook.to/sntL",
-      "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp"
+      "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
+      "identifier": "JH-AI-EBOOK-06",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/#book"
     },
     {
       "title": "Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability",
@@ -59,9 +94,20 @@
         "Transportation",
         "Artificial Intelligence"
       ],
-      "keywords": "[Creativity, Artificial Intelligence, Creativity, Artificial Intelligence In Logistics: Optimizing Efficiency And Sustainability, Energy, Transportation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "logistics",
+        "supply",
+        "chain",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/zSKnSW",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
+      "identifier": "JH-AI-EBOOK-14",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/#book"
     },
     {
       "title": "Artificial Intelligence and the Law: Case Studies and Future Trends",
@@ -74,9 +120,19 @@
         "General AI",
         "Artificial Intelligence"
       ],
-      "keywords": "[General Ai, Law, Artificial Intelligence And The Law: Case Studies And Future Trends, Creativity, Law, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "law",
+        "legal",
+        "regulation"
+      ],
       "buy_url": "https://mybook.to/bWpjeB",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
+      "identifier": "JH-AI-EBOOK-08",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/#book"
     },
     {
       "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
@@ -90,9 +146,20 @@
         "AI Trends",
         "Automation"
       ],
-      "keywords": "[Creativity, Creativity, Ai Trends, Artificial Intelligence For Cyber Security: A Practical Guide To Data Breach Prevention, Artificial Intelligence, Automation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "cybersecurity",
+        "data",
+        "breach",
+        "prevention"
+      ],
       "buy_url": "https://mybook.to/9Wvf",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
+      "identifier": "JH-AI-EBOOK-09",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/#book"
     },
     {
       "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
@@ -106,9 +173,16 @@
         "AI Trends",
         "AI & Creativity"
       ],
-      "keywords": "[Creativity, Ai & Creativity, Creativity, Ai Trends, The Artificial Intelligence Revolution: From Algorithms To Consciousness, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/YYLW",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
+      "identifier": "JH-AI-EBOOK-32",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/#book"
     },
     {
       "title": "AI in Aviation: Transforming Safety and Sustainability",
@@ -121,9 +195,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, Ai Trends, Energy, Ai In Aviation: Transforming Safety And Sustainability, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "aviation",
+        "aerospace",
+        "safety",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/13VF",
-      "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp"
+      "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
+      "identifier": "JH-AI-EBOOK-03",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/#book"
     },
     {
       "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
@@ -136,9 +221,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, Ai Trends, Ai In Maritime: Revolutionizing Shipping For Sustainability, Energy, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "maritime",
+        "shipping",
+        "logistics",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/yANzV8",
-      "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp"
+      "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
+      "identifier": "JH-AI-EBOOK-05",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/#book"
     },
     {
       "title": "Artificial Intelligence in Pharmaceuticals:Revolutionizing Healthcare",
@@ -151,9 +247,21 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Artificial Intelligence In Pharmaceuticals:Revolutionizing Healthcare, Healthcare, Creativity, Ai Trends, Artificial Intelligence, Healthcare]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "pharmaceuticals",
+        "healthcare",
+        "biotech",
+        "medicine",
+        "diagnostics"
+      ],
       "buy_url": "https://mybook.to/3cA8",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
+      "identifier": "JH-AI-EBOOK-15",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/#book"
     },
     {
       "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
@@ -166,9 +274,18 @@
         "General AI",
         "Artificial Intelligence"
       ],
-      "keywords": "[Creativity, Artificial Intelligence, General Ai, The Autonomous Revolution: Artificial Intelligence And The Future Of The Automotive Industry, Creativity, Transportation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "industry",
+        "industrial"
+      ],
       "buy_url": "https://mybook.to/DS4Ag",
-      "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp"
+      "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
+      "identifier": "JH-AI-EBOOK-33",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/#book"
     },
     {
       "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
@@ -182,9 +299,20 @@
         "General AI",
         "Artificial Intelligence"
       ],
-      "keywords": "[Retail, Creativity, General Ai, Creativity, Artificial Intelligence Powered Retail: Revolutionizing Customer Experience For A Sustainable Future, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "retail",
+        "ecommerce",
+        "customer",
+        "experience"
+      ],
       "buy_url": "https://mybook.to/POYR",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
+      "identifier": "JH-AI-EBOOK-18",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/#book"
     },
     {
       "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
@@ -197,9 +325,20 @@
         "AI Trends",
         "Transportation"
       ],
-      "keywords": "[Creativity, Artificial Intelligence Revolution In Manufacturing: Modernizing Operations, Maintenance, And Service Delivery, Creativity, Ai Trends, Transportation, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "manufacturing",
+        "industry",
+        "operations",
+        "maintenance"
+      ],
       "buy_url": "https://mybook.to/SOAEb",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
+      "identifier": "JH-AI-EBOOK-19",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/#book"
     },
     {
       "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
@@ -213,9 +352,18 @@
         "AI Trends",
         "Automation"
       ],
-      "keywords": "[Creativity, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence In Industry: A Comprehensive Guide, Automation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "industry",
+        "industrial"
+      ],
       "buy_url": "https://mybook.to/t2Au28",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
+      "identifier": "JH-AI-EBOOK-13",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/#book"
     },
     {
       "title": "The Dumbening: How AI is Reshaping Our Minds",
@@ -229,9 +377,16 @@
         "Automation",
         "Robotics"
       ],
-      "keywords": "[Robotics, Ai Trends, Artificial Intelligence, Artificial Intelligence, The Dumbening: How Ai Is Reshaping Our Minds, Automation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/YcRiCRp",
-      "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp"
+      "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
+      "identifier": "JH-AI-EBOOK-34",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/#book"
     },
     {
       "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
@@ -245,9 +400,19 @@
         "AI Trends",
         "Creativity"
       ],
-      "keywords": "[General Ai, Creativity, Ai Trends, Ai In Agriculture: Revolutionizing Farming For A Sustainable Future, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "agriculture",
+        "farming",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/PsciMD5",
-      "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp"
+      "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+      "identifier": "JH-AI-EBOOK-02",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/#book"
     },
     {
       "title": "AI in Education: Reimagining Learning for Every Student",
@@ -260,9 +425,19 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Education, Creativity, Ai Trends, Ai In Education: Reimagining Learning For Every Student, Artificial Intelligence, Education]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "education",
+        "learning",
+        "edtech"
+      ],
       "buy_url": "https://mybook.to/Ldhe41",
-      "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp"
+      "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
+      "identifier": "JH-AI-EBOOK-04",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/#book"
     },
     {
       "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
@@ -276,9 +451,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, Artificial Intelligence In Banking: Revolutionizing Finance And Data Security, Finance, Creativity, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "banking",
+        "finance",
+        "fintech",
+        "cybersecurity"
+      ],
       "buy_url": "https://mybook.to/8VjT",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
+      "identifier": "JH-AI-EBOOK-11",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/#book"
     },
     {
       "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
@@ -291,9 +477,19 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Digital Diagnosis: How Ai Is Revolutionizing Healthcare, Healthcare, Creativity, Ai Trends, Artificial Intelligence, Healthcare]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "healthcare",
+        "medicine",
+        "diagnostics"
+      ],
       "buy_url": "https://mybook.to/hrnKOD",
-      "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp"
+      "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
+      "identifier": "JH-AI-EBOOK-23",
+      "entity_id": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/#book"
     },
     {
       "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
@@ -307,9 +503,19 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, General Ai, Creativity, Ai Trends, Artificial Intelligence In Construction: Building A Sustainable Future, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "construction",
+        "building",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/v98RD",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
+      "identifier": "JH-AI-EBOOK-12",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/#book"
     },
     {
       "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
@@ -323,9 +529,16 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, General Ai, Creativity, The Artificial Intelligence Job Shift: Navigating The Future Of Work, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/unBJY7",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
+      "identifier": "JH-AI-EBOOK-31",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/#book"
     },
     {
       "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
@@ -339,9 +552,16 @@
         "AI Trends",
         "Creativity"
       ],
-      "keywords": "[General Ai, Creativity, The Future Of Government: Leveraging Ai To Enhance Services And Safeguard Information, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/3TwcUA",
-      "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp"
+      "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
+      "identifier": "JH-AI-EBOOK-35",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/#book"
     },
     {
       "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
@@ -355,9 +575,21 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, Smart Buildings: Ai-Powered Efficiency And Sustainability, Creativity, Ai Trends, Energy, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "smart",
+        "buildings",
+        "iot",
+        "energy",
+        "efficiency"
+      ],
       "buy_url": "https://mybook.to/QEcdy",
-      "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp"
+      "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
+      "identifier": "JH-AI-EBOOK-27",
+      "entity_id": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/#book"
     },
     {
       "title": "Digital Defense: The Role of AI in Modern Warfare",
@@ -371,9 +603,19 @@
         "Creativity",
         "AI & Creativity"
       ],
-      "keywords": "[Ai & Creativity, Digital Defense: The Role Of Ai In Modern Warfare, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "defence",
+        "warfare",
+        "security"
+      ],
       "buy_url": "https://mybook.to/8jAITc",
-      "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp"
+      "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
+      "identifier": "JH-AI-EBOOK-22",
+      "entity_id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#book"
     },
     {
       "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
@@ -387,9 +629,19 @@
         "AI Trends",
         "AI & Creativity"
       ],
-      "keywords": "[Creativity, Ai & Creativity, Artificial Intelligence For Wildlife Conservation: Revolutionizing Biodiversity Protection Through Technology, Creativity, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "wildlife",
+        "conservation",
+        "biodiversity"
+      ],
       "buy_url": "https://mybook.to/8jAITc",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
+      "identifier": "JH-AI-EBOOK-10",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/#book"
     },
     {
       "title": "Climate Intelligence: Harnessing AI for a Greener Future",
@@ -403,9 +655,19 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[General Ai, Climate Intelligence: Harnessing Ai For A Greener Future, Ai Trends, Energy, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "climate",
+        "sustainability",
+        "energy"
+      ],
       "buy_url": "https://mybook.to/aKj8Fh",
-      "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp"
+      "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
+      "identifier": "JH-AI-EBOOK-21",
+      "entity_id": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/#book"
     },
     {
       "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
@@ -418,9 +680,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Creativity, General Ai, Creativity, Ai Trends, Ai Revolution In Railways: Modernizing Travel For A Smarter Future, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "rail",
+        "railways",
+        "transport",
+        "mobility"
+      ],
       "buy_url": "https://mybook.to/JkJfDp",
-      "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp"
+      "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
+      "identifier": "JH-AI-EBOOK-07",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/#book"
     },
     {
       "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
@@ -434,12 +707,23 @@
         "AI Trends",
         "AI & Creativity"
       ],
-      "keywords": "[Creativity, Ai & Creativity, Artificial Intelligence In Sports: Revolutionizing Performance And Fan Engagement K, Creativity, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "logistics",
+        "supply",
+        "chain",
+        "sustainability"
+      ],
       "buy_url": "https://mybook.to/73M1",
-      "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp"
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
+      "identifier": "JH-AI-EBOOK-16",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/#book"
     },
     {
-      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ais-role-in-modern-filmmaking",
       "url": "/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/",
       "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity. Pages: 336.",
@@ -450,7 +734,7 @@
         "Creativity",
         "AI & Creativity"
       ],
-      "keywords": "[Ai & Creativity, Lights, Camera, Algorithm: Ai\u00e2_x0080__x0099_S Role In Modern Filmmaking, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": "[Ai & Creativity, Lights, Camera, Algorithm: Aiâ_x0080__x0099_S Role In Modern Filmmaking, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence]",
       "buy_url": "https://mybook.to/EcO2DI",
       "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp"
     },
@@ -466,9 +750,18 @@
         "AI Trends",
         "AI & Creativity"
       ],
-      "keywords": "[The Ai Music Revolution: Creativity, Controversy, And Collaboration, Creativity, Ai & Creativity, Creativity, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "music",
+        "creativity"
+      ],
       "buy_url": "https://mybook.to/Io32sC3",
-      "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp"
+      "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
+      "identifier": "JH-AI-EBOOK-29",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/#book"
     },
     {
       "title": "The Architects of AI_ Pioneers_ Breakthroughs_ and the Road Ahead",
@@ -480,9 +773,16 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[Artificial Intelligence, The Architects Of Ai_ Pioneers_ Breakthroughs_ And The Road Ahead, Ai Trends, None, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/qFAI",
-      "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp"
+      "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
+      "identifier": "JH-AI-EBOOK-30",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/#book"
     },
     {
       "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
@@ -496,9 +796,16 @@
         "AI Trends",
         "AI Governance"
       ],
-      "keywords": "[The House Always Knows: Ai, Gambling, And The Ethics Of Personalized Gaming, Law, Ethics, Ai Governance, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/K7nVJGv",
-      "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp"
+      "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
+      "identifier": "JH-AI-EBOOK-36",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/#book"
     },
     {
       "title": "Beyond Earth How AI is Transforming Space Exploration",
@@ -512,9 +819,19 @@
         "AI Trends",
         "AI & Creativity"
       ],
-      "keywords": "[Creativity, Ai & Creativity, Beyond Earth How Ai Is Transforming Space Exploration, Creativity, Ai Trends, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "space",
+        "exploration",
+        "aerospace"
+      ],
       "buy_url": "https://mybook.to/iY9m",
-      "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp"
+      "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
+      "identifier": "JH-AI-EBOOK-20",
+      "entity_id": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/#book"
     },
     {
       "title": "From Reporters to Robots: How AI is Reshaping Journalism",
@@ -528,9 +845,19 @@
         "Creativity",
         "Automation"
       ],
-      "keywords": "[From Reporters To Robots: How Ai Is Reshaping Journalism, Creativity, Ai Trends, Artificial Intelligence, Artificial Intelligence, Automation]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "journalism",
+        "media",
+        "news"
+      ],
       "buy_url": "https://mybook.to/DWfAK",
-      "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp"
+      "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
+      "identifier": "JH-AI-EBOOK-24",
+      "entity_id": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/#book"
     },
     {
       "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
@@ -543,9 +870,20 @@
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "keywords": "[General Ai, Ai Trends, None, The Ai Behind Your Feed: Personalization, Moderation, And The Future Of Social Media, Artificial Intelligence, Artificial Intelligence]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation",
+        "social",
+        "media",
+        "personalization",
+        "moderation"
+      ],
       "buy_url": "https://mybook.to/rNRr",
-      "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp"
+      "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
+      "identifier": "JH-AI-EBOOK-28",
+      "entity_id": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/#book"
     },
     {
       "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
@@ -559,9 +897,16 @@
         "AI Trends",
         "Robotics"
       ],
-      "keywords": "[Education, Robotics, Ai Trends, Game Ai Unleashed: From Finite State Machines To Machine Learning, Artificial Intelligence, Education]",
+      "keywords": [
+        "artificial intelligence",
+        "ai",
+        "machine learning",
+        "automation"
+      ],
       "buy_url": "https://mybook.to/e7GozY6",
-      "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp"
+      "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
+      "identifier": "JH-AI-EBOOK-25",
+      "entity_id": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/#book"
     }
   ]
 }
