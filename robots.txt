@@ -1,25 +1,8 @@
-# Robots rules (human-readable, crawler-friendly)
-# Canonical domain: https://jonathan-harris.online/
+# This file is redirected in production via _redirects.
+# Canonical robots file:
+# https://assets.jonathan-harris.online/robot.txt
 
 User-agent: *
-Allow: /
+Disallow:
 
-# Explicit AI crawler allowances
-User-agent: GPTBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
-# Sitemaps
-Sitemap: https://jonathan-harris.online/site-map.xml
 Sitemap: https://assets.jonathan-harris.online/site-map.xml
