@@ -121,6 +121,14 @@
     const h = document.createElement("h2");
     h.textContent = book.title;
 
+
+    const topicWrap = document.createElement("div");
+    topicWrap.className = "topic-chip-wrap";
+    const topicChip = document.createElement("span");
+    topicChip.className = "topic-chip";
+    topicChip.textContent = book.filter || "AI";
+    topicWrap.appendChild(topicChip);
+
     const p = document.createElement("p");
     p.textContent = book.short;
 
@@ -162,6 +170,7 @@
 
     a.appendChild(img);
     a.appendChild(h);
+    a.appendChild(topicWrap);
     a.appendChild(p);
     a.appendChild(tags);
     a.appendChild(more);
