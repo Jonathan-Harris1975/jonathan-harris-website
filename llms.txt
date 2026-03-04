@@ -10,6 +10,7 @@ Primary Content Sections:
 
 /ebooks/        - AI-focused books across industries
 /blog/          - Weekly AI brief and editorial analysis
+/podcast/       - Podcast episodes and subscription links
 /newsletter/    - Curated AI insights archive
 /bio            - Author background and positioning
 /affiliate      - Partner resources
