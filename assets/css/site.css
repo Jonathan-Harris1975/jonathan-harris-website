@@ -725,3 +725,114 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
   font-size:13px;
 }
 .chips button:hover, .chips .chip:hover{background:rgba(79,70,229,0.08); border-color:rgba(79,70,229,0.20);}
+
+
+/* --- Home conversion polish (keeps brand tone: clean, editorial, no gimmicks) --- */
+.home-hero-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.card--cta{
+  text-align:left;
+}
+
+.bullets{
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  display:grid;
+  gap:10px;
+}
+.bullets li{
+  padding-left: 26px;
+  position: relative;
+  color:#111827;
+  line-height:1.5;
+}
+.bullets li::before{
+  content:"✓";
+  position:absolute;
+  left:0;
+  top:0;
+  color:#4F46E5;
+  font-weight:700;
+}
+
+.latest-episode{
+  display:grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap:16px;
+  align-items:start;
+  margin-top:14px;
+}
+.latest-episode__meta{
+  min-width: 0;
+}
+.latest-episode__embed{
+  min-width: 0;
+}
+@media (max-width: 920px){
+  .latest-episode{
+    grid-template-columns: 1fr;
+  }
+}
+
+.card--mini{
+  padding:18px;
+}
+
+.jh-sticky-cta{
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 50;
+  background: rgba(13,20,32,0.92);
+  border: 1px solid rgba(147,197,253,0.25);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}
+.jh-sticky-cta__inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding: 12px 12px;
+}
+.jh-sticky-cta__copy{
+  color:#E5E7EB;
+  display:flex;
+  gap:10px;
+  align-items:baseline;
+  flex-wrap:wrap;
+}
+.jh-sticky-cta__muted{
+  color:#D1D5DB;
+  font-size:0.95rem;
+}
+.jh-sticky-cta__actions{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.jh-sticky-cta__close{
+  appearance:none;
+  border:0;
+  background: rgba(255,255,255,0.08);
+  color:#E5E7EB;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+.jh-sticky-cta__close:focus{
+  outline: 3px solid rgba(147,197,253,0.75);
+  outline-offset: 2px;
+}
