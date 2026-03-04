@@ -27,25 +27,20 @@
         const style = document.createElement("style");
         style.id = "jh-ui-inline";
         style.textContent = `
+          
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:10px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header{position:sticky;top:0;z-index:2500;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);}
-          .jh-header__inner{max-width:1200px;margin:0 auto;padding:12px 15px;display:flex;align-items:center;gap:14px;}
-          .jh-logo img{display:block;height:auto;}
-          .jh-nav{margin-left:auto;display:flex;align-items:center;gap:14px;}
-          .jh-nav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;padding:8px 10px;border-radius:12px;}
-          .jh-nav a:hover,.jh-nav a:focus{background:rgba(255,255,255,0.08);outline:none;}
-          .jh-nav__toggle{margin-left:auto;display:none;align-items:center;justify-content:center;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,0.18);background:rgba(17,24,39,0.45);color:#E5E7EB;}
-          .jh-nav__toggle-bars{width:18px;height:2px;background:currentColor;position:relative;display:block;border-radius:2px;}
-          .jh-nav__toggle-bars:before,.jh-nav__toggle-bars:after{content:"";position:absolute;left:0;width:18px;height:2px;background:currentColor;border-radius:2px;}
-          .jh-nav__toggle-bars:before{top:-6px;}
-          .jh-nav__toggle-bars:after{top:6px;}
-          @media (max-width: 860px){
-            .jh-nav__toggle{display:flex;}
-            .jh-nav{position:fixed;inset:64px 12px auto 12px;display:none;flex-direction:column;align-items:stretch;gap:6px;padding:10px;border-radius:18px;background:rgba(13,20,32,0.97);border:1px solid rgba(255,255,255,0.10);box-shadow:0 16px 40px rgba(0,0,0,0.35);}
-            .jh-nav.is-open{display:flex;}
-            .jh-nav a{padding:12px 12px;}
+          .jh-header{position:relative;z-index:2500;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);}
+          .jh-header__inner{max-width:1200px;margin:0 auto;padding:10px 15px;display:flex;align-items:center;justify-content:center;}
+          .jh-topnav{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;}
+          .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;line-height:1.1;padding:6px 0;border-bottom:1px solid transparent;}
+          .jh-topnav a:hover,.jh-topnav a:focus{border-bottom-color:rgba(199,210,254,0.75);outline:none;}
+          @media (max-width: 520px){
+            .jh-header__inner{padding:10px 12px;}
+            .jh-topnav{gap:12px;}
+            .jh-topnav a{font-size:13px;}
           }
+
         `;
         head.appendChild(style);
       }
@@ -78,32 +73,6 @@
         first.insertAdjacentElement("afterend", headerEl);
       }else{
         document.body.prepend(headerEl);
-      }
-
-      // Hamburger toggle
-      const btn = document.querySelector(".jh-nav__toggle");
-      const nav = document.getElementById("jhPrimaryNav");
-      if (btn && nav){
-        const setState = (open) => {
-          btn.setAttribute("aria-expanded", open ? "true" : "false");
-          btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-          nav.classList.toggle("is-open", !!open);
-          document.documentElement.classList.toggle("jh-nav-open", !!open);
-        };
-
-        btn.addEventListener("click", () => {
-          const open = btn.getAttribute("aria-expanded") === "true";
-          setState(!open);
-        });
-
-        document.addEventListener("keydown", (e) => {
-          if (e.key === "Escape") setState(false);
-        });
-
-        nav.addEventListener("click", (e) => {
-          const t = e.target;
-          if (t && t.tagName === "A") setState(false);
-        });
       }
     }catch(_){
       // Header is optional. Pages still work.
