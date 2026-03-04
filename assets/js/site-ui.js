@@ -177,10 +177,125 @@
     }catch(_){}
   }
 
+
+  function prettyLabel(seg){
+    if (!seg) return "";
+    const map = {
+      "ebooks":"eBooks",
+      "book":"Book",
+      "podcast":"Podcast",
+      "newsletter":"Newsletter",
+      "blog":"Blog",
+      "topics":"Topics",
+      "glossary":"Glossary",
+      "compare":"Compare",
+      "contact":"Contact",
+      "privacy-policy":"Privacy Policy",
+      "terms-of-use":"Terms of Use",
+      "author":"Author",
+      "bio":"About",
+      "api":"API",
+      "catalogue":"Catalogue",
+      "affiliate":"Affiliate"
+    };
+    if (map[seg]) return map[seg];
+    // Title case with hyphens
+    return seg.replace(/-/g," ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function injectBreadcrumbs(){
+    try{
+      const path = (location.pathname || "/").replace(/\/+$/, "/");
+      if (path === "/") return; // no breadcrumbs on home
+
+      const main = document.getElementById("main") || document.querySelector("main") || document.querySelector('[role="main"]');
+      if (!main) return;
+
+      // Avoid duplicates
+      if (document.querySelector(".jh-breadcrumbs")) return;
+
+      const segs = path.split("/").filter(Boolean);
+      if (!segs.length) return;
+
+      const nav = document.createElement("nav");
+      nav.className = "jh-breadcrumbs";
+      nav.setAttribute("aria-label","Breadcrumb");
+      nav.innerHTML = '<ol class="jh-breadcrumbs__list"></ol>';
+
+      const ol = nav.querySelector("ol");
+      const liHome = document.createElement("li");
+      liHome.className = "jh-breadcrumbs__item";
+      liHome.innerHTML = '<a href="/">Home</a>';
+      ol.appendChild(liHome);
+
+      let accum = "/";
+      segs.forEach((seg, i) => {
+        accum += seg + "/";
+        const li = document.createElement("li");
+        li.className = "jh-breadcrumbs__item";
+        const label = prettyLabel(seg);
+
+        const isLast = i === segs.length - 1;
+        if (isLast){
+          li.innerHTML = '<span aria-current="page">' + label + '</span>';
+        }else{
+          li.innerHTML = '<a href="' + accum + '">' + label + '</a>';
+        }
+        ol.appendChild(li);
+      });
+
+      // Insert breadcrumbs as the first element inside main
+      if (main.firstElementChild){
+        main.insertBefore(nav, main.firstElementChild);
+      }else{
+        main.appendChild(nav);
+      }
+    }catch(_){}  
+  }
+
+  function shouldSkipInlineCta(){
+    const path = (location.pathname || "/");
+    if (path === "/" || path.startsWith("/newsletter")) return true;
+    if (document.querySelector("[data-no-inline-cta='true']")) return true;
+    return false;
+  }
+
+  function injectInlineNewsletterCta(){
+    try{
+      if (shouldSkipInlineCta()) return;
+
+      const main = document.getElementById("main") || document.querySelector("main") || document.querySelector('[role="main"]');
+      if (!main) return;
+
+      if (document.querySelector(".jh-inline-cta")) return;
+
+      const cta = document.createElement("section");
+      cta.className = "jh-inline-cta";
+      cta.setAttribute("aria-label","Newsletter sign-up prompt");
+      cta.innerHTML = `
+        <div class="jh-inline-cta__inner">
+          <div class="jh-inline-cta__copy">
+            <h2>Get the AI Edge</h2>
+            <p>Daily AI updates. Short. Useful. Zero breathless hype.</p>
+          </div>
+          <div class="jh-inline-cta__actions">
+            <a class="btn btn-primary" href="/newsletter/">Join the newsletter</a>
+            <a class="btn btn-ghost" href="/ebooks/">Browse eBooks</a>
+          </div>
+        </div>
+      `;
+
+      // Append near the end but before footer mount, so it feels intentional.
+      main.appendChild(cta);
+    }catch(_){}  
+  }
+
   function init(){
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
+    injectBreadcrumbs();
+    injectInlineNewsletterCta();
     hideLoader();
     injectHeader();
     injectFooter();
