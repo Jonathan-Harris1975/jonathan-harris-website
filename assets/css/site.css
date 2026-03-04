@@ -637,3 +637,91 @@ details.facts li{margin:6px 0; color:var(--text)}
   .jh-topnav{gap:10px;}
   .jh-topnav a{font-size:12.5px;padding:6px 6px;}
 }
+
+
+/* ===== UX Phase 1+2 Enhancements (brand-preserving) ===== */
+
+/* Links: always recognisable in content */
+a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+a:hover{color:var(--accent-hover);}
+a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:8px;}
+/* Nav + buttons look like controls, not underlined paragraphs */
+.jh-topnav a,
+.btn{ text-decoration:none; }
+
+/* Section rhythm */
+.section{padding:34px 0;}
+.section-title{margin:0 0 10px; font-size:1.55rem; letter-spacing:-0.2px;}
+.section-lead{margin:0 auto 22px; max-width:780px; color:var(--text-soft);}
+
+/* Start Here cards */
+.trio{display:grid; gap:16px; grid-template-columns:repeat(3, minmax(0, 1fr));}
+@media (max-width: 900px){ .trio{grid-template-columns:1fr;} }
+
+/* Buttons */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:10px 14px; border-radius:999px; font-weight:700; font-size:14px; line-height:1;
+  border:1px solid transparent; cursor:pointer; white-space:nowrap;
+}
+.btn-primary{background:var(--accent); color:#fff; border-color:rgba(255,255,255,0.08); box-shadow:0 10px 24px rgba(79,70,229,0.25);}
+.btn-primary:hover{background:var(--accent-hover); color:#fff;}
+.btn-ghost{background:transparent; color:var(--accent); border-color:rgba(79,70,229,0.35);}
+.btn-ghost:hover{background:rgba(79,70,229,0.08); color:var(--accent-hover);}
+
+/* Action row spacing */
+.actions{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px;}
+
+/* Cards: subtle hierarchy + micro-interactions */
+.card, .book-card{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 10px 26px rgba(0,0,0,0.06);
+}
+.card--path{padding:18px 16px;}
+.card--path h3{margin:0 0 8px; font-size:1.15rem; color:#111827;}
+.card--path p{margin:0; color:var(--text-soft);}
+
+.card:hover, .book-card:hover{transform:translateY(-2px); box-shadow:0 16px 34px rgba(0,0,0,0.10);}
+.card:focus-within, .book-card:focus-within{outline:2px solid rgba(79,70,229,0.55); outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){
+  .card:hover, .book-card:hover{transform:none;}
+}
+
+/* Breadcrumbs */
+.jh-breadcrumbs{max-width:1100px; margin:12px auto 18px; padding:0 18px; text-align:left;}
+.jh-breadcrumbs__list{list-style:none; display:flex; flex-wrap:wrap; gap:8px; padding:0; margin:0;}
+.jh-breadcrumbs__item{display:flex; align-items:center; gap:8px; color:var(--text-soft); font-size:13px;}
+.jh-breadcrumbs__item + .jh-breadcrumbs__item:before{content:"›"; color:#9CA3AF;}
+.jh-breadcrumbs__item span[aria-current="page"]{color:#111827; font-weight:700;}
+
+/* Inline CTA */
+.jh-inline-cta{padding:26px 18px;}
+.jh-inline-cta__inner{
+  max-width:1100px; margin:0 auto;
+  background:linear-gradient(180deg, rgba(79,70,229,0.07), rgba(13,20,32,0.02));
+  border:1px solid rgba(79,70,229,0.18);
+  border-radius:22px;
+  padding:18px 16px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+}
+.jh-inline-cta__copy{max-width:640px; text-align:left;}
+.jh-inline-cta__copy h2{margin:0 0 6px; font-size:1.25rem; color:#111827;}
+.jh-inline-cta__copy p{margin:0; color:var(--text-soft);}
+.jh-inline-cta__actions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-start;}
+@media (max-width: 720px){
+  .jh-inline-cta__copy{max-width:none;}
+  .jh-inline-cta__actions{width:100%; justify-content:center;}
+  .jh-breadcrumbs{margin-top:18px;}
+}
+
+/* Make filter chips feel clickable (ebooks page) */
+.chips button, .chips .chip{
+  border-radius:999px;
+  padding:8px 12px;
+  border:1px solid rgba(17,24,39,0.10);
+  background:#fff;
+  font-weight:700;
+  font-size:13px;
+}
+.chips button:hover, .chips .chip:hover{background:rgba(79,70,229,0.08); border-color:rgba(79,70,229,0.20);}
