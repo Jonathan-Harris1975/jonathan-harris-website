@@ -1,3 +1,17 @@
+# ===== Ebook canonical redirects =====
+/book/*   /ebooks/:splat   301!
+/ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/   301!
+/book/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/   301!
+/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/   301!
+/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/   301!
+/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/   301!
+/book/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/   301!
+/ebooks/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   /ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/   301!
+/book/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   /ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/   301!
+# ===== Domain aliases → main site =====
+https://books.jonathan-harris.online/*   https://jonathan-harris.online/ebooks/:splat   301!
+https://ebooks.jonathan-harris.online/*  https://jonathan-harris.online/ebooks/:splat   301!
+
 # ============================================================
 # jonathan-harris.online — Consolidated _redirects
 # ============================================================

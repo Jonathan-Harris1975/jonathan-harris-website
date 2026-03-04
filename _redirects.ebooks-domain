@@ -13,7 +13,7 @@ https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/eboo
 /ebooks    https://jonathan-harris.online/ebooks/  301
 
 # Book pages (slug-based) → consolidated site
-/book/*    https://jonathan-harris.online/book/:splat  301
+/book/*    https://jonathan-harris.online/ebooks/:splat  301
 
 # Catalogue
 /catalogue/*  https://jonathan-harris.online/catalogue/:splat  301
