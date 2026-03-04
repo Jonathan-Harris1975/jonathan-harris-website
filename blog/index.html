@@ -18,92 +18,68 @@
 <meta name="ai-role" content="AI blog and weekly insights"/>
 <meta name="ai-target-audience" content="Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"/>
 <meta name="ai-style" content="Plain-English, practical, sceptical, no-hype"/>
-<meta name="content-usage" content="search=y, train-ai=y"/>
+<meta name="content-usage" content="search=y, train-ai=y, citation-preferred=y"/>
 
-<meta property="og:type" content="website"/>
-<meta property="og:site_name" content="Jonathan Harris"/>
 <meta property="og:title" content="Blog | Jonathan Harris"/>
-<meta property="og:description" content="Weekly AI insights — clear thinking, real-world context, no hype."/>
+<meta property="og:description" content="Weekly AI insights — practical, sceptical, and grounded in real-world use."/>
+<meta property="og:type" content="website"/>
 <meta property="og:url" content="https://jonathan-harris.online/blog/"/>
-<meta property="og:image" content="https://images.jonathan-harris.online/site-logo"/>
+<meta property="og:image" content="https://images.jonathan-harris.online/newsletter-img"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Blog | Jonathan Harris"/>
-<meta name="twitter:description" content="Weekly AI insights — clear thinking, real-world context, no hype."/>
-<meta name="twitter:image" content="https://images.jonathan-harris.online/site-logo"/>
-
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
-<script>
-  function loadScript(callback) {
-    var head = document.getElementsByTagName("head")[0];
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://tracker.metricool.com/resources/be.js";
-    script.onload = callback;
-    script.onerror = function() {};
-    head.appendChild(script);
-  }
-  loadScript(function() {
-    if (typeof beTracker !== "undefined" && beTracker.t) {
-      beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
-    }
-  });
-</script>
 
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "Jonathan Harris — AI Insights",
-  "url": "https://jonathan-harris.online/blog/",
-  "description": "Weekly AI insights — clear thinking, real-world context, no hype.",
-  "inLanguage": "en",
-  "publisher": {
-    "@type": "Person",
-    "name": "Jonathan Harris",
-    "url": "https://jonathan-harris.online/"
+  "@context":"https://schema.org",
+  "@type":"Blog",
+  "name":"Jonathan Harris — Blog",
+  "url":"https://jonathan-harris.online/blog/",
+  "description":"Weekly AI insights from Jonathan Harris — clear thinking, real-world context, no hype.",
+  "publisher":{
+    "@type":"Person",
+    "@id":"https://jonathan-harris.online/#person",
+    "name":"Jonathan Harris",
+    "url":"https://jonathan-harris.online/"
   }
 }
 </script>
 </head>
 <body>
-<header class="hero" role="banner" aria-label="Blog header">
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="hero" role="banner">
   <div class="wrap">
-    <img alt="Jonathan Harris site logo" class="logo-plain" src="https://images.jonathan-harris.online/site-logo"/>
-    <h1>AI Insights Blog</h1>
-    <p>Weekly takes on what changed in AI, what matters, and what you can safely ignore.</p>
+    <h1>AI, without the hype</h1>
+    <p>Short takes, weekly posts, and practical AI notes you can actually use — minus the buzzwords and magical thinking.</p>
+    <div class="cta-row">
+      <a class="button primary" href="/newsletter/">Subscribe to AI Edge</a>
+      <a class="button secondary" href="/ebooks/">Browse eBooks</a>
+    </div>
   </div>
 </header>
 
-<main class="main" role="main" aria-label="Blog content">
-  <div class="wrap">
-    <section class="panel">
-      <h2>Launching soon</h2>
-      <p>
-        This page is the landing zone for the weekly blog posts generated from your AI news pipeline.
-        The structure is in place so you can publish without redesigning everything later.
-      </p>
-      <p class="small-note">
-        For now, if you want something to read: browse the ebook library — same tone, same “no hype” policy.
-      </p>
-      <div class="cta-row">
-        <a class="button" href="/ebooks/">Explore eBooks</a>
-        <a class="button secondary" href="/newsletter/">Daily newsletter</a>
-      </div>
-    </section>
+<main id="main" class="wrap" role="main">
+  <section class="card" style="padding:18px;">
+    <h2 style="margin-top:0;">Latest posts</h2>
+    <p style="margin-top:0;">
+      This page auto-populates from your RSS feed and/or the published blog manifest in R2.
+      When publishing goes live, posts appear here automatically — no manual editing.
+    </p>
+    <p id="blogStatus" class="muted" aria-live="polite"></p>
+  </section>
 
-    <section class="panel">
-      <h2>Future structure</h2>
-      <ul class="bullet-list">
-        <li><strong>/blog/</strong> — index (this page)</li>
-        <li><strong>/blog/weekly/</strong> — weekly posts (your blog service can write here)</li>
-        <li><strong>/blog/assets/</strong> — blog images (already planned with your separate bucket)</li>
-      </ul>
-    </section>
-  </div>
+  <section id="blogList" aria-label="Blog posts"></section>
+
+  <section class="card" style="padding:18px; margin-top:18px;">
+    <h2 style="margin-top:0;">Prefer audio?</h2>
+    <p>There’s also <strong>Turing’s Torch: AI Weekly</strong> — the podcast version of the same “no nonsense” editorial approach.</p>
+    <a class="button secondary" href="/podcast/">Go to the podcast page</a>
+  </section>
 </main>
 
-<script defer src="https://botsailor.com/script/webchat-link.js?code=1744067063128291"></script>
 <div id="siteFooter"></div>
-<script defer src="/assets/js/site-ui.js"></script>
+
+<script src="/assets/js/blog-config.js"></script>
+<script src="/assets/js/blog.js"></script>
+<script src="/assets/js/site-ui.js"></script>
 </body>
 </html>
