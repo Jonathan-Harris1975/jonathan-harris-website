@@ -26,7 +26,7 @@
     return false;
   }
 
-function ensureStyles(){
+  function ensureStyles(){
     try{
       const head = document.head || document.getElementsByTagName("head")[0];
       if (!head) return;
