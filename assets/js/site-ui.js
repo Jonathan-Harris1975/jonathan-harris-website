@@ -149,7 +149,7 @@ function ensureStyles(){
     }catch(_){}
   }
 
-  async async function injectHeader(){
+  async function injectHeader(){
     try{
       // Avoid duplicate headers
       if (document.querySelector(".jh-header")) return;
@@ -179,7 +179,7 @@ function ensureStyles(){
     return !!document.querySelector("footer") && !document.getElementById(FOOTER_TARGET_ID);
   }
 
-  async async function injectFooter(){
+  async function injectFooter(){
     try{
       // If the page already includes a real footer, don't inject another.
       const hasRealFooter = !!document.querySelector("footer");
@@ -322,9 +322,6 @@ function ensureStyles(){
         span.textContent = a.textContent || "";
         a.replaceWith(span);
       });
-    }catch(_){}
-  });
-      header.querySelectorAll("nav, details, summary").forEach(el=>el.remove());
     }catch(_){}
   }
 
