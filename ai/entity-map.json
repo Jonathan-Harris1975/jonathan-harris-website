@@ -6,7 +6,7 @@
   },
   "podcast": {
     "id": "https://jonathan-harris.online/podcast/#podcast",
-    "name": "Turing’s Torch: AI Weekly",
+    "name": "Turing\u2019s Torch: AI Weekly",
     "url": "https://jonathan-harris.online/podcast/"
   },
   "books": [
@@ -245,7 +245,7 @@
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/#book",
       "identifier": "JH-AI-EBOOK-15",
-      "title": "artificial intelligence in Pharmaceuticals: Revolutionizing Healthcare",
+      "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
       "keywords": [
@@ -261,20 +261,19 @@
       ]
     },
     {
-      "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/#book",
+      "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/#book",
       "identifier": "JH-AI-EBOOK-16",
-      "title": "Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability",
+      "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
       "keywords": [
         "artificial intelligence",
         "ai",
         "machine learning",
         "automation",
-        "logistics",
-        "supply",
-        "chain",
-        "sustainability"
+        "sports",
+        "performance",
+        "fan engagement"
       ]
     },
     {
@@ -425,8 +424,8 @@
     {
       "id": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/#book",
       "identifier": "JH-AI-EBOOK-26",
-      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-      "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
+      "slug": "lights-camera-algorithm-ais-role-in-modern-filmmaking",
       "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/",
       "keywords": [
         "artificial intelligence",
@@ -491,7 +490,7 @@
     {
       "id": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/#book",
       "identifier": "JH-AI-EBOOK-30",
-      "title": "The Architects of AI_ Pioneers_ Breakthroughs_ and the Road Ahead",
+      "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
       "url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
       "keywords": [
