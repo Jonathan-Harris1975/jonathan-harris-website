@@ -316,15 +316,14 @@ function ensureStyles(){
   
   function stripHeaderLinks(){
     try{
-      const header = document.querySelector("header");
-      if (!header) return;
-      header.querySelectorAll("a").forEach(a=>{
+      document.querySelectorAll(".jh-header a").forEach(a=>{
         const span = document.createElement("span");
         span.className = a.className || "";
         span.textContent = a.textContent || "";
-        span.setAttribute("aria-label", span.textContent);
         a.replaceWith(span);
       });
+    }catch(_){}
+  });
       header.querySelectorAll("nav, details, summary").forEach(el=>el.remove());
     }catch(_){}
   }
@@ -338,11 +337,9 @@ function init(){
     injectFooter();
 
     if (!is404Page()){
-    if (!is404Page()){
       injectBreadcrumbs();
       injectInlineNewsletterCta();
-    }
-} else {
+    } else {
       // Clean up anything injected before (safety)
       document.querySelectorAll(".jh-breadcrumbs, .jh-inline-cta").forEach(el=>el.remove());
     }
