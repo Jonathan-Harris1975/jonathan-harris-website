@@ -68,7 +68,7 @@ function ensureStyles(){
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
 
           /* Header (clean, uncluttered, no “nav circle”) */
-          .jh-header{position:sticky;top:0;z-index:2500;width:100%;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);}
+          .jh-header{position:sticky;top:0;z-index:2500;width:100%;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transition:opacity 0.25s ease,transform 0.25s ease;transform:translateY(-4px);} .jh-header.jh-header--visible{opacity:1;pointer-events:auto;transform:translateY(0);}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;}
           .jh-topnav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
@@ -172,6 +172,31 @@ function ensureStyles(){
       }
 
       markActiveNav(header);
+
+      // Scroll-reveal: header hidden until hero scrolls out of view
+      try {
+        const hero = findHeroHost() || document.querySelector('.hero') || document.querySelector('header[role="banner"]');
+        if (hero && 'IntersectionObserver' in window) {
+          const io = new IntersectionObserver(
+            (entries) => {
+              const heroVisible = entries[0].isIntersecting;
+              if (heroVisible) {
+                header.classList.remove('jh-header--visible');
+              } else {
+                header.classList.add('jh-header--visible');
+              }
+            },
+            { threshold: 0.05 }
+          );
+          io.observe(hero);
+        } else {
+          // Fallback: always show if no IntersectionObserver
+          header.classList.add('jh-header--visible');
+        }
+      } catch(_) {
+        if (header) header.classList.add('jh-header--visible');
+      }
+
     }catch(_){}
   }
 
@@ -314,23 +339,11 @@ function ensureStyles(){
   }
 
   
-  function stripHeaderLinks(){
-    try{
-      document.querySelectorAll(".jh-header a").forEach(a=>{
-        const span = document.createElement("span");
-        span.className = a.className || "";
-        span.textContent = a.textContent || "";
-        a.replaceWith(span);
-      });
-    }catch(_){}
-  }
-
 function init(){
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
     injectHeader();
-    stripHeaderLinks();
     injectFooter();
 
     if (!is404Page()){
@@ -350,4 +363,3 @@ if (document.readyState === "loading"){
     init();
   }
 })();
-// Fallback: ensure header contains no clickable links
