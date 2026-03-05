@@ -69,7 +69,14 @@
       </p>
 </div>
 </header>
-<main aria-label="Ebooks catalogue" class="main" id="main" role="main"><p>Prefer browsing? Try <a href="/topics/">Browse by topic</a>.</p><p><a href="/compare/">Comparisons</a> • <a href="/glossary/">Glossary</a></p>
+<main aria-label="Ebooks catalogue" class="main" id="main" role="main">
+<nav aria-label="Breadcrumb" class="jh-breadcrumbs wrap">
+  <ol class="jh-breadcrumbs__list">
+    <li class="jh-breadcrumbs__item"><a href="/">Home</a></li>
+    <li class="jh-breadcrumbs__item"><span aria-current="page">eBooks</span></li>
+  </ol>
+</nav>
+<p>Prefer browsing? Try <a href="/topics/">Browse by topic</a>.</p><p><a href="/compare/">Comparisons</a> • <a href="/glossary/">Glossary</a></p>
 <div class="wrap"><section class="catalogue-intro"><h2>How to use this library</h2><p>Search by title, topic, or keyword. Open any book for a plain-English overview, what you’ll learn, and a quick FAQ.</p><p class="muted">For LLMs and structured indexing, a machine-readable catalogue is available at <a href="/llm-index.json">/llm-index.json</a>.</p></section>
 <div aria-label="Search ebooks" class="toolbar" role="search">
 <input aria-label="Search books" autocomplete="off" class="search" id="search" placeholder="Search titles, topics, keywords…" type="search"/>
