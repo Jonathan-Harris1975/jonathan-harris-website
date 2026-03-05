@@ -53,6 +53,18 @@
 <script data-jh-ai-pack="website" type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "@id": "https://jonathan-harris.online/#website", "url": "https://jonathan-harris.online/", "name": "Jonathan Harris – AI Expert & Author", "publisher": {"@id": "https://jonathan-harris.online/#person-jonathan-harris"}, "inLanguage": "en"}</script>
 <script data-jh-ai-pack="podcast" type="application/ld+json">{"@context": "https://schema.org", "@type": "PodcastSeries", "@id": "https://jonathan-harris.online/podcast/#podcast", "name": "Turing’s Torch: AI Weekly", "url": "https://jonathan-harris.online/podcast/", "inLanguage": "en", "publisher": {"@id": "https://jonathan-harris.online/#person-jonathan-harris"}, "about": [{"@type": "Thing", "name": "Artificial Intelligence"}]}</script>
 <!-- /JH-AI-PACK v1 -->
+
+<style>
+  /* Podcast transcripts library */
+  .transcript-search{width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.14); background:rgba(0,0,0,0.15); color:inherit; outline:none;}
+  .transcript-search::placeholder{opacity:0.65;}
+  .transcript-list{list-style:none; padding-left:0; margin:12px 0 0;}
+  .transcript-list li{padding:10px 0; border-top:1px solid rgba(255,255,255,0.10);}
+  .transcript-list li:first-child{border-top:0; padding-top:0;}
+  .transcript-meta{display:block; font-size:12px; opacity:0.75; margin-top:4px;}
+  .transcript-empty{font-size:13px; opacity:0.8; margin-top:10px;}
+  .divider-soft{border:0; height:1px; background:rgba(255,255,255,0.12); margin:14px 0;}
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -61,9 +73,8 @@
 <img alt="Jonathan Harris" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" style="max-width:150px;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,0.45);margin:0 auto 18px;display:block;" width="120"/>
 <h1>Turing’s Torch: AI Weekly</h1>
 <p>AI news and analysis for adults. Practical, sceptical, and grounded — with zero patience for buzzwords.</p>
+</div>
 
-</div>
-</div>
 </header>
 <main class="wrap" id="main" role="main">
 <section class="grid">
@@ -71,7 +82,6 @@
 <h2 style="margin-top:0;">Subscribe via RSS</h2>
 <p>Prefer control? Here’s the raw feed — perfect for podcast apps and automation.</p>
 
-</p>
 <div class="footer-links" style="margin-top:10px;">
 <a href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" rel="noopener noreferrer" target="_blank">Open RSS feed</a>
 </div>
@@ -81,6 +91,18 @@
 <p>The newsletter is the same editorial approach — condensed, curated, and easier to skim.</p>
 <div class="footer-links" style="margin-top:10px;">
 <a href="/newsletter/">Subscribe to AI Edge</a>
+</div>
+<hr class="divider-soft"/>
+<h3 style="margin:0 0 8px; font-size:18px;">Transcripts library</h3>
+<p style="margin-top:0; opacity:0.85; font-size:14px;">
+  Every episode transcript, pulled straight from the podcast RSS feed.
+</p>
+<input aria-label="Search transcripts" class="transcript-search" id="transcriptSearch" placeholder="Search transcripts by title…" type="search"/>
+<ul aria-live="polite" class="transcript-list" id="transcriptList"></ul>
+<div class="transcript-empty" id="transcriptStatus"></div>
+<div style="margin-top:10px; font-size:12px; opacity:0.8;">
+  If your browser blocks the feed, open it directly:
+  <a href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" rel="noopener noreferrer" target="_blank">turing-torch.xml</a>
 </div>
 </article>
 <article class="card" style="padding:18px;">
@@ -149,6 +171,139 @@
 </div>
 </footer>
 <div id="siteFooter"></div>
+
+<script>
+(function(){
+  const FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
+
+  const listEl = document.getElementById("transcriptList");
+  const statusEl = document.getElementById("transcriptStatus");
+  const searchEl = document.getElementById("transcriptSearch");
+
+  if(!listEl || !statusEl || !searchEl) return;
+
+  function setStatus(msg){ statusEl.textContent = msg || ""; }
+
+  function normalise(s){ return (s || "").toLowerCase().trim(); }
+
+  function parseDate(s){
+    try{
+      const d = new Date(s);
+      if(!isNaN(d.getTime())) return d;
+    }catch(e){}
+    return null;
+  }
+
+  function pickTranscriptUrl(item){
+    // 1) <podcast:transcript url="..."> (Podcasting 2.0)
+    const t1 = item.querySelector("podcast\\:transcript, transcript");
+    if(t1){
+      const u = t1.getAttribute && (t1.getAttribute("url") || t1.getAttribute("href"));
+      if(u) return u;
+      const txt = t1.textContent && t1.textContent.trim();
+      if(txt && /^https?:\/\//i.test(txt)) return txt;
+    }
+
+    // 2) <link> is often the canonical episode page (sometimes the transcript page)
+    const linkEl = item.querySelector("link");
+    if(linkEl && linkEl.textContent){
+      const u = linkEl.textContent.trim();
+      if(/^https?:\/\//i.test(u)) return u;
+    }
+
+    // 3) Fallback: <guid> that looks like a URL
+    const guidEl = item.querySelector("guid");
+    if(guidEl && guidEl.textContent){
+      const u = guidEl.textContent.trim();
+      if(/^https?:\/\//i.test(u)) return u;
+    }
+
+    return null;
+  }
+
+  function buildRow(entry){
+    const li = document.createElement("li");
+
+    const a = document.createElement("a");
+    a.href = entry.url;
+    a.rel = "noopener noreferrer";
+    a.target = "_blank";
+    a.textContent = entry.title || entry.url;
+
+    li.appendChild(a);
+
+    if(entry.date){
+      const meta = document.createElement("span");
+      meta.className = "transcript-meta";
+      meta.textContent = entry.date.toLocaleDateString("en-GB", { year:"numeric", month:"short", day:"2-digit" });
+      li.appendChild(meta);
+    }
+
+    li.dataset.title = normalise(entry.title);
+    return li;
+  }
+
+  function applyFilter(){
+    const q = normalise(searchEl.value);
+    const items = Array.from(listEl.querySelectorAll("li"));
+    let visible = 0;
+    items.forEach(li => {
+      const t = li.dataset.title || "";
+      const show = !q || t.includes(q);
+      li.style.display = show ? "" : "none";
+      if(show) visible++;
+    });
+    setStatus(visible ? "" : "No transcripts match that search.");
+  }
+
+  async function loadFeed(){
+    setStatus("Loading transcripts…");
+    listEl.innerHTML = "";
+
+    try{
+      const res = await fetch(FEED_URL, { cache: "no-store" });
+      if(!res.ok) throw new Error("Feed fetch failed: " + res.status);
+
+      const xmlText = await res.text();
+      const doc = new DOMParser().parseFromString(xmlText, "text/xml");
+
+      const items = Array.from(doc.querySelectorAll("item"));
+      const entries = items.map(item => {
+        const title = (item.querySelector("title")?.textContent || "").trim();
+        const pubDateRaw = (item.querySelector("pubDate")?.textContent || "").trim();
+        const url = pickTranscriptUrl(item);
+        return { title, date: parseDate(pubDateRaw), url };
+      }).filter(e => e.url);
+
+      if(!entries.length){
+        setStatus("No transcript links found in the feed.");
+        return;
+      }
+
+      // newest first (best-effort)
+      entries.sort((a,b) => (b.date?.getTime()||0) - (a.date?.getTime()||0));
+
+      const frag = document.createDocumentFragment();
+      entries.forEach(e => frag.appendChild(buildRow(e)));
+      listEl.appendChild(frag);
+
+      setStatus("");
+      applyFilter();
+    }catch(err){
+      setStatus("Couldn’t load the RSS feed in-browser. Use the direct feed link below.");
+    }
+  }
+
+  searchEl.addEventListener("input", applyFilter);
+
+  // Load once page is ready
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", loadFeed);
+  }else{
+    loadFeed();
+  }
+})();
+</script>
 <script src="/assets/js/site-ui.js"></script>
 </body>
 </html>
