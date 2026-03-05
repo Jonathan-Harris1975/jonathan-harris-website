@@ -13,7 +13,20 @@
   const FONT_PRECONNECT_2 = "https://fonts.gstatic.com";
   const FONT_STYLESHEET = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap";
 
-  function ensureStyles(){
+  
+  function is404Page(){
+    try{
+      const b = document.body;
+      if (b && b.classList && b.classList.contains("jh-page-404")) return true;
+      const p = (location && location.pathname ? location.pathname : "").toLowerCase();
+      if (p.endsWith("/404") || p.endsWith("/404/") || p.endsWith("404.html")) return true;
+      const t = (document.title || "").toLowerCase();
+      if (t.startsWith("404") || t.includes("page not found") || t.includes("not here")) return true;
+    }catch(_){}
+    return false;
+  }
+
+function ensureStyles(){
     try{
       const head = document.head || document.getElementsByTagName("head")[0];
       if (!head) return;
@@ -320,16 +333,22 @@ function init(){
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
-    injectBreadcrumbs();
-    injectInlineNewsletterCta();
-    hideLoader();
     injectHeader();
-    
     stripHeaderLinks();
-injectFooter();
+    injectFooter();
+
+    if (!is404Page()){
+      injectBreadcrumbs();
+      injectInlineNewsletterCta();
+    } else {
+      // Clean up anything injected before (safety)
+      document.querySelectorAll(".jh-breadcrumbs, .jh-inline-cta").forEach(el=>el.remove());
+    }
+
+    hideLoader();
   }
 
-  if (document.readyState === "loading"){
+if (document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", init);
   }else{
     init();
