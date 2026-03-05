@@ -918,3 +918,12 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
 
 /* Global: section spacing (home uses .jh-section) */
 .jh-section{padding: clamp(28px, 5vw, 52px) 0;}
+
+/* 404: on-brand CTA row */
+body.jh-page-404 .jh-404-ctas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin-top:18px;
+}
