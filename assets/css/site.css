@@ -22,8 +22,6 @@ body{
   color:var(--text);
   background:var(--bg);
   text-align:center;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
 }
 
 a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
@@ -557,10 +555,7 @@ details.facts li{margin:6px 0; color:var(--text)}
   outline:3px solid rgba(79,70,229,0.35);
 }
 
-/* JH Header */
-  .jh-topnav{ gap:12px; }
-  .jh-topnav a{ font-size:13px; }
-}
+/* jh-topnav desktop tweaks are set in site-ui.js inline styles */
 
 
 /* Catalogue topic chip on cards */
@@ -588,22 +583,7 @@ details.facts li{margin:6px 0; color:var(--text)}
 .jh-hero-host{position:relative;}
 
 
-.jh-header{
-  position: sticky;
-  top: 0;
-  z-index: 2500;
-  background: linear-gradient(180deg, rgba(10,16,28,0.98), rgba(10,16,28,0.92));
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  backdrop-filter: blur(10px);
-}
-.jh-header__inner{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+/* .jh-header layout is controlled by site-ui.js inline styles */
 .jh-topnav{
   display:flex;
   flex-wrap:wrap;
@@ -834,23 +814,7 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
   outline-offset: 2px;
 }
 
-/* Header: brand-only, on-brand */
-.jh-header{
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: linear-gradient(180deg, rgba(10,16,28,0.98), rgba(10,16,28,0.92));
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  backdrop-filter: blur(10px);
-}
-.jh-header__inner{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 14px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+/* Header brand-only block: removed duplicate — see site-ui.js */
 .jh-brand--static{
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -980,18 +944,7 @@ body.jh-page-404 main{
 .breadcrumbs a:hover,
 .jh-breadcrumbs a:hover { text-decoration: underline; }
 
-/* ── Sticky nav: visible from first interaction ── */
-.jh-header {
-  opacity: 1;
-  pointer-events: auto;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  transform: translateY(0);
-}
-.jh-header.jh-header--visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
+/* ── Sticky nav: opacity/visibility controlled by site-ui.js (is-visible class) ── */
 
 /* ── eBooks pagination buttons ── */
 .pager-btn {
