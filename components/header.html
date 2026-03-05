@@ -10,8 +10,32 @@
         <li><a href="/podcast/">Podcast</a></li>
         <li><a href="/newsletter/">Newsletter</a></li>
         <li><a href="/blog/">Blog</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+        <li><a href="/topics/">Topics</a></li>
         <li><a href="/bio/">About</a></li>
       </ul>
     </nav>
+    <button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger" id="jh-hamburger-btn">&#9776;</button>
   </div>
+  <nav aria-label="Mobile navigation" class="jh-mobile-nav" id="jh-mobile-nav">
+    <a href="/ebooks/">eBooks</a>
+    <a href="/podcast/">Podcast</a>
+    <a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a>
+    <a href="/glossary/">Glossary</a>
+    <a href="/topics/">Topics</a>
+    <a href="/bio/">About</a>
+  </nav>
 </header>
+<script>
+(function(){
+  var btn = document.getElementById('jh-hamburger-btn');
+  var nav = document.getElementById('jh-mobile-nav');
+  if(!btn || !nav) return;
+  btn.addEventListener('click', function(){
+    var open = nav.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.innerHTML = open ? '&#10005;' : '&#9776;';
+  });
+})();
+</script>
