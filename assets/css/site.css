@@ -632,11 +632,33 @@ details.facts li{margin:6px 0; color:var(--text)}
   border:1px solid rgba(79,70,229,0.35);
 }
 @media (max-width: 520px){
-  .jh-header{bottom:10px;}
-  .jh-header__inner{padding:10px 12px;}
-  .jh-topnav{gap:10px;}
-  .jh-topnav a{font-size:12.5px;padding:6px 6px;}
+  /* Mobile: keep nav human-friendly (no “nav circle”) */
+  .jh-header{
+    bottom:10px;
+    width: calc(100% - 24px);
+    border-radius:16px;
+  }
+  .jh-header__inner{
+    padding:10px 12px;
+    justify-content:flex-start;
+  }
+  .jh-topnav{
+    flex-wrap:nowrap;
+    justify-content:flex-start;
+    gap:10px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; /* Firefox */
+  }
+  .jh-topnav::-webkit-scrollbar{ display:none; }
+  .jh-topnav a{
+    flex:0 0 auto;
+    font-size:12.5px;
+    padding:8px 10px;
+    white-space:nowrap;
+  }
 }
+
 
 
 /* ===== UX Phase 1+2 Enhancements (brand-preserving) ===== */
