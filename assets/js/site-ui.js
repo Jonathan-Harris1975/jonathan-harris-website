@@ -149,7 +149,7 @@ function ensureStyles(){
     }catch(_){}
   }
 
-  async function injectHeader(){
+  async async function injectHeader(){
     try{
       // Avoid duplicate headers
       if (document.querySelector(".jh-header")) return;
@@ -179,7 +179,7 @@ function ensureStyles(){
     return !!document.querySelector("footer") && !document.getElementById(FOOTER_TARGET_ID);
   }
 
-  async function injectFooter(){
+  async async function injectFooter(){
     try{
       // If the page already includes a real footer, don't inject another.
       const hasRealFooter = !!document.querySelector("footer");
