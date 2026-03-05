@@ -66,14 +66,14 @@ function ensureStyles(){
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);}
+          .jh-header{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
           .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
           .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:none;}
           .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);}
-          .jh-hamburger{display:none;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:9px;color:#E5E7EB;cursor:pointer;font-size:18px;line-height:1;padding:7px 10px;margin-left:auto;}
+          .jh-hamburger{display:none;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.28);border-radius:9px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:8px 12px;margin-left:auto;min-width:42px;}
           .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
           .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
           .jh-mobile-nav.is-open{display:flex;}
@@ -178,11 +178,6 @@ function ensureStyles(){
 
       markActiveNav(header);
 
-      // Insert spacer div after header so content isn't hidden behind fixed header
-      var spacer = document.createElement('div');
-      spacer.className = 'jh-header-spacer';
-      spacer.setAttribute('aria-hidden', 'true');
-      header.parentNode.insertBefore(spacer, header.nextSibling);
 
       // Wire up hamburger button if present
       try {
@@ -198,6 +193,38 @@ function ensureStyles(){
           markActiveNav(mobileNav);
         }
       } catch(_) {}
+
+      // ── Scroll-reveal: show nav only after hero leaves viewport ──
+      // Falls back to always-visible if no hero or no IntersectionObserver support.
+      try {
+        var heroEl = (
+          document.querySelector('section[aria-label="Page Header"]') ||
+          document.querySelector('header.hero') ||
+          document.querySelector('.hero') ||
+          document.querySelector('header[role="banner"]') ||
+          null
+        );
+        if (heroEl && 'IntersectionObserver' in window) {
+          var revealIO = new IntersectionObserver(
+            function(entries) {
+              // Hero leaving view → show nav. Hero entering view → hide nav.
+              if (entries[0].isIntersecting) {
+                header.classList.remove('is-visible');
+              } else {
+                header.classList.add('is-visible');
+              }
+            },
+            { threshold: 0.05 }
+          );
+          revealIO.observe(heroEl);
+        } else {
+          // No hero found or no IO support — always show
+          header.classList.add('is-visible');
+        }
+      } catch(_) {
+        // Safety fallback
+        try { header.classList.add('is-visible'); } catch(__) {}
+      }
 
     }catch(_){}
   }
