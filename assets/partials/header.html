@@ -1,7 +1,7 @@
 <header class="jh-header" role="banner" aria-label="Primary site header">
   <div class="jh-header__inner">
     <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" aria-hidden="true"/>
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" aria-hidden="true" style="width:32px;height:32px;border-radius:8px;display:block;"/>
       Jonathan Harris
     </a>
     <nav aria-label="Primary navigation">
@@ -15,9 +15,9 @@
         <li><a href="/bio/">About</a></li>
       </ul>
     </nav>
-    <button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger" id="jh-hamburger-btn">&#9776;</button>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu">&#9776;</button>
   </div>
-  <nav aria-label="Mobile navigation" class="jh-mobile-nav" id="jh-mobile-nav">
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation">
     <a href="/ebooks/">eBooks</a>
     <a href="/podcast/">Podcast</a>
     <a href="/newsletter/">Newsletter</a>
@@ -27,15 +27,3 @@
     <a href="/bio/">About</a>
   </nav>
 </header>
-<script>
-(function(){
-  var btn = document.getElementById('jh-hamburger-btn');
-  var nav = document.getElementById('jh-mobile-nav');
-  if(!btn || !nav) return;
-  btn.addEventListener('click', function(){
-    var open = nav.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    btn.innerHTML = open ? '&#10005;' : '&#9776;';
-  });
-})();
-</script>
