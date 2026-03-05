@@ -257,20 +257,56 @@
 <p class="small-note" style="max-width:720px;margin:0 auto 14px;">
       Rotates weekly. Same library. New angle. No hype.
     </p>
-<div class="featured-ebook" id="featuredEbook">
-<a aria-label="Featured ebook overview" href="/ebooks/" id="featuredEbookLink">
-<img alt="Featured ebook cover" height="120" id="featuredEbookCover" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="120"/>
-</a>
-<div class="featured-copy">
-<h3 id="featuredEbookTitle">Loading…</h3>
-<p class="small-note" id="featuredEbookDesc"></p>
-<div class="cta-row">
-<a class="button secondary" href="/ebooks/" id="featuredEbookPage">Read overview</a>
-<a class="button" href="/ebooks/" id="featuredEbookBuy" rel="noopener noreferrer" target="_blank">View on Amazon</a>
+<div class="featured-ebook" id="featuredEbook" aria-live="polite">
+  <!-- Skeleton shown until JS loads the real content -->
+  <div id="featuredEbookSkeleton" aria-hidden="true">
+    <div class="skeleton skeleton-cover"></div>
+  </div>
+  <div id="featuredEbookSkeletonCopy" aria-hidden="true" style="flex:1;min-width:0;">
+    <div class="skeleton skeleton-line skeleton-line--mid"></div>
+    <div class="skeleton skeleton-line skeleton-line--long"></div>
+    <div class="skeleton skeleton-line skeleton-line--short"></div>
+    <div class="skeleton skeleton-btn"></div>
+  </div>
+  <!-- Real content, hidden until loaded -->
+  <a aria-label="Featured ebook overview" href="/ebooks/" id="featuredEbookLink" style="display:none;">
+    <img alt="Featured ebook cover" height="120" id="featuredEbookCover" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+  </a>
+  <div class="featured-copy" id="featuredEbookCopyWrap" style="display:none;">
+    <h3 id="featuredEbookTitle"></h3>
+    <p class="small-note" id="featuredEbookDesc"></p>
+    <div class="cta-row">
+      <a class="button secondary" href="/ebooks/" id="featuredEbookPage">Read overview</a>
+      <a class="button" href="/ebooks/" id="featuredEbookBuy" rel="noopener noreferrer" target="_blank">View on Amazon</a>
+    </div>
+    <div class="micro-meta" id="featuredEbookMeta" style="margin-top:10px;"></div>
+  </div>
 </div>
-<div class="micro-meta" id="featuredEbookMeta" style="margin-top:10px;"></div>
-</div>
-</div>
+<script>
+// Reveal real content and hide skeleton once featured book JS has populated the fields
+(function(){
+  function revealFeatured(){
+    var title = document.getElementById('featuredEbookTitle');
+    if(title && title.textContent && title.textContent.trim() !== ''){
+      var sk1 = document.getElementById('featuredEbookSkeleton');
+      var sk2 = document.getElementById('featuredEbookSkeletonCopy');
+      var link = document.getElementById('featuredEbookLink');
+      var copy = document.getElementById('featuredEbookCopyWrap');
+      if(sk1) sk1.style.display='none';
+      if(sk2) sk2.style.display='none';
+      if(link) link.style.display='';
+      if(copy) copy.style.display='';
+      return true;
+    }
+    return false;
+  }
+  var attempts = 0;
+  var interval = setInterval(function(){
+    attempts++;
+    if(revealFeatured() || attempts > 30){ clearInterval(interval); }
+  }, 200);
+})();
+</script>
 <div style="margin-top:16px;">
 <a class="button secondary" href="https://jonathan-harris.online/ebooks/">Browse all AI eBooks</a>
 </div>
@@ -347,21 +383,33 @@
 </div>
 </section>
 <!-- TESTIMONIALS -->
-<section aria-label="Reader Testimonials" class="jh-section" role="region" style="background-color:#F5F7FA;">
+<section aria-label="Reader Testimonials" class="jh-section" role="region" style="background-color:#EEF2FF;">
 <h2>What People Are Saying</h2>
 <div class="testimonials-container">
-<div class="testimonial">
-<p style="font-style:italic;">"The ebooks are properly useful — clear, practical, and not written like a corporate memo. I actually finished one in a weekend."</p>
-<p style="font-weight:bold;color:#4F46E5;">-- Hannah B., Operations Lead</p>
-</div>
-<div class="testimonial">
-<p style="font-style:italic;">"The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters."</p>
-<p style="font-weight:bold;color:#4F46E5;">-- Liam R., IT Manager</p>
-</div>
-<div class="testimonial">
-<p style="font-style:italic;">"The podcast nails the balance: realistic about AI, but not doom-and-gloom. It’s like getting the week’s nonsense filtered out for you."</p>
-<p style="font-weight:bold;color:#4F46E5;">-- Priya S., Product Designer</p>
-</div>
+  <div class="testimonial-card">
+    <p class="testimonial-card__quote">"The ebooks are properly useful — clear, practical, and not written like a corporate memo. I actually finished one in a weekend."</p>
+    <div class="testimonial-card__footer">
+      <div class="testimonial-card__avatar" aria-hidden="true">HB</div>
+      <div><div class="testimonial-card__name">Hannah B.</div><div class="testimonial-card__role">Operations Lead</div></div>
+      <span class="testimonial-card__stars" aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    </div>
+  </div>
+  <div class="testimonial-card">
+    <p class="testimonial-card__quote">"The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters."</p>
+    <div class="testimonial-card__footer">
+      <div class="testimonial-card__avatar" aria-hidden="true">LR</div>
+      <div><div class="testimonial-card__name">Liam R.</div><div class="testimonial-card__role">IT Manager</div></div>
+      <span class="testimonial-card__stars" aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    </div>
+  </div>
+  <div class="testimonial-card">
+    <p class="testimonial-card__quote">"The podcast nails the balance: realistic about AI, but not doom-and-gloom. It’s like getting the week’s nonsense filtered out for you."</p>
+    <div class="testimonial-card__footer">
+      <div class="testimonial-card__avatar" aria-hidden="true">PS</div>
+      <div><div class="testimonial-card__name">Priya S.</div><div class="testimonial-card__role">Product Designer</div></div>
+      <span class="testimonial-card__stars" aria-label="5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    </div>
+  </div>
 </div>
 </section>
 </main>

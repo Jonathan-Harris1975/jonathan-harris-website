@@ -40,3 +40,7 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 # 9) Terms
 /terms   /terms-of-use/  301
 /terms/  /terms-of-use/  301
+
+# 10) Consolidate author pages → canonical /bio/
+/author/   /bio/   301
+/author    /bio/   301
