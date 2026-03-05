@@ -982,26 +982,33 @@ body.jh-page-404 main{
 .book-card{ overflow:hidden; }
 
 
-/* ── Breadcrumbs: structurally present for crawlers, invisible to users ── */
+/* ── Breadcrumbs: visible for users ── */
 .breadcrumbs,
 .jh-breadcrumbs {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
+  display: block;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
   padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0,0,0,0) !important;
-  white-space: nowrap !important;
+  margin: 0 0 14px 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
   border: 0 !important;
+  font-size: 0.88rem;
+  color: var(--text-soft);
 }
+.breadcrumbs a,
+.jh-breadcrumbs a { color: var(--text-soft); text-decoration: none; }
+.breadcrumbs a:hover,
+.jh-breadcrumbs a:hover { text-decoration: underline; }
 
-/* ── Sticky nav: hidden until hero scrolls out of view ── */
+/* ── Sticky nav: visible from first interaction ── */
 .jh-header {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
   transition: opacity 0.25s ease, transform 0.25s ease;
-  transform: translateY(-4px);
+  transform: translateY(0);
 }
 .jh-header.jh-header--visible {
   opacity: 1;
@@ -1125,4 +1132,248 @@ body.jh-page-404 main{
   .bio-page .card p { font-size: 1rem; }
   .bio-page .about-banner { padding: 14px 12px 0; }
   .bio-page .about-banner img { border-radius: 14px; }
+}
+
+
+/* ── Prefers-reduced-motion: wrap transitions for vestibular safety ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .jh-header {
+    transition: none;
+  }
+  .card:hover, .book-card:hover {
+    transform: none;
+  }
+}
+
+/* ── Contrast ratio improvements (WCAG AA) ── */
+/* Meta text: #4B5563 → #374151 for better contrast on white */
+.meta, .text-soft, [class*="meta"], .micro-meta,
+.card .meta, .card p.meta,
+.section-lead { color: #374151; }
+
+/* Soft-bg alternating section: slightly deeper for clarity */
+:root {
+  --bg-soft: #EEF2FF;
+  --text-soft: #374151;
+}
+
+/* ── Content skeleton loaders for dynamic sections ── */
+.skeleton {
+  background: linear-gradient(90deg, #e8eaf0 25%, #f3f5f8 50%, #e8eaf0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: #e8eaf0;
+  }
+}
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-cover {
+  width: 100%;
+  aspect-ratio: 2/3;
+  max-width: 160px;
+  border-radius: 14px;
+}
+.skeleton-line {
+  height: 16px;
+  margin: 8px 0;
+  border-radius: 6px;
+}
+.skeleton-line--short { width: 55%; }
+.skeleton-line--mid   { width: 80%; }
+.skeleton-line--long  { width: 100%; }
+.skeleton-btn {
+  height: 38px;
+  width: 120px;
+  border-radius: 999px;
+  margin-top: 12px;
+}
+
+/* ── Hero CSS consolidated (newsletter page hero) ── */
+.hero--newsletter h1 {
+  font-size: 2.35rem;
+  line-height: 1.15;
+  color: #93C5FD;
+  letter-spacing: -.2px;
+  margin: 0 0 10px;
+}
+
+/* ── Mobile hamburger menu ── */
+.jh-hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 10px;
+  color: #E5E7EB;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 7px 10px;
+  margin-left: auto;
+}
+.jh-hamburger:focus {
+  outline: 2px solid rgba(147,197,253,0.75);
+  outline-offset: 2px;
+}
+.jh-mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  background: rgba(10,16,28,0.98);
+}
+.jh-mobile-nav.is-open {
+  display: flex;
+}
+.jh-mobile-nav a {
+  color: #E5E7EB;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 10px 12px;
+  border-radius: 10px;
+}
+.jh-mobile-nav a:hover,
+.jh-mobile-nav a:focus {
+  background: rgba(255,255,255,0.08);
+  outline: none;
+}
+.jh-mobile-nav a[aria-current="page"] {
+  background: rgba(79,70,229,0.20);
+  border: 1px solid rgba(79,70,229,0.35);
+}
+@media (max-width: 640px) {
+  .jh-hamburger { display: block; }
+  .jh-topnav { display: none !important; }
+  .jh-header__inner { flex-wrap: wrap; }
+}
+
+/* ── Testimonial cards with initials avatar ── */
+.testimonial-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+  padding: 22px 20px 18px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 680px;
+  width: 100%;
+}
+.testimonial-card__quote {
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+}
+.testimonial-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.testimonial-card__avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.testimonial-card__name {
+  font-weight: 700;
+  color: #4F46E5;
+  font-size: 0.92rem;
+}
+.testimonial-card__role {
+  color: #6B7280;
+  font-size: 0.85rem;
+}
+.testimonial-card__stars {
+  color: #F59E0B;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  margin-left: auto;
+}
+
+/* ── 404 search box ── */
+.jh-404-search {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 18px auto 10px;
+  max-width: 520px;
+}
+.jh-404-search input {
+  flex: 1 1 220px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+  color: rgba(230,238,255,0.92);
+  font-size: 0.95rem;
+  outline: none;
+}
+.jh-404-search input::placeholder {
+  color: rgba(209,213,219,0.55);
+}
+.jh-404-search input:focus {
+  border-color: rgba(147,197,253,0.55);
+  background: rgba(255,255,255,0.12);
+}
+.jh-404-search button {
+  padding: 11px 18px;
+  border-radius: 12px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.jh-404-search button:hover {
+  background: var(--accent-hover);
+}
+
+/* ── Newsletter fallback button ── */
+.newsletter-fallback {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none !important;
+  box-shadow: 0 8px 20px rgba(79,70,229,0.22);
+  margin-top: 10px;
+}
+.newsletter-fallback:hover {
+  background: var(--accent-hover);
 }
