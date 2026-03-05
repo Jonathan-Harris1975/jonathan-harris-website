@@ -338,9 +338,11 @@ function init(){
     injectFooter();
 
     if (!is404Page()){
+    if (!is404Page()){
       injectBreadcrumbs();
       injectInlineNewsletterCta();
-    } else {
+    }
+} else {
       // Clean up anything injected before (safety)
       document.querySelectorAll(".jh-breadcrumbs, .jh-inline-cta").forEach(el=>el.remove());
     }
