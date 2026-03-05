@@ -148,7 +148,7 @@ a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius
 .meta{color:var(--text-soft); font-size:.92rem}
 .tags{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0}
 .tag{
-  font-size:.82rem;
+  font-size:.875rem;
   padding:6px 10px;
   border-radius:999px;
   background:#F3F4F6;
@@ -189,8 +189,8 @@ details.more summary{
   list-style:none;
 }
 details.more summary::-webkit-details-marker{display:none}
-details.more summary:before{content:"▶"; margin-right:8px}
-details.more[open] summary:before{content:"▼"}
+details.more summary:before{content:"";display:inline-block;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid currentColor;margin-right:8px;vertical-align:middle;transition:transform .2s;}
+details.more[open] summary:before{transform:rotate(90deg);}
 
 .footer-note{
   padding:20px 0 0;
@@ -286,7 +286,7 @@ details.more[open] summary:before{content:"▼"}
   border-top: 1px solid rgba(255,255,255,0.06);
   font-size: 0.9rem;
 }
-.footer-fineprint{ color: rgba(255,255,255,0.54); }
+.footer-fineprint{ color: rgba(255,255,255,0.72); }
 
 @media (min-width: 820px){
   .footer-grid{ grid-template-columns: 1.6fr 1fr; align-items: start; }
@@ -450,8 +450,8 @@ details.facts summary{
   list-style:none;
 }
 details.facts summary::-webkit-details-marker{display:none}
-details.facts summary:before{content:"▶"; margin-right:8px}
-details.facts[open] summary:before{content:"▼"}
+details.facts summary:before{content:"";display:inline-block;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid currentColor;margin-right:8px;vertical-align:middle;transition:transform .2s;}
+details.facts[open] summary:before{transform:rotate(90deg);}
 details.facts ul{margin:12px 0 0; padding-left:18px}
 details.facts li{margin:6px 0; color:var(--text)}
 
@@ -981,3 +981,148 @@ body.jh-page-404 main{
 }
 .book-card{ overflow:hidden; }
 
+
+/* ── Breadcrumbs: structurally present for crawlers, invisible to users ── */
+.breadcrumbs,
+.jh-breadcrumbs {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ── Sticky nav: hidden until hero scrolls out of view ── */
+.jh-header {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(-4px);
+}
+.jh-header.jh-header--visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ── eBooks pagination buttons ── */
+.pager-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pager-btn:hover {
+  background: rgba(79,70,229,0.06);
+  border-color: rgba(79,70,229,0.3);
+}
+.pager-btn:focus {
+  outline: 2px solid rgba(79,70,229,0.85);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+.pager-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+.pager-info {
+  font-size: 0.9rem;
+  color: var(--text-soft);
+  min-width: 80px;
+  text-align: center;
+}
+
+/* ── Bio page – migrated from inline styles ── */
+.bio-page {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  text-align: center;
+  background: #FFFFFF;
+  color: #374151;
+}
+.bio-page .about-banner {
+  background: #F5F7FA;
+  padding: 18px 16px 0;
+}
+.bio-page .about-banner img {
+  display: block;
+  margin: 0 auto;
+  max-width: 900px;
+  width: 100%;
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.bio-page .main {
+  background: #F5F7FA;
+  padding: 26px 16px 64px;
+}
+.bio-page .card {
+  background: #FFFFFF;
+  max-width: 900px;
+  margin: 0 auto 18px;
+  padding: 30px 18px;
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.bio-page .card h2 {
+  margin: 0 0 12px;
+  font-size: 2rem;
+  color: #4F46E5;
+}
+.bio-page .card p {
+  margin: 0 auto 12px;
+  max-width: 720px;
+  font-size: 1.05rem;
+  color: #374151;
+}
+.bio-page a.button {
+  display: inline-block;
+  background: #4F46E5;
+  color: #FFFFFF !important;
+  padding: 12px 18px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(79,70,229,0.18);
+}
+.bio-page a.button:hover { background: #4338CA; }
+.bio-page a.link {
+  color: #4F46E5;
+  text-decoration: none;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+.bio-page a.link:hover {
+  background: rgba(79,70,229,0.08);
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .bio-page .hero { padding: 62px 12px 36px; }
+  .bio-page .hero h1 { font-size: 2rem; }
+  .bio-page .hero p { font-size: 1rem; }
+  .bio-page .card h2 { font-size: 1.55rem; }
+  .bio-page .card p { font-size: 1rem; }
+  .bio-page .about-banner { padding: 14px 12px 0; }
+  .bio-page .about-banner img { border-radius: 14px; }
+}
