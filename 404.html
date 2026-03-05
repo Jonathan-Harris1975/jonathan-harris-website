@@ -160,4 +160,33 @@
 <div id="siteFooter"></div>
 <script src="/assets/js/site-ui.js"></script>
 </body>
-</head></html>
+<style>
+/* 404 overrides (force brand dark theme even when global --bg is light) */
+body.jh-page-404{
+  background: var(--bg-dark) !important;
+  color: var(--text-light) !important;
+}
+body.jh-page-404 .wrap{
+  flex: 1;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding: 28px 16px 54px !important;
+  min-height: calc(100svh - 160px);
+  text-align:center;
+}
+body.jh-page-404 .card{
+  max-width: 820px;
+  width: 100%;
+}
+body.jh-page-404 h1{ color: #93C5FD !important; }
+body.jh-page-404 p{ color: rgba(209,213,219,0.95) !important; }
+body.jh-page-404 .jh-404-ctas{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 12px;
+  justify-content:center;
+  margin: 14px 0 18px;
+}
+body.jh-page-404 .jh-404-ctas .btn{ box-shadow: none; }
+</style></head></html>
