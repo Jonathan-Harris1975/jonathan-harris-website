@@ -13,7 +13,23 @@
   const FONT_PRECONNECT_2 = "https://fonts.gstatic.com";
   const FONT_STYLESHEET = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap";
 
-  function ensureStyles(){
+  
+  function is404Page(){
+    try{
+      const b = document.body;
+      if (b && b.classList && b.classList.contains("jh-page-404")) return true;
+      const t = (document.title || "").toLowerCase();
+      if (t.includes("page not found") || t.startsWith("404")) return true;
+      const p = (location && location.pathname ? location.pathname : "").toLowerCase();
+      if (p.includes("/404") || p.endsWith("404.html")) return true;
+      const main = document.querySelector('[role="main"]');
+      const aria = main ? (main.getAttribute("aria-label") || "").toLowerCase() : "";
+      if (aria.includes("page not found")) return true;
+    }catch(_){}
+    return false;
+  }
+
+function ensureStyles(){
     try{
       const head = document.head || document.getElementsByTagName("head")[0];
       if (!head) return;
@@ -304,8 +320,10 @@
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
-    injectBreadcrumbs();
-    injectInlineNewsletterCta();
+    if (!is404Page()){
+      injectBreadcrumbs();
+      injectInlineNewsletterCta();
+    }
     hideLoader();
     injectHeader();
     injectFooter();
