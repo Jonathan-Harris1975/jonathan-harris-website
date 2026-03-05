@@ -914,3 +914,7 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
   outline: 3px solid rgba(147,197,253,0.75);
   outline-offset: 2px;
 }
+
+
+/* Global: section spacing (home uses .jh-section) */
+.jh-section{padding: clamp(28px, 5vw, 52px) 0;}
