@@ -13,23 +13,7 @@
   const FONT_PRECONNECT_2 = "https://fonts.gstatic.com";
   const FONT_STYLESHEET = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap";
 
-  
-  function is404Page(){
-    try{
-      const b = document.body;
-      if (b && b.classList && b.classList.contains("jh-page-404")) return true;
-      const t = (document.title || "").toLowerCase();
-      if (t.includes("page not found") || t.startsWith("404")) return true;
-      const p = (location && location.pathname ? location.pathname : "").toLowerCase();
-      if (p.includes("/404") || p.endsWith("404.html")) return true;
-      const main = document.querySelector('[role="main"]');
-      const aria = main ? (main.getAttribute("aria-label") || "").toLowerCase() : "";
-      if (aria.includes("page not found")) return true;
-    }catch(_){}
-    return false;
-  }
-
-function ensureStyles(){
+  function ensureStyles(){
     try{
       const head = document.head || document.getElementsByTagName("head")[0];
       if (!head) return;
@@ -316,17 +300,33 @@ function ensureStyles(){
     }catch(_){}  
   }
 
-  function init(){
+  
+  function stripHeaderLinks(){
+    try{
+      const header = document.querySelector("header");
+      if (!header) return;
+      header.querySelectorAll("a").forEach(a=>{
+        const span = document.createElement("span");
+        span.className = a.className || "";
+        span.textContent = a.textContent || "";
+        span.setAttribute("aria-label", span.textContent);
+        a.replaceWith(span);
+      });
+      header.querySelectorAll("nav, details, summary").forEach(el=>el.remove());
+    }catch(_){}
+  }
+
+function init(){
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
-    if (!is404Page()){
-      injectBreadcrumbs();
-      injectInlineNewsletterCta();
-    }
+    injectBreadcrumbs();
+    injectInlineNewsletterCta();
     hideLoader();
     injectHeader();
-    injectFooter();
+    
+    stripHeaderLinks();
+injectFooter();
   }
 
   if (document.readyState === "loading"){
@@ -335,3 +335,4 @@ function ensureStyles(){
     init();
   }
 })();
+// Fallback: ensure header contains no clickable links
