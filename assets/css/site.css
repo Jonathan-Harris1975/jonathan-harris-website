@@ -589,19 +589,17 @@ details.facts li{margin:6px 0; color:var(--text)}
 
 
 .jh-header{
-  position:absolute;
-  left:50%;
-  bottom:14px;
-  transform:translateX(-50%);
-  z-index:2500;
-  background:rgba(13,20,32,0.78);
-  backdrop-filter:saturate(1.2) blur(10px);
-  border:1px solid rgba(255,255,255,0.14);
-  border-radius:999px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.22);
+  position: sticky;
+  top: 0;
+  z-index: 2500;
+  background: linear-gradient(180deg, rgba(10,16,28,0.98), rgba(10,16,28,0.92));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
 }
 .jh-header__inner{
-  padding:10px 14px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -912,11 +910,33 @@ body.jh-page-404 img{
   }
 }
 
-/* 404 overrides */
+/* 404: dark canvas (on-brand) */
 body.jh-page-404{
-  background: var(--bg-dark) !important;
-  color: var(--text-light) !important;
+  background: #0D1420 !important;
+  color: rgba(230,238,255,0.92) !important;
+}
+body.jh-page-404 .card{
+  background: rgba(255,255,255,0.06) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35) !important;
+}
+body.jh-page-404 h1, body.jh-page-404 h2, body.jh-page-404 h3{
+  color: rgba(180,210,255,0.95) !important;
+}
+body.jh-page-404 p{
+  color: rgba(230,238,255,0.78) !important;
+}
+body.jh-page-404 .jh-404-ctas{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin: 14px 0 18px;
+}
+body.jh-page-404 .jh-404-ctas a{
+  flex: 1 1 150px;
+  text-align:center;
 }
 body.jh-page-404 main{
-  background: transparent !important;
+  min-height: calc(100svh - 160px);
 }
