@@ -44,3 +44,7 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 # 10) Consolidate author pages → canonical /bio/
 /author/   /bio/   301
 /author    /bio/   301
+
+# Consolidate author pages → canonical /bio/
+/author/   /bio/   301
+/author    /bio/   301
