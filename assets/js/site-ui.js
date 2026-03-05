@@ -66,22 +66,27 @@ function ensureStyles(){
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-
-          /* Header (clean, uncluttered, no “nav circle”) */
-          .jh-header{position:sticky;top:0;z-index:2500;width:100%;background:rgba(13,20,32,0.92);backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transition:opacity 0.25s ease,transform 0.25s ease;transform:translateY(-4px);} .jh-header.jh-header--visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+          .jh-header{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
-          .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;}
-          .jh-topnav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
-          .jh-topnav a,.jh-navmore>summary{color:#E5E7EB;text-decoration:none;font-weight:650;font-size:13px;line-height:1.1;padding:8px 10px;border-radius:10px;}
-          .jh-topnav a:hover,.jh-topnav a:focus,.jh-navmore>summary:hover,.jh-navmore>summary:focus{background:rgba(255,255,255,0.08);outline:none;}
+          .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
+          .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
+          .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
+          .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:none;}
           .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);}
-          .jh-navmore{position:relative;}
-          .jh-navmore>summary{list-style:none;cursor:pointer;}
-          .jh-navmore>summary::-webkit-details-marker{display:none;}
-          .jh-navmore__panel{position:absolute;right:0;top:calc(100% + 10px);min-width:200px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.14);border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,0.35);padding:8px;}
-          .jh-navmore__panel a{display:block;padding:10px 10px;border-radius:10px;color:#E5E7EB;text-decoration:none;font-weight:600;}
-          .jh-navmore__panel a:hover,.jh-navmore__panel a:focus{background:rgba(255,255,255,0.08);outline:none;}
-          @media (max-width: 640px){.jh-header__inner{flex-wrap:wrap;justify-content:center;}.jh-topnav{justify-content:center;}.jh-navmore__panel{left:0;right:auto;}}.jh-header{bottom:10px;}.jh-header__inner{padding:10px 12px;}.jh-topnav{gap:10px;}.jh-topnav a{font-size:12.5px;}}
+          .jh-hamburger{display:none;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:9px;color:#E5E7EB;cursor:pointer;font-size:18px;line-height:1;padding:7px 10px;margin-left:auto;}
+          .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
+          .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
+          .jh-mobile-nav.is-open{display:flex;}
+          .jh-mobile-nav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:15px;padding:11px 12px;border-radius:10px;}
+          .jh-mobile-nav a:hover,.jh-mobile-nav a:focus{background:rgba(255,255,255,0.09);outline:none;}
+          .jh-mobile-nav a[aria-current="page"]{background:rgba(79,70,229,0.22);border:1px solid rgba(79,70,229,0.38);}
+          .jh-header-spacer{display:block;height:54px;}
+          @media (max-width:640px){
+            .jh-topnav{display:none !important;}
+            .jh-hamburger{display:block;}
+            .jh-header__inner{padding:10px 14px;}
+            .jh-header-spacer{height:52px;}
+          }
         `;
         head.appendChild(style);
       }
@@ -173,29 +178,26 @@ function ensureStyles(){
 
       markActiveNav(header);
 
-      // Scroll-reveal: header hidden until hero scrolls out of view
+      // Insert spacer div after header so content isn't hidden behind fixed header
+      var spacer = document.createElement('div');
+      spacer.className = 'jh-header-spacer';
+      spacer.setAttribute('aria-hidden', 'true');
+      header.parentNode.insertBefore(spacer, header.nextSibling);
+
+      // Wire up hamburger button if present
       try {
-        const hero = findHeroHost() || document.querySelector('.hero') || document.querySelector('header[role="banner"]');
-        if (hero && 'IntersectionObserver' in window) {
-          const io = new IntersectionObserver(
-            (entries) => {
-              const heroVisible = entries[0].isIntersecting;
-              if (heroVisible) {
-                header.classList.remove('jh-header--visible');
-              } else {
-                header.classList.add('jh-header--visible');
-              }
-            },
-            { threshold: 0.05 }
-          );
-          io.observe(hero);
-        } else {
-          // Fallback: always show if no IntersectionObserver
-          header.classList.add('jh-header--visible');
+        var btn = header.querySelector('.jh-hamburger');
+        var mobileNav = header.querySelector('.jh-mobile-nav');
+        if (btn && mobileNav) {
+          btn.addEventListener('click', function(){
+            var open = mobileNav.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.textContent = open ? '\u2715' : '\u2630';
+          });
+          // Mark active links in mobile nav too
+          markActiveNav(mobileNav);
         }
-      } catch(_) {
-        if (header) header.classList.add('jh-header--visible');
-      }
+      } catch(_) {}
 
     }catch(_){}
   }
