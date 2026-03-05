@@ -588,49 +588,38 @@ details.facts li{margin:6px 0; color:var(--text)}
 @media (max-width:520px){.jh-hero-host{padding-bottom:64px;}}
 
 
-
-/* JH Header (clean, uncluttered, no “nav circle”) */
 .jh-header{
-  position:sticky;
-  top:0;
+  position:absolute;
+  left:50%;
+  bottom:14px;
+  transform:translateX(-50%);
   z-index:2500;
-  width:100%;
-  background:rgba(13,20,32,0.92);
+  background:rgba(13,20,32,0.78);
   backdrop-filter:saturate(1.2) blur(10px);
-  border-bottom:1px solid rgba(255,255,255,0.10);
+  border:1px solid rgba(255,255,255,0.14);
+  border-radius:999px;
+  box-shadow:0 18px 40px rgba(0,0,0,0.22);
 }
 .jh-header__inner{
-  max-width:1120px;
-  margin:0 auto;
-  padding:12px 16px;
+  padding:10px 14px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:14px;
+  justify-content:center;
 }
-.jh-brand{
-  color:#E5E7EB;
-  text-decoration:none;
-  font-weight:800;
-  letter-spacing:-0.2px;
-  white-space:nowrap;
-}
-.jh-brand:hover,.jh-brand:focus{ color:#fff; outline:none; }
-
 .jh-topnav{
   display:flex;
-  align-items:center;
-  gap:12px;
   flex-wrap:wrap;
-  justify-content:flex-end;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
 }
 .jh-topnav a{
   color:#E5E7EB;
   text-decoration:none;
-  font-weight:650;
+  font-weight:600;
   font-size:13px;
   line-height:1.1;
-  padding:8px 10px;
+  padding:6px 6px;
   border-radius:10px;
 }
 .jh-topnav a:hover,
@@ -642,58 +631,13 @@ details.facts li{margin:6px 0; color:var(--text)}
   background:rgba(79,70,229,0.20);
   border:1px solid rgba(79,70,229,0.35);
 }
-
-/* Dropdown */
-.jh-navmore{ position:relative; }
-.jh-navmore > summary{
-  list-style:none;
-  cursor:pointer;
-  color:#E5E7EB;
-  font-weight:650;
-  font-size:13px;
-  padding:8px 10px;
-  border-radius:10px;
-}
-.jh-navmore > summary::-webkit-details-marker{ display:none; }
-.jh-navmore > summary:hover,
-.jh-navmore > summary:focus{
-  background:rgba(255,255,255,0.08);
-  outline:none;
-}
-.jh-navmore[open] > summary{
-  background:rgba(79,70,229,0.18);
-  border:1px solid rgba(79,70,229,0.32);
-}
-.jh-navmore__panel{
-  position:absolute;
-  right:0;
-  top:calc(100% + 10px);
-  min-width:200px;
-  background:rgba(13,20,32,0.98);
-  border:1px solid rgba(255,255,255,0.14);
-  border-radius:14px;
-  box-shadow:0 18px 40px rgba(0,0,0,0.35);
-  padding:8px;
-}
-.jh-navmore__panel a{
-  display:block;
-  padding:10px 10px;
-  border-radius:10px;
-  text-decoration:none;
-  color:#E5E7EB;
-  font-weight:600;
-}
-.jh-navmore__panel a:hover,
-.jh-navmore__panel a:focus{
-  background:rgba(255,255,255,0.08);
-  outline:none;
-}
-
-@media (max-width: 640px){
-  .jh-header__inner{ flex-wrap:wrap; justify-content:center; }
-  .jh-topnav{ justify-content:center; }
-  .jh-navmore__panel{ left:0; right:auto; }
-}
+@media (max-width: 520px){
+  /* Mobile: keep nav human-friendly (no “nav circle”) */
+  .jh-header{
+    bottom:10px;
+    width: calc(100% - 24px);
+    border-radius:16px;
+  }
   .jh-header__inner{
     padding:10px 12px;
     justify-content:flex-start;
@@ -915,15 +859,55 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
   outline-offset: 2px;
 }
 
-
-/* Global: section spacing (home uses .jh-section) */
-.jh-section{padding: clamp(28px, 5vw, 52px) 0;}
-
-/* 404: on-brand CTA row */
-body.jh-page-404 .jh-404-ctas{
+/* Header: brand-only, on-brand */
+.jh-header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(10,16,28,0.98), rgba(10,16,28,0.92));
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+}
+.jh-header__inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
   display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+  align-items:center;
   justify-content:center;
-  margin-top:18px;
+}
+.jh-brand--static{
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  font-size: 18px;
+  color: rgba(230,238,255,0.92);
+}
+
+/* 404: finish — reduce white void, centre content, tighten rhythm */
+body.jh-page-404 .jh-404-main{
+  min-height: calc(100vh - 180px);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+body.jh-page-404 .jh-404-layout{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 26px 16px 34px;
+}
+body.jh-page-404 h1, 
+body.jh-page-404 h2{
+  margin-top: 12px;
+}
+body.jh-page-404 .jh-404-ctas{
+  margin-top: 14px;
+  margin-bottom: 18px;
+}
+body.jh-page-404 img{
+  margin-top: 8px;
+}
+@media (min-width: 900px){
+  body.jh-page-404 .jh-404-layout{
+    padding-top: 34px;
+  }
 }
