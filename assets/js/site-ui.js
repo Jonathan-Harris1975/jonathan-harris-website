@@ -72,7 +72,11 @@
   function hideLoader(){
     try{
       const loader = document.getElementById(LOADER_ID);
-      if (loader) loader.style.display = "none";
+      if (loader) {
+        loader.style.display = "none";
+        loader.setAttribute("aria-hidden", "true");
+        loader.setAttribute("aria-live", "off");
+      }
     }catch(_){}
   }
 
