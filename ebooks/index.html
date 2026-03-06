@@ -108,7 +108,17 @@
 <script>
 (function(){
   var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
-  if(btn&&mn)btn.addEventListener('click',function(){var o=mn.classList.toggle('is-open');mn.hidden=!o;btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close navigation menu':'Open navigation menu');});
+  if(btn&&mn)btn.addEventListener('click',function(){
+    var open=mn.classList.toggle('is-open');
+    if(open){mn.removeAttribute('hidden');mn.style.display='';}
+    else{mn.style.display='none';}
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
+    var lbl=btn.querySelector('.jh-hamburger__label');
+    if(lbl)lbl.textContent=open?'Close':'Menu';
+    var icon=btn.firstChild;
+    if(icon&&icon.nodeType===3)icon.textContent=open?'\u2715 ':'\u2630 ';
+  });
 })();
 </script>
 <header aria-label="Ebooks catalogue header" class="hero" role="banner">
