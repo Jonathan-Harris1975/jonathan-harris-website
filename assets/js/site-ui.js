@@ -186,8 +186,13 @@
         if (btn && mobileNav) {
           btn.addEventListener('click', function(){
             var open = mobileNav.classList.toggle('is-open');
+            mobileNav.removeAttribute('hidden');
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-            btn.textContent = open ? '\u2715' : '\u2630';
+            btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+            var lbl = btn.querySelector('.jh-hamburger__label');
+            if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+            var icon = btn.firstChild;
+            if (icon && icon.nodeType === 3) icon.textContent = open ? '\u2715 ' : '\u2630 ';
           });
           // Mark active links in mobile nav too
           markActiveNav(mobileNav);
