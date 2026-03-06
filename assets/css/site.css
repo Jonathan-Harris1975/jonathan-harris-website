@@ -1187,7 +1187,7 @@ body.jh-page-404 main{
   background: rgba(79,70,229,0.20);
   border: 1px solid rgba(79,70,229,0.35);
 }
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .jh-hamburger { display: block; }
   .jh-topnav { display: none !important; }
   .jh-header__inner { flex-wrap: wrap; }
