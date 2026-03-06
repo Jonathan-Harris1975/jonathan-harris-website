@@ -1,12 +1,12 @@
 {
   "generated_utc": "2026-03-04T22:30:03.233401Z",
   "person": {
-    "id": "https://jonathan-harris.online/#person-jonathan-harris",
+    "id": "https://jonathan-harris.online/#person",
     "name": "Jonathan Harris"
   },
   "podcast": {
     "id": "https://jonathan-harris.online/podcast/#podcast",
-    "name": "Turing\u2019s Torch: AI Weekly",
+    "name": "Turing’s Torch: AI Weekly",
     "url": "https://jonathan-harris.online/podcast/"
   },
   "books": [
@@ -17,16 +17,14 @@
       "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "formula",
-        "1",
-        "motorsport",
-        "racing",
-        "strategy"
-      ]
+        "AI race strategy",
+        "Formula 1 analytics",
+        "predictive motorsport systems",
+        "machine learning racing"
+      ],
+      "asin": "B0DQHSD858",
+      "topic": "Transportation",
+      "pages": 227
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/#book",
@@ -35,14 +33,14 @@
       "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "agriculture",
-        "farming",
-        "sustainability"
-      ]
+        "AI precision farming",
+        "crop yield prediction",
+        "sustainable agriculture AI",
+        "smart farming technology"
+      ],
+      "asin": "B0DMN32J3Y",
+      "topic": "Agriculture",
+      "pages": 333
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/#book",
@@ -51,15 +49,14 @@
       "slug": "ai-in-aviation-transforming-safety-and-sustainability",
       "url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "aviation",
-        "aerospace",
-        "safety",
-        "sustainability"
-      ]
+        "AI aviation safety",
+        "predictive aircraft maintenance",
+        "air traffic AI optimisation",
+        "sustainable flight planning"
+      ],
+      "asin": "B0DMKTLMX6",
+      "topic": "Transportation",
+      "pages": 284
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/#book",
@@ -68,14 +65,14 @@
       "slug": "ai-in-education-reimagining-learning-for-every-student",
       "url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "education",
-        "learning",
-        "edtech"
-      ]
+        "AI adaptive learning",
+        "personalised education technology",
+        "automated grading systems",
+        "virtual AI tutoring"
+      ],
+      "asin": "B0DMKXWQDK",
+      "topic": "Education",
+      "pages": 323
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/#book",
@@ -84,15 +81,14 @@
       "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "maritime",
-        "shipping",
-        "logistics",
-        "sustainability"
-      ]
+        "autonomous maritime vessels",
+        "AI shipping optimisation",
+        "maritime emissions tracking",
+        "sustainable global trade AI"
+      ],
+      "asin": "B0DMMTGNDJ",
+      "topic": "Transportation",
+      "pages": 312
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/#book",
@@ -101,15 +97,14 @@
       "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
       "url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "smart",
-        "grid",
-        "energy",
-        "electricity"
-      ]
+        "AI smart grid management",
+        "renewable energy AI",
+        "electricity demand forecasting",
+        "smart grid optimisation"
+      ],
+      "asin": "B0DMKFZ3W3",
+      "topic": "Energy",
+      "pages": 338
     },
     {
       "id": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/#book",
@@ -118,15 +113,14 @@
       "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "rail",
-        "railways",
-        "transport",
-        "mobility"
-      ]
+        "AI railway predictive maintenance",
+        "autonomous train systems",
+        "smart rail scheduling",
+        "railway safety AI"
+      ],
+      "asin": "B0DWM19MZH",
+      "topic": "Transportation",
+      "pages": 254
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/#book",
@@ -135,14 +129,14 @@
       "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "law",
-        "legal",
-        "regulation"
-      ]
+        "AI legal case studies",
+        "automated contract law",
+        "AI judicial processes",
+        "AI legal ethics"
+      ],
+      "asin": "B0DQHTBSWJ",
+      "topic": "Law",
+      "pages": 224
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/#book",
@@ -151,15 +145,14 @@
       "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "cybersecurity",
-        "data",
-        "breach",
-        "prevention"
-      ]
+        "AI data breach prevention",
+        "machine learning threat detection",
+        "cybersecurity AI guide",
+        "AI intrusion detection"
+      ],
+      "asin": "B0DN4GZZQ4",
+      "topic": "Cybersecurity",
+      "pages": 269
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/#book",
@@ -168,14 +161,14 @@
       "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "wildlife",
-        "conservation",
-        "biodiversity"
-      ]
+        "AI wildlife monitoring",
+        "anti-poaching AI systems",
+        "biodiversity AI technology",
+        "AI habitat analysis"
+      ],
+      "asin": "B0DM8256SL",
+      "topic": "Environment",
+      "pages": 221
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/#book",
@@ -184,15 +177,13 @@
       "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "banking",
-        "finance",
-        "fintech",
-        "cybersecurity"
-      ]
+        "AI banking fraud detection",
+        "personalised financial services",
+        "AI data security banking",
+        "machine learning finance"
+      ],
+      "topic": "Finance",
+      "pages": 286
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/#book",
@@ -201,14 +192,13 @@
       "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "construction",
-        "building",
-        "sustainability"
-      ]
+        "AI construction planning",
+        "smart building safety AI",
+        "sustainable construction technology",
+        "AI project management"
+      ],
+      "topic": "Construction",
+      "pages": 319
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/#book",
@@ -217,13 +207,13 @@
       "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "industry",
-        "industrial"
-      ]
+        "AI industrial automation",
+        "AI analytics industry",
+        "AI ethics business",
+        "industrial AI transformation"
+      ],
+      "topic": "Industry",
+      "pages": 347
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/#book",
@@ -232,15 +222,13 @@
       "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "logistics",
-        "supply",
-        "chain",
-        "sustainability"
-      ]
+        "AI logistics optimisation",
+        "route planning AI",
+        "demand forecasting logistics",
+        "automated warehousing AI"
+      ],
+      "topic": "Transportation",
+      "pages": 339
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/#book",
@@ -249,16 +237,13 @@
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "pharmaceuticals",
-        "healthcare",
-        "biotech",
-        "medicine",
-        "diagnostics"
-      ]
+        "AI drug discovery",
+        "clinical trial AI optimisation",
+        "personalised medicine AI",
+        "pharmaceutical AI innovation"
+      ],
+      "topic": "Healthcare",
+      "pages": 328
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/#book",
@@ -267,14 +252,13 @@
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "sports",
-        "performance",
-        "fan engagement"
-      ]
+        "AI sports performance analytics",
+        "injury prevention AI",
+        "fan engagement AI",
+        "AI athlete data analysis"
+      ],
+      "topic": "Sports",
+      "pages": 229
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/#book",
@@ -283,16 +267,13 @@
       "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "veterinary",
-        "medicine",
-        "animal",
-        "healthcare",
-        "diagnostics"
-      ]
+        "AI veterinary diagnostics",
+        "animal health AI monitoring",
+        "personalised veterinary treatment",
+        "AI animal welfare"
+      ],
+      "topic": "Healthcare",
+      "pages": 235
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/#book",
@@ -301,15 +282,13 @@
       "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "retail",
-        "ecommerce",
-        "customer",
-        "experience"
-      ]
+        "AI retail personalisation",
+        "inventory optimisation AI",
+        "sustainable supply chain AI",
+        "AI customer experience"
+      ],
+      "topic": "Retail",
+      "pages": 234
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/#book",
@@ -318,15 +297,13 @@
       "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "manufacturing",
-        "industry",
-        "operations",
-        "maintenance"
-      ]
+        "AI manufacturing automation",
+        "predictive maintenance AI",
+        "smart supply chain AI",
+        "AI production optimisation"
+      ],
+      "topic": "Manufacturing",
+      "pages": 369
     },
     {
       "id": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/#book",
@@ -335,14 +312,13 @@
       "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
       "url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "space",
-        "exploration",
-        "aerospace"
-      ]
+        "AI space exploration",
+        "autonomous rover AI",
+        "space mission AI",
+        "AI astronomy data analysis"
+      ],
+      "topic": "Space",
+      "pages": 350
     },
     {
       "id": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/#book",
@@ -351,14 +327,13 @@
       "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
       "url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "climate",
-        "sustainability",
-        "energy"
-      ]
+        "AI climate change solutions",
+        "emissions tracking AI",
+        "AI renewable energy",
+        "AI environmental modelling"
+      ],
+      "topic": "Environment",
+      "pages": 338
     },
     {
       "id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#book",
@@ -367,14 +342,13 @@
       "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
       "url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "defence",
-        "warfare",
-        "security"
-      ]
+        "AI modern warfare",
+        "autonomous military drones",
+        "AI military cybersecurity",
+        "AI defence strategy"
+      ],
+      "topic": "Defence",
+      "pages": 296
     },
     {
       "id": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/#book",
@@ -383,14 +357,14 @@
       "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "url": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "healthcare",
-        "medicine",
-        "diagnostics"
-      ]
+        "AI healthcare diagnostics",
+        "predictive patient analytics",
+        "AI personalised medicine",
+        "machine learning clinical care"
+      ],
+      "asin": "B0DM73FR3W",
+      "topic": "Healthcare",
+      "pages": 348
     },
     {
       "id": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/#book",
@@ -399,14 +373,13 @@
       "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
       "url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "journalism",
-        "media",
-        "news"
-      ]
+        "AI automated journalism",
+        "AI fact checking news",
+        "personalised news AI",
+        "AI media ethics bias"
+      ],
+      "topic": "Media",
+      "pages": 334
     },
     {
       "id": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/#book",
@@ -415,16 +388,18 @@
       "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
       "url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "game AI machine learning",
+        "AI game development history",
+        "NPC behaviour AI systems",
+        "AI procedural generation"
+      ],
+      "topic": "Gaming",
+      "pages": 344
     },
     {
       "id": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/#book",
       "identifier": "JH-AI-EBOOK-26",
-      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ais-role-in-modern-filmmaking",
       "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/",
       "keywords": [
@@ -444,16 +419,14 @@
       "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
       "url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "smart",
-        "buildings",
-        "iot",
-        "energy",
-        "efficiency"
-      ]
+        "AI smart building management",
+        "energy efficiency AI buildings",
+        "predictive building maintenance",
+        "AI occupant comfort systems"
+      ],
+      "asin": "B0DMHBQVCR",
+      "topic": "Construction",
+      "pages": 345
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/#book",
@@ -462,15 +435,14 @@
       "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
       "url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "social",
-        "media",
-        "personalization",
-        "moderation"
-      ]
+        "AI social media feed",
+        "content moderation AI",
+        "social media personalisation AI",
+        "AI algorithmic feed design"
+      ],
+      "asin": "B0DY12Z1SP",
+      "topic": "Social Media",
+      "pages": 333
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/#book",
@@ -479,13 +451,14 @@
       "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "url": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "music",
-        "creativity"
-      ]
+        "AI music composition",
+        "AI artist collaboration",
+        "AI music production ethics",
+        "generative AI music"
+      ],
+      "asin": "B0DY666TZJ",
+      "topic": "Creativity",
+      "pages": 320
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/#book",
@@ -494,11 +467,14 @@
       "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
       "url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI history pioneers",
+        "AI research breakthroughs",
+        "AI future development",
+        "machine learning origins"
+      ],
+      "asin": "B0DY5MRT6K",
+      "topic": "General AI",
+      "pages": 315
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/#book",
@@ -507,11 +483,14 @@
       "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
       "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI job automation impact",
+        "AI workforce reskilling",
+        "future of work AI",
+        "AI employment disruption"
+      ],
+      "asin": "B0DMQHQTQH",
+      "topic": "Workforce",
+      "pages": 315
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/#book",
@@ -520,11 +499,14 @@
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
       "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI consciousness theories",
+        "AI algorithms evolution",
+        "AI societal implications",
+        "machine sentience AI"
+      ],
+      "asin": "B0DMYF3YH3",
+      "topic": "General AI",
+      "pages": 14
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/#book",
@@ -533,13 +515,14 @@
       "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
       "url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation",
-        "industry",
-        "industrial"
-      ]
+        "AI self-driving cars",
+        "autonomous vehicle AI",
+        "AI automotive manufacturing",
+        "AI predictive vehicle maintenance"
+      ],
+      "asin": "B0DMYQV1LY",
+      "topic": "Transportation",
+      "pages": 324
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/#book",
@@ -548,11 +531,14 @@
       "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
       "url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI cognitive impact",
+        "AI human decision making",
+        "digital reliance thinking",
+        "AI creativity automation"
+      ],
+      "asin": "B0DMMVN17Z",
+      "topic": "Society",
+      "pages": 277
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/#book",
@@ -561,11 +547,14 @@
       "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
       "url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI government services",
+        "public sector AI analytics",
+        "AI government cybersecurity",
+        "AI public administration"
+      ],
+      "asin": "B0DM74CRSD",
+      "topic": "Government",
+      "pages": 328
     },
     {
       "id": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/#book",
@@ -574,11 +563,14 @@
       "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
       "url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
       "keywords": [
-        "artificial intelligence",
-        "ai",
-        "machine learning",
-        "automation"
-      ]
+        "AI gambling personalisation",
+        "AI addiction risk gaming",
+        "AI casino ethics",
+        "personalised gaming AI"
+      ],
+      "asin": "B0DY4PSD8Z",
+      "topic": "Law",
+      "pages": 327
     }
   ]
 }
