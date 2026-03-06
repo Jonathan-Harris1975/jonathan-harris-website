@@ -1,11 +1,177 @@
-<header class="jh-header" role="banner" aria-label="Primary site header">
+<style>
+  /* ── Focus-visible: applies globally to all interactive elements ── */
+  :focus-visible {
+    outline: 2px solid #4F46E5;
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ── Primary nav header ── */
+  .jh-header {
+    background: #0D1420;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .jh-header__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+  .jh-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .jh-header__logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: block;
+  }
+  .jh-topnav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  .jh-topnav a {
+    color: #D1D5DB;
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    display: block;
+  }
+  .jh-topnav a:hover {
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+  }
+  .jh-topnav a[aria-current="page"] {
+    color: #93C5FD;
+    background: rgba(147,197,253,0.1);
+    font-weight: 600;
+  }
+
+  /* ── Search ── */
+  .jh-search-form {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .jh-search-input {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 5px 14px;
+    color: #D1D5DB;
+    font-size: 13px;
+    width: 160px;
+    transition: width 0.25s, border-color 0.2s;
+    font-family: inherit;
+  }
+  .jh-search-input::placeholder { color: rgba(209,213,219,0.5); }
+  .jh-search-input:focus {
+    width: 220px;
+    border-color: #4F46E5;
+    outline: none;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+  .jh-search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 300px;
+    background: #1a2333;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    z-index: 1001;
+    overflow: hidden;
+    display: none;
+  }
+  .jh-search-results.is-open { display: block; }
+  .jh-search-result-item {
+    display: block;
+    padding: 10px 16px;
+    color: #D1D5DB;
+    text-decoration: none;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.15s;
+  }
+  .jh-search-result-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .jh-search-result-item:last-child { border-bottom: none; }
+  .jh-search-result-label { font-size: 11px; color: #6B7280; display: block; margin-top: 2px; }
+
+  /* ── Hamburger ── */
+  .jh-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: #D1D5DB;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    margin-left: auto;
+    line-height: 1;
+  }
+  .jh-hamburger:hover { color: #fff; background: rgba(255,255,255,0.08); }
+
+  /* ── Mobile nav ── */
+  .jh-mobile-nav {
+    display: none;
+    flex-direction: column;
+    background: #0D1420;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 16px 16px;
+  }
+  .jh-mobile-nav a {
+    color: #D1D5DB;
+    text-decoration: none;
+    font-size: 15px;
+    padding: 11px 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: block;
+  }
+  .jh-mobile-nav a:last-child { border-bottom: none; }
+  .jh-mobile-nav a:hover,
+  .jh-mobile-nav a[aria-current="page"] { color: #93C5FD; }
+  .jh-mobile-nav.is-open { display: flex; }
+
+  @media (max-width: 768px) {
+    .jh-topnav, .jh-search-form { display: none; }
+    .jh-hamburger { display: flex; align-items: center; }
+  }
+</style>
+
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
   <div class="jh-header__inner">
     <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" aria-hidden="true" style="width:32px;height:32px;border-radius:8px;display:block;"/>
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" aria-hidden="true"/>
       Jonathan Harris
     </a>
     <nav aria-label="Primary navigation">
-      <ul class="jh-topnav" style="list-style:none;padding:0;margin:0;">
+      <ul class="jh-topnav">
         <li><a href="/ebooks/">eBooks</a></li>
         <li><a href="/podcast/">Podcast</a></li>
         <li><a href="/newsletter/">Newsletter</a></li>
@@ -15,9 +181,13 @@
         <li><a href="/bio/">About</a></li>
       </ul>
     </nav>
+    <form class="jh-search-form" role="search" aria-label="Site search" onsubmit="return jhHandleSearch(event)">
+      <input class="jh-search-input" type="search" id="jh-search-input" placeholder="Search…" aria-label="Search the site" autocomplete="off" aria-haspopup="listbox" aria-expanded="false" aria-controls="jh-search-results"/>
+      <div class="jh-search-results" id="jh-search-results" role="listbox" aria-label="Search suggestions"></div>
+    </form>
     <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu">&#9776;</button>
   </div>
-  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation">
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
     <a href="/ebooks/">eBooks</a>
     <a href="/podcast/">Podcast</a>
     <a href="/newsletter/">Newsletter</a>
@@ -27,3 +197,82 @@
     <a href="/bio/">About</a>
   </nav>
 </header>
+
+<script>
+(function () {
+  /* ── Active page highlighting ── */
+  var path = window.location.pathname.replace(/\/+$/, '') || '/';
+  document.querySelectorAll('.jh-topnav a, .jh-mobile-nav a').forEach(function (a) {
+    var href = a.getAttribute('href').replace(/\/+$/, '') || '/';
+    if (href === path || (href.length > 1 && path.startsWith(href))) {
+      a.setAttribute('aria-current', 'page');
+    }
+  });
+
+  /* ── Hamburger toggle ── */
+  var btn = document.querySelector('.jh-hamburger');
+  var mobileNav = document.getElementById('jh-mobile-nav');
+  if (btn && mobileNav) {
+    btn.addEventListener('click', function () {
+      var open = mobileNav.classList.toggle('is-open');
+      mobileNav.hidden = !open;
+      btn.setAttribute('aria-expanded', open);
+      btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+    });
+  }
+
+  /* ── Site search ── */
+  var PAGES = [
+    { title: 'eBooks',      url: '/ebooks/',       label: 'Browse all AI ebooks' },
+    { title: 'Podcast',     url: '/podcast/',      label: "Turing's Torch: AI Weekly" },
+    { title: 'Newsletter',  url: '/newsletter/',   label: 'Daily AI Edge newsletter' },
+    { title: 'Blog',        url: '/blog/',         label: 'Short takes and weekly posts' },
+    { title: 'Glossary',    url: '/glossary/',     label: 'Plain-English AI definitions' },
+    { title: 'Topics',      url: '/topics/',       label: 'Browse by topic' },
+    { title: 'About',       url: '/bio/',          label: 'About Jonathan Harris' },
+    { title: 'Contact',     url: '/contact/',      label: 'Get in touch' },
+    { title: 'Privacy Policy', url: '/privacy-policy/', label: '' },
+    { title: 'Terms of Use',   url: '/terms-of-use/',   label: '' },
+  ];
+
+  var inp = document.getElementById('jh-search-input');
+  var box = document.getElementById('jh-search-results');
+
+  window.jhHandleSearch = function (e) {
+    e.preventDefault();
+    var q = inp ? inp.value.trim().toLowerCase() : '';
+    if (!q) return false;
+    var m = PAGES.find(function (p) { return p.title.toLowerCase().includes(q); });
+    window.location.href = m ? m.url : '/glossary/';
+    return false;
+  };
+
+  if (inp && box) {
+    inp.addEventListener('input', function () {
+      var q = this.value.trim().toLowerCase();
+      box.innerHTML = '';
+      if (!q) { box.classList.remove('is-open'); inp.setAttribute('aria-expanded', 'false'); return; }
+      var hits = PAGES.filter(function (p) {
+        return p.title.toLowerCase().includes(q) || (p.label && p.label.toLowerCase().includes(q));
+      }).slice(0, 6);
+      if (!hits.length) { box.classList.remove('is-open'); inp.setAttribute('aria-expanded', 'false'); return; }
+      hits.forEach(function (p) {
+        var a = document.createElement('a');
+        a.className = 'jh-search-result-item';
+        a.href = p.url;
+        a.setAttribute('role', 'option');
+        a.innerHTML = p.title + (p.label ? '<span class="jh-search-result-label">' + p.label + '</span>' : '');
+        box.appendChild(a);
+      });
+      box.classList.add('is-open');
+      inp.setAttribute('aria-expanded', 'true');
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('#site-primary-nav')) { box.classList.remove('is-open'); inp.setAttribute('aria-expanded', 'false'); }
+    });
+    inp.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { box.classList.remove('is-open'); inp.setAttribute('aria-expanded', 'false'); inp.value = ''; }
+    });
+  }
+})();
+</script>
