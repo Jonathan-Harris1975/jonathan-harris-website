@@ -393,4 +393,25 @@ if (document.readyState === "loading"){
   }else{
     init();
   }
+
+// ── FAQ accordion aria-expanded enhancement ──────────────────────────────
+(function(){
+  function enhanceFaqAccordions(){
+    document.querySelectorAll('.faq details, details.more').forEach(function(det){
+      var sum = det.querySelector('summary');
+      if(!sum) return;
+      if(sum.hasAttribute('data-faq-enhanced')) return;
+      sum.setAttribute('data-faq-enhanced','1');
+      sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
+      det.addEventListener('toggle', function(){
+        sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
+      });
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enhanceFaqAccordions);
+  } else {
+    enhanceFaqAccordions();
+  }
+})();
 })();
