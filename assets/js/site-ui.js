@@ -66,7 +66,7 @@
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
+          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
@@ -156,8 +156,35 @@
 
   async function injectHeader(){
     try{
-      // Avoid duplicate headers
-      if (document.querySelector(".jh-header")) return;
+      // If a baked-in header already exists, wire it up and make it visible.
+      var existingHeader = document.querySelector(".jh-header");
+      if (existingHeader) {
+        // Baked-in header: ensure it's visible (no scroll-reveal needed, it's sticky)
+        existingHeader.classList.add('is-visible');
+        // Wire hamburger on the baked-in header
+        try {
+          var eBtn = existingHeader.querySelector('.jh-hamburger');
+          var eMobileNav = existingHeader.querySelector('.jh-mobile-nav');
+          if (eBtn && eMobileNav) {
+            // Remove stale listener by cloning the button
+            var newBtn = eBtn.cloneNode(true);
+            eBtn.parentNode.replaceChild(newBtn, eBtn);
+            newBtn.addEventListener('click', function(){
+              var open = eMobileNav.classList.toggle('is-open');
+              if (open) { eMobileNav.removeAttribute('hidden'); eMobileNav.style.display=''; }
+              else { eMobileNav.style.display='none'; }
+              newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+              newBtn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+              var lbl = newBtn.querySelector('.jh-hamburger__label');
+              if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+              var icon = newBtn.firstChild;
+              if (icon && icon.nodeType === 3) icon.textContent = open ? '\u2715 ' : '\u2630 ';
+            });
+            markActiveNav(eMobileNav);
+          }
+        } catch(_) {}
+        return;
+      }
 
       const res = await fetch(HEADER_URL, { cache: "force-cache" });
       if (!res.ok) return;
@@ -176,6 +203,7 @@
         document.body.insertBefore(header, document.body.firstChild);
       }
 
+      header.classList.add('jh-header--injected');
       markActiveNav(header);
 
 
