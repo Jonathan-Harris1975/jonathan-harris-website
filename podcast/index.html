@@ -67,6 +67,62 @@
 <link href="https://Jonathan-Harris.online/podcast/" rel="canonical"/><meta content="AI news and analysis for adults. Practical, sceptical, and grounded — with zero patience for buzzwords." name="description"/><meta content="index,follow" name="robots"/><meta content="page" name="ai:content_type"/><meta content="torch, x, podcast, newsletter, gen, weekly, turing, ebooks, ai, automation" name="ai:keywords"/><meta content="website" property="og:type"/><meta content="https://Jonathan-Harris.online/podcast/" property="og:url"/><meta content="Turing’s Torch: AI Weekly | Jonathan Harris" property="og:title"/><meta content="AI news and analysis for adults. Practical, sceptical, and grounded — with zero patience for buzzwords." property="og:description"/><meta content="summary_large_image" name="twitter:card"/><meta content="Turing’s Torch: AI Weekly | Jonathan Harris" name="twitter:title"/><meta content="AI news and analysis for adults. Practical, sceptical, and grounded — with zero patience for buzzwords." name="twitter:description"/></head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
+<!-- ── Primary navigation ── -->
+<style>
+  :focus-visible{outline:2px solid #4F46E5;outline-offset:3px;border-radius:4px;}
+  .jh-header{background:#0D1420;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;z-index:1000;}
+  .jh-header__inner{max-width:1200px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:24px;}
+  .jh-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0;}
+  .jh-header__logo{width:32px;height:32px;border-radius:8px;display:block;}
+  .jh-topnav{list-style:none;padding:0;margin:0;display:flex;align-items:center;gap:4px;flex:1;}
+  .jh-topnav a{color:#D1D5DB;text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;display:block;}
+  .jh-topnav a:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .jh-topnav a[aria-current="page"]{color:#93C5FD;background:rgba(147,197,253,.1);font-weight:600;}
+  .jh-hamburger{display:none;background:none;border:none;color:#D1D5DB;font-size:22px;cursor:pointer;padding:6px;border-radius:6px;margin-left:auto;line-height:1;}
+  .jh-hamburger:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .jh-mobile-nav{display:none;flex-direction:column;background:#0D1420;border-top:1px solid rgba(255,255,255,.08);padding:8px 16px 16px;}
+  .jh-mobile-nav a{color:#D1D5DB;text-decoration:none;font-size:15px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.06);display:block;}
+  .jh-mobile-nav a:last-child{border-bottom:none;}
+  .jh-mobile-nav a:hover,.jh-mobile-nav a[aria-current="page"]{color:#93C5FD;}
+  .jh-mobile-nav.is-open{display:flex;}
+  @media(max-width:768px){.jh-topnav{display:none;}.jh-hamburger{display:flex;align-items:center;}}
+</style>
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
+  <div class="jh-header__inner">
+    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
+      Jonathan Harris
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="jh-topnav">
+        <li><a href="/ebooks/">eBooks</a></li>
+        <li><a href="/podcast/">Podcast</a></li>
+        <li><a href="/newsletter/">Newsletter</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+        <li><a href="/topics/">Topics</a></li>
+        <li><a href="/bio/">About</a></li>
+      </ul>
+    </nav>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu">&#9776;</button>
+  </div>
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
+    <a href="/ebooks/">eBooks</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a><a href="/glossary/">Glossary</a><a href="/topics/">Topics</a><a href="/bio/">About</a>
+  </nav>
+</header>
+<script>
+(function(){
+  var path=window.location.pathname.replace(/\/+$/,'')||'/';
+  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
+    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
+    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
+  });
+  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
+  if(btn&&mn)btn.addEventListener('click',function(){var o=mn.classList.toggle('is-open');mn.hidden=!o;btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close navigation menu':'Open navigation menu');});
+})();
+</script>
+
 <header class="hero" role="banner">
 <div class="wrap">
 <img alt="Jonathan Harris" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" style="max-width:150px;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,0.45);margin:0 auto 18px;display:block;" width="120"/>
@@ -114,7 +170,7 @@
 <h2 style="margin-top:0;">Spotify player</h2>
 <p class="muted">If your browser blocks embeds, the subscribe links above still work.</p>
 <div style="border:1px solid var(--border); border-radius:18px; overflow:hidden;">
-<iframe allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/show/4NluRPjuAIGK59vVf7GcoF" style="border:0; width:100%; height:352px;"></iframe>
+<iframe title="Turing's Torch: AI Weekly podcast player" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/show/4NluRPjuAIGK59vVf7GcoF" style="border:0; width:100%; height:352px;"></iframe>
 </div>
 </section>
 </main>
