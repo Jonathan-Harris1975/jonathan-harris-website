@@ -1682,3 +1682,53 @@ main.wrap, .wrap#main, .main#main{
   margin-left: 2px;
 }
 
+
+/* ── CDN image fallback — dark brand background shows instead of broken icon ── */
+.cover { background-color: var(--bg-dark); }
+img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
+
+/* ── FAQ accordion — enhanced open state ── */
+.faq details { border-bottom: 1px solid var(--border); padding: 4px 0; }
+.faq details[open] > summary { color: var(--accent); }
+.faq summary { font-weight: 700; cursor: pointer; padding: 10px 0; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::before {
+  content: "";
+  display: inline-block;
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid currentColor;
+  margin-right: 8px;
+  vertical-align: middle;
+  transition: transform .2s;
+}
+.faq details[open] summary::before { transform: rotate(90deg); }
+
+/* ── Topic chips on book pages ── */
+.topic-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.topic-chip { font-size: .82rem; padding: 4px 10px; border-radius: 999px;
+  background: var(--indigo-lt, #EEF2FF); border: 1px solid rgba(79,70,229,.2);
+  color: #4F46E5; font-weight: 600; }
+
+/* ── Book detail page — hero cover image ── */
+.book-hero-cover {
+  display: block;
+  max-width: 180px;
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: contain;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.10);
+  background: var(--bg-dark);
+  margin: 18px auto 0;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+}
+@media (min-width: 640px) {
+  .book-hero-layout { display: flex; align-items: flex-start; gap: 28px; text-align: left; }
+  .book-hero-cover { margin: 0; flex-shrink: 0; max-width: 160px; }
+  .book-hero-copy { flex: 1; text-align: left; }
+  .book-hero-copy h1 { text-align: left; }
+  .book-hero-copy p { text-align: left; margin: 0 0 12px; }
+  .book-hero-copy .summary-box { text-align: left; }
+}
