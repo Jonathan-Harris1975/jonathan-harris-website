@@ -3,7 +3,7 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' cdn-cookieyes.com tracker.metricool.com botsailor.com fonts.googleapis.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com; img-src 'self' images.jonathan-harris.online assets.jonathan-harris.online data:; connect-src 'self' tracker.metricool.com; frame-src 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; script-src 'self' 'unsafe-inline' https://cdn-cookieyes.com https://tracker.metricool.com https://botsailor.com https://fonts.googleapis.com https://cdn.jotfor.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.jonathan-harris.online https://*.r2.dev https://i.scdn.co https://*.scdn.co; connect-src 'self' https://tracker.metricool.com https://*.jonathan-harris.online https://*.r2.dev https://form.jotform.com https://cdn.jotfor.ms; frame-src 'self' https://form.jotform.com https://www.jotform.com https://open.spotify.com; media-src 'self' https://*.jonathan-harris.online https://*.r2.dev https://open.spotify.com; frame-ancestors 'self'; object-src 'none'
 
 /api/*
   Access-Control-Allow-Origin: *
