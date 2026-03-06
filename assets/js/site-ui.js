@@ -214,7 +214,7 @@
                 header.classList.add('is-visible');
               }
             },
-            { threshold: 0.05 }
+            { threshold: 0.01, rootMargin: '-72px 0px 0px 0px' }
           );
           revealIO.observe(heroEl);
         } else {
@@ -229,29 +229,31 @@
     }catch(_){}
   }
 
-  function pageAlreadyHasFooter(){
-    return !!document.querySelector("footer") && !document.getElementById(FOOTER_TARGET_ID);
+  function ensureFooterTarget(){
+    let target = document.getElementById(FOOTER_TARGET_ID);
+    if (target) return target;
+
+    target = document.createElement("div");
+    target.id = FOOTER_TARGET_ID;
+    document.body.appendChild(target);
+    return target;
   }
 
   async function injectFooter(){
     try{
-      // If the page already includes a real footer, don't inject another.
-      const hasRealFooter = !!document.querySelector("footer");
-      const target = document.getElementById(FOOTER_TARGET_ID);
-
-      if (hasRealFooter){
-        // Prevent double-footers and remove the mount point if it exists.
-        if (target) target.remove();
-        return;
-      }
-
+      const target = ensureFooterTarget();
       if (!target) return;
+
+      const legacyFooters = Array.from(document.querySelectorAll("footer"));
+      legacyFooters.forEach((footer) => {
+        if (!footer.closest(`#${FOOTER_TARGET_ID}`)) footer.remove();
+      });
 
       const res = await fetch(FOOTER_URL, { cache: "force-cache" });
       if (!res.ok) return;
       const html = await res.text();
       target.innerHTML = html;
-    }catch(_){}
+    }catch(_){ }
   }
 
 
