@@ -81,7 +81,7 @@
           .jh-mobile-nav a:hover,.jh-mobile-nav a:focus{background:rgba(255,255,255,0.09);outline:none;}
           .jh-mobile-nav a[aria-current="page"]{background:rgba(79,70,229,0.22);border:1px solid rgba(79,70,229,0.38);}
           .jh-header-spacer{display:block;height:54px;}
-          @media (max-width:640px){
+          @media (max-width:768px){
             .jh-topnav{display:none !important;}
             .jh-hamburger{display:block;}
             .jh-header__inner{padding:10px 14px;}
@@ -226,40 +226,11 @@
           markActiveNav(mobileNav);
         }
       } catch(_) {}
+      // Keep the primary navigation visible immediately.
+      // Delayed reveal looked slick on paper but behaved like a missing menu on real devices.
+      header.classList.add('is-visible');
 
-      // ── Scroll-reveal: show nav only after hero leaves viewport ──
-      // Falls back to always-visible if no hero or no IntersectionObserver support.
-      try {
-        var heroEl = (
-          document.querySelector('section[aria-label="Page Header"]') ||
-          document.querySelector('header.hero') ||
-          document.querySelector('.hero') ||
-          document.querySelector('header[role="banner"]') ||
-          null
-        );
-        if (heroEl && 'IntersectionObserver' in window) {
-          var revealIO = new IntersectionObserver(
-            function(entries) {
-              // Hero leaving view → show nav. Hero entering view → hide nav.
-              if (entries[0].isIntersecting) {
-                header.classList.remove('is-visible');
-              } else {
-                header.classList.add('is-visible');
-              }
-            },
-            { threshold: 0.01, rootMargin: '-72px 0px 0px 0px' }
-          );
-          revealIO.observe(heroEl);
-        } else {
-          // No hero found or no IO support — always show
-          header.classList.add('is-visible');
-        }
-      } catch(_) {
-        // Safety fallback
-        try { header.classList.add('is-visible'); } catch(__) {}
-      }
-
-    }catch(_){}
+    }catch(_){ }
   }
 
   function ensureFooterTarget(){
