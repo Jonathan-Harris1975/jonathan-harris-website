@@ -1,177 +1,94 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Page Not Found | Jonathan Harris</title>
-<meta content="Jonathan Harris" name="author"/>
-<meta content="artificial intelligence, ai technology, practical ai, generative ai, machine learning, ai for business, ethical ai, real world ai, ai insights, ai trends, ai analysis, large language models, chatgpt, openai ai, ai productivity, human centred ai, 404, page not found" name="keywords"/>
-<meta content="Page not found. Return to Jonathan Harris Online for AI ebooks, the daily newsletter, and the podcast." name="description"/>
-<meta content="noindex, follow" name="robots"/>
-<meta content="#0D1420" name="theme-color"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
-<style>
-    :root{
-      --bg:#0D1420;
-      --title:#93C5FD;
-      --text:#D1D5DB;
-    }
-
-    html, body{
-      height:100%;
-      margin:0;
-      padding:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    body{
-      display:flex;
-      flex-direction:column;
-      min-height:100vh;
-    }
-
-    .wrap{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:42px 16px 24px;
-      text-align:center;
-    }
-
-    .card{
-      max-width:820px;
-      width:100%;
-    }
-
-    .logo{
-      width:180px;
-      height:180px;
-      border-radius:12px;
-      display:block;
-      margin:0 auto 18px;
-      object-fit:cover;
-      box-shadow:0 6px 22px rgba(0,0,0,0.45);
-    }
-
-    h1{
-      margin:0 0 10px;
-      font-size:40px;
-      line-height:1.15;
-      color:var(--title);
-      font-weight:800;
-      letter-spacing:-0.02em;
-    }
-
-    p{
-      margin:0 auto 18px;
-      max-width:720px;
-      font-size:18px;
-      color:var(--text);
-      line-height:1.6;
-    }
-
-    .img404{
-      width:min(520px, 92vw);
-      height:auto;
-      border-radius:18px;
-      box-shadow:0 18px 60px rgba(0,0,0,0.45);
-      display:block;
-      margin:22px auto 22px;
-    }
-
-    .links a{
-      color:var(--title);
-      text-decoration:none;
-      font-weight:800;
-      margin:0 10px;
-    }
-    .links a:hover{ text-decoration:underline; }
-
-    @media (max-width:600px){
-      h1{font-size:32px;}
-      p{font-size:16px;}
-    }
-  </style>
+  <meta charset="utf-8"/>
+  <link href="https://images.jonathan-harris.online" rel="preconnect"/>
+  <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Page Not Found | Jonathan Harris</title>
+  <meta content="Jonathan Harris" name="author"/>
+  <meta content="Page not found. Return to Jonathan Harris Online for AI ebooks, the daily newsletter, and the podcast." name="description"/>
+  <meta content="noindex, follow" name="robots"/>
+  <meta content="#0D1420" name="theme-color"/>
+  <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+  <!-- Use the shared site stylesheet for consistent layout and typography -->
+  <link href="/assets/css/site.css" rel="stylesheet"/>
+  <script defer src="/assets/js/site-ui.js"></script>
 </head>
-<body>
+<body class="jh-page-404">
+
 <a class="skip-link" href="#main">Skip to main content</a>
-<main aria-label="Page not found" class="wrap" id="main" role="main">
-<div class="card">
-<img alt="Jonathan Harris" class="logo" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
-<h1>404 — Page not found</h1>
-<p>This page doesn’t exist, or it’s been moved. Either way, it’s not here.</p>
-<div class="jh-404-search" role="search">
-  <input aria-label="Search the site" id="jh404-input" placeholder="Try searching…" type="search"/>
-  <button onclick="var q=document.getElementById('jh404-input').value.trim();if(q)window.location='/ebooks/?q='+encodeURIComponent(q);" type="button">Search</button>
-</div>
-<nav aria-label="Popular pages" style="margin:18px auto 14px;max-width:480px;">
-  <p style="font-size:0.88rem;color:rgba(180,210,255,0.75);margin:0 0 10px;">Or jump to:</p>
-  <div class="jh-404-ctas">
-    <a class="button" href="/ebooks/">eBooks</a>
-    <a class="button secondary" href="/podcast/">Podcast</a>
-    <a class="button secondary" href="/newsletter/">Newsletter</a>
-    <a class="button secondary" href="/glossary/">Glossary</a>
-    <a class="button secondary" href="/bio/">About</a>
+
+<!-- Shared site header — identical to all other pages -->
+<div id="siteHeader"></div>
+<script>
+  fetch('/components/header.html').then(r=>r.text()).then(h=>{
+    document.getElementById('siteHeader').outerHTML = h;
+  });
+</script>
+
+<main id="main" role="main" aria-label="Page not found">
+  <div class="jh-404-layout wrap">
+
+    <!-- Logo -->
+    <a href="/" aria-label="Return to homepage">
+      <img
+        src="https://images.jonathan-harris.online/site-logo"
+        alt="Jonathan Harris logo"
+        width="80" height="80"
+        loading="eager" fetchpriority="high"
+        style="width:80px;height:80px;border-radius:14px;display:block;margin:0 auto 24px;box-shadow:0 8px 28px rgba(0,0,0,0.45);"
+      />
+    </a>
+
+    <!-- Heading hierarchy: H1 → descriptive subtext -->
+    <h1 style="text-align:center;color:#93C5FD;margin:0 0 12px;">404 — Page Not Found</h1>
+    <p style="text-align:center;max-width:560px;margin:0 auto 24px;color:#D1D5DB;font-size:1.1rem;line-height:1.65;">
+      This page doesn't exist or has been moved. Use the search or jump to a popular section below.
+    </p>
+
+    <!-- Search — same style as site search -->
+    <div class="jh-404-search" role="search" aria-label="Search the site">
+      <input
+        id="jh404-input"
+        type="search"
+        placeholder="Try searching…"
+        aria-label="Search the site"
+        autocomplete="off"
+      />
+      <button
+        type="button"
+        onclick="var q=document.getElementById('jh404-input').value.trim();if(q)window.location='/ebooks/?q='+encodeURIComponent(q);"
+      >Search</button>
+    </div>
+
+    <!-- Primary CTA -->
+    <div class="jh-404-ctas" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:28px auto 10px;max-width:600px;">
+      <a class="button" href="/ebooks/" style="flex:1 1 140px;text-align:center;">Browse eBooks</a>
+      <a class="button secondary" href="/podcast/" style="flex:1 1 140px;text-align:center;">Podcast</a>
+      <a class="button secondary" href="/newsletter/" style="flex:1 1 140px;text-align:center;">Newsletter</a>
+      <a class="button secondary" href="/glossary/" style="flex:1 1 140px;text-align:center;">Glossary</a>
+      <a class="button secondary" href="/bio/" style="flex:1 1 140px;text-align:center;">About</a>
+    </div>
+
+    <!-- Illustration — same corner-radius language as site cards -->
+    <img
+      src="https://images.jonathan-harris.online/404-img"
+      alt="Illustration of a lost robot searching for a page"
+      loading="lazy"
+      style="width:min(440px,88vw);height:auto;border-radius:18px;display:block;margin:32px auto 0;box-shadow:0 18px 60px rgba(0,0,0,0.4);"
+    />
+
   </div>
-</nav>
-<img alt="404 illustration" class="img404" loading="lazy" src="https://images.jonathan-harris.online/404-img"/>
 </main>
-<!-- Animated Footer with Hover Effects -->
-<footer aria-label="Website Footer" role="contentinfo" style="background-color:#0D1420; color:#D1D5DB; font-family:Arial, Helvetica, sans-serif; font-size:14px; padding:20px 15px;">
-<div style="max-width:1200px; margin:0 auto;">
-<div style="display:flex; flex-direction:column; gap:30px; align-items:center; text-align:center;">
-<!-- Navigation Links -->
-<nav aria-label="Footer navigation">
-<ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 40px;">
-<li><a href="https://jonathan-harris.online/" style="color:#93C5FD; text-decoration:none;">Home</a></li>
-<li><a href="https://jonathan-harris.online/bio" style="color:#93C5FD; text-decoration:none;">More About Me</a></li>
-<li><a href="https://jonathan-harris.online/terms-of-use" style="color:#93C5FD; text-decoration:none;">Terms of Use</a></li>
-<li><a href="https://jonathan-harris.online/privacy-policy" style="color:#93C5FD; text-decoration:none;">Privacy Policy</a></li>
-<li><a href="https://jonathan-harris.online/affiliate" style="color:#93C5FD; text-decoration:none;">Affiliate Partners</a></li>
-<li><a href="https://jonathan-harris.online/contact" style="color:#93C5FD; text-decoration:none;">Contact Me</a></li>
-</ul>
-</nav>
-<!-- Social Media Links -->
-<nav aria-label="Social media links">
-<ul style="list-style:none; padding:0; margin:0; display:flex; justify-content:center; gap:25px;">
-<li>
-<a href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank">
-<img alt="YouTube" loading="lazy" src="https://images.jonathan-harris.online/youtube-logo" style="width:30px;height:30px;opacity:0.7;"/>
-</a>
-</li>
-<li>
-<a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">
-<img alt="Spotify Podcast" loading="lazy" src="https://images.jonathan-harris.online/spotify-logo" style="width:30px;height:30px;opacity:0.7;"/>
-</a>
-</li>
-<li>
-<a href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank">
-<img alt="TikTok" loading="lazy" src="https://images.jonathan-harris.online/tiktok-icon" style="width:30px;height:30px;opacity:0.7;"/>
-</a>
-</li>
-<li>
-<a href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank">
-<img alt="Facebook" loading="lazy" src="https://images.jonathan-harris.online/facebook-icon" style="width:30px;height:30px;opacity:0.7;"/>
-</a>
-</li>
-<li>
-<a href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank">
-<img alt="Instagram" loading="lazy" src="https://images.jonathan-harris.online/insta-logo" style="width:30px;height:30px;opacity:0.7;"/>
-</a>
-</li>
-</ul>
-</nav>
-<div style="font-size:12px;">© 2026 Jonathan Harris. All rights reserved.</div>
-</div>
-</div>
-</footer>
+
+<!-- Shared site footer — identical to all other pages -->
 <div id="siteFooter"></div>
-<script src="/assets/js/site-ui.js"></script>
+<script>
+  fetch('/components/footer.html').then(r=>r.text()).then(h=>{
+    document.getElementById('siteFooter').outerHTML = h;
+  });
+</script>
+
 </body>
 </html>
