@@ -96,4 +96,32 @@
 </section>
 </main>
 <div id="siteFooter"></div>
+
+<!-- Back to top button -->
+<style>
+  .btt-btn {
+    position: fixed; bottom: 28px; right: 24px;
+    background: #4F46E5; color: #fff;
+    border: none; border-radius: 50%;
+    width: 48px; height: 48px;
+    font-size: 20px; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(79,70,229,0.4);
+    display: none; align-items: center; justify-content: center;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 900;
+  }
+  .btt-btn:hover { background: #4338CA; transform: translateY(-2px); }
+  .btt-btn.visible { display: flex; }
+</style>
+<button aria-label="Back to top" class="btt-btn" id="bttBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8679;</button>
+<script>
+(function(){
+  var btn = document.getElementById('bttBtn');
+  if(!btn) return;
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, {passive:true});
+})();
+</script>
+
 </body></html>
