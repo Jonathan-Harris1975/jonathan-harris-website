@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Jonathan Harris Books</ShortName>
+  <Description>Search the Jonathan Harris AI ebook catalogue — 36 plain-English guides to AI across industries.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">https://jonathan-harris.online/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://jonathan-harris.online/ebooks/?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self"
+       template="https://jonathan-harris.online/opensearch.xml"/>
+  <moz:SearchForm>https://jonathan-harris.online/ebooks/</moz:SearchForm>
+  <Tags>AI artificial intelligence ebooks Jonathan Harris</Tags>
+  <LongName>Jonathan Harris AI Ebook Catalogue Search</LongName>
+  <Contact>hello@jonathan-harris.online</Contact>
+</OpenSearchDescription>
