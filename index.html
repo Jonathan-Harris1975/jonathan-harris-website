@@ -184,17 +184,19 @@
   .lp-ebook-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
   .lp-ebook-card__cover {
     background: linear-gradient(135deg, #1e2d45 0%, #0D1420 100%);
-    height: 120px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 0;
     font-size: 13px;
     font-weight: 700;
     color: #93C5FD;
     text-align: center;
     line-height: 1.4;
+    overflow: hidden;
   }
+  .lp-ebook-card__cover--img { padding: 0; }
   .lp-ebook-card__body { padding: 14px 16px; }
   .lp-ebook-card__title { margin: 0; font-size: 13px; color: #111827; font-weight: 600; line-height: 1.4; }
 
@@ -836,23 +838,23 @@
       <p class="lp-section-desc">A sample of topics covered. Each one designed to be read and understood by non-technical people.</p>
       <div class="lp-ebooks">
         <a class="lp-ebook-card" href="/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/">
-          <div class="lp-ebook-card__cover">AI in Healthcare</div>
+          <div class="lp-ebook-card__cover lp-ebook-card__cover--img"><img src="https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp" alt="Digital Diagnosis — AI in Healthcare cover" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;display:block;"/></div>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Digital Diagnosis: How AI is Revolutionizing Healthcare</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/">
-          <div class="lp-ebook-card__cover">AI in Logistics</div>
+          <div class="lp-ebook-card__cover lp-ebook-card__cover--img"><img src="https://images.jonathan-harris.online/artificial-intelligence-logistics-webp" alt="AI in Logistics cover" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;display:block;"/></div>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI in Logistics: Optimizing Efficiency and Sustainability</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/">
-          <div class="lp-ebook-card__cover">AI &amp; Cyber Security</div>
+          <div class="lp-ebook-card__cover lp-ebook-card__cover--img"><img src="https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp" alt="AI for Cyber Security cover" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;display:block;"/></div>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI for Cyber Security: A Practical Guide to Data Breach Prevention</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/">
-          <div class="lp-ebook-card__cover">Autonomous Vehicles</div>
+          <div class="lp-ebook-card__cover lp-ebook-card__cover--img"><img src="https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp" alt="The Autonomous Revolution cover" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;display:block;"/></div>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">The Autonomous Revolution: AI and the Future of the Automotive Industry</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/climate-intelligence-harnessing-ai-for-a-greener-future/">
-          <div class="lp-ebook-card__cover">AI &amp; Climate</div>
+          <div class="lp-ebook-card__cover lp-ebook-card__cover--img"><img src="https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp" alt="Climate Intelligence cover" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;display:block;"/></div>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Climate Intelligence: Harnessing AI for a Greener Future</p></div>
         </a>
         <a class="lp-ebook-card" href="/ebooks/" style="background:#4F46E5;border:none;display:flex;align-items:center;justify-content:center;min-height:170px;text-decoration:none;border-radius:12px;">
