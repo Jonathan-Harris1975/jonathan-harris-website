@@ -1239,7 +1239,7 @@ body.jh-page-404 main{
   font-size: 0.92rem;
 }
 .testimonial-card__role {
-  color: #6B7280;
+  color: #555555;
   font-size: 0.85rem;
 }
 .testimonial-card__stars {
@@ -1367,7 +1367,7 @@ body.jh-page-404 main{
   flex-shrink: 0; letter-spacing: 0.3px;
 }
 .testimonial-card__name { font-weight: 700; color: #4F46E5; font-size: 0.92rem; }
-.testimonial-card__role { color: #6B7280; font-size: 0.85rem; }
+.testimonial-card__role { color: #555555; font-size: 0.85rem; }
 .testimonial-card__stars { color: #F59E0B; font-size: 0.85rem; letter-spacing: 1px; margin-left: auto; }
 
 /* ── Newsletter fallback button ── */
@@ -1672,3 +1672,13 @@ main.wrap, .wrap#main, .main#main{
   margin-left:auto;
   margin-right:auto;
 }
+
+/* Hamburger Menu label */
+.jh-hamburger__label {
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 600;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+
