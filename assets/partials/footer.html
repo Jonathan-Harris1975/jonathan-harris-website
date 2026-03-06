@@ -1,54 +1,60 @@
-<footer style="background-color:#0D1420; color:#D1D5DB; font-family:Arial, Helvetica, sans-serif; font-size:14px; padding:20px 15px;" role="contentinfo" aria-label="Website Footer">
+<footer class="site-footer" role="contentinfo" aria-label="Website Footer">
+  <div class="site-footer__inner">
 
-  <div style="max-width:1200px; margin:0 auto;">
-    <div style="display:flex; flex-direction:column; gap:30px; align-items:center; text-align:center;">
-
-      <!-- Navigation Links -->
-      <nav aria-label="Footer navigation">
-        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 40px;">
-          <li><a href="/" style="color:#93C5FD; text-decoration:none;">Home</a></li>
-          <li><a href="/bio/" style="color:#93C5FD; text-decoration:none;">More About Me</a></li>
-          <li><a href="/terms-of-use/" style="color:#93C5FD; text-decoration:none;">Terms of Use</a></li>
-          <li><a href="/privacy-policy/" style="color:#93C5FD; text-decoration:none;">Privacy Policy</a></li>
-          <li><a href="/affiliate/" style="color:#93C5FD; text-decoration:none;">Affiliate Partners</a></li>
-          <li><a href="/blog/" style="color:#93C5FD; text-decoration:none;">Blog</a></li>
-          <li><a href="/contact/" style="color:#93C5FD; text-decoration:none;">Contact Me</a></li>
-        </ul>
+    <!-- Brand column -->
+    <div class="site-footer__brand">
+      <div class="site-footer__brand-name">Jonathan Harris</div>
+      <p class="site-footer__tagline">Cut through the noise. Practical AI ebooks, a daily newsletter, and the Turing's Torch podcast.</p>
+      <nav class="site-footer__social" aria-label="Social media links">
+        <a href="https://youtube.com/@jonathanharris-r7i" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+          <img src="https://images.jonathan-harris.online/youtube-logo" alt="YouTube" loading="lazy">
+        </a>
+        <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener noreferrer" aria-label="Spotify Podcast">
+          <img src="https://images.jonathan-harris.online/spotify-logo" alt="Spotify" loading="lazy">
+        </a>
+        <a href="https://www.tiktok.com/@jonathan_harris_01" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <img src="https://images.jonathan-harris.online/tiktok-icon" alt="TikTok" loading="lazy">
+        </a>
+        <a href="https://www.facebook.com/share/1G7v4P69xa" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <img src="https://images.jonathan-harris.online/facebook-icon" alt="Facebook" loading="lazy">
+        </a>
+        <a href="https://www.instagram.com/jonathan.harris1975" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <img src="https://images.jonathan-harris.online/insta-logo" alt="Instagram" loading="lazy">
+        </a>
       </nav>
-
-      <!-- Social Media Links -->
-      <nav aria-label="Social media links">
-        <ul style="list-style:none; padding:0; margin:0; display:flex; justify-content:center; gap:25px;">
-          <li>
-            <a href="https://youtube.com/@jonathanharris-r7i" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/youtube-logo" alt="YouTube" style="width:30px;height:30px;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/spotify-logo" alt="Spotify Podcast" style="width:30px;height:30px;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.tiktok.com/@jonathan_harris_01" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/tiktok-icon" alt="TikTok" style="width:30px;height:30px;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.facebook.com/share/1G7v4P69xa" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/facebook-icon" alt="Facebook" style="width:30px;height:30px;" loading="lazy">
-            </a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/jonathan.harris1975" target="_blank" rel="noopener noreferrer">
-              <img src="https://images.jonathan-harris.online/insta-logo" alt="Instagram" style="width:30px;height:30px;" loading="lazy">
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <div style="font-size:12px;color:rgba(255,255,255,0.72);">© 2026 Jonathan Harris. All rights reserved.</div>
-
     </div>
+
+    <!-- Content group -->
+    <div class="site-footer__nav-group">
+      <h3 class="site-footer__nav-heading">Content</h3>
+      <ul class="site-footer__nav-list">
+        <li><a href="/ebooks/">eBooks</a></li>
+        <li><a href="/podcast/">Podcast</a></li>
+        <li><a href="/newsletter/">Newsletter</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+        <li><a href="/topics/">Topics</a></li>
+      </ul>
+    </div>
+
+    <!-- About group -->
+    <div class="site-footer__nav-group">
+      <h3 class="site-footer__nav-heading">About</h3>
+      <ul class="site-footer__nav-list">
+        <li><a href="/bio/">About Jonathan</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/affiliate/">Affiliate Partners</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="site-footer__bottom">
+    <span>© 2026 Jonathan Harris. All rights reserved.</span>
+    <nav class="site-footer__legal" aria-label="Legal links">
+      <a href="/privacy-policy/">Privacy Policy</a>
+      <a href="/terms-of-use/">Terms of Use</a>
+    </nav>
   </div>
 </footer>
