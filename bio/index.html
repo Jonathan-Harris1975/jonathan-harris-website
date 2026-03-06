@@ -94,6 +94,62 @@
 <link href="https://Jonathan-Harris.online/bio/" rel="canonical"/><meta content="AI author and podcast host — clear, practical artificial intelligence, minus the hype and buzzwords." name="description"/><meta content="index,follow" name="robots"/><meta content="page" name="ai:content_type"/><meta content="x, about, podcast, newsletter, gen, ebooks, harris, ai, jonathan, automation" name="ai:keywords"/><meta content="website" property="og:type"/><meta content="https://Jonathan-Harris.online/bio/" property="og:url"/><meta content="About Jonathan Harris" property="og:title"/><meta content="AI author and podcast host — clear, practical artificial intelligence, minus the hype and buzzwords." property="og:description"/><meta content="summary_large_image" name="twitter:card"/><meta content="About Jonathan Harris" name="twitter:title"/><meta content="AI author and podcast host — clear, practical artificial intelligence, minus the hype and buzzwords." name="twitter:description"/></head>
 <body class="bio-page">
 <a class="skip-link" href="#main">Skip to main content</a>
+<!-- Primary navigation -->
+<style>
+  :focus-visible{outline:2px solid #4F46E5;outline-offset:3px;border-radius:4px;}
+  .jh-header{background:#0D1420;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;z-index:1000;}
+  .jh-header__inner{max-width:1200px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:24px;}
+  .jh-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0;}
+  .jh-header__logo{width:32px;height:32px;border-radius:8px;display:block;}
+  .jh-topnav{list-style:none;padding:0;margin:0;display:flex;align-items:center;gap:4px;flex:1;}
+  .jh-topnav a{color:#D1D5DB;text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;display:block;}
+  .jh-topnav a:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .jh-topnav a[aria-current="page"]{color:#93C5FD;background:rgba(147,197,253,.1);font-weight:600;}
+  .jh-hamburger{display:none;background:none;border:none;color:#D1D5DB;font-size:22px;cursor:pointer;padding:6px;border-radius:6px;margin-left:auto;line-height:1;}
+  .jh-hamburger:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .jh-mobile-nav{display:none;flex-direction:column;background:#0D1420;border-top:1px solid rgba(255,255,255,.08);padding:8px 16px 16px;}
+  .jh-mobile-nav a{color:#D1D5DB;text-decoration:none;font-size:15px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.06);display:block;}
+  .jh-mobile-nav a:last-child{border-bottom:none;}
+  .jh-mobile-nav a:hover,.jh-mobile-nav a[aria-current="page"]{color:#93C5FD;}
+  .jh-mobile-nav.is-open{display:flex;}
+  @media(max-width:768px){.jh-topnav{display:none;}.jh-hamburger{display:flex;align-items:center;}}
+</style>
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
+  <div class="jh-header__inner">
+    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
+      Jonathan Harris
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="jh-topnav">
+        <li><a href="/ebooks/">eBooks</a></li>
+        <li><a href="/podcast/">Podcast</a></li>
+        <li><a href="/newsletter/">Newsletter</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+        <li><a href="/topics/">Topics</a></li>
+        <li><a href="/bio/">About</a></li>
+      </ul>
+    </nav>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu">&#9776;</button>
+  </div>
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
+    <a href="/ebooks/">eBooks</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a><a href="/glossary/">Glossary</a><a href="/topics/">Topics</a><a href="/bio/">About</a>
+  </nav>
+</header>
+<script>
+(function(){
+  var path=window.location.pathname.replace(/\/+$/,'')||'/';
+  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
+    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
+    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
+  });
+  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
+  if(btn&&mn)btn.addEventListener('click',function(){var o=mn.classList.toggle('is-open');mn.hidden=!o;btn.setAttribute('aria-expanded',o);btn.setAttribute('aria-label',o?'Close navigation menu':'Open navigation menu');});
+})();
+</script>
+
 <!-- HERO -->
 <header aria-label="About page header" class="hero" role="banner">
 <img alt="Jonathan Harris portrait" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
@@ -101,6 +157,26 @@
 <p>
       AI author and podcast host — clear, practical artificial intelligence, minus the hype and buzzwords.
     </p>
+
+<!-- Social links in hero -->
+<nav aria-label="Social media profiles" style="margin-top:20px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;">
+  <a href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank" aria-label="Jonathan Harris on YouTube" style="display:flex;align-items:center;gap:6px;color:#93C5FD;text-decoration:none;font-size:14px;">
+    <img alt="" aria-hidden="true" loading="lazy" src="https://images.jonathan-harris.online/youtube-logo" style="width:22px;height:22px;"/>YouTube
+  </a>
+  <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank" aria-label="Turing Torch podcast on Spotify" style="display:flex;align-items:center;gap:6px;color:#93C5FD;text-decoration:none;font-size:14px;">
+    <img alt="" aria-hidden="true" loading="lazy" src="https://images.jonathan-harris.online/spotify-logo" style="width:22px;height:22px;"/>Spotify
+  </a>
+  <a href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank" aria-label="Jonathan Harris on TikTok" style="display:flex;align-items:center;gap:6px;color:#93C5FD;text-decoration:none;font-size:14px;">
+    <img alt="" aria-hidden="true" loading="lazy" src="https://images.jonathan-harris.online/tiktok-icon" style="width:22px;height:22px;"/>TikTok
+  </a>
+  <a href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank" aria-label="Jonathan Harris on Instagram" style="display:flex;align-items:center;gap:6px;color:#93C5FD;text-decoration:none;font-size:14px;">
+    <img alt="" aria-hidden="true" loading="lazy" src="https://images.jonathan-harris.online/insta-logo" style="width:22px;height:22px;"/>Instagram
+  </a>
+  <a href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank" aria-label="Jonathan Harris on Facebook" style="display:flex;align-items:center;gap:6px;color:#93C5FD;text-decoration:none;font-size:14px;">
+    <img alt="" aria-hidden="true" loading="lazy" src="https://images.jonathan-harris.online/facebook-icon" style="width:22px;height:22px;"/>Facebook
+  </a>
+</nav>
+
 </header>
 <!-- ABOUT BANNER -->
 <section aria-label="About banner" class="about-banner" role="region">
