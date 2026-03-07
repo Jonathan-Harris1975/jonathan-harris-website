@@ -73,7 +73,7 @@
           .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
           .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:2px solid rgba(147,197,253,0.55);outline-offset:2px;}
           .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);}
-          .jh-hamburger{display:none;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.28);border-radius:9px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:8px 12px;margin-left:auto;min-width:42px;}
+          .jh-hamburger{display:none;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.28);border-radius:10px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;}
           .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
           .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
           .jh-mobile-nav.is-open{display:flex;}
