@@ -1,20 +1,20 @@
 {
-  "title": "The Dumbening: How AI is Reshaping Our Minds",
-  "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
-  "description": "Examines ai's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.",
-  "topic": "Society",
+  "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+  "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
+  "description": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity, improving public trust and safety. Pages: 328.",
+  "topic": "Government",
   "tags": [
+    "General AI",
     "Artificial Intelligence",
     "AI Trends",
-    "Automation",
-    "Robotics"
+    "Creativity"
   ],
-  "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
-  "image": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
-  "buy_url": "https://mybook.to/YcRiCRp",
-  "pages": 277,
+  "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
+  "image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
+  "buy_url": "https://mybook.to/3TwcUA",
+  "pages": 328,
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/"
 }
