@@ -1,12 +1,12 @@
-# Smart Buildings: AI-Powered Efficiency and Sustainability
+# Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking
 
 ## Summary
 
-Artificial intelligence optimizes smart buildings with energy management, predictive maintenance, and occupant comfort, promoting sustainability and efficiency. Pages: 345.
+Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity. Pages: 336.
 
 ## What this book covers
 
-Artificial intelligence optimizes smart buildings with energy management, predictive maintenance, and occupant comfort, promoting sustainability and efficiency.
+Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity.
 
 ## Who this book is for
 
@@ -14,20 +14,20 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in smart buildings and building management — the practical use cases that matter.
+- How AI shows up in filmmaking and creative production — the practical use cases that matter.
 - The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Construction, Energy, Sustainability, Artificial Intelligence.
+- Key themes, including: Creativity, Filmmaking, Arts, Artificial Intelligence.
 - What to watch out for: limitations, trade-offs, and common misconceptions.
 
 ## Why it matters
 
-AI decisions in building management have real consequences: energy consumption and cost, occupant comfort and safety, carbon footprint, and the economics of sustainable construction.
+AI decisions in filmmaking have real consequences: intellectual property rights, the livelihoods of creative professionals, audience authenticity expectations, and the future of storytelling.
 
 ## Topics and tags
 
-- Topic: Construction
-- Tags: Energy, Creativity, Artificial Intelligence, AI Trends
-- Length: 345 pages
+- Topic: Creativity
+- Tags: Artificial Intelligence, AI Trends, Creativity, AI & Creativity
+- Length: 336 pages
 
 ## Buy
-- https://mybook.to/QEcdy
+- https://mybook.to/EcO2DI

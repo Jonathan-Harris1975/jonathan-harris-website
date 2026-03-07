@@ -1,20 +1,20 @@
 {
-  "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
-  "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
-  "description": "Artificial intelligence optimizes smart buildings with energy management, predictive maintenance, and occupant comfort, promoting sustainability and efficiency. Pages: 345.",
-  "topic": "Construction",
+  "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
+  "slug": "lights-camera-algorithm-ais-role-in-modern-filmmaking",
+  "description": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity. Pages: 336.",
+  "topic": "Creativity",
   "tags": [
-    "Energy",
-    "Creativity",
     "Artificial Intelligence",
-    "AI Trends"
+    "AI Trends",
+    "Creativity",
+    "AI & Creativity"
   ],
-  "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
-  "image": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
-  "buy_url": "https://mybook.to/QEcdy",
-  "pages": 345,
+  "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
+  "image": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
+  "buy_url": "https://mybook.to/EcO2DI",
+  "pages": 336,
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking/"
 }
