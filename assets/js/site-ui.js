@@ -186,7 +186,7 @@
         return;
       }
 
-      const res = await fetch(HEADER_URL, { cache: "force-cache" });
+      const res = await fetch(HEADER_URL, { cache: "no-cache" });
       if (!res.ok) return;
       const html = await res.text();
 
