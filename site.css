@@ -615,9 +615,6 @@ details.facts li{margin:6px 0; color:var(--text)}
 .jh-topnav a[aria-current="page"]{
   background:rgba(79,70,229,0.20);
   border:1px solid rgba(79,70,229,0.35);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  color: #93C5FD;
 }
 @media (max-width: 520px){
   /* Mobile: handled by hamburger in JS/site-ui.js */
@@ -1152,39 +1149,18 @@ body.jh-page-404 main{
   margin: 0 0 10px;
 }
 
-/* ── Mobile nav brand link (replaces inline styles) ── */
-.jh-mobile-nav__brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
-  margin-bottom: 4px;
-  text-decoration: none;
-}
-.jh-mobile-nav__brand-logo {
-  border-radius: 8px;
-  flex-shrink: 0;
-}
-.jh-mobile-nav__brand-text {
-  font-weight: 700;
-  color: #fff;
-  font-size: 15px;
-}
-
 /* ── Mobile hamburger menu ── */
 .jh-hamburger {
   display: none;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.28);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.18);
   border-radius: 10px;
-  color: #fff;
+  color: #E5E7EB;
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
   padding: 7px 10px;
   margin-left: auto;
-  min-width: 42px;
 }
 .jh-hamburger:focus {
   outline: 2px solid rgba(147,197,253,0.75);
@@ -1217,9 +1193,6 @@ body.jh-page-404 main{
 .jh-mobile-nav a[aria-current="page"] {
   background: rgba(79,70,229,0.20);
   border: 1px solid rgba(79,70,229,0.35);
-  color: #93C5FD;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 @media (max-width: 768px) {
   .jh-hamburger { display: block; }
@@ -1485,7 +1458,27 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 .hero > *, .lp-hero > *, .dark-section > *, .bio-page .hero > *{ position:relative; z-index:1; }
 
 .jh-header{
+  /* Start hidden & fixed so the header never flashes before JS reveals it */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2500;
+  background: rgba(13,20,32,0.96);
+  backdrop-filter: saturate(1.2) blur(12px);
+  -webkit-backdrop-filter: saturate(1.2) blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
   box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+}
+/* JS adds this class when the hero scrolls out of view */
+.jh-header.is-visible{
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 .jh-header__inner{
   min-height: var(--header-height);
