@@ -23,235 +23,7 @@
 <meta content="Jonathan Harris — AI Author &amp; Podcast Host" name="twitter:title"/>
 <meta content="Practical AI ebooks, daily newsletter, and the Turing's Torch podcast." name="twitter:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
-<style>
-  /* ── Landing page overrides ── */
-  body { margin: 0; padding: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; color: #374151; background: #fff; }
-
-  /* Hero */
-  .lp-hero {
-    background: #0D1420;
-    padding: 72px 20px 60px;
-    text-align: center;
-  }
-  .lp-hero__logo {
-    width: 100px; height: 100px;
-    border-radius: 12px;
-    display: block; margin: 0 auto 24px;
-    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .lp-hero__logo {
-      animation: fadeUp 0.7s ease forwards;
-    }
-  }
-  @keyframes fadeUp {
-    0%  { opacity: 0; transform: translateY(8px); }
-    100%{ opacity: 1; transform: translateY(0); }
-  }
-  .lp-hero h1 {
-    margin: 0 0 12px;
-    font-size: clamp(24px, 5vw, 52px);
-    line-height: 1.1;
-    color: #93C5FD;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-  .lp-hero p {
-    margin: 0 auto 32px;
-    max-width: 640px;
-    font-size: 18px;
-    line-height: 1.65;
-    color: #D1D5DB;
-  }
-  .lp-hero__ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .btn-primary {
-    background: #4F46E5; color: #fff;
-    padding: 12px 28px; border-radius: 8px;
-    text-decoration: none; font-weight: 700; font-size: 15px;
-    transition: background 0.2s;
-  }
-  .btn-primary:hover { background: #4338CA; }
-  .btn-secondary {
-    background: rgba(255,255,255,0.08); color: #D1D5DB;
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 12px 28px; border-radius: 8px;
-    text-decoration: none; font-weight: 600; font-size: 15px;
-    transition: background 0.2s;
-  }
-  .btn-secondary:hover { background: rgba(255,255,255,0.14); color: #fff; }
-
-  /* Section wrapper */
-  .lp-section { padding: 60px 20px; }
-  .lp-section--alt { background: #F5F7FA; }
-  .lp-inner { max-width: 1100px; margin: 0 auto; }
-  .lp-section-label {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
-    text-transform: uppercase; color: #4F46E5; margin: 0 0 8px;
-  }
-  .lp-section-title {
-    margin: 0 0 12px;
-    font-size: clamp(22px, 3.5vw, 32px);
-    color: #111827; font-weight: 800;
-  }
-  .lp-section-desc { margin: 0 0 36px; color: #374151; font-size: 16px; max-width: 640px; }
-
-  /* Author intro */
-  .lp-author {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 40px;
-    align-items: start;
-  }
-  .lp-author__img {
-    width: 160px; height: 160px;
-    border-radius: 12px;
-    object-fit: cover;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  }
-  .lp-author__text h2 { margin: 0 0 12px; font-size: 26px; color: #111827; }
-  .lp-author__text p { margin: 0 0 16px; color: #374151; line-height: 1.7; font-size: 16px; }
-
-  /* Offer cards (ebooks / podcast / newsletter) */
-  .lp-offers {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-  }
-  .lp-offer-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
-    border: 1px solid rgba(0,0,0,0.06);
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-  }
-  .lp-offer-card__img {
-    width: 100%;
-    height: auto;
-    max-height: 240px;
-    object-fit: contain;
-    border-radius: 10px;
-    margin: 0 0 20px;
-    display: block;
-  }
-  .lp-offer-card h3 { margin: 0 0 10px; color: #111827; font-size: 20px; }
-  .lp-offer-card p { margin: 0 0 20px; color: #374151; font-size: 14px; line-height: 1.6; flex: 1; }
-  .lp-offer-card a {
-    display: inline-block;
-    background: #4F46E5; color: #fff;
-    padding: 10px 20px; border-radius: 8px;
-    text-decoration: none; font-size: 14px; font-weight: 700;
-    align-self: flex-start;
-    transition: background 0.2s;
-  }
-  .lp-offer-card a:hover { background: #4338CA; }
-
-  /* Social proof / stats bar */
-  .lp-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-    justify-content: center;
-    padding: 40px 20px;
-    background: #0D1420;
-    text-align: center;
-  }
-  .lp-stat { color: #fff; }
-  .lp-stat__num { font-size: 32px; font-weight: 800; color: #93C5FD; display: block; }
-  .lp-stat__label { font-size: 13px; color: #9CA3AF; margin-top: 4px; display: block; }
-
-  /* Testimonials */
-  .lp-testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
-  .lp-testimonial {
-    background: #fff;
-    border-radius: 14px;
-    padding: 24px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
-    border-left: 4px solid #4F46E5;
-  }
-  .lp-testimonial blockquote { margin: 0 0 14px; font-style: italic; color: #374151; font-size: 15px; line-height: 1.65; }
-  .lp-testimonial cite { font-size: 13px; font-weight: 700; color: #4F46E5; font-style: normal; }
-
-  /* Featured ebooks */
-  .lp-ebooks { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 20px; }
-  .lp-ebook-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 14px rgba(0,0,0,0.08);
-    border: 1px solid rgba(0,0,0,0.06);
-    overflow: hidden;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: block;
-  }
-  .lp-ebook-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
-  .lp-ebook-card__cover {
-    background: linear-gradient(135deg, #1e2d45 0%, #0D1420 100%);
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #93C5FD;
-    text-align: center;
-    line-height: 1.4;
-  }
-  .lp-ebook-card__body { padding: 14px 16px; }
-  .lp-ebook-card__title { margin: 0; font-size: 13px; color: #111827; font-weight: 600; line-height: 1.4; }
-
-  /* Newsletter CTA */
-  .lp-newsletter-cta {
-    background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
-    border-radius: 20px;
-    padding: 48px 32px;
-    text-align: center;
-    color: #fff;
-  }
-  .lp-newsletter-cta h2 { margin: 0 0 10px; font-size: 28px; }
-  .lp-newsletter-cta p { margin: 0 0 24px; color: rgba(255,255,255,0.85); font-size: 16px; }
-  .lp-newsletter-cta a {
-    background: #fff; color: #4F46E5;
-    padding: 12px 32px; border-radius: 8px;
-    text-decoration: none; font-weight: 800; font-size: 15px;
-    display: inline-block;
-    transition: opacity 0.2s;
-  }
-  .lp-newsletter-cta a:hover { opacity: 0.92; }
-
-  /* Glossary / Topics teaser */
-  .lp-resources {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-  .lp-resource-card {
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid rgba(0,0,0,0.07);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-    padding: 28px 24px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    transition: transform 0.18s, box-shadow 0.18s;
-  }
-  .lp-resource-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
-  .lp-resource-card__icon { font-size: 28px; }
-  .lp-resource-card h3 { margin: 0; color: #111827; font-size: 18px; }
-  .lp-resource-card p { margin: 0; color: #374151; font-size: 14px; line-height: 1.6; flex: 1; }
-  .lp-resource-card__cta { color: #4F46E5; font-weight: 700; font-size: 14px; }
-  @media (max-width: 640px) {
-    .lp-author { grid-template-columns: 1fr; text-align: center; }
-    .lp-author__img { margin: 0 auto; }
-    .lp-stats { gap: 20px; }
-    .lp-resources { grid-template-columns: 1fr; }
-  }
-</style>
-  <link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
+<link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
 
 <script type="application/ld+json">
 {
@@ -786,32 +558,34 @@
     </a>
     <nav aria-label="Primary navigation">
       <ul class="jh-topnav">
-        <li><a href="/ebooks/">eBooks</a></li>
-        <li><a href="/podcast/">Podcast</a></li>
-        <li><a href="/newsletter/">Newsletter</a></li>
-        <li><a href="/blog/">Blog</a></li>
-        <li><a href="/glossary/">Glossary</a></li>
-        <li><a href="/topics/">Topics</a></li>
-        <li><a href="/bio/">About</a></li>
-        <li><a href="/contact/">Contact</a></li>
-      </ul>
+  <li><a href="/">Home</a></li>
+  <li><a href="/ebooks/">eBooks</a></li>
+  <li><a href="/podcast/">Podcast</a></li>
+  <li><a href="/newsletter/">Newsletter</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/bio/">About</a></li>
+  <li><a href="/glossary/">Glossary</a></li>
+  <li><a href="/topics/">Topics</a></li>
+  <li><a href="/contact/">Contact</a></li>
+</ul>
     </nav>
     <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
   </div>
   <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home" style="display:flex;align-items:center;gap:10px;padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:4px;text-decoration:none;">
-    <img src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true" style="border-radius:8px;flex-shrink:0;"/>
-    <span style="font-weight:700;color:#fff;font-size:15px;">Jonathan Harris</span>
+  <a class="jh-mobile-nav__brand-link" href="/" aria-label="Jonathan Harris – home">
+    <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
+    <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
   </a>
-    <a href="/ebooks/">eBooks</a>
-    <a href="/podcast/">Podcast</a>
-    <a href="/newsletter/">Newsletter</a>
-    <a href="/blog/">Blog</a>
-    <a href="/glossary/">Glossary</a>
-    <a href="/topics/">Topics</a>
-    <a href="/bio/">About</a>
-    <a href="/contact/">Contact</a>
-  </nav>
+  <a href="/">Home</a>
+  <a href="/ebooks/">eBooks</a>
+  <a href="/podcast/">Podcast</a>
+  <a href="/newsletter/">Newsletter</a>
+  <a href="/blog/">Blog</a>
+  <a href="/bio/">About</a>
+  <a href="/glossary/">Glossary</a>
+  <a href="/topics/">Topics</a>
+  <a href="/contact/">Contact</a>
+</nav>
 </header>
 <script>
 (function(){
