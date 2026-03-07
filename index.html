@@ -38,7 +38,11 @@
     border-radius: 12px;
     display: block; margin: 0 auto 24px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.5);
-    animation: fadeUp 0.7s ease forwards;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lp-hero__logo {
+      animation: fadeUp 0.7s ease forwards;
+    }
   }
   @keyframes fadeUp {
     0%  { opacity: 0; transform: translateY(8px); }
@@ -46,7 +50,7 @@
   }
   .lp-hero h1 {
     margin: 0 0 12px;
-    font-size: clamp(32px, 5vw, 52px);
+    font-size: clamp(24px, 5vw, 52px);
     line-height: 1.1;
     color: #93C5FD;
     font-weight: 800;
@@ -89,7 +93,7 @@
     font-size: clamp(22px, 3.5vw, 32px);
     color: #111827; font-weight: 800;
   }
-  .lp-section-desc { margin: 0 0 36px; color: #6B7280; font-size: 16px; max-width: 640px; }
+  .lp-section-desc { margin: 0 0 36px; color: #374151; font-size: 16px; max-width: 640px; }
 
   /* Author intro */
   .lp-author {
@@ -105,7 +109,7 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   }
   .lp-author__text h2 { margin: 0 0 12px; font-size: 26px; color: #111827; }
-  .lp-author__text p { margin: 0 0 16px; color: #4B5563; line-height: 1.7; font-size: 16px; }
+  .lp-author__text p { margin: 0 0 16px; color: #374151; line-height: 1.7; font-size: 16px; }
 
   /* Offer cards (ebooks / podcast / newsletter) */
   .lp-offers {
@@ -132,7 +136,7 @@
     display: block;
   }
   .lp-offer-card h3 { margin: 0 0 10px; color: #111827; font-size: 20px; }
-  .lp-offer-card p { margin: 0 0 20px; color: #6B7280; font-size: 14px; line-height: 1.6; flex: 1; }
+  .lp-offer-card p { margin: 0 0 20px; color: #374151; font-size: 14px; line-height: 1.6; flex: 1; }
   .lp-offer-card a {
     display: inline-block;
     background: #4F46E5; color: #fff;
@@ -217,10 +221,34 @@
   }
   .lp-newsletter-cta a:hover { opacity: 0.92; }
 
+  /* Glossary / Topics teaser */
+  .lp-resources {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .lp-resource-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.07);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    padding: 28px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .lp-resource-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.12); }
+  .lp-resource-card__icon { font-size: 28px; }
+  .lp-resource-card h3 { margin: 0; color: #111827; font-size: 18px; }
+  .lp-resource-card p { margin: 0; color: #374151; font-size: 14px; line-height: 1.6; flex: 1; }
+  .lp-resource-card__cta { color: #4F46E5; font-weight: 700; font-size: 14px; }
   @media (max-width: 640px) {
     .lp-author { grid-template-columns: 1fr; text-align: center; }
     .lp-author__img { margin: 0 auto; }
     .lp-stats { gap: 20px; }
+    .lp-resources { grid-template-columns: 1fr; }
   }
 </style>
   <link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
@@ -941,6 +969,29 @@
           <blockquote>"No hype, no waffle. Just the bits of AI news that actually change what I do at work."</blockquote>
           <cite>Rachel D., Product Manager</cite>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GLOSSARY + TOPICS TEASER ── -->
+  <section class="lp-section lp-section--alt" aria-labelledby="resources-heading">
+    <div class="lp-inner">
+      <p class="lp-section-label">Explore the knowledge base</p>
+      <h2 class="lp-section-title" id="resources-heading">Go deeper on AI</h2>
+      <p class="lp-section-desc">Two free reference tools built for readers who want to understand the language and landscape of artificial intelligence.</p>
+      <div class="lp-resources">
+        <a class="lp-resource-card" href="/glossary/">
+          <span class="lp-resource-card__icon" aria-hidden="true">📖</span>
+          <h3>AI Glossary</h3>
+          <p>Plain-English definitions for the terms, acronyms, and concepts that come up constantly in AI discussions — without the jargon and hand-waving.</p>
+          <span class="lp-resource-card__cta">Explore the Glossary →</span>
+        </a>
+        <a class="lp-resource-card" href="/topics/">
+          <span class="lp-resource-card__icon" aria-hidden="true">🗺️</span>
+          <h3>Topics Index</h3>
+          <p>Browse eBooks and articles organised by subject — from healthcare and law to climate, manufacturing, and the future of work.</p>
+          <span class="lp-resource-card__cta">Browse by Topic →</span>
+        </a>
       </div>
     </div>
   </section>
