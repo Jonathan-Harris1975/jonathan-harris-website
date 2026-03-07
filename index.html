@@ -17,12 +17,12 @@
 <meta content="https://jonathan-harris.online/" property="og:url"/>
 <meta content="Jonathan Harris — AI Author &amp; Podcast Host" property="og:title"/>
 <meta content="Cut through the noise. Practical AI ebooks, a daily newsletter, and the Turing's Torch podcast." property="og:description"/>
-<meta content="/img/local/site-logo.svg" property="og:image"/>
+<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="Jonathan Harris — AI Author &amp; Podcast Host" name="twitter:title"/>
 <meta content="Practical AI ebooks, daily newsletter, and the Turing's Torch podcast." name="twitter:description"/>
-<meta content="/img/local/site-logo.svg" name="twitter:image"/>
+<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
 <style>
   /* ── Landing page overrides ── */
   body { margin: 0; padding: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; color: #374151; background: #fff; }
@@ -750,9 +750,63 @@
   <span class="sr-only" role="status">Loading content…</span>
 </div>
 
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
+  <div class="jh-header__inner">
+    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
+      <span class="jh-brand__text">Jonathan Harris</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="jh-topnav">
+        <li><a href="/ebooks/">eBooks</a></li>
+        <li><a href="/podcast/">Podcast</a></li>
+        <li><a href="/newsletter/">Newsletter</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/glossary/">Glossary</a></li>
+        <li><a href="/topics/">Topics</a></li>
+        <li><a href="/bio/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
+  </div>
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
+    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home" style="display:flex;align-items:center;gap:10px;padding:12px 8px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:4px;text-decoration:none;">
+    <img src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true" style="border-radius:8px;flex-shrink:0;"/>
+    <span style="font-weight:700;color:#fff;font-size:15px;">Jonathan Harris</span>
+  </a>
+    <a href="/ebooks/">eBooks</a>
+    <a href="/podcast/">Podcast</a>
+    <a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a>
+    <a href="/glossary/">Glossary</a>
+    <a href="/topics/">Topics</a>
+    <a href="/bio/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+<script>
+(function(){
+  var path=window.location.pathname.replace(/\/+$/,'')||'/';
+  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
+    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
+    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
+  });
+  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
+  if(btn&&mn)btn.addEventListener('click',function(){
+    var open=mn.classList.toggle('is-open');
+    if(open){mn.removeAttribute('hidden');mn.style.display='';}
+    else{mn.style.display='none';}
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
+    var lbl=btn.querySelector('.jh-hamburger__label');
+    if(lbl)lbl.textContent=open?'Close':'Menu';
+  });
+})();
+</script>
 <!-- ── HERO ── -->
 <div class="lp-hero">
-  <img alt="Jonathan Harris" class="lp-hero__logo" fetchpriority="high" height="100" loading="eager" src="/img/local/site-logo.svg" width="100"/>
+  <img alt="Jonathan Harris" class="lp-hero__logo" fetchpriority="high" height="100" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="100"/>
   <h1>AI, Without the Hype</h1>
   <p>Clear thinking on artificial intelligence — what works, what breaks, and what the trade-offs really look like once AI hits the real world.</p>
   <div class="lp-hero__ctas">
