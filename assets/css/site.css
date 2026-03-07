@@ -280,7 +280,7 @@ details.more[open] summary:before{transform:rotate(90deg);}
   display: flex;
   flex-direction: column;
   gap: 6px;
-  color: rgba(255,255,255,0.62);
+  color: rgba(255,255,255,0.73);
   border-top: 1px solid rgba(255,255,255,0.06);
   font-size: 0.9rem;
 }
@@ -1577,7 +1577,7 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   margin:0;
   font-size:0.95rem;
   line-height:1.65;
-  color:rgba(226,232,240,0.84);
+  color:rgba(226,232,240,0.92);
 }
 .footer-badges{
   display:flex;
@@ -1604,7 +1604,7 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   margin-top:18px;
   text-align:center;
   font-size:0.82rem;
-  color:rgba(226,232,240,0.82);
+  color:rgba(226,232,240,0.88);
 }
 @media (max-width: 980px){
   .footer-grid{ grid-template-columns: 1fr 1fr; }
@@ -1866,3 +1866,78 @@ body.home .lp-cta-links{ display:flex; gap:12px; justify-content:center; flex-wr
 .page-podcast .transcript-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;opacity:0.72;margin-bottom:4px;}
 .page-podcast .transcript-list a{color:#BFDBFE;text-decoration:none;font-weight:700;}
 .page-podcast .transcript-list a:hover{text-decoration:underline;}
+
+/* ── UX-Report: Left-align extended reading content (bio, blog, book pages) ── */
+.main p, .main li, .main h1, .main h2, .main h3, .main h4 { text-align: left; }
+
+/* ── UX-Report: CSS classes for book page inline styles ── */
+.unique-insight {
+  background: #F0F4FF;
+  border-left: 4px solid #4F46E5;
+  padding: 20px 24px;
+  margin: 24px 0;
+  border-radius: 0 12px 12px 0;
+}
+.unique-insight h2 { margin-top: 0; color: #1e1b4b; }
+.unique-insight .not-your-book { color: #6B7280; font-size: 0.95em; }
+
+.book-cta {
+  margin: 24px 0;
+  padding: 20px 24px;
+  background: #F5F7FA;
+  border-radius: 14px;
+  border: 1px solid #E5E7EB;
+}
+.book-cta h2 { margin: 0 0 14px; font-size: 1rem; color: #374151; }
+.book-cta__actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+.panel { margin-top: 16px; }
+.panel > h2 { margin: 0 0 12px; }
+
+.keep-exploring-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+}
+.keep-exploring-item h3 { font-size: 0.95rem; margin: 0 0 6px; color: #374151; }
+.keep-exploring-item p  { margin: 0 0 8px; font-size: 0.9rem; color: #6B7280; }
+.keep-exploring-item .button,
+.keep-exploring-item .btn,
+.keep-exploring-item a.button,
+.keep-exploring-item a.secondary { font-size: 0.85rem; padding: 7px 12px; }
+
+/* ── UX-Report: External-link indicator on Buy on Amazon buttons ── */
+a.btn-external::after,
+a[target="_blank"].button:not(.secondary):not(.btn-ghost)::after {
+  content: " ↗";
+  font-size: 0.8em;
+  opacity: 0.75;
+}
+
+/* ── UX-Report: Back-to-top link in footer ── */
+.footer-back-top {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.85rem;
+}
+.footer-back-top a {
+  color: rgba(160,210,255,0.80);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+.footer-back-top a:hover { color: #FFFFFF; text-decoration: underline; }
+
+/* ── UX-Report: Testimonial cards — left-align at mobile breakpoints ── */
+@media (max-width: 640px) {
+  .testimonial { text-align: left; }
+  .testimonials-container { align-items: flex-start; }
+}
+
+/* ── UX-Report: Cover image object-fit (avoid padding bands) ── */
+.book-hero-cover { object-fit: cover; }
+.ebook-catalogue .book-card img,
+.catalogue-grid  .book-card img { object-fit: cover; }
