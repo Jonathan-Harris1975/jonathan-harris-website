@@ -186,7 +186,7 @@
         return;
       }
 
-      const res = await fetch(HEADER_URL, { cache: "no-cache" });
+      const res = await fetch(HEADER_URL, { cache: "force-cache" });
       if (!res.ok) return;
       const html = await res.text();
 
@@ -204,8 +204,8 @@
       }
 
       header.classList.add('jh-header--injected');
+      header.classList.add('is-visible');
       markActiveNav(header);
-
 
       // Wire up hamburger button if present
       try {
@@ -226,11 +226,12 @@
           markActiveNav(mobileNav);
         }
       } catch(_) {}
-      // Keep the primary navigation visible immediately.
-      // Delayed reveal looked slick on paper but behaved like a missing menu on real devices.
+
+      // Keep injected navigation visible on all pages.
       header.classList.add('is-visible');
 
-    }catch(_){ }
+
+    }catch(_){}
   }
 
   function ensureFooterTarget(){
