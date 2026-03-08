@@ -2019,3 +2019,140 @@ body.home .wrap .card{text-align:center;}
   border:1px solid rgba(5,150,105,0.2);margin-top:4px;
   line-height:1.4;
 }
+
+/* ===== UX Evaluation Improvements — March 2026 ===== */
+
+/* HIGH — Hamburger: ensure brand-indigo button is visible on all pages */
+.jh-hamburger {
+  background: rgba(79,70,229,0.85) !important;
+  border: 1px solid rgba(79,70,229,0.6) !important;
+  color: #fff !important;
+  min-height: 44px;
+  min-width: 44px;
+}
+.jh-hamburger:hover, .jh-hamburger:focus {
+  background: rgba(67,56,202,0.95) !important;
+  outline: 2px solid rgba(147,197,253,0.75);
+  outline-offset: 2px;
+}
+
+/* HIGH — Active nav link: bottom border + bold weight (colour-blind safe) */
+.jh-topnav a[aria-current="page"] {
+  border-bottom: 2px solid #93C5FD;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+
+/* HIGH — Skip link: ensure visible on focus */
+.skip-link:focus {
+  left: 12px !important;
+  top: 12px !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 10px 14px !important;
+  background: #111827 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  z-index: 9999 !important;
+}
+
+/* MEDIUM — Body text: left-aligned for readability; hero/section stays centred */
+body { text-align: left; }
+.hero, .hero h1, .hero p, .hero .wrap { text-align: center; }
+.section-center, .footer-meta, .lp-newsletter-cta { text-align: center; }
+
+/* MEDIUM — Prose content max-width for comfortable line length */
+.main p, .wrap > p, .card p, .lp-section p {
+  max-width: 72ch;
+}
+
+/* MEDIUM — All tap targets meet 44×44px minimum */
+.button, .btn-primary, .chip, .tag, .podcast-platform-btn,
+.footer-badges a, .footer-social a, .jh-back-to-top {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.chip, .tag { min-height: 36px; } /* chips are UI filters, slightly relaxed */
+
+/* MEDIUM — Focus rings: visible on all interactive elements */
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid rgba(79,70,229,0.85);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* MEDIUM — Podcast page: episode card headings use brand accent */
+body.page-podcast .card h2,
+body.page-podcast .card h3 { color: var(--accent); }
+
+/* MEDIUM — Transcript label: on-brand colour */
+.transcript-label {
+  display: block;
+  margin: 0 0 8px;
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* MEDIUM — Footer: centre on mobile for single-column layout */
+@media (max-width: 640px) {
+  .footer-panel { text-align: center; }
+  .footer-panel .footer-links { justify-content: center; }
+  .footer-panel .footer-badges,
+  .footer-panel .footer-social { justify-content: center; }
+}
+
+/* LOW — Affiliate disclosure: brand palette */
+.disclosure-banner, .disclosure-banner--brand {
+  background: #EEF2FF;
+  border: 1px solid rgba(79,70,229,0.3);
+  border-radius: 12px;
+  padding: 16px 22px;
+  margin: 0 0 28px;
+  color: #3730A3;
+  font-size: 0.97em;
+  line-height: 1.55;
+}
+
+/* LOW — Improve card hover: subtle lift for interactivity signal */
+.card {
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 48px rgba(15,23,42,0.13) !important;
+}
+
+/* LOW — Glossary term headings: use brand accent */
+.glossary-term h2, .glossary-term h3 {
+  color: var(--accent);
+}
+
+/* LOW — Table responsiveness (compare page) */
+.compare-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius);
+}
+.compare-table-wrap table {
+  min-width: 600px;
+}
+
+/* LOW — Blog listing: consistent date styling */
+.blog-date, .post-date {
+  color: #6B7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* LOW — 404 page: centre CTA buttons on mobile */
+@media (max-width: 640px) {
+  body.jh-page-404 .jh-404-ctas { justify-content: center; }
+  body.jh-page-404 .jh-404-search { justify-content: center; }
+}
