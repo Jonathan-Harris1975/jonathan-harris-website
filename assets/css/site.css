@@ -675,7 +675,7 @@ a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:
 .jh-breadcrumbs{max-width:1100px; margin:12px auto 18px; padding:0 18px; text-align:left;}
 .jh-breadcrumbs__list{list-style:none; display:flex; flex-wrap:wrap; gap:8px; padding:0; margin:0;}
 .jh-breadcrumbs__item{display:flex; align-items:center; gap:8px; color:var(--text-soft); font-size:13px;}
-.jh-breadcrumbs__item + .jh-breadcrumbs__item:before{content:"›"; color:#9CA3AF;}
+.jh-breadcrumbs__item + .jh-breadcrumbs__item:before{content:"›"; color:#6B7280;}
 .jh-breadcrumbs__item span[aria-current="page"]{color:#111827; font-weight:700;}
 
 /* Inline CTA */
@@ -1867,15 +1867,7 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 }
 
 
-/* ===== UX Evaluation fixes applied 2026 ===== */
-
-/* HIGH — Hamburger: solid brand indigo so it's visible on any background */
-.jh-hamburger{
-  background:rgba(79,70,229,0.85) !important;
-  border:1px solid rgba(79,70,229,0.6) !important;
-  color:#fff !important;
-}
-.jh-hamburger:hover{background:rgba(67,56,202,0.95) !important;}
+/* ===== Consolidated UX fixes — canonical rules are in the March 2026 block below ===== */
 
 /* HIGH — Active nav: non-colour indicator (bottom border + bold) */
 .jh-topnav a[aria-current="page"]{
@@ -1884,9 +1876,10 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 }
 
 /* Section-level centring for hero and CTA areas */
+/* Hero section: centre headings and short intro only; long prose stays left-aligned */
 .hero{text-align:center;}
-.hero p{text-align:center;}
 .hero h1{text-align:center;}
+/* .hero p intentionally omitted — long paragraphs remain left-aligned for readability */
 .section-center{text-align:center;}
 
 /* MEDIUM — Podcast page: episode card headings use brand accent */
@@ -1998,7 +1991,7 @@ body.home .wrap .card{text-align:center;}
   margin-bottom:8px;display:block;
 }
 .lp-testimonial-source{
-  display:block;font-size:0.8rem;color:#9CA3AF;margin-top:4px;
+  display:block;font-size:0.8rem;color:#6B7280;margin-top:4px;
   font-style:normal;
 }
 
@@ -2059,7 +2052,8 @@ body.home .wrap .card{text-align:center;}
 
 /* MEDIUM — Body text: left-aligned for readability; hero/section stays centred */
 body { text-align: left; }
-.hero, .hero h1, .hero p, .hero .wrap { text-align: center; }
+/* Hero section centring — headings and labels only, not long prose paragraphs */
+.hero, .hero h1, .hero .wrap { text-align: center; }
 .section-center, .footer-meta, .lp-newsletter-cta { text-align: center; }
 
 /* MEDIUM — Prose content max-width for comfortable line length */
@@ -2075,7 +2069,7 @@ body { text-align: left; }
   align-items: center;
   justify-content: center;
 }
-.chip, .tag { min-height: 36px; } /* chips are UI filters, slightly relaxed */
+.chip, .tag { min-height: 44px; } /* meets 44×44px touch target minimum */
 
 /* MEDIUM — Focus rings: visible on all interactive elements */
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
@@ -2155,4 +2149,71 @@ body.page-podcast .card h3 { color: var(--accent); }
 @media (max-width: 640px) {
   body.jh-page-404 .jh-404-ctas { justify-content: center; }
   body.jh-page-404 .jh-404-search { justify-content: center; }
+}
+
+/* ===== UX Evaluation Applied Fixes — March 2026 ===== */
+
+/* Inner-page prose: centred column with comfortable max line length */
+.main > .wrap > p,
+.wrap > p,
+section.card > p,
+.lp-section > p {
+  max-width: 72ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Comparison table: right-fade shadow as horizontal-scroll affordance on mobile */
+.compare-table-wrap {
+  position: relative;
+}
+.compare-table-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 40px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.85));
+  pointer-events: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+@media (min-width: 800px) {
+  .compare-table-wrap::after { display: none; }
+}
+
+/* Podcast platform buttons: ensure icon + label always display side-by-side */
+.podcast-platform-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/* Blog placeholder card: enhanced styling so it reads as intentional */
+.blog-placeholder {
+  background: linear-gradient(135deg, #EEF2FF 0%, #F5F7FA 100%);
+  border: 1px solid rgba(79,70,229,0.2);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+}
+.blog-placeholder h2 {
+  color: var(--accent);
+  margin-top: 0;
+}
+
+/* Back-to-top: add visible "Top" label */
+.jh-back-to-top::after {
+  content: "Top";
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  line-height: 1;
+}
+.jh-back-to-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
 }
