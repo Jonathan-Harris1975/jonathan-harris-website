@@ -140,17 +140,20 @@ a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius
   color:#111827;
 }
 .chip[aria-pressed="true"]{
-  border-color:rgba(79,70,229,.35);
-  border-width:2px;
-  box-shadow:0 10px 22px rgba(79,70,229,0.10);
-  color:var(--accent);
-  padding-left:8px;
+  background: var(--accent);
+  border-color: var(--accent);
+  border-width: 2px;
+  box-shadow: 0 4px 14px rgba(79,70,229,0.28);
+  color: #fff;
+  padding-left: 8px;
 }
 .chip[aria-pressed="true"]::before{
-  content:"✓ ";
-  font-size:0.8em;
-  font-weight:800;
+  content: "✓ ";
+  font-size: 0.8em;
+  font-weight: 800;
 }
+/* Minimum touch target for chips */
+.chip{ min-height: 44px; display: inline-flex; align-items: center; }
 
 .grid{
   display:grid;
@@ -289,6 +292,9 @@ details.more[open] summary:before{transform:rotate(90deg);}
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+
+/* ── Visually-hidden utility (screen readers only) ── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 /* ===== Footer ===== */
 .site-footer{
   margin-top: 26px;
@@ -1194,18 +1200,19 @@ body.jh-page-404 main{
 /* ── Mobile hamburger menu — single consolidated rule ── */
 .jh-hamburger {
   display: none;
-  background: rgba(79,70,229,0.85);
-  border: 1px solid rgba(79,70,229,0.6);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 10px;
-  color: #fff;
+  color: #E5E7EB;
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
   padding: 7px 10px;
   margin-left: auto;
   min-width: 42px;
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
-.jh-hamburger:hover { background: rgba(67,56,202,0.95); }
+.jh-hamburger:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.38); }
 .jh-hamburger:focus {
   outline: 2px solid rgba(147,197,253,0.75);
   outline-offset: 2px;
@@ -1478,6 +1485,8 @@ body.jh-page-404 main{
 
 html{scroll-padding-top:86px;}
 body{ text-align:left; background:var(--bg); color:var(--text); }
+/* Centred wrappers inside body */
+.lp-hero, .hero, .lp-stats, .lp-section > .lp-inner{ text-align:center; }
 .wrap, .lp-inner, .jh-header__inner, .footer-shell{ max-width: var(--site-max); margin-left:auto; margin-right:auto; }
 main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-top: 96px; }
 
@@ -1599,6 +1608,13 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 .lp-section-title, .section-title{ color:#111827; line-height:1.15; letter-spacing:-0.02em; }
 .lp-section-desc, .section-lead{ max-width: 760px; color:var(--text-soft); }
 .lp-offers, .lp-ebooks, .lp-testimonials{ gap: 22px !important; }
+.lp-offer-card__img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
 .lp-offer-card, .lp-ebook-card, .lp-testimonial, .card, .book-card{
   border-radius: 20px !important;
   box-shadow: 0 14px 34px rgba(15,23,42,0.08) !important;
@@ -1909,16 +1925,21 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 
 /* HIGH — Active nav: non-colour indicator (bottom border + bold) */
 .jh-topnav a[aria-current="page"]{
-  border-bottom:2px solid #93C5FD;
-  font-weight:700;
+  border-bottom: 2px solid #93C5FD;
+  font-weight: 700;
+  color: #93C5FD;
+  background: rgba(147,197,253,0.08);
 }
 
-/* MEDIUM — Body text-align: left for readability; hero/section stays centred */
+/* MEDIUM — Alignment: keep hero/sections centred; body-copy cards left */
 body{text-align:left;}
-.hero{text-align:center;}
-.hero p{text-align:center;}
-.hero h1{text-align:center;}
-.section-center{text-align:center;}
+.hero, .lp-hero, .lp-section, .lp-inner, .lp-stats, .lp-newsletter-cta{ text-align:center; }
+.hero p, .hero h1, .hero h2, .lp-hero p, .lp-hero h1{ text-align:center; }
+.lp-section-title, .lp-section-label, .lp-section-desc{ text-align:center; }
+.section-center{ text-align:center; }
+/* Cards keep body-copy left for readability */
+.card, .lp-offer-card, .lp-ebook-card .lp-ebook-card__body{ text-align:left; }
+.lp-ebook-card__title{ text-align:center; }
 
 /* MEDIUM — Podcast page: episode card headings use brand accent */
 body.page-podcast .card h2,
@@ -2159,4 +2180,91 @@ blockquote:last-child{ margin-bottom:0; }
   border-left:3px solid var(--accent);
   color:#93C5FD;
   font-weight:700;
+}
+
+/* ===== Podcast page — class-based styles (replaces inline) ===== */
+.podcast-hero-img {
+  max-width: 150px;
+  border-radius: 14px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  margin: 0 auto 18px;
+  display: block;
+}
+.podcast-hero-byline {
+  margin: 0 auto 6px;
+  font-size: 0.95rem;
+  /* Same visual weight as hero paragraph — not lighter */
+  color: var(--text-light);
+  font-weight: 600;
+}
+.podcast-subscribe-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+.podcast-platform-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 999px;
+  padding: 9px 18px;
+  color: #E5E7EB;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: background 0.15s ease;
+}
+.podcast-platform-btn:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  text-decoration: none;
+}
+.podcast-card { padding: 18px; }
+.podcast-card h2 { margin-top: 0; }
+.podcast-card-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+.podcast-spotify-wrap { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+.podcast-spotify-iframe {
+  border: 0;
+  width: 100%;
+  /* Use min-height + auto to allow zoom scaling */
+  min-height: 352px;
+  height: auto;
+}
+
+/* ===== eBook cover placeholder — styled, not plain rectangle ===== */
+.lp-ebook-card__cover {
+  background: linear-gradient(135deg, #1a2540 0%, #0D1420 60%, #1E2D45 100%);
+  border-radius: 12px 12px 0 0;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #93C5FD;
+  text-align: center;
+  letter-spacing: 0.02em;
+  border-bottom: 2px solid rgba(147,197,253,0.18);
+  position: relative;
+  overflow: hidden;
+}
+.lp-ebook-card__cover::before {
+  content: "";
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, rgba(79,70,229,0.25), transparent 70%);
+  pointer-events: none;
+}
+.lp-ebook-card__cover::after {
+  content: "📖";
+  position: absolute;
+  bottom: 8px; right: 10px;
+  font-size: 1.1rem;
+  opacity: 0.5;
 }
