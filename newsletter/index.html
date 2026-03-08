@@ -66,126 +66,6 @@
       }
     });
   </script>
-<style>
-    body{
-      margin:0;
-      padding:0;
-      font-family: 'Inter', Arial, Helvetica, sans-serif;
-      line-height:1.6;
-      color:#374151;
-      text-align:center;
-      background:#FFFFFF;
-    }
-
-    .hero{
-      background:#0D1420;
-      padding:64px 16px 44px;
-    }
-
-    /* Logo morph: square -> circle (page-load only) */
-    .logo-morph{
-      width:120px;
-      height:120px;
-      object-fit:cover;
-      border-radius:12px;
-      display:block;
-      margin:0 auto 16px;
-      box-shadow:0 6px 22px rgba(0,0,0,0.45);
-      animation:morphIn 1.2s ease forwards;
-    }
-    @keyframes morphIn{
-      0%{border-radius:12px; opacity:0; transform:translateY(6px);}
-      55%{border-radius:12px; opacity:1; transform:translateY(0);}
-      100%{border-radius:999px; opacity:1; transform:translateY(0);}
-    }
-
-    .hero-img{
-      width:180px;
-      max-width:90%;
-      height:auto;
-      border-radius:14px;
-      box-shadow:0 6px 22px rgba(0,0,0,0.45);
-      display:block;
-      margin:0 auto 18px;
-    }
-
-    .hero h1{
-      margin:0 0 10px;
-      font-size:40px;
-      line-height:1.15;
-      color:#93C5FD;
-      font-weight:800;
-      letter-spacing:-0.02em;
-    }
-
-    .hero p{
-      margin:0 auto;
-      max-width:760px;
-      font-size:18px;
-      line-height:1.6;
-      color:#D1D5DB;
-    }
-
-    .main{
-      background:#F5F7FA;
-      padding:54px 16px 64px;
-      width:100%;
-    }
-
-    .card{
-      background:#FFFFFF;
-      max-width:900px;
-      margin:0 auto;
-      padding:30px 18px;
-      border-radius:18px;
-      box-shadow:0 14px 40px rgba(0,0,0,0.12);
-      border:1px solid rgba(0,0,0,0.06);
-      text-align:center;
-    }
-
-    .card h2{
-      margin:0 0 10px;
-      color:#4F46E5;
-      font-weight:800;
-      font-size:34px;
-      line-height:1.2;
-    }
-
-    .card p{
-      margin:0 auto 16px;
-      max-width:760px;
-      font-size:18px;
-      color:#374151;
-    }
-
-    .subtle{
-      font-size:14px;
-      color:#6B7280;
-      margin-top:14px;
-    }
-
-    .embed-wrap{
-      max-width:650px;
-      margin:0 auto;
-    }
-
-    blockquote{
-      margin:0 0 16px;
-      padding:14px 16px;
-      border-left:4px solid #4F46E5;
-      background:#F5F7FA;
-      border-radius:12px;
-      text-align:left;
-    }
-    blockquote:last-child{ margin-bottom:0; }
-
-    @media (max-width:600px){
-      .hero{ padding:58px 14px 40px; }
-      .hero h1{ font-size:32px; }
-      .card h2{ font-size:28px; }
-      .card p{ font-size:16px; }
-    }
-  </style>
 <link href="https://jonathan-harris.online/newsletter" hreflang="en-GB" rel="alternate"/>
 <link href="https://jonathan-harris.online/newsletter" hreflang="x-default" rel="alternate"/>
 <link href="https://jonathan-harris.online/newsletter/" rel="canonical"/><meta content="Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like." name="description"/><meta content="index,follow" name="robots"/><meta content="page" name="ai:content_type"/><meta content="x, get, podcast, newsletter, gen, edge, ebooks, ai, automation" name="ai:keywords"/><meta content="website" property="og:type"/><meta content="https://jonathan-harris.online/newsletter/" property="og:url"/><meta content="Get the AI Edge | Jonathan Harris" property="og:title"/><meta content="Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like." property="og:description"/><meta content="summary_large_image" name="twitter:card"/><meta content="Get the AI Edge | Jonathan Harris" name="twitter:title"/><meta content="Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like." name="twitter:description"/><style id="jh-dropdown-inline">
@@ -268,12 +148,12 @@
 </header>
 
 
-<section aria-label="Newsletter header" class="hero">
+<section aria-label="Newsletter header" class="hero hero--newsletter">
 <img alt="Jonathan Harris" class="logo-morph" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
 <h1>Get the AI Edge</h1>
 <p>Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like.</p>
 </section>
-<main aria-label="Newsletter sign-up content" class="main" id="main" role="main">
+<main aria-label="Newsletter sign-up content" class="main page-main" id="main" role="main">
 <section aria-label="Newsletter at a glance" class="card" role="region" style="margin-bottom:22px;background:linear-gradient(135deg,#4F46E5 0%,#3730A3 100%);color:#fff;border:none;">
 <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;padding:8px 0;">
   <div style="text-align:center;">
@@ -294,7 +174,7 @@
   </div>
 </div>
 </section>
-<section aria-label="What the newsletter covers" class="card" role="region" style="margin-bottom:22px;">
+<section aria-label="What the newsletter covers" class="card card--accent" role="region" style="margin-bottom:22px;">
 <h2>What You’ll Get</h2>
 <p>
         This is a <strong>daily AI newsletter</strong> built for business leaders, tech professionals, and
@@ -315,7 +195,7 @@
         No spam. No affiliate pressure. Unsubscribe whenever you like — it’s one click.
       </p>
 </section>
-<section aria-label="Sign up form" class="card" role="region">
+<section aria-label="Sign up form" class="card card--accent" role="region">
 <h2>Newsletter Sign-Up</h2>
 <div class="embed-wrap">
 <iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260277027608054" onload="window.parent.scrollTo(0,0)" scrolling="no" src="https://form.jotform.com/260277027608054" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Get the AI Edge"></iframe>
@@ -327,7 +207,7 @@
   </a>
 </p>
 </section>
-<section aria-label="What readers say" class="card" role="region" style="margin-top:22px;">
+<section aria-label="What readers say" class="card card--accent" role="region" style="margin-top:22px;">
 <h2>What readers say</h2>
 <p style="margin:0 auto 18px;max-width:760px;color:#374151;">
         A couple of quick reactions from people who prefer signal over noise.
@@ -335,11 +215,11 @@
 <div style="max-width:760px;margin:0 auto;">
 <blockquote>
           “The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters.”
-          <div style="margin-top:8px;color:#6B7280;font-size:14px;">— Liam R., IT Manager</div>
+          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Liam R., IT Manager</div>
 </blockquote>
 <blockquote>
           “No hype, no waffle. Just the bits of AI news that actually change what I do at work.”
-          <div style="margin-top:8px;color:#6B7280;font-size:14px;">— Rachel D., Product Manager</div>
+          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Rachel D., Product Manager</div>
 </blockquote>
 </div>
 </section>
