@@ -51,48 +51,6 @@ a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius
 .hero h1{margin:0 0 10px; font-size:2.35rem; line-height:1.15; color:#93C5FD; letter-spacing:-.2px}
 .hero p{margin:0 auto; max-width:780px; font-size:1.05rem; color:var(--text-light)}
 
-/* P1 FIX — lp-hero (home page): must carry the same dark background/colour as .hero */
-.lp-hero{
-  background:var(--bg-dark);
-  color:var(--text-light);
-  padding:80px 18px 48px;
-  text-align:center;
-}
-.lp-hero h1{
-  margin:0 0 12px;
-  font-size:2.6rem;
-  line-height:1.12;
-  color:#93C5FD;
-  letter-spacing:-.03em;
-  font-weight:800;
-}
-.lp-hero p{
-  margin:0 auto 24px;
-  max-width:720px;
-  font-size:1.1rem;
-  color:var(--text-light);
-  line-height:1.65;
-}
-.lp-hero__logo{
-  display:block;
-  margin:0 auto 22px;
-  width:100px;
-  height:100px;
-  border-radius:16px;
-  box-shadow:0 8px 28px rgba(0,0,0,0.45);
-}
-.lp-hero__ctas{
-  display:flex;
-  gap:12px;
-  justify-content:center;
-  flex-wrap:wrap;
-}
-@media(max-width:620px){
-  .lp-hero{ padding:64px 14px 36px; }
-  .lp-hero h1{ font-size:2rem; }
-  .lp-hero p{ font-size:1rem; }
-}
-
 .logo-plain{
   width:96px; height:96px;
   border-radius:12px;
@@ -140,20 +98,17 @@ a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius
   color:#111827;
 }
 .chip[aria-pressed="true"]{
-  background: var(--accent);
-  border-color: var(--accent);
-  border-width: 2px;
-  box-shadow: 0 4px 14px rgba(79,70,229,0.28);
-  color: #fff;
-  padding-left: 8px;
+  border-color:rgba(79,70,229,.35);
+  border-width:2px;
+  box-shadow:0 10px 22px rgba(79,70,229,0.10);
+  color:var(--accent);
+  padding-left:8px;
 }
 .chip[aria-pressed="true"]::before{
-  content: "✓ ";
-  font-size: 0.8em;
-  font-weight: 800;
+  content:"✓ ";
+  font-size:0.8em;
+  font-weight:800;
 }
-/* Minimum touch target for chips */
-.chip{ min-height: 44px; display: inline-flex; align-items: center; }
 
 .grid{
   display:grid;
@@ -292,9 +247,6 @@ details.more[open] summary:before{transform:rotate(90deg);}
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-
-/* ── Visually-hidden utility (screen readers only) ── */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 /* ===== Footer ===== */
 .site-footer{
   margin-top: 26px;
@@ -1197,11 +1149,11 @@ body.jh-page-404 main{
   margin: 0 0 10px;
 }
 
-/* ── Mobile hamburger menu — single consolidated rule ── */
+/* ── Mobile hamburger menu ── */
 .jh-hamburger {
   display: none;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.22);
+  border: 1px solid rgba(255,255,255,0.18);
   border-radius: 10px;
   color: #E5E7EB;
   cursor: pointer;
@@ -1209,10 +1161,7 @@ body.jh-page-404 main{
   line-height: 1;
   padding: 7px 10px;
   margin-left: auto;
-  min-width: 42px;
-  transition: background 0.15s ease, border-color 0.15s ease;
 }
-.jh-hamburger:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.38); }
 .jh-hamburger:focus {
   outline: 2px solid rgba(147,197,253,0.75);
   outline-offset: 2px;
@@ -1484,9 +1433,11 @@ body.jh-page-404 main{
 }
 
 html{scroll-padding-top:86px;}
+/* Pages without a hero: ensure main content clears the fixed sticky header */
+body:not(.home) main.wrap:first-of-type,
+body:not(.home) > main:not([class]),
+.jh-no-hero-page main{ padding-top: 88px; }
 body{ text-align:left; background:var(--bg); color:var(--text); }
-/* Centred wrappers inside body */
-.lp-hero, .hero, .lp-stats, .lp-section > .lp-inner{ text-align:center; }
 .wrap, .lp-inner, .jh-header__inner, .footer-shell{ max-width: var(--site-max); margin-left:auto; margin-right:auto; }
 main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-top: 96px; }
 
@@ -1521,13 +1472,13 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   backdrop-filter: saturate(1.2) blur(12px);
   -webkit-backdrop-filter: saturate(1.2) blur(12px);
   border-bottom: 1px solid rgba(255,255,255,0.10);
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
   transition: opacity 0.28s ease, transform 0.28s ease;
   box-shadow: 0 12px 30px rgba(0,0,0,0.28);
 }
-/* is-visible class kept for JS compatibility */
+/* JS adds this class when the hero scrolls out of view */
 .jh-header.is-visible{
   opacity: 1;
   pointer-events: auto;
@@ -1608,13 +1559,6 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 .lp-section-title, .section-title{ color:#111827; line-height:1.15; letter-spacing:-0.02em; }
 .lp-section-desc, .section-lead{ max-width: 760px; color:var(--text-soft); }
 .lp-offers, .lp-ebooks, .lp-testimonials{ gap: 22px !important; }
-.lp-offer-card__img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 12px;
-  display: block;
-}
 .lp-offer-card, .lp-ebook-card, .lp-testimonial, .card, .book-card{
   border-radius: 20px !important;
   box-shadow: 0 14px 34px rgba(15,23,42,0.08) !important;
@@ -1683,10 +1627,10 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 .footer-links a:hover, .footer-links a:focus, .footer-brand:hover, .footer-brand:focus, .footer-badges a:hover, .footer-social a:hover{ color:#FFFFFF; text-decoration:underline; }
 .footer-social{ display:flex; flex-wrap:wrap; gap:12px; margin-top:14px; }
 .footer-social a{
-  width:42px; height:42px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;
+  width:44px; height:44px; border-radius:999px; display:inline-flex; align-items:center; justify-content:center;
   background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
 }
-.footer-social img{ width:22px; height:22px; opacity:0.92; }
+.footer-social img{ width:28px; height:28px; opacity:0.92; }
 .footer-meta{
   margin-top:18px;
   text-align:center;
@@ -1882,7 +1826,10 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 .card-links a:focus{
   text-decoration:underline;
 }
-
+.muted{
+  color:#6B7280;
+  font-size:0.9rem;
+}
 .wrap .card{
   text-align:center;
 }
@@ -1923,23 +1870,25 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 
 /* ===== UX Evaluation fixes applied 2026 ===== */
 
+/* HIGH — Hamburger: solid brand indigo so it's visible on any background */
+.jh-hamburger{
+  background:rgba(79,70,229,0.85) !important;
+  border:1px solid rgba(79,70,229,0.6) !important;
+  color:#fff !important;
+}
+.jh-hamburger:hover{background:rgba(67,56,202,0.95) !important;}
+
 /* HIGH — Active nav: non-colour indicator (bottom border + bold) */
 .jh-topnav a[aria-current="page"]{
-  border-bottom: 2px solid #93C5FD;
-  font-weight: 700;
-  color: #93C5FD;
-  background: rgba(147,197,253,0.08);
+  border-bottom:2px solid #93C5FD;
+  font-weight:700;
 }
 
-/* MEDIUM — Alignment: keep hero/sections centred; body-copy cards left */
-body{text-align:left;}
-.hero, .lp-hero, .lp-section, .lp-inner, .lp-stats, .lp-newsletter-cta{ text-align:center; }
-.hero p, .hero h1, .hero h2, .lp-hero p, .lp-hero h1{ text-align:center; }
-.lp-section-title, .lp-section-label, .lp-section-desc{ text-align:center; }
-.section-center{ text-align:center; }
-/* Cards keep body-copy left for readability */
-.card, .lp-offer-card, .lp-ebook-card .lp-ebook-card__body{ text-align:left; }
-.lp-ebook-card__title{ text-align:center; }
+/* Section-level centring for hero and CTA areas */
+.hero{text-align:center;}
+.hero p{text-align:center;}
+.hero h1{text-align:center;}
+.section-center{text-align:center;}
 
 /* MEDIUM — Podcast page: episode card headings use brand accent */
 body.page-podcast .card h2,
@@ -1981,396 +1930,5 @@ body.page-podcast .card h3{color:var(--accent);}
   font-size:0.97em;
 }
 
-/* LOW — Cards inside .wrap stay centred only on home */
-body:not(.home) .wrap .card{text-align:left;}
+/* Cards inside .wrap: centred on homepage, left-aligned everywhere else (handled by base .card rule) */
 body.home .wrap .card{text-align:center;}
-
-/* ===== UX Recommendations applied March 2026 ===== */
-
-/* ACCESSIBILITY — Skip to main content link */
-.skip-link{
-  position:absolute;
-  left:-999px;
-  top:auto;
-  width:1px;
-  height:1px;
-  overflow:hidden;
-  z-index:9999;
-}
-.skip-link:focus{
-  left:12px;
-  top:12px;
-  width:auto;
-  height:auto;
-  padding:10px 14px;
-  background:#111827;
-  color:#fff;
-  border-radius:12px;
-  font-weight:700;
-  font-size:0.95rem;
-  outline:2px solid rgba(79,70,229,0.9);
-  outline-offset:2px;
-}
-
-/* ACCESSIBILITY — Standardised form field label */
-.field-label{
-  display:block;
-  margin:0 0 6px;
-  font-weight:700;
-  color:var(--accent);
-  font-size:0.9rem;
-}
-
-/* P1+P2 FIX — Muted text: single definition, cool-grey on-brand, strong contrast */
-.muted{
-  color:#4B5563;
-  font-size:0.9rem;
-}
-
-/* ACCESSIBILITY — Podcast RSS hint: minimum 14px, consistent with muted */
-.podcast-rss-hint{
-  margin-top:10px;
-  font-size:0.875rem;  /* 14px */
-  color:#4B5563;
-}
-
-/* VISUAL — Footer social icons: flex column with visible text label */
-.footer-social a{
-  flex-direction:column;
-  gap:4px;
-  width:auto;
-  min-width:48px;
-  height:auto;
-  padding:8px 10px;
-  border-radius:12px;
-}
-.footer-social__item{
-  display:inline-flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-  padding:8px 10px;
-  border-radius:12px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.08);
-  text-decoration:none;
-}
-.footer-social__item:hover,
-.footer-social__item:focus{
-  background:rgba(255,255,255,0.12);
-  color:#ffffff;
-  text-decoration:none;
-}
-.footer-social__label{
-  font-size:0.65rem;
-  font-weight:700;
-  color:rgba(209,213,219,0.80);
-  letter-spacing:0.03em;
-  white-space:nowrap;
-}
-
-
-/* VISUAL — Hamburger: also ensure mobile display rule matches consolidated style */
-@media (max-width:768px){
-  .jh-hamburger{ display:block; }
-}
-
-/* ── P2 FIX — Newsletter/Contact: shared hero styles moved from inline <style> ── */
-.hero--newsletter,
-.hero--contact{
-  background:var(--bg-dark);
-  padding:64px 16px 44px;
-}
-.hero--newsletter h1,
-.hero--contact h1{
-  margin:0 0 10px;
-  font-size:40px;
-  line-height:1.15;
-  color:#93C5FD;
-  font-weight:800;
-  letter-spacing:-0.02em;
-}
-.hero--newsletter p,
-.hero--contact p{
-  margin:0 auto;
-  max-width:760px;
-  font-size:18px;
-  line-height:1.6;
-  color:#D1D5DB;
-}
-/* Logo morph animation — newsletter hero logo */
-.logo-morph{
-  width:120px;
-  height:120px;
-  object-fit:cover;
-  border-radius:12px;
-  display:block;
-  margin:0 auto 16px;
-  box-shadow:0 6px 22px rgba(0,0,0,0.45);
-  animation:morphIn 1.2s ease forwards;
-}
-@keyframes morphIn{
-  0%  { border-radius:12px; opacity:0; transform:translateY(6px); }
-  55% { border-radius:12px; opacity:1; transform:translateY(0); }
-  100%{ border-radius:999px; opacity:1; transform:translateY(0); }
-}
-/* Embed wrapper — JotForm iframes */
-.embed-wrap{
-  max-width:650px;
-  margin:0 auto;
-}
-/* Subtle note text (inline form fallback links etc.) */
-.subtle{
-  font-size:14px;
-  color:#4B5563;
-  margin-top:14px;
-}
-/* Blockquote — testimonials on newsletter page */
-blockquote{
-  margin:0 0 16px;
-  padding:14px 16px;
-  border-left:4px solid var(--accent);
-  background:var(--bg-soft);
-  border-radius:12px;
-  text-align:left;
-}
-blockquote:last-child{ margin-bottom:0; }
-/* Accent card — indigo heading variant (newsletter/contact signup cards) */
-.card--accent h2{
-  color:var(--accent);
-  font-weight:800;
-  font-size:34px;
-  line-height:1.2;
-}
-.card--accent p{
-  font-size:18px;
-}
-/* Page-level main content area (newsletter/contact) */
-.page-main{
-  background:var(--bg-soft);
-  padding:54px 16px 64px;
-  width:100%;
-}
-@media(max-width:600px){
-  .hero--newsletter,
-  .hero--contact{ padding:58px 14px 40px; }
-  .hero--newsletter h1,
-  .hero--contact h1{ font-size:32px; }
-  .card--accent h2{ font-size:28px; }
-  .card--accent p{ font-size:16px; }
-}
-
-/* ── P3 FIX — Mobile nav: Resources group label styling ── */
-.jh-mobile-nav__group-label{
-  display:block;
-  font-size:0.72rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:0.09em;
-  color:#93C5FD;
-  padding:14px 12px 4px;
-  margin-top:4px;
-  opacity:0.85;
-}
-
-/* ── P3 FIX — Mobile nav: stronger active-page indicator ── */
-.jh-mobile-nav a[aria-current="page"]{
-  background:rgba(79,70,229,0.20);
-  border:1px solid rgba(79,70,229,0.35);
-  border-left:3px solid var(--accent);
-  color:#93C5FD;
-  font-weight:700;
-}
-
-/* ===== Podcast page — class-based styles (replaces inline) ===== */
-.podcast-hero-img {
-  max-width: 150px;
-  border-radius: 14px;
-  box-shadow: 0 10px 28px rgba(0,0,0,0.45);
-  margin: 0 auto 18px;
-  display: block;
-}
-.podcast-hero-byline {
-  margin: 0 auto 6px;
-  font-size: 0.95rem;
-  /* Same visual weight as hero paragraph — not lighter */
-  color: var(--text-light);
-  font-weight: 600;
-}
-.podcast-subscribe-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 18px;
-}
-.podcast-platform-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.22);
-  border-radius: 999px;
-  padding: 9px 18px;
-  color: #E5E7EB;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 700;
-  transition: background 0.15s ease;
-}
-.podcast-platform-btn:hover {
-  background: rgba(255,255,255,0.18);
-  color: #fff;
-  text-decoration: none;
-}
-.podcast-card { padding: 18px; }
-.podcast-card h2 { margin-top: 0; }
-.podcast-card-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
-.podcast-spotify-wrap { border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
-.podcast-spotify-iframe {
-  border: 0;
-  width: 100%;
-  /* Use min-height + auto to allow zoom scaling */
-  min-height: 352px;
-  height: auto;
-}
-
-/* ===== eBook cover placeholder — styled, not plain rectangle ===== */
-.lp-ebook-card__cover {
-  background: linear-gradient(135deg, #1a2540 0%, #0D1420 60%, #1E2D45 100%);
-  border-radius: 12px 12px 0 0;
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 18px 14px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #93C5FD;
-  text-align: center;
-  letter-spacing: 0.02em;
-  border-bottom: 2px solid rgba(147,197,253,0.18);
-  position: relative;
-  overflow: hidden;
-}
-.lp-ebook-card__cover::before {
-  content: "";
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 100px; height: 100px;
-  background: radial-gradient(circle, rgba(79,70,229,0.25), transparent 70%);
-  pointer-events: none;
-}
-.lp-ebook-card__cover::after {
-  content: "📖";
-  position: absolute;
-  bottom: 8px; right: 10px;
-  font-size: 1.1rem;
-  opacity: 0.5;
-}
-
-@media (min-width: 641px) and (max-width: 760px){
-  .footer-grid{ grid-template-columns: 1fr 1fr !important; gap: 16px; }
-  .footer-panel{ padding: 16px 14px; }
-}
-
-/* btn-secondary: outlined ghost style for secondary CTAs */
-.btn-secondary{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:10px 20px; border-radius:999px; font-weight:700; font-size:14px; line-height:1;
-  border:2px solid rgba(255,255,255,0.55); cursor:pointer; white-space:nowrap;
-  background:transparent; color:#E5E7EB; text-decoration:none;
-  min-height:44px;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-.btn-secondary:hover{ background:rgba(255,255,255,0.10); border-color:rgba(255,255,255,0.80); color:#fff; text-decoration:none; }
-.btn-secondary:focus{ outline:2px solid rgba(147,197,253,0.75); outline-offset:2px; }
-
-/* Hero CTA row: primary takes full width on very small screens */
-@media (max-width:480px){
-  .lp-hero__ctas{ flex-direction:column; align-items:stretch; }
-  .lp-hero__ctas .btn-primary{ font-size:1rem; padding:14px 20px; }
-  .lp-hero__ctas .btn-secondary{ font-size:0.95rem; }
-}
-
-/* Enhanced active nav state — more visible highlight */
-.jh-topnav a[aria-current="page"]{
-  background: rgba(147,197,253,0.14) !important;
-  border-bottom: 3px solid #93C5FD !important;
-  border-radius: 10px 10px 0 0 !important;
-  font-weight: 800 !important;
-  color: #93C5FD !important;
-  padding-bottom: 7px !important;
-}
-
-/* Unified card text-align: left on all pages for readability */
-.card, .book-card{ text-align: left !important; }
-/* Exception: stat/number cards can stay centred */
-.lp-stat{ text-align: center !important; }
-/* Homepage offer cards: centred for visual appeal */
-body.home .lp-offer-card{ text-align: center !important; }
-/* Book cover labels inside lp-ebook-card stay centred */
-.lp-ebook-card__cover{ text-align: center !important; }
-
-/* Ensure all nav controls meet 44px touch target minimum */
-.jh-nav-dropdown__btn{ min-height: 44px; }
-.jh-hamburger{ min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; }
-.jh-topnav a{ min-height: 44px; display: inline-flex; align-items: center; }
-
-/* ── Book availability badge on catalogue cards ── */
-.book-avail{
-  margin: 10px 0 4px;
-}
-.book-avail__badge{
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #1D4ED8;
-  background: #DBEAFE;
-  border: 1px solid #BFDBFE;
-  border-radius: 999px;
-  padding: 4px 10px;
-}
-
-/* ── Homepage featured ebook cards: real cover images ── */
-.lp-ebook-card__img{
-  display: block;
-  width: 100%;
-  max-width: 140px;
-  aspect-ratio: 2/3;
-  object-fit: cover;
-  border-radius: 10px 10px 0 0;
-  margin: 0 auto;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
-  border-bottom: 2px solid rgba(147,197,253,0.18);
-}
-.lp-ebook-card{
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  overflow: hidden;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
-}
-.lp-ebook-card:hover{
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px rgba(15,23,42,0.13);
-  text-decoration: none;
-}
-.lp-ebook-card__body{
-  padding: 12px 14px 14px;
-  flex: 1;
-}
-.lp-ebook-card__title{
-  margin: 0;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #111827;
-  line-height: 1.35;
-  text-align: left;
-}
