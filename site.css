@@ -1862,3 +1862,71 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
   height:30px;
   border-radius:8px;
 }
+
+
+/* ===== UX Evaluation fixes applied 2026 ===== */
+
+/* HIGH — Hamburger: solid brand indigo so it's visible on any background */
+.jh-hamburger{
+  background:rgba(79,70,229,0.85) !important;
+  border:1px solid rgba(79,70,229,0.6) !important;
+  color:#fff !important;
+}
+.jh-hamburger:hover{background:rgba(67,56,202,0.95) !important;}
+
+/* HIGH — Active nav: non-colour indicator (bottom border + bold) */
+.jh-topnav a[aria-current="page"]{
+  border-bottom:2px solid #93C5FD;
+  font-weight:700;
+}
+
+/* MEDIUM — Body text-align: left for readability; hero/section stays centred */
+body{text-align:left;}
+.hero{text-align:center;}
+.hero p{text-align:center;}
+.hero h1{text-align:center;}
+.section-center{text-align:center;}
+
+/* MEDIUM — Podcast page: episode card headings use brand accent */
+body.page-podcast .card h2,
+body.page-podcast .card h3{color:var(--accent);}
+
+/* MEDIUM — Podcast transcript label — softer, on-brand colour */
+.transcript-label{
+  display:block;
+  margin:0 0 8px;
+  font-weight:700;
+  color:var(--accent);
+  font-size:0.9rem;
+}
+
+/* MEDIUM — Podcast transcript section standalone */
+.podcast-transcripts{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-top:20px;
+}
+.podcast-transcripts h2{
+  margin:0 0 6px;
+  color:var(--accent);
+  font-size:1.1rem;
+}
+.podcast-transcripts p.muted{margin:0 0 14px;}
+
+/* LOW — Affiliate disclosure: brand palette */
+.disclosure-banner--brand{
+  background:#EEF2FF;
+  border:1px solid rgba(79,70,229,0.3);
+  border-radius:12px;
+  padding:16px 22px;
+  margin:0 0 28px;
+  color:#3730A3;
+  font-size:0.97em;
+}
+
+/* LOW — Cards inside .wrap stay centred only on home */
+body:not(.home) .wrap .card{text-align:left;}
+body.home .wrap .card{text-align:center;}
