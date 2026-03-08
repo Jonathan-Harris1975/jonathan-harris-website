@@ -458,7 +458,7 @@
 
   function wireDropdowns(){
     try{
-      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){\
+      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
         var btn=dd.querySelector('.jh-nav-dropdown__btn');
         var menu=dd.querySelector('.jh-nav-dropdown__menu');
         if(!btn||btn.dataset.jhWired)return;
@@ -515,8 +515,8 @@
           });
         }
       });
-      document.addEventListener('click',function(){\
-        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){\
+      document.addEventListener('click',function(){
+        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
           dd.classList.remove('is-open');
           var b=dd.querySelector('.jh-nav-dropdown__btn');
           if(b)b.setAttribute('aria-expanded','false');
