@@ -66,14 +66,14 @@
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
+          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
           .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
           .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:2px solid rgba(147,197,253,0.55);outline-offset:2px;}
-          .jh-topnav a[aria-current="page"]{background:rgba(147,197,253,0.08);border-bottom:2px solid #93C5FD;font-weight:700;color:#93C5FD;}
-          .jh-hamburger{display:none;background:transparent;border:1px solid rgba(255,255,255,0.22);border-radius:10px;color:#E5E7EB;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;transition:background 0.15s ease,border-color 0.15s ease;}
+          .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);border-bottom:2px solid #93C5FD;font-weight:700;}
+          .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);border-radius:10px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;}
           .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
           .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
           .jh-mobile-nav.is-open{display:flex;}
@@ -201,10 +201,25 @@
           }
         } catch(_) {}
 
-        // Header is always visible from page load (accessibility requirement)
+        // Scroll-based sticky header: show only once hero/static header is out of view
         try {
           existingHeader.classList.add('jh-header--injected');
-          existingHeader.classList.add('is-visible');
+          var heroEl = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+          if (heroEl && 'IntersectionObserver' in window) {
+            var headerObs = new IntersectionObserver(function(entries){
+              entries.forEach(function(entry){
+                if (!entry.isIntersecting) {
+                  existingHeader.classList.add('is-visible');
+                } else {
+                  existingHeader.classList.remove('is-visible');
+                }
+              });
+            }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
+            headerObs.observe(heroEl);
+          } else {
+            // Fallback: always visible on pages without a hero
+            existingHeader.classList.add('is-visible');
+          }
         } catch(_) {
           existingHeader.classList.add('is-visible');
         }
@@ -231,8 +246,19 @@
       header.classList.add('jh-header--injected');
       markActiveNav(header);
 
-      // Header always visible from page load
-      header.classList.add('is-visible');
+      // Scroll-based visibility for injected header
+      var heroElInj = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+      if (heroElInj && 'IntersectionObserver' in window) {
+        var injObs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (!entry.isIntersecting) { header.classList.add('is-visible'); }
+            else { header.classList.remove('is-visible'); }
+          });
+        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
+        injObs.observe(heroElInj);
+      } else {
+        header.classList.add('is-visible');
+      }
 
       // Wire up hamburger button if present
       try {
@@ -432,47 +458,65 @@
 
   function wireDropdowns(){
     try{
-      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
+      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){\
         var btn=dd.querySelector('.jh-nav-dropdown__btn');
+        var menu=dd.querySelector('.jh-nav-dropdown__menu');
         if(!btn||btn.dataset.jhWired)return;
         btn.dataset.jhWired='1';
-        function toggleDropdown(e){
+
+        function openMenu(){
+          dd.classList.add('is-open');
+          btn.setAttribute('aria-expanded','true');
+        }
+        function closeMenu(){
+          dd.classList.remove('is-open');
+          btn.setAttribute('aria-expanded','false');
+        }
+
+        btn.addEventListener('click',function(e){
           e.stopPropagation();
           var open=dd.classList.toggle('is-open');
           btn.setAttribute('aria-expanded',open?'true':'false');
-          // Move focus to first menu item when opening via keyboard
-          if(open){
-            var firstItem=dd.querySelector('.jh-nav-dropdown__menu a');
-            if(firstItem) setTimeout(function(){ firstItem.focus(); }, 50);
-          }
-        }
-        btn.addEventListener('click',toggleDropdown);
-        // Keyboard: Enter and Space open/close the dropdown
-        btn.addEventListener('keydown',function(e){
-          if(e.key==='Enter'||e.key===' '){
-            e.preventDefault();
-            toggleDropdown(e);
-          }
-          if(e.key==='Escape'){
-            dd.classList.remove('is-open');
-            btn.setAttribute('aria-expanded','false');
-            btn.focus();
+          if(open && menu){
+            var first=menu.querySelector('a[role="menuitem"]');
+            if(first) first.focus();
           }
         });
-        // Close with Escape from within menu
-        var menu=dd.querySelector('.jh-nav-dropdown__menu');
+
+        // Keyboard: ArrowDown opens and focuses first item; Escape closes
+        btn.addEventListener('keydown',function(e){
+          if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){
+            e.preventDefault();
+            openMenu();
+            if(menu){
+              var first=menu.querySelector('a[role="menuitem"]');
+              if(first) first.focus();
+            }
+          }
+        });
+
+        // Arrow navigation within the menu items
         if(menu){
           menu.addEventListener('keydown',function(e){
-            if(e.key==='Escape'){
-              dd.classList.remove('is-open');
-              btn.setAttribute('aria-expanded','false');
+            var items=Array.from(menu.querySelectorAll('a[role="menuitem"]'));
+            var idx=items.indexOf(document.activeElement);
+            if(e.key==='ArrowDown'){
+              e.preventDefault();
+              var next=items[idx+1]||items[0];
+              if(next) next.focus();
+            } else if(e.key==='ArrowUp'){
+              e.preventDefault();
+              var prev=items[idx-1]||items[items.length-1];
+              if(prev) prev.focus();
+            } else if(e.key==='Escape'||e.key==='Tab'){
+              closeMenu();
               btn.focus();
             }
           });
         }
       });
-      document.addEventListener('click',function(){
-        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
+      document.addEventListener('click',function(){\
+        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){\
           dd.classList.remove('is-open');
           var b=dd.querySelector('.jh-nav-dropdown__btn');
           if(b)b.setAttribute('aria-expanded','false');
