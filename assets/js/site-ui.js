@@ -179,7 +179,7 @@
             newBtn.addEventListener('click', function(){
               var open = eMobileNav.classList.toggle('is-open');
               if (open) { eMobileNav.removeAttribute('hidden'); eMobileNav.style.display=''; }
-              else { eMobileNav.style.display='none'; }
+              else { eMobileNav.setAttribute('hidden', ''); eMobileNav.style.removeProperty('display'); }
               newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
               newBtn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
               var lbl = newBtn.querySelector('.jh-hamburger__label');
@@ -221,7 +221,8 @@
         if (btn && mobileNav) {
           btn.addEventListener('click', function(){
             var open = mobileNav.classList.toggle('is-open');
-            mobileNav.removeAttribute('hidden');
+            if (open) { mobileNav.removeAttribute('hidden'); }
+            else { mobileNav.setAttribute('hidden', ''); }
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
             btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
             var lbl = btn.querySelector('.jh-hamburger__label');
@@ -393,33 +394,54 @@
           btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         });
       });
-      document.addEventListener('click', function(){ 
+      // Close dropdowns on outside click
+      document.addEventListener('click', function(){
         container.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
           dd.classList.remove('is-open');
           var b = dd.querySelector('.jh-nav-dropdown__btn');
           if(b) b.setAttribute('aria-expanded','false');
         });
       });
+      // Item 8: Close dropdowns on Escape key, return focus to trigger button
+      document.addEventListener('keydown', function(e){
+        if (e.key !== 'Escape') return;
+        container.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
+          dd.classList.remove('is-open');
+          var b = dd.querySelector('.jh-nav-dropdown__btn');
+          if(b){ b.setAttribute('aria-expanded','false'); b.focus(); }
+        });
+      });
     }catch(_){}
   }
 
+  // Item 7: Use scroll position instead of hero-element detection so this
+  // works identically on every page regardless of layout.
   function initScrollHamburger(header){
     try{
-      // Only applies on mobile (hamburger visible breakpoint)
       if (window.innerWidth > 768) return;
-      var hero = document.querySelector('.hero, section[aria-label="Page Header"], header.hero');
-      if (!hero || hero === header) return;
       var hamburger = header.querySelector('.jh-hamburger');
       if (!hamburger) return;
-      // Initially hide hamburger; show once hero leaves viewport
-      hamburger.classList.add('jh-hamburger--hidden');
-      var observer = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          var visible = !entry.isIntersecting;
-          hamburger.classList.toggle('jh-hamburger--hidden', !visible);
-        });
-      }, { threshold: 0.1 });
-      observer.observe(hero);
+
+      // How far down (px) before the hamburger becomes visible.
+      // 80px covers the fixed header height so the button only appears
+      // once the visitor has clearly scrolled away from the top of the page.
+      var SCROLL_THRESHOLD = 80;
+
+      function updateHamburgerVisibility(){
+        var pastThreshold = window.scrollY > SCROLL_THRESHOLD;
+        hamburger.classList.toggle('jh-hamburger--hidden', !pastThreshold);
+      }
+
+      updateHamburgerVisibility(); // set correct state on load
+      window.addEventListener('scroll', updateHamburgerVisibility, { passive: true });
+      // Re-evaluate if viewport is resized past the mobile breakpoint
+      window.addEventListener('resize', function(){
+        if (window.innerWidth > 768){
+          hamburger.classList.remove('jh-hamburger--hidden');
+        } else {
+          updateHamburgerVisibility();
+        }
+      }, { passive: true });
     }catch(_){}
   }
 
@@ -468,6 +490,44 @@ if (document.readyState === "loading"){
     document.addEventListener('DOMContentLoaded', enhanceFaqAccordions);
   } else {
     enhanceFaqAccordions();
+  }
+})();
+
+// ── Item 10: Annotate all external (new-tab) links for screen readers ─────
+// Any link with target="_blank" that doesn't already mention "new tab"
+// in its aria-label gets a visually-hidden span appended so assistive
+// technology announces the behaviour before the user activates the link.
+(function(){
+  function annotateNewTabLinks(){
+    document.querySelectorAll('a[target="_blank"]').forEach(function(a){
+      // Skip if already annotated
+      if(a.hasAttribute('data-newtab-annotated')) return;
+      a.setAttribute('data-newtab-annotated','1');
+
+      var label = (a.getAttribute('aria-label') || '').toLowerCase();
+      var hasNote = label.indexOf('new tab') !== -1 || label.indexOf('new window') !== -1;
+
+      if(!hasNote){
+        // If aria-label is set but doesn't mention new tab, append to it
+        if(a.getAttribute('aria-label')){
+          a.setAttribute('aria-label', a.getAttribute('aria-label') + ', opens in a new tab');
+        } else {
+          // No aria-label: inject a visually-hidden span inside the link
+          if(!a.querySelector('.jh-sr-newtab')){
+            var span = document.createElement('span');
+            span.className = 'jh-sr-newtab';
+            span.textContent = ' (opens in a new tab)';
+            a.appendChild(span);
+          }
+        }
+      }
+    });
+  }
+  // Run on DOM ready and again after dynamic content may have loaded
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', annotateNewTabLinks);
+  } else {
+    annotateNewTabLinks();
   }
 })();
 })();
