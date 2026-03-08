@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap');
+
 :root{
   --bg-dark:#0D1420;
   --bg-soft:#F5F7FA;
@@ -24,9 +26,9 @@ body{
   text-align:left;
 }
 
-a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
-a:hover{color:var(--accent-hover);}
-a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:6px;}
+a{color:var(--accent);text-decoration:none;}
+a:hover{color:var(--accent-hover);text-decoration:underline;text-underline-offset:3px;}
+a:focus{outline:2px solid rgba(79,70,229,0.5);outline-offset:2px;border-radius:6px;}
 
 
 /* ===== Home-only polish ===== */
@@ -37,9 +39,6 @@ body.home .actions,
 body.home .cta-row{ justify-content:center; }
 body.home .featured-copy{ text-align:center; }
 
-a{color:var(--accent); text-decoration:none}
-a:hover{color:var(--accent-hover); text-decoration:underline}
-a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius:10px}
 
 .wrap{max-width:1100px;margin:0 auto;padding:0 18px}
 
@@ -1932,3 +1931,91 @@ body.page-podcast .card h3{color:var(--accent);}
 
 /* Cards inside .wrap: centred on homepage, left-aligned everywhere else (handled by base .card rule) */
 body.home .wrap .card{text-align:center;}
+
+
+/* ─── UX Audit Additions ──────────────────────────────────────────────────── */
+
+/* F1 — Author monogram (replace with real headshot when available) */
+.lp-author__monogram{
+  display:flex;align-items:center;justify-content:center;
+  width:160px;height:160px;border-radius:18px;flex-shrink:0;
+  background:linear-gradient(145deg,#1E2D45 0%,#0D1420 100%);
+  border:2px solid rgba(147,197,253,0.25);
+  font-size:2.75rem;font-weight:800;letter-spacing:-1px;color:#93C5FD;
+  font-family:'Inter',Arial,sans-serif;user-select:none;
+}
+.lp-author__monogram-note{
+  font-size:0.78rem;color:rgba(147,197,253,0.55);margin-top:8px;
+  text-align:center;font-style:italic;
+}
+
+/* F6 — Browse-all catalogue card */
+.lp-ebook-card--browse-all{
+  background:linear-gradient(145deg,#1E2D45 0%,#0D1420 100%) !important;
+  border:1px solid rgba(79,70,229,0.35) !important;
+  display:flex;flex-direction:column;text-decoration:none;
+  border-radius:12px;overflow:hidden;
+}
+.lp-ebook-card--browse-all:hover{
+  border-color:rgba(79,70,229,0.7) !important;
+  transform:translateY(-2px);
+  box-shadow:0 14px 36px rgba(79,70,229,0.22);
+}
+.lp-browse-spines{
+  display:flex;gap:4px;padding:18px 16px 14px;flex:1;
+  align-items:flex-end;min-height:120px;
+}
+.lp-browse-spine{
+  flex:1;border-radius:4px 4px 0 0;min-height:60px;opacity:0.9;
+}
+.lp-browse-spine:nth-child(1){height:100px;}
+.lp-browse-spine:nth-child(2){height:75px;}
+.lp-browse-spine:nth-child(3){height:90px;}
+.lp-browse-spine:nth-child(4){height:65px;}
+.lp-browse-spine:nth-child(5){height:85px;}
+.lp-browse-more{
+  flex:1;border-radius:4px;min-height:65px;
+  background:rgba(255,255,255,0.08);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:0.9rem;color:rgba(255,255,255,0.6);
+}
+.lp-ebook-card--browse-all .lp-ebook-card__body{
+  padding:12px 16px 16px;border-top:1px solid rgba(255,255,255,0.07);
+}
+.lp-ebook-card--browse-all .lp-ebook-card__title{
+  color:#E5E7EB !important;font-weight:700;margin-bottom:10px;
+}
+.lp-browse-btn{
+  display:inline-block;background:#4F46E5;color:#fff;font-weight:700;
+  font-size:0.9rem;padding:8px 16px;border-radius:10px;text-decoration:none;
+  width:100%;text-align:center;box-sizing:border-box;
+}
+.lp-ebook-card--browse-all:hover .lp-browse-btn{background:#4338CA;}
+
+/* F8 — Testimonial star ratings */
+.lp-testimonial-stars{
+  font-size:1.05rem;color:#F59E0B;letter-spacing:1px;
+  margin-bottom:8px;display:block;
+}
+.lp-testimonial-source{
+  display:block;font-size:0.8rem;color:#9CA3AF;margin-top:4px;
+  font-style:normal;
+}
+
+/* F11 — Ebook topic tags on homepage cards */
+.lp-ebook-tag{
+  display:inline-block;font-size:0.75rem;font-weight:600;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(79,70,229,0.1);color:#4F46E5;
+  border:1px solid rgba(79,70,229,0.18);margin-top:6px;
+  line-height:1.4;
+}
+
+/* F4 — Pricing chip */
+.lp-ebook-price{
+  display:inline-block;font-size:0.75rem;font-weight:700;
+  padding:3px 8px;border-radius:999px;
+  background:rgba(5,150,105,0.1);color:#059669;
+  border:1px solid rgba(5,150,105,0.2);margin-top:4px;
+  line-height:1.4;
+}
