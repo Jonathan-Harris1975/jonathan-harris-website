@@ -21,7 +21,7 @@ body{
   line-height:1.6;
   color:var(--text);
   background:var(--bg);
-  text-align:center;
+  text-align:left;
 }
 
 a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
@@ -1521,13 +1521,13 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   backdrop-filter: saturate(1.2) blur(12px);
   -webkit-backdrop-filter: saturate(1.2) blur(12px);
   border-bottom: 1px solid rgba(255,255,255,0.10);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-6px);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
   transition: opacity 0.28s ease, transform 0.28s ease;
   box-shadow: 0 12px 30px rgba(0,0,0,0.28);
 }
-/* JS adds this class when the hero scrolls out of view */
+/* is-visible class kept for JS compatibility */
 .jh-header.is-visible{
   opacity: 1;
   pointer-events: auto;
@@ -2267,4 +2267,110 @@ blockquote:last-child{ margin-bottom:0; }
   bottom: 8px; right: 10px;
   font-size: 1.1rem;
   opacity: 0.5;
+}
+
+@media (min-width: 641px) and (max-width: 760px){
+  .footer-grid{ grid-template-columns: 1fr 1fr !important; gap: 16px; }
+  .footer-panel{ padding: 16px 14px; }
+}
+
+/* btn-secondary: outlined ghost style for secondary CTAs */
+.btn-secondary{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:10px 20px; border-radius:999px; font-weight:700; font-size:14px; line-height:1;
+  border:2px solid rgba(255,255,255,0.55); cursor:pointer; white-space:nowrap;
+  background:transparent; color:#E5E7EB; text-decoration:none;
+  min-height:44px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.btn-secondary:hover{ background:rgba(255,255,255,0.10); border-color:rgba(255,255,255,0.80); color:#fff; text-decoration:none; }
+.btn-secondary:focus{ outline:2px solid rgba(147,197,253,0.75); outline-offset:2px; }
+
+/* Hero CTA row: primary takes full width on very small screens */
+@media (max-width:480px){
+  .lp-hero__ctas{ flex-direction:column; align-items:stretch; }
+  .lp-hero__ctas .btn-primary{ font-size:1rem; padding:14px 20px; }
+  .lp-hero__ctas .btn-secondary{ font-size:0.95rem; }
+}
+
+/* Enhanced active nav state — more visible highlight */
+.jh-topnav a[aria-current="page"]{
+  background: rgba(147,197,253,0.14) !important;
+  border-bottom: 3px solid #93C5FD !important;
+  border-radius: 10px 10px 0 0 !important;
+  font-weight: 800 !important;
+  color: #93C5FD !important;
+  padding-bottom: 7px !important;
+}
+
+/* Unified card text-align: left on all pages for readability */
+.card, .book-card{ text-align: left !important; }
+/* Exception: stat/number cards can stay centred */
+.lp-stat{ text-align: center !important; }
+/* Homepage offer cards: centred for visual appeal */
+body.home .lp-offer-card{ text-align: center !important; }
+/* Book cover labels inside lp-ebook-card stay centred */
+.lp-ebook-card__cover{ text-align: center !important; }
+
+/* Ensure all nav controls meet 44px touch target minimum */
+.jh-nav-dropdown__btn{ min-height: 44px; }
+.jh-hamburger{ min-height: 44px; min-width: 44px; display: flex; align-items: center; justify-content: center; }
+.jh-topnav a{ min-height: 44px; display: inline-flex; align-items: center; }
+
+/* ── Book availability badge on catalogue cards ── */
+.book-avail{
+  margin: 10px 0 4px;
+}
+.book-avail__badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #1D4ED8;
+  background: #DBEAFE;
+  border: 1px solid #BFDBFE;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+/* ── Homepage featured ebook cards: real cover images ── */
+.lp-ebook-card__img{
+  display: block;
+  width: 100%;
+  max-width: 140px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+  margin: 0 auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+  border-bottom: 2px solid rgba(147,197,253,0.18);
+}
+.lp-ebook-card{
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.lp-ebook-card:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(15,23,42,0.13);
+  text-decoration: none;
+}
+.lp-ebook-card__body{
+  padding: 12px 14px 14px;
+  flex: 1;
+}
+.lp-ebook-card__title{
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.35;
+  text-align: left;
 }
