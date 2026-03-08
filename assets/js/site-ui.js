@@ -70,7 +70,7 @@
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
-          .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
+          .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
           .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:2px solid rgba(147,197,253,0.55);outline-offset:2px;}
           .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);border-bottom:2px solid #93C5FD;font-weight:700;}
           .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);border-radius:10px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;}
