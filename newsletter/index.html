@@ -211,8 +211,8 @@
   .jh-topnav a{color:#D1D5DB;text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;display:block;}
   .jh-topnav a:hover{color:#fff;background:rgba(255,255,255,.08);}
   .jh-topnav a[aria-current="page"]{color:#93C5FD;background:rgba(147,197,253,.1);font-weight:600;}
-  .jh-hamburger{display:none;background:none;border:none;color:#D1D5DB;font-size:22px;cursor:pointer;padding:6px;border-radius:6px;margin-left:auto;line-height:1;}
-  .jh-hamburger:hover{color:#fff;background:rgba(255,255,255,.08);}
+  .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);color:#fff;font-size:20px;cursor:pointer;padding:7px 10px;border-radius:10px;margin-left:auto;line-height:1;}
+  .jh-hamburger:hover{background:rgba(67,56,202,0.95);}
   .jh-mobile-nav{display:none;flex-direction:column;background:#0D1420;border-top:1px solid rgba(255,255,255,.08);padding:8px 16px 16px;}
   .jh-mobile-nav a{color:#D1D5DB;text-decoration:none;font-size:15px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.06);display:block;}
   .jh-mobile-nav a:last-child{border-bottom:none;}
@@ -239,6 +239,7 @@
     <ul class="jh-nav-dropdown__menu" role="menu">
       <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
       <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
     </ul>
   </li>
   <li><a href="/contact/">Contact</a></li>
@@ -259,30 +260,11 @@
   <a href="/bio/">About</a>
   <a href="/glossary/">Glossary</a>
   <a href="/topics/">Topics</a>
+  <a href="/compare/">Comparisons</a>
   <a href="/contact/">Contact</a>
 </nav>
 </header>
-<script>
-(function(){
-  var path=window.location.pathname.replace(/\/+$/,'')||'/';
-  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
-    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
-    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
-  });
-  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
-  if(btn&&mn)btn.addEventListener('click',function(){
-    var open=mn.classList.toggle('is-open');
-    if(open){mn.removeAttribute('hidden');mn.style.display='';}
-    else{mn.style.display='none';}
-    btn.setAttribute('aria-expanded',open?'true':'false');
-    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
-    var lbl=btn.querySelector('.jh-hamburger__label');
-    if(lbl)lbl.textContent=open?'Close':'Menu';
-    var icon=btn.firstChild;
-    if(icon&&icon.nodeType===3)icon.textContent=open?'\u2715 ':'\u2630 ';
-  });
-})();
-</script>
+
 
 <section aria-label="Newsletter header" class="hero">
 <img alt="Jonathan Harris" class="logo-morph" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
@@ -367,46 +349,6 @@
   </script>
 <div id="siteFooter"></div>
 <script src="/assets/js/site-ui.js"></script>
-<script>
-(function(){
-  // Resources dropdown wiring
-  document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
-    var btn=dd.querySelector('.jh-nav-dropdown__btn');
-    if(!btn)return;
-    btn.addEventListener('click',function(e){
-      e.stopPropagation();
-      var open=dd.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded',open?'true':'false');
-    });
-  });
-  document.addEventListener('click',function(){
-    document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
-      dd.classList.remove('is-open');
-      var b=dd.querySelector('.jh-nav-dropdown__btn');
-      if(b)b.setAttribute('aria-expanded','false');
-    });
-  });
-  // Scroll-triggered hamburger
-  (function(){
-    var header=document.querySelector('.jh-header');
-    var hero=document.querySelector('.hero, section[aria-label="Page Header"]');
-    if(!header||!hero||hero===header)return;
-    if(window.innerWidth>768)return;
-    var hamburger=header.querySelector('.jh-hamburger');
-    if(!hamburger)return;
-    hamburger.style.opacity='0';
-    hamburger.style.pointerEvents='none';
-    hamburger.style.transition='opacity 0.2s ease';
-    var observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        var show=!entry.isIntersecting;
-        hamburger.style.opacity=show?'1':'0';
-        hamburger.style.pointerEvents=show?'auto':'none';
-      });
-    },{threshold:0.1});
-    observer.observe(hero);
-  })();
-})();
-</script>
+
 </body>
 </html>
