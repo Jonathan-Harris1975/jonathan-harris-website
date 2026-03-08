@@ -51,6 +51,48 @@ a:focus{outline:2px solid rgba(79,70,229,.35); outline-offset:2px; border-radius
 .hero h1{margin:0 0 10px; font-size:2.35rem; line-height:1.15; color:#93C5FD; letter-spacing:-.2px}
 .hero p{margin:0 auto; max-width:780px; font-size:1.05rem; color:var(--text-light)}
 
+/* P1 FIX — lp-hero (home page): must carry the same dark background/colour as .hero */
+.lp-hero{
+  background:var(--bg-dark);
+  color:var(--text-light);
+  padding:80px 18px 48px;
+  text-align:center;
+}
+.lp-hero h1{
+  margin:0 0 12px;
+  font-size:2.6rem;
+  line-height:1.12;
+  color:#93C5FD;
+  letter-spacing:-.03em;
+  font-weight:800;
+}
+.lp-hero p{
+  margin:0 auto 24px;
+  max-width:720px;
+  font-size:1.1rem;
+  color:var(--text-light);
+  line-height:1.65;
+}
+.lp-hero__logo{
+  display:block;
+  margin:0 auto 22px;
+  width:100px;
+  height:100px;
+  border-radius:16px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.45);
+}
+.lp-hero__ctas{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+@media(max-width:620px){
+  .lp-hero{ padding:64px 14px 36px; }
+  .lp-hero h1{ font-size:2rem; }
+  .lp-hero p{ font-size:1rem; }
+}
+
 .logo-plain{
   width:96px; height:96px;
   border-radius:12px;
@@ -1824,10 +1866,7 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 .card-links a:focus{
   text-decoration:underline;
 }
-.muted{
-  color:#6B7280;
-  font-size:0.9rem;
-}
+
 .wrap .card{
   text-align:center;
 }
@@ -1961,9 +2000,9 @@ body.home .wrap .card{text-align:center;}
   font-size:0.9rem;
 }
 
-/* ACCESSIBILITY — Muted text: raised from #6B7280 to #555 for contrast */
+/* P1+P2 FIX — Muted text: single definition, cool-grey on-brand, strong contrast */
 .muted{
-  color:#555555;
+  color:#4B5563;
   font-size:0.9rem;
 }
 
@@ -1971,20 +2010,7 @@ body.home .wrap .card{text-align:center;}
 .podcast-rss-hint{
   margin-top:10px;
   font-size:0.875rem;  /* 14px */
-  color:#555555;
-}
-
-/* NAVIGATION — Mobile nav Resources group label */
-.jh-mobile-nav__group-label{
-  display:block;
-  font-size:0.7rem;
-  font-weight:800;
-  letter-spacing:0.08em;
-  text-transform:uppercase;
-  color:rgba(147,197,253,0.60);
-  padding:10px 12px 2px;
-  pointer-events:none;
-  user-select:none;
+  color:#4B5563;
 }
 
 /* VISUAL — Footer social icons: flex column with visible text label */
@@ -2022,7 +2048,115 @@ body.home .wrap .card{text-align:center;}
   white-space:nowrap;
 }
 
+
 /* VISUAL — Hamburger: also ensure mobile display rule matches consolidated style */
 @media (max-width:768px){
   .jh-hamburger{ display:block; }
+}
+
+/* ── P2 FIX — Newsletter/Contact: shared hero styles moved from inline <style> ── */
+.hero--newsletter,
+.hero--contact{
+  background:var(--bg-dark);
+  padding:64px 16px 44px;
+}
+.hero--newsletter h1,
+.hero--contact h1{
+  margin:0 0 10px;
+  font-size:40px;
+  line-height:1.15;
+  color:#93C5FD;
+  font-weight:800;
+  letter-spacing:-0.02em;
+}
+.hero--newsletter p,
+.hero--contact p{
+  margin:0 auto;
+  max-width:760px;
+  font-size:18px;
+  line-height:1.6;
+  color:#D1D5DB;
+}
+/* Logo morph animation — newsletter hero logo */
+.logo-morph{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
+  margin:0 auto 16px;
+  box-shadow:0 6px 22px rgba(0,0,0,0.45);
+  animation:morphIn 1.2s ease forwards;
+}
+@keyframes morphIn{
+  0%  { border-radius:12px; opacity:0; transform:translateY(6px); }
+  55% { border-radius:12px; opacity:1; transform:translateY(0); }
+  100%{ border-radius:999px; opacity:1; transform:translateY(0); }
+}
+/* Embed wrapper — JotForm iframes */
+.embed-wrap{
+  max-width:650px;
+  margin:0 auto;
+}
+/* Subtle note text (inline form fallback links etc.) */
+.subtle{
+  font-size:14px;
+  color:#4B5563;
+  margin-top:14px;
+}
+/* Blockquote — testimonials on newsletter page */
+blockquote{
+  margin:0 0 16px;
+  padding:14px 16px;
+  border-left:4px solid var(--accent);
+  background:var(--bg-soft);
+  border-radius:12px;
+  text-align:left;
+}
+blockquote:last-child{ margin-bottom:0; }
+/* Accent card — indigo heading variant (newsletter/contact signup cards) */
+.card--accent h2{
+  color:var(--accent);
+  font-weight:800;
+  font-size:34px;
+  line-height:1.2;
+}
+.card--accent p{
+  font-size:18px;
+}
+/* Page-level main content area (newsletter/contact) */
+.page-main{
+  background:var(--bg-soft);
+  padding:54px 16px 64px;
+  width:100%;
+}
+@media(max-width:600px){
+  .hero--newsletter,
+  .hero--contact{ padding:58px 14px 40px; }
+  .hero--newsletter h1,
+  .hero--contact h1{ font-size:32px; }
+  .card--accent h2{ font-size:28px; }
+  .card--accent p{ font-size:16px; }
+}
+
+/* ── P3 FIX — Mobile nav: Resources group label styling ── */
+.jh-mobile-nav__group-label{
+  display:block;
+  font-size:0.72rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.09em;
+  color:#93C5FD;
+  padding:14px 12px 4px;
+  margin-top:4px;
+  opacity:0.85;
+}
+
+/* ── P3 FIX — Mobile nav: stronger active-page indicator ── */
+.jh-mobile-nav a[aria-current="page"]{
+  background:rgba(79,70,229,0.20);
+  border:1px solid rgba(79,70,229,0.35);
+  border-left:3px solid var(--accent);
+  color:#93C5FD;
+  font-weight:700;
 }
