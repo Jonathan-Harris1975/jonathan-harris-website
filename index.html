@@ -578,6 +578,7 @@
     <ul class="jh-nav-dropdown__menu" role="menu">
       <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
       <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
     </ul>
   </li>
   <li><a href="/contact/">Contact</a></li>
@@ -586,40 +587,23 @@
     <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
   </div>
   <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-  <a class="jh-mobile-nav__brand-link" href="/" aria-label="Jonathan Harris – home">
-    <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
-    <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
-  </a>
-  <a href="/">Home</a>
-  <a href="/ebooks/">eBooks</a>
-  <a href="/podcast/">Podcast</a>
-  <a href="/newsletter/">Newsletter</a>
-  <a href="/blog/">Blog</a>
-  <a href="/bio/">About</a>
-  <a href="/glossary/">Glossary</a>
-  <a href="/topics/">Topics</a>
-  <a href="/contact/">Contact</a>
-</nav>
+    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
+      <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+    </a>
+    <a href="/">Home</a>
+    <a href="/ebooks/">eBooks</a>
+    <a href="/podcast/">Podcast</a>
+    <a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a>
+    <a href="/bio/">About</a>
+    <span class="jh-mobile-nav__group-label">Resources</span>
+    <a href="/glossary/">Glossary</a>
+    <a href="/topics/">Topics</a>
+    <a href="/compare/">Comparisons</a>
+    <a href="/contact/">Contact</a>
+  </nav>
 </header>
-<script>
-(function(){
-  var path=window.location.pathname.replace(/\/+$/,'')||'/';
-  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
-    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
-    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
-  });
-  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
-  if(btn&&mn)btn.addEventListener('click',function(){
-    var open=mn.classList.toggle('is-open');
-    if(open){mn.removeAttribute('hidden');mn.style.display='';}
-    else{mn.style.display='none';}
-    btn.setAttribute('aria-expanded',open?'true':'false');
-    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
-    var lbl=btn.querySelector('.jh-hamburger__label');
-    if(lbl)lbl.textContent=open?'Close':'Menu';
-  });
-})();
-</script>
 <!-- ── HERO ── -->
 <div class="lp-hero">
   <img alt="Jonathan Harris" class="lp-hero__logo" fetchpriority="high" height="100" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="100"/>
