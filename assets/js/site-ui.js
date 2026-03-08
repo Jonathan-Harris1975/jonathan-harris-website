@@ -412,14 +412,11 @@
       var hamburger = header.querySelector('.jh-hamburger');
       if (!hamburger) return;
       // Initially hide hamburger; show once hero leaves viewport
-      hamburger.style.opacity = '0';
-      hamburger.style.pointerEvents = 'none';
-      hamburger.style.transition = 'opacity 0.2s ease';
+      hamburger.classList.add('jh-hamburger--hidden');
       var observer = new IntersectionObserver(function(entries){
         entries.forEach(function(entry){
           var visible = !entry.isIntersecting;
-          hamburger.style.opacity = visible ? '1' : '0';
-          hamburger.style.pointerEvents = visible ? 'auto' : 'none';
+          hamburger.classList.toggle('jh-hamburger--hidden', !visible);
         });
       }, { threshold: 0.1 });
       observer.observe(hero);
