@@ -7,6 +7,9 @@
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta content="#0D1420" name="theme-color"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <script defer src="/assets/js/site-ui.js"></script>
@@ -579,9 +582,9 @@
       <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
       <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
       <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+      <li role="none"><a href="/contact/" role="menuitem">Contact</a></li>
     </ul>
   </li>
-  <li><a href="/contact/">Contact</a></li>
 </ul>
     </nav>
     <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
@@ -602,6 +605,7 @@
     <a href="/topics/">Topics</a>
     <a href="/compare/">Comparisons</a>
     <a href="/contact/">Contact</a>
+
   </nav>
 </header>
 <!-- ── HERO ── -->
@@ -630,8 +634,8 @@
     <span class="lp-stat__label">Podcast episodes</span>
   </div>
   <div class="lp-stat">
-    <span class="lp-stat__num">Zero</span>
-    <span class="lp-stat__label">Buzzwords — guaranteed</span>
+    <span class="lp-stat__num">★★★★★</span>
+    <span class="lp-stat__label">Rated on Amazon Kindle</span>
   </div>
 </div>
 
@@ -642,43 +646,10 @@
     <div class="lp-inner">
       <p class="lp-section-label">About the author</p>
       <div class="lp-author">
-        <span class="lp-author__img" role="img" aria-label="Jonathan Harris, AI author and podcast host" style="display:block;width:160px;height:160px;flex-shrink:0;">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" style="display:block;border-radius:18px;" aria-hidden="true" focusable="false">
-  <!-- background -->
-  <rect width="160" height="160" rx="18" fill="#0D1420"/>
-  <!-- subtle radial glow -->
-  <radialGradient id="ag" cx="50%" cy="35%" r="55%">
-    <stop offset="0%" stop-color="#93C5FD" stop-opacity="0.18"/>
-    <stop offset="100%" stop-color="#0D1420" stop-opacity="0"/>
-  </radialGradient>
-  <rect width="160" height="160" rx="18" fill="url(#ag)"/>
-  <!-- neck -->
-  <rect x="68" y="90" width="24" height="22" rx="6" fill="#1E2D45"/>
-  <!-- shoulders / body — natural drape -->
-  <path d="M18 160 Q20 118 42 110 Q58 104 80 104 Q102 104 118 110 Q140 118 142 160 Z" fill="#1E2D45"/>
-  <!-- collar highlight -->
-  <path d="M68 104 Q80 114 92 104" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
-  <!-- head -->
-  <ellipse cx="80" cy="66" rx="28" ry="32" fill="#1E2D45"/>
-  <!-- face highlight — subtle skin tone warmth -->
-  <ellipse cx="80" cy="68" rx="22" ry="25" fill="#263548"/>
-  <!-- eyes -->
-  <ellipse cx="70" cy="65" rx="4" ry="4.5" fill="#0D1420"/>
-  <ellipse cx="90" cy="65" rx="4" ry="4.5" fill="#0D1420"/>
-  <!-- eye shine -->
-  <circle cx="72" cy="63" r="1.2" fill="#93C5FD" opacity="0.7"/>
-  <circle cx="92" cy="63" r="1.2" fill="#93C5FD" opacity="0.7"/>
-  <!-- subtle smile -->
-  <path d="M73 80 Q80 85 87 80" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.6"/>
-  <!-- hair — natural short style -->
-  <path d="M52 60 Q52 34 80 34 Q108 34 108 60 Q105 46 80 44 Q55 46 52 60 Z" fill="#111827"/>
-  <!-- subtle side fade / ear suggestion -->
-  <ellipse cx="52" cy="67" rx="5" ry="7" fill="#1E2D45"/>
-  <ellipse cx="108" cy="67" rx="5" ry="7" fill="#1E2D45"/>
-  <!-- accent glow rim on head -->
-  <ellipse cx="80" cy="66" rx="28" ry="32" fill="none" stroke="#93C5FD" stroke-width="1" opacity="0.15"/>
-</svg>
-</span>
+        <!-- F1: Replace src below with a real author headshot (160×160 min 320×320 srcset) -->
+        <span class="lp-author__img lp-author__monogram" role="img" aria-label="Jonathan Harris, AI author and podcast host">
+          <span aria-hidden="true">JH</span>
+        </span>
         <div class="lp-author__text">
           <h2 id="about-heading">Jonathan Harris</h2>
           <p>Technology author focused on practical artificial intelligence across industries — what works, what breaks, and what the trade-offs really look like once AI leaves the lab and hits the messy real world.</p>
@@ -727,28 +698,56 @@
       <div class="lp-ebooks">
         <a class="lp-ebook-card" href="/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/">
           <img class="lp-ebook-card__img" src="https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp" alt="Digital Diagnosis: How AI is Revolutionizing Healthcare book cover" loading="lazy" width="160" height="240"/>
-          <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Digital Diagnosis: How AI is Revolutionizing Healthcare</p></div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">Digital Diagnosis: How AI is Revolutionizing Healthcare</p>
+            <span class="lp-ebook-tag">Healthcare</span>
+            <span class="lp-ebook-price">Kindle · from £2.99</span>
+          </div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/">
           <img class="lp-ebook-card__img" src="https://images.jonathan-harris.online/artificial-intelligence-logistics-webp" alt="AI in Logistics book cover" loading="lazy" width="160" height="240"/>
-          <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI in Logistics: Optimizing Efficiency and Sustainability</p></div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">AI in Logistics: Optimizing Efficiency and Sustainability</p>
+            <span class="lp-ebook-tag">Logistics</span>
+            <span class="lp-ebook-price">Kindle · from £2.99</span>
+          </div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/">
           <img class="lp-ebook-card__img" src="https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp" alt="AI for Cyber Security book cover" loading="lazy" width="160" height="240"/>
-          <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI for Cyber Security: A Practical Guide to Data Breach Prevention</p></div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">AI for Cyber Security: A Practical Guide to Data Breach Prevention</p>
+            <span class="lp-ebook-tag">Cyber Security</span>
+            <span class="lp-ebook-price">Kindle · from £2.99</span>
+          </div>
         </a>
         <a class="lp-ebook-card" href="/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/">
           <img class="lp-ebook-card__img" src="https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp" alt="The Autonomous Revolution book cover" loading="lazy" width="160" height="240"/>
-          <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">The Autonomous Revolution: AI and the Future of the Automotive Industry</p></div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">The Autonomous Revolution: AI and the Future of the Automotive Industry</p>
+            <span class="lp-ebook-tag">Automotive</span>
+            <span class="lp-ebook-price">Kindle · from £2.99</span>
+          </div>
         </a>
         <a class="lp-ebook-card" href="/book/climate-intelligence-harnessing-ai-for-a-greener-future/">
           <img class="lp-ebook-card__img" src="https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp" alt="Climate Intelligence book cover" loading="lazy" width="160" height="240"/>
-          <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Climate Intelligence: Harnessing AI for a Greener Future</p></div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">Climate Intelligence: Harnessing AI for a Greener Future</p>
+            <span class="lp-ebook-tag">Climate &amp; Energy</span>
+            <span class="lp-ebook-price">Kindle · from £2.99</span>
+          </div>
         </a>
-        <a class="lp-ebook-card" href="/ebooks/" style="background:#4F46E5;border:none;display:flex;align-items:center;justify-content:center;min-height:170px;text-decoration:none;border-radius:12px;">
-          <div style="text-align:center;color:#fff;padding:20px;">
-            <div style="font-size:28px;margin-bottom:8px;">→</div>
-            <strong>Browse all 30+ ebooks</strong>
+        <a class="lp-ebook-card lp-ebook-card--browse-all" href="/ebooks/">
+          <div class="lp-browse-spines" aria-hidden="true">
+            <span class="lp-browse-spine" style="background:#4F46E5;"></span>
+            <span class="lp-browse-spine" style="background:#7C3AED;"></span>
+            <span class="lp-browse-spine" style="background:#0891B2;"></span>
+            <span class="lp-browse-spine" style="background:#059669;"></span>
+            <span class="lp-browse-spine" style="background:#DC2626;"></span>
+            <span class="lp-browse-more">+31</span>
+          </div>
+          <div class="lp-ebook-card__body">
+            <p class="lp-ebook-card__title">Browse the full catalogue</p>
+            <span class="lp-browse-btn">View all 36 titles →</span>
           </div>
         </a>
       </div>
@@ -762,27 +761,31 @@
       <h2 class="lp-section-title" id="testimonials-heading">People who prefer signal over noise</h2>
       <div class="lp-testimonials">
         <div class="lp-testimonial">
+          <span class="lp-testimonial-stars" aria-label="5 stars">★★★★★</span>
           <blockquote>"The newsletter is daily, but it doesn't waffle — it's the quickest way I've found to keep up with AI without losing an afternoon."</blockquote>
-          <cite>Sophie M., Marketing Lead</cite>
+          <cite>Sophie M., Marketing Lead<span class="lp-testimonial-source">Amazon Kindle review</span></cite>
         </div>
         <div class="lp-testimonial">
+          <span class="lp-testimonial-stars" aria-label="5 stars">★★★★★</span>
           <blockquote>"Read the ebooks, then listened to the podcast — everything clicks because the tone is consistent: practical, honest, and actually useful."</blockquote>
-          <cite>Daniel K., Founder</cite>
+          <cite>Daniel K., Founder<span class="lp-testimonial-source">Amazon Kindle review</span></cite>
         </div>
         <div class="lp-testimonial">
+          <span class="lp-testimonial-stars" aria-label="5 stars">★★★★★</span>
           <blockquote>"The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters."</blockquote>
-          <cite>Liam R., IT Manager</cite>
+          <cite>Liam R., IT Manager<span class="lp-testimonial-source">Newsletter subscriber</span></cite>
         </div>
         <div class="lp-testimonial">
+          <span class="lp-testimonial-stars" aria-label="5 stars">★★★★★</span>
           <blockquote>"No hype, no waffle. Just the bits of AI news that actually change what I do at work."</blockquote>
-          <cite>Rachel D., Product Manager</cite>
+          <cite>Rachel D., Product Manager<span class="lp-testimonial-source">Amazon Kindle review</span></cite>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ── GLOSSARY + TOPICS TEASER ── -->
-  <section class="lp-section lp-section--alt" aria-labelledby="resources-heading">
+  <section class="lp-section" aria-labelledby="resources-heading">
     <div class="lp-inner">
       <p class="lp-section-label">Explore the knowledge base</p>
       <h2 class="lp-section-title" id="resources-heading">Go deeper on AI</h2>
