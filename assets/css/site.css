@@ -1149,19 +1149,21 @@ body.jh-page-404 main{
   margin: 0 0 10px;
 }
 
-/* ── Mobile hamburger menu ── */
+/* ── Mobile hamburger menu — single consolidated rule ── */
 .jh-hamburger {
   display: none;
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(79,70,229,0.85);
+  border: 1px solid rgba(79,70,229,0.6);
   border-radius: 10px;
-  color: #E5E7EB;
+  color: #fff;
   cursor: pointer;
   font-size: 20px;
   line-height: 1;
   padding: 7px 10px;
   margin-left: auto;
+  min-width: 42px;
 }
+.jh-hamburger:hover { background: rgba(67,56,202,0.95); }
 .jh-hamburger:focus {
   outline: 2px solid rgba(147,197,253,0.75);
   outline-offset: 2px;
@@ -1866,14 +1868,6 @@ img.cover[src=""], img.cover:not([src]) { background: var(--bg-dark); }
 
 /* ===== UX Evaluation fixes applied 2026 ===== */
 
-/* HIGH — Hamburger: solid brand indigo so it's visible on any background */
-.jh-hamburger{
-  background:rgba(79,70,229,0.85) !important;
-  border:1px solid rgba(79,70,229,0.6) !important;
-  color:#fff !important;
-}
-.jh-hamburger:hover{background:rgba(67,56,202,0.95) !important;}
-
 /* HIGH — Active nav: non-colour indicator (bottom border + bold) */
 .jh-topnav a[aria-current="page"]{
   border-bottom:2px solid #93C5FD;
@@ -1930,3 +1924,105 @@ body.page-podcast .card h3{color:var(--accent);}
 /* LOW — Cards inside .wrap stay centred only on home */
 body:not(.home) .wrap .card{text-align:left;}
 body.home .wrap .card{text-align:center;}
+
+/* ===== UX Recommendations applied March 2026 ===== */
+
+/* ACCESSIBILITY — Skip to main content link */
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  z-index:9999;
+}
+.skip-link:focus{
+  left:12px;
+  top:12px;
+  width:auto;
+  height:auto;
+  padding:10px 14px;
+  background:#111827;
+  color:#fff;
+  border-radius:12px;
+  font-weight:700;
+  font-size:0.95rem;
+  outline:2px solid rgba(79,70,229,0.9);
+  outline-offset:2px;
+}
+
+/* ACCESSIBILITY — Standardised form field label */
+.field-label{
+  display:block;
+  margin:0 0 6px;
+  font-weight:700;
+  color:var(--accent);
+  font-size:0.9rem;
+}
+
+/* ACCESSIBILITY — Muted text: raised from #6B7280 to #555 for contrast */
+.muted{
+  color:#555555;
+  font-size:0.9rem;
+}
+
+/* ACCESSIBILITY — Podcast RSS hint: minimum 14px, consistent with muted */
+.podcast-rss-hint{
+  margin-top:10px;
+  font-size:0.875rem;  /* 14px */
+  color:#555555;
+}
+
+/* NAVIGATION — Mobile nav Resources group label */
+.jh-mobile-nav__group-label{
+  display:block;
+  font-size:0.7rem;
+  font-weight:800;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:rgba(147,197,253,0.60);
+  padding:10px 12px 2px;
+  pointer-events:none;
+  user-select:none;
+}
+
+/* VISUAL — Footer social icons: flex column with visible text label */
+.footer-social a{
+  flex-direction:column;
+  gap:4px;
+  width:auto;
+  min-width:48px;
+  height:auto;
+  padding:8px 10px;
+  border-radius:12px;
+}
+.footer-social__item{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  padding:8px 10px;
+  border-radius:12px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  text-decoration:none;
+}
+.footer-social__item:hover,
+.footer-social__item:focus{
+  background:rgba(255,255,255,0.12);
+  color:#ffffff;
+  text-decoration:none;
+}
+.footer-social__label{
+  font-size:0.65rem;
+  font-weight:700;
+  color:rgba(209,213,219,0.80);
+  letter-spacing:0.03em;
+  white-space:nowrap;
+}
+
+/* VISUAL — Hamburger: also ensure mobile display rule matches consolidated style */
+@media (max-width:768px){
+  .jh-hamburger{ display:block; }
+}
