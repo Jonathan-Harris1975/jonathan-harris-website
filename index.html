@@ -837,26 +837,7 @@
       if(b)b.setAttribute('aria-expanded','false');
     });
   });
-  // Scroll-triggered hamburger
-  (function(){
-    var header=document.querySelector('.jh-header');
-    var hero=document.querySelector('.lp-hero, .hero, section[aria-label="Page Header"]');
-    if(!header||!hero||hero===header)return;
-    if(window.innerWidth>768)return;
-    var hamburger=header.querySelector('.jh-hamburger');
-    if(!hamburger)return;
-    hamburger.style.opacity='0';
-    hamburger.style.pointerEvents='none';
-    hamburger.style.transition='opacity 0.2s ease';
-    var observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        var show=!entry.isIntersecting;
-        hamburger.style.opacity=show?'1':'0';
-        hamburger.style.pointerEvents=show?'auto':'none';
-      });
-    },{threshold:0.1});
-    observer.observe(hero);
-  })();
+  // Hamburger always visible on mobile — scroll-trigger removed for accessibility
 })();
 </script>
 </body>
