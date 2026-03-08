@@ -141,9 +141,15 @@
       tags.appendChild(s);
     });
 
+    // Availability badge
+    const avail = document.createElement("div");
+    avail.className = "book-avail";
+    avail.innerHTML = '<span class="book-avail__badge">&#x1F6CD;&#xFE0F; Available on Amazon Kindle</span>';
+
     const more = document.createElement("details");
     more.className = "more";
     const sum = document.createElement("summary");
+    sum.setAttribute("aria-expanded", "false");
     sum.textContent = "More details";
     const moreText = document.createElement("div");
     moreText.className = "meta";
@@ -173,6 +179,7 @@
     a.appendChild(topicWrap);
     a.appendChild(p);
     a.appendChild(tags);
+    a.appendChild(avail);
     a.appendChild(more);
 
     return a;

@@ -66,7 +66,7 @@
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
+          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
@@ -201,25 +201,10 @@
           }
         } catch(_) {}
 
-        // Scroll-based sticky header: show only once hero/static header is out of view
+        // Header is always visible from page load (accessibility requirement)
         try {
           existingHeader.classList.add('jh-header--injected');
-          var heroEl = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
-          if (heroEl && 'IntersectionObserver' in window) {
-            var headerObs = new IntersectionObserver(function(entries){
-              entries.forEach(function(entry){
-                if (!entry.isIntersecting) {
-                  existingHeader.classList.add('is-visible');
-                } else {
-                  existingHeader.classList.remove('is-visible');
-                }
-              });
-            }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
-            headerObs.observe(heroEl);
-          } else {
-            // Fallback: always visible on pages without a hero
-            existingHeader.classList.add('is-visible');
-          }
+          existingHeader.classList.add('is-visible');
         } catch(_) {
           existingHeader.classList.add('is-visible');
         }
@@ -246,19 +231,8 @@
       header.classList.add('jh-header--injected');
       markActiveNav(header);
 
-      // Scroll-based visibility for injected header
-      var heroElInj = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
-      if (heroElInj && 'IntersectionObserver' in window) {
-        var injObs = new IntersectionObserver(function(entries){
-          entries.forEach(function(entry){
-            if (!entry.isIntersecting) { header.classList.add('is-visible'); }
-            else { header.classList.remove('is-visible'); }
-          });
-        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
-        injObs.observe(heroElInj);
-      } else {
-        header.classList.add('is-visible');
-      }
+      // Header always visible from page load
+      header.classList.add('is-visible');
 
       // Wire up hamburger button if present
       try {
@@ -462,11 +436,40 @@
         var btn=dd.querySelector('.jh-nav-dropdown__btn');
         if(!btn||btn.dataset.jhWired)return;
         btn.dataset.jhWired='1';
-        btn.addEventListener('click',function(e){
+        function toggleDropdown(e){
           e.stopPropagation();
           var open=dd.classList.toggle('is-open');
           btn.setAttribute('aria-expanded',open?'true':'false');
+          // Move focus to first menu item when opening via keyboard
+          if(open){
+            var firstItem=dd.querySelector('.jh-nav-dropdown__menu a');
+            if(firstItem) setTimeout(function(){ firstItem.focus(); }, 50);
+          }
+        }
+        btn.addEventListener('click',toggleDropdown);
+        // Keyboard: Enter and Space open/close the dropdown
+        btn.addEventListener('keydown',function(e){
+          if(e.key==='Enter'||e.key===' '){
+            e.preventDefault();
+            toggleDropdown(e);
+          }
+          if(e.key==='Escape'){
+            dd.classList.remove('is-open');
+            btn.setAttribute('aria-expanded','false');
+            btn.focus();
+          }
         });
+        // Close with Escape from within menu
+        var menu=dd.querySelector('.jh-nav-dropdown__menu');
+        if(menu){
+          menu.addEventListener('keydown',function(e){
+            if(e.key==='Escape'){
+              dd.classList.remove('is-open');
+              btn.setAttribute('aria-expanded','false');
+              btn.focus();
+            }
+          });
+        }
       });
       document.addEventListener('click',function(){
         document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
