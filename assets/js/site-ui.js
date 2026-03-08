@@ -71,23 +71,17 @@
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
           .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
-          .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:none;}
-          .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);}
-          .jh-hamburger{display:none;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.28);border-radius:9px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:8px 12px;margin-left:auto;min-width:42px;}
+          .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:2px solid rgba(147,197,253,0.55);outline-offset:2px;}
+          .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);border-bottom:2px solid #93C5FD;font-weight:700;}
+          .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);border-radius:10px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;}
           .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
           .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
           .jh-mobile-nav.is-open{display:flex;}
           .jh-mobile-nav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:15px;padding:11px 12px;border-radius:10px;}
-          .jh-mobile-nav a:hover,.jh-mobile-nav a:focus{background:rgba(255,255,255,0.09);outline:none;}
+          .jh-mobile-nav a:hover{background:rgba(255,255,255,0.09);}
+          .jh-mobile-nav a:focus{background:rgba(255,255,255,0.09);outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
           .jh-mobile-nav a[aria-current="page"]{background:rgba(79,70,229,0.22);border:1px solid rgba(79,70,229,0.38);}
           .jh-header-spacer{display:block;height:54px;}
-          .jh-nav-dropdown{position:relative;list-style:none;}
-          .jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-          .jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-          .jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-          .jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;}
-          .jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-          .jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
           @media (max-width:768px){
             .jh-topnav{display:none !important;}
             .jh-hamburger{display:block;}
@@ -163,12 +157,10 @@
 
   async function injectHeader(){
     try{
-      // If a baked-in header already exists, wire it up and make it visible.
+      // If a baked-in header already exists, wire it up with scroll-based reveal.
       var existingHeader = document.querySelector(".jh-header");
       if (existingHeader) {
-        // Baked-in header: ensure it's visible (no scroll-reveal needed, it's sticky)
-        existingHeader.classList.add('is-visible');
-        // Wire hamburger on the baked-in header
+      // Wire hamburger on the baked-in header
         try {
           var eBtn = existingHeader.querySelector('.jh-hamburger');
           var eMobileNav = existingHeader.querySelector('.jh-mobile-nav');
@@ -178,19 +170,60 @@
             eBtn.parentNode.replaceChild(newBtn, eBtn);
             newBtn.addEventListener('click', function(){
               var open = eMobileNav.classList.toggle('is-open');
-              if (open) { eMobileNav.removeAttribute('hidden'); eMobileNav.style.display=''; }
-              else { eMobileNav.setAttribute('hidden', ''); eMobileNav.style.removeProperty('display'); }
+              if (open) {
+                eMobileNav.removeAttribute('hidden');
+                eMobileNav.style.display='';
+                // Move focus to first link for keyboard users
+                var firstLink = eMobileNav.querySelector('a');
+                if (firstLink) setTimeout(function(){ firstLink.focus(); }, 50);
+              } else {
+                eMobileNav.style.display='none';
+                newBtn.focus();
+              }
               newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
               newBtn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
               var lbl = newBtn.querySelector('.jh-hamburger__label');
               if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
-              var icon = newBtn.firstChild;
-              if (icon && icon.nodeType === 3) icon.textContent = open ? '\u2715 ' : '\u2630 ';
+            });
+            // Focus trapping inside mobile nav
+            eMobileNav.addEventListener('keydown', function(e){
+              if(!eMobileNav.classList.contains('is-open')) return;
+              var focusable = Array.from(eMobileNav.querySelectorAll('a,[tabindex]:not([tabindex="-1"])'));
+              if(!focusable.length) return;
+              if(e.key === 'Tab'){
+                var first = focusable[0], last = focusable[focusable.length-1];
+                if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+                else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+              }
+              if(e.key==='Escape'){ eMobileNav.classList.remove('is-open'); eMobileNav.style.display='none'; newBtn.setAttribute('aria-expanded','false'); newBtn.focus(); }
             });
             markActiveNav(eMobileNav);
           }
         } catch(_) {}
-        return;
+
+        // Scroll-based sticky header: show only once hero/static header is out of view
+        try {
+          existingHeader.classList.add('jh-header--injected');
+          var heroEl = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+          if (heroEl && 'IntersectionObserver' in window) {
+            var headerObs = new IntersectionObserver(function(entries){
+              entries.forEach(function(entry){
+                if (!entry.isIntersecting) {
+                  existingHeader.classList.add('is-visible');
+                } else {
+                  existingHeader.classList.remove('is-visible');
+                }
+              });
+            }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
+            headerObs.observe(heroEl);
+          } else {
+            // Fallback: always visible on pages without a hero
+            existingHeader.classList.add('is-visible');
+          }
+        } catch(_) {
+          existingHeader.classList.add('is-visible');
+        }
+        return; // baked-in header handled; no need to fetch partial
       }
 
       const res = await fetch(HEADER_URL, { cache: "force-cache" });
@@ -211,8 +244,21 @@
       }
 
       header.classList.add('jh-header--injected');
-      header.classList.add('is-visible');
       markActiveNav(header);
+
+      // Scroll-based visibility for injected header
+      var heroElInj = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+      if (heroElInj && 'IntersectionObserver' in window) {
+        var injObs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (!entry.isIntersecting) { header.classList.add('is-visible'); }
+            else { header.classList.remove('is-visible'); }
+          });
+        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
+        injObs.observe(heroElInj);
+      } else {
+        header.classList.add('is-visible');
+      }
 
       // Wire up hamburger button if present
       try {
@@ -221,8 +267,7 @@
         if (btn && mobileNav) {
           btn.addEventListener('click', function(){
             var open = mobileNav.classList.toggle('is-open');
-            if (open) { mobileNav.removeAttribute('hidden'); }
-            else { mobileNav.setAttribute('hidden', ''); }
+            mobileNav.removeAttribute('hidden');
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
             btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
             var lbl = btn.querySelector('.jh-hamburger__label');
@@ -234,10 +279,6 @@
           markActiveNav(mobileNav);
         }
       } catch(_) {}
-
-      // Keep injected navigation visible on all pages.
-      header.classList.add('is-visible');
-
 
     }catch(_){}
   }
@@ -383,77 +424,68 @@
   }
 
   
-  function wireDropdowns(container){
+  function injectBackToTop(){
     try{
-      container.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
-        var btn = dd.querySelector('.jh-nav-dropdown__btn');
-        if (!btn) return;
-        btn.addEventListener('click', function(e){
-          e.stopPropagation();
-          var open = dd.classList.toggle('is-open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
+      if (document.querySelector('.jh-back-to-top')) return;
+      var btn = document.createElement('button');
+      btn.className = 'jh-back-to-top';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>';
+      document.body.appendChild(btn);
+      btn.addEventListener('click', function(){
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
-      // Close dropdowns on outside click
-      document.addEventListener('click', function(){
-        container.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
-          dd.classList.remove('is-open');
-          var b = dd.querySelector('.jh-nav-dropdown__btn');
-          if(b) b.setAttribute('aria-expanded','false');
-        });
-      });
-      // Item 8: Close dropdowns on Escape key, return focus to trigger button
-      document.addEventListener('keydown', function(e){
-        if (e.key !== 'Escape') return;
-        container.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
-          dd.classList.remove('is-open');
-          var b = dd.querySelector('.jh-nav-dropdown__btn');
-          if(b){ b.setAttribute('aria-expanded','false'); b.focus(); }
-        });
-      });
+      if ('IntersectionObserver' in window){
+        var sentinel = document.createElement('div');
+        sentinel.style.cssText = 'position:absolute;top:400px;left:0;width:1px;height:1px;pointer-events:none;';
+        document.body.insertBefore(sentinel, document.body.firstChild);
+        var bttObs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (!entry.isIntersecting){ btn.classList.add('is-visible'); }
+            else { btn.classList.remove('is-visible'); }
+          });
+        }, { threshold: 0 });
+        bttObs.observe(sentinel);
+      } else {
+        window.addEventListener('scroll', function(){
+          if (window.scrollY > 400) btn.classList.add('is-visible');
+          else btn.classList.remove('is-visible');
+        }, { passive: true });
+      }
     }catch(_){}
   }
 
-  // Item 7: Use scroll position instead of hero-element detection so this
-  // works identically on every page regardless of layout.
-  function initScrollHamburger(header){
+
+  function wireDropdowns(){
     try{
-      if (window.innerWidth > 768) return;
-      var hamburger = header.querySelector('.jh-hamburger');
-      if (!hamburger) return;
-
-      // How far down (px) before the hamburger becomes visible.
-      // 80px covers the fixed header height so the button only appears
-      // once the visitor has clearly scrolled away from the top of the page.
-      var SCROLL_THRESHOLD = 80;
-
-      function updateHamburgerVisibility(){
-        var pastThreshold = window.scrollY > SCROLL_THRESHOLD;
-        hamburger.classList.toggle('jh-hamburger--hidden', !pastThreshold);
-      }
-
-      updateHamburgerVisibility(); // set correct state on load
-      window.addEventListener('scroll', updateHamburgerVisibility, { passive: true });
-      // Re-evaluate if viewport is resized past the mobile breakpoint
-      window.addEventListener('resize', function(){
-        if (window.innerWidth > 768){
-          hamburger.classList.remove('jh-hamburger--hidden');
-        } else {
-          updateHamburgerVisibility();
-        }
-      }, { passive: true });
+      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
+        var btn=dd.querySelector('.jh-nav-dropdown__btn');
+        if(!btn||btn.dataset.jhWired)return;
+        btn.dataset.jhWired='1';
+        btn.addEventListener('click',function(e){
+          e.stopPropagation();
+          var open=dd.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded',open?'true':'false');
+        });
+      });
+      document.addEventListener('click',function(){
+        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
+          dd.classList.remove('is-open');
+          var b=dd.querySelector('.jh-nav-dropdown__btn');
+          if(b)b.setAttribute('aria-expanded','false');
+        });
+      },{capture:false,once:false});
     }catch(_){}
   }
 
 function init(){
     ensureStyles();
     ensureSkipLink();
+    wireDropdowns();
     ensureMainId();
-    injectHeader().then(function(){
-      var h = document.querySelector('.jh-header');
-      if(h){ wireDropdowns(h); initScrollHamburger(h); }
-    });
+    injectHeader();
     injectFooter();
+    injectBackToTop();
 
     if (!is404Page()){
       injectBreadcrumbs();
@@ -490,44 +522,6 @@ if (document.readyState === "loading"){
     document.addEventListener('DOMContentLoaded', enhanceFaqAccordions);
   } else {
     enhanceFaqAccordions();
-  }
-})();
-
-// ── Item 10: Annotate all external (new-tab) links for screen readers ─────
-// Any link with target="_blank" that doesn't already mention "new tab"
-// in its aria-label gets a visually-hidden span appended so assistive
-// technology announces the behaviour before the user activates the link.
-(function(){
-  function annotateNewTabLinks(){
-    document.querySelectorAll('a[target="_blank"]').forEach(function(a){
-      // Skip if already annotated
-      if(a.hasAttribute('data-newtab-annotated')) return;
-      a.setAttribute('data-newtab-annotated','1');
-
-      var label = (a.getAttribute('aria-label') || '').toLowerCase();
-      var hasNote = label.indexOf('new tab') !== -1 || label.indexOf('new window') !== -1;
-
-      if(!hasNote){
-        // If aria-label is set but doesn't mention new tab, append to it
-        if(a.getAttribute('aria-label')){
-          a.setAttribute('aria-label', a.getAttribute('aria-label') + ', opens in a new tab');
-        } else {
-          // No aria-label: inject a visually-hidden span inside the link
-          if(!a.querySelector('.jh-sr-newtab')){
-            var span = document.createElement('span');
-            span.className = 'jh-sr-newtab';
-            span.textContent = ' (opens in a new tab)';
-            a.appendChild(span);
-          }
-        }
-      }
-    });
-  }
-  // Run on DOM ready and again after dynamic content may have loaded
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', annotateNewTabLinks);
-  } else {
-    annotateNewTabLinks();
   }
 })();
 })();
