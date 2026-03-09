@@ -110,28 +110,34 @@
 </div>
 </section>
 <main class="wrap" id="main" role="main">
-<section class="card blog-placeholder" aria-label="Blog coming soon">
-  <h2>Coming Soon — First Posts Expected Q2 2026</h2>
-  <p>Short takes, practical analysis, and sceptical commentary on what matters in AI — none of the breathless hype.</p>
-  <p>In the meantime, the newsletter covers the same ground every weekday. <a href="/newsletter/">Subscribe free — no spam, unsubscribe any time.</a></p>
-  <p aria-live="polite" aria-atomic="true" style="display:none;" id="blog-status">No posts are available yet.</p>
+<section class="blog-coming-soon" aria-label="Blog coming soon">
+  <span class="blog-coming-soon__icon" aria-hidden="true">✍️</span>
+  <h2>First Posts Coming Q2 2026</h2>
+  <p>Short, sceptical analysis on what's actually happening in AI — none of the breathless hype or magical thinking.</p>
+  <p>Expect practical takes, honest breakdowns, and clear thinking you can actually use at work.</p>
+  <div class="blog-newsletter-prompt">
+    <p>While you wait — get the daily newsletter instead:</p>
+    <a class="button" href="/newsletter/" style="font-size:0.95rem;">Subscribe free — no spam, unsubscribe any time →</a>
+  </div>
 </section>
-<section aria-label="Blog posts" id="blogList">
-  <!-- Skeleton loading placeholders — replaced by JS when feed loads or on page load -->
-  <div class="card skeleton-card" aria-hidden="true" style="padding:18px;margin-bottom:18px;">
-    <div style="background:#E5E7EB;height:16px;width:70%;border-radius:4px;margin-bottom:10px;"></div>
-    <div style="background:#E5E7EB;height:11px;width:90%;border-radius:4px;margin-bottom:6px;"></div>
-    <div style="background:#E5E7EB;height:11px;width:60%;border-radius:4px;"></div>
+<section aria-label="Related content" id="blogList" style="display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:8px;">
+  <div class="card" style="padding:24px;">
+    <span style="font-size:1.6rem;display:block;margin-bottom:12px;" aria-hidden="true">🎙️</span>
+    <h3 style="margin-top:0;color:var(--accent);">Listen to the Podcast</h3>
+    <p style="color:#374151;margin:0 0 16px;">Turing's Torch: AI Weekly — the audio version of the same no-nonsense editorial approach. New episode every week.</p>
+    <a class="button secondary" href="/podcast/" style="display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;">Go to the podcast →</a>
   </div>
-  <div class="card" style="padding:18px; margin-bottom:18px;">
-    <h3 style="margin-top:0;">While you wait — listen to the podcast</h3>
-    <p style="color:#374151; margin:0 0 12px;">Turing's Torch: AI Weekly is the audio version of the same no-nonsense editorial approach. New episode every week.</p>
-    <a class="button secondary" href="/podcast/" style="display:inline-block;">Go to the podcast →</a>
+  <div class="card" style="padding:24px;">
+    <span style="font-size:1.6rem;display:block;margin-bottom:12px;" aria-hidden="true">📚</span>
+    <h3 style="margin-top:0;color:var(--accent);">Browse the eBooks</h3>
+    <p style="color:#374151;margin:0 0 16px;">36 plain-English guides to AI across industries — from healthcare and law to sports and space.</p>
+    <a class="button" href="/ebooks/" style="display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;">Browse all 36 titles →</a>
   </div>
-  <div class="card" style="padding:18px;">
-    <h3 style="margin-top:0;">Browse the ebook catalogue</h3>
-    <p style="color:#374151; margin:0 0 12px;">36 plain-English guides to AI across industries — from healthcare and law to sports and space. Find the topics that matter to you.</p>
-    <a class="button" href="/ebooks/" style="display:inline-block;">Browse all eBooks →</a>
+  <div class="card" style="padding:24px;">
+    <span style="font-size:1.6rem;display:block;margin-bottom:12px;" aria-hidden="true">📖</span>
+    <h3 style="margin-top:0;color:var(--accent);">AI Glossary</h3>
+    <p style="color:#374151;margin:0 0 16px;">Plain-English definitions for the terms, acronyms, and concepts that come up constantly in AI discussions.</p>
+    <a class="button secondary" href="/glossary/" style="display:inline-flex;align-items:center;gap:6px;font-size:0.9rem;">Explore the Glossary →</a>
   </div>
 </section>
 </main>
