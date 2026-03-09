@@ -12,11 +12,8 @@
 <title>About | Jonathan Harris</title>
 <meta content="Jonathan Harris" name="author"/>
 
-
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <!-- Open Graph -->
-
-
 
 <meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
 <meta content="1200" property="og:image:width"/>
@@ -27,7 +24,6 @@
 
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="@jonathan_harris_01" name="twitter:creator"/>
-
 
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
 <!-- Structured Data -->
@@ -71,21 +67,10 @@
   ]
 }
 </script>
-<!-- Email-safe CSS: ONE block, no variables, no gradients --><!-- Chatbot (deferred for mobile performance) -->
-<script>
-    window.addEventListener('load', function () {
-      setTimeout(function () {
-        var s = document.createElement('script');
-        s.src = 'https://botsailor.com/script/webchat-link.js?code=1744067063128291';
-        s.async = true;
-        s.referrerPolicy = 'strict-origin-when-cross-origin';
-        document.body.appendChild(s);
-      }, 2500);
-    });
-  </script>
+<!-- Email-safe CSS: ONE block, no variables, no gradients -->
+
 <!-- Required Scripts -->
-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script async="" onerror="console.error('Metricool script failed to load')" onload='beTracker.t({hash:"fe05ab38be8b4875d12740b632198511"})' src="https://tracker.metricool.com/resources/be.js"></script>
+
 <link href="https://jonathan-harris.online/bio/" hreflang="en-us" rel="alternate"/>
 <link href="https://jonathan-harris.online/en-gb/bio/" hreflang="en-gb" rel="alternate"/>
 <link href="https://jonathan-harris.online/en-ca/bio/" hreflang="en-ca" rel="alternate"/>
@@ -100,6 +85,25 @@
 .jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
 .jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
 </style>
+
+<!-- CookieYes -->
+<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+
+<!-- Metricool Tracking with error handling -->
+<script>
+    function loadScript(callback) {
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://tracker.metricool.com/resources/be.js";
+        script.onload = callback;
+        script.onerror = function() { console.error("Metricool script failed to load"); };
+        head.appendChild(script);
+    }
+    loadScript(function() {
+        beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
+    });
+</script>
 </head>
 <body class="bio-page page-bio">
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -167,7 +171,6 @@
   <a href="/contact/">Contact</a>
 </nav>
 </header>
-
 
 <!-- HERO -->
 <section aria-label="About page header" class="hero" role="region">
@@ -321,5 +324,8 @@
 <div id="siteFooter"></div>
 <script defer src="/assets/js/site-ui.js"></script>
 
+
+<!-- Chatbot -->
+<script src="https://botsailor.com/script/webchat-link.js?code=1744067063128291" defer></script>
 </body>
 </html>
