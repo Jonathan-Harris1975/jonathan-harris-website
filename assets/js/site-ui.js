@@ -633,3 +633,19 @@ if (document.readyState === "loading"){
   }
 })();
 })();
+
+
+// Improved hamburger behaviour
+document.addEventListener("scroll",function(){
+  const header=document.querySelector("header");
+  const burger=document.querySelector(".hamburger");
+  if(!header||!burger) return;
+
+  const headerBottom=header.getBoundingClientRect().bottom;
+
+  if(headerBottom<=0){
+    burger.style.display="block";
+  }else{
+    burger.style.display="none";
+  }
+});
