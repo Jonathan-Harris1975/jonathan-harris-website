@@ -256,10 +256,16 @@
           }
         } catch(_) {}
 
-        // Scroll-based sticky header: show only once hero/static header is out of view
+        // Scroll-based sticky header: show only once the page hero is out of view.
+        // If a page is incorrectly marked as no-hero but a hero exists, trust the DOM and
+        // remove the flag so the hamburger/header do not appear too early on mobile.
         try {
           existingHeader.classList.add('jh-header--injected');
           var heroEl = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
+          if (heroEl && document.body && document.body.classList.contains('jh-no-hero-page')) {
+            document.body.classList.remove('jh-no-hero-page');
+          }
+          if (!heroEl) existingHeader.classList.add('is-visible');
           syncHeaderVisibility(existingHeader, heroEl, eMobileNav, newBtn);
         } catch(_) {
           existingHeader.classList.add('is-visible');
