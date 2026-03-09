@@ -83,6 +83,17 @@
       state.filter = label;
       state.page = 1;
       $$(".chip", chipsWrap).forEach(c => c.setAttribute("aria-pressed", c.textContent === label ? "true":"false"));
+      // FIX #9: Announce active filter to screen readers via aria-live region
+      try {
+        var countEl2 = document.getElementById("count");
+        if (countEl2) {
+          var filterMsg = label === "All"
+            ? "Showing all books"
+            : "Filtered by " + label + ". ";
+          // Announcement is appended after count update in renderBooks()
+          countEl2.dataset.pendingFilter = filterMsg;
+        }
+      } catch(_) {}
       render();
     });
     return btn;
@@ -209,7 +220,11 @@
     const pageItems = filtered.slice(start, start + perPage);
 
     pageItems.forEach(b => grid.appendChild(card(b)));
-    if (countEl) countEl.textContent = `${filtered.length} of ${books.length} books`;
+    if (countEl) {
+      var pendingFilter = countEl.dataset.pendingFilter || "";
+      delete countEl.dataset.pendingFilter;
+      countEl.textContent = pendingFilter + filtered.length + " of " + books.length + " books";
+    }
     updatePager(totalPages);
 
     hideLoader();
