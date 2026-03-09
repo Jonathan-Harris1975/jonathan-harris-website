@@ -40,6 +40,25 @@
   .compare-scroll-cue{ display:block; }
 }
 </style>
+
+<!-- CookieYes -->
+<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+
+<!-- Metricool Tracking with error handling -->
+<script>
+    function loadScript(callback) {
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://tracker.metricool.com/resources/be.js";
+        script.onload = callback;
+        script.onerror = function() { console.error("Metricool script failed to load"); };
+        head.appendChild(script);
+    }
+    loadScript(function() {
+        beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
+    });
+</script>
 </head><body class="page-compare">
 <a class="skip-link" href="#main">Skip to main content</a>
 <div aria-hidden="true" class="page-loader" id="pageLoader" style="display:none">
@@ -255,4 +274,7 @@
 </div>
 </main>
 <div id="siteFooter"></div>
+
+<!-- Chatbot -->
+<script src="https://botsailor.com/script/webchat-link.js?code=1744067063128291" defer></script>
 </body></html>
