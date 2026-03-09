@@ -156,6 +156,59 @@
     }catch(_){}
   }
 
+  function syncHeaderVisibility(header, heroEl, mobileNav, button){
+    if (!header) return;
+
+    function closeMobileNav(){
+      if (!mobileNav) return;
+      mobileNav.classList.remove('is-open');
+      mobileNav.style.display = 'none';
+      mobileNav.setAttribute('hidden','');
+      if (button) {
+        button.setAttribute('aria-expanded','false');
+        button.setAttribute('aria-label','Open navigation menu');
+        var lbl = button.querySelector('.jh-hamburger__label');
+        if (lbl) lbl.textContent = 'Menu';
+      }
+    }
+
+    function setVisible(visible){
+      header.classList.toggle('is-visible', !!visible);
+      if (!visible) closeMobileNav();
+    }
+
+    if (!heroEl) {
+      setVisible(true);
+      return;
+    }
+
+    var updateFromScroll = function(){
+      try {
+        var rect = heroEl.getBoundingClientRect();
+        setVisible(rect.bottom <= 10);
+      } catch(_) {}
+    };
+
+    if ('IntersectionObserver' in window) {
+      try {
+        var obs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            setVisible(!entry.isIntersecting);
+          });
+        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
+        obs.observe(heroEl);
+      } catch(_) {
+        updateFromScroll();
+      }
+    } else {
+      updateFromScroll();
+    }
+
+    window.addEventListener('scroll', updateFromScroll, { passive: true });
+    window.addEventListener('resize', updateFromScroll, { passive: true });
+    updateFromScroll();
+  }
+
   async function injectHeader(){
     try{
       // If a baked-in header already exists, wire it up with scroll-based reveal.
@@ -207,32 +260,7 @@
         try {
           existingHeader.classList.add('jh-header--injected');
           var heroEl = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
-          if (heroEl && 'IntersectionObserver' in window) {
-            var headerObs = new IntersectionObserver(function(entries){
-              entries.forEach(function(entry){
-                if (!entry.isIntersecting) {
-                  existingHeader.classList.add('is-visible');
-                } else {
-                  existingHeader.classList.remove('is-visible');
-                  if (eMobileNav) {
-                    eMobileNav.classList.remove('is-open');
-                    eMobileNav.style.display='none';
-                    eMobileNav.setAttribute('hidden','');
-                    if (newBtn) {
-                      newBtn.setAttribute('aria-expanded','false');
-                      newBtn.setAttribute('aria-label','Open navigation menu');
-                      var existingLbl = newBtn.querySelector('.jh-hamburger__label');
-                      if (existingLbl) existingLbl.textContent = 'Menu';
-                    }
-                  }
-                }
-              });
-            }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
-            headerObs.observe(heroEl);
-          } else {
-            // Fallback: always visible on pages without a hero
-            existingHeader.classList.add('is-visible');
-          }
+          syncHeaderVisibility(existingHeader, heroEl, eMobileNav, newBtn);
         } catch(_) {
           existingHeader.classList.add('is-visible');
         }
@@ -325,17 +353,6 @@
 
       // Scroll-based visibility for injected header
       var heroElInj = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
-      if (heroElInj && 'IntersectionObserver' in window) {
-        var injObs = new IntersectionObserver(function(entries){
-          entries.forEach(function(entry){
-            if (!entry.isIntersecting) { header.classList.add('is-visible'); }
-            else { header.classList.remove('is-visible'); }
-          });
-        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
-        injObs.observe(heroElInj);
-      } else {
-        header.classList.add('is-visible');
-      }
 
       // Wire up hamburger button if present
       try {
@@ -609,9 +626,9 @@
 function init(){
     ensureStyles();
     ensureSkipLink();
-    wireDropdowns();
     ensureMainId();
     injectHeader();
+    wireDropdowns();
     injectFooter();
     injectBackToTop();
 
@@ -654,18 +671,3 @@ if (document.readyState === "loading"){
 })();
 })();
 
-
-// Improved hamburger behaviour
-document.addEventListener("scroll",function(){
-  const header=document.querySelector("header");
-  const burger=document.querySelector(".hamburger");
-  if(!header||!burger) return;
-
-  const headerBottom=header.getBoundingClientRect().bottom;
-
-  if(headerBottom<=0){
-    burger.style.display="block";
-  }else{
-    burger.style.display="none";
-  }
-});
