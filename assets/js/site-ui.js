@@ -200,27 +200,30 @@
     var updateFromScroll = function(){
       try {
         var rect = heroEl.getBoundingClientRect();
-        setVisible(rect.bottom <= 10);
+        var headerHeight = header.offsetHeight || 64;
+        var revealOffset = Math.max(12, Math.round(headerHeight * 0.35));
+        var shouldShow = rect.bottom <= revealOffset;
+        setVisible(shouldShow);
       } catch(_) {}
     };
 
-    if ('IntersectionObserver' in window) {
-      try {
-        var obs = new IntersectionObserver(function(entries){
-          entries.forEach(function(entry){
-            setVisible(!entry.isIntersecting);
-          });
-        }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
-        obs.observe(heroEl);
-      } catch(_) {
-        updateFromScroll();
-      }
-    } else {
-      updateFromScroll();
-    }
-
     window.addEventListener('scroll', updateFromScroll, { passive: true });
     window.addEventListener('resize', updateFromScroll, { passive: true });
+    window.addEventListener('load', updateFromScroll, { once: true });
+
+    if ('IntersectionObserver' in window) {
+      try {
+        var obs = new IntersectionObserver(function(){
+          updateFromScroll();
+        }, { threshold: [0, 0.01, 0.5, 1], rootMargin: '0px 0px 0px 0px' });
+        obs.observe(heroEl);
+      } catch(_) {}
+    }
+
+    if ('requestAnimationFrame' in window) {
+      requestAnimationFrame(updateFromScroll);
+    }
+    setTimeout(updateFromScroll, 120);
     updateFromScroll();
   }
 
