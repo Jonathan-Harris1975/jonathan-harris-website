@@ -2455,3 +2455,38 @@ body.page-contact .jh-header--injected {
   transition: color 0.15s;
 }
 .footer-links li a:hover { color: #93C5FD; }
+
+
+
+/* UI/UX improvements */
+body, p, h1, h2, h3, h4, h5, h6, .container, .content {
+    text-align:center;
+}
+
+header{
+    margin-top:0!important;
+    padding-top:0!important;
+}
+
+main{
+    margin-top:0;
+}
+
+section{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.hero, .card, .post, .book-card{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+a{
+    text-decoration:none;
+}
+
+footer{
+    text-align:center;
+}
+
