@@ -121,7 +121,7 @@
   .jh-mobile-nav a:last-child{border-bottom:none;}
   .jh-mobile-nav a:hover,.jh-mobile-nav a[aria-current="page"]{color:#93C5FD;}
   .jh-mobile-nav.is-open{display:flex;}
-  @media(max-width:768px){.jh-topnav{display:none;}.jh-hamburger{display:flex;align-items:center;}}
+  @media(max-width:768px){.jh-topnav{display:none;}.jh-hamburger{display:none !important;}.jh-header.is-visible .jh-hamburger,.jh-header--injected.is-visible .jh-hamburger{display:flex !important;align-items:center;justify-content:center;}}
 </style>
 <header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
   <div class="jh-header__inner">
