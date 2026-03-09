@@ -132,7 +132,8 @@
       document.querySelector('section[aria-label="Page Header"]') ||
       document.querySelector('header.hero') ||
       document.querySelector('.hero') ||
-      document.querySelector('header[role="banner"]') ||
+      document.querySelector('.lp-hero') ||
+      document.querySelector('.dark-section') ||
       null
     );
   }
@@ -205,7 +206,7 @@
         // Scroll-based sticky header: show only once hero/static header is out of view
         try {
           existingHeader.classList.add('jh-header--injected');
-          var heroEl = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+          var heroEl = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
           if (heroEl && 'IntersectionObserver' in window) {
             var headerObs = new IntersectionObserver(function(entries){
               entries.forEach(function(entry){
@@ -302,7 +303,13 @@
 
       var wrap = document.createElement("div");
       wrap.innerHTML = INLINED_HEADER_HTML.trim();
-      var header = wrap.firstElementChild;
+
+      var inlineStyle = wrap.querySelector('#jh-dropdown-inline');
+      if (inlineStyle && !document.getElementById('jh-dropdown-inline')) {
+        (document.head || document.documentElement).appendChild(inlineStyle);
+      }
+
+      var header = wrap.querySelector('.jh-header');
       if (!header) return;
 
       var hero = findHeroHost();
@@ -317,7 +324,7 @@
       markActiveNav(header);
 
       // Scroll-based visibility for injected header
-      var heroElInj = document.querySelector('.lp-hero, .hero, [aria-label="Page Header"]');
+      var heroElInj = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
       if (heroElInj && 'IntersectionObserver' in window) {
         var injObs = new IntersectionObserver(function(entries){
           entries.forEach(function(entry){
