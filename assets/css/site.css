@@ -2223,3 +2223,235 @@ section.card > p,
 /* Fix #12: All chip/tag/badge font sizes raised to 0.875rem minimum */
 /* Fix #13: Card border opacity raised from 6% to 12% for clearer edge definition */
 /* Fix #14: Compare table scroll cue — see compare/index.html */
+
+
+/* ===== UX Recommendations — Batch 3 (March 2026) ===== */
+
+/* REC 1 · Visual: raise tag / chip / topic-chip font sizes */
+.tag                  { font-size: 0.9rem; }
+.topic-chip           { font-size: 0.875rem !important; }
+.lp-ebook-tag         { font-size: 0.875rem; }
+
+/* REC 2 · Visual: enhanced author avatar — circular, glowing border, JH illustrated look */
+.lp-author__monogram {
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 35%,#1E3A5F 0%,#1E2D45 55%,#0D1420 100%);
+  border: 3px solid rgba(147,197,253,0.45);
+  box-shadow: 0 0 0 6px rgba(79,70,229,0.14), 0 18px 44px rgba(13,20,32,0.45);
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: #93C5FD;
+  position: relative;
+  overflow: hidden;
+}
+/* subtle inner highlight arc */
+.lp-author__monogram::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, rgba(147,197,253,0.18) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* REC 3 · Visual: standardise book cover images with consistent dark mat */
+.cover, .book-hero-cover, .lp-ebook-card__img {
+  background: #0D1420;
+  object-fit: contain;
+}
+
+/* REC 4 · Visual: per-section subtle identity tint */
+body.page-podcast .hero { background: linear-gradient(160deg,#0D1420 0%,#140D29 100%); }
+body.page-newsletter .hero { background: linear-gradient(160deg,#0D1420 0%,#0b1e16 100%); }
+body.page-bio .hero { background: linear-gradient(160deg,#0D1420 0%,#1a170a 100%); }
+
+/* REC 5 · Navigation: mobile Resources sub-group visual differentiation */
+.jh-mobile-nav__group-label {
+  display: block;
+  padding: 8px 12px 3px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(147,197,253,0.55);
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.09);
+}
+/* indent the Resources sub-links */
+.jh-mobile-nav__group-links a {
+  padding-left: 22px !important;
+  font-size: 14px !important;
+  color: rgba(209,213,219,0.82) !important;
+}
+.jh-mobile-nav__group-links a:hover,
+.jh-mobile-nav__group-links a:focus {
+  color: #E5E7EB !important;
+}
+
+/* REC 6 · Usability: compare table — readable on mobile without horizontal scroll */
+@media (max-width: 640px) {
+  .compare-table-wrap { overflow-x: visible; }
+  .compare-table-wrap::after { display: none; }
+  .compare-table { display: block; width: 100%; }
+  .compare-table thead { display: block; }
+  .compare-table thead tr { display: flex; gap: 6px; margin-bottom: 6px; }
+  .compare-table thead th {
+    flex: 1;
+    background: var(--bg-dark);
+    color: #93C5FD;
+    border-radius: 8px 8px 0 0;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  .compare-table tbody { display: block; }
+  .compare-table tbody tr { display: flex; gap: 6px; margin-bottom: 3px; }
+  .compare-table tbody td {
+    flex: 1;
+    font-size: 0.875rem;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 0;
+    vertical-align: top;
+  }
+  .compare-table tbody tr:last-child td { border-radius: 0 0 8px 8px; }
+}
+
+/* REC 7 · Blog: polished coming-soon placeholder */
+.blog-coming-soon {
+  background: linear-gradient(135deg,#EEF2FF 0%,#F0F4FF 60%,#F5F7FA 100%);
+  border: 2px dashed rgba(79,70,229,0.3);
+  border-radius: var(--radius);
+  padding: 48px 32px 40px;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto 32px;
+}
+.blog-coming-soon__icon {
+  font-size: 2.8rem;
+  display: block;
+  margin-bottom: 18px;
+  line-height: 1;
+}
+.blog-coming-soon h2 {
+  color: var(--accent);
+  margin: 0 0 10px;
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+}
+.blog-coming-soon > p {
+  color: var(--text-soft);
+  max-width: 460px;
+  margin: 0 auto 10px;
+  font-size: 1rem;
+}
+.blog-newsletter-prompt {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(79,70,229,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.blog-newsletter-prompt p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* REC 8 · Homepage: inline mid-page newsletter prompt */
+.lp-newsletter-mid {
+  background: linear-gradient(135deg,#EEF2FF 0%,#F5F7FA 100%);
+  border: 1px solid rgba(79,70,229,0.2);
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 10px;
+}
+.lp-newsletter-mid__copy h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  color: #111827;
+  letter-spacing: -0.01em;
+}
+.lp-newsletter-mid__copy p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+.lp-newsletter-mid__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+@media (max-width: 600px) {
+  .lp-newsletter-mid { flex-direction: column; text-align: center; }
+  .lp-newsletter-mid__actions { justify-content: center; }
+}
+
+/* REC 9 · Contact: add a response-time callout style */
+.contact-meta-note {
+  background: #EEF2FF;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 16px;
+  margin-bottom: 22px;
+  font-size: 0.95rem;
+  color: #3730A3;
+}
+
+/* REC 10 · Navigation: header always visible on pages without a hero section */
+body:not([class]) .jh-header--injected,
+body.page-privacy .jh-header--injected,
+body.page-terms .jh-header--injected,
+body.page-affiliate .jh-header--injected,
+body.page-contact .jh-header--injected {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+
+/* REC 11 · Footer: ensure 3-col grid on desktop, stacked on mobile */
+.footer-grid {
+  grid-template-columns: 1.8fr 1fr 1fr 0.8fr;
+}
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 500px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+.footer-panel h2 {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(147,197,253,0.7);
+  margin: 0 0 12px;
+}
+.footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.footer-links li a {
+  color: rgba(209,213,219,0.85);
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.footer-links li a:hover { color: #93C5FD; }
