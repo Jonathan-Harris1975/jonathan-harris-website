@@ -84,7 +84,7 @@
           .jh-header-spacer{display:block;height:54px;}
           @media (max-width:768px){
             .jh-topnav{display:none !important;}
-            .jh-hamburger{display:block;}
+            .jh-hamburger{display:none;}.jh-header.is-visible .jh-hamburger,.jh-header--injected.is-visible .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
             .jh-header__inner{padding:10px 14px;}
             .jh-header-spacer{height:52px;}
           }
@@ -178,6 +178,7 @@
                 if (firstLink) setTimeout(function(){ firstLink.focus(); }, 50);
               } else {
                 eMobileNav.style.display='none';
+                eMobileNav.setAttribute('hidden','');
                 newBtn.focus();
               }
               newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -195,7 +196,7 @@
                 if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
                 else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
               }
-              if(e.key==='Escape'){ eMobileNav.classList.remove('is-open'); eMobileNav.style.display='none'; newBtn.setAttribute('aria-expanded','false'); newBtn.focus(); }
+              if(e.key==='Escape'){ eMobileNav.classList.remove('is-open'); eMobileNav.style.display='none'; eMobileNav.setAttribute('hidden',''); newBtn.setAttribute('aria-expanded','false'); newBtn.focus(); }
             });
             markActiveNav(eMobileNav);
           }
@@ -212,6 +213,17 @@
                   existingHeader.classList.add('is-visible');
                 } else {
                   existingHeader.classList.remove('is-visible');
+                  if (eMobileNav) {
+                    eMobileNav.classList.remove('is-open');
+                    eMobileNav.style.display='none';
+                    eMobileNav.setAttribute('hidden','');
+                    if (newBtn) {
+                      newBtn.setAttribute('aria-expanded','false');
+                      newBtn.setAttribute('aria-label','Open navigation menu');
+                      var existingLbl = newBtn.querySelector('.jh-hamburger__label');
+                      if (existingLbl) existingLbl.textContent = 'Menu';
+                    }
+                  }
                 }
               });
             }, { threshold: 0, rootMargin: '-10px 0px 0px 0px' });
@@ -325,7 +337,8 @@
         if (btn && mobileNav) {
           btn.addEventListener('click', function(){
             var open = mobileNav.classList.toggle('is-open');
-            mobileNav.removeAttribute('hidden');
+            if (open) mobileNav.removeAttribute('hidden');
+            else mobileNav.setAttribute('hidden','');
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
             btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
             var lbl = btn.querySelector('.jh-hamburger__label');
