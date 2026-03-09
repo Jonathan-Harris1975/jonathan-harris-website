@@ -2530,3 +2530,44 @@ footer{
   color:#F8FAFC;
   font-weight:800;
 }
+
+
+/* ===== Page-specific spacing fixes from spreadsheet notes ===== */
+body.page-bio .hero{
+  padding-top: 108px;
+}
+body.page-bio .about-banner{
+  padding-top: 20px;
+}
+body.page-newsletter .hero--newsletter,
+body.page-topics .hero,
+body.page-ebooks .hero{
+  padding-top: 108px;
+}
+body.page-newsletter #main .card:first-child,
+body.page-topics #main,
+body.page-ebooks #main{
+  margin-top: 14px;
+}
+body.page-ebooks .pager{
+  margin-top: 28px;
+}
+@media (max-width: 768px){
+  body.page-bio .hero,
+  body.page-newsletter .hero--newsletter,
+  body.page-topics .hero,
+  body.page-ebooks .hero{
+    padding-top: 126px;
+  }
+  body.page-newsletter #main .card:first-child,
+  body.page-topics #main,
+  body.page-ebooks #main{
+    margin-top: 24px;
+  }
+  body.page-bio .about-banner{
+    padding-top: 28px;
+  }
+  body.page-ebooks .pager{
+    margin-top: 34px;
+  }
+}
