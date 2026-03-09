@@ -2541,12 +2541,14 @@ body.page-bio .about-banner{
 }
 body.page-newsletter .hero--newsletter,
 body.page-topics .hero,
-body.page-ebooks .hero{
+body.page-ebooks .hero,
+body.page-compare .hero{
   padding-top: 108px;
 }
 body.page-newsletter #main .card:first-child,
 body.page-topics #main,
-body.page-ebooks #main{
+body.page-ebooks #main,
+body.page-compare #main{
   margin-top: 14px;
 }
 body.page-ebooks .pager{
@@ -2556,12 +2558,14 @@ body.page-ebooks .pager{
   body.page-bio .hero,
   body.page-newsletter .hero--newsletter,
   body.page-topics .hero,
-  body.page-ebooks .hero{
+  body.page-ebooks .hero,
+  body.page-compare .hero{
     padding-top: 126px;
   }
   body.page-newsletter #main .card:first-child,
   body.page-topics #main,
-  body.page-ebooks #main{
+  body.page-ebooks #main,
+  body.page-compare #main{
     margin-top: 24px;
   }
   body.page-bio .about-banner{
