@@ -106,7 +106,7 @@
 <!-- Primary navigation -->
 <style>
   :focus-visible{outline:2px solid #4F46E5;outline-offset:3px;border-radius:4px;}
-  .jh-header{background:#0D1420;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;z-index:1000;}
+  .jh-header{background:#0D1420;border-bottom:1px solid rgba(255,255,255,0.08);position:fixed;top:0;left:0;right:0;z-index:2500;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .28s ease,transform .28s ease;}.jh-header.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
   .jh-header__inner{max-width:1200px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;gap:24px;}
   .jh-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0;}
   .jh-header__logo{width:32px;height:32px;border-radius:8px;display:block;}
