@@ -518,7 +518,11 @@
   
   function injectBackToTop(){
     try{
-      if (document.querySelector('.jh-back-to-top')) return;
+      if (
+        document.querySelector('.jh-back-to-top') ||
+        document.querySelector('.btt-btn') ||
+        document.querySelector('[aria-label="Back to top"]')
+      ) return;
       var btn = document.createElement('button');
       btn.className = 'jh-back-to-top';
       btn.setAttribute('aria-label', 'Back to top');
