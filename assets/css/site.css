@@ -127,7 +127,7 @@ body.home .featured-copy{ text-align:center; }
 
 .card{
   background:#fff;
-  border:1px solid rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.12);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:16px;
@@ -141,7 +141,7 @@ body.home .featured-copy{ text-align:center; }
   aspect-ratio: 2/3;
   object-fit:contain;
   border-radius:14px;
-  border:1px solid rgba(0,0,0,0.06);
+  border:1px solid rgba(0,0,0,0.12);
   background:var(--bg-dark);
   max-height: 380px;
 }
@@ -601,7 +601,7 @@ details.facts li{margin:6px 0; color:var(--text)}
   color:#E5E7EB;
   text-decoration:none;
   font-weight:600;
-  font-size:14px;
+  font-size:13px;
   line-height:1.1;
   padding:6px 6px;
   border-radius:10px;
@@ -1543,7 +1543,7 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 }
 @media (max-width: 920px){
   .jh-header__cta{ display:none; }
-  .jh-topnav a{ padding:9px 10px !important; font-size:0.92rem !important; }
+  .jh-topnav a{ padding:9px 10px !important; font-size:0.88rem !important; }
 }
 @media (max-width: 640px){
   .jh-header__inner{ min-height:64px; }
@@ -1938,7 +1938,7 @@ body.home .wrap .card{text-align:center;}
   font-family:'Inter',Arial,sans-serif;user-select:none;
 }
 .lp-author__monogram-note{
-  font-size:0.78rem;color:rgba(147,197,253,0.55);margin-top:8px;
+  font-size:0.875rem;color:rgba(147,197,253,0.55);margin-top:8px;
   text-align:center;font-style:italic;
 }
 
@@ -1991,13 +1991,13 @@ body.home .wrap .card{text-align:center;}
   margin-bottom:8px;display:block;
 }
 .lp-testimonial-source{
-  display:block;font-size:0.8rem;color:#6B7280;margin-top:4px;
+  display:block;font-size:0.875rem;color:#6B7280;margin-top:4px;
   font-style:normal;
 }
 
 /* F11 — Ebook topic tags on homepage cards */
 .lp-ebook-tag{
-  display:inline-block;font-size:0.75rem;font-weight:600;
+  display:inline-block;font-size:0.875rem;font-weight:600;
   padding:3px 8px;border-radius:999px;
   background:rgba(79,70,229,0.1);color:#4F46E5;
   border:1px solid rgba(79,70,229,0.18);margin-top:6px;
@@ -2006,7 +2006,7 @@ body.home .wrap .card{text-align:center;}
 
 /* F4 — Pricing chip */
 .lp-ebook-price{
-  display:inline-block;font-size:0.75rem;font-weight:700;
+  display:inline-block;font-size:0.875rem;font-weight:700;
   padding:3px 8px;border-radius:999px;
   background:rgba(5,150,105,0.1);color:#059669;
   border:1px solid rgba(5,150,105,0.2);margin-top:4px;
@@ -2217,3 +2217,9 @@ section.card > p,
   justify-content: center;
   padding: 8px 10px;
 }
+
+
+/* ===== UX Evaluation Fixes — March 2026 (Batch 2) ===== */
+/* Fix #12: All chip/tag/badge font sizes raised to 0.875rem minimum */
+/* Fix #13: Card border opacity raised from 6% to 12% for clearer edge definition */
+/* Fix #14: Compare table scroll cue — see compare/index.html */
