@@ -2575,3 +2575,16 @@ body.page-ebooks .pager{
     margin-top: 34px;
   }
 }
+
+
+/* REC 12 · Mobile catalogue pagination breathing room */
+body.page-ebooks .pager{
+  margin-top: 40px !important;
+  padding-top: 10px;
+}
+@media (max-width: 768px){
+  body.page-ebooks .pager{
+    margin-top: 52px !important;
+    padding-top: 14px;
+  }
+}
