@@ -130,10 +130,25 @@
     // Prefer the existing hero/header section so nav feels native.
     return (
       document.querySelector('section[aria-label="Page Header"]') ||
+      document.querySelector('section[aria-label*="header" i]') ||
+      document.querySelector('header.hero') ||
+      document.querySelector('.lp-hero') ||
+      document.querySelector('.hero') ||
+      document.querySelector('.dark-section') ||
+      document.querySelector('.about-banner') ||
+      null
+    );
+  }
+
+  function findHeaderRevealAnchor(){
+    return (
+      document.querySelector('.lp-hero') ||
       document.querySelector('header.hero') ||
       document.querySelector('.hero') ||
-      document.querySelector('.lp-hero') ||
       document.querySelector('.dark-section') ||
+      document.querySelector('.about-banner') ||
+      document.querySelector('section[aria-label="Page Header"]') ||
+      document.querySelector('section[aria-label*="header" i]') ||
       null
     );
   }
@@ -261,7 +276,7 @@
         // remove the flag so the hamburger/header do not appear too early on mobile.
         try {
           existingHeader.classList.add('jh-header--injected');
-          var heroEl = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
+          var heroEl = findHeaderRevealAnchor();
           if (heroEl && document.body && document.body.classList.contains('jh-no-hero-page')) {
             document.body.classList.remove('jh-no-hero-page');
           }
@@ -358,7 +373,7 @@
       markActiveNav(header);
 
       // Scroll-based visibility for injected header
-      var heroElInj = document.querySelector('.lp-hero, .hero, .dark-section, [aria-label="Page Header"]');
+      var heroElInj = findHeaderRevealAnchor();
 
       // Wire up hamburger button if present
       try {
@@ -375,8 +390,13 @@
             if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
           });
           markActiveNav(mobileNav);
+          syncHeaderVisibility(header, heroElInj, mobileNav, btn);
+        } else {
+          syncHeaderVisibility(header, heroElInj, null, null);
         }
-      } catch(_) {}
+      } catch(_) {
+        syncHeaderVisibility(header, heroElInj, null, null);
+      }
 
     }catch(_){}
   }
