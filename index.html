@@ -600,11 +600,15 @@
     <a href="/newsletter/">Newsletter</a>
     <a href="/blog/">Blog</a>
     <a href="/bio/">About</a>
-    <span class="jh-mobile-nav__group-label">Resources</span>
-    <a href="/glossary/">Glossary</a>
-    <a href="/topics/">Topics</a>
-    <a href="/compare/">Comparisons</a>
-    <a href="/contact/">Contact</a>
+    <div class="jh-mobile-nav__group">
+      <span class="jh-mobile-nav__group-label">Resources</span>
+      <div class="jh-mobile-nav__group-links">
+        <a href="/glossary/">Glossary</a>
+        <a href="/topics/">Topics</a>
+        <a href="/compare/">Comparisons</a>
+        <a href="/contact/">Contact</a>
+      </div>
+    </div>
 
   </nav>
 </header>
@@ -646,9 +650,29 @@
     <div class="lp-inner">
       <p class="lp-section-label">About the author</p>
       <div class="lp-author">
-        <!-- F1: Replace src below with a real author headshot (160×160 min 320×320 srcset) -->
+        <!-- Author avatar — illustrated professional portrait -->
         <span class="lp-author__img lp-author__monogram" role="img" aria-label="Jonathan Harris, AI author and podcast host">
-          <span aria-hidden="true">JH</span>
+          <svg aria-hidden="true" focusable="false" width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- shoulders / torso -->
+            <ellipse cx="45" cy="82" rx="30" ry="16" fill="rgba(79,70,229,0.55)"/>
+            <!-- neck -->
+            <rect x="39" y="58" width="12" height="12" rx="4" fill="rgba(147,197,253,0.6)"/>
+            <!-- head -->
+            <ellipse cx="45" cy="46" rx="17" ry="19" fill="rgba(147,197,253,0.72)"/>
+            <!-- hair -->
+            <ellipse cx="45" cy="29" rx="17" ry="9" fill="rgba(30,45,69,0.95)"/>
+            <ellipse cx="29" cy="44" rx="4" ry="10" fill="rgba(30,45,69,0.90)"/>
+            <ellipse cx="61" cy="44" rx="4" ry="10" fill="rgba(30,45,69,0.90)"/>
+            <!-- eyes -->
+            <ellipse cx="38" cy="45" rx="3" ry="3.2" fill="#0D1420"/>
+            <ellipse cx="52" cy="45" rx="3" ry="3.2" fill="#0D1420"/>
+            <circle cx="39" cy="44" r="1" fill="rgba(255,255,255,0.5)"/>
+            <circle cx="53" cy="44" r="1" fill="rgba(255,255,255,0.5)"/>
+            <!-- subtle smile -->
+            <path d="M39 53 Q45 57 51 53" stroke="rgba(13,20,32,0.6)" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            <!-- collar / shirt detail -->
+            <path d="M33 70 L42 60 L45 64 L48 60 L57 70" fill="rgba(79,70,229,0.7)"/>
+          </svg>
         </span>
         <div class="lp-author__text">
           <h2 id="about-heading">Jonathan Harris</h2>
@@ -750,6 +774,22 @@
             <span class="lp-browse-btn">View all 36 titles →</span>
           </div>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEWSLETTER MID-PAGE PROMPT ── -->
+  <section class="lp-section lp-section--alt" aria-labelledby="mid-newsletter-heading" style="padding:36px 0;">
+    <div class="lp-inner">
+      <div class="lp-newsletter-mid">
+        <div class="lp-newsletter-mid__copy">
+          <h3 id="mid-newsletter-heading">Get the AI Edge — free, every weekday</h3>
+          <p>What matters in AI today, filtered to under two minutes. No hype. No waffle.</p>
+        </div>
+        <div class="lp-newsletter-mid__actions">
+          <a class="btn-primary" href="/newsletter/" style="white-space:nowrap;">Subscribe free →</a>
+          <a class="btn-secondary" href="/newsletter/" style="white-space:nowrap;font-size:0.9rem;opacity:0.8;">No spam · Unsubscribe anytime</a>
+        </div>
       </div>
     </div>
   </section>
