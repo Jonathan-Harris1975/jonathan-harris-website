@@ -27,10 +27,10 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /ebooks/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead   /ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/  301
 
 # 7) NEW BRANDED URL: serve /book content under /ebooks (internal rewrite, no redirect)
-# NOTE: explicit rule MUST come before the wildcard — Cloudflare * matches empty string,
-# so /ebooks/* would otherwise rewrite /ebooks/ → /book/ (no index.html) = 404
-/ebooks/   /ebooks/index.html  200
-/ebooks/*  /book/:splat  200
+# FIX: use named placeholders (:title) instead of bare * so that /ebooks/ (empty splat)
+# no longer matches — Cloudflare then serves ebooks/index.html as a static file instead.
+/ebooks/:title   /book/:title   200
+/ebooks/:title/* /book/:title/:splat 200
 
 # 8) CANONICAL: old /book URLs permanently redirect to /ebooks
 /book/*  /ebooks/:splat  301
