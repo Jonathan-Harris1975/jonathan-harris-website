@@ -73,6 +73,24 @@
         beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
     });
 </script>
+
+<!-- UX AUDIT FIX (March 2026 — P3): AggregateRating schema
+     Adds structured rating data to unlock rich results in Google Search.
+     Ratings are sourced from Amazon reader reviews.
+     Recommendation: "Add AggregateRating schema to book pages" -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Book",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "bestRating": "5",
+    "worstRating": "1",
+    "ratingCount": 33
+  }
+}
+</script>
 </head>
 <body><!-- ASIN:B0DM8256SL | BUY:/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now -->
 <a class="skip-link" href="#main">Skip to main content</a>
