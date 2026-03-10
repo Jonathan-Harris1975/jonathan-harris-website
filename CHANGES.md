@@ -1,105 +1,82 @@
-# Audit Fix Deployment — jonathan-harris.online
-**Date:** 10 March 2026  
-**Source:** SEO & AI Discoverability Audit 2026  
-**Files changed:** 42 HTML files
+# jonathan-harris.online — Patch Release Notes
+**Date:** March 2026  
+**Source:** SEO & AI Discoverability Audit 2026 + Implementation Roadmap
 
 ---
 
-## Changes Applied
+## Phase 1 — Immediate Fixes
 
-### [FIX-01] Duplicate Metricool script removed — 36 book pages
-**Priority:** HIGH | **Effort:** ~30 min  
-**Files:** `book/*/index.html` (all 36)
+### [F1.1] `blog/_templates/post.html` — Noindex blog template
+- Changed `robots` meta from `index,follow` → `noindex,nofollow`  
+- Prevents Googlebot from indexing a page containing unfilled `{{TITLE}}` placeholder tokens, protecting crawl budget and quality signals.
 
-Each book page contained two `loadScript()` function calls injecting the Metricool tracker. The first (early in `<head>`, missing the `console.error` handler) was removed. The second instance — positioned after CookieYes and with a proper `onerror` handler — is retained.
+### [F1.2] `catalogue/*/index.html` (7 files) — Fix ItemList schema URLs
+- Updated all `ItemList` JSON-LD schema `url` fields from `/book/[slug]/` → `/ebooks/[slug]/`  
+- The `/book/` path is an internal rewrite; `/ebooks/` is the public canonical URL. Fixes link equity fragmentation for all 7 catalogue index pages.
 
----
+### [F2.4] `catalogue/*/index.html` (6 files) — Fix ai:keywords
+- Replaced placeholder `ai:keywords` values (`x, without, podcast, newsletter, gen, hype, ebooks, ai, automation`) with real, category-specific topical phrases on: artificial-intelligence, creativity, education, ethics, law, transportation.
 
-### [FIX-02] Canonical URL corrected to /ebooks/ path — 36 book pages
-**Priority:** HIGH | **Effort:** ~1 hr  
-**Files:** `book/*/index.html` (all 36)
+### [F6.1] `catalogue/*/index.html`, `topics/index.html`, `glossary/index.html` (9 files) — Standardise Person schema jobTitle
+- Changed `"jobTitle": "AI Technology Author"` → `"jobTitle": ["AI Author", "Podcast Host"]` across all catalogue, topics, and glossary pages  
+- Now consistent with bio and book pages. Removes conflicting entity attributes that prevent stable Knowledge Graph node creation.
 
-`<link rel="canonical">` was pointing to the internal `/book/[slug]/` URL instead of the public-facing `/ebooks/[slug]/` URL, splitting link equity. All canonical tags now point to the correct `/ebooks/` path.
-
----
-
-### [FIX-03] og:url corrected to /ebooks/ path — 36 book pages
-**Priority:** HIGH  
-**Files:** `book/*/index.html` (all 36)
-
-`og:url` Open Graph tags were also pointing to `/book/[slug]/`. Updated to match the canonical `/ebooks/[slug]/` path for consistency.
+### [F6.3] `book/*/index.html` (36 files) — Remove placeholder AggregateRating schema
+- Removed the `AggregateRating` JSON-LD block added in the prior audit pass  
+- The `ratingCount: 22–24` placeholder does not match live Amazon review data per book. Inaccurate schema risks a Google rich-result penalty. Schema to be re-added with accurate per-book data.
 
 ---
 
-### [FIX-04] Broken ./detail.html button removed — 36 book pages
-**Priority:** HIGH | **Effort:** ~1 hr  
-**Files:** `book/*/index.html` (all 36)
+## Phase 2 — Sprint Fixes (actionable without external data)
 
-Every book page contained a "Full Details" secondary CTA button linking to `./detail.html`. These files were absent from the repository, creating 36 dead links. The button has been removed. (Note: creating rich `detail.html` pages is a MEDIUM-priority content opportunity for a future sprint.)
+### [F4.3] `book/*/index.html` (34 files) — Convert topic chips to navigational links
+- Changed `<span class="topic-chip">` → `<a class="topic-chip" href="/catalogue/[category]/">` for all topic chips with a matching catalogue page  
+- Topic→catalogue URL mapping applied:
+  - Transportation → `/catalogue/transportation/`
+  - Artificial Intelligence, AI Trends, AI Governance, General AI, Automation, Robotics, Energy, Retail, AI in Sports → `/catalogue/artificial-intelligence/`
+  - Creativity, AI & Creativity → `/catalogue/creativity/`
+  - Education → `/catalogue/education/`
+  - Ethics → `/catalogue/ethics/`
+  - Healthcare → `/catalogue/healthcare/`
+  - Law → `/catalogue/law/`
+- Improves internal navigation, pages-per-session, and topical cluster crawl graph.
 
----
-
-### [FIX-05] Person schema @id standardised site-wide
-**Priority:** HIGH | **Effort:** ~1 hr  
-**Files:** `bio/index.html`, `blog/index.html`, `ebooks/index.html`, `podcast/index.html`, `privacy-policy/index.html`
-
-Five pages used `https://jonathan-harris.online/#person-jonathan-harris` as the JSON-LD `@id` for the Person entity, while the homepage and book pages correctly used `https://jonathan-harris.online/#person`. All instances normalised to the shorter canonical form so Google's Knowledge Graph and LLM systems can merge signals into a single entity node.
-
----
-
-### [FIX-06] Twitter/X added to Person sameAs array
-**Priority:** MEDIUM | **Effort:** ~30 min  
-**Files:** `bio/index.html`
-
-`https://twitter.com/jonathan_harris_01` added to the `sameAs` array in the Person JSON-LD schema on the bio page. Twitter/X is a primary signal LLMs use for author authority verification.
+### [Pg.7] `index.html` — Add WebSite + SearchAction schema
+- Added `WebSite` JSON-LD block with `SearchAction` `potentialAction` pointing to `/ebooks/?q={search_term_string}`  
+- Enables Google Sitelinks Search Box eligibility. OpenSearch XML was already in place; this schema was the missing piece.
 
 ---
 
-### [FIX-07] Bio page ai:keywords replaced with meaningful phrases
-**Priority:** HIGH | **Effort:** ~15 min  
-**Files:** `bio/index.html`
+## Files Modified (57 total)
 
-Previous value: `"x, about, podcast, newsletter, gen, ebooks, harris, ai, jonathan, automation"` — contained meaningless tokens.  
-New value: `"Jonathan Harris AI author, practical artificial intelligence, AI books non-technical, Turing's Torch podcast, AI plain English"`
-
----
-
-### [FIX-08] ai:summary meta tag added to bio page
-**Priority:** LOW | **Effort:** ~15 min  
-**Files:** `bio/index.html`
-
-The bio page lacked an `ai:summary` meta tag (present on other pages). Added a concise, citable description for AI crawlers and LLM ingestion pipelines.
-
----
-
-### [FIX-09] Blog page ai:keywords replaced with meaningful phrases
-**Priority:** HIGH | **Effort:** ~15 min  
-**Files:** `blog/index.html`
-
-Previous value: `"x, without, podcast, newsletter, gen, hype, ebooks, ai, automation"` — contained meaningless tokens including the literal character `x`.  
-New value: `"AI analysis, weekly AI insights, artificial intelligence commentary, AI trends, practical AI notes"`
+| File | Change |
+|------|--------|
+| `blog/_templates/post.html` | F1.1 |
+| `catalogue/artificial-intelligence/index.html` | F1.2, F6.1, F2.4 |
+| `catalogue/creativity/index.html` | F1.2, F6.1, F2.4 |
+| `catalogue/education/index.html` | F1.2, F6.1, F2.4 |
+| `catalogue/ethics/index.html` | F1.2, F6.1, F2.4 |
+| `catalogue/healthcare/index.html` | F1.2, F6.1 |
+| `catalogue/law/index.html` | F1.2, F6.1, F2.4 |
+| `catalogue/transportation/index.html` | F1.2, F6.1, F2.4 |
+| `topics/index.html` | F6.1 |
+| `glossary/index.html` | F6.1 |
+| `index.html` | Pg.7 |
+| `book/*/index.html` (36 files) | F6.3, F4.3 |
 
 ---
 
-### [FIX-10] Topics page ai:keywords replaced with meaningful phrases
-**Priority:** HIGH | **Effort:** ~15 min  
-**Files:** `topics/index.html`
+## Remaining Roadmap Items (Not In This Patch)
 
-Previous value: `"topic, x, podcast, newsletter, gen, ebooks, ai, browse, automation"` — contained meaningless tokens.  
-New value: `"AI topics index, AI by industry, artificial intelligence categories, AI ebook catalogue by subject"`
-
----
-
-## Remaining High-Priority Items (Not in this deployment)
-
-| Task | Why deferred |
-|------|-------------|
-| Activate blog publishing pipeline | Requires content creation, not a code-only fix |
-| Create individual podcast episode pages | Ongoing content work |
-| Write unique "What you'll learn" bullets for top-10 book pages | Requires per-book content research |
-| Add Amazon Author Central / Goodreads to sameAs | External account setup required |
-| Create 3 curated list blog posts | Content creation task |
-
----
-
-*Fix script: `fix_site.py` | Source audit: `JonathanHarris_SEO_AI_Audit_2026.pdf`*
+| Ref | Task | Reason deferred |
+|-----|------|-----------------|
+| F2.1 | Activate blog pipeline | Requires running `generate-blog-from-rss.mjs` in deployment env |
+| F2.2 | Unique 'What you'll learn' for top 10 books | Requires editorial content per book |
+| F4.1 | Podcast episode pages | Requires RSS episode data & template build |
+| F6.2 | Add ISBNs to Book schema | Requires ISBN data per title |
+| F4.2 | Newsletter preview content | Newsletter page already has sample, testimonials, and frequency; verified up to date |
+| F5.2 | Extend llm-index.json with podcast episodes | Requires episode data pipeline |
+| F6.4 | External backlinks | Off-site action |
+| F6.5 | Amazon Author Central | Off-site action (marked done in roadmap) |
+| F2.3 | Glossary cross-links from book pages | Requires editorial pass per book |
+| F3.1 | Metricool deferred load | Low priority performance tweak |
