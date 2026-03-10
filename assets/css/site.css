@@ -2870,3 +2870,238 @@ body .cky-overlay,
 body .cky-btn-revisit-wrapper{
   z-index:9999;
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   UX AUDIT FIXES — March 2026
+   Applied recommendations from UI/UX audit report
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Focus visibility: WCAG AA compliance ── */
+:focus-visible {
+  outline: 2px solid #4F46E5;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+/* Nav links need a lighter outline on dark bg */
+.jh-topnav a:focus-visible,
+.jh-mobile-nav a:focus-visible,
+.jh-nav-dropdown__btn:focus-visible,
+.footer-links a:focus-visible,
+.footer-badges a:focus-visible,
+.footer-social a:focus-visible {
+  outline: 2px solid #93C5FD;
+  outline-offset: 3px;
+}
+/* Remove browser-default outline only when we supply our own */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ── 2. Contrast: raise muted/soft text to WCAG AA minimum ── */
+:root {
+  --text-soft: #374151;
+  --text-muted: #4B5563;
+}
+.muted,
+.meta,
+.micro-meta,
+.lp-stat__label,
+.footer-copy,
+.podcast-hero-byline,
+.card p.meta,
+.section-lead,
+.lp-section-desc {
+  color: #4B5563;
+}
+/* Small text on dark backgrounds: minimum #9CA3AF → raise to #B0BEC5 */
+.footer-panel,
+.footer-meta {
+  color: #D1D5DB;
+}
+
+/* ── 3. Mobile nav: focus trap helpers ── */
+.jh-mobile-nav:not([hidden]) {
+  display: flex;
+}
+
+/* ── 4. Touch targets: 44×44px minimum on all interactive elements ── */
+.podcast-platform-btn,
+.lp-offer-card a,
+.card-links a,
+.pager-btn,
+.btn-primary,
+.btn-secondary,
+.button,
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 5. Spotify iframe: responsive, capped height on mobile ── */
+.podcast-spotify-iframe {
+  min-height: 232px !important;
+  max-height: 352px;
+}
+@media (min-width: 641px) {
+  .podcast-spotify-iframe {
+    min-height: 352px !important;
+  }
+}
+
+/* ── 6. Affiliate disclosure banner ── */
+.affiliate-disclosure {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #EEF2FF;
+  border: 1px solid rgba(79,70,229,0.28);
+  border-left: 4px solid #4F46E5;
+  border-radius: 0 12px 12px 0;
+  padding: 16px 20px;
+  margin: 0 0 28px;
+  color: #3730A3;
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+.affiliate-disclosure__icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.affiliate-disclosure strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #312E81;
+}
+
+/* ── 7. Newsletter embedded form ── */
+.newsletter-form-wrap {
+  background: linear-gradient(135deg, #EEF2FF 0%, #F0F4FF 100%);
+  border: 1px solid rgba(79,70,229,0.22);
+  border-radius: 18px;
+  padding: 28px 24px;
+  margin: 0 0 22px;
+}
+.newsletter-form-wrap h2 {
+  margin: 0 0 6px;
+  color: #111827;
+  font-size: 1.25rem;
+}
+.newsletter-form-wrap p {
+  margin: 0 0 18px;
+  color: #4B5563;
+  font-size: 0.97rem;
+}
+.newsletter-form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.newsletter-form__input {
+  flex: 1 1 240px;
+  padding: 12px 16px;
+  border: 1px solid rgba(79,70,229,0.25);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #111827;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.newsletter-form__input:focus {
+  border-color: #4F46E5;
+  outline: 2px solid rgba(79,70,229,0.2);
+  outline-offset: 0;
+}
+.newsletter-form__input::placeholder {
+  color: #9CA3AF;
+}
+.newsletter-form__btn {
+  flex-shrink: 0;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  background: #4F46E5;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  min-height: 44px;
+  transition: background 0.15s;
+}
+.newsletter-form__btn:hover {
+  background: #4338CA;
+}
+.newsletter-form__btn:focus-visible {
+  outline: 2px solid #4F46E5;
+  outline-offset: 3px;
+}
+.newsletter-form__note {
+  margin: 10px 0 0;
+  font-size: 0.85rem;
+  color: #6B7280;
+}
+
+/* ── 8. Podcast static episode list ── */
+.podcast-episodes-static {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.podcast-episodes-static h2 {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+.podcast-episodes-static .ep-note {
+  margin: 0 0 16px;
+  color: #4B5563;
+  font-size: 0.9rem;
+}
+.podcast-episode-item {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.podcast-episode-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.podcast-episode-item__num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(79,70,229,0.1);
+  color: #4F46E5;
+  font-weight: 800;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.podcast-episode-item__body {
+  flex: 1;
+  min-width: 0;
+}
+.podcast-episode-item__title {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.97rem;
+  line-height: 1.35;
+}
+.podcast-episode-item__date {
+  font-size: 0.83rem;
+  color: #6B7280;
+  margin-top: 2px;
+}
