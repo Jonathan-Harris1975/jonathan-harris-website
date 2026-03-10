@@ -682,6 +682,49 @@
     }catch(_){}
   }
 
+
+  /**
+   * UX AUDIT FIX (March 2026 — Mobile UX #3):
+   * Close the hamburger menu when the user taps outside the nav panel.
+   * Creates a semi-transparent overlay behind the mobile nav; tapping it
+   * dismisses the menu without requiring the user to find the close button.
+   */
+  function injectMobileNavOverlay() {
+    try {
+      if (document.getElementById('jh-nav-overlay')) return;
+      var overlay = document.createElement('div');
+      overlay.id = 'jh-nav-overlay';
+      overlay.className = 'jh-nav-overlay';
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function() {
+        // Close all open mobile navs
+        document.querySelectorAll('.jh-mobile-nav.is-open').forEach(function(nav) {
+          nav.classList.remove('is-open');
+          nav.style.display = 'none';
+          nav.setAttribute('hidden', '');
+        });
+        // Reset hamburger buttons
+        document.querySelectorAll('.jh-hamburger[aria-expanded="true"]').forEach(function(btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'Open navigation menu');
+          var lbl = btn.querySelector('.jh-hamburger__label');
+          if (lbl) lbl.textContent = 'Menu';
+        });
+        overlay.classList.remove('is-active');
+      });
+
+      // Listen for mobile nav state changes to show/hide overlay
+      // We use a MutationObserver on the body to watch for class changes
+      var mobileNavObserver = new MutationObserver(function() {
+        var isOpen = !!document.querySelector('.jh-mobile-nav.is-open');
+        overlay.classList.toggle('is-active', isOpen);
+      });
+      mobileNavObserver.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    } catch (_) {}
+  }
+
 function init(){
     ensureStyles();
     ensureSkipLink();
@@ -690,6 +733,7 @@ function init(){
     wireDropdowns();
     injectFooter();
     injectBackToTop();
+    injectMobileNavOverlay();
 
     if (!is404Page()){
       injectBreadcrumbs();
