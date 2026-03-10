@@ -1464,7 +1464,7 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
 .hero > *, .lp-hero > *, .dark-section > *, .bio-page .hero > *{ position:relative; z-index:1; }
 
 .jh-header{
-  /* Start hidden & fixed so the header never flashes before JS reveals it */
+  /* Visible by default — JS adds .jh-header--hero-mode when page has a hero section */
   position: fixed;
   top: 0;
   left: 0;
@@ -1474,13 +1474,18 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   backdrop-filter: saturate(1.2) blur(12px);
   -webkit-backdrop-filter: saturate(1.2) blur(12px);
   border-bottom: 1px solid rgba(255,255,255,0.10);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-6px);
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
   transition: opacity 0.28s ease, transform 0.28s ease;
   box-shadow: 0 12px 30px rgba(0,0,0,0.28);
 }
-/* JS adds this class when the hero scrolls out of view */
+/* JS adds .jh-header--hero-mode when page has a hero; adds .is-visible when scrolled past it */
+.jh-header--hero-mode:not(.is-visible){
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+}
 .jh-header.is-visible{
   opacity: 1;
   pointer-events: auto;
@@ -1493,7 +1498,8 @@ body .jh-header--injected{
   right: 0 !important;
   z-index: 2500 !important;
 }
-body .jh-header--injected:not(.is-visible){
+/* Only hide injected header when in hero-mode and not yet scrolled */
+body .jh-header--injected.jh-header--hero-mode:not(.is-visible){
   opacity: 0 !important;
   pointer-events: none !important;
   transform: translateY(-6px) !important;
@@ -1563,7 +1569,7 @@ body .jh-header--injected.is-visible{
 }
 @media (max-width: 920px){
   .jh-header__cta{ display:none; }
-  .jh-topnav a{ padding:9px 10px !important; font-size:0.88rem !important; }
+  .jh-topnav a{ padding:9px 10px !important; font-size: 0.875rem !important; }
 }
 @media (max-width: 640px){
   .jh-header__inner{ min-height:64px; }
@@ -2438,6 +2444,7 @@ body.page-bio .hero { background: linear-gradient(160deg,#0D1420 0%,#1a170a 100%
 }
 
 /* REC 10 · Navigation: only pages explicitly marked as having no hero keep the sticky header visible immediately */
+/* jh-no-hero-page: legacy class; hero-mode CSS now handles this automatically */
 body.jh-no-hero-page .jh-header--injected {
   opacity: 1 !important;
   transform: translateY(0) !important;
@@ -2839,17 +2846,11 @@ body.page-ebooks .pager{
   z-index:1;
 }
 
-/* Mobile nav: never appear until the sticky header has actually been revealed */
+/* Mobile nav: only hide hamburger when in hero-mode and not yet scrolled (no-JS = always visible) */
 @media (max-width: 768px){
-  .jh-header .jh-hamburger,
-  .jh-header .jh-mobile-nav{
+  .jh-header--hero-mode:not(.is-visible) .jh-hamburger,
+  .jh-header--hero-mode:not(.is-visible) .jh-mobile-nav{
     visibility:hidden;
-  }
-  .jh-header.is-visible .jh-hamburger,
-  .jh-header--injected.is-visible .jh-hamburger,
-  .jh-header.is-visible .jh-mobile-nav.is-open,
-  .jh-header--injected.is-visible .jh-mobile-nav.is-open{
-    visibility:visible;
   }
 }
 
