@@ -392,12 +392,31 @@
         if (btn && mobileNav) {
           btn.addEventListener('click', function(){
             var open = mobileNav.classList.toggle('is-open');
-            if (open) mobileNav.removeAttribute('hidden');
-            else mobileNav.setAttribute('hidden','');
+            if (open) {
+              mobileNav.removeAttribute('hidden');
+              // Focus trap: move focus to first focusable link in the nav
+              var firstLink = mobileNav.querySelector('a');
+              if (firstLink) { setTimeout(function(){ firstLink.focus(); }, 30); }
+            } else {
+              mobileNav.setAttribute('hidden','');
+              // Return focus to hamburger on close
+              btn.focus();
+            }
             btn.setAttribute('aria-expanded', open ? 'true' : 'false');
             btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
             var lbl = btn.querySelector('.jh-hamburger__label');
             if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+          });
+          // Escape key closes mobile nav from anywhere within it
+          mobileNav.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') {
+              mobileNav.classList.remove('is-open');
+              mobileNav.setAttribute('hidden','');
+              btn.setAttribute('aria-expanded','false');
+              var lbl = btn.querySelector('.jh-hamburger__label');
+              if (lbl) lbl.textContent = 'Menu';
+              btn.focus();
+            }
           });
           markActiveNav(mobileNav);
           syncHeaderVisibility(header, heroElInj, mobileNav, btn);
