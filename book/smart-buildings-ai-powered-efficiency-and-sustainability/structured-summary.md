@@ -30,4 +30,4 @@ AI decisions in filmmaking have real consequences: intellectual property rights,
 - Length: 336 pages
 
 ## Buy
-- https://mybook.to/EcO2DI
+- https://mybook.to/QEcdy
