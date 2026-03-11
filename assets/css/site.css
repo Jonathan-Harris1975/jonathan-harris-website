@@ -3420,3 +3420,109 @@ body.page-glossary .hero {
 .button, .button.secondary {
   transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
+
+
+/* ===== March 2026 mobile UX patch ===== */
+
+/* Global mobile image resilience for cards and content blocks */
+.card img,
+.book-card img,
+.lp-ebook-card__cover,
+.lp-offer-card__img{
+  max-width:100%;
+}
+
+/* Keep fixed header tighter on phones and avoid oversized menu control */
+@media (max-width: 768px){
+  .jh-header__inner{
+    padding:10px 14px !important;
+    gap:10px !important;
+  }
+  .jh-header__logo{
+    width:32px;
+    height:32px;
+  }
+  .jh-brand__text{
+    font-size:1rem;
+    line-height:1.15;
+  }
+  .jh-hamburger{
+    min-height:44px;
+    min-width:44px;
+    padding:10px 12px;
+    border-radius:14px;
+    font-size:18px;
+  }
+  .jh-hamburger__label{
+    font-size:0.95rem;
+    line-height:1;
+  }
+}
+
+/* Fixed controls should not sit over the reading line on mobile */
+.jh-back-to-top{
+  top:auto;
+  bottom:max(18px, calc(env(safe-area-inset-bottom, 0px) + 12px));
+  right:max(14px, calc(env(safe-area-inset-right, 0px) + 10px));
+  width:48px;
+  height:48px;
+  transform:translateY(10px);
+}
+.jh-back-to-top.is-visible{
+  transform:translateY(0);
+}
+@media (max-width: 768px){
+  body{
+    padding-bottom:84px;
+  }
+  .jh-back-to-top{
+    width:46px;
+    height:46px;
+    bottom:max(14px, calc(env(safe-area-inset-bottom, 0px) + 10px));
+    right:max(12px, calc(env(safe-area-inset-right, 0px) + 8px));
+  }
+}
+
+/* Homepage mobile fixes */
+body.home .lp-offers,
+body.home .lp-ebooks,
+body.home .lp-testimonials,
+body.home .lp-resources{
+  width:100%;
+}
+@media (max-width: 768px){
+  body.home .lp-offers,
+  body.home .lp-ebooks,
+  body.home .lp-testimonials,
+  body.home .lp-resources{
+    grid-template-columns:1fr !important;
+    gap:18px;
+  }
+  body.home .lp-offer-card,
+  body.home .lp-ebook-card,
+  body.home .lp-testimonial,
+  body.home .lp-resource-card{
+    width:100%;
+    max-width:none;
+  }
+  body.home .lp-ebook-card__cover{
+    aspect-ratio:2 / 3;
+    min-height:0;
+  }
+  body.home .lp-newsletter-cta{
+    background:linear-gradient(135deg, #111827 0%, #1e1b4b 55%, #312e81 100%) !important;
+    border:1px solid rgba(147,197,253,0.18) !important;
+    color:#EEF2FF !important;
+    box-shadow:0 22px 48px rgba(30,27,75,0.24);
+  }
+  body.home .lp-newsletter-cta h2{
+    color:#EEF2FF !important;
+  }
+  body.home .lp-newsletter-cta p{
+    color:#D1D5DB !important;
+  }
+  body.home .lp-newsletter-cta a{
+    background:#FFFFFF !important;
+    color:#3730A3 !important;
+  }
+}
