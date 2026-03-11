@@ -3526,3 +3526,62 @@ body.home .lp-resources{
     color:#3730A3 !important;
   }
 }
+
+
+/* ===== Header Logo Container — Brand Hue Treatment (March 2026) ===== */
+
+/* Base logo wrapper: subtle brand-tinted backing plate, rounded-square */
+.jh-logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(79, 70, 229, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+/* Newsletter page override: circular container for 'inner circle' feel */
+.jh-logo-wrap--circle {
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.22);
+  border: 1px solid rgba(147, 197, 253, 0.32);
+  box-shadow: 0 2px 12px rgba(79, 70, 229, 0.22), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+/* Standardised logo size inside wrapper — one fixed size site-wide */
+.jh-logo-wrap .jh-header__logo,
+.jh-logo-wrap .jh-mobile-nav__brand-logo {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 7px;
+  display: block;
+  margin: 0;
+  transform: none;
+  filter: none;
+}
+
+/* Reduce excess header vertical padding */
+.jh-header__inner {
+  min-height: 64px !important;
+  padding: 10px 18px !important;
+}
+
+@media (max-width: 768px) {
+  .jh-header__inner {
+    min-height: 58px !important;
+    padding: 8px 14px !important;
+  }
+  .jh-logo-wrap {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+  }
+  .jh-logo-wrap--circle {
+    border-radius: 50%;
+  }
+}
