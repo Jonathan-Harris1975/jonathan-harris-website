@@ -89,7 +89,7 @@
     font-size: clamp(22px, 3.5vw, 32px);
     color: #111827; font-weight: 800;
   }
-  .lp-section-desc { margin: 0 0 36px; color: #6B7280; font-size: 16px; max-width: 640px; }
+  .lp-section-desc { margin: 0 0 36px; color: #4B5563; font-size: 16px; max-width: 640px; }
 
   /* Author intro */
   .lp-author {
@@ -132,7 +132,7 @@
     display: block;
   }
   .lp-offer-card h3 { margin: 0 0 10px; color: #111827; font-size: 20px; }
-  .lp-offer-card p { margin: 0 0 20px; color: #6B7280; font-size: 14px; line-height: 1.6; flex: 1; }
+  .lp-offer-card p { margin: 0 0 20px; color: #4B5563; font-size: 16px; line-height: 1.7; flex: 1; }
   .lp-offer-card a {
     display: inline-block;
     background: #4F46E5; color: #fff;
@@ -155,7 +155,7 @@
   }
   .lp-stat { color: #fff; }
   .lp-stat__num { font-size: 32px; font-weight: 800; color: #93C5FD; display: block; }
-  .lp-stat__label { font-size: 13px; color: #9CA3AF; margin-top: 4px; display: block; }
+  .lp-stat__label { font-size: 14px; font-weight: 600; color: #D1D5DB; margin-top: 4px; display: block; }
 
   /* Testimonials */
   .lp-testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
@@ -224,6 +224,45 @@
   }
 </style>
   <link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
+  <link rel="canonical" href="https://jonathan-harris.online/"/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://jonathan-harris.online/#person",
+  "name": "Jonathan Harris",
+  "jobTitle": ["AI Author", "Podcast Host"],
+  "url": "https://jonathan-harris.online/",
+  "description": "Jonathan Harris is an artificial intelligence author and host of the Turing's Torch AI Weekly podcast. He writes plain-English books on AI across healthcare, law, finance, manufacturing, and education.",
+  "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Generative AI", "AI Ethics", "Applied AI", "LLMs", "Robotics Automation"],
+  "sameAs": [
+    "https://www.amazon.com/kindle-dbs/author?ref=dbs_G_A_C&asin=B0DNCHC337",
+    "https://www.goodreads.com/author/show/54004095.Jonathan_Harris",
+    "https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF",
+    "https://podcasts.apple.com/gb/podcast/turings-torch-ai-weekly/id1862839712",
+    "https://twitter.com/jonathan_harris_01"
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://jonathan-harris.online/#website",
+  "url": "https://jonathan-harris.online/",
+  "name": "Jonathan Harris – AI Author & Podcast Host",
+  "description": "Practical AI ebooks, the Turing's Torch podcast, and a daily newsletter — plain English, no hype.",
+  "publisher": {"@id": "https://jonathan-harris.online/#person"},
+  "inLanguage": "en",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://jonathan-harris.online/ebooks/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 
 <script type="application/ld+json">
 {
@@ -782,6 +821,23 @@
 </div>
 
 <main id="main">
+
+  <!-- ── ENTITY REINFORCEMENT (AI Search / LLM Citation block) ── -->
+  <section class="lp-section" style="padding:36px 20px 0;" aria-label="About Jonathan Harris">
+    <div class="lp-inner">
+      <div class="jh-key-insight" role="note">
+        <span class="jh-key-insight__label">About this site</span>
+        <p><strong>Jonathan Harris is an artificial intelligence author and host of the Turing's Torch AI Weekly podcast.</strong> He publishes practical, plain-English books and commentary on AI across healthcare, finance, law, manufacturing, logistics, education, and more — without hype, jargon, or agenda.</p>
+      </div>
+      <ul class="jh-fact-list" aria-label="Key facts about Jonathan Harris">
+        <li>Author of 36 AI-focused ebooks covering applied AI across industries</li>
+        <li>Host of Turing's Torch AI Weekly — a sceptical, grounded weekly AI podcast</li>
+        <li>Publisher of AI Edge, a daily newsletter on artificial intelligence developments</li>
+        <li>Specialises in plain-English analysis for non-technical professionals and decision-makers</li>
+        <li>Topics include healthcare, law, finance, logistics, energy, education, defence, and creative industries</li>
+      </ul>
+    </div>
+  </section>
 
   <!-- ── ABOUT ── -->
   <section class="lp-section" aria-labelledby="about-heading">
