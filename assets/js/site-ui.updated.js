@@ -1,0 +1,899 @@
+(function(){
+  if (window.__JH_SITE_UI_INIT__) return;
+  window.__JH_SITE_UI_INIT__ = true;
+
+  const HEADER_URL = "/assets/partials/header.html";
+  const FOOTER_TARGET_ID = "siteFooter";
+  const FOOTER_URL = "/assets/partials/footer.html";
+  const LOADER_ID = "pageLoader";
+  const SITE_CSS_HREF = "/assets/css/site.css";
+
+  // Optional web font (keeps the brand minimal, just cleaner)
+  const FONT_PRECONNECT_1 = "https://fonts.googleapis.com";
+  const FONT_PRECONNECT_2 = "https://fonts.gstatic.com";
+  const FONT_STYLESHEET = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap";
+
+  
+  function is404Page(){
+    try{
+      const b = document.body;
+      if (b && b.classList && b.classList.contains("jh-page-404")) return true;
+      const p = (location && location.pathname ? location.pathname : "").toLowerCase();
+      if (p.endsWith("/404") || p.endsWith("/404/") || p.endsWith("404.html")) return true;
+      const t = (document.title || "").toLowerCase();
+      if (t.startsWith("404") || t.includes("page not found") || t.includes("not here")) return true;
+    }catch(_){}
+    return false;
+  }
+
+  function ensureStyles(){
+    try{
+      const head = document.head || document.getElementsByTagName("head")[0];
+      if (!head) return;
+
+      // Ensure global stylesheet is present even on older standalone pages.
+      const hasSiteCss = !!document.querySelector(`link[rel="stylesheet"][href="${SITE_CSS_HREF}"],link[rel="stylesheet"][href$="${SITE_CSS_HREF}"]`);
+      if (!hasSiteCss){
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = SITE_CSS_HREF;
+        head.appendChild(link);
+      }
+
+      // Web font (safe no-op if blocked)
+      if (!document.querySelector(`link[rel="stylesheet"][href="${FONT_STYLESHEET}"]`)){
+        const p1 = document.createElement("link");
+        p1.rel = "preconnect";
+        p1.href = FONT_PRECONNECT_1;
+        head.appendChild(p1);
+
+        const p2 = document.createElement("link");
+        p2.rel = "preconnect";
+        p2.href = FONT_PRECONNECT_2;
+        p2.crossOrigin = "anonymous";
+        head.appendChild(p2);
+
+        const f = document.createElement("link");
+        f.rel = "stylesheet";
+        f.href = FONT_STYLESHEET;
+        head.appendChild(f);
+      }
+
+      // Minimal critical styles so navigation + skip link don't look like 1998 if CSS fails to load.
+      if (!document.getElementById("jh-ui-inline")){
+        const style = document.createElement("style");
+        style.id = "jh-ui-inline";
+        style.textContent = `
+          .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
+          .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
+          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.jh-header--hero-mode:not(.is-visible){opacity:0;pointer-events:none;transform:translateY(-6px);}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
+          .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+          .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
+          .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
+          .jh-topnav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;white-space:nowrap;}
+          .jh-topnav a:hover,.jh-topnav a:focus{background:rgba(255,255,255,0.08);outline:2px solid rgba(147,197,253,0.55);outline-offset:2px;}
+          .jh-topnav a[aria-current="page"]{background:rgba(79,70,229,0.20);border:1px solid rgba(79,70,229,0.35);border-bottom:2px solid #93C5FD;font-weight:700;}
+          .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);border-radius:10px;color:#fff;cursor:pointer;font-size:20px;line-height:1;padding:7px 10px;margin-left:auto;min-width:42px;}
+          .jh-hamburger:focus{outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
+          .jh-mobile-nav{display:none;flex-direction:column;gap:3px;padding:8px 12px 12px;border-top:1px solid rgba(255,255,255,0.08);background:rgba(10,16,28,0.99);}
+          .jh-mobile-nav.is-open{display:flex;}
+          .jh-mobile-nav a{color:#E5E7EB;text-decoration:none;font-weight:600;font-size:15px;padding:11px 12px;border-radius:10px;}
+          .jh-mobile-nav a:hover{background:rgba(255,255,255,0.09);}
+          .jh-mobile-nav a:focus{background:rgba(255,255,255,0.09);outline:2px solid rgba(147,197,253,0.75);outline-offset:2px;}
+          .jh-mobile-nav a[aria-current="page"]{background:rgba(79,70,229,0.22);border:1px solid rgba(79,70,229,0.38);}
+          .jh-header-spacer{display:block;height:54px;}
+          @media (max-width:768px){
+            .jh-topnav{display:none !important;}
+            .jh-hamburger{display:none;}.jh-header.is-visible .jh-hamburger,.jh-header--injected.is-visible .jh-hamburger,.jh-header:not(.jh-header--hero-mode) .jh-hamburger,.jh-header--injected:not(.jh-header--hero-mode) .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
+            .jh-header__inner{padding:10px 14px;}
+            .jh-header-spacer{height:52px;}
+          }
+        `;
+        head.appendChild(style);
+      }
+    }catch(_){}
+  }
+
+  function hideLoader(){
+    try{
+      const loader = document.getElementById(LOADER_ID);
+      if (loader) {
+        loader.style.display = "none";
+        loader.setAttribute("aria-hidden", "true");
+        loader.setAttribute("aria-live", "off");
+      }
+    }catch(_){}
+  }
+
+  function ensureSkipLink(){
+    try{
+      if (document.querySelector(".skip-link")) return;
+      const a = document.createElement("a");
+      a.className = "skip-link";
+      a.href = "#main";
+      a.textContent = "Skip to main content";
+      document.body.insertBefore(a, document.body.firstChild);
+    }catch(_){}
+  }
+
+  function ensureMainId(){
+    try{
+      let main = document.getElementById("main");
+      if (main) return;
+
+      main = document.querySelector("main") || document.querySelector('[role="main"]');
+      if (main && !main.id) main.id = "main";
+    }catch(_){}
+  }
+
+  function findHeroHost(){
+    // Prefer the existing hero/header section so nav feels native.
+    return (
+      document.querySelector('section[aria-label="Page Header"]') ||
+      document.querySelector('section[aria-label*="header" i]') ||
+      document.querySelector('header.hero') ||
+      document.querySelector('.lp-hero') ||
+      document.querySelector('.hero') ||
+      document.querySelector('.dark-section') ||
+      document.querySelector('.about-banner') ||
+      null
+    );
+  }
+
+  function findHeaderRevealAnchor(){
+    return (
+      document.querySelector('.lp-hero') ||
+      document.querySelector('header.hero') ||
+      document.querySelector('.hero') ||
+      document.querySelector('.dark-section') ||
+      document.querySelector('.about-banner') ||
+      document.querySelector('section[aria-label="Page Header"]') ||
+      document.querySelector('section[aria-label*="header" i]') ||
+      null
+    );
+  }
+
+  function markActiveNav(container){
+    try{
+      const path = (location.pathname || "/").replace(/\/+$/, "/");
+      const links = container.querySelectorAll("a[href]");
+      links.forEach(a=>{
+        try{
+          const href = a.getAttribute("href");
+          if (!href || href.indexOf("http") === 0 || href.indexOf("mailto:") === 0) return;
+
+          const target = href.replace(/\/+$/, "/");
+          const isActive = (target === "/" && path === "/") || (target !== "/" && path.startsWith(target));
+          if (isActive) a.setAttribute("aria-current","page");
+          else a.removeAttribute("aria-current");
+        }catch(_){}
+      });
+    }catch(_){}
+  }
+
+  function syncHeaderVisibility(header, heroEl, mobileNav, button){
+    if (!header) return;
+
+    // Mark header as hero-mode so CSS hides it until scrolled past the hero
+    if (heroEl) {
+      header.classList.add('jh-header--hero-mode');
+    } else {
+      header.classList.remove('jh-header--hero-mode');
+    }
+
+    function closeMobileNav(){
+      if (!mobileNav) return;
+      mobileNav.classList.remove('is-open');
+      mobileNav.style.display = 'none';
+      mobileNav.setAttribute('hidden','');
+      if (button) {
+        button.setAttribute('aria-expanded','false');
+        button.setAttribute('aria-label','Open navigation menu');
+        var lbl = button.querySelector('.jh-hamburger__label');
+        if (lbl) lbl.textContent = 'Menu';
+      }
+    }
+
+    function setVisible(visible){
+      header.classList.toggle('is-visible', !!visible);
+      if (!visible) closeMobileNav();
+    }
+
+    if (!heroEl) {
+      setVisible(true);
+      return;
+    }
+
+    var updateFromScroll = function(){
+      try {
+        var rect = heroEl.getBoundingClientRect();
+        var headerHeight = header.offsetHeight || 64;
+        var revealOffset = Math.max(12, Math.round(headerHeight * 0.35));
+        var shouldShow = rect.bottom <= revealOffset;
+        setVisible(shouldShow);
+      } catch(_) {}
+    };
+
+    window.addEventListener('scroll', updateFromScroll, { passive: true });
+    window.addEventListener('resize', updateFromScroll, { passive: true });
+    window.addEventListener('load', updateFromScroll, { once: true });
+
+    if ('IntersectionObserver' in window) {
+      try {
+        var obs = new IntersectionObserver(function(){
+          updateFromScroll();
+        }, { threshold: [0, 0.01, 0.5, 1], rootMargin: '0px 0px 0px 0px' });
+        obs.observe(heroEl);
+      } catch(_) {}
+    }
+
+    if ('requestAnimationFrame' in window) {
+      requestAnimationFrame(updateFromScroll);
+    }
+    setTimeout(updateFromScroll, 120);
+    updateFromScroll();
+  }
+
+  async function injectHeader(){
+    try{
+      // If a baked-in header already exists, wire it up with scroll-based reveal.
+      var existingHeader = document.querySelector(".jh-header");
+      if (existingHeader) {
+      // Wire hamburger on the baked-in header
+        try {
+          var eBtn = existingHeader.querySelector('.jh-hamburger');
+          var eMobileNav = existingHeader.querySelector('.jh-mobile-nav');
+          if (eBtn && eMobileNav) {
+            // Remove stale listener by cloning the button
+            var newBtn = eBtn.cloneNode(true);
+            eBtn.parentNode.replaceChild(newBtn, eBtn);
+            newBtn.addEventListener('click', function(){
+              var open = eMobileNav.classList.toggle('is-open');
+              if (open) {
+                eMobileNav.removeAttribute('hidden');
+                eMobileNav.style.display='';
+                // Move focus to first link for keyboard users
+                var firstLink = eMobileNav.querySelector('a');
+                if (firstLink) setTimeout(function(){ firstLink.focus(); }, 50);
+              } else {
+                eMobileNav.style.display='none';
+                eMobileNav.setAttribute('hidden','');
+                newBtn.focus();
+              }
+              newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+              newBtn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+              var lbl = newBtn.querySelector('.jh-hamburger__label');
+              if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+            });
+            // Focus trapping inside mobile nav
+            eMobileNav.addEventListener('keydown', function(e){
+              if(!eMobileNav.classList.contains('is-open')) return;
+              var focusable = Array.from(eMobileNav.querySelectorAll('a,[tabindex]:not([tabindex="-1"])'));
+              if(!focusable.length) return;
+              if(e.key === 'Tab'){
+                var first = focusable[0], last = focusable[focusable.length-1];
+                if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+                else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+              }
+              if(e.key==='Escape'){ eMobileNav.classList.remove('is-open'); eMobileNav.style.display='none'; eMobileNav.setAttribute('hidden',''); newBtn.setAttribute('aria-expanded','false'); newBtn.focus(); }
+            });
+            markActiveNav(eMobileNav);
+          }
+        } catch(_) {}
+
+        // Scroll-based sticky header: show only once the page hero is out of view.
+        // If a page is incorrectly marked as no-hero but a hero exists, trust the DOM and
+        // remove the flag so the hamburger/header do not appear too early on mobile.
+        try {
+          existingHeader.classList.add('jh-header--injected');
+          var heroEl = findHeaderRevealAnchor();
+          if (heroEl && document.body && document.body.classList.contains('jh-no-hero-page')) {
+            document.body.classList.remove('jh-no-hero-page');
+          }
+          if (!heroEl) existingHeader.classList.add('is-visible');
+          syncHeaderVisibility(existingHeader, heroEl, eMobileNav, newBtn);
+        } catch(_) {
+          existingHeader.classList.add('is-visible');
+        }
+        return; // baked-in header handled; no need to fetch partial
+      }
+
+      // ── FIX #1: Use inlined header HTML instead of a network fetch ──
+      // This eliminates the round-trip delay that caused a flash of missing navigation.
+      var INLINED_HEADER_HTML = `<style id="jh-dropdown-inline">
+.jh-nav-dropdown{position:relative;list-style:none;}
+.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
+.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
+.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
+.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
+</style>
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
+  <div class="jh-header__inner">
+    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" decoding="async" aria-hidden="true"/>
+      <span class="jh-brand__text">Jonathan Harris</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="jh-topnav">
+  <li><a href="/">Home</a></li>
+  <li><a href="/ebooks/">eBooks</a></li>
+  <li><a href="/podcast/">Podcast</a></li>
+  <li><a href="/newsletter/">Newsletter</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/bio/">About</a></li>
+  <li class="jh-nav-dropdown">
+    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="jh-nav-dropdown__menu" role="menu">
+      <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+      <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+      <li role="none"><a href="/contact/" role="menuitem">Contact</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
+  </div>
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
+    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
+      <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true"/>
+      <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+    </a>
+    <a href="/">Home</a>
+    <a href="/ebooks/">eBooks</a>
+    <a href="/podcast/">Podcast</a>
+    <a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a>
+    <a href="/bio/">About</a>
+    <div class="jh-mobile-nav__group">
+      <span class="jh-mobile-nav__group-label">Resources</span>
+      <div class="jh-mobile-nav__group-links">
+        <a href="/glossary/">Glossary</a>
+        <a href="/topics/">Topics</a>
+        <a href="/compare/">Comparisons</a>
+        <a href="/contact/">Contact</a>
+      </div>
+    </div>
+  </nav>
+</header>
+`;
+
+      var wrap = document.createElement("div");
+      wrap.innerHTML = INLINED_HEADER_HTML.trim();
+
+      var inlineStyle = wrap.querySelector('#jh-dropdown-inline');
+      if (inlineStyle && !document.getElementById('jh-dropdown-inline')) {
+        (document.head || document.documentElement).appendChild(inlineStyle);
+      }
+
+      var header = wrap.querySelector('.jh-header');
+      if (!header) return;
+
+      var hero = findHeroHost();
+      if (hero){
+        hero.classList.add("jh-hero-host");
+        hero.parentNode.insertBefore(header, hero);
+      }else{
+        document.body.insertBefore(header, document.body.firstChild);
+      }
+
+      header.classList.add('jh-header--injected');
+      markActiveNav(header);
+
+      // Scroll-based visibility for injected header
+      var heroElInj = findHeaderRevealAnchor();
+
+      // Wire up hamburger button if present
+      try {
+        var btn = header.querySelector('.jh-hamburger');
+        var mobileNav = header.querySelector('.jh-mobile-nav');
+        if (btn && mobileNav) {
+          btn.addEventListener('click', function(){
+            var open = mobileNav.classList.toggle('is-open');
+            if (open) {
+              mobileNav.removeAttribute('hidden');
+              // Focus trap: move focus to first focusable link in the nav
+              var firstLink = mobileNav.querySelector('a');
+              if (firstLink) { setTimeout(function(){ firstLink.focus(); }, 30); }
+            } else {
+              mobileNav.setAttribute('hidden','');
+              // Return focus to hamburger on close
+              btn.focus();
+            }
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+            var lbl = btn.querySelector('.jh-hamburger__label');
+            if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+          });
+          // Escape key closes mobile nav from anywhere within it
+          mobileNav.addEventListener('keydown', function(e){
+            if (e.key === 'Escape') {
+              mobileNav.classList.remove('is-open');
+              mobileNav.setAttribute('hidden','');
+              btn.setAttribute('aria-expanded','false');
+              var lbl = btn.querySelector('.jh-hamburger__label');
+              if (lbl) lbl.textContent = 'Menu';
+              btn.focus();
+            }
+          });
+          markActiveNav(mobileNav);
+          syncHeaderVisibility(header, heroElInj, mobileNav, btn);
+        } else {
+          syncHeaderVisibility(header, heroElInj, null, null);
+        }
+      } catch(_) {
+        syncHeaderVisibility(header, heroElInj, null, null);
+      }
+
+    }catch(_){}
+  }
+
+  function ensureFooterTarget(){
+    let target = document.getElementById(FOOTER_TARGET_ID);
+    if (target) return target;
+
+    target = document.createElement("div");
+    target.id = FOOTER_TARGET_ID;
+    document.body.appendChild(target);
+    return target;
+  }
+
+  async function injectFooter(){
+    try{
+      const target = ensureFooterTarget();
+      if (!target) return;
+
+      const legacyFooters = Array.from(document.querySelectorAll("footer"));
+      legacyFooters.forEach((footer) => {
+        if (!footer.closest(`#${FOOTER_TARGET_ID}`)) footer.remove();
+      });
+
+      const res = await fetch(FOOTER_URL, { cache: "force-cache" });
+      if (!res.ok) return;
+      const html = await res.text();
+      target.innerHTML = html;
+    }catch(_){ }
+  }
+
+
+
+  function normaliseCanonicalUrl(url){
+    try{
+      const parsed = new URL(url, window.location.origin);
+      parsed.hash = "";
+      const cleanPath = parsed.pathname.replace(/\/{2,}/g, "/");
+      parsed.pathname = cleanPath === "/" ? "/" : cleanPath.replace(/\/+$/, "") + "/";
+      return parsed.toString();
+    }catch(_){
+      return window.location.origin + "/";
+    }
+  }
+
+  function ensureCanonical(){
+    try{
+      const canonicalHref = normaliseCanonicalUrl(window.location.href);
+      let canonical = document.querySelector('link[rel="canonical"]');
+
+      if (!canonical){
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
+        document.head.appendChild(canonical);
+      }
+
+      canonical.setAttribute("href", canonicalHref);
+    }catch(_){}
+  }
+
+  function ensureImagePreloads(){
+    try{
+      const path = (location.pathname || "/").replace(/\/+$/, "/") || "/";
+      const hrefs = ["https://images.jonathan-harris.online/site-logo"];
+
+      if (path === "/"){
+        hrefs.push("https://images.jonathan-harris.online/headshot");
+      }
+
+      hrefs.forEach(function(href){
+        if (document.querySelector('link[rel="preload"][as="image"][href="' + href + '"]')) return;
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = href;
+        if (href.indexOf("site-logo") !== -1) link.setAttribute("fetchpriority", "high");
+        document.head.appendChild(link);
+      });
+    }catch(_){}
+  }
+
+  function injectBreadcrumbSchema(){
+    try{
+      const path = (location.pathname || "/").replace(/\/+$/, "/") || "/";
+      const existing = document.getElementById("jh-breadcrumb-schema");
+      if (existing) existing.remove();
+
+      const segs = path.split("/").filter(Boolean);
+      if (!segs.length) return;
+
+      const itemList = [{
+        "@type":"ListItem",
+        "position":1,
+        "name":"Home",
+        "item":"https://jonathan-harris.online/"
+      }];
+
+      let accum = "/";
+      segs.forEach(function(seg, i){
+        accum += seg + "/";
+        itemList.push({
+          "@type":"ListItem",
+          "position": i + 2,
+          "name": prettyLabel(seg),
+          "item": "https://jonathan-harris.online" + accum
+        });
+      });
+
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.id = "jh-breadcrumb-schema";
+      script.textContent = JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement": itemList
+      });
+      document.head.appendChild(script);
+    }catch(_){}
+  }
+
+  function lazyLoadLargeImages(){
+    try{
+      const hero = document.querySelector(".lp-hero, header.hero, .hero, .about-banner, .dark-section");
+      const largeImageSelector = 'img:not([loading="eager"])';
+      document.querySelectorAll(largeImageSelector).forEach(function(img){
+        if (!img || img.dataset.jhImageOptimised === "true") return;
+
+        const isInsideHeader = !!img.closest(".jh-header");
+        const isHeroImage = !!(hero && hero.contains(img));
+        const declaredLarge = (parseInt(img.getAttribute("width") || "0", 10) >= 120) || (parseInt(img.getAttribute("height") || "0", 10) >= 120);
+        const classHints = /(hero|banner|cover|card__img|author__img|featured|thumbnail|poster|image)/i.test((img.className || "").toString());
+
+        if (!isInsideHeader && !isHeroImage && (declaredLarge || classHints)){
+          img.loading = "lazy";
+        }
+
+        if (!img.hasAttribute("decoding")){
+          img.setAttribute("decoding", "async");
+        }
+
+        img.dataset.jhImageOptimised = "true";
+      });
+    }catch(_){}
+  }
+
+
+  function prettyLabel(seg){
+    if (!seg) return "";
+    const map = {
+      "ebooks":"eBooks",
+      "book":"Book",
+      "podcast":"Podcast",
+      "newsletter":"Newsletter",
+      "blog":"Blog",
+      "topics":"Topics",
+      "glossary":"Glossary",
+      "compare":"Compare",
+      "contact":"Contact",
+      "privacy-policy":"Privacy Policy",
+      "terms-of-use":"Terms of Use",
+      "author":"Author",
+      "bio":"About",
+      "api":"API",
+      "catalogue":"Catalogue",
+      "affiliate":"Affiliate"
+    };
+    if (map[seg]) return map[seg];
+    // Title case with hyphens
+    return seg.replace(/-/g," ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function injectBreadcrumbs(){
+    try{
+      const path = (location.pathname || "/").replace(/\/+$/, "/");
+      if (path === "/") return; // no breadcrumbs on home
+
+      const main = document.getElementById("main") || document.querySelector("main") || document.querySelector('[role="main"]');
+      if (!main) return;
+
+      // Avoid duplicates
+      if (document.querySelector(".jh-breadcrumbs")) return;
+
+      const segs = path.split("/").filter(Boolean);
+      if (!segs.length) return;
+
+      const nav = document.createElement("nav");
+      nav.className = "jh-breadcrumbs";
+      nav.setAttribute("aria-label","Breadcrumb");
+      nav.innerHTML = '<ol class="jh-breadcrumbs__list"></ol>';
+
+      const ol = nav.querySelector("ol");
+      const liHome = document.createElement("li");
+      liHome.className = "jh-breadcrumbs__item";
+      liHome.innerHTML = '<a href="/">Home</a>';
+      ol.appendChild(liHome);
+
+      let accum = "/";
+      segs.forEach((seg, i) => {
+        accum += seg + "/";
+        const li = document.createElement("li");
+        li.className = "jh-breadcrumbs__item";
+        const label = prettyLabel(seg);
+
+        const isLast = i === segs.length - 1;
+        if (isLast){
+          li.innerHTML = '<span aria-current="page">' + label + '</span>';
+        }else{
+          li.innerHTML = '<a href="' + accum + '">' + label + '</a>';
+        }
+        ol.appendChild(li);
+      });
+
+      // Insert breadcrumbs as the first element inside main
+      if (main.firstElementChild){
+        main.insertBefore(nav, main.firstElementChild);
+      }else{
+        main.appendChild(nav);
+      }
+    }catch(_){}  
+  }
+
+  function shouldSkipInlineCta(){
+    const path = (location.pathname || "/");
+    if (path === "/" || path.startsWith("/newsletter")) return true;
+    if (document.querySelector("[data-no-inline-cta='true']")) return true;
+    return false;
+  }
+
+  function injectInlineNewsletterCta(){
+    try{
+      if (shouldSkipInlineCta()) return;
+
+      const main = document.getElementById("main") || document.querySelector("main") || document.querySelector('[role="main"]');
+      if (!main) return;
+
+      if (document.querySelector(".jh-inline-cta")) return;
+
+      const cta = document.createElement("section");
+      cta.className = "jh-inline-cta";
+      cta.setAttribute("aria-label","Newsletter sign-up prompt");
+      cta.innerHTML = `
+        <div class="jh-inline-cta__inner">
+          <div class="jh-inline-cta__copy">
+            <h2>Get the AI Edge</h2>
+            <p>Daily AI updates. Short. Useful. Zero breathless hype.</p>
+          </div>
+          <div class="jh-inline-cta__actions">
+            <a class="btn btn-primary" href="/newsletter/">Join the newsletter</a>
+            <a class="btn btn-ghost" href="/ebooks/">Browse eBooks</a>
+          </div>
+        </div>
+      `;
+
+      // Append near the end but before footer mount, so it feels intentional.
+      main.appendChild(cta);
+    }catch(_){}  
+  }
+
+  
+  function injectBackToTop(){
+    try{
+      if (
+        document.querySelector('.jh-back-to-top') ||
+        document.querySelector('.btt-btn') ||
+        document.querySelector('[aria-label="Back to top"]')
+      ) return;
+      var btn = document.createElement('button');
+      btn.className = 'jh-back-to-top';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>';
+      document.body.appendChild(btn);
+      btn.addEventListener('click', function(){
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      if ('IntersectionObserver' in window){
+        var sentinel = document.createElement('div');
+        sentinel.style.cssText = 'position:absolute;top:400px;left:0;width:1px;height:1px;pointer-events:none;';
+        document.body.insertBefore(sentinel, document.body.firstChild);
+        var bttObs = new IntersectionObserver(function(entries){
+          entries.forEach(function(entry){
+            if (!entry.isIntersecting){ btn.classList.add('is-visible'); }
+            else { btn.classList.remove('is-visible'); }
+          });
+        }, { threshold: 0 });
+        bttObs.observe(sentinel);
+      } else {
+        window.addEventListener('scroll', function(){
+          if (window.scrollY > 400) btn.classList.add('is-visible');
+          else btn.classList.remove('is-visible');
+        }, { passive: true });
+      }
+    }catch(_){}
+  }
+
+
+  function wireDropdowns(){
+    try{
+      document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
+        var btn=dd.querySelector('.jh-nav-dropdown__btn');
+        var menu=dd.querySelector('.jh-nav-dropdown__menu');
+        if(!btn||btn.dataset.jhWired)return;
+        btn.dataset.jhWired='1';
+
+        function openMenu(){
+          dd.classList.add('is-open');
+          btn.setAttribute('aria-expanded','true');
+        }
+        function closeMenu(){
+          dd.classList.remove('is-open');
+          btn.setAttribute('aria-expanded','false');
+        }
+
+        btn.addEventListener('click',function(e){
+          e.stopPropagation();
+          var open=dd.classList.toggle('is-open');
+          btn.setAttribute('aria-expanded',open?'true':'false');
+          if(open && menu){
+            var first=menu.querySelector('a[role="menuitem"]');
+            if(first) first.focus();
+          }
+        });
+
+        // Keyboard: ArrowDown opens and focuses first item; Escape closes
+        btn.addEventListener('keydown',function(e){
+          if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){
+            e.preventDefault();
+            openMenu();
+            if(menu){
+              var first=menu.querySelector('a[role="menuitem"]');
+              if(first) first.focus();
+            }
+          }
+          // FIX #4: Close open dropdown with Escape key from the button itself
+          if(e.key==='Escape' && dd.classList.contains('is-open')){
+            e.preventDefault();
+            closeMenu();
+            btn.focus();
+          }
+        });
+
+        // Arrow navigation within the menu items
+        if(menu){
+          menu.addEventListener('keydown',function(e){
+            var items=Array.from(menu.querySelectorAll('a[role="menuitem"]'));
+            var idx=items.indexOf(document.activeElement);
+            if(e.key==='ArrowDown'){
+              e.preventDefault();
+              var next=items[idx+1]||items[0];
+              if(next) next.focus();
+            } else if(e.key==='ArrowUp'){
+              e.preventDefault();
+              var prev=items[idx-1]||items[items.length-1];
+              if(prev) prev.focus();
+            } else if(e.key==='Escape'||e.key==='Tab'){
+              closeMenu();
+              btn.focus();
+            }
+          });
+        }
+      });
+      document.addEventListener('click',function(){
+        document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
+          dd.classList.remove('is-open');
+          var b=dd.querySelector('.jh-nav-dropdown__btn');
+          if(b)b.setAttribute('aria-expanded','false');
+        });
+      },{capture:false,once:false});
+    }catch(_){}
+  }
+
+
+  /**
+   * UX AUDIT FIX (March 2026 — Mobile UX #3):
+   * Close the hamburger menu when the user taps outside the nav panel.
+   * Creates a semi-transparent overlay behind the mobile nav; tapping it
+   * dismisses the menu without requiring the user to find the close button.
+   */
+  function injectMobileNavOverlay() {
+    try {
+      if (document.getElementById('jh-nav-overlay')) return;
+      var overlay = document.createElement('div');
+      overlay.id = 'jh-nav-overlay';
+      overlay.className = 'jh-nav-overlay';
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', function() {
+        // Close all open mobile navs
+        document.querySelectorAll('.jh-mobile-nav.is-open').forEach(function(nav) {
+          nav.classList.remove('is-open');
+          nav.style.display = 'none';
+          nav.setAttribute('hidden', '');
+        });
+        // Reset hamburger buttons
+        document.querySelectorAll('.jh-hamburger[aria-expanded="true"]').forEach(function(btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.setAttribute('aria-label', 'Open navigation menu');
+          var lbl = btn.querySelector('.jh-hamburger__label');
+          if (lbl) lbl.textContent = 'Menu';
+        });
+        overlay.classList.remove('is-active');
+      });
+
+      // Listen for mobile nav state changes to show/hide overlay
+      // We use a MutationObserver on the body to watch for class changes
+      var mobileNavObserver = new MutationObserver(function() {
+        var isOpen = !!document.querySelector('.jh-mobile-nav.is-open');
+        overlay.classList.toggle('is-active', isOpen);
+      });
+      mobileNavObserver.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    } catch (_) {}
+  }
+
+function init(){
+    ensureStyles();
+    ensureSkipLink();
+    ensureMainId();
+    ensureCanonical();
+    ensureImagePreloads();
+    injectHeader();
+    wireDropdowns();
+    injectFooter();
+    injectBackToTop();
+    injectMobileNavOverlay();
+    lazyLoadLargeImages();
+
+    if (!is404Page()){
+      injectBreadcrumbs();
+      injectBreadcrumbSchema();
+      injectInlineNewsletterCta();
+    } else {
+      // Clean up anything injected before (safety)
+      document.querySelectorAll(".jh-breadcrumbs, .jh-inline-cta, #jh-breadcrumb-schema").forEach(el=>el.remove());
+    }
+
+    hideLoader();
+  }
+
+if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  }else{
+    init();
+  }
+
+  window.addEventListener("load", function(){
+    lazyLoadLargeImages();
+  }, { once: true });
+
+
+// ── FAQ accordion aria-expanded enhancement ──────────────────────────────
+(function(){
+  function enhanceFaqAccordions(){
+    document.querySelectorAll('.faq details, details.more').forEach(function(det){
+      var sum = det.querySelector('summary');
+      if(!sum) return;
+      if(sum.hasAttribute('data-faq-enhanced')) return;
+      sum.setAttribute('data-faq-enhanced','1');
+      sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
+      det.addEventListener('toggle', function(){
+        sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
+      });
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enhanceFaqAccordions);
+  } else {
+    enhanceFaqAccordions();
+  }
+})();
+})();
+
