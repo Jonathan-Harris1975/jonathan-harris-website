@@ -23,7 +23,207 @@
 <meta content="Jonathan Harris — AI Author &amp; Podcast Host" name="twitter:title"/>
 <meta content="Practical AI ebooks, daily newsletter, and the Turing's Torch podcast." name="twitter:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
-<link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
+<style>
+  /* ── Landing page overrides ── */
+  body { margin: 0; padding: 0; font-family: 'Inter', Arial, Helvetica, sans-serif; color: #374151; background: #fff; }
+
+  /* Hero */
+  .lp-hero {
+    background: #0D1420;
+    padding: 72px 20px 60px;
+    text-align: center;
+  }
+  .lp-hero__logo {
+    width: 100px; height: 100px;
+    border-radius: 12px;
+    display: block; margin: 0 auto 24px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    0%  { opacity: 0; transform: translateY(8px); }
+    100%{ opacity: 1; transform: translateY(0); }
+  }
+  .lp-hero h1 {
+    margin: 0 0 12px;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.1;
+    color: #93C5FD;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .lp-hero p {
+    margin: 0 auto 32px;
+    max-width: 640px;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #D1D5DB;
+  }
+  .lp-hero__ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: #4F46E5; color: #fff;
+    padding: 12px 28px; border-radius: 8px;
+    text-decoration: none; font-weight: 700; font-size: 15px;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: #4338CA; }
+  .btn-secondary {
+    background: rgba(255,255,255,0.08); color: #D1D5DB;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 12px 28px; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 15px;
+    transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+  /* Section wrapper */
+  .lp-section { padding: 60px 20px; }
+  .lp-section--alt { background: #F5F7FA; }
+  .lp-inner { max-width: 1100px; margin: 0 auto; }
+  .lp-section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #4F46E5; margin: 0 0 8px;
+  }
+  .lp-section-title {
+    margin: 0 0 12px;
+    font-size: clamp(22px, 3.5vw, 32px);
+    color: #111827; font-weight: 800;
+  }
+  .lp-section-desc { margin: 0 0 36px; color: #6B7280; font-size: 16px; max-width: 640px; }
+
+  /* Author intro */
+  .lp-author {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .lp-author__img {
+    width: 160px; height: 160px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
+  .lp-author__text h2 { margin: 0 0 12px; font-size: 26px; color: #111827; }
+  .lp-author__text p { margin: 0 0 16px; color: #4B5563; line-height: 1.7; font-size: 16px; }
+
+  /* Offer cards (ebooks / podcast / newsletter) */
+  .lp-offers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .lp-offer-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .lp-offer-card__img {
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin: 0 0 20px;
+    display: block;
+  }
+  .lp-offer-card h3 { margin: 0 0 10px; color: #111827; font-size: 20px; }
+  .lp-offer-card p { margin: 0 0 20px; color: #6B7280; font-size: 14px; line-height: 1.6; flex: 1; }
+  .lp-offer-card a {
+    display: inline-block;
+    background: #4F46E5; color: #fff;
+    padding: 10px 20px; border-radius: 8px;
+    text-decoration: none; font-size: 14px; font-weight: 700;
+    align-self: flex-start;
+    transition: background 0.2s;
+  }
+  .lp-offer-card a:hover { background: #4338CA; }
+
+  /* Social proof / stats bar */
+  .lp-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #0D1420;
+    text-align: center;
+  }
+  .lp-stat { color: #fff; }
+  .lp-stat__num { font-size: 32px; font-weight: 800; color: #93C5FD; display: block; }
+  .lp-stat__label { font-size: 13px; color: #9CA3AF; margin-top: 4px; display: block; }
+
+  /* Testimonials */
+  .lp-testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; }
+  .lp-testimonial {
+    background: #fff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+    border-left: 4px solid #4F46E5;
+  }
+  .lp-testimonial blockquote { margin: 0 0 14px; font-style: italic; color: #374151; font-size: 15px; line-height: 1.65; }
+  .lp-testimonial cite { font-size: 13px; font-weight: 700; color: #4F46E5; font-style: normal; }
+
+  /* Featured ebooks */
+  .lp-ebooks { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 20px; }
+  .lp-ebook-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.06);
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: block;
+  }
+  .lp-ebook-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
+  .lp-ebook-card__cover {
+    background: linear-gradient(135deg, #1e2d45 0%, #0D1420 100%);
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #93C5FD;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .lp-ebook-card__body { padding: 14px 16px; }
+  .lp-ebook-card__title { margin: 0; font-size: 13px; color: #111827; font-weight: 600; line-height: 1.4; }
+
+  /* Newsletter CTA */
+  .lp-newsletter-cta {
+    background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+    border-radius: 20px;
+    padding: 48px 32px;
+    text-align: center;
+    color: #fff;
+  }
+  .lp-newsletter-cta h2 { margin: 0 0 10px; font-size: 28px; }
+  .lp-newsletter-cta p { margin: 0 0 24px; color: rgba(255,255,255,0.85); font-size: 16px; }
+  .lp-newsletter-cta a {
+    background: #fff; color: #4F46E5;
+    padding: 12px 32px; border-radius: 8px;
+    text-decoration: none; font-weight: 800; font-size: 15px;
+    display: inline-block;
+    transition: opacity 0.2s;
+  }
+  .lp-newsletter-cta a:hover { opacity: 0.92; }
+
+  @media (max-width: 640px) {
+    .lp-author { grid-template-columns: 1fr; text-align: center; }
+    .lp-author__img { margin: 0 auto; }
+    .lp-stats { gap: 20px; }
+  }
+</style>
+  <link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
 
 <script type="application/ld+json">
 {
@@ -542,15 +742,6 @@
   ]
 }
 </script>
-<style id="jh-dropdown-inline">
-.jh-nav-dropdown{position:relative;list-style:none;}
-.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;}
-.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
-</style>
 </head>
 <body class="home">
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -559,67 +750,6 @@
   <span class="sr-only" role="status">Loading content…</span>
 </div>
 
-<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
-  <div class="jh-header__inner">
-    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
-      <span class="jh-brand__text">Jonathan Harris</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <ul class="jh-topnav">
-  <li><a href="/">Home</a></li>
-  <li><a href="/ebooks/">eBooks</a></li>
-  <li><a href="/podcast/">Podcast</a></li>
-  <li><a href="/newsletter/">Newsletter</a></li>
-  <li><a href="/blog/">Blog</a></li>
-  <li><a href="/bio/">About</a></li>
-  <li class="jh-nav-dropdown">
-    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <ul class="jh-nav-dropdown__menu" role="menu">
-      <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
-      <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
-    </ul>
-  </li>
-  <li><a href="/contact/">Contact</a></li>
-</ul>
-    </nav>
-    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
-  </div>
-  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-  <a class="jh-mobile-nav__brand-link" href="/" aria-label="Jonathan Harris – home">
-    <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
-    <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
-  </a>
-  <a href="/">Home</a>
-  <a href="/ebooks/">eBooks</a>
-  <a href="/podcast/">Podcast</a>
-  <a href="/newsletter/">Newsletter</a>
-  <a href="/blog/">Blog</a>
-  <a href="/bio/">About</a>
-  <a href="/glossary/">Glossary</a>
-  <a href="/topics/">Topics</a>
-  <a href="/contact/">Contact</a>
-</nav>
-</header>
-<script>
-(function(){
-  var path=window.location.pathname.replace(/\/+$/,'')||'/';
-  document.querySelectorAll('.jh-topnav a,.jh-mobile-nav a').forEach(function(a){
-    var h=a.getAttribute('href').replace(/\/+$/,'')||'/';
-    if(h===path||(h.length>1&&path.startsWith(h)))a.setAttribute('aria-current','page');
-  });
-  var btn=document.querySelector('.jh-hamburger'),mn=document.getElementById('jh-mobile-nav');
-  if(btn&&mn)btn.addEventListener('click',function(){
-    var open=mn.classList.toggle('is-open');
-    if(open){mn.removeAttribute('hidden');mn.style.display='';}
-    else{mn.style.display='none';}
-    btn.setAttribute('aria-expanded',open?'true':'false');
-    btn.setAttribute('aria-label',open?'Close navigation menu':'Open navigation menu');
-    var lbl=btn.querySelector('.jh-hamburger__label');
-    if(lbl)lbl.textContent=open?'Close':'Menu';
-  });
-})();
-</script>
 <!-- ── HERO ── -->
 <div class="lp-hero">
   <img alt="Jonathan Harris" class="lp-hero__logo" fetchpriority="high" height="100" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="100"/>
@@ -658,43 +788,7 @@
     <div class="lp-inner">
       <p class="lp-section-label">About the author</p>
       <div class="lp-author">
-        <span class="lp-author__img" role="img" aria-label="Jonathan Harris, AI author and podcast host" style="display:block;width:160px;height:160px;flex-shrink:0;">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" style="display:block;border-radius:18px;" aria-hidden="true" focusable="false">
-  <!-- background -->
-  <rect width="160" height="160" rx="18" fill="#0D1420"/>
-  <!-- subtle radial glow -->
-  <radialGradient id="ag" cx="50%" cy="35%" r="55%">
-    <stop offset="0%" stop-color="#93C5FD" stop-opacity="0.18"/>
-    <stop offset="100%" stop-color="#0D1420" stop-opacity="0"/>
-  </radialGradient>
-  <rect width="160" height="160" rx="18" fill="url(#ag)"/>
-  <!-- neck -->
-  <rect x="68" y="90" width="24" height="22" rx="6" fill="#1E2D45"/>
-  <!-- shoulders / body — natural drape -->
-  <path d="M18 160 Q20 118 42 110 Q58 104 80 104 Q102 104 118 110 Q140 118 142 160 Z" fill="#1E2D45"/>
-  <!-- collar highlight -->
-  <path d="M68 104 Q80 114 92 104" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
-  <!-- head -->
-  <ellipse cx="80" cy="66" rx="28" ry="32" fill="#1E2D45"/>
-  <!-- face highlight — subtle skin tone warmth -->
-  <ellipse cx="80" cy="68" rx="22" ry="25" fill="#263548"/>
-  <!-- eyes -->
-  <ellipse cx="70" cy="65" rx="4" ry="4.5" fill="#0D1420"/>
-  <ellipse cx="90" cy="65" rx="4" ry="4.5" fill="#0D1420"/>
-  <!-- eye shine -->
-  <circle cx="72" cy="63" r="1.2" fill="#93C5FD" opacity="0.7"/>
-  <circle cx="92" cy="63" r="1.2" fill="#93C5FD" opacity="0.7"/>
-  <!-- subtle smile -->
-  <path d="M73 80 Q80 85 87 80" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.6"/>
-  <!-- hair — natural short style -->
-  <path d="M52 60 Q52 34 80 34 Q108 34 108 60 Q105 46 80 44 Q55 46 52 60 Z" fill="#111827"/>
-  <!-- subtle side fade / ear suggestion -->
-  <ellipse cx="52" cy="67" rx="5" ry="7" fill="#1E2D45"/>
-  <ellipse cx="108" cy="67" rx="5" ry="7" fill="#1E2D45"/>
-  <!-- accent glow rim on head -->
-  <ellipse cx="80" cy="66" rx="28" ry="32" fill="none" stroke="#93C5FD" stroke-width="1" opacity="0.15"/>
-</svg>
-</span>
+        <img alt="Jonathan Harris, AI author and podcast host" class="lp-author__img" loading="lazy" src="https://images.jonathan-harris.online/author-photo" width="160" height="160"/>
         <div class="lp-author__text">
           <h2 id="about-heading">Jonathan Harris</h2>
           <p>Technology author focused on practical artificial intelligence across industries — what works, what breaks, and what the trade-offs really look like once AI leaves the lab and hits the messy real world.</p>
@@ -797,29 +891,6 @@
     </div>
   </section>
 
-  <!-- ── GLOSSARY + TOPICS TEASER ── -->
-  <section class="lp-section lp-section--alt" aria-labelledby="resources-heading">
-    <div class="lp-inner">
-      <p class="lp-section-label">Explore the knowledge base</p>
-      <h2 class="lp-section-title" id="resources-heading">Go deeper on AI</h2>
-      <p class="lp-section-desc">Two free reference tools built for readers who want to understand the language and landscape of artificial intelligence.</p>
-      <div class="lp-resources">
-        <a class="lp-resource-card" href="/glossary/">
-          <span class="lp-resource-card__icon" aria-hidden="true">📖</span>
-          <h3>AI Glossary</h3>
-          <p>Plain-English definitions for the terms, acronyms, and concepts that come up constantly in AI discussions — without the jargon and hand-waving.</p>
-          <span class="lp-resource-card__cta">Explore the Glossary →</span>
-        </a>
-        <a class="lp-resource-card" href="/topics/">
-          <span class="lp-resource-card__icon" aria-hidden="true">🗺️</span>
-          <h3>Topics Index</h3>
-          <p>Browse eBooks and articles organised by subject — from healthcare and law to climate, manufacturing, and the future of work.</p>
-          <span class="lp-resource-card__cta">Browse by Topic →</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- ── NEWSLETTER CTA ── -->
   <section class="lp-section" aria-labelledby="newsletter-cta-heading">
     <div class="lp-inner">
@@ -834,46 +905,5 @@
 </main>
 
 <div id="siteFooter"></div>
-<script>
-(function(){
-  // Resources dropdown wiring
-  document.querySelectorAll('.jh-nav-dropdown').forEach(function(dd){
-    var btn=dd.querySelector('.jh-nav-dropdown__btn');
-    if(!btn)return;
-    btn.addEventListener('click',function(e){
-      e.stopPropagation();
-      var open=dd.classList.toggle('is-open');
-      btn.setAttribute('aria-expanded',open?'true':'false');
-    });
-  });
-  document.addEventListener('click',function(){
-    document.querySelectorAll('.jh-nav-dropdown.is-open').forEach(function(dd){
-      dd.classList.remove('is-open');
-      var b=dd.querySelector('.jh-nav-dropdown__btn');
-      if(b)b.setAttribute('aria-expanded','false');
-    });
-  });
-  // Scroll-triggered hamburger
-  (function(){
-    var header=document.querySelector('.jh-header');
-    var hero=document.querySelector('.lp-hero, .hero, section[aria-label="Page Header"]');
-    if(!header||!hero||hero===header)return;
-    if(window.innerWidth>768)return;
-    var hamburger=header.querySelector('.jh-hamburger');
-    if(!hamburger)return;
-    hamburger.style.opacity='0';
-    hamburger.style.pointerEvents='none';
-    hamburger.style.transition='opacity 0.2s ease';
-    var observer=new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        var show=!entry.isIntersecting;
-        hamburger.style.opacity=show?'1':'0';
-        hamburger.style.pointerEvents=show?'auto':'none';
-      });
-    },{threshold:0.1});
-    observer.observe(hero);
-  })();
-})();
-</script>
 </body>
 </html>
