@@ -1102,6 +1102,7 @@ body.jh-page-404 main{
 :root {
   --bg-soft: #EEF2FF;
   --text-soft: #374151;
+  --header-h: 72px; /* MOB-03: shared header height for hero padding calculations */
 }
 
 /* ── Content skeleton loaders for dynamic sections ── */
@@ -1330,27 +1331,7 @@ body.jh-page-404 main{
 }
 
 /* ── Contrast improvements ── */
-:root {
-  --bg-soft: #EEF2FF;
-  --text-soft: #374151;
-}
-.meta, .micro-meta, .section-lead { color: #374151; }
-
-/* ── Skeleton loaders ── */
-.skeleton {
-  background: linear-gradient(90deg, #e8eaf0 25%, #f3f5f8 50%, #e8eaf0 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.4s ease-in-out infinite;
-  border-radius: 8px;
-}
-@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; background: #e8eaf0; } }
-@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.skeleton-cover { width: 100%; aspect-ratio: 2/3; max-width: 160px; border-radius: 14px; }
-.skeleton-line { height: 16px; margin: 8px 0; border-radius: 6px; }
-.skeleton-line--short { width: 55%; }
-.skeleton-line--mid   { width: 80%; }
-.skeleton-line--long  { width: 100%; }
-.skeleton-btn { height: 38px; width: 120px; border-radius: 999px; margin-top: 12px; }
+/* CSS-02: Duplicate skeleton/root block removed — see primary definition above */
 
 /* ── Testimonial cards ── */
 .testimonial-card {
@@ -2057,9 +2038,8 @@ body.home .wrap .card{text-align:center;}
   outline-offset: 2px;
 }
 @media (max-width: 768px) {
-  .jh-hamburger { display: none !important; }
-  .jh-header.is-visible .jh-hamburger,
-  .jh-header--injected.is-visible .jh-hamburger { display: inline-flex !important; align-items: center; justify-content: center; }
+  /* MOB-01: Always show hamburger on mobile — hero-mode should not hide it */
+  .jh-hamburger { display: inline-flex !important; align-items: center; justify-content: center; }
 }
 
 /* HIGH — Active nav link: bottom border + bold weight (colour-blind safe) */
@@ -2218,6 +2198,9 @@ section.card > p,
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  min-height: 44px; /* MOB-04: ensure 44px touch target on mobile */
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 /* Blog placeholder card: enhanced styling so it reads as intentional */
@@ -2488,38 +2471,6 @@ body.jh-no-hero-page .jh-header--injected {
 
 
 
-/* UI/UX improvements */
-body, p, h1, h2, h3, h4, h5, h6, .container, .content {
-    text-align:center;
-}
-
-header{
-    margin-top:0!important;
-    padding-top:0!important;
-}
-
-main{
-    margin-top:0;
-}
-
-section{
-    margin-left:auto;
-    margin-right:auto;
-}
-
-.hero, .card, .post, .book-card{
-    margin-left:auto;
-    margin-right:auto;
-}
-
-a{
-    text-decoration:none;
-}
-
-footer{
-    text-align:center;
-}
-
 
 /* Podcast embed: fill card width cleanly */
 .podcast-spotify-wrap{width:100%;border-radius:18px;overflow:hidden;background:#0D1420;box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);}
@@ -2752,6 +2703,11 @@ body.home .lp-ebook-card__cover{
   display:block;
   width:100%;
   height:auto;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  border-radius: 8px 8px 0 0;
+  /* HOME-01: fallback background if CDN image fails to load */
+  background-color: #1e2a40;
 }
 body.home .lp-ebook-card__body{
   padding:18px 18px 20px;
@@ -2846,18 +2802,23 @@ body.page-ebooks .pager{
   z-index:1;
 }
 
-/* Mobile nav: only hide hamburger when in hero-mode and not yet scrolled (no-JS = always visible) */
+/* MOB-01: Hamburger always visible on mobile - hero-mode only hides header text on desktop */
 @media (max-width: 768px){
-  .jh-header--hero-mode:not(.is-visible) .jh-hamburger,
-  .jh-header--hero-mode:not(.is-visible) .jh-mobile-nav{
-    visibility:hidden;
+  /* Ensure header is visible enough on mobile hero pages */
+  .jh-header--hero-mode:not(.is-visible) {
+    opacity: 1;
+    background: rgba(13,20,32,0.85);
+    backdrop-filter: blur(8px);
   }
 }
 
-/* Keep the back-to-top clear of chatbot and consent UI on smaller screens */
+/* MOB-05: Keep the back-to-top clear of chatbot, consent UI, and footer on mobile */
 @media (max-width: 768px){
   .jh-back-to-top{
     right:max(12px, calc(env(safe-area-inset-right, 0px) + 6px));
+    top: auto;
+    bottom: 80px;
+    transform: none;
   }
 }
 
@@ -3165,16 +3126,16 @@ header.hero .muted {
 /* ── REC 4: Mobile book grid — 2-column layout (Mobile UX #1)
    Audit finding: catalogue drops to single column on mobile causing
    excessive scroll. Change to 2-column at ≤ 620px to reduce fatigue. ── */
+/* MOB-02: Flattened nested @media for older browser compatibility */
 @media (max-width: 620px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
-  /* Keep single column only on very narrow devices (375px portrait edge) */
-  @media (max-width: 340px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
+}
+@media (max-width: 340px) {
+  .grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -3443,4 +3404,19 @@ body.page-glossary .hero {
   body.page-podcast .hero {
     padding-top: 82px;
   }
+}
+
+
+/* ── CSS-03: Button system unification ── */
+/* Standardise .button (legacy book pages) to match .btn-primary styling */
+.button {
+  border-radius: 999px !important;
+}
+.button.secondary {
+  border-radius: 999px !important;
+}
+/* Ensure both systems share the same visual language */
+.btn-primary, .btn-ghost, .btn,
+.button, .button.secondary {
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
