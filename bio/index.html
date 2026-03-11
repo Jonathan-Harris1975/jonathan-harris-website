@@ -156,30 +156,13 @@
 <body class="bio-page page-bio">
 <a class="skip-link" href="#main">Skip to main content</a>
 <!-- Primary navigation -->
-<style>
-  :focus-visible{outline:2px solid #4F46E5;outline-offset:3px;border-radius:4px;}
-  .jh-header{background:#0D1420;border-bottom:1px solid rgba(255,255,255,0.08);position:fixed;top:0;left:0;right:0;z-index:2500;opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity .28s ease,transform .28s ease;}.jh-header.jh-header--hero-mode:not(.is-visible){opacity:0;pointer-events:none;transform:translateY(-6px);}.jh-header.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}
-  .jh-header__inner{max-width:1200px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:24px;}
-  .jh-brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-weight:700;font-size:15px;white-space:nowrap;flex-shrink:0;}
-  .jh-header__logo{width:32px;height:32px;border-radius:8px;display:block;}
-  .jh-topnav{list-style:none;padding:0;margin:0;display:flex;align-items:center;gap:4px;flex:1;}
-  .jh-topnav a{color:#D1D5DB;text-decoration:none;font-size:14px;padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;display:block;}
-  .jh-topnav a:hover{color:#fff;background:rgba(255,255,255,.08);}
-  .jh-topnav a[aria-current="page"]{color:#93C5FD;background:rgba(147,197,253,0.08);border-bottom:2px solid #93C5FD;font-weight:700;}
-  .jh-hamburger{display:none;background:rgba(79,70,229,0.85);border:1px solid rgba(79,70,229,0.6);color:#fff;font-size:20px;cursor:pointer;padding:7px 10px;border-radius:10px;margin-left:auto;line-height:1;transition:background 0.15s ease;}
-  .jh-hamburger:hover{background:rgba(67,56,202,0.95);}
-  .jh-mobile-nav{display:none;flex-direction:column;background:#0D1420;border-top:1px solid rgba(255,255,255,.08);padding:8px 16px 16px;}
-  .jh-mobile-nav a{color:#D1D5DB;text-decoration:none;font-size:15px;padding:11px 8px;border-bottom:1px solid rgba(255,255,255,.06);display:block;}
-  .jh-mobile-nav a:last-child{border-bottom:none;}
-  .jh-mobile-nav a:hover,.jh-mobile-nav a[aria-current="page"]{color:#93C5FD;}
-  .jh-mobile-nav.is-open{display:flex;}
-  @media(max-width:768px){.jh-topnav{display:none;}.jh-hamburger{display:none;}.jh-header--hero-mode:not(.is-visible) .jh-hamburger{visibility:hidden;}.jh-header.is-visible .jh-hamburger,.jh-header--injected.is-visible .jh-hamburger,.jh-header:not(.jh-header--hero-mode) .jh-hamburger{display:flex !important;align-items:center;justify-content:center;}}
-</style>
 <header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
   <div class="jh-header__inner">
     <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
-      Jonathan Harris
+      <span class="jh-logo-wrap" aria-hidden="true">
+        <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" decoding="async" aria-hidden="true"/>
+      </span>
+      <span class="jh-brand__text">Jonathan Harris</span>
     </a>
     <nav aria-label="Primary navigation">
       <ul class="jh-topnav">
@@ -203,8 +186,10 @@
     <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
   </div>
   <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-  <a class="jh-mobile-nav__brand-link" href="/" aria-label="Jonathan Harris – home">
-    <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
+  <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
+    <span class="jh-logo-wrap" aria-hidden="true">
+      <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true"/>
+    </span>
     <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
   </a>
   <a href="/">Home</a>
@@ -222,7 +207,7 @@
 
 <!-- HERO -->
 <section aria-label="About page header" class="hero" role="region">
-<img alt="Jonathan Harris, AI author and podcast host" class="logo-plain" height="120" src="https://images.jonathan-harris.online/headshot" width="120" style="border-radius:50%;object-fit:cover;border:3px solid rgba(147,197,253,0.35);background-color:#1e2a40;"/>
+<img alt="Jonathan Harris – AI Author &amp; Podcast Host" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120" loading="eager" fetchpriority="high" decoding="async"/>
 <h1>About Jonathan Harris</h1>
 <p>
       AI author and podcast host — clear, practical artificial intelligence, minus the hype and buzzwords.
