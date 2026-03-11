@@ -170,7 +170,7 @@
   .lp-testimonial cite { font-size: 13px; font-weight: 700; color: #4F46E5; font-style: normal; }
 
   /* Featured ebooks */
-  .lp-ebooks { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 20px; }
+  .lp-ebooks { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 20px; }
   .lp-ebook-card {
     background: #fff;
     border-radius: 12px;
@@ -184,43 +184,57 @@
   .lp-ebook-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.14); }
   .lp-ebook-card__cover {
     background: linear-gradient(135deg, #1e2d45 0%, #0D1420 100%);
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #93C5FD;
-    text-align: center;
-    line-height: 1.4;
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    min-height: 0;
   }
   .lp-ebook-card__body { padding: 14px 16px; }
   .lp-ebook-card__title { margin: 0; font-size: 13px; color: #111827; font-weight: 600; line-height: 1.4; }
 
   /* Newsletter CTA */
   .lp-newsletter-cta {
-    background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
-    border-radius: 20px;
+    background: linear-gradient(135deg, #111827 0%, #1e1b4b 55%, #312e81 100%);
+    border: 1px solid rgba(147,197,253,0.18);
+    border-radius: 24px;
     padding: 48px 32px;
     text-align: center;
     color: #fff;
+    box-shadow: 0 20px 50px rgba(49,46,129,0.22);
   }
-  .lp-newsletter-cta h2 { margin: 0 0 10px; font-size: 28px; }
-  .lp-newsletter-cta p { margin: 0 0 24px; color: rgba(255,255,255,0.85); font-size: 16px; }
+  .lp-newsletter-cta h2 { margin: 0 0 10px; font-size: 28px; color: #EEF2FF; }
+  .lp-newsletter-cta p { margin: 0 auto 24px; max-width: 680px; color: #D1D5DB; font-size: 16px; }
   .lp-newsletter-cta a {
-    background: #fff; color: #4F46E5;
-    padding: 12px 32px; border-radius: 8px;
+    background: #fff; color: #3730A3;
+    padding: 12px 32px; border-radius: 12px;
     text-decoration: none; font-weight: 800; font-size: 15px;
     display: inline-block;
-    transition: opacity 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 10px 24px rgba(15,23,42,0.18);
   }
-  .lp-newsletter-cta a:hover { opacity: 0.92; }
+  .lp-newsletter-cta a:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(15,23,42,0.22); }
 
+  @media (max-width: 768px) {
+    .lp-offers,
+    .lp-ebooks,
+    .lp-testimonials {
+      grid-template-columns: 1fr;
+    }
+  }
   @media (max-width: 640px) {
     .lp-author { grid-template-columns: 1fr; text-align: center; }
     .lp-author__img { margin: 0 auto; }
     .lp-stats { gap: 20px; }
+    .lp-offer-card,
+    .lp-testimonial,
+    .lp-ebook-card {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .lp-newsletter-cta {
+      padding: 32px 20px;
+    }
   }
 </style>
   <link rel="search" type="application/opensearchdescription+xml" title="Jonathan Harris Books" href="/opensearch.xml"/>
@@ -844,7 +858,7 @@
     <div class="lp-inner">
       <p class="lp-section-label">About the author</p>
       <div class="lp-author">
-        <img alt="Jonathan Harris, AI author and podcast host" class="lp-author__img" loading="lazy" src="https://images.jonathan-harris.online/author-photo" width="160" height="160" style="background-color:#1e2a40;"/>
+        <img alt="Jonathan Harris, AI author and podcast host" class="lp-author__img" loading="lazy" src="https://images.jonathan-harris.online/headshot" width="160" height="160" style="background-color:#1e2a40;"/>
         <div class="lp-author__text">
           <h2 id="about-heading">Jonathan Harris</h2>
           <p>Technology author focused on practical artificial intelligence across industries — what works, what breaks, and what the trade-offs really look like once AI leaves the lab and hits the messy real world.</p>
@@ -892,23 +906,23 @@
       <p class="lp-section-desc">A sample of topics covered. Each one designed to be read and understood by non-technical people.</p>
       <div class="lp-ebooks">
         <a class="lp-ebook-card" href="/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/">
-          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/digital-diagnosis-how-ai-is-revolutionizing-healthcare-webp" alt="Digital Diagnosis: How AI is Revolutionizing Healthcare — book cover" loading="lazy" decoding="async"/>
+          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp" alt="Digital Diagnosis: How AI is Revolutionizing Healthcare — book cover" loading="lazy" decoding="async"/>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Digital Diagnosis: How AI is Revolutionizing Healthcare</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/">
-          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability-webp" alt="AI in Logistics: Optimizing Efficiency and Sustainability — book cover" loading="lazy" decoding="async"/>
+          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/artificial-intelligence-logistics-webp" alt="AI in Logistics: Optimizing Efficiency and Sustainability — book cover" loading="lazy" decoding="async"/>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI in Logistics: Optimizing Efficiency and Sustainability</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/">
-          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention-webp" alt="AI for Cyber Security: A Practical Guide to Data Breach Prevention — book cover" loading="lazy" decoding="async"/>
+          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp" alt="AI for Cyber Security: A Practical Guide to Data Breach Prevention — book cover" loading="lazy" decoding="async"/>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">AI for Cyber Security: A Practical Guide to Data Breach Prevention</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/">
-          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry-webp" alt="The Autonomous Revolution: AI and the Future of the Automotive Industry — book cover" loading="lazy" decoding="async"/>
+          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp" alt="The Autonomous Revolution: AI and the Future of the Automotive Industry — book cover" loading="lazy" decoding="async"/>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">The Autonomous Revolution: AI and the Future of the Automotive Industry</p></div>
         </a>
         <a class="lp-ebook-card" href="/book/climate-intelligence-harnessing-ai-for-a-greener-future/">
-          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/climate-intelligence-harnessing-ai-for-a-greener-future-webp" alt="Climate Intelligence: Harnessing AI for a Greener Future — book cover" loading="lazy" decoding="async"/>
+          <img class="lp-ebook-card__cover" src="https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp" alt="Climate Intelligence: Harnessing AI for a Greener Future — book cover" loading="lazy" decoding="async"/>
           <div class="lp-ebook-card__body"><p class="lp-ebook-card__title">Climate Intelligence: Harnessing AI for a Greener Future</p></div>
         </a>
         <a class="lp-ebook-card" href="/ebooks/" style="background:#4F46E5;border:none;display:flex;align-items:center;justify-content:center;min-height:170px;text-decoration:none;border-radius:12px;">
