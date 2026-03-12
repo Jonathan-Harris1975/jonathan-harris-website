@@ -412,7 +412,7 @@
             var lbl = btn.querySelector('.jh-hamburger__label');
             if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
           });
-          // Escape key closes mobile nav from anywhere within it
+          // Escape key + focus trap for mobile nav (WCAG 2.1 SC 2.1.2)
           mobileNav.addEventListener('keydown', function(e){
             if (e.key === 'Escape') {
               mobileNav.classList.remove('is-open');
@@ -421,6 +421,19 @@
               var lbl = btn.querySelector('.jh-hamburger__label');
               if (lbl) lbl.textContent = 'Menu';
               btn.focus();
+              return;
+            }
+            // Focus trap: cycle Tab within the open mobile nav
+            if (e.key === 'Tab' && mobileNav.classList.contains('is-open')) {
+              var focusable = Array.from(mobileNav.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])'));
+              if (!focusable.length) return;
+              var first = focusable[0];
+              var last = focusable[focusable.length - 1];
+              if (e.shiftKey) {
+                if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+              } else {
+                if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+              }
             }
           });
           markActiveNav(mobileNav);

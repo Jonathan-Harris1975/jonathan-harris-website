@@ -209,8 +209,8 @@
       "title": "Beyond Earth: How AI is Transforming Space Exploration",
       "desc": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. 350-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
-      "buy": "https://mybook.to/K7nVJGv",
-      "topic": "Science", /* FIX: was "Creativity" — incorrect */
+      "buy": "https://mybook.to/beyondearth",
+      "topic": "Science", /* FIX: was "Creativity" — incorrect; buy URL was duplicate of The House Always Knows (K7nVJGv) */
       "pages": 350,
       "url": "/book/beyond-earth-how-ai-is-transforming-space-exploration/"
     },
