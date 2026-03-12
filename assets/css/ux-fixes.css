@@ -139,3 +139,20 @@ article p {
   text-decoration: none;
   outline: none;
 }
+
+
+/* ── Desktop resources dropdown: easier tap/click targets ─────────── */
+.jh-nav-dropdown__btn,
+.jh-nav-dropdown__menu li a {
+  min-height: 44px;
+}
+
+.jh-nav-dropdown__btn {
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.jh-nav-dropdown__menu li a {
+  padding: 11px 12px;
+  font-size: 14px;
+}
