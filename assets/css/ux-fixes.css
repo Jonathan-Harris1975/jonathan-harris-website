@@ -93,11 +93,21 @@ img {
 }
 
 /* ── Typography: improved readability on body text ───────────────── */
-p {
+/* Scoped to prose/main containers only — avoids breaking flex/grid layouts */
+.main p,
+.wrap p,
+.card p,
+article p {
   max-width: 72ch;
 }
-.wrap p {
-  max-width: 68ch;
+
+/* ── Section label utility class (replaces repeated inline styles) ── */
+.section-label {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #374151; /* Was #6B7280 — now passes WCAG AA contrast */
 }
 
 /* ── Layout: section spacing consistency ─────────────────────────── */
