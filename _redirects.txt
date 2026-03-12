@@ -109,6 +109,18 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 # 8) CANONICAL: old /book URLs permanently redirect to /ebooks
 /book/*  /ebooks/:splat  301
 
+# 8A) Topic route rewrites (serve topic landing pages on canonical /topics/* paths)
+/topics/ai-for-beginners   /ai-for-beginners/   200
+/topics/ai-for-beginners/  /ai-for-beginners/   200
+/topics/ai-in-business     /ai-in-business/     200
+/topics/ai-in-business/    /ai-in-business/     200
+/topics/ai-in-healthcare   /ai-in-healthcare/   200
+/topics/ai-in-healthcare/  /ai-in-healthcare/   200
+/topics/generative-ai      /generative-ai/      200
+/topics/generative-ai/     /generative-ai/      200
+/topics/robotics-automation    /robotics-automation/    200
+/topics/robotics-automation/   /robotics-automation/    200
+
 # 9) Terms
 /terms   /terms-of-use/  301
 /terms/  /terms-of-use/  301
