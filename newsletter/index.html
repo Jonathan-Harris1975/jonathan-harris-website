@@ -81,9 +81,9 @@
 <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
 <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
 <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
-<li role="none"><a href="/contact/" role="menuitem">Contact</a></li>
 </ul>
 </li>
+<li><a href="/contact/">Contact</a></li>
 </ul>
 </nav>
 <button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
@@ -174,15 +174,30 @@
 </section>
 <section aria-label="Sign up form" class="card card--accent" role="region">
 <h2>Newsletter Sign-Up</h2>
-<div class="embed-wrap">
-<iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260277027608054" onload="window.parent.scrollTo(0,0)" scrolling="no" src="https://form.jotform.com/260277027608054" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Get the AI Edge"></iframe>
+<div id="newsletter-form-wrap">
+  <div class="embed-wrap">
+    <iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260277027608054" onload="window.parent.scrollTo(0,0)" scrolling="no" src="https://form.jotform.com/260277027608054" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Get the AI Edge"></iframe>
+  </div>
+  <p class="subtle" style="margin-top:14px;text-align:center;">
+    If the form above doesn’t load:
+    <a class="newsletter-fallback" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Sign up here →</a>
+  </p>
 </div>
-<p class="subtle" style="margin-top:14px;text-align:center;">
-  If the form above doesn’t load: 
-  <a class="newsletter-fallback" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">
-    Sign up here →
-  </a>
-</p>
+<div id="newsletter-success" aria-live="polite" role="status" style="display:none;text-align:center;padding:32px 18px;" tabindex="-1">
+  <svg aria-hidden="true" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 16px;display:block;"><circle cx="24" cy="24" r="23" stroke="#4F46E5" stroke-width="2"/><path d="M14 24l7 7 13-14" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <h3 style="margin:0 0 8px;color:#111827;">You’re in — welcome aboard!</h3>
+  <p style="margin:0;color:#374151;">Check your inbox for a confirmation email. Your first <em>AI Edge</em> briefing will arrive tomorrow morning.</p>
+</div>
+<script>
+(function(){
+  window.addEventListener('message',function(e){
+    if(e.data&&(e.data.action==='submission-completed'||(typeof e.data==='string'&&e.data.indexOf('JotForm')>-1&&e.data.indexOf('submitted')>-1))){
+      var w=document.getElementById('newsletter-form-wrap'),s=document.getElementById('newsletter-success');
+      if(w&&s){w.style.display='none';s.style.display='block';s.focus();}
+    }
+  });
+})();
+</script>
 </section>
 <section aria-label="What readers say" class="card card--accent" role="region" style="margin-top:22px;">
 <h2>What readers say</h2>
@@ -206,10 +221,6 @@
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260277027608054']", "https://form.jotform.com/");
   </script>
 <div id="siteFooter"></div>
-<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>
-  window.jotformEmbedHandler("iframe[id='JotFormIFrame-260277027608054']", "https://form.jotform.com/");
-</script>
 <script defer="" src="/assets/js/site-ui.js"></script>
 <!-- Chatbot -->
 <script defer="" src="https://botsailor.com/script/webchat-link.js?code=1744067063128291"></script>
