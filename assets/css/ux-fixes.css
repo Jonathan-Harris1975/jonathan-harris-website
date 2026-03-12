@@ -156,3 +156,40 @@ article p {
   padding: 11px 12px;
   font-size: 14px;
 }
+
+
+/* ── Embedded form resilience: visible fallback state ───────────────── */
+.embed-wrap {
+  position: relative;
+  min-height: 220px;
+}
+.embed-wrap--pending::before {
+  content: "Loading form…";
+  display: block;
+  margin: 0 0 12px;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.embed-wrap--loaded::before {
+  display: none;
+}
+.embed-wrap--timeout {
+  outline: 1px dashed rgba(79,70,229,0.35);
+  outline-offset: 10px;
+}
+.embed-fallback-note a {
+  font-weight: 700;
+}
+
+/* ── Comparison tables: keep them usable on small screens ───────────── */
+@media (max-width: 800px) {
+  .compare-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  .compare-table {
+    min-width: 640px;
+  }
+}
