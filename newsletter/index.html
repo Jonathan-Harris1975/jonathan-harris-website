@@ -50,15 +50,6 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 <!-- FIX: Baked-in header added to ensure the hamburger menu is present on mobile
      at the top of the page without requiring the user to scroll past the hero. -->
-<style id="jh-dropdown-inline">
-.jh-nav-dropdown{position:relative;list-style:none;}
-.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
-.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
-</style>
 <header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
 <div class="jh-header__inner">
 <a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
@@ -72,7 +63,7 @@
 <li><a href="/">Home</a></li>
 <li><a href="/ebooks/">eBooks</a></li>
 <li><a href="/podcast/">Podcast</a></li>
-<li><a href="/newsletter/">Newsletter</a></li>
+<li><a href="/newsletter/" aria-current="page">Newsletter</a></li>
 <li><a href="/blog/">Blog</a></li>
 <li><a href="/bio/">About</a></li>
 <li class="jh-nav-dropdown">
@@ -207,11 +198,11 @@
 <div style="max-width:760px;margin:0 auto;">
 <blockquote>
           “The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters.”
-          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Liam R., IT Manager</div>
+          <footer><cite>— Liam R., IT Manager</cite></footer>
 </blockquote>
 <blockquote>
           “No hype, no waffle. Just the bits of AI news that actually change what I do at work.”
-          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Rachel D., Product Manager</div>
+          <footer><cite>— Rachel D., Product Manager</cite></footer>
 </blockquote>
 </div>
 </section>
