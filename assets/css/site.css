@@ -28,7 +28,7 @@ body{
 
 a{color:var(--accent);text-decoration:none;}
 a:hover{color:var(--accent-hover);text-decoration:underline;text-underline-offset:3px;}
-a:focus{outline:2px solid rgba(79,70,229,0.5);outline-offset:2px;border-radius:6px;}
+a:focus-visible{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:6px;}
 
 
 /* ===== Home-only polish ===== */
@@ -627,7 +627,7 @@ details.facts li{margin:6px 0; color:var(--text)}
 /* Links: always recognisable in content */
 a{color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
 a:hover{color:var(--accent-hover);}
-a:focus{outline:2px solid rgba(79,70,229,0.85);outline-offset:2px;border-radius:8px;}
+/* focus ring consolidated into ux-fixes.css */
 /* Nav + buttons look like controls, not underlined paragraphs */
 .jh-topnav a,
 .btn{ text-decoration:none; }
@@ -1102,7 +1102,7 @@ body.jh-page-404 main{
 :root {
   --bg-soft: #EEF2FF;
   --text-soft: #374151;
-  --header-h: 72px; /* MOB-03: shared header height for hero padding calculations */
+  --header-h: 64px; /* Standardised header height — used in all hero padding calc() */
 }
 
 /* ── Content skeleton loaders for dynamic sections ── */
@@ -1410,7 +1410,7 @@ body.jh-page-404 main{
 /* ===== March 2026 UX lock: navigation, spacing, footer, 404 ===== */
 :root{
   --site-max: 1120px;
-  --header-height: 72px;
+  --header-height: 64px;
   --accent-soft: rgba(99,102,241,0.14);
   --panel-dark: rgba(255,255,255,0.06);
 }
@@ -3472,9 +3472,7 @@ body.page-glossary .hero {
   transform:translateY(0);
 }
 @media (max-width: 768px){
-  body{
-    padding-bottom:84px;
-  }
+  /* Removed body padding-bottom:84px — back-to-top is absolutely positioned, no gap needed */
   .jh-back-to-top{
     width:46px;
     height:46px;
@@ -3663,4 +3661,37 @@ body.bio-page .about-banner {
   #JotFormIFrame-260277027608054 {
     height: 680px !important;
   }
+}
+
+/* ===== UX Audit Fixes — Batch 2 ===== */
+
+/* H12: Fix homepage 3-card grid orphan on tablet */
+@media (max-width: 980px) {
+  .explore-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+/* H13: Standardise hero padding-top for fixed header */
+.hero--has-fixed-nav {
+  padding-top: calc(var(--header-h, 64px) + 44px);
+}
+
+/* H15: Featured book grid layout moved from inline styles */
+.featured-book-layout {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 32px;
+  align-items: center;
+}
+@media (max-width: 600px) {
+  .featured-book-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* H20: Give hero--contact and hero--newsletter distinct padding treatments */
+.hero--contact,
+.hero--newsletter {
+  padding-top: calc(var(--header-h, 64px) + 44px);
 }

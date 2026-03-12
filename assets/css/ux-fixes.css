@@ -5,6 +5,7 @@
 /* ── Accessibility: Focus rings ─────────────────────────────────────
    Use a high-contrast cyan ring (WCAG 2.1 AA) instead of the faint
    purple default. Exclude nav dropdown button which has its own style. */
+/* Canonical focus ring system — overrides site.css a:focus rules */
 a:focus-visible,
 button:focus-visible {
   outline: 3px solid #00bcd4;
