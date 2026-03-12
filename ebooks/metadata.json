@@ -1,20 +1,20 @@
 {
-  "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
-  "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
-  "description": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity distribution and generation. Pages: 338.",
-  "topic": "Energy",
+  "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
+  "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+  "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection strategies. Pages: 269.",
+  "topic": "Cybersecurity",
   "tags": [
-    "Energy",
     "Creativity",
     "Artificial Intelligence",
-    "AI Trends"
+    "AI Trends",
+    "Automation"
   ],
-  "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
-  "image": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
-  "buy_url": "https://mybook.to/sntL",
-  "pages": 338,
+  "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
+  "image": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
+  "buy_url": "https://mybook.to/9Wvf",
+  "pages": 269,
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/"
 }
