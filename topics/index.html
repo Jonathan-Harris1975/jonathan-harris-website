@@ -107,15 +107,6 @@
      site-ui.js injected header logo would appear alongside the hero logo-plain
      image once visible, creating a double-logo effect. With the header baked in
      and the hero logo-plain removed, there is only one logo visible at a time. -->
-<style id="jh-dropdown-inline">
-.jh-nav-dropdown{position:relative;list-style:none;}
-.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
-.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
-</style>
 <header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
   <div class="jh-header__inner">
     <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
@@ -133,7 +124,7 @@
   <li><a href="/blog/">Blog</a></li>
   <li><a href="/bio/">About</a></li>
   <li class="jh-nav-dropdown">
-    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true" aria-current="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     <ul class="jh-nav-dropdown__menu" role="menu">
       <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
       <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
@@ -161,7 +152,7 @@
       <span class="jh-mobile-nav__group-label">Resources</span>
       <div class="jh-mobile-nav__group-links">
         <a href="/glossary/">Glossary</a>
-        <a href="/topics/">Topics</a>
+        <a href="/topics/" aria-current="page">Topics</a>
         <a href="/compare/">Comparisons</a>
       </div>
     </div>
