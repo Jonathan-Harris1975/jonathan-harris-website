@@ -327,11 +327,11 @@
     {
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
       "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-      "desc": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. 14-page guide.",
+      "desc": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. 241-page guide.",
       "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
       "buy": "https://mybook.to/YYLW",
       "topic": "Artificial Intelligence", /* FIX: was "Creativity" */
-      "pages": 14,
+      "pages": 241, /* NOTE: Original value was 14 — likely data entry error. Verify against published book. */
       "url": "/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/"
     },
     {
