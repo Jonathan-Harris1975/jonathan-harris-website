@@ -1,28 +1,130 @@
+/* ===== UX/UI Fixes — Applied March 2026 =====
+   Source: SEO & AI Discoverability Audit + UX/UI Repo Optimizer
+   ================================================= */
 
-/* Global UX Improvements */
-
-button, a.button, .btn {
-  min-height:48px;
-  min-width:48px;
-  padding:12px 20px;
-  transition:all .2s ease;
+/* ── Accessibility: Focus rings ─────────────────────────────────────
+   Use a high-contrast cyan ring (WCAG 2.1 AA) instead of the faint
+   purple default. Exclude nav dropdown button which has its own style. */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #00bcd4;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-button:hover, .btn:hover, a.button:hover {
-  transform:translateY(-1px);
-  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+/* ── Touch targets: ensure 44px minimum on interactive elements ──────
+   Scoped to CTA buttons, chip links, and hamburger only.
+   Explicitly excludes nav items so the top bar stays compact. */
+.button,
+a.button,
+.jh-hamburger {
+  min-height: 44px;
+  transition: background 0.18s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-button:focus, a:focus {
-  outline:3px solid #00e5ff;
-  outline-offset:2px;
+/* ── Hover lift: CTA buttons ─────────────────────────────────────── */
+a.button:hover,
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  text-decoration: none;
 }
 
+/* ── Card hover interaction ──────────────────────────────────────── */
 .card:hover {
-  transform:translateY(-3px);
-  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-section {
-  margin-bottom:48px;
+/* ── Navigation: hamburger — mobile only ─────────────────────────────
+   Confirm hamburger is visible ONLY on mobile (≤768px).
+   On desktop it remains display:none from site.css.
+   This rule ensures the brand-indigo style is applied when shown. */
+.jh-hamburger {
+  background: rgba(79,70,229,0.85);
+  border: 1px solid rgba(79,70,229,0.6);
+  color: #fff;
+  min-width: 44px;
+  border-radius: 12px;
+}
+.jh-hamburger:hover {
+  background: rgba(67,56,202,0.95);
+}
+
+/* ── Active nav link indicator ───────────────────────────────────── */
+.jh-topnav a[aria-current="page"] {
+  border-bottom: 2px solid #93C5FD;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+
+/* ── Images: prevent layout shift, ensure responsive scaling ─────── */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Podcast iframe: ensure it doesn't overflow on narrow screens ─── */
+.podcast-spotify-iframe {
+  width: 100%;
+  max-width: 100%;
+  min-height: 232px;
+  border: none;
+  border-radius: 12px;
+}
+
+/* ── Responsiveness: featured book card stacks on mobile ─────────── */
+@media (max-width: 600px) {
+  .featured-book {
+    grid-template-columns: 1fr !important;
+  }
+  .featured-book img {
+    max-width: 160px;
+    margin: 0 auto;
+  }
+  .featured-copy {
+    text-align: center !important;
+  }
+  .featured-copy > div {
+    justify-content: center;
+  }
+}
+
+/* ── Typography: improved readability on body text ───────────────── */
+p {
+  max-width: 72ch;
+}
+.wrap p {
+  max-width: 68ch;
+}
+
+/* ── Layout: section spacing consistency ─────────────────────────── */
+.main section + section {
+  margin-top: 0;
+}
+
+/* ── Colour contrast: ensure chip links meet WCAG AA ─────────────── */
+.chip {
+  color: #111827;
+}
+.chip:hover {
+  color: #111827;
+  background: #F3F4F6;
+  text-decoration: none;
+}
+
+/* ── Skip link visibility on focus (accessibility) ───────────────── */
+.skip-link:focus {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 9999;
+  background: #4F46E5;
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  text-decoration: none;
+  outline: none;
 }
