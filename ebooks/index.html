@@ -78,6 +78,12 @@
 .jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
 .jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
 .jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
+.jh-hero-brand{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 auto 22px;max-width:760px;text-align:left;}
+.jh-hero-brand__logo{width:56px;height:56px;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,0.35);flex:0 0 auto;}
+.jh-hero-brand__text{display:flex;flex-direction:column;gap:2px;}
+.jh-hero-brand__name{font-size:18px;font-weight:800;line-height:1.1;color:#fff;letter-spacing:.01em;}
+.jh-hero-brand__role{font-size:13px;line-height:1.45;color:rgba(229,231,235,0.88);max-width:32ch;}
+@media (max-width:640px){.jh-hero-brand{justify-content:flex-start;margin-bottom:18px;}.jh-hero-brand__logo{width:52px;height:52px;}.jh-hero-brand__name{font-size:17px;}.jh-hero-brand__role{font-size:12px;max-width:none;}}
 </style>
 <header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
   <div class="jh-header__inner">
@@ -140,6 +146,13 @@
 </div>
 <header aria-label="Ebooks catalogue header" class="hero" role="banner">
 <div class="wrap">
+<div class="jh-hero-brand" aria-label="Site identity">
+  <img class="jh-hero-brand__logo" src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris site logo" width="56" height="56" loading="eager"/>
+  <div class="jh-hero-brand__text">
+    <span class="jh-hero-brand__name">Jonathan Harris</span>
+    <span class="jh-hero-brand__role">Artificial Intelligence Author &amp; Host of Turing&#39;s Torch AI Weekly</span>
+  </div>
+</div>
 <h1>AI eBooks by Jonathan Harris</h1>
 <p>
         Cut through the noise. These ebooks break down artificial intelligence with clear thinking,
