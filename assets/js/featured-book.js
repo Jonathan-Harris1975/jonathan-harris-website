@@ -22,7 +22,7 @@
       "buy": "https://mybook.to/Gi93rOF",
       "topic": "Transportation", /* FIX: was Transportation — correct */
       "pages": 227,
-      "url": "/book/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/"
+      "url": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/"
     },
     {
       "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
@@ -32,7 +32,7 @@
       "buy": "https://mybook.to/Ldhe41",
       "topic": "Agriculture", /* FIX: was "Artificial Intelligence" — corrected to domain */
       "pages": 333,
-      "url": "/book/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
+      "url": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
     },
     {
       "slug": "ai-in-aviation-transforming-safety-and-sustainability",
@@ -42,7 +42,7 @@
       "buy": "https://mybook.to/13VF",
       "topic": "Transportation", /* FIX: was "Artificial Intelligence" */
       "pages": 284,
-      "url": "/book/ai-in-aviation-transforming-safety-and-sustainability/"
+      "url": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/"
     },
     {
       "slug": "ai-in-education-reimagining-learning-for-every-student",
@@ -52,7 +52,7 @@
       "buy": "https://mybook.to/8VjT",
       "topic": "Education", /* FIX: was "Education" — correct */
       "pages": 323,
-      "url": "/book/ai-in-education-reimagining-learning-for-every-student/"
+      "url": "/ebooks/ai-in-education-reimagining-learning-for-every-student/"
     },
     {
       "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
@@ -62,7 +62,7 @@
       "buy": "https://mybook.to/yANzV8",
       "topic": "Transportation", /* FIX: was "Artificial Intelligence" */
       "pages": 312,
-      "url": "/book/ai-in-maritime-revolutionizing-shipping-for-sustainability/"
+      "url": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/"
     },
     {
       "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
@@ -72,7 +72,7 @@
       "buy": "https://mybook.to/JkJfDp",
       "topic": "Transportation", /* FIX: was "Creativity" — incorrect */
       "pages": 254,
-      "url": "/book/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/"
+      "url": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/"
     },
     {
       "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
@@ -82,7 +82,7 @@
       "buy": "https://mybook.to/sntL",
       "topic": "Energy", /* FIX: was "Creativity" — incorrect */
       "pages": 338,
-      "url": "/book/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/"
+      "url": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/"
     },
     {
       "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
@@ -92,7 +92,7 @@
       "buy": "https://mybook.to/bWpjeB",
       "topic": "Law", /* FIX: was "Law" — correct */
       "pages": 224,
-      "url": "/book/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
+      "url": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
     },
     {
       "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
@@ -102,7 +102,7 @@
       "buy": "https://mybook.to/9Wvf",
       "topic": "Cyber Security", /* FIX: was "Creativity" — incorrect */
       "pages": 269,
-      "url": "/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/"
+      "url": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/"
     },
     {
       "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
@@ -112,7 +112,7 @@
       "buy": "https://mybook.to/8jAITc",
       "topic": "Environment", /* FIX: was "Creativity" — incorrect */
       "pages": 221,
-      "url": "/book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/"
+      "url": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/"
     },
     {
       "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
@@ -122,7 +122,7 @@
       "buy": "https://mybook.to/hrnKOD",
       "topic": "Finance", /* FIX: was "Creativity" — incorrect */
       "pages": 286,
-      "url": "/book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/"
+      "url": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/"
     },
     {
       "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
@@ -132,7 +132,7 @@
       "buy": "https://mybook.to/unBJY7",
       "topic": "Construction", /* FIX: was "Creativity" — incorrect */
       "pages": 319,
-      "url": "/book/artificial-intelligence-in-construction-building-a-sustainable-future/"
+      "url": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/"
     },
     {
       "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
@@ -142,7 +142,7 @@
       "buy": "https://mybook.to/t2Au28",
       "topic": "Industry", /* FIX: was "Creativity" — incorrect */
       "pages": 347,
-      "url": "/book/artificial-intelligence-in-industry-a-comprehensive-guide/"
+      "url": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/"
     },
     {
       "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
@@ -152,7 +152,7 @@
       "buy": "https://mybook.to/zSKnSW",
       "topic": "Transportation", /* FIX: was "Creativity" — incorrect */
       "pages": 339,
-      "url": "/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/"
+      "url": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/"
     },
     {
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
@@ -162,7 +162,7 @@
       "buy": "https://mybook.to/73M1",
       "topic": "Sports", /* FIX: was "Creativity" — incorrect */
       "pages": 229,
-      "url": "/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/"
+      "url": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/"
     },
     {
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
@@ -172,7 +172,7 @@
       "buy": "https://mybook.to/3cA8",
       "topic": "Healthcare", /* FIX: was "Healthcare" — correct; title capitalisation fixed */
       "pages": 328,
-      "url": "/book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/"
+      "url": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/"
     },
     {
       "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
@@ -182,7 +182,7 @@
       "buy": "https://mybook.to/SOjUE",
       "topic": "Healthcare", /* correct */
       "pages": 235,
-      "url": "/book/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/"
+      "url": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/"
     },
     {
       "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
@@ -192,7 +192,7 @@
       "buy": "https://mybook.to/SOAEb",
       "topic": "Manufacturing", /* FIX: was "Creativity" — incorrect */
       "pages": 369,
-      "url": "/book/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/"
+      "url": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/"
     },
     {
       "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
@@ -202,7 +202,7 @@
       "buy": "https://mybook.to/POYR",
       "topic": "Retail", /* FIX: was "Creativity" — incorrect */
       "pages": 234,
-      "url": "/book/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/"
+      "url": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/"
     },
     {
       "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
@@ -212,7 +212,7 @@
       "buy": "https://mybook.to/beyondearth",
       "topic": "Science", /* FIX: was "Creativity" — incorrect; buy URL was duplicate of The House Always Knows (K7nVJGv) */
       "pages": 350,
-      "url": "/book/beyond-earth-how-ai-is-transforming-space-exploration/"
+      "url": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/"
     },
     {
       "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
@@ -222,7 +222,7 @@
       "buy": "https://mybook.to/aKj8Fh",
       "topic": "Environment", /* FIX: was "Artificial Intelligence" */
       "pages": 338,
-      "url": "/book/climate-intelligence-harnessing-ai-for-a-greener-future/"
+      "url": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/"
     },
     {
       "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
@@ -232,7 +232,7 @@
       "buy": "https://mybook.to/digitaldefense", /* FIX: was wildlife-conservation URL — DUPLICATE BUG */
       "topic": "Defence", /* FIX: was "Artificial Intelligence" */
       "pages": 296,
-      "url": "/book/digital-defense-the-role-of-ai-in-modern-warfare/"
+      "url": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/"
     },
     {
       "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
@@ -242,7 +242,7 @@
       "buy": "https://mybook.to/v98RD",
       "topic": "Healthcare", /* correct */
       "pages": 348,
-      "url": "/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/"
+      "url": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/"
     },
     {
       "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
@@ -252,7 +252,7 @@
       "buy": "https://mybook.to/DWfAK",
       "topic": "Media", /* FIX: was "Artificial Intelligence" */
       "pages": 334,
-      "url": "/book/from-reporters-to-robots-how-ai-is-reshaping-journalism/"
+      "url": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/"
     },
     {
       "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
@@ -262,7 +262,7 @@
       "buy": "https://mybook.to/gameai",
       "topic": "Gaming", /* FIX: was "Education" — incorrect; also had shared buy URL */
       "pages": 344,
-      "url": "/book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/"
+      "url": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/"
     },
     {
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
@@ -272,7 +272,7 @@
       "buy": "https://mybook.to/EcO2DI",
       "topic": "Creativity", /* correct domain for this title */
       "pages": 336,
-      "url": "/book/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/"
+      "url": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/"
     },
     {
       "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
@@ -282,7 +282,7 @@
       "buy": "https://mybook.to/QEcdy",
       "topic": "Construction", /* FIX: was "Creativity" — incorrect */
       "pages": 345,
-      "url": "/book/smart-buildings-ai-powered-efficiency-and-sustainability/"
+      "url": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/"
     },
     {
       "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
@@ -292,7 +292,7 @@
       "buy": "https://mybook.to/aibehindyourfeed",
       "topic": "Media", /* FIX: was "Artificial Intelligence"; had shared DWfAK URL */
       "pages": 333,
-      "url": "/book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/"
+      "url": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/"
     },
     {
       "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
@@ -302,7 +302,7 @@
       "buy": "https://mybook.to/Io32sC3",
       "topic": "Creativity", /* correct */
       "pages": 320,
-      "url": "/book/the-ai-music-revolution-creativity-controversy-and-collaboration/"
+      "url": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/"
     },
     {
       "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
@@ -312,7 +312,7 @@
       "buy": "https://mybook.to/architectsofai",
       "topic": "History", /* FIX: was "Artificial Intelligence" with bad buy URL */
       "pages": 315,
-      "url": "/book/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/"
+      "url": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/"
     },
     {
       "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
@@ -322,7 +322,7 @@
       "buy": "https://mybook.to/aijobshift",
       "topic": "Future of Work", /* FIX: was "Creativity" with shared unBJY7 URL */
       "pages": 315,
-      "url": "/book/the-artificial-intelligence-job-shift-navigating-the-future-of-work/"
+      "url": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/"
     },
     {
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
@@ -332,7 +332,7 @@
       "buy": "https://mybook.to/YYLW",
       "topic": "Artificial Intelligence", /* FIX: was "Creativity" */
       "pages": 241, /* NOTE: Original value was 14 — likely data entry error. Verify against published book. */
-      "url": "/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/"
+      "url": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/"
     },
     {
       "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
@@ -342,7 +342,7 @@
       "buy": "https://mybook.to/DS4Ag",
       "topic": "Transportation", /* FIX: was "Creativity" */
       "pages": 324,
-      "url": "/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/"
+      "url": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/"
     },
     {
       "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
@@ -352,7 +352,7 @@
       "buy": "https://mybook.to/YcRiCRp",
       "topic": "Ethics", /* FIX: was "Artificial Intelligence" */
       "pages": 277,
-      "url": "/book/the-dumbening-how-ai-is-reshaping-our-minds/"
+      "url": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/"
     },
     {
       "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
@@ -362,7 +362,7 @@
       "buy": "https://mybook.to/3TwcUA",
       "topic": "Government", /* FIX: was "Artificial Intelligence" */
       "pages": 328,
-      "url": "/book/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/"
+      "url": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/"
     },
     {
       "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
@@ -372,7 +372,7 @@
       "buy": "https://mybook.to/K7nVJGv",
       "topic": "Ethics", /* correct */
       "pages": 327,
-      "url": "/book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/"
+      "url": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/"
     }
   ];
 

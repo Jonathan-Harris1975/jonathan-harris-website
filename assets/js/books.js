@@ -64,7 +64,26 @@
   const filters = new Set();
   books.forEach(b => { if (b && b.filter) filters.add(b.filter); });
 
-  const state = { q:"", filter:"All", page: 1 };
+  const params = new URLSearchParams(window.location.search);
+  const state = {
+    q: params.get("q") || "",
+    filter: params.get("filter") || "All",
+    page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1)
+  };
+
+  function syncUrl(){
+    try {
+      const next = new URL(window.location.href);
+      if (state.q.trim()) next.searchParams.set("q", state.q.trim());
+      else next.searchParams.delete("q");
+      if (state.filter && state.filter !== "All") next.searchParams.set("filter", state.filter);
+      else next.searchParams.delete("filter");
+      if (state.page > 1) next.searchParams.set("page", String(state.page));
+      else next.searchParams.delete("page");
+      const nextUrl = `${next.pathname}${next.searchParams.toString() ? `?${next.searchParams.toString()}` : ""}${next.hash}`;
+      window.history.replaceState({}, "", nextUrl);
+    } catch(_) {}
+  }
 
   function getPerPage(){
     const w = window.innerWidth || 0;
@@ -94,6 +113,7 @@
           countEl2.dataset.pendingFilter = filterMsg;
         }
       } catch(_) {}
+      syncUrl();
       render();
     });
     return btn;
@@ -169,7 +189,7 @@
     actions.className = "actions";
     const btnDetail = document.createElement("a");
     btnDetail.className = "button secondary";
-    btnDetail.href = `/book/${book.slug}/detail.html`;
+    btnDetail.href = `/ebooks/${book.slug}/`;
     btnDetail.textContent = "Full description";
     const btnBuy = document.createElement("a");
     btnBuy.className = "button";
@@ -234,18 +254,20 @@
     searchInput.addEventListener("input", (e)=>{
       state.q = e.target.value;
       state.page = 1;
+      syncUrl();
       render();
     });
   }
 
   if (prevBtn){
     prevBtn.addEventListener("click", ()=>{
-      if (state.page > 1){ state.page -= 1; render(); }
+      if (state.page > 1){ state.page -= 1; syncUrl(); render(); }
     });
   }
   if (nextBtn){
     nextBtn.addEventListener("click", ()=>{
       state.page += 1;
+      syncUrl();
       render();
     });
   }
@@ -255,5 +277,12 @@
     render();
   });
 
+  if (searchInput) searchInput.value = state.q;
+
+  if (state.filter !== "All" && !filters.has(state.filter)) {
+    state.filter = "All";
+  }
+
+  syncUrl();
   render();
 })();
