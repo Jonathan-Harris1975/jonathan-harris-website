@@ -66,7 +66,7 @@
         style.textContent = `
           .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:3000;}
           .skip-link:focus{left:12px;top:12px;width:auto;height:auto;padding:10px 12px;background:#111827;color:#fff;border-radius:12px;outline:2px solid rgba(79,70,229,0.9);}
-          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.jh-header--hero-mode:not(.is-visible){opacity:0;pointer-events:none;transform:translateY(-6px);}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
+          .jh-header--injected{position:fixed;top:0;left:0;right:0;z-index:2500;background:rgba(13,20,32,0.96);backdrop-filter:saturate(1.2) blur(12px);-webkit-backdrop-filter:saturate(1.2) blur(12px);border-bottom:1px solid rgba(255,255,255,0.10);opacity:1;pointer-events:auto;transform:translateY(0);transition:opacity 0.28s ease,transform 0.28s ease;}.jh-header--injected.is-visible{opacity:1;pointer-events:auto;transform:translateY(0);}.jh-header{z-index:2500;}
           .jh-header__inner{max-width:1120px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
           .jh-brand{color:#E5E7EB;text-decoration:none;font-weight:800;letter-spacing:-0.2px;white-space:nowrap;display:flex;align-items:center;gap:8px;}
           .jh-topnav{display:flex;align-items:center;gap:10px;flex-wrap:nowrap;}
@@ -84,7 +84,7 @@
           .jh-header-spacer{display:block;height:54px;}
           @media (max-width:768px){
             .jh-topnav{display:none !important;}
-            .jh-hamburger{display:none;}.jh-header.is-visible .jh-hamburger,.jh-header--injected.is-visible .jh-hamburger,.jh-header:not(.jh-header--hero-mode) .jh-hamburger,.jh-header--injected:not(.jh-header--hero-mode) .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
+            .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
             .jh-header__inner{padding:10px 14px;gap:10px;}
             .jh-brand__text{font-size:16px;line-height:1.1;}
             .jh-header-spacer{height:56px;}
@@ -175,13 +175,6 @@
   function syncHeaderVisibility(header, heroEl, mobileNav, button){
     if (!header) return;
 
-    // Mark header as hero-mode so CSS hides it until scrolled past the hero
-    if (heroEl) {
-      header.classList.add('jh-header--hero-mode');
-    } else {
-      header.classList.remove('jh-header--hero-mode');
-    }
-
     function closeMobileNav(){
       if (!mobileNav) return;
       mobileNav.classList.remove('is-open');
@@ -200,252 +193,12 @@
       if (!visible) closeMobileNav();
     }
 
-    if (!heroEl) {
+    header.classList.remove('jh-header--hero-mode');
+    setVisible(true);
+
+    window.addEventListener('resize', function(){
       setVisible(true);
-      return;
-    }
-
-    var updateFromScroll = function(){
-      try {
-        var rect = heroEl.getBoundingClientRect();
-        var headerHeight = header.offsetHeight || 64;
-        var revealOffset = Math.max(12, Math.round(headerHeight * 0.35));
-        var shouldShow = rect.bottom <= revealOffset;
-        setVisible(shouldShow);
-      } catch(_) {}
-    };
-
-    window.addEventListener('scroll', updateFromScroll, { passive: true });
-    window.addEventListener('resize', updateFromScroll, { passive: true });
-    window.addEventListener('load', updateFromScroll, { once: true });
-
-    if ('IntersectionObserver' in window) {
-      try {
-        var obs = new IntersectionObserver(function(){
-          updateFromScroll();
-        }, { threshold: [0, 0.01, 0.5, 1], rootMargin: '0px 0px 0px 0px' });
-        obs.observe(heroEl);
-      } catch(_) {}
-    }
-
-    if ('requestAnimationFrame' in window) {
-      requestAnimationFrame(updateFromScroll);
-    }
-    setTimeout(updateFromScroll, 120);
-    updateFromScroll();
-  }
-
-  async function injectHeader(){
-    try{
-      // If a baked-in header already exists, wire it up with scroll-based reveal.
-      var existingHeader = document.querySelector(".jh-header");
-      if (existingHeader) {
-      // Wire hamburger on the baked-in header
-        try {
-          var eBtn = existingHeader.querySelector('.jh-hamburger');
-          var eMobileNav = existingHeader.querySelector('.jh-mobile-nav');
-          if (eBtn && eMobileNav) {
-            // Remove stale listener by cloning the button
-            var newBtn = eBtn.cloneNode(true);
-            eBtn.parentNode.replaceChild(newBtn, eBtn);
-            newBtn.addEventListener('click', function(){
-              var open = eMobileNav.classList.toggle('is-open');
-              if (open) {
-                eMobileNav.removeAttribute('hidden');
-                eMobileNav.style.display='';
-                // Move focus to first link for keyboard users
-                var firstLink = eMobileNav.querySelector('a');
-                if (firstLink) setTimeout(function(){ firstLink.focus(); }, 50);
-              } else {
-                eMobileNav.style.display='none';
-                eMobileNav.setAttribute('hidden','');
-                newBtn.focus();
-              }
-              newBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-              newBtn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-              var lbl = newBtn.querySelector('.jh-hamburger__label');
-              if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
-            });
-            // Focus trapping inside mobile nav
-            eMobileNav.addEventListener('keydown', function(e){
-              if(!eMobileNav.classList.contains('is-open')) return;
-              var focusable = Array.from(eMobileNav.querySelectorAll('a,[tabindex]:not([tabindex="-1"])'));
-              if(!focusable.length) return;
-              if(e.key === 'Tab'){
-                var first = focusable[0], last = focusable[focusable.length-1];
-                if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
-                else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
-              }
-              if(e.key==='Escape'){ eMobileNav.classList.remove('is-open'); eMobileNav.style.display='none'; eMobileNav.setAttribute('hidden',''); newBtn.setAttribute('aria-expanded','false'); newBtn.focus(); }
-            });
-            markActiveNav(eMobileNav);
-          }
-        } catch(_) {}
-
-        // Scroll-based sticky header: show only once the page hero is out of view.
-        // If a page is incorrectly marked as no-hero but a hero exists, trust the DOM and
-        // remove the flag so the hamburger/header do not appear too early on mobile.
-        try {
-          existingHeader.classList.add('jh-header--injected');
-          var heroEl = findHeaderRevealAnchor();
-          if (heroEl && document.body && document.body.classList.contains('jh-no-hero-page')) {
-            document.body.classList.remove('jh-no-hero-page');
-          }
-          if (!heroEl) existingHeader.classList.add('is-visible');
-          syncHeaderVisibility(existingHeader, heroEl, eMobileNav, newBtn);
-        } catch(_) {
-          existingHeader.classList.add('is-visible');
-        }
-        return; // baked-in header handled; no need to fetch partial
-      }
-
-      // ── FIX #1: Use inlined header HTML instead of a network fetch ──
-      // This eliminates the round-trip delay that caused a flash of missing navigation.
-      var INLINED_HEADER_HTML = `<style id="jh-dropdown-inline">
-.jh-nav-dropdown{position:relative;list-style:none;}
-.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
-.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
-</style>
-<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
-  <div class="jh-header__inner">
-    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <span class="jh-logo-wrap" aria-hidden="true">
-        <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" decoding="async" aria-hidden="true"/>
-      </span>
-      <span class="jh-brand__text">Jonathan Harris</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <ul class="jh-topnav">
-  <li><a href="/">Home</a></li>
-  <li><a href="/ebooks/">eBooks</a></li>
-  <li><a href="/podcast/">Podcast</a></li>
-  <li><a href="/newsletter/">Newsletter</a></li>
-  <li><a href="/blog/">Blog</a></li>
-  <li><a href="/bio/">About</a></li>
-  <li class="jh-nav-dropdown">
-    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <ul class="jh-nav-dropdown__menu" role="menu">
-      <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
-      <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
-      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
-      <li role="none"><a href="/contact/" role="menuitem">Contact</a></li>
-    </ul>
-  </li>
-</ul>
-    </nav>
-    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
-  </div>
-  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
-      <span class="jh-logo-wrap" aria-hidden="true">
-        <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true"/>
-      </span>
-      <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
-    </a>
-    <a href="/">Home</a>
-    <a href="/ebooks/">eBooks</a>
-    <a href="/podcast/">Podcast</a>
-    <a href="/newsletter/">Newsletter</a>
-    <a href="/blog/">Blog</a>
-    <a href="/bio/">About</a>
-    <div class="jh-mobile-nav__group">
-      <span class="jh-mobile-nav__group-label">Resources</span>
-      <div class="jh-mobile-nav__group-links">
-        <a href="/glossary/">Glossary</a>
-        <a href="/topics/">Topics</a>
-        <a href="/compare/">Comparisons</a>
-        <a href="/contact/">Contact</a>
-      </div>
-    </div>
-  </nav>
-</header>
-`;
-
-      var wrap = document.createElement("div");
-      wrap.innerHTML = INLINED_HEADER_HTML.trim();
-
-      var inlineStyle = wrap.querySelector('#jh-dropdown-inline');
-      if (inlineStyle && !document.getElementById('jh-dropdown-inline')) {
-        (document.head || document.documentElement).appendChild(inlineStyle);
-      }
-
-      var header = wrap.querySelector('.jh-header');
-      if (!header) return;
-
-      var hero = findHeroHost();
-      if (hero){
-        hero.classList.add("jh-hero-host");
-        hero.parentNode.insertBefore(header, hero);
-      }else{
-        document.body.insertBefore(header, document.body.firstChild);
-      }
-
-      header.classList.add('jh-header--injected');
-      markActiveNav(header);
-
-      // Scroll-based visibility for injected header
-      var heroElInj = findHeaderRevealAnchor();
-
-      // Wire up hamburger button if present
-      try {
-        var btn = header.querySelector('.jh-hamburger');
-        var mobileNav = header.querySelector('.jh-mobile-nav');
-        if (btn && mobileNav) {
-          btn.addEventListener('click', function(){
-            var open = mobileNav.classList.toggle('is-open');
-            if (open) {
-              mobileNav.removeAttribute('hidden');
-              // Focus trap: move focus to first focusable link in the nav
-              var firstLink = mobileNav.querySelector('a');
-              if (firstLink) { setTimeout(function(){ firstLink.focus(); }, 30); }
-            } else {
-              mobileNav.setAttribute('hidden','');
-              // Return focus to hamburger on close
-              btn.focus();
-            }
-            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-            btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-            var lbl = btn.querySelector('.jh-hamburger__label');
-            if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
-          });
-          // Escape key + focus trap for mobile nav (WCAG 2.1 SC 2.1.2)
-          mobileNav.addEventListener('keydown', function(e){
-            if (e.key === 'Escape') {
-              mobileNav.classList.remove('is-open');
-              mobileNav.setAttribute('hidden','');
-              btn.setAttribute('aria-expanded','false');
-              var lbl = btn.querySelector('.jh-hamburger__label');
-              if (lbl) lbl.textContent = 'Menu';
-              btn.focus();
-              return;
-            }
-            // Focus trap: cycle Tab within the open mobile nav
-            if (e.key === 'Tab' && mobileNav.classList.contains('is-open')) {
-              var focusable = Array.from(mobileNav.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])'));
-              if (!focusable.length) return;
-              var first = focusable[0];
-              var last = focusable[focusable.length - 1];
-              if (e.shiftKey) {
-                if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-              } else {
-                if (document.activeElement === last) { e.preventDefault(); first.focus(); }
-              }
-            }
-          });
-          markActiveNav(mobileNav);
-          syncHeaderVisibility(header, heroElInj, mobileNav, btn);
-        } else {
-          syncHeaderVisibility(header, heroElInj, null, null);
-        }
-      } catch(_) {
-        syncHeaderVisibility(header, heroElInj, null, null);
-      }
-
-    }catch(_){}
+    }, { passive: true });
   }
 
   function ensureFooterTarget(){
@@ -863,6 +616,7 @@ function init(){
     ensureMainId();
     ensureCanonical();
     ensureImagePreloads();
+    strengthenEmbeddedForms();
     injectHeader();
     wireDropdowns();
     injectFooter();
