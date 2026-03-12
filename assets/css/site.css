@@ -3585,3 +3585,82 @@ body.home .lp-resources{
     border-radius: 50%;
   }
 }
+
+
+/* ===== UX Audit Fixes — March 2026 Sprint ===== */
+
+/* FIX: Consolidate nav dropdown inline styles into stylesheet
+   (removes need for <style id="jh-dropdown-inline"> in every page) */
+.jh-nav-dropdown{position:relative;list-style:none;}
+.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
+.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;}
+.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
+.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
+
+/* FIX: 'Featured This Week' label contrast — was #6B7280 (~3.2:1 fail), now #4B5563+ on white */
+.featured-label, .lp-featured__label, [class*="featured-week"], .featured-this-week {
+  color: #374151 !important; /* ~7:1 on white */
+}
+
+/* FIX: Podcast hero byline contrast — #4B5563 fails on dark hero background.
+   Use light colour matching the hero text convention */
+.podcast-hero-byline {
+  color: #9CA3AF !important;
+}
+
+/* FIX: Bio about-banner section — move inline padding-top to CSS */
+.about-banner {
+  padding-top: 0;
+}
+body.page-bio .about-banner,
+body.bio-page .about-banner {
+  padding-top: 70px;
+}
+
+/* FIX: Homepage 'Featured This Week' small label contrast */
+.featured-week-label {
+  color: #374151;
+}
+
+/* FIX: Ensure skip-link is always the very first focusable element */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  z-index: 9999;
+  background: var(--accent, #4F46E5);
+  color: #fff;
+  padding: 10px 18px;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+  text-decoration: none;
+  transition: top 0.1s;
+}
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+
+/* FIX: Focus trap visible indicator for mobile nav */
+.jh-mobile-nav:focus-within {
+  outline: none;
+}
+
+/* FIX: Testimonial blockquotes — add cite styling */
+.testimonial-cite, blockquote footer cite, blockquote cite {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.875rem;
+  color: #6B7280;
+  font-style: normal;
+}
+
+/* FIX: Newsletter JotForm iframe — responsive height on small screens */
+@media (max-width: 480px) {
+  #JotFormIFrame-260277027608054 {
+    height: 680px !important;
+  }
+}
