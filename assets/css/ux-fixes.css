@@ -1,0 +1,28 @@
+
+/* Global UX Improvements */
+
+button, a.button, .btn {
+  min-height:48px;
+  min-width:48px;
+  padding:12px 20px;
+  transition:all .2s ease;
+}
+
+button:hover, .btn:hover, a.button:hover {
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+button:focus, a:focus {
+  outline:3px solid #00e5ff;
+  outline-offset:2px;
+}
+
+.card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.2);
+}
+
+section {
+  margin-bottom:48px;
+}
