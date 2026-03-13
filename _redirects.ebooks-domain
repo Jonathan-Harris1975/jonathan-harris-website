@@ -12,6 +12,8 @@ https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/:spl
 /ebooks/   https://jonathan-harris.online/ebooks/  301
 
 # Old paths → new site
+/book         https://jonathan-harris.online/ebooks/             301
+/book/        https://jonathan-harris.online/ebooks/             301
 /book/*       https://jonathan-harris.online/ebooks/:splat       301
 /catalogue/*  https://jonathan-harris.online/catalogue/:splat    301
 /category/*   https://jonathan-harris.online/catalogue/:splat    301

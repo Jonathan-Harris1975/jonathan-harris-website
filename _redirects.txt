@@ -100,16 +100,12 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now   https://mybook.to/K7nVJGv   302
 /book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now   https://mybook.to/K7nVJGv   302
 
-# 7) NEW BRANDED URL: serve /book content under /ebooks (internal rewrite, no redirect)
-# FIX: use named placeholders (:title) instead of bare * so that /ebooks/ (empty splat)
-# no longer matches — Cloudflare then serves ebooks/index.html as a static file instead.
-/ebooks/:title   /book/:title   200
-/ebooks/:title/* /book/:title/:splat 200
-
-# 8) CANONICAL: old /book URLs permanently redirect to /ebooks
+# 7) CANONICAL: old /book URLs permanently redirect to /ebooks
+/book    /ebooks/        301
+/book/   /ebooks/        301
 /book/*  /ebooks/:splat  301
 
-# 8A) Topic route rewrites (serve topic landing pages on canonical /topics/* paths)
+# 7A) Topic route rewrites (serve topic landing pages on canonical /topics/* paths)
 /topics/ai-for-beginners   /ai-for-beginners/   200
 /topics/ai-for-beginners/  /ai-for-beginners/   200
 /topics/ai-in-business     /ai-in-business/     200
@@ -121,11 +117,11 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /topics/robotics-automation    /robotics-automation/    200
 /topics/robotics-automation/   /robotics-automation/    200
 
-# 9) Terms
+# 8) Terms
 /terms   /terms-of-use/  301
 /terms/  /terms-of-use/  301
 
-# 10) Consolidate author pages → canonical /bio/
+# 9) Consolidate author pages → canonical /bio/
 /author/   /bio/   301
 /author    /bio/   301
 
