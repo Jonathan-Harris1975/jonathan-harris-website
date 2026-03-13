@@ -117,6 +117,18 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /topics/robotics-automation    /robotics-automation/    200
 /topics/robotics-automation/   /robotics-automation/    200
 
+# 7B) Root topic aliases → canonical /topics/* pages
+/ai-for-beginners        /topics/ai-for-beginners/      301
+/ai-for-beginners/       /topics/ai-for-beginners/      301
+/ai-in-business          /topics/ai-in-business/        301
+/ai-in-business/         /topics/ai-in-business/        301
+/ai-in-healthcare        /topics/ai-in-healthcare/      301
+/ai-in-healthcare/       /topics/ai-in-healthcare/      301
+/generative-ai           /topics/generative-ai/         301
+/generative-ai/          /topics/generative-ai/         301
+/robotics-automation     /topics/robotics-automation/   301
+/robotics-automation/    /topics/robotics-automation/   301
+
 # 8) Terms
 /terms   /terms-of-use/  301
 /terms/  /terms-of-use/  301
