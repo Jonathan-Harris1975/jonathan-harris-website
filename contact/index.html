@@ -31,8 +31,8 @@
     });
 </script>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="https://jonathan-harris.online/contact/" rel="canonical">
-<link as="style" href="/assets/css/site.css" rel="preload"/><link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="https://jonathan-harris.online/contact/" rel="canonical"/>
+<link as="style" href="/assets/css/site.css" rel="preload"><link href="/assets/css/site.css" rel="stylesheet"/>
 <style>
 body.page-contact .hero--contact { padding-top: calc(var(--header-h, 72px) + 36px); }
 body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height: 560px; border: none; }
@@ -49,7 +49,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <meta content="Get in Touch | Jonathan Harris" name="twitter:title"/>
 <meta content="Get in touch with Jonathan Harris — AI author and podcast host." name="twitter:description"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Get in Touch","url":"https://jonathan-harris.online/contact/","description":"Contact page for Jonathan Harris — AI author and podcast host.","author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"}}</script>
-</head>
+</link><link href="/assets/css/gold-standard.css" rel="stylesheet"/><link href="/assets/css/ux-fixes.css" rel="stylesheet"/></head>
 <body class="page-contact">
 <a class="skip-link" href="#main">Skip to main content</a>
 <header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
@@ -66,7 +66,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <li><a href="/ebooks/">eBooks</a></li>
 <li><a href="/podcast/">Podcast</a></li>
 <li><a href="/newsletter/">Newsletter</a></li>
-<li><a href="/blog/">Blog</a></li>
+
 <li><a href="/bio/">About</a></li>
 <li class="jh-nav-dropdown">
 <button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
@@ -76,8 +76,8 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
 </ul>
 </li>
-<li><a href="/contact/" aria-current="page">Contact</a></li>
-</ul>
+<li><a aria-current="page" href="/contact/">Contact</a></li>
+<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li></ul>
 </nav>
 <button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
 </div>
@@ -92,7 +92,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <a href="/ebooks/">eBooks</a>
 <a href="/podcast/">Podcast</a>
 <a href="/newsletter/">Newsletter</a>
-<a href="/blog/">Blog</a>
+
 <a href="/bio/">About</a>
 <div class="jh-mobile-nav__group">
 <span class="jh-mobile-nav__group-label">Resources</span>
@@ -103,7 +103,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 </div>
 </div>
 <a href="/contact/">Contact</a>
-</nav>
+<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a></nav>
 </header>
 <section aria-label="Contact header" class="hero hero--contact">
 <img alt="Jonathan Harris" class="logo-plain" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
@@ -112,12 +112,12 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 </section>
 <main aria-label="Contact content" class="main page-main" id="main" role="main">
 <section aria-label="Contact form" class="card card--accent" role="region">
-      <div id="contact-form-confirmation" role="status" aria-live="polite" tabindex="-1" style="display:none;padding:32px;text-align:center;">
-        <svg aria-hidden="true" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" style="margin:0 auto 16px;display:block;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <p style="color:#16a34a;margin:0 0 8px;font-size:1.35rem;font-weight:700;">Message sent!</p>
-        <p>Thanks for getting in touch. I'll reply within 2–3 business days.</p>
-      </div>
-      <div id="contact-form-wrap">
+<div aria-live="polite" id="contact-form-confirmation" role="status" style="display:none;padding:32px;text-align:center;" tabindex="-1">
+<svg aria-hidden="true" fill="none" height="48" stroke="#16a34a" stroke-linecap="round" stroke-width="2" style="margin:0 auto 16px;display:block;" viewbox="0 0 24 24" width="48"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+<p style="color:#16a34a;margin:0 0 8px;font-size:1.35rem;font-weight:700;">Message sent!</p>
+<p>Thanks for getting in touch. I'll reply within 2–3 business days.</p>
+</div>
+<div id="contact-form-wrap">
 <h2>Contact Me</h2>
 <p class="contact-meta-note">✉️ <strong>Typical response time: 2–3 business days.</strong> For book or podcast questions, check the <a href="/ebooks/">eBooks catalogue</a> or <a href="/podcast/">podcast page</a> first — the answer is usually there.</p>
 <div class="embed-wrap">
@@ -132,7 +132,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 </div><!-- /contact-form-wrap -->
 </section>
 </main>
-    <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
 <script>
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260281179574362']", "https://form.jotform.com/");
     window.addEventListener('message', function(e) {
@@ -183,7 +183,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <li><a href="/ebooks/">Browse eBooks</a></li>
 <li><a href="/podcast/">Listen to the podcast</a></li>
 <li><a href="/newsletter/">Join the newsletter</a></li>
-<li><a href="/blog/">Read the blog</a></li>
+
 <li><a href="/bio/">About Jonathan Harris</a></li>
 <li><a href="/contact/">Contact</a></li>
 </ul>
@@ -211,5 +211,5 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <script defer="" src="/assets/js/site-ui.js"></script>
 <!-- Chatbot -->
 <script defer="" src="https://botsailor.com/script/webchat-link.js?code=1744067063128291"></script>
-</body>
+<script defer="" src="/assets/js/gold-standard.js"></script></body>
 </html>
