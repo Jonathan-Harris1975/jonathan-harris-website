@@ -6,8 +6,8 @@
 
   function slugFromPath(){
     const parts = location.pathname.split("/").filter(Boolean);
-    // /ebooks/<slug>/ or /book/<slug>/detail.html
-    const i = parts.findIndex(p => p === "ebooks" || p === "book");
+    // /ebooks/<slug>/ or /ebooks/<slug>/detail.html
+    const i = parts.findIndex(p => p === "ebooks");
     if (i >= 0 && parts[i+1]) return parts[i+1];
     return "";
   }
