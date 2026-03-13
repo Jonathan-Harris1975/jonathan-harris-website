@@ -1,19 +1,19 @@
 {
-  "title": "AI in Aviation: Transforming Safety and Sustainability",
-  "slug": "ai-in-aviation-transforming-safety-and-sustainability",
-  "description": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight planning, promoting sustainability. Pages: 284.",
-  "topic": "Transportation",
+  "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+  "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+  "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. Pages: 333.",
+  "topic": "Agriculture",
   "tags": [
-    "Energy",
+    "General AI",
     "Artificial Intelligence",
     "AI Trends"
   ],
-  "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
-  "image": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
-  "buy_url": "https://mybook.to/13VF",
-  "pages": 284,
+  "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+  "image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+  "buy_url": "https://mybook.to/PsciMD5",
+  "pages": 333,
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
 }
