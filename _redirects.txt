@@ -21,6 +21,7 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /ebooks  /ebooks/  301
 
 # 6) Known legacy slug fixes (keep BEFORE the rewrite)
+/ebooks/*/detail.html  /ebooks/:splat/  301
 /ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
 /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
 /ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
