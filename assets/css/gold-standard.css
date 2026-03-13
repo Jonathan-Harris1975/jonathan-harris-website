@@ -22,3 +22,14 @@
 .jh-related-callout{margin-top:18px;font-size:.95rem;color:#4B5563;}
 .related-books ul,.jh-related-links{display:grid;gap:10px;padding-left:20px;}
 @media (max-width:768px){.jh-hub-intro,.jh-journey-panel{padding:20px;border-radius:18px;}.jh-topnav__cta{display:none !important;}}
+
+
+.jh-priority-paths{margin:28px 0;padding:24px;border:1px solid rgba(148,163,184,.18);border-radius:20px;background:linear-gradient(180deg,rgba(15,23,42,.8),rgba(2,6,23,.92));box-shadow:0 20px 40px rgba(2,6,23,.24)}
+.jh-priority-paths h2{margin:0 0 10px;font-size:1.45rem;line-height:1.2}
+.jh-priority-paths p{margin:0 0 16px;color:#cbd5e1;max-width:72ch}
+.jh-priority-actions{display:flex;flex-wrap:wrap;gap:12px}
+.jh-priority-actions .jh-hub-cta{display:inline-flex;align-items:center;justify-content:center;padding:12px 16px;border-radius:999px;border:1px solid rgba(148,163,184,.28);text-decoration:none;font-weight:700;color:#e5eefb;background:rgba(15,23,42,.65)}
+.jh-priority-actions .jh-hub-cta--primary{background:#22c55e;color:#04130a;border-color:#22c55e}
+.breadcrumbs{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:.92rem;margin:0 0 18px;color:#cbd5e1}
+.breadcrumbs a{color:#93c5fd;text-decoration:none;font-weight:600}
+.breadcrumbs a:hover{text-decoration:underline}
