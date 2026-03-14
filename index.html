@@ -94,7 +94,7 @@
 </a>
 <nav aria-label="Primary navigation">
 <ul class="jh-topnav">
-<li><a href="/">Home</a></li>
+<li><a aria-current="page" href="/">Home</a></li>
 <li><a href="/ebooks/">eBooks</a></li>
 <li><a href="/podcast/">Podcast</a></li>
 <li><a href="/newsletter/">Newsletter</a></li>
@@ -140,74 +140,73 @@
 <a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
 </nav>
 </header>
-<section aria-labelledby="hero-heading" class="hero" role="region" style="padding-top:calc(var(--header-h,72px) + 44px);padding-bottom:48px;text-align:center;">
+<section aria-labelledby="hero-heading" class="hero hero--home" role="region">
 <div class="wrap">
-<img alt="Jonathan Harris" class="logo-plain" fetchpriority="high" height="96" loading="eager" src="https://images.jonathan-harris.online/site-logo" style="border-radius:50%;margin:0 auto 22px;" width="96"/>
-<h1 id="hero-heading" style="font-size:2.4rem;line-height:1.15;color:#93C5FD;margin:0 0 14px;letter-spacing:-0.3px;">AI, Without the Hype</h1>
-<p style="font-size:1.1rem;color:#D1D5DB;max-width:620px;margin:0 auto 28px;line-height:1.65;">Jonathan Harris writes plain-English books on artificial intelligence — 36 titles covering healthcare, law, finance, manufacturing, and more. Plus the <strong style="color:#93C5FD;">Turing's Torch</strong> AI Weekly podcast.</p>
-<div class="cta-row" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-<a class="button" href="/ebooks/" style="font-size:1rem;padding:13px 24px;">Browse 36 AI Books →</a>
-<a class="button secondary" href="/podcast/" style="font-size:1rem;padding:13px 24px;">Turing's Torch Podcast</a>
+<img alt="Jonathan Harris" class="logo-plain logo-plain--hero" fetchpriority="high" height="96" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="96"/>
+<h1 class="hero__title" id="hero-heading">AI, Without the Hype</h1>
+<p class="hero__lead">Jonathan Harris writes plain-English books on artificial intelligence — 36 titles covering healthcare, law, finance, manufacturing, and more. Plus the <strong class="hero__accent">Turing's Torch</strong> AI Weekly podcast.</p>
+<div class="cta-row">
+<a class="button" href="/ebooks/">Browse 36 AI Books →</a>
+<a class="button secondary" href="/podcast/">Turing's Torch Podcast</a>
 </div>
 </div>
 </section>
 <main id="main" role="main">
-<section aria-labelledby="featured-heading" class="main" style="padding:48px 0;">
+<section aria-labelledby="featured-heading" class="main section--featured">
 <div class="wrap">
-<h2 class="section-label" id="featured-heading" style="text-align:center;margin:0 0 28px;">Featured This Week</h2>
+<h2 class="section-label section-label--centered" id="featured-heading">Featured This Week</h2>
 <div class="featured-book-layout">
 <a aria-label="View featured book" href="/ebooks/" id="featuredEbookPage">
-<img alt="Featured AI book" height="270" id="featuredEbookCover" loading="eager" src="https://images.jonathan-harris.online/site-logo" style="width:100%;aspect-ratio:2/3;object-fit:contain;border-radius:10px;border:1px solid rgba(0,0,0,0.10);background:#0D1420;display:block;" width="180"/>
+<img alt="Featured AI book" height="270" id="featuredEbookCover" loading="eager" src="https://images.jonathan-harris.online/site-logo" class="featured-cover-img" width="180"/>
 </a>
-<div class="featured-copy" style="text-align:left;">
-<span id="featuredEbookMeta" style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#374151;display:block;margin-bottom:8px;">Loading…</span>
-<h3 id="featuredEbookTitle" style="font-size:1.25rem;line-height:1.3;color:#111827;margin:0 0 12px;font-weight:800;">Loading featured book…</h3>
-<p id="featuredEbookDesc" style="font-size:0.95rem;color:#374151;line-height:1.65;margin:0 0 20px;">Discover this week's featured AI title.</p>
-<div style="display:flex;gap:10px;flex-wrap:wrap;">
-<a class="button" href="/ebooks/" id="featuredEbookLink" style="font-size:0.9rem;padding:10px 18px;">View Book →</a>
-<a class="button secondary" href="/ebooks/" id="featuredEbookBuy" rel="noopener noreferrer" style="font-size:0.9rem;padding:10px 18px;" target="_blank">Buy on Amazon</a>
+<div class="featured-copy">
+<span class="featured-meta" id="featuredEbookMeta">Featured</span>
+<h3 class="featured-title" id="featuredEbookTitle">AI, Without the Hype — 36 Books</h3>
+<p class="featured-desc" id="featuredEbookDesc">Plain-English books on artificial intelligence, covering healthcare, law, finance, manufacturing, and more.</p>
+<div class="featured-actions">
+<a class="button" href="/ebooks/" id="featuredEbookLink">View Book →</a>
+<a class="button secondary" href="/ebooks/" id="featuredEbookBuy" rel="noopener noreferrer" target="_blank">Buy on Amazon</a>
 </div>
 </div>
 </div>
-<p style="text-align:center;margin:20px 0 0;font-size:0.88rem;color:#6B7280;">Updated weekly · <a href="/ebooks/">See all 36 books →</a></p>
+<p class="featured-footer-note">Updated weekly · <a href="/ebooks/">See all 36 books →</a></p>
 </div>
-</section><section aria-label="Priority site paths" class="jh-priority-paths"><h2>Choose your next step</h2><p>For a cleaner first visit, the homepage now points readers to the three core journeys on the site: explore the eBook catalogue, listen to the podcast, or join the newsletter.</p><div class="jh-priority-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse eBooks</a><a class="jh-hub-cta" href="/podcast/">Listen to the podcast</a><a class="jh-hub-cta" href="/newsletter/">Join the newsletter</a></div></section>
-<section aria-labelledby="explore-heading" style="padding:0 0 56px;">
+</section><section aria-labelledby="explore-heading" class="section--explore">
 <div class="wrap">
-<h2 class="section-label" id="explore-heading" style="text-align:center;margin:0 0 28px;">Explore</h2>
-<div class="grid" style="max-width:900px;margin:0 auto;">
-<article class="card" style="padding:24px;">
-<span aria-hidden="true" style="font-size:1.8rem;display:block;margin-bottom:12px;">📚</span>
-<h3 style="font-size:1.1rem;font-weight:800;color:#111827;margin:0 0 8px;">36 AI eBooks</h3>
-<p style="font-size:0.92rem;color:#374151;margin:0 0 18px;line-height:1.6;">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education, and more.</p>
-<a class="button" href="/ebooks/" style="font-size:0.88rem;padding:9px 16px;margin-top:auto;">Browse Catalogue →</a>
+<h2 class="section-label section-label--centered" id="explore-heading">Explore</h2>
+<div class="grid grid--explore">
+<article class="card card--explore">
+<span aria-hidden="true" class="card__emoji">📚</span>
+<h3 class="card__title">36 AI eBooks</h3>
+<p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education, and more.</p>
+<a class="button" href="/ebooks/">Browse Catalogue →</a>
 </article>
-<article class="card" style="padding:24px;">
-<span aria-hidden="true" style="font-size:1.8rem;display:block;margin-bottom:12px;">🎙️</span>
-<h3 style="font-size:1.1rem;font-weight:800;color:#111827;margin:0 0 8px;">Turing's Torch Podcast</h3>
-<p style="font-size:0.92rem;color:#374151;margin:0 0 18px;line-height:1.6;">Weekly AI analysis — practical takes on what's happening in artificial intelligence. No buzzwords.</p>
-<a class="button" href="/podcast/" style="font-size:0.88rem;padding:9px 16px;margin-top:auto;">Listen Free →</a>
+<article class="card card--explore">
+<span aria-hidden="true" class="card__emoji">🎙️</span>
+<h3 class="card__title">Turing's Torch Podcast</h3>
+<p class="card__desc">Weekly AI analysis — practical takes on what's happening in artificial intelligence. No buzzwords.</p>
+<a class="button" href="/podcast/">Listen Free →</a>
 </article>
-<article class="card" style="padding:24px;">
-<span aria-hidden="true" style="font-size:1.8rem;display:block;margin-bottom:12px;">📬</span>
-<h3 style="font-size:1.1rem;font-weight:800;color:#111827;margin:0 0 8px;">AI Edge Newsletter</h3>
-<p style="font-size:0.92rem;color:#374151;margin:0 0 18px;line-height:1.6;">Free weekly newsletter. Practical AI insights you can use at work — no spam, unsubscribe any time.</p>
-<a class="button" href="/newsletter/" style="font-size:0.88rem;padding:9px 16px;margin-top:auto;">Subscribe Free →</a>
+<article class="card card--explore">
+<span aria-hidden="true" class="card__emoji">📬</span>
+<h3 class="card__title">AI Edge Newsletter</h3>
+<p class="card__desc">Free weekly newsletter. Practical AI insights you can use at work — no spam, unsubscribe any time.</p>
+<a class="button" href="/newsletter/">Subscribe Free →</a>
 </article>
 </div>
 </div>
 </section>
-<section aria-labelledby="about-heading" style="background:#0D1420;padding:52px 18px;text-align:center;">
-<div class="wrap" style="max-width:680px;">
-<h2 id="about-heading" style="color:#93C5FD;font-size:1.55rem;margin:0 0 16px;">About Jonathan Harris</h2>
-<p style="color:#D1D5DB;font-size:1rem;line-height:1.7;margin:0 0 24px;">Jonathan Harris is an artificial intelligence author based in the United Kingdom. He writes practical, no-hype guides explaining how AI works across industries. His 36 books cover healthcare, finance, law, manufacturing, education, and more. He also hosts the <strong style="color:#93C5FD;">Turing's Torch AI Weekly</strong> podcast.</p>
-<a class="button" href="/bio/" style="font-size:0.95rem;padding:12px 22px;background:rgba(79,70,229,0.85);">Read the Full Bio →</a>
+<section aria-labelledby="about-heading" class="section--about">
+<div class="wrap wrap--narrow">
+<h2 class="about__title" id="about-heading">About Jonathan Harris</h2>
+<p class="about__copy">Jonathan Harris is an artificial intelligence author based in the United Kingdom. He writes practical, no-hype guides explaining how AI works across industries. His 36 books cover healthcare, finance, law, manufacturing, education, and more. He also hosts the <strong class="hero__accent">Turing's Torch AI Weekly</strong> podcast.</p>
+<a class="button button--bio" href="/bio/">Read the Full Bio →</a>
 </div>
 </section>
-<section aria-labelledby="topics-heading" style="padding:52px 0 60px;">
+<section aria-labelledby="topics-heading" class="section--topics">
 <div class="wrap">
-<h2 class="section-label" id="topics-heading" style="text-align:center;margin:0 0 24px;">Learn About AI</h2>
-<div class="chips" style="max-width:760px;margin:0 auto;">
+<h2 class="section-label section-label--centered" id="topics-heading">Learn About AI</h2>
+<div class="chips chips--topics">
 <a class="chip" href="/topics/ai-for-beginners/">AI for Beginners</a>
 <a class="chip" href="/topics/generative-ai/">Generative AI</a>
 <a class="chip" href="/topics/ai-in-healthcare/">AI in Healthcare</a>
