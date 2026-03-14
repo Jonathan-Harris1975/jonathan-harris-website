@@ -34,7 +34,7 @@
       <div class="jh-sticky-cta__inner">
         <div class="jh-sticky-cta__copy">
           <strong>AI Edge</strong>
-          <span class="jh-sticky-cta__muted">Daily AI updates — minus the hype.</span>
+          <span class="jh-sticky-cta__muted">Weekly AI updates - minus the hype.</span>
         </div>
         <div class="jh-sticky-cta__actions">
           <a class="btn btn-primary" href="/newsletter/">Subscribe</a>

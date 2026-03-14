@@ -442,7 +442,7 @@
         <div class="jh-inline-cta__inner">
           <div class="jh-inline-cta__copy">
             <h2>Get the AI Edge</h2>
-            <p>Daily AI updates. Short. Useful. Zero breathless hype.</p>
+            <p>Weekly AI updates. Short. Useful. Zero breathless hype.</p>
           </div>
           <div class="jh-inline-cta__actions">
             <a class="btn btn-primary" href="/newsletter/">Join the newsletter</a>

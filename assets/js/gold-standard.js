@@ -27,7 +27,7 @@
     var main=document.querySelector('main'); if(!main) return;
     var panel=el('section',{'class':'jh-journey-panel','aria-label':'Continue exploring'});
     var title=(document.querySelector('h1')||{}).textContent||'this title';
-    panel.innerHTML='<h2>Keep exploring the Jonathan Harris AI library</h2><p>You have reached <strong>'+title.replace(/</g,'&lt;')+'</strong>. The next useful step is usually one of four things: see the full catalogue, explore the matching topic hub, listen to a related podcast episode, or subscribe for weekly AI analysis.</p><div class="jh-journey-actions"><a href="/ebooks/">Browse all books</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a><a href="/topics/">AI topics</a></div><p class="jh-related-callout">This adds a cleaner discovery loop so visitors do not hit a dead end after viewing a single book.</p>';
+    panel.innerHTML='<h2>Keep exploring the Jonathan Harris AI library</h2><p>You have reached <strong>'+title.replace(/</g,'&lt;')+'</strong>. The next useful step is usually one of four things: see the full catalogue, explore the matching topic hub, listen to a related podcast episode, or subscribe for weekly AI analysis.</p><div class="jh-journey-actions"><a href="/ebooks/">Browse all books</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a><a href="/topics/">AI topics</a></div><p class="jh-related-callout">This keeps readers moving instead of leaving them parked on one page.</p>';
     main.appendChild(panel);
   }
   function upgradeLegacyFooter(){
