@@ -65,9 +65,27 @@
   books.forEach(b => { if (b && b.filter) filters.add(b.filter); });
 
   const params = new URLSearchParams(window.location.search);
+  const legacyCat = (params.get("cat") || "").trim();
+  const legacyCatMap = {
+    "Artificial Intelligence": { filter: "Artificial Intelligence" },
+    "Creativity": { filter: "Creativity" },
+    "Education": { filter: "Education" },
+    "Ethics": { filter: "Ethics" },
+    "Healthcare": { filter: "Healthcare" },
+    "Law": { filter: "Law" },
+    "Transportation": { filter: "Transportation" },
+    "Construction": { q: "Construction" },
+    "Energy": { q: "Energy" },
+    "Finance": { q: "Finance" },
+    "Manufacturing": { q: "Manufacturing" },
+    "Retail": { q: "Retail" },
+    "Security": { q: "Security" },
+    "Sports": { q: "Sports" }
+  };
+  const legacyState = legacyCatMap[legacyCat] || null;
   const state = {
-    q: params.get("q") || "",
-    filter: params.get("filter") || "All",
+    q: params.get("q") || (legacyState && legacyState.q) || "",
+    filter: params.get("filter") || (legacyState && legacyState.filter) || "All",
     page: Math.max(1, parseInt(params.get("page") || "1", 10) || 1)
   };
 

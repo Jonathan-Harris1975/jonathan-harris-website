@@ -215,6 +215,7 @@
     try{
       const target = ensureFooterTarget();
       if (!target) return;
+      if (target.querySelector("footer.site-footer")) return;
 
       const legacyFooters = Array.from(document.querySelectorAll("footer"));
       legacyFooters.forEach((footer) => {
