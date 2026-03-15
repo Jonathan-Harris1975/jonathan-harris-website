@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity distribution and generation. Pages: 338.
+Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. Pages: 338.
 
 ## What this book covers
 
-Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity distribution and generation.
+Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in energy and smart grid systems — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Energy, Infrastructure, Artificial Intelligence, AI Trends.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in energy today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical energy use cases, explained in plain English.
+- Key themes including demand forecasting, grid balancing, renewables, efficiency.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in energy systems have real consequences: grid stability, renewable integration, cost for consumers, and progress towards decarbonisation targets.
+Because AI in energy affects grid resilience, efficiency, emissions, and cost. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Energy
-- Tags: Energy, Creativity, Artificial Intelligence, AI Trends
+- Tags: Energy, Artificial Intelligence, AI Trends
 - Length: 338 pages
 
 ## Buy
