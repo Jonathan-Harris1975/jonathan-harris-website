@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs and environmental impact. Pages: 319.
+Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. Pages: 319.
 
 ## What this book covers
 
-Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs and environmental impact.
+Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.
 
 ## Who this book is for
 
@@ -14,20 +14,20 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in construction and built environment — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Construction, Sustainability, Artificial Intelligence, AI Trends.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in construction today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.
+- Key themes including planning, site safety, computer vision, digital twins.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in construction have real consequences: structural safety, project timelines, budget overruns, worker safety, and the environmental footprint of buildings.
+Because AI in construction affects project risk, site safety, delivery costs, and sustainability targets. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Construction
-- Tags: Creativity, General AI, Artificial Intelligence, AI Trends
+- Tags: Construction, Artificial Intelligence, AI Trends
 - Length: 319 pages
 
 ## Buy
-- https://mybook.to/v98RD
+- https://mybook.to/unBJY7
