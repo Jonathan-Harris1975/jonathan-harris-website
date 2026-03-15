@@ -2,11 +2,11 @@
 
 ## Summary
 
-Examines ai's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.
+Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.
 
 ## What this book covers
 
-Examines ai's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.
+Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in cognitive science, society, and AI's effects on thinking — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Society, Cognitive Science, AI Ethics, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in ethics today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.
+- Key themes including ethics, artificial intelligence, ai trends.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-Because AI decisions in artificial intelligence have real consequences: cost, safety, trust, and competitive edge.
+Because AI in ethics affects fairness, accountability, public trust, and long-term safety. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
-- Topic: Society
-- Tags: Artificial Intelligence, AI Trends, Automation, Robotics
+- Topic: Ethics
+- Tags: Ethics, Artificial Intelligence, AI Trends
 - Length: 277 pages
 
 ## Buy
