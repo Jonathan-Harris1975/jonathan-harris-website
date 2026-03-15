@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence revolutionizes maritime shipping with autonomous vessels, route optimization, and emissions tracking, fostering sustainable global trade. Pages: 312.
+A 312-page guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. Pages: 312.
 
 ## What this book covers
 
-Artificial intelligence revolutionizes maritime shipping with autonomous vessels, route optimization, and emissions tracking, fostering sustainable global trade.
+A 312-page guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in maritime shipping — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Transportation, Sustainability, Artificial Intelligence, AI Trends.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Key themes including routing, prediction, safety, operations.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in maritime shipping have real consequences: cargo safety, fuel efficiency, emissions reductions, and global supply chain reliability.
+Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Transportation
-- Tags: Energy, Artificial Intelligence, AI Trends
+- Tags: Transportation, Artificial Intelligence, AI Trends
 - Length: 312 pages
 
 ## Buy
