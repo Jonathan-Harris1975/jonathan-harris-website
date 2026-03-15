@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and ethics. Pages: 334.
+Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. Pages: 334.
 
 ## What this book covers
 
-Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and ethics.
+Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in journalism and media — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Media, Journalism, Automation, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in media today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.
+- Key themes including reporting workflows, moderation, personalisation, deepfakes.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in journalism have real consequences: public trust in news, information quality, the spread of misinformation, editorial independence, and democratic discourse.
+Because AI in media affects accuracy, trust, editorial workflow, and audience reach. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Media
-- Tags: Artificial Intelligence, AI Trends, Creativity, Automation
+- Tags: Media, Artificial Intelligence, AI Trends
 - Length: 334 pages
 
 ## Buy
