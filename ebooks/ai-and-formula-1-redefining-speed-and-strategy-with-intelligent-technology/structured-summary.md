@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence enhances formula 1 with real-time strategy optimization, predictive analytics, and improved safety, changing racing performance and team efficiency. Pages: 227.
+A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. Pages: 227.
 
 ## What this book covers
 
-Artificial intelligence enhances formula 1 with real-time strategy optimization, predictive analytics, and improved safety, changing racing performance and team efficiency.
+A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in motorsport and transportation — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Transportation, AI in Sports, Artificial Intelligence, AI Trends.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Key themes including routing, prediction, safety, operations.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in motorsport and transportation have real consequences: race strategy, vehicle safety, fuel efficiency, and competitive performance.
+Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Transportation
-- Tags: Artificial Intelligence, AI Trends, Transportation, AI in Sports
+- Tags: Transportation, Artificial Intelligence, AI Trends, AI in Sports
 - Length: 227 pages
 
 ## Buy
