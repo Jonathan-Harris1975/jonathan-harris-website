@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety and efficiency. Pages: 254.
+Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. Pages: 254.
 
 ## What this book covers
 
-Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety and efficiency.
+Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in rail transportation — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Transportation, Infrastructure, Artificial Intelligence, AI Trends.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Key themes including routing, prediction, safety, operations.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in rail transportation have real consequences: passenger safety, timetable reliability, infrastructure maintenance costs, and the viability of public transport.
+Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Transportation
-- Tags: General AI, Artificial Intelligence, AI Trends
+- Tags: Transportation, Artificial Intelligence, AI Trends
 - Length: 254 pages
 
 ## Buy
