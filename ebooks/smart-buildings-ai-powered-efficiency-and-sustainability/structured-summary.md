@@ -1,12 +1,12 @@
-# Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking
+# Smart Buildings: AI-Powered Efficiency and Sustainability
 
 ## Summary
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity. Pages: 336.
+A 345-page guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. Pages: 345.
 
 ## What this book covers
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production and creativity.
+A 345-page guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.
 
 ## Who this book is for
 
@@ -14,20 +14,20 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in filmmaking and creative production — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Filmmaking, Arts, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in construction today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.
+- Key themes including planning, site safety, computer vision, digital twins.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in filmmaking have real consequences: intellectual property rights, the livelihoods of creative professionals, audience authenticity expectations, and the future of storytelling.
+Because AI in construction affects project risk, site safety, delivery costs, and sustainability targets. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
-- Topic: Creativity
-- Tags: Artificial Intelligence, AI Trends, Creativity, AI & Creativity
-- Length: 336 pages
+- Topic: Construction
+- Tags: Construction, Artificial Intelligence, AI Trends
+- Length: 345 pages
 
 ## Buy
 - https://mybook.to/QEcdy
