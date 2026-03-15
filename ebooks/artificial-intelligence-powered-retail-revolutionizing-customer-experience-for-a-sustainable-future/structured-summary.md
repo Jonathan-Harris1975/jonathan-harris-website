@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence enhances retail with personalized shopping, inventory optimization, and sustainable supply chains, improving customer experience and eco-efficiency. Pages: 234.
+A 234-page guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. Pages: 234.
 
 ## What this book covers
 
-Artificial intelligence enhances retail with personalized shopping, inventory optimization, and sustainable supply chains, improving customer experience and eco-efficiency.
+A 234-page guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in retail and e-commerce — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Retail, Commerce, Sustainability, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in retail today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical retail use cases, explained in plain English.
+- Key themes including personalisation, inventory, forecasting, customer experience.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in retail have real consequences: customer privacy, pricing fairness, inventory waste, supply chain efficiency, and long-term brand trust.
+Because AI in retail affects customer trust, margins, stock flow, and personalisation. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Retail
-- Tags: Creativity, Retail, General AI, Artificial Intelligence
+- Tags: Retail, Artificial Intelligence, AI Trends
 - Length: 234 pages
 
 ## Buy
