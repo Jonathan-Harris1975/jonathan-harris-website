@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence modernizes manufacturing with predictive maintenance, automated production, and optimized supply chains, boosting efficiency and innovation. Pages: 369.
+A 369-page guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. Pages: 369.
 
 ## What this book covers
 
-Artificial intelligence modernizes manufacturing with predictive maintenance, automated production, and optimized supply chains, boosting efficiency and innovation.
+A 369-page guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in manufacturing and industrial operations — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Manufacturing, Industry, Automation, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in manufacturing today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical manufacturing use cases, explained in plain English.
+- Key themes including predictive maintenance, quality control, automation, supply chains.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in manufacturing have real consequences: product quality, worker safety, downtime costs, environmental compliance, and the pace of industrial modernisation.
+Because AI in manufacturing affects quality, uptime, worker safety, and supply-chain resilience. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Manufacturing
-- Tags: Artificial Intelligence, AI Trends, Transportation
+- Tags: Manufacturing, Artificial Intelligence, AI Trends
 - Length: 369 pages
 
 ## Buy
