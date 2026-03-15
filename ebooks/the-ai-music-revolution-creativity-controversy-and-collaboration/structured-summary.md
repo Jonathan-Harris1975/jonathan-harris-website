@@ -2,11 +2,11 @@
 
 ## Summary
 
-Explores ai's role in music creation, from composition to production, addressing creativity, ethics, and artist-artificial intelligence collaboration. Pages: 320.
+Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. Pages: 320.
 
 ## What this book covers
 
-Explores ai's role in music creation, from composition to production, addressing creativity, ethics, and artist-artificial intelligence collaboration.
+Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.
 
 ## Who this book is for
 
@@ -14,19 +14,19 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in music and creative industries — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Creativity, Music, Arts, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in creativity today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.
+- Key themes including music, film, writing, copyright.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in music have real consequences: artist livelihoods, intellectual property, audience authenticity, the economics of the music industry, and what it means to be a creator.
+Because AI in creativity affects authorship, originality, workflow, and commercial control. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
 - Topic: Creativity
-- Tags: Creativity, Artificial Intelligence, AI Trends, AI & Creativity
+- Tags: Creativity, Artificial Intelligence, AI Trends
 - Length: 320 pages
 
 ## Buy
