@@ -32,7 +32,7 @@
 </script>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://jonathan-harris.online/contact/" rel="canonical"/>
-<link as="style" href="/assets/css/site.css" rel="preload"/><link href="/assets/css/site.css" rel="stylesheet">
+<link as="style" href="/assets/css/site.css" rel="preload"/><link href="/assets/css/site.css" rel="stylesheet"/>
 <style>
 body.page-contact .hero--contact { padding-top: calc(var(--header-h, 72px) + 36px); }
 body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height: 560px; border: none; }
@@ -49,10 +49,9 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <meta content="Get in Touch | Jonathan Harris" name="twitter:title"/>
 <meta content="Get in touch with Jonathan Harris — AI author and podcast host." name="twitter:description"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Get in Touch","url":"https://jonathan-harris.online/contact/","description":"Contact page for Jonathan Harris — AI author and podcast host.","author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"}}</script>
-</link><link href="/assets/css/gold-standard.css" rel="stylesheet"/><link href="/assets/css/ux-fixes.css" rel="stylesheet"/></head>
+<link href="/assets/css/gold-standard.css" rel="stylesheet"/><link href="/assets/css/ux-fixes.css" rel="stylesheet"/></head>
 <body class="page-contact">
 <a class="skip-link" href="#main">Skip to main content</a>
-
 <header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
 <div class="jh-header__inner">
 <a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
@@ -116,7 +115,7 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 </section>
 <main aria-label="Contact content" class="main page-main" id="main" role="main"><section aria-label="Priority site paths" class="jh-priority-paths"><h2>Keep exploring</h2><p>Pick the next useful path: the full eBook catalogue, the podcast, the newsletter, or the topics hub.</p><div class="jh-priority-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse eBooks</a><a class="jh-hub-cta" href="/podcast/">Podcast</a><a class="jh-hub-cta" href="/newsletter/">Newsletter</a><a class="jh-hub-cta" href="/topics/">Topics</a></div></section>
 <section aria-label="Contact form" class="card card--accent" role="region">
-<div aria-atomic="true" aria-hidden="true" aria-live="polite" hidden="" id="contact-form-confirmation" role="status" style="display:none;padding:32px;text-align:center;" tabindex="-1">
+<div aria-atomic="true" aria-live="polite" hidden="" id="contact-form-confirmation" role="status" style="display:none;padding:32px;text-align:center;" tabindex="-1">
 <svg aria-hidden="true" fill="none" height="48" stroke="#16a34a" stroke-linecap="round" stroke-width="2" style="margin:0 auto 16px;display:block;" viewbox="0 0 24 24" width="48"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
 <p>Thanks for getting in touch. I'll reply within 2–3 business days.</p>
 </div>
@@ -139,23 +138,28 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <script>
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260281179574362']", "https://form.jotform.com/");
     window.addEventListener('message', function(e) {
+      var completed = false;
       if (e.data && typeof e.data === 'string') {
         try {
           var d = JSON.parse(e.data);
-          if (d.action === 'submission-completed') {
-            var confirmation = document.getElementById('contact-form-confirmation');
-            var formWrap = document.getElementById('contact-form-wrap');
-            if (confirmation) {
-              confirmation.hidden = false;
-              confirmation.removeAttribute('aria-hidden');
-              confirmation.style.display = 'block';
-              confirmation.focus();
-            }
-            if (formWrap) {
-              formWrap.style.display = 'none';
-            }
-          }
-        } catch(err) {}
+          completed = d && d.action === 'submission-completed';
+        } catch(err) {
+          completed = e.data.indexOf('submission-completed') > -1 || e.data.indexOf('submitted') > -1;
+        }
+      } else if (e.data && typeof e.data === 'object') {
+        completed = e.data.action === 'submission-completed';
+      }
+      if (completed) {
+        var confirmation = document.getElementById('contact-form-confirmation');
+        var formWrap = document.getElementById('contact-form-wrap');
+        if (confirmation) {
+          confirmation.hidden = false;
+          confirmation.style.display = 'block';
+          confirmation.focus();
+        }
+        if (formWrap) {
+          formWrap.style.display = 'none';
+        }
       }
     });
   </script>
