@@ -2,11 +2,11 @@
 
 ## Summary
 
-Explores ai's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. Pages: 315.
+Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. Pages: 315.
 
 ## What this book covers
 
-Explores ai's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.
+Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.
 
 ## Who this book is for
 
@@ -14,20 +14,20 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in the future of work and employment — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Workforce, Economics, Automation, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in future of work today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical future of work use cases, explained in plain English.
+- Key themes including automation, reskilling, productivity, labour markets.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions about automation and hiring have real consequences: employment levels, skills gaps, income distribution, social stability, and the kind of economy future generations inherit.
+Because AI in future of work affects jobs, skills, productivity, and how organisations adapt. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
-- Topic: Workforce
-- Tags: Creativity, General AI, Artificial Intelligence, AI Trends
+- Topic: Future of Work
+- Tags: Future of Work, Artificial Intelligence, AI Trends
 - Length: 315 pages
 
 ## Buy
-- https://mybook.to/unBJY7
+- https://mybook.to/aijobshift
