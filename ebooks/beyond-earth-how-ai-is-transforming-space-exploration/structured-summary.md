@@ -2,11 +2,11 @@
 
 ## Summary
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning, unlocking cosmic discoveries. Pages: 350.
+Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. Pages: 350.
 
 ## What this book covers
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning, unlocking cosmic discoveries.
+Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.
 
 ## Who this book is for
 
@@ -14,20 +14,20 @@ Readers who want practical, plain-English AI insight with real-world examples �
 
 ## What you’ll learn
 
-- How AI shows up in space exploration and aerospace — the practical use cases that matter.
-- The core ideas explained in plain English (no maths-heavy detours).
-- Key themes, including: Space, Aerospace, Science, Artificial Intelligence.
-- What to watch out for: limitations, trade-offs, and common misconceptions.
+- Where AI is already being used in science today — and where the claims are running ahead of reality.
+- The workflows, systems, and trade-offs behind practical science use cases, explained in plain English.
+- Key themes including autonomous systems, mission planning, sensor data, space operations.
+- The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-AI decisions in space exploration have real consequences: mission safety, scientific discovery, cost and feasibility of deep-space programmes, and long-term human progress beyond Earth.
+Because AI in science affects mission success, data interpretation, and what can be automated far from Earth. Getting the basics right matters long before anyone wheels in the hype machine.
 
 ## Topics and tags
 
-- Topic: Space
-- Tags: Creativity, Artificial Intelligence, AI Trends, AI & Creativity
+- Topic: Science
+- Tags: Science, Artificial Intelligence, AI Trends
 - Length: 350 pages
 
 ## Buy
-- https://mybook.to/iY9m
+- https://mybook.to/beyondearth
