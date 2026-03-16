@@ -52,25 +52,15 @@
   .compare-table.is-stacked td::before{content:attr(data-label);display:block;font-size:.8rem;font-weight:700;color:#4F46E5;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
 }
 </style>
-<!-- CookieYes -->
-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<!-- Metricool Tracking with error handling -->
-<script>
-    function loadScript(callback) {
-        var head = document.getElementsByTagName("head")[0];
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://tracker.metricool.com/resources/be.js";
-        script.onload = callback;
-        script.onerror = function() { console.error("Metricool script failed to load"); };
-        head.appendChild(script);
-    }
-    loadScript(function() {
-        beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
-    });
-</script>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
-</link><link href="/assets/css/gold-standard.css" rel="stylesheet"/></head><body class="page-compare">
+</link><link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+
+<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<!-- CookieYes -->
+<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+<script defer src="/assets/js/consent-managed-scripts.js"></script>
+</head><body class="page-compare">
 <a class="skip-link" href="#main">Skip to main content</a>
 <div aria-label="Loading content" aria-live="polite" class="page-loader" id="pageLoader" role="status" style="display:none">
 <div aria-hidden="true" class="spinner"></div>
@@ -375,6 +365,5 @@
 </footer>
 </div>
 <!-- Chatbot -->
-<script defer="" src="https://botsailor.com/script/webchat-link.js?code=1744067063128291"></script>
 <script defer="" src="/assets/js/ux-fixes.js"></script>
 <script defer="" src="/assets/js/site-ui.js"></script><script defer="" src="/assets/js/gold-standard.js"></script></body></html>
