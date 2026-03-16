@@ -1,6 +1,6 @@
 # This file is redirected in production via _redirects.
 # Canonical robots file:
-# https://assets.jonathan-harris.online/robot.txt
+# https://assets.jonathan-harris.online/robots.txt
 
 User-agent: *
 Disallow:
