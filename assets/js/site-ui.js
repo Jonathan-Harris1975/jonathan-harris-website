@@ -285,6 +285,11 @@
       const existing = document.getElementById("jh-breadcrumb-schema");
       if (existing) existing.remove();
 
+      const hasBakedBreadcrumb = Array.from(document.querySelectorAll('script[type="application/ld+json"]')).some(function(node){
+        return /"@type"\s*:\s*"BreadcrumbList"/.test(node.textContent || "");
+      });
+      if (hasBakedBreadcrumb || document.querySelector('[data-jh-ai-pack]')) return;
+
       const segs = path.split("/").filter(Boolean);
       if (!segs.length) return;
 
