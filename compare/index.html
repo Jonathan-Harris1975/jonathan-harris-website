@@ -38,6 +38,19 @@
 @media(max-width:800px){
   .compare-scroll-cue{ display:block; }
 }
+@media (max-width: 760px){
+  .compare-scroll-cue{display:none;}
+  .compare-table-wrap{overflow:visible;}
+  .compare-table.is-stacked thead{display:none;}
+  .compare-table.is-stacked,
+  .compare-table.is-stacked tbody,
+  .compare-table.is-stacked tr,
+  .compare-table.is-stacked td{display:block;width:100%;}
+  .compare-table.is-stacked tr{margin-bottom:14px;border:1px solid rgba(79,70,229,0.16);border-radius:14px;overflow:hidden;background:#fff;}
+  .compare-table.is-stacked td{padding:14px 16px;border-bottom:1px solid rgba(229,231,235,0.9);}
+  .compare-table.is-stacked td:last-child{border-bottom:none;}
+  .compare-table.is-stacked td::before{content:attr(data-label);display:block;font-size:.8rem;font-weight:700;color:#4F46E5;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
+}
 </style>
 <!-- CookieYes -->
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
@@ -294,7 +307,7 @@
 </div>
 </section>
 </div>
-</main>
+</main><script>(function(){var mq=window.matchMedia('(max-width: 760px)');function syncCompareTables(){document.querySelectorAll('.compare-table').forEach(function(table){var headers=Array.from(table.querySelectorAll('thead th')).map(function(th){return th.textContent.trim();});table.querySelectorAll('tbody tr').forEach(function(row){Array.from(row.children).forEach(function(cell,index){if(headers[index]) cell.setAttribute('data-label',headers[index]);});});table.classList.toggle('is-stacked',mq.matches);});}syncCompareTables();if(mq.addEventListener) mq.addEventListener('change',syncCompareTables);else if(mq.addListener) mq.addListener(syncCompareTables);})();</script>
 <div id="siteFooter"><footer aria-label="Website footer" class="site-footer" role="contentinfo">
 <div class="wrap footer-shell">
 <div class="footer-grid">
