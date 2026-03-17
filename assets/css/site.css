@@ -3695,3 +3695,21 @@ body.bio-page .about-banner {
 .hero--newsletter {
   padding-top: calc(var(--header-h, 64px) + 44px);
 }
+
+
+/* Remediation pack: mobile nav state */
+html.jh-nav-open,
+body.jh-nav-open {
+  overflow: hidden;
+}
+
+.jh-nav-overlay {
+  touch-action: none;
+}
+
+.jh-nav-dropdown__btn:focus-visible,
+.jh-mobile-nav a:focus-visible,
+.jh-hamburger:focus-visible {
+  outline: 2px solid rgba(147,197,253,0.75);
+  outline-offset: 2px;
+}
