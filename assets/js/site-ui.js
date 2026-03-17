@@ -256,22 +256,33 @@
 
   async function injectHeader(){
     try{
+      const html = await fetchPartial(HEADER_URL);
+      if (!html) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = html;
+      let nextHeader = wrapper.querySelector('.jh-header') || wrapper.firstElementChild;
+      if (!nextHeader) return;
+
       let header = document.querySelector('.jh-header');
-      if (!header){
-        const html = await fetchPartial(HEADER_URL);
-        if (!html) return;
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = html;
-        const nodes = Array.from(wrapper.childNodes);
-        const anchor = document.body.firstChild;
-        nodes.forEach(function(node){
-          document.body.insertBefore(node, anchor);
-        });
-        header = document.querySelector('.jh-header');
+      if (header){
+        header.replaceWith(nextHeader);
+        header = nextHeader;
+      } else {
+        const skipLink = document.querySelector('.skip-link');
+        if (skipLink && skipLink.parentNode === document.body){
+          skipLink.insertAdjacentElement('afterend', nextHeader);
+        } else {
+          document.body.insertBefore(nextHeader, document.body.firstChild);
+        }
+        header = nextHeader;
       }
-      if (!header) return;
+
+      header.classList.add('jh-header--injected');
+      header.dataset.jhShared = '1';
       markActiveNav(header);
       wireMobileNav(header);
+      wireDropdowns();
       syncHeaderVisibility(header, findHeaderRevealAnchor(), header.querySelector('.jh-mobile-nav'), header.querySelector('.jh-hamburger'));
     }catch(_){ }
   }
@@ -355,12 +366,33 @@
       if (!visible) closeMobileNav();
     }
 
-    header.classList.remove('jh-header--hero-mode');
-    setVisible(true);
+    function revealThreshold(){
+      const target = heroEl || findHeaderRevealAnchor();
+      if (!target) return 0;
+      const rect = target.getBoundingClientRect();
+      const scrollTop = window.scrollY || window.pageYOffset || 0;
+      const top = rect.top + scrollTop;
+      const height = Math.max(rect.height, target.offsetHeight || 0, 0);
+      return Math.max(0, top + Math.max(96, height - 96));
+    }
 
-    window.addEventListener('resize', function(){
-      setVisible(true);
-    }, { passive: true });
+    function updateVisibility(){
+      const target = heroEl || findHeaderRevealAnchor();
+      if (!target){
+        header.classList.remove('jh-header--hero-mode');
+        setVisible(true);
+        return;
+      }
+
+      header.classList.add('jh-header--hero-mode');
+      const shouldShow = (window.scrollY || window.pageYOffset || 0) >= revealThreshold();
+      setVisible(shouldShow);
+    }
+
+    updateVisibility();
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility, { passive: true });
+    window.addEventListener('orientationchange', updateVisibility, { passive: true });
   }
 
   function ensureFooterTarget(){
@@ -375,14 +407,27 @@
 
   async function injectFooter(){
     try{
-      const target = ensureFooterTarget();
-      if (!target) return;
-      if (target.querySelector("footer.site-footer")) return;
-      const existing = document.querySelector("footer.site-footer");
-      if (existing && !existing.closest(`#${FOOTER_TARGET_ID}`)) return;
       const html = await fetchPartial(FOOTER_URL);
       if (!html) return;
+
+      let target = document.getElementById(FOOTER_TARGET_ID);
+      const existing = document.querySelector('footer.site-footer');
+
+      if (existing){
+        if (existing.parentElement && existing.parentElement.id === FOOTER_TARGET_ID){
+          target = existing.parentElement;
+        } else if (target) {
+          existing.remove();
+        } else {
+          target = document.createElement('div');
+          target.id = FOOTER_TARGET_ID;
+          existing.replaceWith(target);
+        }
+      }
+
+      if (!target) target = ensureFooterTarget();
       target.innerHTML = html;
+      target.dataset.jhShared = '1';
     }catch(_){ }
   }
 
@@ -780,16 +825,16 @@
     } catch (_) {}
   }
 
-function init(){
+async function init(){
     ensureStyles();
     ensureSkipLink();
     ensureMainId();
     ensureCanonical();
     ensureImagePreloads();
     strengthenEmbeddedForms();
-    injectHeader();
+    await injectHeader();
+    await injectFooter();
     wireDropdowns();
-    injectFooter();
     quietDecorativeIcons();
     injectBackToTop();
     injectMobileNavOverlay();
