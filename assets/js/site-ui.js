@@ -127,6 +127,170 @@
     }catch(_){}
   }
 
+  const PARTIAL_CACHE = new Map();
+
+  async function fetchPartial(url){
+    try{
+      if (PARTIAL_CACHE.has(url)) return PARTIAL_CACHE.get(url);
+      const res = await fetch(url, { cache: "force-cache" });
+      if (!res.ok) return "";
+      const html = await res.text();
+      PARTIAL_CACHE.set(url, html);
+      return html;
+    }catch(_){
+      return "";
+    }
+  }
+
+  function setBodyScrollLock(locked){
+    try{
+      document.documentElement.classList.toggle('jh-nav-open', !!locked);
+      document.body.classList.toggle('jh-nav-open', !!locked);
+    }catch(_){ }
+  }
+
+  function updateNavOverlay(visible){
+    try{
+      const overlay = document.getElementById('jh-nav-overlay');
+      if (!overlay) return;
+      overlay.classList.toggle('is-active', !!visible);
+      overlay.setAttribute('aria-hidden', visible ? 'false' : 'true');
+    }catch(_){ }
+  }
+
+  function getFocusableElements(container){
+    try{
+      if (!container) return [];
+      return Array.from(container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter(function(el){
+        return !el.hasAttribute('hidden') && el.getAttribute('aria-hidden') !== 'true';
+      });
+    }catch(_){
+      return [];
+    }
+  }
+
+  function setMobileNavState(mobileNav, button, isOpen){
+    try{
+      if (!mobileNav || !button) return;
+      const open = !!isOpen;
+      mobileNav.classList.toggle('is-open', open);
+      if (open){
+        mobileNav.removeAttribute('hidden');
+        mobileNav.style.display = 'flex';
+      }else{
+        mobileNav.setAttribute('hidden', '');
+        mobileNav.style.display = 'none';
+      }
+      button.setAttribute('aria-expanded', open ? 'true' : 'false');
+      button.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+      var lbl = button.querySelector('.jh-hamburger__label');
+      if (lbl) lbl.textContent = open ? 'Close' : 'Menu';
+      setBodyScrollLock(open);
+      updateNavOverlay(open);
+    }catch(_){ }
+  }
+
+  function wireMobileNav(header){
+    try{
+      if (!header || header.dataset.jhMobileNavWired === '1') return;
+      const button = header.querySelector('.jh-hamburger');
+      const mobileNav = header.querySelector('.jh-mobile-nav');
+      if (!button || !mobileNav) return;
+      header.dataset.jhMobileNavWired = '1';
+
+      if (!mobileNav.id) mobileNav.id = 'jh-mobile-nav';
+      button.setAttribute('aria-controls', mobileNav.id);
+      setMobileNavState(mobileNav, button, false);
+
+      button.addEventListener('click', function(){
+        const open = button.getAttribute('aria-expanded') === 'true';
+        setMobileNavState(mobileNav, button, !open);
+        if (!open){
+          const first = getFocusableElements(mobileNav)[0];
+          if (first) first.focus();
+        } else {
+          button.focus();
+        }
+      });
+
+      mobileNav.addEventListener('click', function(evt){
+        const link = evt.target && evt.target.closest ? evt.target.closest('a[href]') : null;
+        if (link) setMobileNavState(mobileNav, button, false);
+      });
+
+      mobileNav.addEventListener('keydown', function(evt){
+        if (evt.key === 'Escape'){
+          evt.preventDefault();
+          setMobileNavState(mobileNav, button, false);
+          button.focus();
+          return;
+        }
+        if (evt.key !== 'Tab') return;
+        const focusable = getFocusableElements(mobileNav);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (evt.shiftKey && document.activeElement === first){
+          evt.preventDefault();
+          last.focus();
+        } else if (!evt.shiftKey && document.activeElement === last){
+          evt.preventDefault();
+          first.focus();
+        }
+      });
+
+      document.addEventListener('keydown', function(evt){
+        if (evt.key === 'Escape' && button.getAttribute('aria-expanded') === 'true'){
+          setMobileNavState(mobileNav, button, false);
+          button.focus();
+        }
+      });
+
+      window.addEventListener('resize', function(){
+        if (window.innerWidth > 768 && button.getAttribute('aria-expanded') === 'true'){
+          setMobileNavState(mobileNav, button, false);
+        }
+      }, { passive: true });
+    }catch(_){ }
+  }
+
+  async function injectHeader(){
+    try{
+      let header = document.querySelector('.jh-header');
+      if (!header){
+        const html = await fetchPartial(HEADER_URL);
+        if (!html) return;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        const nodes = Array.from(wrapper.childNodes);
+        const anchor = document.body.firstChild;
+        nodes.forEach(function(node){
+          document.body.insertBefore(node, anchor);
+        });
+        header = document.querySelector('.jh-header');
+      }
+      if (!header) return;
+      markActiveNav(header);
+      wireMobileNav(header);
+      syncHeaderVisibility(header, findHeaderRevealAnchor(), header.querySelector('.jh-mobile-nav'), header.querySelector('.jh-hamburger'));
+    }catch(_){ }
+  }
+
+  function strengthenEmbeddedForms(){
+    try{
+      document.querySelectorAll('iframe[src*="form.jotform.com"]').forEach(function(frame, index){
+        if (frame.dataset.jhFormStrengthened === '1') return;
+        frame.dataset.jhFormStrengthened = '1';
+        if (!frame.getAttribute('title')){
+          frame.setAttribute('title', 'Embedded form ' + (index + 1));
+        }
+        frame.setAttribute('loading', frame.getAttribute('loading') || 'lazy');
+        frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+        frame.removeAttribute('onload');
+      });
+    }catch(_){ }
+  }
+
   function findHeroHost(){
     // Prefer the existing hero/header section so nav feels native.
     return (
@@ -177,14 +341,12 @@
 
     function closeMobileNav(){
       if (!mobileNav) return;
-      mobileNav.classList.remove('is-open');
-      mobileNav.style.display = 'none';
-      mobileNav.setAttribute('hidden','');
       if (button) {
-        button.setAttribute('aria-expanded','false');
-        button.setAttribute('aria-label','Open navigation menu');
-        var lbl = button.querySelector('.jh-hamburger__label');
-        if (lbl) lbl.textContent = 'Menu';
+        setMobileNavState(mobileNav, button, false);
+      } else {
+        mobileNav.classList.remove('is-open');
+        mobileNav.style.display = 'none';
+        mobileNav.setAttribute('hidden','');
       }
     }
 
@@ -216,15 +378,10 @@
       const target = ensureFooterTarget();
       if (!target) return;
       if (target.querySelector("footer.site-footer")) return;
-
-      const legacyFooters = Array.from(document.querySelectorAll("footer"));
-      legacyFooters.forEach((footer) => {
-        if (!footer.closest(`#${FOOTER_TARGET_ID}`)) footer.remove();
-      });
-
-      const res = await fetch(FOOTER_URL, { cache: "force-cache" });
-      if (!res.ok) return;
-      const html = await res.text();
+      const existing = document.querySelector("footer.site-footer");
+      if (existing && !existing.closest(`#${FOOTER_TARGET_ID}`)) return;
+      const html = await fetchPartial(FOOTER_URL);
+      if (!html) return;
       target.innerHTML = html;
     }catch(_){ }
   }
@@ -614,29 +771,12 @@
       document.body.appendChild(overlay);
 
       overlay.addEventListener('click', function() {
-        // Close all open mobile navs
         document.querySelectorAll('.jh-mobile-nav.is-open').forEach(function(nav) {
-          nav.classList.remove('is-open');
-          nav.style.display = 'none';
-          nav.setAttribute('hidden', '');
+          var ownerHeader = nav.closest('.jh-header') || document;
+          var button = ownerHeader.querySelector('.jh-hamburger');
+          if (button) setMobileNavState(nav, button, false);
         });
-        // Reset hamburger buttons
-        document.querySelectorAll('.jh-hamburger[aria-expanded="true"]').forEach(function(btn) {
-          btn.setAttribute('aria-expanded', 'false');
-          btn.setAttribute('aria-label', 'Open navigation menu');
-          var lbl = btn.querySelector('.jh-hamburger__label');
-          if (lbl) lbl.textContent = 'Menu';
-        });
-        overlay.classList.remove('is-active');
       });
-
-      // Listen for mobile nav state changes to show/hide overlay
-      // We use a MutationObserver on the body to watch for class changes
-      var mobileNavObserver = new MutationObserver(function() {
-        var isOpen = !!document.querySelector('.jh-mobile-nav.is-open');
-        overlay.classList.toggle('is-active', isOpen);
-      });
-      mobileNavObserver.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
     } catch (_) {}
   }
 
