@@ -2038,7 +2038,7 @@ body.home .wrap .card{text-align:center;}
   outline-offset: 2px;
 }
 @media (max-width: 768px) {
-  /* MOB-01: Always show hamburger on mobile — hero-mode should not hide it */
+  /* Mobile: expose the hamburger when the shared header itself is visible */
   .jh-hamburger { display: inline-flex !important; align-items: center; justify-content: center; }
 }
 
@@ -2802,13 +2802,12 @@ body.page-ebooks .pager{
   z-index:1;
 }
 
-/* MOB-01: Hamburger always visible on mobile - hero-mode only hides header text on desktop */
+/* Mobile: keep the same threshold-driven reveal logic as desktop */
 @media (max-width: 768px){
-  /* Ensure header is visible enough on mobile hero pages */
   .jh-header--hero-mode:not(.is-visible) {
-    opacity: 1;
-    background: rgba(13,20,32,0.85);
-    backdrop-filter: blur(8px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
   }
 }
 
