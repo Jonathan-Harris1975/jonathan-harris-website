@@ -21,7 +21,7 @@ const cfgText = fs.readFileSync(cfgPath, "utf8");
 
 // Extract defaults from blog-config.js without eval
 function extract(key){
-  const re = new RegExp(`${key}:\s*\"([^\"]+)\"`);
+  const re = new RegExp(key + ":\\s*\"([^\"]+)\"");
   const m = cfgText.match(re);
   return m ? m[1] : "";
 }
@@ -51,8 +51,13 @@ function stripHtml(s){
   return (s||"").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function safeJson(s){
-  return (s||"").replace(/\\/g, "\\\\").replace(/"/g, "\\"");
+function escapeHtml(s){
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function parseRss(xml){
@@ -123,8 +128,8 @@ async function main(){
     const image = it.image || "https://images.jonathan-harris.online/newsletter-img";
 
     const content = `
-      <p><strong>Source:</strong> <a href="${it.link}" target="_blank" rel="noopener noreferrer">${it.link || "RSS item"}</a></p>
-      <p>${safeJson(it.description || desc)}</p>
+      <p><strong>Source:</strong> <a href="${escapeHtml(it.link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(it.link || "RSS item")}</a></p>
+      <p>${escapeHtml(it.description || desc)}</p>
       <p class="muted">If you’re seeing this early: this post was generated from RSS. The editorial rewrite stage plugs in next.</p>
     `.trim();
 
