@@ -69,29 +69,29 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
 <script>
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260281179574362']", "https://form.jotform.com/");
-    window.addEventListener('message', function(e) {
-      var completed = false;
-      if (e.data && typeof e.data === 'string') {
-        try {
-          var d = JSON.parse(e.data);
-          completed = d && d.action === 'submission-completed';
-        } catch(err) {
-          completed = e.data.indexOf('submission-completed') > -1 || e.data.indexOf('submitted') > -1;
-        }
-      } else if (e.data && typeof e.data === 'object') {
-        completed = e.data.action === 'submission-completed';
+    function isCompletedMessage(data) {
+      if (!data) return false;
+      if (typeof data === 'object') return data.action === 'submission-completed';
+      if (typeof data !== 'string') return false;
+      if (data.indexOf('submission-completed') === -1) return false;
+      try {
+        var parsed = JSON.parse(data);
+        return parsed && parsed.action === 'submission-completed';
+      } catch(err) {
+        return data.indexOf('JotForm') > -1;
       }
-      if (completed) {
-        var confirmation = document.getElementById('contact-form-confirmation');
-        var formWrap = document.getElementById('contact-form-wrap');
-        if (confirmation) {
-          confirmation.hidden = false;
-          confirmation.style.display = 'block';
-          confirmation.focus();
-        }
-        if (formWrap) {
-          formWrap.style.display = 'none';
-        }
+    }
+    window.addEventListener('message', function(e) {
+      if (!isCompletedMessage(e.data)) return;
+      var confirmation = document.getElementById('contact-form-confirmation');
+      var formWrap = document.getElementById('contact-form-wrap');
+      if (confirmation) {
+        confirmation.hidden = false;
+        confirmation.style.display = 'block';
+        confirmation.focus();
+      }
+      if (formWrap) {
+        formWrap.style.display = 'none';
       }
     });
   </script>
