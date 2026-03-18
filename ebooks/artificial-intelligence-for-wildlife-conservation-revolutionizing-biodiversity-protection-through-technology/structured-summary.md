@@ -30,4 +30,4 @@ Because AI in environment affects biodiversity, monitoring accuracy, and conserv
 - Length: 221 pages
 
 ## Buy
-- https://mybook.to/8jAITc
+- https://mybook.to/94Q3
