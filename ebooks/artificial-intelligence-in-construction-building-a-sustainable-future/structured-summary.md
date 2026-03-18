@@ -30,4 +30,4 @@ Because AI in construction affects project risk, site safety, delivery costs, an
 - Length: 319 pages
 
 ## Buy
-- https://mybook.to/unBJY7
+- https://mybook.to/v98RD
