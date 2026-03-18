@@ -1,30 +1,25 @@
-# Jonathan Harris Online — Static Pages
+# Jonathan Harris Online - Static Site Repository
 
-This repository contains static HTML pages for deployment to Cloudflare Pages / GitHub Pages.
+This repository contains the static HTML, CSS, JavaScript, JSON manifests, partials, and redirect/config files for Jonathan Harris Online.
 
-## Routes
-- `/` → `index.html`
-- `/bio/` → `bio/index.html`
-- `/newsletter/` → `newsletter/index.html`
-- `/contact/` → `contact/index.html`
-- `/affiliate/` → `affiliate/index.html`
-- `/privacy-policy/` → `privacy-policy/index.html`
-- `/terms-of-use/` → `terms-of-use/index.html`
-- `404` → `404.html`
+## Public route families
+- `/` home page
+- `/404.html` not-found page
+- Core routes: `/affiliate/`, `/api/docs/`, `/bio/`, `/compare/`, `/contact/`, `/glossary/`, `/newsletter/`, `/podcast/`, `/privacy-policy/`, `/terms-of-use/`
+- Blog routes: `/blog/`, `/blog/weekly/`
+- Topic routes: `/topics/` plus guide pages under `/topics/*/`
+- Catalogue routes: `/catalogue/*/`
+- eBook catalogue: `/ebooks/`
+- Canonical eBook pages: `/ebooks/<slug>/`
+- Legacy eBook detail pages: `/ebooks/<slug>/detail.html`
 
-Note: `sitemap.xml`, `robots.txt`, and `llms.txt` are managed externally per current setup.
-
-## Audit fixes implemented (Feb 2026)
-This repo has been updated to address the items in *Jonathan_Harris_Website_Audit.pdf*.
-Key changes include: schema de-duplication, homepage H1 fix, complete hreflang coverage (+ x-default), affiliate rel=sponsored + disclosure, removal of hidden AI DOM content, Core Web Vitals image loading tweaks, and enriched structured data for the podcast + freshness fields.
-
+## Data and shared assets
+- Canonical book manifest: `ebooks/books.json`
+- Public/API derivatives: `assets/js/books.json`, `api/v1/books.json`, `feed.json`, `ai/entity-map.json`
+- Shared partials: `assets/partials/header.html`, `assets/partials/footer.html`
+- Shared styles/scripts: `assets/css/*`, `assets/js/*`
 
 ## Redirects
-
-This site uses a root `_redirects` file (Cloudflare Pages/Netlify-style) to 301 redirect:
-
-- `/robots.txt` → canonical robots file on `assets.jonathan-harris.online`
-- `/sitemap.xml` → canonical sitemap on `assets.jonathan-harris.online`
-- `/llms.txt` → canonical `llms.txt` hosted on R2
-
-If you are deploying somewhere that does not support `_redirects`, replicate these redirects in that platform’s redirect rules.
+- `_redirects` is the primary redirect source for the deployed static site.
+- `_redirects.txt` mirrors the current redirect rules and should be kept in sync if a deployment workflow still depends on it.
+- `robots.txt`, `sitemap.xml`, and `llms.txt` are present locally and also redirected to their externally hosted canonical assets by `_redirects`.
