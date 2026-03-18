@@ -29,7 +29,7 @@
       "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
       "desc": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. 333-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
-      "buy": "https://mybook.to/Ldhe41",
+      "buy": "https://mybook.to/PsciMD5",
       "topic": "Agriculture", /* FIX: was "Artificial Intelligence" — corrected to domain */
       "pages": 333,
       "url": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
@@ -49,7 +49,7 @@
       "title": "AI in Education: Reimagining Learning for Every Student",
       "desc": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. 323-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
-      "buy": "https://mybook.to/8VjT",
+      "buy": "https://mybook.to/Ldhe41",
       "topic": "Education", /* FIX: was "Education" — correct */
       "pages": 323,
       "url": "/ebooks/ai-in-education-reimagining-learning-for-every-student/"
@@ -109,7 +109,7 @@
       "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
       "desc": "A 221-page guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
       "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
-      "buy": "https://mybook.to/8jAITc",
+      "buy": "https://mybook.to/94Q3",
       "topic": "Environment", /* FIX: was "Creativity" — incorrect */
       "pages": 221,
       "url": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/"
@@ -119,7 +119,7 @@
       "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
       "desc": "A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
       "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
-      "buy": "https://mybook.to/hrnKOD",
+      "buy": "https://mybook.to/8VjT",
       "topic": "Finance", /* FIX: was "Creativity" — incorrect */
       "pages": 286,
       "url": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/"
@@ -129,7 +129,7 @@
       "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
       "desc": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. 319-page guide.",
       "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
-      "buy": "https://mybook.to/unBJY7",
+      "buy": "https://mybook.to/v98RD",
       "topic": "Construction", /* FIX: was "Creativity" — incorrect */
       "pages": 319,
       "url": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/"
@@ -209,7 +209,7 @@
       "title": "Beyond Earth: How AI is Transforming Space Exploration",
       "desc": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. 350-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
-      "buy": "https://mybook.to/beyondearth",
+      "buy": "https://mybook.to/iY9m",
       "topic": "Science", /* FIX: was "Creativity" — incorrect; buy URL was duplicate of The House Always Knows (K7nVJGv) */
       "pages": 350,
       "url": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/"
@@ -239,7 +239,7 @@
       "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
       "desc": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. 348-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
-      "buy": "https://mybook.to/v98RD",
+      "buy": "https://mybook.to/hrnKOD",
       "topic": "Healthcare", /* correct */
       "pages": 348,
       "url": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/"
@@ -259,7 +259,7 @@
       "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
       "desc": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. 344-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
-      "buy": "https://mybook.to/gameai",
+      "buy": "https://mybook.to/e7GozY6",
       "topic": "Gaming", /* FIX: was "Education" — incorrect; also had shared buy URL */
       "pages": 344,
       "url": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/"
@@ -289,7 +289,7 @@
       "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
       "desc": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. 333-page guide.",
       "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
-      "buy": "https://mybook.to/aibehindyourfeed",
+      "buy": "https://mybook.to/rNRr",
       "topic": "Media", /* FIX: was "Artificial Intelligence"; had shared DWfAK URL */
       "pages": 333,
       "url": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/"
@@ -309,7 +309,7 @@
       "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "desc": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. 315-page guide.",
       "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
-      "buy": "https://mybook.to/architectsofai",
+      "buy": "https://mybook.to/qFAI",
       "topic": "History", /* FIX: was "Artificial Intelligence" with bad buy URL */
       "pages": 315,
       "url": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/"
