@@ -99,12 +99,16 @@
     try{
       const loader = document.getElementById(LOADER_ID);
       if (loader) {
+        loader.classList.remove("is-active");
+        loader.classList.add("hide");
         loader.style.display = "none";
         loader.setAttribute("aria-hidden", "true");
         loader.setAttribute("aria-live", "off");
       }
     }catch(_){}
   }
+
+  window.__JH_HIDE_LOADER__ = hideLoader;
 
   function ensureSkipLink(){
     try{
@@ -433,12 +437,21 @@
 
 
 
+  function isDirectFilePath(pathname){
+    try{
+      return /\/[^/]+\.html$/i.test((pathname || "").replace(/\/{2,}/g, "/"));
+    }catch(_){
+      return false;
+    }
+  }
+
   function normaliseCanonicalUrl(url){
     try{
       const parsed = new URL(url, window.location.origin);
       parsed.hash = "";
       const cleanPath = parsed.pathname.replace(/\/{2,}/g, "/");
-      parsed.pathname = cleanPath === "/" ? "/" : cleanPath.replace(/\/+$/, "") + "/";
+      const trimmedPath = cleanPath === "/" ? "/" : cleanPath.replace(/\/+$/, "");
+      parsed.pathname = trimmedPath === "/" ? "/" : (isDirectFilePath(trimmedPath) ? trimmedPath : trimmedPath + "/");
       return parsed.toString();
     }catch(_){
       return window.location.origin + "/";
@@ -447,8 +460,9 @@
 
   function ensureCanonical(){
     try{
-      const canonicalHref = normaliseCanonicalUrl(window.location.href);
       let canonical = document.querySelector('link[rel="canonical"]');
+      const sourceHref = canonical && canonical.getAttribute("href") ? canonical.getAttribute("href").trim() : "";
+      const canonicalHref = normaliseCanonicalUrl(sourceHref || window.location.href);
 
       if (!canonical){
         canonical = document.createElement("link");

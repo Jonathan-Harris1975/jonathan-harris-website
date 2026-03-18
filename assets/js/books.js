@@ -24,12 +24,9 @@
 
   async function fetchBooks(){
     const candidates = [
-      "/books.json",
       "/ebooks/books.json",
-      "./books.json",
-      "./ebooks/books.json",
       "/assets/js/books.json",
-      "./assets/js/books.json"
+      "./books.json"
     ];
     let lastErr = null;
     for (const url of candidates){
