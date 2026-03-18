@@ -17,7 +17,9 @@ https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/:spl
 /book/*       https://jonathan-harris.online/ebooks/:splat       301
 /catalogue/*  https://jonathan-harris.online/catalogue/:splat    301
 /category/*   https://jonathan-harris.online/catalogue/:splat    301
-/author/*     https://jonathan-harris.online/author/:splat       301
+/author       https://jonathan-harris.online/bio/                301
+/author/      https://jonathan-harris.online/bio/                301
+/author/*     https://jonathan-harris.online/bio/                301
 /topics/*     https://jonathan-harris.online/topics/:splat       301
 /glossary/*   https://jonathan-harris.online/glossary/:splat     301
 /api/*        https://jonathan-harris.online/api/:splat          301

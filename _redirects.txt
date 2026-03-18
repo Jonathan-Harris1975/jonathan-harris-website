@@ -22,6 +22,7 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 # 6) Known legacy slug fixes (keep BEFORE the rewrite)
 # detail.html pages are now real long-form conversion pages; keep route live
+/ebooks/*/detail  /ebooks/:splat/detail.html  301
 /ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
 /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
 /ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
@@ -46,7 +47,7 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /book/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now   https://mybook.to/bWpjeB   302
 /ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now   https://mybook.to/9Wvf   302
 /book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now   https://mybook.to/9Wvf   302
-/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now   https://mybook.to/94Q3 302
+/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now   https://mybook.to/94Q3   302
 /book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now   https://mybook.to/94Q3   302
 /ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now   https://mybook.to/8VjT   302
 /book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now   https://mybook.to/8VjT   302
