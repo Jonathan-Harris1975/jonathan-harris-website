@@ -30,4 +30,4 @@ Because AI in history affects how people understand the field, its turning point
 - Length: 315 pages
 
 ## Buy
-- https://mybook.to/architectsofai
+- https://mybook.to/qFAI
