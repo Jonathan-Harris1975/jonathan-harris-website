@@ -30,4 +30,4 @@ Because AI in gaming affects game design, player experience, monetisation, and f
 - Length: 344 pages
 
 ## Buy
-- https://mybook.to/gameai
+- https://mybook.to/e7GozY6
