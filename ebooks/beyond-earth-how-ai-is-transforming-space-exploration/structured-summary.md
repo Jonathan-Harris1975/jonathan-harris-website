@@ -30,4 +30,4 @@ Because AI in science affects mission success, data interpretation, and what can
 - Length: 350 pages
 
 ## Buy
-- https://mybook.to/beyondearth
+- https://mybook.to/iY9m
