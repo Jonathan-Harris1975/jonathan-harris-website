@@ -3712,3 +3712,29 @@ body.jh-nav-open {
   outline: 2px solid rgba(147,197,253,0.75);
   outline-offset: 2px;
 }
+
+
+/* === Detail page conversion styles === */
+.page-book-detail .detail-shell{padding:34px 0 72px}
+.detail-hero-card{display:grid;grid-template-columns:minmax(220px,320px) 1fr;gap:28px;align-items:start;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:20px;box-shadow:var(--shadow);padding:24px}
+.detail-copy h2{margin:6px 0 14px;color:#111827;font-size:1.9rem;line-height:1.15}
+.detail-copy .eyebrow{margin:0 0 6px;color:#4F46E5;font-weight:800;text-transform:uppercase;letter-spacing:.07em;font-size:.83rem}
+.detail-lead{font-size:1.04rem;line-height:1.75;color:#374151;max-width:68ch}
+.detail-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.detail-actions--tight{margin-top:14px}
+.detail-grid{display:grid;gap:18px;margin-top:28px}
+.detail-grid--two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.detail-panel,.detail-metric,.detail-signal{background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:18px;box-shadow:var(--shadow)}
+.detail-panel{padding:22px}
+.detail-panel h2,.detail-metric h3,.detail-signal h3{margin-top:0;color:#111827}
+.detail-panel p,.detail-panel li,.detail-metric p,.detail-signal p{color:#374151}
+.detail-proof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:24px}
+.detail-metric{padding:18px}
+.detail-metric h3{font-size:1rem;margin-bottom:8px}
+.detail-metric p{margin:0;line-height:1.65}
+.detail-signal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+.detail-signal{padding:18px}
+.detail-signal h3{font-size:1rem;margin-bottom:8px}
+.page-book-detail .related-books,.page-book-detail .faq{margin-top:0}
+.page-book-detail .related-books ul{display:grid;gap:10px}
+@media (max-width:860px){.detail-hero-card,.detail-grid--two{grid-template-columns:1fr}.detail-copy h2{font-size:1.6rem}}
