@@ -87,7 +87,7 @@
 <section aria-label="Sample edition preview" class="card card--accent" role="region" style="margin-bottom:22px;">
 <h2>What a typical edition looks like</h2>
 <div style="background:rgba(13,20,32,0.06);border:1px solid rgba(79,70,229,0.25);border-radius:12px;padding:20px 24px;font-size:0.95rem;line-height:1.7;">
-<p style="font-weight:700;margin:0 0 6px;font-size:1rem;">📬 AI Edge — Wednesday</p>
+<p style="font-weight:700;margin:0 0 6px;font-size:1rem;">📬 AI Edge — Friday</p>
 <p style="color:#6B7280;margin:0 0 14px;font-size:0.85rem;">Weekly briefing · Plain English · No hype</p>
 <p><strong>Today's signal:</strong> Google DeepMind published a new paper on AI-assisted drug discovery that cuts early-stage screening time by roughly 40%. Three things you should know about it — and one reason the headline number is probably too optimistic.</p>
 <p><strong>Worth your attention?</strong> Yes, if you work in pharma, biotech, or healthcare strategy. Interesting-but-not-urgent for everyone else.</p>
@@ -113,11 +113,22 @@
 </div>
 <script>
 (function(){
-  window.addEventListener('message',function(e){
-    if(e.data&&(e.data.action==='submission-completed'||(typeof e.data==='string'&&e.data.indexOf('JotForm')>-1&&e.data.indexOf('submitted')>-1))){
-      var w=document.getElementById('newsletter-form-wrap'),s=document.getElementById('newsletter-success');
-      if(w&&s){w.style.display='none';s.style.display='block';s.focus();}
+  function isCompletedMessage(data){
+    if (!data) return false;
+    if (typeof data === 'object') return data.action === 'submission-completed';
+    if (typeof data !== 'string') return false;
+    if (data.indexOf('submission-completed') === -1) return false;
+    try {
+      var parsed = JSON.parse(data);
+      return parsed && parsed.action === 'submission-completed';
+    } catch(_) {
+      return data.indexOf('JotForm') > -1;
     }
+  }
+  window.addEventListener('message',function(e){
+    if(!isCompletedMessage(e.data)) return;
+    var w=document.getElementById('newsletter-form-wrap'),s=document.getElementById('newsletter-success');
+    if(w&&s){w.style.display='none';s.style.display='block';s.focus();}
   });
 })();
 </script>
