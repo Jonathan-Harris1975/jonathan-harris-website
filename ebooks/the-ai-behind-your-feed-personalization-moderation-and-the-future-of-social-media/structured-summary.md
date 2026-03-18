@@ -30,4 +30,4 @@ Because AI in media affects accuracy, trust, editorial workflow, and audience re
 - Length: 333 pages
 
 ## Buy
-- https://mybook.to/aibehindyourfeed
+- https://mybook.to/rNRr
