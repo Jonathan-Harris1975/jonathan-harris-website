@@ -4,31 +4,15 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is this book about?",
+      "name": "Is this book suitable for non-technical readers?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Digital Defense: The Role of AI in Modern Warfare is a plain-English guide to how AI is changing defence, intelligence, cybersecurity, and military decision-making."
+        "text": "Yes. It is written in plain English, with practical examples rather than technical jargon."
       }
     },
     {
       "@type": "Question",
-      "name": "Who is it for?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "It is written for curious readers, professionals, and policy-minded people who want a practical overview of AI in defence without technical waffle."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Do I need technical skills?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "No. The book focuses on concepts, real-world use cases, and trade-offs rather than code or maths."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What will I get from it?",
+      "name": "What will I learn from this book?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "You will get a grounded understanding of autonomous systems, predictive intelligence, cybersecurity, oversight, and the ethical issues that come with AI in warfare."
@@ -36,10 +20,18 @@
     },
     {
       "@type": "Question",
+      "name": "How long is it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "296 pages."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "Where can I buy it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You can buy the ebook via the Amazon link on this page."
+        "text": "Use the buy link on the page to purchase the eBook via Amazon."
       }
     }
   ]
