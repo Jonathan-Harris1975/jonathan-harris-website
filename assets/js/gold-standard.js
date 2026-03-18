@@ -47,7 +47,7 @@
       if(alt && alt.trim()) return;
       var src=img.getAttribute('src')||'';
       var guess=src.split('/').pop().split('?')[0].replace(/[-_]/g,' ').replace(/webp|jpg|jpeg|png|avif|svg/ig,'').trim();
-      img.setAttribute('alt', guess ? guess.replace(/\s+/g,' ').replace(/\w/g,function(c){return c.toUpperCase();}) : 'Jonathan Harris website image');
+      img.setAttribute('alt', guess ? guess.replace(/\s+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}) : 'Jonathan Harris website image');
     });
   }
   function init(){ removeBlogLinks(); addFooterTopics(); addHubIntro(); addJourneyPanel(); upgradeLegacyFooter(); addMissingAlt(); }
