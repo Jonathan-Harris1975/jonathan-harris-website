@@ -18,7 +18,7 @@
     if(!location.pathname.startsWith('/catalogue/') || document.querySelector('.jh-hub-intro')) return;
     var main=document.querySelector('main'); if(!main) return;
     var section=el('section',{'class':'jh-hub-intro','aria-label':'Topic hub quick links'});
-    section.innerHTML='<h2>Use this topic hub to find the right next step</h2><p>Start with the books in this topic, then jump sideways into the podcast, newsletter, or broader AI catalogue. That keeps discovery simple and gives each category page a clearer job: helping readers decide where to go next.</p><div class="jh-hub-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse all eBooks</a><a class="jh-hub-cta" href="/podcast/">Listen to the podcast</a><a class="jh-hub-cta" href="/newsletter/">Join the newsletter</a><a class="jh-hub-cta" href="/topics/">Explore AI topics</a></div>';
+    section.innerHTML='<h2>Use this topic hub to find the right next step</h2><p>Start with the books in this topic, then use the links below to move into the wider catalogue, the podcast, the newsletter, or related AI topics.</p><div class="jh-hub-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse all eBooks</a><a class="jh-hub-cta" href="/podcast/">Listen to the podcast</a><a class="jh-hub-cta" href="/newsletter/">Join the newsletter</a><a class="jh-hub-cta" href="/topics/">Explore AI topics</a></div>';
     var first = main.querySelector('.breadcrumbs, .jh-breadcrumbs, h2, section, article');
     if(first) first.insertAdjacentElement('beforebegin', section); else main.prepend(section);
   }
@@ -27,7 +27,7 @@
     var main=document.querySelector('main'); if(!main) return;
     var panel=el('section',{'class':'jh-journey-panel','aria-label':'Continue exploring'});
     var title=(document.querySelector('h1')||{}).textContent||'this title';
-    panel.innerHTML='<h2>Keep exploring the Jonathan Harris AI library</h2><p>You have reached <strong>'+title.replace(/</g,'&lt;')+'</strong>. The next useful step is usually one of four things: see the full catalogue, explore the matching topic hub, listen to a related podcast episode, or subscribe for weekly AI analysis.</p><div class="jh-journey-actions"><a href="/ebooks/">Browse all books</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a><a href="/topics/">AI topics</a></div><p class="jh-related-callout">This keeps readers moving instead of leaving them parked on one page.</p>';
+    panel.innerHTML='<h2>Keep exploring the Jonathan Harris AI library</h2><p>You have reached <strong>'+title.replace(/</g,'&lt;')+'</strong>. Use the links below to continue into the wider catalogue, the podcast, the newsletter, or a related topic hub.</p><div class="jh-journey-actions"><a href="/ebooks/">Browse all books</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a><a href="/topics/">AI topics</a></div><p class="jh-related-callout">A quick route to more books, the podcast, and the newsletter.</p>';
     main.appendChild(panel);
   }
   function upgradeLegacyFooter(){
