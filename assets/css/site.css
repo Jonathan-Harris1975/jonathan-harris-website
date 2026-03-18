@@ -207,7 +207,7 @@ details.more[open] summary:before{transform:rotate(90deg);}
 .page-loader{
   position: fixed;
   inset: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 24px;
@@ -215,6 +215,9 @@ details.more[open] summary:before{transform:rotate(90deg);}
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
+}
+.page-loader.is-active{
+  display: flex;
 }
 .page-loader.hide{
   opacity: 0;
