@@ -30,4 +30,4 @@ Because AI in education affects learning outcomes, access, workload, and fairnes
 - Length: 323 pages
 
 ## Buy
-- https://mybook.to/8VjT
+- https://mybook.to/Ldhe41
