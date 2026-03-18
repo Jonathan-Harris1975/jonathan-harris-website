@@ -30,4 +30,4 @@ Because AI in finance affects fraud losses, compliance exposure, customer trust,
 - Length: 286 pages
 
 ## Buy
-- https://mybook.to/hrnKOD
+- https://mybook.to/8VjT
