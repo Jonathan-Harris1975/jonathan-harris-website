@@ -30,4 +30,4 @@ Because AI in healthcare affects patient outcomes, safety, workload, and access 
 - Length: 348 pages
 
 ## Buy
-- https://mybook.to/v98RD
+- https://mybook.to/hrnKOD
