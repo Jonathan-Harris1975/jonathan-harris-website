@@ -30,4 +30,4 @@ Because AI in agriculture affects yields, input costs, food security, and sustai
 - Length: 333 pages
 
 ## Buy
-- https://mybook.to/Ldhe41
+- https://mybook.to/PsciMD5
