@@ -151,7 +151,7 @@
         "AI intrusion detection"
       ],
       "asin": "B0DN4GZZQ4",
-      "topic": "Cybersecurity",
+      "topic": "Cyber Security",
       "pages": 269
     },
     {
@@ -233,7 +233,7 @@
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/#book",
       "identifier": "JH-AI-EBOOK-15",
-      "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
+      "title": "Artificial Intelligence in Pharmaceuticals:Revolutionizing Healthcare",
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
       "keywords": [
@@ -278,7 +278,7 @@
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/#book",
       "identifier": "JH-AI-EBOOK-18",
-      "title": "Artificial Intelligence-Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
+      "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
       "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
       "keywords": [
@@ -317,7 +317,7 @@
         "space mission AI",
         "AI astronomy data analysis"
       ],
-      "topic": "Space",
+      "topic": "Science",
       "pages": 350
     },
     {
@@ -410,7 +410,9 @@
         "film",
         "filmmaking",
         "media"
-      ]
+      ],
+      "topic": "Creativity",
+      "pages": 336
     },
     {
       "id": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/#book",
@@ -441,7 +443,7 @@
         "AI algorithmic feed design"
       ],
       "asin": "B0DY12Z1SP",
-      "topic": "Social Media",
+      "topic": "Media",
       "pages": 333
     },
     {
@@ -473,7 +475,7 @@
         "machine learning origins"
       ],
       "asin": "B0DY5MRT6K",
-      "topic": "General AI",
+      "topic": "History",
       "pages": 315
     },
     {
@@ -489,7 +491,7 @@
         "AI employment disruption"
       ],
       "asin": "B0DMQHQTQH",
-      "topic": "Workforce",
+      "topic": "Future of Work",
       "pages": 315
     },
     {
@@ -505,7 +507,7 @@
         "machine sentience AI"
       ],
       "asin": "B0DMYF3YH3",
-      "topic": "General AI",
+      "topic": "Artificial Intelligence",
       "pages": 14
     },
     {
@@ -537,7 +539,7 @@
         "AI creativity automation"
       ],
       "asin": "B0DMMVN17Z",
-      "topic": "Society",
+      "topic": "Ethics",
       "pages": 277
     },
     {
@@ -569,7 +571,7 @@
         "personalised gaming AI"
       ],
       "asin": "B0DY4PSD8Z",
-      "topic": "Law",
+      "topic": "Ethics",
       "pages": 327
     }
   ]
