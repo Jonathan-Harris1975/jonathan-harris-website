@@ -208,9 +208,7 @@
     btnDetail.textContent = "Full description";
     const btnBuy = document.createElement("a");
     btnBuy.className = "button";
-    btnBuy.href = book.buy_url || "#";
-    btnBuy.target = "_blank";
-    btnBuy.rel = "noopener noreferrer";
+    btnBuy.href = book.slug ? `/ebooks/${book.slug}/buy-now` : "#";
     btnBuy.textContent = "View on Amazon";
 
     actions.appendChild(btnDetail);

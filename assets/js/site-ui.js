@@ -333,6 +333,16 @@
     );
   }
 
+  function shouldShowHeaderImmediately(heroEl){
+    try{
+      const target = heroEl || findHeaderRevealAnchor();
+      if (!target) return true;
+      return target.classList.contains('hero--has-fixed-nav') || target.classList.contains('hero--newsletter') || target.classList.contains('hero--contact');
+    }catch(_){
+      return false;
+    }
+  }
+
   function markActiveNav(container){
     try{
       const path = (location.pathname || "/").replace(/\/+$/, "/");
@@ -382,7 +392,7 @@
 
     function updateVisibility(){
       const target = heroEl || findHeaderRevealAnchor();
-      if (!target){
+      if (!target || shouldShowHeaderImmediately(target)){
         header.classList.remove('jh-header--hero-mode');
         setVisible(true);
         return;

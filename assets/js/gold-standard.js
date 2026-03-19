@@ -2,12 +2,6 @@
 (function(){
   if(window.__JH_GOLD_STANDARD__) return; window.__JH_GOLD_STANDARD__ = true;
   function el(tag, attrs, html){ var n=document.createElement(tag); if(attrs){Object.keys(attrs).forEach(function(k){n.setAttribute(k,attrs[k]);});} if(html!==undefined) n.innerHTML=html; return n; }
-  function removeBlogLinks(){
-    document.querySelectorAll('a[href="/blog/"]').forEach(function(a){
-      var li=a.closest('li');
-      if(li && li.parentElement && li.parentElement.children.length>1) li.remove(); else a.remove();
-    });
-  }
   function addFooterTopics(){
     var discover = Array.from(document.querySelectorAll('.footer-panel')).find(function(p){ return /Discover/i.test(p.textContent||'');});
     if(!discover || discover.querySelector('.jh-topic-links')) return;
@@ -50,6 +44,6 @@
       img.setAttribute('alt', guess ? guess.replace(/\s+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}) : 'Jonathan Harris website image');
     });
   }
-  function init(){ removeBlogLinks(); addFooterTopics(); addHubIntro(); addJourneyPanel(); upgradeLegacyFooter(); addMissingAlt(); }
+  function init(){ addFooterTopics(); addHubIntro(); addJourneyPanel(); upgradeLegacyFooter(); addMissingAlt(); }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
