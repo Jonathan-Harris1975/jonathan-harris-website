@@ -69,7 +69,27 @@
       <p class="subtle" id="blogStatus" aria-live="polite"></p>
     </section>
 
-    <section aria-label="Weekly posts archive" id="blogList" style="margin-top:24px;"></section>
+    <section aria-label="Weekly posts archive" id="blogList" style="margin-top:24px;">
+      <div class="grid">
+        <article class="card" style="overflow:hidden;">
+          <div style="padding:16px;">
+            <div class="tag" style="display:inline-flex;margin-bottom:8px;">Static fallback</div>
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Browse the main blog route</h2>
+            <p style="margin:0 0 12px 0;">If the live archive manifest is unavailable, use the main blog route and the wider site paths below.</p>
+            <a class="button secondary" href="/blog/">Open the blog</a>
+          </div>
+        </article>
+        <article class="card" style="overflow:hidden;">
+          <div style="padding:16px;">
+            <div class="tag" style="display:inline-flex;margin-bottom:8px;">Audio fallback</div>
+            <h2 style="margin:0 0 8px 0; font-size:18px;">Use the podcast feed</h2>
+            <p style="margin:0 0 12px 0;">The weekly writing is tied closely to the podcast, so the feed is the blunt but reliable fallback.</p>
+            <a class="button secondary" href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" rel="noopener noreferrer" target="_blank">Open the RSS feed</a>
+          </div>
+        </article>
+      </div>
+    </section>
+    <noscript><p class="subtle" style="margin-top:14px;">JavaScript is off, so the live archive cannot load here. Use <a href="/blog/">the blog route</a> or the <a href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" rel="noopener noreferrer" target="_blank">RSS feed</a> instead.</p></noscript>
 
     <section aria-label="Continue exploring" class="jh-journey-panel" style="margin-top:24px;">
       <h2>Keep exploring the site</h2>
