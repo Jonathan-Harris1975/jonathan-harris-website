@@ -52,6 +52,8 @@
   .compare-table.is-stacked td::before{content:attr(data-label);display:block;font-size:.8rem;font-weight:700;color:#4F46E5;margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em;}
 }
 </style>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"AI Topic Comparisons","item":"https://jonathan-harris.online/compare/"}]}</script>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
@@ -64,13 +66,10 @@
 <div aria-label="Loading content" aria-live="polite" class="page-loader" id="pageLoader" role="status" style="display:none">
 <div aria-hidden="true" class="spinner"></div>
 </div>
-<!-- FIX: Baked-in header added to ensure the hamburger menu is present on mobile
-     at the top of the page without requiring the user to scroll past the hero. -->
+<!-- Shared header loads immediately on this comparison hero so navigation is available at first paint. -->
 
-<!-- FIX: Removed the redundant logo-plain image from the hero — the baked-in
-     header above already shows the site logo, so the large hero logo was
-     creating a visual duplicate on mobile when the header became visible. -->
-<section aria-label="Comparisons header" class="hero">
+<!-- The hero stays text-only so the shared header remains the single site-identity element on mobile. -->
+<section aria-label="Comparisons header" class="hero hero--has-fixed-nav">
 <div class="wrap">
 <h1 class="tagline">AI Topic Comparisons</h1>
 <p>Not sure which subject area is right for you? Each comparison below breaks down two AI domains side by side — covering focus, audience, data context, and which eBook to start with.</p>
