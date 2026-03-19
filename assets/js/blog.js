@@ -71,10 +71,7 @@
     list.innerHTML = `<div class="grid">${html}</div>`;
   }
 
-  async function tryManifest(){
-    const base = (cfg.R2_PUBLIC_BASE_URL_BLOG || "").replace(/\/$/, "");
-    if (!base) return null;
-    const url = `${base}/posts.json`;
+  async function fetchManifest(url){
     try{
       const res = await fetch(url, { cache: "no-store" });
       if (!res.ok) return null;
@@ -85,6 +82,16 @@
     }catch(_){
       return null;
     }
+  }
+
+  async function tryManifest(){
+    const local = await fetchManifest("/blog/posts.json");
+    if (local && local.length) return local;
+
+    const base = (cfg.R2_PUBLIC_BASE_URL_BLOG || "").replace(/\/$/, "");
+    if (!base) return null;
+    const remote = await fetchManifest(`${base}/posts.json`);
+    return remote && remote.length ? remote : null;
   }
 
   async function tryRss(){
