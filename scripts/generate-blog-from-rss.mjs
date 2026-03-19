@@ -48,7 +48,19 @@ function slugify(s){
 }
 
 function stripHtml(s){
-  return (s||"").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return decodeEntities((s||"").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
+}
+
+function decodeEntities(s){
+  return String(s ?? "")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>');
 }
 
 function escapeHtml(s){
@@ -84,12 +96,20 @@ function parseRss(xml){
 }
 
 function loadTemplate(){
-  const p = path.join(repoRoot, "blog", "_templates", "post.html");
+  const p = path.join(repoRoot, "scripts", "templates", "blog-post.html");
   return fs.readFileSync(p, "utf8");
 }
 
 function applyTemplate(tpl, vars){
   return tpl.replace(/\{\{([A-Z0-9_]+)\}\}/g, (_, k) => (vars[k] ?? ""));
+}
+
+function jsonString(s){
+  return JSON.stringify(String(s ?? ""));
+}
+
+function cleanDescription(s){
+  return String(s ?? "").replace(/\s+/g, " ").trim();
 }
 
 function isoDate(d){
@@ -123,7 +143,7 @@ async function main(){
     fs.mkdirSync(outDir, { recursive: true });
 
     const canonical = `https://jonathan-harris.online/blog/posts/${slug}/`;
-    const desc = (it.description || "").slice(0, 160) || "Weekly AI insight from Jonathan Harris — clear thinking, real-world context, no hype.";
+    const desc = cleanDescription((it.description || "").slice(0, 160)) || "Weekly AI insight from Jonathan Harris - clear thinking, real-world context, no hype.";
 
     const image = it.image || "https://images.jonathan-harris.online/newsletter-img";
 
@@ -134,13 +154,19 @@ async function main(){
     `.trim();
 
     const html = applyTemplate(tpl, {
-      TITLE: it.title || "Untitled",
-      DESCRIPTION: desc,
-      CANONICAL: canonical,
-      IMAGE: image,
-      PUBLISHED: published,
-      MODIFIED: published,
-      PUBLISHED_HUMAN: humanDate(it.pubDate),
+      TITLE_HTML: escapeHtml(it.title || "Untitled"),
+      TITLE_ATTR: escapeHtml(it.title || "Untitled"),
+      TITLE_JSON: jsonString(it.title || "Untitled"),
+      DESCRIPTION_HTML: escapeHtml(desc),
+      DESCRIPTION_ATTR: escapeHtml(desc),
+      DESCRIPTION_JSON: jsonString(desc),
+      CANONICAL_ATTR: escapeHtml(canonical),
+      CANONICAL_JSON: jsonString(canonical),
+      IMAGE_ATTR: escapeHtml(image),
+      IMAGE_JSON: jsonString(image),
+      PUBLISHED_JSON: jsonString(published),
+      MODIFIED_JSON: jsonString(published),
+      PUBLISHED_HUMAN_HTML: escapeHtml(humanDate(it.pubDate)),
       CONTENT: content
     });
 
