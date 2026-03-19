@@ -13,7 +13,7 @@
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="https://jonathan-harris.online/newsletter/" rel="canonical"/>
+<link href="https://jonathan-harris.online/newsletter/" rel="canonical"/><link href="https://jonathan-harris.online/newsletter/" hreflang="en" rel="alternate"/><link href="https://jonathan-harris.online/newsletter/" hreflang="x-default" rel="alternate"/>
 <meta content="Subscribe to AI Edge — Jonathan Harris's free weekly newsletter on artificial intelligence, practical insights, and ebook updates." name="description"/>
 <meta content="index,follow" name="robots"/>
 <meta content="page" name="ai:content_type"/>
@@ -25,6 +25,8 @@
 <meta content="Get the AI Edge | Jonathan Harris" name="twitter:title"/>
 <meta content="Subscribe to AI Edge — weekly AI commentary, ebook offers, and podcast updates from Jonathan Harris." name="twitter:description"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Get the AI Edge Newsletter","url":"https://jonathan-harris.online/newsletter/","description":"Subscribe to AI Edge — Jonathan Harris's free weekly newsletter on artificial intelligence, practical insights, and ebook updates.","author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"},"about":{"@type":"Thing","name":"Artificial Intelligence"}}</script>
+
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Get the AI Edge","item":"https://jonathan-harris.online/newsletter/"}]}</script>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
@@ -35,8 +37,7 @@
 </head>
 <body class="page-newsletter">
 <a class="skip-link" href="#main">Skip to main content</a>
-<!-- FIX: Baked-in header added to ensure the hamburger menu is present on mobile
-     at the top of the page without requiring the user to scroll past the hero. -->
+<!-- Shared header loads immediately on this hero so the mobile menu is available at first paint. -->
 
 <div aria-label="Loading content" aria-live="polite" class="page-loader" id="pageLoader" role="status"><div aria-hidden="true" class="spinner"></div></div>
 <section aria-label="Newsletter header" class="hero hero--newsletter">
@@ -97,7 +98,10 @@
 </section>
 <section aria-label="Sign up form" class="card card--accent" role="region">
 <h2>Newsletter Sign-Up</h2>
+<p class="subtle" style="margin:0 0 16px;">If the embedded form plays up, use the direct sign-up page instead.</p>
+<p style="margin:0 0 18px;"><a class="button secondary" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Open the sign-up form directly</a></p>
 <div id="newsletter-form-wrap">
+<noscript><p class="subtle" style="margin:0 0 16px;">JavaScript is off, so the embedded form will not load here. Use the direct sign-up page instead: <a class="newsletter-fallback" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Sign up here →</a></p></noscript>
 <div class="embed-wrap">
 <iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260277027608054" loading="lazy" scrolling="no" src="https://form.jotform.com/260277027608054" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Get the AI Edge"></iframe>
 </div>
