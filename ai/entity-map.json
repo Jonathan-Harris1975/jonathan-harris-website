@@ -198,7 +198,8 @@
         "AI project management"
       ],
       "topic": "Construction",
-      "pages": 319
+      "pages": 319,
+      "asin": "B0DMQMGLP4"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/#book",
@@ -213,7 +214,8 @@
         "industrial AI transformation"
       ],
       "topic": "Industry",
-      "pages": 347
+      "pages": 347,
+      "asin": "B0DMV47ZRL"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/#book",
@@ -228,7 +230,8 @@
         "automated warehousing AI"
       ],
       "topic": "Transportation",
-      "pages": 339
+      "pages": 339,
+      "asin": "B0DMQLK6LY"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/#book",
@@ -243,7 +246,8 @@
         "pharmaceutical AI innovation"
       ],
       "topic": "Healthcare",
-      "pages": 328
+      "pages": 328,
+      "asin": "B0DN4XSLK9"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/#book",
@@ -258,7 +262,8 @@
         "AI athlete data analysis"
       ],
       "topic": "Sports",
-      "pages": 229
+      "pages": 229,
+      "asin": "B0DQFJ6XP5"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/#book",
@@ -273,7 +278,8 @@
         "AI animal welfare"
       ],
       "topic": "Healthcare",
-      "pages": 235
+      "pages": 235,
+      "asin": "B0DQK6C563"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/#book",
@@ -288,7 +294,8 @@
         "AI customer experience"
       ],
       "topic": "Retail",
-      "pages": 234
+      "pages": 234,
+      "asin": "B0DMYHW17M"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/#book",
@@ -318,7 +325,8 @@
         "AI astronomy data analysis"
       ],
       "topic": "Science",
-      "pages": 350
+      "pages": 350,
+      "asin": "B0DY4Q2Q2D"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/#book",
@@ -333,7 +341,8 @@
         "AI environmental modelling"
       ],
       "topic": "Environment",
-      "pages": 338
+      "pages": 338,
+      "asin": "B0DM72JZ44"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#book",
@@ -379,7 +388,8 @@
         "AI media ethics bias"
       ],
       "topic": "Media",
-      "pages": 334
+      "pages": 334,
+      "asin": "B0DY4NP1WF"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/#book",
@@ -394,7 +404,8 @@
         "AI procedural generation"
       ],
       "topic": "Gaming",
-      "pages": 344
+      "pages": 344,
+      "asin": "B0DY18CYT6"
     },
     {
       "id": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/#book",
