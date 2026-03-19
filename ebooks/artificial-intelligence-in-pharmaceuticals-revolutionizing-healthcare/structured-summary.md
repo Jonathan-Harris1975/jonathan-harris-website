@@ -1,4 +1,4 @@
-# Artificial Intelligence in Pharmaceuticals:Revolutionizing Healthcare
+# Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare
 
 ## Summary
 
