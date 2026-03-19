@@ -1,9 +1,6 @@
 /assets/partials/*
   Cache-Control: no-store, must-revalidate
 
-/img/local/*.svg
-  Content-Type: image/svg+xml
-
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
