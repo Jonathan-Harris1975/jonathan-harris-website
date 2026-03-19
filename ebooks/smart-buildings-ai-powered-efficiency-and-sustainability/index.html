@@ -114,19 +114,6 @@
 <script defer="" src="/assets/js/related-books.js"></script>
 <div id="siteFooter"></div>
 <script defer="" src="/assets/js/site-ui.js"></script>
-<script>
-// FAQ accordion aria-expanded enhancement
-(function(){
-  document.querySelectorAll('.faq details').forEach(function(det){
-    var sum = det.querySelector('summary');
-    if(!sum) return;
-    sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
-    det.addEventListener('toggle', function(){
-      sum.setAttribute('aria-expanded', det.open ? 'true' : 'false');
-    });
-  });
-})();
-</script>
 <!-- Chatbot -->
 <script defer="" src="/assets/js/ux-fixes.js"></script>
 <script defer="" src="/assets/js/gold-standard.js"></script></body>
