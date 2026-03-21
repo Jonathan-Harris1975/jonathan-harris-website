@@ -1,7 +1,7 @@
 {
   "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
   "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-  "description": "A 312-page guide to AI in maritime shipping  autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+  "description": "A 312-page guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
   "topic": "Transportation",
   "tags": [
     "Transportation",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
   "image": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
   "buy_url": "https://mybook.to/yANzV8",
+  "buy_route": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now",
   "pages": 312,
+  "asin": "B0DMMTGNDJ",
+  "datePublished": "2024-11-10",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
+  "identifier": "JH-AI-EBOOK-05"
 }
