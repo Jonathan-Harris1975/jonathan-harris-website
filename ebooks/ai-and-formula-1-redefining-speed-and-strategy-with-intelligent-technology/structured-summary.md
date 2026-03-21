@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. Pages: 227.
+A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predict
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in transportation affects safety, reliability, efficiency, and emissi
 - Length: 227 pages
 
 ## Buy
+
 - https://mybook.to/Gi93rOF
