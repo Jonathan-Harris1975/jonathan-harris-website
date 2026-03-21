@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 369-page guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. Pages: 369.
+A 369-page guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 369-page guide to AI in manufacturing — predictive maintenance, automated pr
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in manufacturing affects quality, uptime, worker safety, and supply-c
 - Length: 369 pages
 
 ## Buy
+
 - https://mybook.to/SOAEb
