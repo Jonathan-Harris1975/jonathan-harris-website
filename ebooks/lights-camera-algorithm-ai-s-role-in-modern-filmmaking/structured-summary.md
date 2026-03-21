@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. Pages: 336.
+Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence revolutionizes filmmaking with script analysis, visual e
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in creativity affects authorship, originality, workflow, and commerci
 - Length: 336 pages
 
 ## Buy
+
 - https://mybook.to/EcO2DI
