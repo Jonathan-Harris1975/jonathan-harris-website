@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. Pages: 350.
+Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence advances space exploration with autonomous rovers, data 
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in science affects mission success, data interpretation, and what can
 - Length: 350 pages
 
 ## Buy
+
 - https://mybook.to/iY9m
