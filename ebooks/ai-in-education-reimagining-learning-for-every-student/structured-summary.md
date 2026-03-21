@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. Pages: 323.
+Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence personalizes education with adaptive learning, automated
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in education affects learning outcomes, access, workload, and fairnes
 - Length: 323 pages
 
 ## Buy
+
 - https://mybook.to/Ldhe41
