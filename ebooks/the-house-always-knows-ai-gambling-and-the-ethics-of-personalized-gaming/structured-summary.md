@@ -2,7 +2,7 @@
 
 ## Summary
 
-Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. Pages: 327.
+Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Examines AI's role in gambling, from personalized gaming to addiction risks, add
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in ethics affects fairness, accountability, public trust, and long-te
 - Length: 327 pages
 
 ## Buy
+
 - https://mybook.to/K7nVJGv
