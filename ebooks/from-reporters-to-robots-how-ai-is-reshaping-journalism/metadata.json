@@ -1,7 +1,7 @@
 {
   "title": "From Reporters to Robots: How AI is Reshaping Journalism",
   "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
-  "description": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. Pages: 334.",
+  "description": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. 334-page guide.",
   "topic": "Media",
   "tags": [
     "Media",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
   "image": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
   "buy_url": "https://mybook.to/DWfAK",
+  "buy_route": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now",
   "pages": 334,
+  "asin": "B0DY4NP1WF",
+  "datePublished": "2025-02-21",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
+  "identifier": "JH-AI-EBOOK-24"
 }
