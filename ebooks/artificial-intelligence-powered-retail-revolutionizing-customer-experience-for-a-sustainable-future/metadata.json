@@ -1,7 +1,7 @@
 {
   "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
   "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
-  "description": "A 234-page guide to AI in retail  personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+  "description": "A 234-page guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
   "topic": "Retail",
   "tags": [
     "Retail",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
   "buy_url": "https://mybook.to/POYR",
+  "buy_route": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now",
   "pages": 234,
+  "asin": "B0DMYHW17M",
+  "datePublished": "2024-11-13",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
+  "identifier": "JH-AI-EBOOK-18"
 }
