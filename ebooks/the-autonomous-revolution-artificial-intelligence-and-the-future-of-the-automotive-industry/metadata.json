@@ -1,7 +1,7 @@
 {
   "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
   "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
-  "description": "A 324-page guide to AI in the automotive industry  autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+  "description": "A 324-page guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
   "topic": "Transportation",
   "tags": [
     "Transportation",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
   "image": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
   "buy_url": "https://mybook.to/DS4Ag",
+  "buy_route": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now",
   "pages": 324,
+  "asin": "B0DMYQV1LY",
+  "datePublished": "2024-11-13",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
+  "identifier": "JH-AI-EBOOK-33"
 }
