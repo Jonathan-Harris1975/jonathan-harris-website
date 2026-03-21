@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 221-page guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. Pages: 221.
+A 221-page guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 221-page guide to AI in wildlife conservation — habitat monitoring, anti-poa
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in environment affects biodiversity, monitoring accuracy, and conserv
 - Length: 221 pages
 
 ## Buy
+
 - https://mybook.to/94Q3
