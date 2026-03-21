@@ -21,8 +21,9 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /ebooks  /ebooks/  301
 
 # 6) Known legacy slug fixes (keep BEFORE the rewrite)
-# detail.html pages are now real long-form conversion pages; keep route live
-/ebooks/*/detail  /ebooks/:splat/detail.html  301
+# retire legacy detail routes to the canonical ebook page
+/ebooks/*/detail  /ebooks/:splat/  301
+/ebooks/*/detail.html  /ebooks/:splat/  301
 /ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare   /ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/  301
 /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k   /ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/  301
 /ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking   /ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/  301
@@ -129,9 +130,6 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 
 # SEO files are hosted on R2 (assets.jonathan-harris.online)
-/robots.txt   https://assets.jonathan-harris.online/robots.txt   301
 /robot.txt    https://assets.jonathan-harris.online/robots.txt   301
-/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml  301
 /Sitemap.xml  https://assets.jonathan-harris.online/site-map.xml  301
 /site-map.xml https://assets.jonathan-harris.online/site-map.xml 301
-/llms.txt     https://assets.jonathan-harris.online/llms.txt     301

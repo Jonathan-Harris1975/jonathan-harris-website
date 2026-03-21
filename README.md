@@ -11,9 +11,10 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Catalogue routes: `/catalogue/*/`
 - eBook catalogue: `/ebooks/`
 - Canonical eBook pages: `/ebooks/<slug>/`
-- Legacy eBook detail pages: `/ebooks/<slug>/detail.html`
+- Legacy detail routes: `/ebooks/<slug>/detail` and `/ebooks/<slug>/detail.html` (both permanently redirected to the canonical eBook page)
 
 ## Data and shared assets
+- Master ebook data: `data/ebooks-master.json`
 - Canonical book manifest: `ebooks/books.json`
 - Public/API derivatives: `assets/js/books.json`, `api/v1/books.json`, `feed.json`, `ai/entity-map.json`
 - Shared partials: `assets/partials/header.html`, `assets/partials/footer.html`
@@ -21,5 +22,28 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 
 ## Redirects
 - `_redirects` is the primary redirect source for the deployed static site.
-- `_redirects.txt` mirrors the current redirect rules and should be kept in sync if a deployment workflow still depends on it.
-- `robots.txt`, `sitemap.xml`, and `llms.txt` are present locally and also redirected to their externally hosted canonical assets by `_redirects`.
+- `_redirects.txt` is a generated mirror of `_redirects`; refresh it with `python3 scripts/sync_redirects.py` rather than editing both files by hand.
+- `robots.txt`, `sitemap.xml`, and `llms.txt` are committed locally and now served directly from the repo-owned public paths.
+
+
+
+## Source-of-truth boundaries
+- `data/ebooks-master.json` is the authoritative in-repo source for slug, title, routes, dates, ASIN, page count, cover, description, and buy mapping.
+- Refresh `data/ebooks-master.json` from the workbook with `python3 scripts/import_ebook_workbook.py <workbook.xlsx>` before rebuilding the ebook subsystem.
+- Canonical `ebooks/<slug>/index.html` pages are generated/synchronised from the master record with `python3 scripts/fix_book_head_metadata.py`.
+- Generated derivatives are rebuilt from the master record with `python3 scripts/build_book_derivatives.py`.
+
+## Route policy
+- `/ebooks/<slug>/` is the sole canonical indexable book route.
+- `/ebooks/<slug>/detail` and `/ebooks/<slug>/detail.html` are retired legacy routes that now 301 to `/ebooks/<slug>/`.
+- Public pages now carry the shared header/footer in initial HTML; `assets/js/site-ui.js` should enhance that shell, not create it from scratch.
+
+## Validation commands
+1. `python3 scripts/import_ebook_workbook.py <workbook.xlsx> --check`
+2. `python3 scripts/sync_redirects.py --check`
+3. `python3 scripts/fix_book_head_metadata.py --check`
+4. `python3 scripts/build_book_derivatives.py --check`
+5. `python3 scripts/check_buy_now.py`
+6. `python3 scripts/check_crawlers.py`
+7. `python3 scripts/check_identifiers.py`
+8. `python3 scripts/validate_release.py`
