@@ -1,7 +1,7 @@
 {
   "title": "Climate Intelligence: Harnessing AI for a Greener Future",
   "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
-  "description": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. Pages: 338.",
+  "description": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. 338-page guide.",
   "topic": "Environment",
   "tags": [
     "Environment",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
   "image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
   "buy_url": "https://mybook.to/aKj8Fh",
+  "buy_route": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
   "pages": 338,
+  "asin": "B0DM72JZ44",
+  "datePublished": "2024-11-06",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
+  "identifier": "JH-AI-EBOOK-21"
 }
