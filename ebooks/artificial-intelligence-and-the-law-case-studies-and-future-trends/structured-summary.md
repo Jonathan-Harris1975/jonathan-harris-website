@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. Pages: 224.
+Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Explores AI's impact on legal practice through case studies, ethical dilemmas, a
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in law affects risk, precedent, access to justice, and professional a
 - Length: 224 pages
 
 ## Buy
+
 - https://mybook.to/bWpjeB
