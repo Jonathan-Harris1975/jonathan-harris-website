@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-03-21T13:42:31Z",
+  "generated_utc": "2026-03-21T22:25:22Z",
   "person": {
     "id": "https://jonathan-harris.online/#person",
     "name": "Jonathan Harris"
@@ -23,52 +23,16 @@
       "identifier": "JH-AI-EBOOK-01"
     },
     {
-      "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
-      "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
-      "topic": "Agriculture",
+      "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
+      "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
+      "topic": "Healthcare",
       "tags": [
-        "Agriculture",
+        "Healthcare",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-02"
-    },
-    {
-      "title": "AI in Aviation: Transforming Safety and Sustainability",
-      "slug": "ai-in-aviation-transforming-safety-and-sustainability",
-      "url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
-      "topic": "Transportation",
-      "tags": [
-        "Transportation",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-03"
-    },
-    {
-      "title": "AI in Education: Reimagining Learning for Every Student",
-      "slug": "ai-in-education-reimagining-learning-for-every-student",
-      "url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-      "topic": "Education",
-      "tags": [
-        "Education",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-04"
-    },
-    {
-      "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
-      "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
-      "topic": "Transportation",
-      "tags": [
-        "Transportation",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-05"
+      "identifier": "JH-AI-EBOOK-17"
     },
     {
       "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
@@ -83,19 +47,19 @@
       "identifier": "JH-AI-EBOOK-06"
     },
     {
-      "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-      "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
+      "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
+      "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
       "topic": "Transportation",
       "tags": [
         "Transportation",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-07"
+      "identifier": "JH-AI-EBOOK-14"
     },
     {
-      "title": "Artificial Intelligence and the Law: Case Studies and Future Trends",
+      "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
       "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
       "topic": "Law",
@@ -119,64 +83,39 @@
       "identifier": "JH-AI-EBOOK-09"
     },
     {
-      "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
-      "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
-      "topic": "Environment",
+      "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
+      "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
+      "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
+      "topic": "Artificial Intelligence",
       "tags": [
-        "Environment",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-10"
+      "identifier": "JH-AI-EBOOK-32"
     },
     {
-      "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-      "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-      "topic": "Finance",
-      "tags": [
-        "Finance",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-11"
-    },
-    {
-      "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-      "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-      "topic": "Construction",
-      "tags": [
-        "Construction",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-12"
-    },
-    {
-      "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
-      "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
-      "topic": "Industry",
-      "tags": [
-        "Industry",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-13"
-    },
-    {
-      "title": "Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability",
-      "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
+      "title": "AI in Aviation: Transforming Safety and Sustainability",
+      "slug": "ai-in-aviation-transforming-safety-and-sustainability",
+      "url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
       "topic": "Transportation",
       "tags": [
         "Transportation",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-14"
+      "identifier": "JH-AI-EBOOK-03"
+    },
+    {
+      "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
+      "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
+      "topic": "Transportation",
+      "tags": [
+        "Transportation",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-05"
     },
     {
       "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
@@ -191,28 +130,16 @@
       "identifier": "JH-AI-EBOOK-15"
     },
     {
-      "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
-      "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
-      "topic": "Sports",
+      "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
+      "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
+      "url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
+      "topic": "Transportation",
       "tags": [
-        "Sports",
+        "Transportation",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-16"
-    },
-    {
-      "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
-      "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
-      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
-      "topic": "Healthcare",
-      "tags": [
-        "Healthcare",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-17"
+      "identifier": "JH-AI-EBOOK-33"
     },
     {
       "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
@@ -239,40 +166,64 @@
       "identifier": "JH-AI-EBOOK-19"
     },
     {
-      "title": "Beyond Earth How AI is Transforming Space Exploration",
-      "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
-      "url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
-      "topic": "Science",
+      "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
+      "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
+      "topic": "Industry",
       "tags": [
-        "Science",
+        "Industry",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-20"
+      "identifier": "JH-AI-EBOOK-13"
     },
     {
-      "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-      "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
-      "url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-      "topic": "Environment",
+      "title": "The Dumbening: How AI is Reshaping Our Minds",
+      "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
+      "url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
+      "topic": "Ethics",
       "tags": [
-        "Environment",
+        "Ethics",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-21"
+      "identifier": "JH-AI-EBOOK-34"
     },
     {
-      "title": "Digital Defense: The Role of AI in Modern Warfare",
-      "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
-      "url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-      "topic": "Defence",
+      "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+      "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+      "topic": "Agriculture",
       "tags": [
-        "Defence",
+        "Agriculture",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-22"
+      "identifier": "JH-AI-EBOOK-02"
+    },
+    {
+      "title": "AI in Education: Reimagining Learning for Every Student",
+      "slug": "ai-in-education-reimagining-learning-for-every-student",
+      "url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
+      "topic": "Education",
+      "tags": [
+        "Education",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-04"
+    },
+    {
+      "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+      "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+      "topic": "Finance",
+      "tags": [
+        "Finance",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-11"
     },
     {
       "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
@@ -287,40 +238,40 @@
       "identifier": "JH-AI-EBOOK-23"
     },
     {
-      "title": "From Reporters to Robots: How AI is Reshaping Journalism",
-      "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
-      "url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
-      "topic": "Media",
+      "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
+      "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
+      "topic": "Construction",
       "tags": [
-        "Media",
+        "Construction",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-24"
+      "identifier": "JH-AI-EBOOK-12"
     },
     {
-      "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-      "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
-      "url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-      "topic": "Gaming",
+      "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
+      "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+      "topic": "Future of Work",
       "tags": [
-        "Gaming",
+        "Future of Work",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-25"
+      "identifier": "JH-AI-EBOOK-31"
     },
     {
-      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-      "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-      "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
-      "topic": "Creativity",
+      "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+      "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
+      "url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+      "topic": "Government",
       "tags": [
-        "Creativity",
+        "Government",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-26"
+      "identifier": "JH-AI-EBOOK-35"
     },
     {
       "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
@@ -335,16 +286,76 @@
       "identifier": "JH-AI-EBOOK-27"
     },
     {
-      "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-      "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
-      "url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-      "topic": "Media",
+      "title": "Digital Defense: The Role of AI in Modern Warfare",
+      "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
+      "url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
+      "topic": "Defence",
       "tags": [
-        "Media",
+        "Defence",
         "Artificial Intelligence",
         "AI Trends"
       ],
-      "identifier": "JH-AI-EBOOK-28"
+      "identifier": "JH-AI-EBOOK-22"
+    },
+    {
+      "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
+      "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
+      "topic": "Environment",
+      "tags": [
+        "Environment",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-10"
+    },
+    {
+      "title": "Climate Intelligence: Harnessing AI for a Greener Future",
+      "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
+      "url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
+      "topic": "Environment",
+      "tags": [
+        "Environment",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-21"
+    },
+    {
+      "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
+      "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
+      "topic": "Transportation",
+      "tags": [
+        "Transportation",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-07"
+    },
+    {
+      "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
+      "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
+      "topic": "Sports",
+      "tags": [
+        "Sports",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-16"
+    },
+    {
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
+      "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
+      "topic": "Creativity",
+      "tags": [
+        "Creativity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-26"
     },
     {
       "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
@@ -371,65 +382,6 @@
       "identifier": "JH-AI-EBOOK-30"
     },
     {
-      "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-      "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
-      "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-      "topic": "Future of Work",
-      "tags": [
-        "Future of Work",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-31"
-    },
-    {
-      "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-      "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-      "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
-      "topic": "Artificial Intelligence",
-      "tags": [
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-32"
-    },
-    {
-      "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
-      "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
-      "url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
-      "topic": "Transportation",
-      "tags": [
-        "Transportation",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-33"
-    },
-    {
-      "title": "The Dumbening: How AI is Reshaping Our Minds",
-      "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
-      "url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
-      "topic": "Ethics",
-      "tags": [
-        "Ethics",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-34"
-    },
-    {
-      "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-      "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
-      "url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-      "topic": "Government",
-      "tags": [
-        "Government",
-        "Artificial Intelligence",
-        "AI Trends"
-      ],
-      "identifier": "JH-AI-EBOOK-35"
-    },
-    {
       "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
       "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
       "url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
@@ -441,6 +393,54 @@
         "Law"
       ],
       "identifier": "JH-AI-EBOOK-36"
+    },
+    {
+      "title": "Beyond Earth: How AI is Transforming Space Exploration",
+      "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
+      "url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
+      "topic": "Science",
+      "tags": [
+        "Science",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-20"
+    },
+    {
+      "title": "From Reporters to Robots: How AI is Reshaping Journalism",
+      "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
+      "url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
+      "topic": "Media",
+      "tags": [
+        "Media",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-24"
+    },
+    {
+      "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
+      "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
+      "url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
+      "topic": "Media",
+      "tags": [
+        "Media",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-28"
+    },
+    {
+      "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
+      "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
+      "url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+      "topic": "Gaming",
+      "tags": [
+        "Gaming",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-25"
     }
   ]
 }
