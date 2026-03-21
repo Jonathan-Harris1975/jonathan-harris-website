@@ -1,7 +1,7 @@
 {
   "title": "Beyond Earth How AI is Transforming Space Exploration",
   "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
-  "description": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. Pages: 350.",
+  "description": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. 350-page guide.",
   "topic": "Science",
   "tags": [
     "Science",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
   "image": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
   "buy_url": "https://mybook.to/iY9m",
+  "buy_route": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/buy-now",
   "pages": 350,
+  "asin": "B0DY4Q2Q2D",
+  "datePublished": "2025-02-21",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
+  "identifier": "JH-AI-EBOOK-20"
 }
