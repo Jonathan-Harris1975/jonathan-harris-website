@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 324-page guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. Pages: 324.
+A 324-page guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 324-page guide to AI in the automotive industry — autonomous vehicles, predi
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in transportation affects safety, reliability, efficiency, and emissi
 - Length: 324 pages
 
 ## Buy
+
 - https://mybook.to/DS4Ag
