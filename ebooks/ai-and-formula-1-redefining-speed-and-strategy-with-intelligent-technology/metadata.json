@@ -1,7 +1,7 @@
 {
   "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
   "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-  "description": "A 227-page guide to AI in Formula 1  real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+  "description": "A 227-page guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
   "topic": "Transportation",
   "tags": [
     "Transportation",
@@ -12,9 +12,13 @@
   "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
   "image": "https://images.jonathan-harris.online/ai-formula-speed-webp",
   "buy_url": "https://mybook.to/Gi93rOF",
+  "buy_route": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
   "pages": 227,
+  "asin": "B0DQHSD858",
+  "datePublished": "2024-12-14",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
+  "identifier": "JH-AI-EBOOK-01"
 }
