@@ -1,7 +1,7 @@
 {
   "title": "Digital Defense: The Role of AI in Modern Warfare",
   "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
-  "description": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. Pages: 296.",
+  "description": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. 296-page guide.",
   "topic": "Defence",
   "tags": [
     "Defence",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
   "image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
   "buy_url": "https://mybook.to/digitaldefense",
+  "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
   "pages": 296,
+  "asin": "B0DM8256SL",
+  "datePublished": "2024-11-06",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
+  "identifier": "JH-AI-EBOOK-22"
 }

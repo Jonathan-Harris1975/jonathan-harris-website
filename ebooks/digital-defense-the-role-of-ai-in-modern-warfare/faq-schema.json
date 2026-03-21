@@ -23,7 +23,7 @@
       "name": "How long is it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "296 pages."
+        "text": "It’s 296 pages (varies by edition)."
       }
     },
     {
@@ -34,5 +34,6 @@
         "text": "Use the buy link on the page to purchase the eBook via Amazon."
       }
     }
-  ]
+  ],
+  "@id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#faq"
 }
