@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. Pages: 229.
+Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence enhances sports with performance analytics, injury preve
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in sports affects performance, injury risk, tactics, and fan engageme
 - Length: 229 pages
 
 ## Buy
+
 - https://mybook.to/73M1
