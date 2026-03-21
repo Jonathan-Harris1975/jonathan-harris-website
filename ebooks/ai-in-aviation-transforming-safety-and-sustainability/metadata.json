@@ -1,7 +1,7 @@
 {
   "title": "AI in Aviation: Transforming Safety and Sustainability",
   "slug": "ai-in-aviation-transforming-safety-and-sustainability",
-  "description": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. Pages: 284.",
+  "description": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. 284-page guide.",
   "topic": "Transportation",
   "tags": [
     "Transportation",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
   "image": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
   "buy_url": "https://mybook.to/13VF",
+  "buy_route": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/buy-now",
   "pages": 284,
+  "asin": "B0DMKTLMX6",
+  "datePublished": "2024-11-09",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
+  "identifier": "JH-AI-EBOOK-03"
 }
