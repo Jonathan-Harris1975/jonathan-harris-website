@@ -1,7 +1,7 @@
 {
   "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
   "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
-  "description": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. Pages: 338.",
+  "description": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. 338-page guide.",
   "topic": "Energy",
   "tags": [
     "Energy",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
   "image": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
   "buy_url": "https://mybook.to/sntL",
+  "buy_route": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now",
   "pages": 338,
+  "asin": "B0DMKFZ3W3",
+  "datePublished": "2024-11-08",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
+  "identifier": "JH-AI-EBOOK-06"
 }
