@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. Pages: 333.
+Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Explores AI's role in social media, from content personalization to moderation, 
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -27,7 +27,8 @@ Because AI in media affects accuracy, trust, editorial workflow, and audience re
 
 - Topic: Media
 - Tags: Media, Artificial Intelligence, AI Trends
-- Length: 333 pages
+- Length: 334 pages
 
 ## Buy
+
 - https://mybook.to/rNRr
