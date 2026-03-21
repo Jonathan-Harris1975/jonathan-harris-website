@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. Pages: 328.
+Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence accelerates drug discovery, optimizes clinical trials, a
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in healthcare affects patient outcomes, safety, workload, and access 
 - Length: 328 pages
 
 ## Buy
+
 - https://mybook.to/3cA8
