@@ -2,7 +2,7 @@
 
 ## Summary
 
-Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.
+Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Examines AI's impact on cognition, exploring how automation and digital reliance
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in ethics affects fairness, accountability, public trust, and long-te
 - Length: 277 pages
 
 ## Buy
+
 - https://mybook.to/YcRiCRp
