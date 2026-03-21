@@ -1,0 +1,52 @@
+.ebook-shell{display:grid;gap:20px}
+.ebook-hero .muted{opacity:.88}
+.ebook-section h2,.related-books h2,.faq h2,.ebook-index-intro h2{margin-top:0}
+.quick-facts ul.ebook-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;list-style:none;padding:0;margin:0}
+.quick-facts li{color:#374151}
+.ebook-showcase{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:20px;align-items:start}
+.ebook-showcase__media,.ebook-showcase__content{height:100%}
+.ebook-showcase__cover{background:#0D1420}
+.ebook-showcase__lead{font-size:1.03rem;line-height:1.75;color:#111827}
+.ebook-showcase__subhead,.ebook-showcase__note{color:#4B5563}
+.ebook-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.ebook-inline-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.ebook-inline-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid rgba(15,23,42,.12);background:#fff;color:#111827}
+.ebook-signal-list{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.ebook-signal-list li{color:#111827;font-weight:600}
+.ebook-theme-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ebook-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;border:1px solid rgba(79,70,229,.18);color:#312E81;font-size:.9rem;font-weight:700}
+.ebook-pill--dark{background:#111827;color:#E5E7EB;border-color:rgba(255,255,255,.12)}
+.ebook-learn-list,.ebook-audience-list,.ebook-key-themes{margin:0;padding-left:20px;display:grid;gap:10px}
+.ebook-section--accent{background:linear-gradient(180deg,#111827 0%,#0F172A 100%);color:#E5E7EB;border-color:rgba(255,255,255,.08)}
+.ebook-section--accent h2{color:#fff}
+.ebook-section--accent p,.ebook-section--accent li{color:#E5E7EB}
+.related-books ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.related-books li{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(15,23,42,.08)}
+.related-books li:last-child{border-bottom:none;padding-bottom:0}
+.related-books li span{font-size:.92rem;color:#6B7280}
+.ebook-faq-list{display:grid;gap:12px}
+.ebook-faq-item{border:1px solid rgba(15,23,42,.10);border-radius:14px;padding:0 14px;background:#F8FAFC}
+.ebook-faq-item summary{cursor:pointer;font-weight:800;padding:14px 0;color:#111827}
+.ebook-faq-item p{margin:0 0 14px;color:#374151}
+.ebook-index-intro p{max-width:72ch}
+.ebook-count{margin:6px 0 18px}
+.pager{margin:24px 0 0;display:flex;align-items:center;justify-content:center;gap:14px}
+.topic-chip-wrap{margin:2px 0 8px}
+.topic-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;color:#312E81;font-size:.88rem;font-weight:700;border:1px solid rgba(79,70,229,.18)}
+.book-avail{margin:12px 0 0}
+.book-avail__badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ECFDF5;color:#166534;border:1px solid rgba(22,101,52,.12);font-size:.88rem;font-weight:700}
+.ebook-signal-grid,.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ebook-signal-card h3,.topic-card h2{margin-top:0}
+.ebook-signal-card p,.topic-card p{margin:0;color:#4B5563}
+.ebooks-catalogue .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:980px){
+  .ebook-showcase{grid-template-columns:1fr}
+  .quick-facts ul.ebook-facts,.ebook-signal-grid,.topic-grid{grid-template-columns:1fr}
+  .ebooks-catalogue .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .ebooks-catalogue .grid{grid-template-columns:1fr}
+  .ebook-actions,.ebook-inline-actions{flex-direction:column}
+  .ebook-actions .button,.pager .button,.ebook-inline-actions a{width:100%;text-align:center}
+  .related-books li{flex-direction:column;align-items:flex-start}
+}
