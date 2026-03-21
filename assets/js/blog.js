@@ -41,8 +41,8 @@
 
     if (!items || !items.length){
       list.innerHTML = `
-        <div class="card" style="padding:18px;">
-          <h2 style="margin-top:0;">No posts yet</h2>
+        <div class="card u-s04">
+          <h2 class="u-s02">No posts yet</h2>
           <p>The blog template is live, but publishing hasn't started. When it does, posts will appear here automatically.</p>
           <p><a class="button primary" href="/newsletter/">Get the newsletter instead</a></p>
         </div>`;
@@ -57,12 +57,12 @@
       const href = it.link || "#";
 
       return `
-        <article class="card" style="overflow:hidden;">
+        <article class="card u-s05">
           ${img}
-          <div style="padding:16px;">
-            ${date ? `<div class="tag" style="display:inline-flex;margin-bottom:8px;">${date}</div>` : ""}
-            <h2 style="margin:0 0 8px 0; font-size:18px;">${safeTitle}</h2>
-            <p style="margin:0 0 12px 0;">${safeDesc}</p>
+          <div class="u-s06">
+            ${date ? `<div class="tag u-s07">${date}</div>` : ""}
+            <h2 class="u-s08">${safeTitle}</h2>
+            <p class="u-s09">${safeDesc}</p>
             ${href !== "#" ? `<a class="button secondary" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">Read / Listen</a>` : ""}
           </div>
         </article>`;
