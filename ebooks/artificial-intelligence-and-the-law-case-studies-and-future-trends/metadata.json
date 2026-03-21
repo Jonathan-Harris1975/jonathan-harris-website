@@ -1,7 +1,7 @@
 {
   "title": "Artificial Intelligence and the Law: Case Studies and Future Trends",
   "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-  "description": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. Pages: 224.",
+  "description": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. 224-page guide.",
   "topic": "Law",
   "tags": [
     "Law",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
   "buy_url": "https://mybook.to/bWpjeB",
+  "buy_route": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now",
   "pages": 224,
+  "asin": "B0DQHTBSWJ",
+  "datePublished": "2024-12-14",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
+  "identifier": "JH-AI-EBOOK-08"
 }
