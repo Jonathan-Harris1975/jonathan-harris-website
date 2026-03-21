@@ -1,7 +1,7 @@
 {
   "title": "AI in Education: Reimagining Learning for Every Student",
   "slug": "ai-in-education-reimagining-learning-for-every-student",
-  "description": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. Pages: 323.",
+  "description": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. 323-page guide.",
   "topic": "Education",
   "tags": [
     "Education",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
   "image": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
   "buy_url": "https://mybook.to/Ldhe41",
+  "buy_route": "/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
   "pages": 323,
+  "asin": "B0DMKXWQDK",
+  "datePublished": "2024-11-09",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
+  "identifier": "JH-AI-EBOOK-04"
 }
