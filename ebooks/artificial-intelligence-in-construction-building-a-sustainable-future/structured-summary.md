@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. Pages: 319.
+Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence optimizes construction with project planning, safety mon
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in construction affects project risk, site safety, delivery costs, an
 - Length: 319 pages
 
 ## Buy
+
 - https://mybook.to/v98RD
