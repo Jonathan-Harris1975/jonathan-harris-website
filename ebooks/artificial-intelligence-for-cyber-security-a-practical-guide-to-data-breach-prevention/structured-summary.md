@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. Pages: 269.
+A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A guide to using artificial intelligence for cybersecurity, using machine learni
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in cyber security affects breach response, resilience, trust, and reg
 - Length: 269 pages
 
 ## Buy
+
 - https://mybook.to/9Wvf
