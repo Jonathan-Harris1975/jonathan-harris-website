@@ -1,7 +1,7 @@
 {
   "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
   "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
-  "description": "A 345-page guide to AI in smart buildings  automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+  "description": "A 345-page guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
   "topic": "Construction",
   "tags": [
     "Construction",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
   "image": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
   "buy_url": "https://mybook.to/QEcdy",
+  "buy_route": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now",
   "pages": 345,
+  "asin": "B0DMHBQVCR",
+  "datePublished": "2024-11-08",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
+  "identifier": "JH-AI-EBOOK-27"
 }
