@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. Pages: 315.
+Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Explores AI's impact on employment, offering strategies to navigate job automati
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in future of work affects jobs, skills, productivity, and how organis
 - Length: 315 pages
 
 ## Buy
+
 - https://mybook.to/aijobshift
