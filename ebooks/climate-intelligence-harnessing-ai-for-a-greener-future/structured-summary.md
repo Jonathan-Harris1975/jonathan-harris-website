@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. Pages: 338.
+Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence combats climate change with emissions tracking, renewabl
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in environment affects biodiversity, monitoring accuracy, and conserv
 - Length: 338 pages
 
 ## Buy
+
 - https://mybook.to/aKj8Fh
