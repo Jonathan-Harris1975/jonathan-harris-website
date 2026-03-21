@@ -1,13 +1,32 @@
 # ============================================================
-# books.jonathan-harris.online — Domain redirects (Netlify-style)
-# Redirect ALL traffic to the new /ebooks/ URLs on main domain
+# books.jonathan-harris.online — Domain redirects (generated)
+# Redirect governed legacy book paths to the main domain
 # ============================================================
 
 # Canonical host (no www)
-https://www.books.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
+https://www.books.jonathan-harris.online/*  https://books.jonathan-harris.online/:splat  301
 
 # Root → ebooks catalogue
 /  https://jonathan-harris.online/ebooks/  301
 
-# Any slug (including nested paths) → same path on new site
-/*  https://jonathan-harris.online/ebooks/:splat  301
+# Canonical and legacy ebook families
+/ebooks          https://jonathan-harris.online/ebooks/                  301
+/ebooks/         https://jonathan-harris.online/ebooks/                  301
+/ebooks/*        https://jonathan-harris.online/ebooks/:splat           301
+/book            https://jonathan-harris.online/ebooks/                  301
+/book/           https://jonathan-harris.online/ebooks/                  301
+/book/*          https://jonathan-harris.online/ebooks/:splat           301
+/category/*      https://jonathan-harris.online/catalogue/:splat        301
+/catalogue/*     https://jonathan-harris.online/catalogue/:splat        301
+/topics/*        https://jonathan-harris.online/topics/:splat           301
+/author          https://jonathan-harris.online/bio/                    301
+/author/         https://jonathan-harris.online/bio/                    301
+/author/*        https://jonathan-harris.online/bio/                    301
+
+# Crawler files stay externally hosted
+/robots.txt     https://assets.jonathan-harris.online/robots.txt   301
+/sitemap.xml    https://assets.jonathan-harris.online/site-map.xml  301
+/llms.txt       https://assets.jonathan-harris.online/llms.txt     301
+
+# Catch-all
+/*  https://jonathan-harris.online/:splat  301

@@ -23,18 +23,19 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 ## Redirects
 - `_redirects` is the primary redirect source for the deployed static site.
 - `_redirects.txt` is a generated mirror of `_redirects`; refresh it with `python3 scripts/sync_redirects.py` rather than editing both files by hand.
-- `robots.txt`, `sitemap.xml`, and `llms.txt` are committed locally and now served directly from the repo-owned public paths.
+- `robots.txt`, `sitemap.xml`, and `llms.txt` remain externally hosted in production, but the repo keeps generated, versioned source snapshots for release verification.
+- Those crawler snapshots are rebuilt by the derivative pipeline and verified before release; the main domain redirects point the live host at the externally published copies.
 
 
 
 ## Source-of-truth boundaries
 - The workbook is the human-editable source of truth for ebook routing fields and book content.
 - `data/ebooks-master.json` is the generated in-repo master record produced from the workbook import path.
-- `data/ebook-content-source.json` is bootstrap content only and should never override workbook values.
-- `data/ebook-source-overrides.json` is a tightly-governed exception register for approved non-core text overrides only.
+- `data/ebooks-master.json` is the only in-repo source used by generated pages and derivative outputs.
 - Refresh the generated master record from the workbook with `python3 scripts/import_ebook_workbook.py <workbook.xlsx>` before rebuilding the ebook subsystem.
 - Canonical `ebooks/<slug>/index.html` pages are generated and synchronised from the generated master record with `python3 scripts/fix_book_head_metadata.py`.
 - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
+- Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `robots.txt`, `sitemap.xml`, `llms.txt`, and per-book sidecars as generated outputs, not hand-edited source files.
 
 ## Route policy
 - `/ebooks/<slug>/` is the sole canonical indexable book route.
@@ -49,5 +50,5 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 5. `python3 scripts/check_buy_now.py`
 6. `python3 scripts/check_crawlers.py`
 7. `python3 scripts/check_identifiers.py`
-8. `python3 scripts/validate_release.py`
+8. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
 9. `python3 scripts/rebuild_ebook_subsystem.py <workbook.xlsx>`

@@ -1,10 +1,10 @@
 # ============================================================
-# ebooks.jonathan-harris.online — Domain redirects (Netlify-style)
-# Redirect ALL traffic to the main domain
+# ebooks.jonathan-harris.online — Domain redirects (generated)
+# Redirect governed ebook and discovery paths to the main domain
 # ============================================================
 
 # Canonical host (no www)
-https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
+https://www.ebooks.jonathan-harris.online/*  https://ebooks.jonathan-harris.online/:splat  301
 
 # Root → ebooks catalogue
 /          https://jonathan-harris.online/ebooks/  301
@@ -24,10 +24,10 @@ https://www.ebooks.jonathan-harris.online/*  https://jonathan-harris.online/:spl
 /glossary/*   https://jonathan-harris.online/glossary/:splat     301
 /api/*        https://jonathan-harris.online/api/:splat          301
 
-# Crawler files
-/robots.txt   https://assets.jonathan-harris.online/ebooks.jonathan-harris.online-robot.txt  301
-/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml                             301
-/llms.txt     https://assets.jonathan-harris.online/llms.txt                                 301
+# Crawler files stay externally hosted
+/robots.txt   https://assets.jonathan-harris.online/robots.txt  301
+/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml  301
+/llms.txt     https://assets.jonathan-harris.online/llms.txt  301
 
 # Catch-all
 /*  https://jonathan-harris.online/:splat  301
