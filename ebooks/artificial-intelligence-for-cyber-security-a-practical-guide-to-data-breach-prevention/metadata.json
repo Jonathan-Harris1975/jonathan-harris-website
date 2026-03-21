@@ -1,7 +1,7 @@
 {
   "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
   "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
-  "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. Pages: 269.",
+  "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. 269-page guide.",
   "topic": "Cyber Security",
   "tags": [
     "Cyber Security",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
   "buy_url": "https://mybook.to/9Wvf",
+  "buy_route": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
   "pages": 269,
+  "asin": "B0DN4GZZQ4",
+  "datePublished": "2024-11-14",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
+  "identifier": "JH-AI-EBOOK-09"
 }
