@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 234-page guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. Pages: 234.
+A 234-page guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 234-page guide to AI in retail — personalisation, inventory optimisation, su
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in retail affects customer trust, margins, stock flow, and personalis
 - Length: 234 pages
 
 ## Buy
+
 - https://mybook.to/POYR
