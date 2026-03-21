@@ -23,7 +23,7 @@
       "name": "How long is it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "336."
+        "text": "It’s 336 pages (varies by edition)."
       }
     },
     {
@@ -34,5 +34,6 @@
         "text": "Use the buy link on the page to purchase the eBook via Amazon."
       }
     }
-  ]
+  ],
+  "@id": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/#faq"
 }

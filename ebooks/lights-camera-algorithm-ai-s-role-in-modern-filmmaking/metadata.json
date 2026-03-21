@@ -1,7 +1,7 @@
 {
   "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
   "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-  "description": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. Pages: 336.",
+  "description": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. 336-page guide.",
   "topic": "Creativity",
   "tags": [
     "Creativity",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
   "image": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
   "buy_url": "https://mybook.to/EcO2DI",
+  "buy_route": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
   "pages": 336,
+  "asin": "B0DY672VRB",
+  "datePublished": "2025-02-22",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
+  "identifier": "JH-AI-EBOOK-26"
 }
