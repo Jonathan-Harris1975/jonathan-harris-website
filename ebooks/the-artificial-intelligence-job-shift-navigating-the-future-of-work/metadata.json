@@ -1,7 +1,7 @@
 {
   "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
   "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
-  "description": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. Pages: 315.",
+  "description": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. 315-page guide.",
   "topic": "Future of Work",
   "tags": [
     "Future of Work",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
   "buy_url": "https://mybook.to/aijobshift",
+  "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
   "pages": 315,
+  "asin": "B0DMQHQTQH",
+  "datePublished": "2024-11-11",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+  "identifier": "JH-AI-EBOOK-31"
 }
