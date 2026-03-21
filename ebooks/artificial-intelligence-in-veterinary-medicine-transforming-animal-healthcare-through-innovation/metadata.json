@@ -1,7 +1,7 @@
 {
   "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
   "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
-  "description": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. Pages: 235.",
+  "description": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. 205-page guide.",
   "topic": "Healthcare",
   "tags": [
     "Healthcare",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
   "buy_url": "https://mybook.to/SOjUE",
-  "pages": 235,
+  "buy_route": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now",
+  "pages": 205,
+  "asin": "B0DQK6C563",
+  "datePublished": "2024-12-15",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
+  "identifier": "JH-AI-EBOOK-17"
 }

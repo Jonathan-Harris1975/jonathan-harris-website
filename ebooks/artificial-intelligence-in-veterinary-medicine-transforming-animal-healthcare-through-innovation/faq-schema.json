@@ -1,29 +1,38 @@
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/#faq",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "Is this book suitable for non-technical readers?",
+      "name": "What is this book about?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. It’s written to be readable without a technical background, focusing on clear explanations and practical context."
+        "text": "“Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation” is a practical, plain-English guide to how AI is changing this field, what works in the real world, and what to watch out for."
       }
     },
     {
       "@type": "Question",
-      "name": "What will I learn from this book?",
+      "name": "Who is it for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments."
+        "text": "It’s written for professionals, creators, founders, and curious readers who want useful insight without wading through academic theory."
       }
     },
     {
       "@type": "Question",
-      "name": "How long is it?",
+      "name": "Do I need technical skills?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "235."
+        "text": "No. It focuses on clear concepts, examples, and decision-making rather than heavy maths or code."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What will I get from it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You’ll come away with a better grasp of the key AI use-cases, risks, and opportunities — plus how to think about adoption sensibly."
       }
     },
     {
@@ -31,7 +40,7 @@
       "name": "Where can I buy it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the buy link on the page to purchase the eBook via Amazon."
+        "text": "You can buy the ebook via the Amazon link on this page."
       }
     }
   ]
