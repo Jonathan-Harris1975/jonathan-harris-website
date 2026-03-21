@@ -1,7 +1,7 @@
 {
   "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
   "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
-  "description": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. Pages: 344.",
+  "description": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. 344-page guide.",
   "topic": "Gaming",
   "tags": [
     "Gaming",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
   "image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
   "buy_url": "https://mybook.to/e7GozY6",
+  "buy_route": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
   "pages": 344,
+  "asin": "B0DY18CYT6",
+  "datePublished": "2025-02-20",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+  "identifier": "JH-AI-EBOOK-25"
 }
