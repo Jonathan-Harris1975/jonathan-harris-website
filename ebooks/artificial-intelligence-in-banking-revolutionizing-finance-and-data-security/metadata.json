@@ -1,7 +1,7 @@
 {
   "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
   "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
-  "description": "A 286-page guide to AI in banking  from fraud detection and personalised services to secure data management and regulatory compliance.",
+  "description": "A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
   "topic": "Finance",
   "tags": [
     "Finance",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
   "image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
   "buy_url": "https://mybook.to/8VjT",
+  "buy_route": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
   "pages": 286,
+  "asin": "B0DML75B3C",
+  "datePublished": "2024-11-09",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+  "identifier": "JH-AI-EBOOK-11"
 }
