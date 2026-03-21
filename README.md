@@ -11,7 +11,7 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Catalogue routes: `/catalogue/*/`
 - eBook catalogue: `/ebooks/`
 - Canonical eBook pages: `/ebooks/<slug>/`
-- Legacy detail routes: `/ebooks/<slug>/detail` and `/ebooks/<slug>/detail.html` (both permanently redirected to the canonical eBook page)
+- Legacy detail routes: `/ebooks/<slug>/detail`, `/ebooks/<slug>/detail.html`, and `/ebooks/<slug>/details.html` (all permanently redirected to the canonical eBook page)
 
 ## Data and shared assets
 - Master ebook data: `data/ebooks-master.json`
@@ -28,14 +28,17 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 
 
 ## Source-of-truth boundaries
-- `data/ebooks-master.json` is the authoritative in-repo source for slug, title, routes, dates, ASIN, page count, cover, description, and buy mapping.
-- Refresh `data/ebooks-master.json` from the workbook with `python3 scripts/import_ebook_workbook.py <workbook.xlsx>` before rebuilding the ebook subsystem.
-- Canonical `ebooks/<slug>/index.html` pages are generated/synchronised from the master record with `python3 scripts/fix_book_head_metadata.py`.
-- Generated derivatives are rebuilt from the master record with `python3 scripts/build_book_derivatives.py`.
+- The workbook is the human-editable source of truth for ebook routing fields and book content.
+- `data/ebooks-master.json` is the generated in-repo master record produced from the workbook import path.
+- `data/ebook-content-source.json` is bootstrap content only and should never override workbook values.
+- `data/ebook-source-overrides.json` is a tightly-governed exception register for approved non-core text overrides only.
+- Refresh the generated master record from the workbook with `python3 scripts/import_ebook_workbook.py <workbook.xlsx>` before rebuilding the ebook subsystem.
+- Canonical `ebooks/<slug>/index.html` pages are generated and synchronised from the generated master record with `python3 scripts/fix_book_head_metadata.py`.
+- Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
 
 ## Route policy
 - `/ebooks/<slug>/` is the sole canonical indexable book route.
-- `/ebooks/<slug>/detail` and `/ebooks/<slug>/detail.html` are retired legacy routes that now 301 to `/ebooks/<slug>/`.
+- `/ebooks/<slug>/detail`, `/ebooks/<slug>/detail.html`, and `/ebooks/<slug>/details.html` are retired legacy routes that now 301 to `/ebooks/<slug>/`.
 - Public pages now carry the shared header/footer in initial HTML; `assets/js/site-ui.js` should enhance that shell, not create it from scratch.
 
 ## Validation commands
@@ -47,3 +50,4 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 6. `python3 scripts/check_crawlers.py`
 7. `python3 scripts/check_identifiers.py`
 8. `python3 scripts/validate_release.py`
+9. `python3 scripts/rebuild_ebook_subsystem.py <workbook.xlsx>`
