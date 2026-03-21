@@ -1,0 +1,1856 @@
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import html
+import json
+import re
+from collections import Counter, defaultdict
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Tuple
+from urllib.parse import urlparse
+
+import openpyxl
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT / "data"
+EBOOKS_DIR = ROOT / "ebooks"
+CATALOGUE_DIR = ROOT / "catalogue"
+TOPICS_DIR = ROOT / "topics"
+MASTER_PATH = DATA_DIR / "ebooks-master.json"
+CONTENT_SOURCE_PATH = DATA_DIR / "ebook-content-source.json"
+OVERRIDES_PATH = DATA_DIR / "ebook-source-overrides.json"
+HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
+FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
+EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
+SITE_NAME = "Jonathan Harris"
+SITE_URL = "https://jonathan-harris.online"
+DEFAULT_AUDIENCE = "Readers who want practical, plain-English AI insight without the buzzwords."
+DEFAULT_TONE = "Plain-English, practical, sceptical, no-hype"
+VALIDATION_REPORT = ROOT / "VALIDATION_OUTPUT.txt"
+
+STOPWORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "book", "by", "for", "from", "how", "in", "into",
+    "is", "it", "its", "of", "on", "or", "our", "that", "the", "this", "through", "to", "what",
+    "when", "where", "why", "with", "your", "you", "ai", "artificial", "intelligence",
+}
+
+
+LEGACY_DETAIL_REDIRECT_LINES = [
+    "/ebooks/*/detail  /ebooks/:splat/  301",
+    "/ebooks/*/detail.html  /ebooks/:splat/  301",
+    "/ebooks/*/details.html  /ebooks/:splat/  301",
+]
+
+TEMPLATE_REQUIRED_FRAGMENTS = [
+    '<body class="ebook-detail">',
+    '<nav aria-label="Breadcrumb" class="breadcrumbs">',
+    '<section class="card ebook-section quick-facts">',
+    '<section class="ebook-showcase">',
+    '<section class="card ebook-section" id="deeper-overview">',
+    '<section class="related-books card">',
+    '<section class="faq card" aria-label="Frequently asked questions">',
+    '<section class="jh-journey-panel">',
+]
+
+TEMPLATE_ORDERED_MARKERS = [
+    '<section class="card ebook-section quick-facts">',
+    '<section class="ebook-showcase">',
+    '<h2>Who this book is for</h2>',
+    '<h2>Key themes</h2>',
+    '<h2>What you’ll learn</h2>',
+    '<section class="card ebook-section" id="deeper-overview">',
+    '<section class="related-books card">',
+    '<section class="faq card" aria-label="Frequently asked questions">',
+]
+
+SUPPORTED_OVERRIDE_FIELDS = {"showcase_heading", "distinct_angle", "notes", "source_note"}
+
+
+def read_json(path: Path, default: Any = None) -> Any:
+    if not path.exists():
+        return default
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+
+def write_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+
+def utc_now() -> str:
+    return dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+
+
+
+def slugify(value: str) -> str:
+    value = (value or "").strip().lower()
+    value = value.replace("&", "and")
+    value = re.sub(r"[’'`]", "", value)
+    value = re.sub(r"[^a-z0-9]+", "-", value)
+    return value.strip("-")
+
+
+
+def normalise_space(value: str) -> str:
+    value = str(value or "").replace("\xa0", " ")
+    return re.sub(r"\s+", " ", value).strip()
+
+
+
+def clean_paragraph(value: str) -> str:
+    value = normalise_space(value)
+    value = value.replace(" .", ".")
+    value = re.sub(r"\s+([,.;:!?])", r"\1", value)
+    return value
+
+
+
+def ensure_trailing_slash(url: str) -> str:
+    url = clean_paragraph(url)
+    if not url:
+        return url
+    return url if url.endswith("/") else url + "/"
+
+
+
+def strip_pages_from_summary(text: str, pages: int | None = None) -> str:
+    cleaned = clean_paragraph(text)
+    cleaned = re.sub(r"\.?\s*Pages:\s*\d+\.?\s*$", ".", cleaned, flags=re.I)
+    cleaned = re.sub(r"\s+\.$", ".", cleaned)
+    if pages:
+        cleaned = re.sub(rf"\b{pages}\s*-?\s*page guide\.?$", "", cleaned, flags=re.I).strip()
+    return clean_paragraph(cleaned)
+
+
+
+def split_field(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [clean_paragraph(v) for v in value if clean_paragraph(v)]
+    text = str(value).replace("•", "\n")
+    parts = re.split(r"\n|\||;", text)
+    return [clean_paragraph(part) for part in parts if clean_paragraph(part)]
+
+
+
+def unique_list(values: Iterable[str]) -> List[str]:
+    seen = set()
+    output: List[str] = []
+    for value in values:
+        cleaned = clean_paragraph(value)
+        key = cleaned.lower()
+        if not cleaned or key in seen:
+            continue
+        seen.add(key)
+        output.append(cleaned)
+    return output
+
+
+
+def choose_authoritative_text(workbook_content: Dict[str, Any], content_source: Dict[str, Any], field: str) -> Any:
+    workbook_value = workbook_content.get(field)
+    if isinstance(workbook_value, list):
+        if any(clean_paragraph(item) for item in workbook_value):
+            return workbook_value
+    elif clean_paragraph(workbook_value):
+        return workbook_value
+    return content_source.get(field)
+
+
+def book_about_terms(book: Dict[str, Any]) -> List[str]:
+    return unique_list([book.get("topic", ""), *(book.get("tags", [])[:5] or [])])
+
+
+def template_contract_errors(page_text: str, book: Dict[str, Any]) -> List[str]:
+    errors: List[str] = []
+    for fragment in TEMPLATE_REQUIRED_FRAGMENTS:
+        if fragment not in page_text:
+            errors.append(f"{book['slug']} is missing a governed template fragment: {fragment}")
+
+    positions: List[int] = []
+    for marker in TEMPLATE_ORDERED_MARKERS:
+        pos = page_text.find(marker)
+        if pos == -1:
+            continue
+        positions.append(pos)
+    if positions != sorted(positions):
+        errors.append(f"{book['slug']} breaks the governed section order for canonical ebook pages.")
+
+    required_ctas = [
+        f'href="{book["buy_route"]}"',
+        'href="/ebooks/"',
+        'href="#deeper-overview"',
+    ]
+    for cta in required_ctas:
+        if cta not in page_text:
+            errors.append(f"{book['slug']} is missing a governed CTA target: {cta}")
+    return errors
+
+
+def text_tokens(value: str) -> set[str]:
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", clean_paragraph(value).lower())
+        if len(token) > 2 and token not in STOPWORDS
+    }
+
+
+
+def url_to_path(value: str) -> str:
+    value = clean_paragraph(value)
+    if not value:
+        return ""
+    if value.startswith("/"):
+        return value
+    if value.startswith("http://") or value.startswith("https://"):
+        parsed = urlparse(value)
+        path = parsed.path or "/"
+        if parsed.query:
+            path += "?" + parsed.query
+        return path
+    return value
+
+
+
+def humanise_slug(slug: str) -> str:
+    return clean_paragraph(slug.replace("-", " ").title())
+
+
+
+def format_date(value: str) -> str:
+    if not value:
+        return ""
+    try:
+        return dt.date.fromisoformat(value).strftime("%d %B %Y")
+    except ValueError:
+        return value
+
+
+
+def escape_paragraphs(text: str) -> str:
+    paragraphs = [clean_paragraph(p) for p in re.split(r"\n{2,}", str(text or "")) if clean_paragraph(p)]
+    return "".join(f"<p>{html.escape(p)}</p>" for p in paragraphs)
+
+
+
+def json_script(payload: Any) -> str:
+    return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
+
+
+
+def render_header() -> str:
+    return HEADER_PARTIAL.read_text(encoding="utf-8").strip()
+
+
+
+def render_footer() -> str:
+    return FOOTER_PARTIAL.read_text(encoding="utf-8").strip()
+
+
+
+def render_tag_pills(tags: Iterable[str], class_name: str = "ebook-pill") -> str:
+    return "".join(f'<span class="{class_name}">{html.escape(tag)}</span>' for tag in tags if clean_paragraph(tag))
+
+
+
+def build_person_schema() -> Dict[str, Any]:
+    return {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "@id": f"{SITE_URL}/#person",
+        "name": SITE_NAME,
+        "url": f"{SITE_URL}/",
+        "jobTitle": ["AI Author", "Podcast Host"],
+        "description": "AI author and commentator publishing practical, no-hype analysis across industries.",
+        "knowsAbout": ["Artificial Intelligence", "Machine Learning", "AI strategy", "Applied AI"],
+        "sameAs": [f"{SITE_URL}/"],
+    }
+
+
+
+def build_website_schema() -> Dict[str, Any]:
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": f"{SITE_URL}/#website",
+        "url": f"{SITE_URL}/",
+        "name": "Jonathan Harris – AI Expert & Author",
+        "publisher": {"@id": f"{SITE_URL}/#person"},
+        "inLanguage": "en-GB",
+    }
+
+
+
+def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
+    about_terms = [{"@type": "Thing", "name": name} for name in book_about_terms(book)]
+    return {
+        "@context": "https://schema.org",
+        "@type": "Book",
+        "@id": f"{book['canonical_url']}#book",
+        "name": book["title"],
+        "url": book["canonical_url"],
+        "description": book["description"],
+        "image": [book["cover"]],
+        "author": {"@type": "Person", "name": book["author"], "url": f"{SITE_URL}/bio/"},
+        "bookFormat": "EBook",
+        "datePublished": book["datePublished"],
+        "inLanguage": "en-GB",
+        "numberOfPages": book["pages"],
+        "sameAs": [book["buy_url"]] if book.get("buy_url") else [],
+        "publisher": {"@type": "Person", "name": book["author"]},
+        "identifier": [
+            {"@type": "PropertyValue", "propertyID": "ASIN", "value": book["asin"]},
+            {"@type": "PropertyValue", "propertyID": "Jonathan Harris internal identifier", "value": book["identifier"]},
+        ],
+        "about": about_terms,
+    }
+
+
+def build_breadcrumb_schema(book: Dict[str, Any]) -> Dict[str, Any]:
+    items = [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE_URL}/"},
+        {"@type": "ListItem", "position": 2, "name": "eBooks", "item": f"{SITE_URL}/ebooks/"},
+    ]
+    position = 3
+    if book.get("topic_url"):
+        items.append({"@type": "ListItem", "position": position, "name": book["topic"], "item": f"{SITE_URL}{book['topic_url']}"})
+        position += 1
+    items.append({"@type": "ListItem", "position": position, "name": book["title"], "item": book["canonical_url"]})
+    return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
+
+
+
+def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, Dict[str, Any]]:
+    headers = [clean_paragraph(cell.value).lower() for cell in ws[1]]
+    index = {header: idx for idx, header in enumerate(headers) if header}
+    required = {"slug"}
+    missing = required - set(index)
+    if missing:
+        raise ValueError(f"Ebooks Master sheet is missing required columns: {', '.join(sorted(missing))}")
+
+    field_map = {
+        "slug": "slug",
+        "title": "title",
+        "short description": "short",
+        "short": "short",
+        "description": "description",
+        "summary": "summary",
+        "topic": "topic",
+        "category": "topic",
+        "tags": "tags",
+        "keywords": "keywords",
+        "audience": "audience",
+        "who this book is for": "who_for",
+        "who_for": "who_for",
+        "what this book covers": "what_this_book_covers",
+        "what_youll_learn": "what_youll_learn",
+        "what you'll learn": "what_youll_learn",
+        "why it matters": "why_it_matters",
+        "tone": "tone",
+        "author": "author",
+        "identifier": "identifier",
+        "showcase heading": "showcase_heading",
+        "distinct angle": "distinct_angle",
+    }
+    list_fields = {"tags", "keywords", "what_youll_learn"}
+
+    results: Dict[str, Dict[str, Any]] = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        slug = clean_paragraph(row[index["slug"]] if index.get("slug") is not None else "")
+        if not slug:
+            continue
+        record: Dict[str, Any] = {}
+        for header, idx in index.items():
+            target = field_map.get(header)
+            if not target:
+                continue
+            value = row[idx]
+            if target in list_fields:
+                record[target] = split_field(value)
+            else:
+                record[target] = clean_paragraph(value)
+        results[slug] = record
+    return results
+
+
+
+def parse_workbook(workbook_path: Path) -> Tuple[List[str], Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+    wb = openpyxl.load_workbook(workbook_path, data_only=True)
+    if "BuyNow Redirects" not in wb.sheetnames:
+        raise ValueError("Workbook is missing the BuyNow Redirects sheet")
+
+    ws = wb["BuyNow Redirects"]
+    order: List[str] = []
+    records: Dict[str, Dict[str, Any]] = {}
+    for row in ws.iter_rows(min_row=2, values_only=True):
+        slug = clean_paragraph(row[0] or "")
+        if not slug:
+            continue
+        date_value = row[8]
+        if isinstance(date_value, dt.datetime):
+            date_value = date_value.date().isoformat()
+        elif hasattr(date_value, "isoformat"):
+            date_value = date_value.isoformat()
+        else:
+            date_value = clean_paragraph(date_value)
+        book_url = ensure_trailing_slash(clean_paragraph(row[1] or "")) or f"{SITE_URL}/ebooks/{slug}/"
+        buy_route_full = clean_paragraph(row[2] or "")
+        buy_route = url_to_path(buy_route_full) if buy_route_full else f"/ebooks/{slug}/buy-now"
+        buy_url = clean_paragraph(row[3] or "")
+        records[slug] = {
+            "slug": slug,
+            "book_url": book_url,
+            "buy_url": buy_url,
+            "buy_route": buy_route,
+            "buy_route_full": buy_route_full or f"{SITE_URL}{buy_route}",
+            "legacy_alias_url": ensure_trailing_slash(clean_paragraph(row[4] or "")),
+            "notes": clean_paragraph(row[5] or ""),
+            "asin": clean_paragraph(row[6] or ""),
+            "pages": int(row[7]) if row[7] else None,
+            "datePublished": date_value,
+            "cover": clean_paragraph((row[9] or "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online"),
+        }
+        order.append(slug)
+
+    master_sheet = parse_master_sheet(wb["Ebooks Master"]) if "Ebooks Master" in wb.sheetnames else {}
+    return order, records, master_sheet
+
+
+
+def load_source_overrides() -> Dict[str, Dict[str, Any]]:
+    return read_json(OVERRIDES_PATH, default={}) or {}
+
+
+
+def load_content_source() -> Dict[str, Dict[str, Any]]:
+    return read_json(CONTENT_SOURCE_PATH, default={}) or {}
+
+
+
+def topic_intro(topic: str) -> str:
+    topic_lc = topic.lower()
+    return f"AI is already elbow-deep in {topic_lc}, but the useful part is separating grounded practice from brochure gloss."
+
+
+
+def default_learning_points(topic: str) -> List[str]:
+    topic_lc = topic.lower()
+    return [
+        f"How AI is already being used in {topic_lc} and where the claims run ahead of the evidence.",
+        f"The workflows, trade-offs, and decision points that matter in {topic_lc}.",
+        f"The awkward questions around risk, adoption, governance, and long-term impact in {topic_lc}.",
+    ]
+
+
+
+def default_why_it_matters(topic: str) -> str:
+    topic_lc = topic.lower()
+    return f"Because AI in {topic_lc} changes decisions, workflows, and risk. Getting the basics right matters before the hype machine starts throwing confetti."
+
+
+
+def default_short(topic: str, pages: int | None) -> str:
+    prefix = f"A {pages}-page guide" if pages else "A practical guide"
+    return f"{prefix} to AI in {topic.lower()}, written in plain English with practical examples and grounded analysis."
+
+
+
+def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
+    learn_line = book["what_youll_learn"][0] if book.get("what_youll_learn") else topic_intro(book["topic"])
+    return [
+        {
+            "@type": "Question",
+            "name": "What will I learn from this book?",
+            "acceptedAnswer": {"@type": "Answer", "text": learn_line},
+        },
+        {
+            "@type": "Question",
+            "name": "Who is this book for?",
+            "acceptedAnswer": {"@type": "Answer", "text": f"This {book['topic'].lower()} title is aimed at {book['audience'].rstrip('.')}"},
+        },
+        {
+            "@type": "Question",
+            "name": "How long is it?",
+            "acceptedAnswer": {"@type": "Answer", "text": f"It’s {book['pages']} pages (varies by edition)."},
+        },
+        {
+            "@type": "Question",
+            "name": "What format is it available in?",
+            "acceptedAnswer": {"@type": "Answer", "text": "Available as an eBook via Amazon using the buy link on this page."},
+        },
+    ]
+
+
+
+def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
+    order, workbook_map, workbook_content = parse_workbook(workbook_path)
+    content_source = load_content_source()
+    overrides = load_source_overrides()
+    if not order:
+        raise ValueError("No ebook rows found in workbook")
+
+    records: List[Dict[str, Any]] = []
+    for idx, slug in enumerate(order, start=1):
+        workbook = workbook_map[slug]
+        content = workbook_content.get(slug, {})
+        bootstrap = dict(content_source.get(slug, {}))
+        override_payload = overrides.get(slug, {})
+        text_override = {
+            key: value
+            for key, value in override_payload.items()
+            if key in SUPPORTED_OVERRIDE_FIELDS and clean_paragraph(value)
+        }
+
+        title = choose_authoritative_text(content, bootstrap, "title") or humanise_slug(slug)
+        topic = choose_authoritative_text(content, bootstrap, "topic") or "Artificial Intelligence"
+        tags = unique_list(choose_authoritative_text(content, bootstrap, "tags") or [topic, "Artificial Intelligence", "AI Trends"])
+        keywords = unique_list(choose_authoritative_text(content, bootstrap, "keywords") or [topic, title, *tags])
+        pages = workbook.get("pages")
+        summary_seed = choose_authoritative_text(content, bootstrap, "summary") or choose_authoritative_text(content, bootstrap, "description") or topic_intro(topic)
+        description_seed = choose_authoritative_text(content, bootstrap, "description") or summary_seed
+        summary = strip_pages_from_summary(summary_seed, pages)
+        description = strip_pages_from_summary(description_seed, pages)
+        what_this_book_covers = clean_paragraph(choose_authoritative_text(content, bootstrap, "what_this_book_covers") or summary)
+        audience = clean_paragraph(choose_authoritative_text(content, bootstrap, "audience") or choose_authoritative_text(content, bootstrap, "who_for") or DEFAULT_AUDIENCE)
+        who_for = clean_paragraph(choose_authoritative_text(content, bootstrap, "who_for") or audience)
+        what_youll_learn = unique_list(choose_authoritative_text(content, bootstrap, "what_youll_learn") or default_learning_points(topic))
+        why_it_matters = clean_paragraph(choose_authoritative_text(content, bootstrap, "why_it_matters") or default_why_it_matters(topic))
+        short = clean_paragraph(choose_authoritative_text(content, bootstrap, "short") or default_short(topic, pages))
+        canonical_url = ensure_trailing_slash(workbook.get("book_url") or f"{SITE_URL}/ebooks/{slug}/")
+        topic_slug = slugify(topic)
+        topic_url = f"/catalogue/{topic_slug}/"
+        identifier = clean_paragraph(choose_authoritative_text(content, bootstrap, "identifier") or f"JH-AI-EBOOK-{idx:02d}")
+        author = clean_paragraph(choose_authoritative_text(content, bootstrap, "author") or SITE_NAME)
+        tone = clean_paragraph(choose_authoritative_text(content, bootstrap, "tone") or DEFAULT_TONE)
+        cover = workbook.get("cover") or clean_paragraph(choose_authoritative_text(content, bootstrap, "cover") or choose_authoritative_text(content, bootstrap, "image") or "")
+
+        book: Dict[str, Any] = {
+            "id": idx,
+            "key": f"{idx}-ebook",
+            "slug": slug,
+            "title": title,
+            "short": short,
+            "description": description,
+            "summary": summary,
+            "topic": topic,
+            "topic_slug": topic_slug,
+            "topic_url": topic_url,
+            "filter": topic,
+            "tags": tags,
+            "keywords": keywords,
+            "cover": cover,
+            "main_image": cover,
+            "image": cover,
+            "buy_url": workbook.get("buy_url", ""),
+            "buy_route": workbook.get("buy_route") or f"/ebooks/{slug}/buy-now",
+            "buy_route_full": workbook.get("buy_route_full") or f"{SITE_URL}/ebooks/{slug}/buy-now",
+            "canonical_url": canonical_url,
+            "book_url": canonical_url,
+            "legacy_alias_url": workbook.get("legacy_alias_url", ""),
+            "pages": pages,
+            "asin": workbook.get("asin", ""),
+            "datePublished": workbook.get("datePublished", ""),
+            "author": author,
+            "tone": tone,
+            "audience": audience,
+            "identifier": identifier,
+            "what_this_book_covers": what_this_book_covers,
+            "who_for": who_for,
+            "what_youll_learn": what_youll_learn,
+            "why_it_matters": why_it_matters,
+            "showcase_heading": clean_paragraph(text_override.get("showcase_heading") or choose_authoritative_text(content, bootstrap, "showcase_heading") or f"How AI is reshaping {topic.lower()}") if topic.lower() != "artificial intelligence" else "AI without the carnival barker routine",
+            "distinct_angle": clean_paragraph(text_override.get("distinct_angle") or choose_authoritative_text(content, bootstrap, "distinct_angle") or f"{title} keeps the focus on practical judgement in {topic.lower()} rather than drifting into brochure-speak."),
+            "notes": workbook.get("notes", ""),
+        }
+        faq_payload = choose_authoritative_text(content, bootstrap, "faq")
+        book["faq"] = faq_payload if isinstance(faq_payload, list) else build_default_faq(book)
+        records.append(book)
+
+    add_related_books(records)
+    return records
+
+
+def add_related_books(records: List[Dict[str, Any]]) -> None:
+    def score(candidate: Dict[str, Any], current: Dict[str, Any]) -> int:
+        total = 0
+        if candidate.get("topic") == current.get("topic"):
+            total += 60
+        total += 10 * len(set(tag.lower() for tag in current.get("tags", [])) & set(tag.lower() for tag in candidate.get("tags", [])))
+        total += 2 * len(set(keyword.lower() for keyword in current.get("keywords", [])) & set(keyword.lower() for keyword in candidate.get("keywords", [])))
+        return total
+
+    for current in records:
+        ranked = sorted(
+            [candidate for candidate in records if candidate["slug"] != current["slug"]],
+            key=lambda candidate: (-score(candidate, current), candidate["title"].lower()),
+        )
+        current["related_slugs"] = [book["slug"] for book in ranked[:4]]
+
+
+
+def load_master() -> List[Dict[str, Any]]:
+    master = read_json(MASTER_PATH, default=[])
+    if not master:
+        raise ValueError(f"Master file not found: {MASTER_PATH}")
+    add_related_books(master)
+    return master
+
+
+
+def save_master(records: List[Dict[str, Any]]) -> None:
+    write_json(MASTER_PATH, records)
+
+
+
+def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
+    return {
+        "id": book["id"],
+        "key": book["key"],
+        "title": book["title"],
+        "short": book["short"],
+        "cover": book["cover"],
+        "main_image": book["main_image"],
+        "tags": book["tags"],
+        "filter": book["filter"],
+        "keywords": book["keywords"],
+        "buy_url": book["buy_url"],
+        "slug": book["slug"],
+        "asin": book["asin"],
+        "pages": book["pages"],
+        "datePublished": book["datePublished"],
+        "canonical_url": book["canonical_url"],
+        "buy_route": book["buy_route"],
+        "topic_url": book["topic_url"],
+    }
+
+
+
+def render_related_links(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> str:
+    by_slug = {item["slug"]: item for item in all_books}
+    items = []
+    for slug in book.get("related_slugs", [])[:4]:
+        related = by_slug.get(slug)
+        if not related:
+            continue
+        items.append(
+            '<li><a href="/ebooks/{slug}/">{title}</a><span>{topic} · {pages} pages</span></li>'.format(
+                slug=html.escape(related["slug"]),
+                title=html.escape(related["title"]),
+                topic=html.escape(related["topic"]),
+                pages=related["pages"],
+            )
+        )
+    return "\n".join(items)
+
+def render_faq_markup(book: Dict[str, Any]) -> str:
+    parts = []
+    for idx, item in enumerate(book.get("faq", []), start=1):
+        question = clean_paragraph(item.get("name", ""))
+        answer = clean_paragraph(item.get("acceptedAnswer", {}).get("text", ""))
+        open_attr = " open" if idx == 1 else ""
+        parts.append(
+            "<details class=\"ebook-faq-item\"%s><summary>%s</summary><div><p>%s</p></div></details>"
+            % (open_attr, html.escape(question), html.escape(answer))
+        )
+    return "\n".join(parts)
+
+
+
+def render_breadcrumbs(book: Dict[str, Any]) -> str:
+    crumbs = [
+        '<a href="/">Home</a>',
+        '<span aria-hidden="true">›</span>',
+        '<a href="/ebooks/">eBooks</a>',
+    ]
+    if book.get("topic_url"):
+        crumbs.extend([
+            '<span aria-hidden="true">›</span>',
+            '<a href="{url}">{topic}</a>'.format(url=html.escape(book["topic_url"]), topic=html.escape(book["topic"])),
+        ])
+    crumbs.extend([
+        '<span aria-hidden="true">›</span>',
+        '<span>{title}</span>'.format(title=html.escape(book["title"])),
+    ])
+    return "".join(crumbs)
+
+def audience_bullets(book: Dict[str, Any]) -> List[str]:
+    topic_lc = book["topic"].lower()
+    slug_name = book["title"].split(":", 1)[0]
+    return [
+        f"Curious readers who want a grounded view of {slug_name} without the hype.",
+        f"Beginners who need a structured introduction to AI in {topic_lc}, in plain English.",
+        f"Professionals in {topic_lc} looking for practical ways to apply AI and make better decisions.",
+        f"Experienced readers who want sharper context, trade-offs, and implementation angles.",
+    ]
+
+
+
+def chapter_signal_cards(book: Dict[str, Any]) -> str:
+    cards = []
+    for item in book.get("what_youll_learn", [])[:3]:
+        heading = re.sub(r"[\.:].*", "", item).strip()
+        heading = heading[:64].rstrip(" ,.;:") or "Chapter signal"
+        cards.append(
+            f'<article class="ebook-signal-card"><h3>{html.escape(heading)}</h3><p>{html.escape(item)}</p></article>'
+        )
+    return "\n".join(cards)
+
+
+
+def problem_framing(book: Dict[str, Any]) -> str:
+    topic_lc = book["topic"].lower()
+    return (
+        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. "
+        f"This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches."
+    )
+
+
+
+def practical_outcomes(book: Dict[str, Any]) -> List[str]:
+    outcomes = []
+    for item in book.get("what_youll_learn", [])[:3]:
+        outcomes.append(item[0].upper() + item[1:] if item else item)
+    return outcomes or default_learning_points(book["topic"])[:3]
+
+
+
+def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> str:
+    header = render_header()
+    footer = render_footer()
+    hero_summary = book["summary"] or strip_pages_from_summary(book["description"], book.get("pages"))
+    title = html.escape(book["title"])
+    description = html.escape(book["description"])
+    canonical = html.escape(book["canonical_url"])
+    cover = html.escape(book["cover"])
+    faq_schema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": f"{book['canonical_url']}#faq",
+        "mainEntity": book.get("faq", []),
+    }
+    learn_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in book.get("what_youll_learn", []))
+    audience_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in audience_bullets(book))
+    key_theme_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in book.get("tags", []))
+    signal_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in practical_outcomes(book))
+
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>{title} | Jonathan Harris</title>
+<meta content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="#0D1420" name="theme-color"/>
+<link as="style" href="/assets/css/site.css" rel="preload"/>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
+<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<meta content="GB" name="geo.region"/>
+<link href="{canonical}" rel="canonical"/>
+<link href="{canonical}" hreflang="en" rel="alternate"/>
+<link href="{canonical}" hreflang="x-default" rel="alternate"/>
+<meta content="{description}" name="description"/>
+<meta content="index,follow" name="robots"/>
+<meta content="{html.escape(book['asin'])}" name="book:asin"/>
+<meta content="{html.escape(book['datePublished'])}" name="datePublished"/>
+<meta content="{html.escape(book['datePublished'])}" property="book:release_date"/>
+<meta content="books.book" property="og:type"/>
+<meta content="{canonical}" property="og:url"/>
+<meta content="{title} | Jonathan Harris" property="og:title"/>
+<meta content="{description}" property="og:description"/>
+<meta content="{cover}" property="og:image"/>
+<meta content="{title} cover" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="{cover}" name="twitter:image"/>
+<meta content="{title} | Jonathan Harris" name="twitter:title"/>
+<meta content="{description}" name="twitter:description"/>
+<meta content="{title}" name="ai:topic"/>
+<meta content="Artificial Intelligence" name="ai:primary"/>
+<meta content="Book" name="ai:entity"/>
+<meta content="{html.escape(book['identifier'])}" name="ai:identifier"/>
+<meta content="book" name="ai:content_type"/>
+<meta content="{html.escape(', '.join(book['keywords']))}" name="ai:keywords"/>
+<meta content="{html.escape(book['tone'])}" name="ai-style"/>
+<meta content="{html.escape(book['audience'])}" name="ai-target-audience"/>
+<meta content="search=y, train-ai=y, citation-preferred=y" name="content-usage"/>
+<script type="application/ld+json">{json_script(build_breadcrumb_schema(book))}</script>
+<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+<script type="application/ld+json">{json_script(build_book_schema(book))}</script>
+<script type="application/ld+json">{json_script(faq_schema)}</script>
+<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
+<script defer="" src="/assets/js/consent-managed-scripts.js"></script>
+</head>
+<body class="ebook-detail">
+{header}
+<div aria-hidden="false" class="page-loader" id="pageLoader">
+  <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
+    <div aria-hidden="true" class="spinner"></div>
+  </div>
+</div>
+<header aria-label="Book header" class="hero ebook-hero" role="region">
+  <div class="wrap">
+    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+    <h1>{title}</h1>
+    <p>{html.escape(hero_summary)} <span class="muted">See latest price on Amazon.</span></p>
+  </div>
+</header>
+<main aria-label="Book content" class="main" id="main" role="main">
+  <div class="wrap ebook-shell">
+    <nav aria-label="Breadcrumb" class="breadcrumbs">{render_breadcrumbs(book)}</nav>
+
+    <section class="card ebook-section quick-facts">
+      <h2>Quick facts</h2>
+      <ul class="ebook-facts">
+        <li><strong>Topic:</strong> {html.escape(book['topic'])}</li>
+        <li><strong>Tags:</strong> {html.escape(', '.join(book['tags']))}</li>
+        <li><strong>Length:</strong> {book['pages']} pages</li>
+        <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
+      </ul>
+    </section>
+
+    <section class="ebook-showcase">
+      <article class="card ebook-showcase__media">
+        <img alt="{title} cover" class="cover ebook-showcase__cover" loading="eager" src="{cover}"/>
+        <div class="ebook-actions">
+          <a class="button" href="{html.escape(book['buy_route'])}">Explore Now</a>
+          <a class="button secondary" href="/ebooks/">Browse all eBooks</a>
+        </div>
+        <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
+      </article>
+      <article class="card ebook-showcase__content">
+        <h2>{html.escape(book['showcase_heading'])}</h2>
+        <p class="ebook-showcase__lead">{html.escape(book['what_this_book_covers'])}</p>
+        <p class="ebook-showcase__subhead">From practical applications to real-world trade-offs.</p>
+        <ul class="ebook-signal-list">
+          {''.join(f'<li>► {html.escape(item)}</li>' for item in book.get('what_youll_learn', [])[:3])}
+        </ul>
+        <p class="ebook-showcase__note">Straight-talking, practical, and deliberately light on hype.</p>
+        <div class="ebook-inline-actions">
+          <a href="{html.escape(book['buy_route'])}">Buy</a>
+          <a href="#deeper-overview">Read deeper overview</a>
+          <a href="/ebooks/">Back to catalogue</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>Who this book is for</h2>
+      <ul class="ebook-audience-list">
+        {audience_items}
+      </ul>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>Key themes</h2>
+      <ul class="ebook-key-themes">
+        {key_theme_items}
+      </ul>
+      <div class="ebook-theme-pills">{render_tag_pills(book['tags'])}</div>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>What you’ll learn</h2>
+      <ul class="ebook-learn-list">
+        {learn_items}
+      </ul>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>Audience fit</h2>
+      {escape_paragraphs(book['who_for'])}
+    </section>
+
+    <section class="card ebook-section" id="deeper-overview">
+      <h2>Deeper overview</h2>
+      {escape_paragraphs(book['summary'])}
+    </section>
+
+    <section class="card ebook-section ebook-section--accent">
+      <h2>Problem framing: where this topic gets messy</h2>
+      {escape_paragraphs(problem_framing(book))}
+    </section>
+
+    <section class="card ebook-section">
+      <h2>Practical outcomes</h2>
+      <p>You should leave this one with clearer judgement, fewer lazy assumptions, and a better sense of where to press further or walk away.</p>
+      <ul class="ebook-learn-list">
+        {signal_items}
+      </ul>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>Chapter-level signals</h2>
+      <div class="ebook-signal-grid">
+        {chapter_signal_cards(book)}
+      </div>
+    </section>
+
+    <section class="card ebook-section">
+      <h2>What makes this title distinct</h2>
+      {escape_paragraphs(book['distinct_angle'])}
+      {escape_paragraphs(book['why_it_matters'])}
+    </section>
+
+    <section class="related-books card">
+      <h2>Related books</h2>
+      <ul>
+        {render_related_links(book, all_books)}
+      </ul>
+      <p class="jh-related-callout">Related titles are chosen from the catalogue based on topic and tag overlap, so the next step stays relevant instead of wandering off into the weeds.</p>
+    </section>
+
+    <section class="faq card" aria-label="Frequently asked questions">
+      <h2>FAQ</h2>
+      <div class="ebook-faq-list">
+        {render_faq_markup(book)}
+      </div>
+    </section>
+
+    <section class="jh-journey-panel">
+      <h2>Keep exploring the Jonathan Harris AI library</h2>
+      <p>Use the links below to carry on browsing the wider catalogue, the podcast, the newsletter, or a related topic.</p>
+      <div class="jh-journey-actions">
+        <a href="/ebooks/">Browse all books</a>
+        <a href="/podcast/">Podcast</a>
+        <a href="/newsletter/">Newsletter</a>
+      </div>
+    </section>
+  </div>
+</main>
+<script defer="" src="/assets/js/related-books.js"></script>
+{footer}
+<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/ux-fixes.js"></script>
+<script defer="" src="/assets/js/gold-standard.js"></script>
+</body>
+</html>
+'''
+
+
+
+def render_catalogue_card(book: Dict[str, Any]) -> str:
+    tags = "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in book.get("tags", [])[:4])
+    return f'''
+<article class="card ebook-card" aria-label="{html.escape(book['title'])}">
+  <img alt="{html.escape(book['title'])}" class="cover" loading="lazy" src="{html.escape(book['cover'])}"/>
+  <h2>{html.escape(book['title'])}</h2>
+  <div class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
+  <p>{html.escape(book['short'])}</p>
+  <div class="tags">{tags}</div>
+  <div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
+  <details class="more">
+    <summary aria-expanded="false">More details</summary>
+    <div class="meta">Read the full description, then check the latest price on Amazon.</div>
+    <div class="actions">
+      <a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Full description</a>
+      <a class="button" href="{html.escape(book['buy_route'])}">View on Amazon</a>
+    </div>
+  </details>
+</article>'''.strip()
+
+
+
+def render_topic_hub_links(books: List[Dict[str, Any]]) -> str:
+    topics = sorted({(book["topic"], book["topic_slug"]) for book in books}, key=lambda item: item[0].lower())
+    return "\n".join(f'<a href="/catalogue/{slug}/">{html.escape(name)}</a>' for name, slug in topics[:12])
+
+
+
+def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
+    header = render_header()
+    footer = render_footer()
+    item_list = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Jonathan Harris eBooks library",
+        "itemListElement": [
+            {"@type": "ListItem", "position": idx, "url": book["canonical_url"], "name": book["title"]}
+            for idx, book in enumerate(books, start=1)
+        ],
+    }
+    static_cards = "\n".join(render_catalogue_card(book) for book in books)
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>AI eBooks Catalogue | Jonathan Harris</title>
+<meta content="Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption." name="description"/>
+<meta content="Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption." name="ai:summary"/>
+<meta content="#0D1420" name="theme-color"/>
+<link as="style" href="/assets/css/site.css" rel="preload"/>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
+<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<meta content="GB" name="geo.region"/>
+<meta content="Jonathan Harris eBooks" property="og:site_name"/>
+<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<meta content="AI ebook catalogue and practical AI guide" name="ai-role"/>
+<meta content="Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight" name="ai-target-audience"/>
+<meta content="Plain-English, practical, sceptical, no-hype" name="ai-style"/>
+<meta content="search=y, train-ai=y" name="content-usage"/>
+<link href="{SITE_URL}/ebooks/" rel="canonical"/>
+<script type="application/ld+json">{json_script(item_list)}</script>
+<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
+<script defer="" src="/assets/js/consent-managed-scripts.js"></script>
+</head>
+<body class="ebooks-catalogue">
+{header}
+<div aria-hidden="false" class="page-loader is-active" id="pageLoader">
+  <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
+    <div aria-hidden="true" class="spinner"></div>
+  </div>
+</div>
+<header class="hero ebook-hero" role="region" aria-label="eBook catalogue intro">
+  <div class="wrap">
+    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+    <h1>AI eBooks Catalogue</h1>
+    <p>Browse all {len(books)} titles from the ebook library. Every book now uses the same governed detail-page template and a direct path back into the wider catalogue.</p>
+  </div>
+</header>
+<main class="main" id="main" role="main" aria-label="eBook catalogue">
+  <div class="wrap">
+    <section class="card ebook-index-intro">
+      <h2>Find the right title without the faff</h2>
+      <p>Search the catalogue, filter by topic, and jump straight into a book page that keeps the full description, FAQ, and Amazon route on one canonical URL.</p>
+      <div class="jh-topic-links">
+        {render_topic_hub_links(books)}
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="Catalogue controls">
+      <input aria-label="Search books" class="search" id="search" placeholder="Search by title, topic, or keyword" type="search"/>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <p class="meta ebook-count" id="count">{len(books)} of {len(books)} books</p>
+
+    <section aria-label="eBook grid" class="grid" id="booksGrid">
+      {static_cards}
+    </section>
+
+    <nav aria-label="Pagination" class="pager" id="pager" style="display:none;">
+      <button class="button secondary" id="prevPage" type="button">Previous</button>
+      <span class="meta" id="pageInfo"></span>
+      <button class="button" id="nextPage" type="button">Next</button>
+    </nav>
+
+    <section class="jh-journey-panel">
+      <h2>Keep exploring the wider library</h2>
+      <p>Every ebook page links back into the catalogue, but you can also hop out to the podcast, newsletter, or topic guides when you want the broader view.</p>
+      <div class="jh-journey-actions">
+        <a href="/podcast/">Listen to the podcast</a>
+        <a href="/newsletter/">Join the newsletter</a>
+        <a href="/topics/">Explore topic guides</a>
+      </div>
+    </section>
+  </div>
+</main>
+{footer}
+<script defer="" src="/assets/js/books.js"></script>
+<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/ux-fixes.js"></script>
+<script defer="" src="/assets/js/gold-standard.js"></script>
+</body>
+</html>
+'''
+
+
+
+def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
+    header = render_header()
+    footer = render_footer()
+    cards = "\n".join(render_catalogue_card(book) for book in books)
+    topic_slug = slugify(topic)
+    item_list = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": f"{topic} books by Jonathan Harris",
+        "itemListElement": [
+            {"@type": "ListItem", "position": idx, "url": book["canonical_url"], "name": book["title"]}
+            for idx, book in enumerate(books, start=1)
+        ],
+    }
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>{html.escape(topic)} AI Books | Jonathan Harris</title>
+<meta content="Browse Jonathan Harris AI books on {html.escape(topic.lower())}." name="description"/>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
+<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<link href="{SITE_URL}/catalogue/{topic_slug}/" rel="canonical"/>
+<script type="application/ld+json">{json_script(item_list)}</script>
+<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+</head>
+<body class="ebooks-catalogue topic-catalogue">
+{header}
+<header class="hero ebook-hero" role="region" aria-label="Topic catalogue intro">
+  <div class="wrap">
+    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+    <h1>{html.escape(topic)} AI Books</h1>
+    <p>Browse the Jonathan Harris titles that connect AI with {html.escape(topic.lower())}.</p>
+  </div>
+</header>
+<main class="main" id="main" role="main">
+  <div class="wrap ebook-shell">
+    <nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/ebooks/">eBooks</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>
+    <section class="card ebook-index-intro">
+      <h2>{len(books)} title{'s' if len(books) != 1 else ''} in this topic</h2>
+      <p>These pages use the same governed detail template as the rest of the ebook subsystem, so the structure stays consistent and the discovery layer stops freelancing.</p>
+    </section>
+    <section aria-label="Topic book grid" class="grid" id="booksGrid">
+      {cards}
+    </section>
+  </div>
+</main>
+{footer}
+<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/ux-fixes.js"></script>
+<script defer="" src="/assets/js/gold-standard.js"></script>
+</body>
+</html>
+'''
+
+
+
+def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
+    header = render_header()
+    footer = render_footer()
+    cards = []
+    for topic in sorted(topic_map, key=str.lower):
+        slug = slugify(topic)
+        cards.append(
+            f'<article class="card topic-card"><h2><a href="/catalogue/{slug}/">{html.escape(topic)}</a></h2><p>{len(topic_map[topic])} title{'s' if len(topic_map[topic]) != 1 else ''}</p></article>'
+        )
+    cards_html = "\n".join(cards)
+    return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>AI Topics | Jonathan Harris</title>
+<meta content="Explore AI topics across the Jonathan Harris ebook library." name="description"/>
+<link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
+<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<link href="{SITE_URL}/topics/" rel="canonical"/>
+<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+</head>
+<body class="ebooks-catalogue topics-index">
+{header}
+<header class="hero ebook-hero" role="region">
+  <div class="wrap">
+    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+    <h1>Explore AI topics</h1>
+    <p>The topic hub now mirrors the governed ebook design system instead of improvising in the corner.</p>
+  </div>
+</header>
+<main class="main" id="main" role="main">
+  <div class="wrap ebook-shell">
+    <section class="card ebook-index-intro">
+      <h2>Browse by topic</h2>
+      <p>Pick a lane and jump into the matching catalogue pages.</p>
+    </section>
+    <section class="grid topic-grid">{cards_html}</section>
+  </div>
+</main>
+{footer}
+<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/ux-fixes.js"></script>
+<script defer="" src="/assets/js/gold-standard.js"></script>
+</body>
+</html>
+'''
+
+
+
+def build_sitemap_xml(books: List[Dict[str, Any]]) -> str:
+    urls = []
+    for book in books:
+        lastmod = book.get("datePublished") or dt.date.today().isoformat()
+        urls.append(
+            "  <url>\n"
+            f"    <loc>{html.escape(book['canonical_url'])}</loc>\n"
+            f"    <lastmod>{html.escape(lastmod)}</lastmod>\n"
+            "  </url>"
+        )
+    return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n" + "\n".join(urls) + "\n</urlset>\n"
+
+
+
+def build_robots_txt() -> str:
+    return "\n".join([
+        "User-agent: *",
+        "Disallow:",
+        "",
+        f"Sitemap: {SITE_URL}/sitemap.xml",
+        "",
+    ])
+
+
+
+def build_llms_txt(books: List[Dict[str, Any]]) -> str:
+    lines = [
+        "# Jonathan Harris ebook library",
+        "# Canonical ebook routes only",
+        f"Homepage: {SITE_URL}/ebooks/",
+        "",
+        "## Canonical books",
+    ]
+    for book in books:
+        lines.append(f"- {book['title']}: {book['canonical_url']}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+
+def build_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
+    manifest_books = []
+    for book in books:
+        manifest_books.append({
+            "slug": book["slug"],
+            "title": book["title"],
+            "canonical": {
+                "path": f"/ebooks/{book['slug']}/",
+                "url": book["canonical_url"],
+            },
+            "buy": {
+                "path": book["buy_route"],
+                "full_url": book["buy_route_full"],
+                "target": book["buy_url"],
+            },
+            "topic_page": book["topic_url"],
+            "legacy_routes": [
+                f"/book/{book['slug']}/",
+                f"/book/{book['slug']}/buy-now",
+                f"/ebooks/{book['slug']}/detail",
+                f"/ebooks/{book['slug']}/detail.html",
+                f"/ebooks/{book['slug']}/details.html",
+            ],
+            "legacy_alias_url": book.get("legacy_alias_url") or "",
+            "domain_redirect_families": [
+                "books.jonathan-harris.online",
+                "ebooks.jonathan-harris.online",
+            ],
+        })
+
+    return {
+        "generated_utc": utc_now(),
+        "base_url": SITE_URL,
+        "ebook_count": len(books),
+        "host_redirect_files": {
+            "books_domain": "_redirects.books-domain",
+            "ebooks_domain": "_redirects.ebooks-domain",
+        },
+        "ebooks": manifest_books,
+    }
+
+
+
+def build_derivatives(books: List[Dict[str, Any]]) -> None:
+    public_records = [book_to_public_record(book) for book in books]
+    write_json(EBOOKS_DIR / "books.json", public_records)
+    write_json(ROOT / "assets" / "js" / "books.json", public_records)
+    write_json(ROOT / "api" / "v1" / "books.json", public_records)
+
+    feed = {
+        "version": "https://jsonfeed.org/version/1.1",
+        "title": "Jonathan Harris eBooks Catalogue",
+        "home_page_url": f"{SITE_URL}/ebooks/",
+        "feed_url": f"{SITE_URL}/feed.json",
+        "items": [
+            {
+                "id": book["canonical_url"],
+                "url": book["canonical_url"],
+                "title": book["title"],
+                "summary": book["short"],
+                "image": book["cover"],
+                "tags": book["tags"],
+            }
+            for book in books
+        ],
+    }
+    write_json(ROOT / "feed.json", feed)
+
+    entity_map = {
+        "generated_utc": utc_now(),
+        "person": {"id": f"{SITE_URL}/#person", "name": SITE_NAME},
+        "podcast": {"title": "Turing’s Torch: AI Weekly", "url": f"{SITE_URL}/podcast/"},
+        "books": [
+            {
+                "title": book["title"],
+                "slug": book["slug"],
+                "url": book["canonical_url"],
+                "topic": book["topic"],
+                "tags": book["tags"],
+                "identifier": book["identifier"],
+            }
+            for book in books
+        ],
+    }
+    write_json(ROOT / "ai" / "entity-map.json", entity_map)
+
+    llm_index = {
+        "generated_utc": utc_now(),
+        "books": [
+            {
+                "title": book["title"],
+                "slug": book["slug"],
+                "url": f"/ebooks/{book['slug']}/",
+                "summary": book["short"],
+                "topic": book["topic"],
+                "tags": book["tags"],
+                "keywords": [clean_paragraph(k).lower() for k in book["keywords"]],
+                "buy_url": book["buy_url"],
+                "buy_route": book["buy_route"],
+                "cover": book["cover"],
+                "identifier": book["identifier"],
+                "entity_id": f"{book['canonical_url']}#book",
+                "asin": book["asin"],
+                "pages": book["pages"],
+                "datePublished": book["datePublished"],
+            }
+            for book in books
+        ],
+        "topic_authority_pages": [f"/catalogue/{slugify(topic)}/" for topic in sorted({book['topic'] for book in books})],
+    }
+    write_json(ROOT / "llm-index.json", llm_index)
+
+    write_json(EBOOKS_DIR / "url-manifest.json", build_route_manifest(books))
+    (EBOOKS_DIR / "index.html").write_text(render_ebooks_index(books), encoding="utf-8")
+    (ROOT / "sitemap.xml").write_text(build_sitemap_xml(books), encoding="utf-8")
+    (ROOT / "robots.txt").write_text(build_robots_txt(), encoding="utf-8")
+    (ROOT / "llms.txt").write_text(build_llms_txt(books), encoding="utf-8")
+
+    topic_map: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
+    for book in books:
+        topic_map[book["topic"]].append(book)
+    for topic, topic_books in topic_map.items():
+        topic_dir = CATALOGUE_DIR / slugify(topic)
+        topic_dir.mkdir(parents=True, exist_ok=True)
+        (topic_dir / "index.html").write_text(render_topic_page(topic, topic_books), encoding="utf-8")
+    TOPICS_DIR.mkdir(parents=True, exist_ok=True)
+    (TOPICS_DIR / "index.html").write_text(render_topics_index(topic_map), encoding="utf-8")
+
+
+
+def build_book_files(books: List[Dict[str, Any]]) -> None:
+    for book in books:
+        book_dir = EBOOKS_DIR / book["slug"]
+        book_dir.mkdir(parents=True, exist_ok=True)
+        metadata = {
+            "title": book["title"],
+            "slug": book["slug"],
+            "description": book["description"],
+            "topic": book["topic"],
+            "tags": book["tags"],
+            "cover": book["cover"],
+            "image": book["cover"],
+            "buy_url": book["buy_url"],
+            "buy_route": book["buy_route"],
+            "pages": book["pages"],
+            "asin": book["asin"],
+            "datePublished": book["datePublished"],
+            "author": book["author"],
+            "tone": book["tone"],
+            "audience": book["audience"],
+            "canonical_url": book["canonical_url"],
+            "identifier": book["identifier"],
+        }
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": f"{book['canonical_url']}#faq",
+            "mainEntity": book["faq"],
+        }
+        summary_md = "\n".join([
+            f"# {book['title']}",
+            "",
+            "## Summary",
+            "",
+            book["summary"],
+            "",
+            "## What this book covers",
+            "",
+            book["what_this_book_covers"],
+            "",
+            "## Who this book is for",
+            "",
+            book["who_for"],
+            "",
+            "## What you’ll learn",
+            "",
+            *[f"- {item}" for item in book["what_youll_learn"]],
+            "",
+            "## Why it matters",
+            "",
+            book["why_it_matters"],
+            "",
+            "## Topics and tags",
+            "",
+            f"- Topic: {book['topic']}",
+            f"- Tags: {', '.join(book['tags'])}",
+            f"- Length: {book['pages']} pages",
+            "",
+            "## Buy",
+            "",
+            f"- {book['buy_url']}",
+            "",
+        ])
+        write_json(book_dir / "metadata.json", metadata)
+        write_json(book_dir / "faq-schema.json", faq_schema)
+        (book_dir / "structured-summary.md").write_text(summary_md, encoding="utf-8")
+        (book_dir / "index.html").write_text(render_book_page(book, books), encoding="utf-8")
+
+
+
+def build_redirect_block(books: List[Dict[str, Any]]) -> str:
+    lines = ["# 6A) Branded buy-now redirects"]
+    for book in books:
+        lines.append(f"{book['buy_route']}   {book['buy_url']}   302")
+        lines.append(f"/book/{book['slug']}/buy-now   {book['buy_url']}   302")
+    return "\n".join(lines)
+
+
+
+def sync_redirects(books: List[Dict[str, Any]]) -> None:
+    redirect_files = [ROOT / "_redirects", ROOT / "_redirects.txt"]
+    block = build_redirect_block(books)
+    pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
+    legacy_anchor = "# retire legacy detail routes to the canonical ebook page\n"
+    for path in redirect_files:
+        text = path.read_text(encoding="utf-8")
+        new_text, count = pattern.subn(block + "\n", text)
+        if count != 1:
+            raise ValueError(f"Could not replace branded redirect block in {path}")
+        for line in LEGACY_DETAIL_REDIRECT_LINES:
+            if line not in new_text:
+                if legacy_anchor not in new_text:
+                    raise ValueError(f"Could not find legacy detail redirect anchor in {path}")
+                new_text = new_text.replace(legacy_anchor, legacy_anchor + line + "\n", 1)
+        path.write_text(new_text, encoding="utf-8")
+
+def ensure_css_file() -> None:
+    css = """
+.ebook-shell{display:grid;gap:20px}
+.ebook-hero .muted{opacity:.88}
+.ebook-section h2,.related-books h2,.faq h2,.ebook-index-intro h2{margin-top:0}
+.quick-facts ul.ebook-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;list-style:none;padding:0;margin:0}
+.quick-facts li{color:#374151}
+.ebook-showcase{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:20px;align-items:start}
+.ebook-showcase__media,.ebook-showcase__content{height:100%}
+.ebook-showcase__cover{background:#0D1420}
+.ebook-showcase__lead{font-size:1.03rem;line-height:1.75;color:#111827}
+.ebook-showcase__subhead,.ebook-showcase__note{color:#4B5563}
+.ebook-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.ebook-inline-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.ebook-inline-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid rgba(15,23,42,.12);background:#fff;color:#111827}
+.ebook-signal-list{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.ebook-signal-list li{color:#111827;font-weight:600}
+.ebook-theme-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.ebook-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;border:1px solid rgba(79,70,229,.18);color:#312E81;font-size:.9rem;font-weight:700}
+.ebook-pill--dark{background:#111827;color:#E5E7EB;border-color:rgba(255,255,255,.12)}
+.ebook-learn-list,.ebook-audience-list,.ebook-key-themes{margin:0;padding-left:20px;display:grid;gap:10px}
+.ebook-section--accent{background:linear-gradient(180deg,#111827 0%,#0F172A 100%);color:#E5E7EB;border-color:rgba(255,255,255,.08)}
+.ebook-section--accent h2{color:#fff}
+.ebook-section--accent p,.ebook-section--accent li{color:#E5E7EB}
+.related-books ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.related-books li{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(15,23,42,.08)}
+.related-books li:last-child{border-bottom:none;padding-bottom:0}
+.related-books li span{font-size:.92rem;color:#6B7280}
+.ebook-faq-list{display:grid;gap:12px}
+.ebook-faq-item{border:1px solid rgba(15,23,42,.10);border-radius:14px;padding:0 14px;background:#F8FAFC}
+.ebook-faq-item summary{cursor:pointer;font-weight:800;padding:14px 0;color:#111827}
+.ebook-faq-item p{margin:0 0 14px;color:#374151}
+.ebook-index-intro p{max-width:72ch}
+.ebook-count{margin:6px 0 18px}
+.pager{margin:24px 0 0;display:flex;align-items:center;justify-content:center;gap:14px}
+.topic-chip-wrap{margin:2px 0 8px}
+.topic-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;color:#312E81;font-size:.88rem;font-weight:700;border:1px solid rgba(79,70,229,.18)}
+.book-avail{margin:12px 0 0}
+.book-avail__badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ECFDF5;color:#166534;border:1px solid rgba(22,101,52,.12);font-size:.88rem;font-weight:700}
+.ebook-signal-grid,.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.ebook-signal-card h3,.topic-card h2{margin-top:0}
+.ebook-signal-card p,.topic-card p{margin:0;color:#4B5563}
+.ebooks-catalogue .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:980px){
+  .ebook-showcase{grid-template-columns:1fr}
+  .quick-facts ul.ebook-facts,.ebook-signal-grid,.topic-grid{grid-template-columns:1fr}
+  .ebooks-catalogue .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:620px){
+  .ebooks-catalogue .grid{grid-template-columns:1fr}
+  .ebook-actions,.ebook-inline-actions{flex-direction:column}
+  .ebook-actions .button,.pager .button,.ebook-inline-actions a{width:100%;text-align:center}
+  .related-books li{flex-direction:column;align-items:flex-start}
+}
+""".strip() + "\n"
+    EBOOK_TEMPLATE_CSS.write_text(css, encoding="utf-8")
+
+
+
+def faq_is_semantically_relevant(book: Dict[str, Any]) -> bool:
+    content_tokens = text_tokens(book["summary"]) | text_tokens(book["what_this_book_covers"])
+    for item in book.get("what_youll_learn", []):
+        content_tokens |= text_tokens(item)
+    for item in book.get("faq", []):
+        question = clean_paragraph(item.get("name", "")).lower()
+        answer = clean_paragraph(item.get("acceptedAnswer", {}).get("text", ""))
+        if any(term in question for term in ["how long", "format", "buy", "who is this book for", "suitable for"]):
+            continue
+        if not (text_tokens(answer) & content_tokens):
+            return False
+    return True
+
+
+
+def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> str:
+    topics = Counter(book["topic"] for book in books)
+    lines = [
+        f"Validation run: {utc_now()}",
+        f"Book count: {len(books)}",
+        f"Topic count: {len(topics)}",
+        "",
+        "Topics:",
+    ]
+    for topic, count in sorted(topics.items(), key=lambda item: item[0].lower()):
+        lines.append(f"- {topic}: {count}")
+    lines.append("")
+    if errors:
+        lines.append(f"Status: FAILED ({len(errors)} issue(s))")
+        lines.extend(f"- {error}" for error in errors)
+    else:
+        lines.append("Status: PASSED")
+        lines.append("- Route registry complete")
+        lines.append("- Sitemap contains canonical ebook URLs only")
+        lines.append("- Topic discovery pages exist for every book")
+        lines.append("- Metadata and FAQ checks passed")
+    lines.append("")
+    return "\n".join(lines)
+
+
+
+def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path: Path | None = None) -> List[str]:
+    if books is None:
+        books = load_master()
+    errors: List[str] = []
+
+    if len(books) != 36:
+        errors.append(f"Expected 36 books in the master record, found {len(books)}.")
+
+    slugs = [book["slug"] for book in books]
+    if len(slugs) != len(set(slugs)):
+        errors.append("Duplicate slugs found in the master record.")
+
+    asins = [book["asin"] for book in books if book.get("asin")]
+    if len(asins) != len(set(asins)):
+        errors.append("Duplicate ASIN values found in the master record.")
+
+    identifiers = [book["identifier"] for book in books if book.get("identifier")]
+    if len(identifiers) != len(set(identifiers)):
+        errors.append("Duplicate internal identifiers found in the master record.")
+
+    detail_files = list(EBOOKS_DIR.glob("**/detail.html")) + list(EBOOKS_DIR.glob("**/details.html"))
+    if detail_files:
+        errors.append("Legacy detail source files still exist under /ebooks/.")
+
+    canonical_urls = {book["canonical_url"] for book in books}
+    books_index_path = EBOOKS_DIR / "index.html"
+    if not books_index_path.exists():
+        errors.append("ebooks/index.html is missing.")
+    else:
+        index_html = books_index_path.read_text(encoding="utf-8")
+        for book in books:
+            if f'/ebooks/{book["slug"]}/' not in index_html:
+                errors.append(f"ebooks/index.html does not link to /ebooks/{book['slug']}/.")
+
+    for book in books:
+        page_path = EBOOKS_DIR / book["slug"] / "index.html"
+        metadata_path = EBOOKS_DIR / book["slug"] / "metadata.json"
+        faq_path = EBOOKS_DIR / book["slug"] / "faq-schema.json"
+        if not page_path.exists():
+            errors.append(f"Book page missing: {page_path}")
+            continue
+        text = page_path.read_text(encoding="utf-8")
+        if f'<link href="{book["canonical_url"]}" rel="canonical"/>' not in text:
+            errors.append(f"{book['slug']} is missing the expected canonical link.")
+        if text.count('"@type":"FAQPage"') != 1:
+            errors.append(f"{book['slug']} should emit exactly one FAQPage JSON-LD block.")
+        if text.count('"@type":"Book"') != 1:
+            errors.append(f"{book['slug']} should emit exactly one Book JSON-LD block.")
+        errors.extend(template_contract_errors(text, book))
+        schema = build_book_schema(book)
+        about_names = [item.get("name", "") for item in schema.get("about", [])]
+        if len(about_names) != len({name.lower() for name in about_names if clean_paragraph(name)}):
+            errors.append(f"{book['slug']} still emits duplicate Book JSON-LD about terms.")
+        if f'href="/book/{book["slug"]}/' in text or f'href="/ebooks/{book["slug"]}/detail' in text:
+            errors.append(f"{book['slug']} still links to a retired route.")
+        if not faq_is_semantically_relevant(book):
+            errors.append(f"{book['slug']} has FAQ content that looks off-topic.")
+        if not metadata_path.exists() or not faq_path.exists():
+            errors.append(f"{book['slug']} is missing metadata.json or faq-schema.json.")
+        else:
+            metadata = read_json(metadata_path, default={}) or {}
+            faq_schema = read_json(faq_path, default={}) or {}
+            if metadata.get("canonical_url") != book["canonical_url"]:
+                errors.append(f"{book['slug']} metadata.json canonical_url does not match the master record.")
+            if faq_schema.get("mainEntity") != book.get("faq"):
+                errors.append(f"{book['slug']} faq-schema.json does not match the master record.")
+
+        topic_page = ROOT / book["topic_url"].strip("/") / "index.html"
+        if not book.get("topic_url") or not topic_page.exists():
+            errors.append(f"{book['slug']} is missing a governed topic discovery page.")
+
+    redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
+    redirects_mirror = (ROOT / "_redirects.txt").read_text(encoding="utf-8")
+    for line in LEGACY_DETAIL_REDIRECT_LINES:
+        if line not in redirects_text:
+            errors.append(f"Redirect family missing from _redirects: {line}")
+        if line not in redirects_mirror:
+            errors.append(f"Redirect family missing from _redirects.txt: {line}")
+    if "/book/*  /ebooks/:splat  301" not in redirects_text:
+        errors.append("Redirect family missing from _redirects: /book/*  /ebooks/:splat  301")
+    if "/book/*  /ebooks/:splat  301" not in redirects_mirror:
+        errors.append("Redirect family missing from _redirects.txt: /book/*  /ebooks/:splat  301")
+    for book in books:
+        required_lines = [
+            f"{book['buy_route']}   {book['buy_url']}   302",
+            f"/book/{book['slug']}/buy-now   {book['buy_url']}   302",
+        ]
+        for line in required_lines:
+            if line not in redirects_text:
+                errors.append(f"Redirect rule missing from _redirects: {line}")
+            if line not in redirects_mirror:
+                errors.append(f"Redirect rule missing from _redirects.txt: {line}")
+
+    manifest = read_json(EBOOKS_DIR / "url-manifest.json", default={}) or {}
+    manifest_books = manifest.get("ebooks", [])
+    if len(manifest_books) != len(books):
+        errors.append("ebooks/url-manifest.json does not contain one route record per book.")
+    manifest_by_slug = {item.get("slug"): item for item in manifest_books}
+    for book in books:
+        entry = manifest_by_slug.get(book["slug"])
+        if not entry:
+            errors.append(f"Route manifest missing slug {book['slug']}.")
+            continue
+        legacy_routes = entry.get("legacy_routes", [])
+        expected_legacy = {f"/book/{book['slug']}/", f"/book/{book['slug']}/buy-now", f"/ebooks/{book['slug']}/detail", f"/ebooks/{book['slug']}/detail.html", f"/ebooks/{book['slug']}/details.html"}
+        if set(legacy_routes) != expected_legacy:
+            errors.append(f"Route manifest legacy route coverage is incomplete for {book['slug']}.")
+
+    sitemap_path = ROOT / "sitemap.xml"
+    if not sitemap_path.exists():
+        errors.append("sitemap.xml is missing.")
+    else:
+        sitemap_text = sitemap_path.read_text(encoding="utf-8")
+        locs = set(re.findall(r"<loc>(.*?)</loc>", sitemap_text))
+        if locs != canonical_urls:
+            errors.append("sitemap.xml does not contain exactly the canonical ebook URLs.")
+        if "/book/" in sitemap_text or "/detail" in sitemap_text:
+            errors.append("sitemap.xml includes a retired legacy route.")
+
+    robots_text = (ROOT / "robots.txt").read_text(encoding="utf-8") if (ROOT / "robots.txt").exists() else ""
+    if f"Sitemap: {SITE_URL}/sitemap.xml" not in robots_text:
+        errors.append("robots.txt does not point to the repo-owned sitemap.xml.")
+
+    llms_text = (ROOT / "llms.txt").read_text(encoding="utf-8") if (ROOT / "llms.txt").exists() else ""
+    if "Canonical ebook routes only" not in llms_text:
+        errors.append("llms.txt is still acting like a placeholder.")
+
+    overrides = load_source_overrides()
+    for slug, payload in overrides.items():
+        unsupported = sorted(key for key in payload.keys() if key not in SUPPORTED_OVERRIDE_FIELDS)
+        if unsupported:
+            errors.append(f"Override payload for {slug} contains unsupported fields: {', '.join(unsupported)}")
+
+    html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
+    for file_path in html_files:
+        text = file_path.read_text(encoding="utf-8", errors="ignore")
+        if re.search(r'href="/book/', text):
+            errors.append(f"Retired /book/ link found in HTML: {file_path.relative_to(ROOT)}")
+        if re.search(r'href="[^"]*/detail(?:\.html)?"', text):
+            errors.append(f"Retired /detail link found in HTML: {file_path.relative_to(ROOT)}")
+
+    if workbook_path and workbook_path.exists():
+        order, workbook_map, workbook_content = parse_workbook(workbook_path)
+        if order != slugs:
+            errors.append("Workbook row order does not match the master record order.")
+        master_by_slug = {book["slug"]: book for book in books}
+        for slug, workbook in workbook_map.items():
+            book = master_by_slug.get(slug)
+            if not book:
+                errors.append(f"Workbook contains slug not found in master record: {slug}")
+                continue
+            for workbook_field, master_field in [
+                ("book_url", "canonical_url"),
+                ("buy_url", "buy_url"),
+                ("buy_route", "buy_route"),
+                ("legacy_alias_url", "legacy_alias_url"),
+                ("asin", "asin"),
+                ("pages", "pages"),
+                ("datePublished", "datePublished"),
+                ("cover", "cover"),
+            ]:
+                if clean_paragraph(str(workbook.get(workbook_field, ""))) != clean_paragraph(str(book.get(master_field, ""))):
+                    errors.append(f"Workbook mismatch for {slug}: {workbook_field} does not match {master_field}.")
+            content = workbook_content.get(slug)
+            if content:
+                for workbook_field, master_field in [
+                    ("title", "title"),
+                    ("short", "short"),
+                    ("description", "description"),
+                    ("summary", "summary"),
+                    ("topic", "topic"),
+                    ("audience", "audience"),
+                    ("who_for", "who_for"),
+                    ("what_this_book_covers", "what_this_book_covers"),
+                    ("why_it_matters", "why_it_matters"),
+                ]:
+                    workbook_value = clean_paragraph(str(content.get(workbook_field, "")))
+                    master_value = clean_paragraph(str(book.get(master_field, "")))
+                    if workbook_field in {"description", "summary"}:
+                        workbook_value = strip_pages_from_summary(workbook_value, book.get("pages"))
+                        master_value = strip_pages_from_summary(master_value, book.get("pages"))
+                    if workbook_value != master_value:
+                        errors.append(f"Workbook content mismatch for {slug}: {workbook_field} does not match {master_field}.")
+
+    return errors
+
+
+
+def run_import_command(args: argparse.Namespace) -> int:
+    try:
+        workbook_path = Path(args.workbook).expanduser().resolve()
+        order, workbook_map, _ = parse_workbook(workbook_path)
+    except Exception as exc:
+        print(f"Import check failed: {exc}")
+        return 1
+
+    if args.check:
+        if len(workbook_map) != 36:
+            print(f"Workbook check failed: expected 36 buy-now redirect rows, found {len(workbook_map)}.")
+            return 1
+        print(f"Workbook check passed: {len(order)} ebook rows found.")
+        return 0
+
+    records = build_master_from_workbook(workbook_path)
+    save_master(records)
+    print(f"Wrote {len(records)} records to {MASTER_PATH.relative_to(ROOT)}")
+    return 0
+
+
+
+def run_fix_pages_command(args: argparse.Namespace) -> int:
+    books = load_master()
+    ensure_css_file()
+    build_book_files(books)
+    if args.check:
+        errors = [
+            err
+            for err in run_release_checks(books, Path(args.workbook).resolve() if getattr(args, "workbook", None) else None)
+            if "canonical link" in err or "FAQPage" in err or "Book JSON-LD" in err or "Book page missing" in err
+        ]
+        if errors:
+            for error in errors:
+                print(error)
+            return 1
+        print("Page metadata check passed.")
+        return 0
+    print(f"Generated {len(books)} canonical ebook pages.")
+    return 0
+
+
+
+def run_build_derivatives_command(args: argparse.Namespace) -> int:
+    books = load_master()
+    ensure_css_file()
+    build_derivatives(books)
+    if args.check:
+        errors = [
+            err
+            for err in run_release_checks(books, Path(args.workbook).resolve() if getattr(args, "workbook", None) else None)
+            if "Derivative" in err or "sitemap" in err or "topic discovery" in err or "url-manifest" in err or "robots.txt" in err or "llms.txt" in err
+        ]
+        if errors:
+            for error in errors:
+                print(error)
+            return 1
+        print("Derivative build check passed.")
+        return 0
+    print("Derivative JSON, manifests, crawler files, and governed discovery pages rebuilt.")
+    return 0
+
+
+
+def run_sync_redirects_command(args: argparse.Namespace) -> int:
+    books = load_master()
+    sync_redirects(books)
+    if args.check:
+        errors = [err for err in run_release_checks(books) if "Redirect rule missing" in err]
+        if errors:
+            for error in errors:
+                print(error)
+            return 1
+        print("Redirect sync check passed.")
+        return 0
+    print("Redirect files synchronised.")
+    return 0
+
+
+
+def rebuild_all(workbook_path: Path) -> List[str]:
+    books = build_master_from_workbook(workbook_path)
+    save_master(books)
+    ensure_css_file()
+    build_book_files(books)
+    build_derivatives(books)
+    sync_redirects(books)
+    errors = run_release_checks(books, workbook_path)
+    VALIDATION_REPORT.write_text(build_validation_report(errors, books), encoding="utf-8")
+    return errors
+
+
+
+def run_validate_command(workbook_path: Path | None = None) -> int:
+    errors = run_release_checks(workbook_path=workbook_path)
+    books = load_master()
+    VALIDATION_REPORT.write_text(build_validation_report(errors, books), encoding="utf-8")
+    if errors:
+        for error in errors:
+            print(error)
+        print(f"Validation failed with {len(errors)} issue(s).")
+        return 1
+    print("Release validation passed.")
+    return 0
