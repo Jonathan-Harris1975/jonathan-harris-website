@@ -1,4 +1,5 @@
 (function(){
+  try{ document.documentElement.classList.add('js-enabled'); }catch(_){ }
   if (window.__JH_SITE_UI_INIT__) return;
   window.__JH_SITE_UI_INIT__ = true;
 
@@ -83,10 +84,12 @@
           .jh-mobile-nav a[aria-current="page"]{background:rgba(79,70,229,0.22);border:1px solid rgba(79,70,229,0.38);}
           .jh-header-spacer{display:block;height:54px;}
           @media (max-width:768px){
-            .jh-topnav{display:none !important;}
-            .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
+            html.js-enabled .jh-topnav{display:none !important;}
+            html.js-enabled .jh-hamburger{display:inline-flex;align-items:center;justify-content:center;}
             .jh-header__inner{padding:10px 14px;gap:10px;}
             .jh-brand__text{font-size:16px;line-height:1.1;}
+            html:not(.js-enabled) .jh-header__inner{flex-wrap:wrap;}
+            html:not(.js-enabled) .jh-topnav{display:flex !important;flex-wrap:wrap;gap:8px;width:100%;padding-top:8px;}
             .jh-header-spacer{height:56px;}
           }
         `;
@@ -260,19 +263,17 @@
 
   async function injectHeader(){
     try{
-      const html = await fetchPartial(HEADER_URL);
-      if (!html) return;
-
-      const wrapper = document.createElement('div');
-      wrapper.innerHTML = html;
-      let nextHeader = wrapper.querySelector('.jh-header') || wrapper.firstElementChild;
-      if (!nextHeader) return;
-
       let header = document.querySelector('.jh-header');
-      if (header){
-        header.replaceWith(nextHeader);
-        header = nextHeader;
-      } else {
+
+      if (!header){
+        const html = await fetchPartial(HEADER_URL);
+        if (!html) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = html;
+        const nextHeader = wrapper.querySelector('.jh-header') || wrapper.firstElementChild;
+        if (!nextHeader) return;
+
         const skipLink = document.querySelector('.skip-link');
         if (skipLink && skipLink.parentNode === document.body){
           skipLink.insertAdjacentElement('afterend', nextHeader);
@@ -280,9 +281,9 @@
           document.body.insertBefore(nextHeader, document.body.firstChild);
         }
         header = nextHeader;
+        header.classList.add('jh-header--injected');
       }
 
-      header.classList.add('jh-header--injected');
       header.dataset.jhShared = '1';
       markActiveNav(header);
       wireMobileNav(header);
@@ -421,24 +422,16 @@
 
   async function injectFooter(){
     try{
+      const existing = document.querySelector('footer.site-footer');
+      if (existing){
+        existing.dataset.jhShared = '1';
+        return;
+      }
+
       const html = await fetchPartial(FOOTER_URL);
       if (!html) return;
 
       let target = document.getElementById(FOOTER_TARGET_ID);
-      const existing = document.querySelector('footer.site-footer');
-
-      if (existing){
-        if (existing.parentElement && existing.parentElement.id === FOOTER_TARGET_ID){
-          target = existing.parentElement;
-        } else if (target) {
-          existing.remove();
-        } else {
-          target = document.createElement('div');
-          target.id = FOOTER_TARGET_ID;
-          existing.replaceWith(target);
-        }
-      }
-
       if (!target) target = ensureFooterTarget();
       target.innerHTML = html;
       target.dataset.jhShared = '1';
