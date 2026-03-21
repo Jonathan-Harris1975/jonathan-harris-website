@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 312-page guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. Pages: 312.
+A 312-page guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 312-page guide to AI in maritime shipping — autonomous vessels, route optimi
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in transportation affects safety, reliability, efficiency, and emissi
 - Length: 312 pages
 
 ## Buy
+
 - https://mybook.to/yANzV8
