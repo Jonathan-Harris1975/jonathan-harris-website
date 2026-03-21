@@ -1,186 +1,947 @@
 {
+  "generated_utc": "2026-03-21T13:42:31Z",
   "base_url": "https://jonathan-harris.online",
   "ebook_count": 36,
+  "host_redirect_files": {
+    "books_domain": "_redirects.books-domain",
+    "ebooks_domain": "_redirects.ebooks-domain"
+  },
   "ebooks": [
     {
       "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
-      "buy_route": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
-      "buy_route": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now"
-    },
-    {
-      "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
-      "buy_route": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
-      "buy_route": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
-      "buy_route": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
-      "buy_route": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now"
-    },
-    {
-      "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
-      "buy_route": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now"
-    },
-    {
-      "slug": "ai-in-aviation-transforming-safety-and-sustainability",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
-      "buy_route": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/buy-now"
-    },
-    {
-      "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
-      "buy_route": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
-      "buy_route": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now"
-    },
-    {
-      "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
-      "buy_route": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
-      "buy_route": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
-      "buy_route": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
-      "buy_route": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now"
-    },
-    {
-      "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
-      "buy_route": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/buy-now"
+      "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
+      "canonical": {
+        "path": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
+        "url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
+        "target": "https://mybook.to/Gi93rOF"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
+        "/book/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
+        "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/detail",
+        "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/detail.html",
+        "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
-      "buy_route": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now"
+      "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+      "canonical": {
+        "path": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+        "url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+        "target": "https://mybook.to/PsciMD5"
+      },
+      "topic_page": "/catalogue/agriculture/",
+      "legacy_routes": [
+        "/book/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+        "/book/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+        "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/detail",
+        "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/detail.html",
+        "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "ai-in-aviation-transforming-safety-and-sustainability",
+      "title": "AI in Aviation: Transforming Safety and Sustainability",
+      "canonical": {
+        "path": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
+        "url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/buy-now",
+        "target": "https://mybook.to/13VF"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/ai-in-aviation-transforming-safety-and-sustainability/",
+        "/book/ai-in-aviation-transforming-safety-and-sustainability/buy-now",
+        "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/detail",
+        "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/detail.html",
+        "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-in-aviation-transforming-safety-and-sustainability/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "ai-in-education-reimagining-learning-for-every-student",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-      "buy_route": "/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now"
+      "title": "AI in Education: Reimagining Learning for Every Student",
+      "canonical": {
+        "path": "/ebooks/ai-in-education-reimagining-learning-for-every-student/",
+        "url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
+        "target": "https://mybook.to/Ldhe41"
+      },
+      "topic_page": "/catalogue/education/",
+      "legacy_routes": [
+        "/book/ai-in-education-reimagining-learning-for-every-student/",
+        "/book/ai-in-education-reimagining-learning-for-every-student/buy-now",
+        "/ebooks/ai-in-education-reimagining-learning-for-every-student/detail",
+        "/ebooks/ai-in-education-reimagining-learning-for-every-student/detail.html",
+        "/ebooks/ai-in-education-reimagining-learning-for-every-student/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-in-education-reimagining-learning-for-every-student/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
-      "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-      "buy_route": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now"
+      "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
+      "canonical": {
+        "path": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
+        "url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now",
+        "target": "https://mybook.to/yANzV8"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
+        "/book/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now",
+        "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/detail",
+        "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/detail.html",
+        "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
-      "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "canonical_url": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
-      "buy_route": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-      "buy_route": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now"
-    },
-    {
-      "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-      "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now"
-    },
-    {
-      "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-      "buy_route": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now"
-    },
-    {
-      "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
-      "canonical_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
-      "buy_route": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now"
-    },
-    {
-      "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
-      "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-      "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now"
-    },
-    {
-      "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
-      "buy_route": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now"
-    },
-    {
-      "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
-      "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-      "buy_route": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now"
+      "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
+      "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
+      "canonical": {
+        "path": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
+        "url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now",
+        "target": "https://mybook.to/sntL"
+      },
+      "topic_page": "/catalogue/energy/",
+      "legacy_routes": [
+        "/book/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
+        "/book/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now",
+        "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/detail",
+        "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/detail.html",
+        "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "canonical_url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
-      "buy_route": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now"
+      "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
+      "canonical": {
+        "path": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
+        "url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now",
+        "target": "https://mybook.to/JkJfDp"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
+        "/book/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now",
+        "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/detail",
+        "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/detail.html",
+        "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "title": "Artificial Intelligence and the Law: Case Studies and Future Trends",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now",
+        "target": "https://mybook.to/bWpjeB"
+      },
+      "topic_page": "/catalogue/law/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
+        "/book/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now",
+        "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/detail",
+        "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/detail.html",
+        "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
+        "target": "https://mybook.to/9Wvf"
+      },
+      "topic_page": "/catalogue/cyber-security/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
+        "/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
+        "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/detail",
+        "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/detail.html",
+        "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
+      "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now",
+        "target": "https://mybook.to/94Q3"
+      },
+      "topic_page": "/catalogue/environment/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
+        "/book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now",
+        "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/detail",
+        "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/detail.html",
+        "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+      "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+        "target": "https://mybook.to/8VjT"
+      },
+      "topic_page": "/catalogue/finance/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+        "/book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+        "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/detail",
+        "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/detail.html",
+        "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+        "target": "https://mybook.to/v98RD"
+      },
+      "topic_page": "/catalogue/construction/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-construction-building-a-sustainable-future/",
+        "/book/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+        "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/detail",
+        "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/detail.html",
+        "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
+      "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now",
+        "target": "https://mybook.to/t2Au28"
+      },
+      "topic_page": "/catalogue/industry/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-industry-a-comprehensive-guide/",
+        "/book/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now",
+        "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/detail",
+        "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/detail.html",
+        "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "title": "Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now",
+        "target": "https://mybook.to/zSKnSW"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
+        "/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now",
+        "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/detail",
+        "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/detail.html",
+        "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
+      "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now",
+        "target": "https://mybook.to/3cA8"
+      },
+      "topic_page": "/catalogue/healthcare/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
+        "/book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now",
+        "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/detail",
+        "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/detail.html",
+        "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
-      "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
-      "buy_route": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now"
+      "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now",
+        "target": "https://mybook.to/73M1"
+      },
+      "topic_page": "/catalogue/sports/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
+        "/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now",
+        "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/detail",
+        "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/detail.html",
+        "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
-      "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-      "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
-      "buy_route": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now"
+      "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
+      "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now",
+        "target": "https://mybook.to/SOjUE"
+      },
+      "topic_page": "/catalogue/healthcare/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
+        "/book/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now",
+        "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/detail",
+        "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/detail.html",
+        "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
-      "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
-      "buy_route": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now"
+      "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now",
+        "target": "https://mybook.to/POYR"
+      },
+      "topic_page": "/catalogue/retail/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
+        "/book/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now",
+        "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/detail",
+        "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/detail.html",
+        "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
-      "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
-      "buy_route": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now"
-    },
-    {
-      "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
-      "buy_route": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now"
+      "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now",
+        "target": "https://mybook.to/SOAEb"
+      },
+      "topic_page": "/catalogue/manufacturing/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
+        "/book/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now",
+        "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/detail",
+        "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/detail.html",
+        "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
-      "canonical_url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
-      "buy_route": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/buy-now"
+      "title": "Beyond Earth How AI is Transforming Space Exploration",
+      "canonical": {
+        "path": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
+        "url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/"
+      },
+      "buy": {
+        "path": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/buy-now",
+        "target": "https://mybook.to/iY9m"
+      },
+      "topic_page": "/catalogue/science/",
+      "legacy_routes": [
+        "/book/beyond-earth-how-ai-is-transforming-space-exploration/",
+        "/book/beyond-earth-how-ai-is-transforming-space-exploration/buy-now",
+        "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/detail",
+        "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/detail.html",
+        "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/beyond-earth-how-ai-is-transforming-space-exploration/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
+      "title": "Climate Intelligence: Harnessing AI for a Greener Future",
+      "canonical": {
+        "path": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
+        "url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/"
+      },
+      "buy": {
+        "path": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+        "target": "https://mybook.to/aKj8Fh"
+      },
+      "topic_page": "/catalogue/environment/",
+      "legacy_routes": [
+        "/book/climate-intelligence-harnessing-ai-for-a-greener-future/",
+        "/book/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+        "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/detail",
+        "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/detail.html",
+        "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
+      "title": "Digital Defense: The Role of AI in Modern Warfare",
+      "canonical": {
+        "path": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
+        "url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/"
+      },
+      "buy": {
+        "path": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+        "target": "https://mybook.to/digitaldefense"
+      },
+      "topic_page": "/catalogue/defence/",
+      "legacy_routes": [
+        "/book/digital-defense-the-role-of-ai-in-modern-warfare/",
+        "/book/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+        "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/detail",
+        "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/detail.html",
+        "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/digital-defense-the-role-of-ai-in-modern-warfare/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
+      "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
+      "canonical": {
+        "path": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
+        "url": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/"
+      },
+      "buy": {
+        "path": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now",
+        "target": "https://mybook.to/hrnKOD"
+      },
+      "topic_page": "/catalogue/healthcare/",
+      "legacy_routes": [
+        "/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
+        "/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now",
+        "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/detail",
+        "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/detail.html",
+        "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
-      "canonical_url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
-      "buy_route": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now"
-    },
-    {
-      "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
-      "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-      "buy_route": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now"
+      "title": "From Reporters to Robots: How AI is Reshaping Journalism",
+      "canonical": {
+        "path": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
+        "url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/"
+      },
+      "buy": {
+        "path": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now",
+        "target": "https://mybook.to/DWfAK"
+      },
+      "topic_page": "/catalogue/media/",
+      "legacy_routes": [
+        "/book/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
+        "/book/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now",
+        "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/detail",
+        "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/detail.html",
+        "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     },
     {
       "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
-      "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-      "buy_route": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now"
+      "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
+      "canonical": {
+        "path": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+        "url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/"
+      },
+      "buy": {
+        "path": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+        "target": "https://mybook.to/e7GozY6"
+      },
+      "topic_page": "/catalogue/gaming/",
+      "legacy_routes": [
+        "/book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+        "/book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+        "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/detail",
+        "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/detail.html",
+        "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
+      "canonical": {
+        "path": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
+        "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/"
+      },
+      "buy": {
+        "path": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
+        "target": "https://mybook.to/EcO2DI"
+      },
+      "topic_page": "/catalogue/creativity/",
+      "legacy_routes": [
+        "/book/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
+        "/book/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
+        "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/detail",
+        "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/detail.html",
+        "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
+      "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
+      "canonical": {
+        "path": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
+        "url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/"
+      },
+      "buy": {
+        "path": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now",
+        "target": "https://mybook.to/QEcdy"
+      },
+      "topic_page": "/catalogue/construction/",
+      "legacy_routes": [
+        "/book/smart-buildings-ai-powered-efficiency-and-sustainability/",
+        "/book/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now",
+        "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/detail",
+        "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/detail.html",
+        "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
+      "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
+      "canonical": {
+        "path": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
+        "url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/"
+      },
+      "buy": {
+        "path": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
+        "target": "https://mybook.to/rNRr"
+      },
+      "topic_page": "/catalogue/media/",
+      "legacy_routes": [
+        "/book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
+        "/book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
+        "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/detail",
+        "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/detail.html",
+        "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
+      "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
+      "canonical": {
+        "path": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
+        "url": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/"
+      },
+      "buy": {
+        "path": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now",
+        "target": "https://mybook.to/Io32sC3"
+      },
+      "topic_page": "/catalogue/creativity/",
+      "legacy_routes": [
+        "/book/the-ai-music-revolution-creativity-controversy-and-collaboration/",
+        "/book/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now",
+        "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/detail",
+        "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/detail.html",
+        "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
+      "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
+      "canonical": {
+        "path": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+        "url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/"
+      },
+      "buy": {
+        "path": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+        "target": "https://mybook.to/qFAI"
+      },
+      "topic_page": "/catalogue/history/",
+      "legacy_routes": [
+        "/book/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+        "/book/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+        "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/detail",
+        "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/detail.html",
+        "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
+      "canonical": {
+        "path": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+        "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/"
+      },
+      "buy": {
+        "path": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+        "target": "https://mybook.to/aijobshift"
+      },
+      "topic_page": "/catalogue/future-of-work/",
+      "legacy_routes": [
+        "/book/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+        "/book/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+        "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/detail",
+        "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/detail.html",
+        "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
+      "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
+      "canonical": {
+        "path": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
+        "url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/"
+      },
+      "buy": {
+        "path": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now",
+        "target": "https://mybook.to/YYLW"
+      },
+      "topic_page": "/catalogue/artificial-intelligence/",
+      "legacy_routes": [
+        "/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
+        "/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now",
+        "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/detail",
+        "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/detail.html",
+        "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
+      "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
+      "canonical": {
+        "path": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
+        "url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/"
+      },
+      "buy": {
+        "path": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now",
+        "target": "https://mybook.to/DS4Ag"
+      },
+      "topic_page": "/catalogue/transportation/",
+      "legacy_routes": [
+        "/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
+        "/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now",
+        "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/detail",
+        "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/detail.html",
+        "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
+      "title": "The Dumbening: How AI is Reshaping Our Minds",
+      "canonical": {
+        "path": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
+        "url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/"
+      },
+      "buy": {
+        "path": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/buy-now",
+        "target": "https://mybook.to/YcRiCRp"
+      },
+      "topic_page": "/catalogue/ethics/",
+      "legacy_routes": [
+        "/book/the-dumbening-how-ai-is-reshaping-our-minds/",
+        "/book/the-dumbening-how-ai-is-reshaping-our-minds/buy-now",
+        "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/detail",
+        "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/detail.html",
+        "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-dumbening-how-ai-is-reshaping-our-minds/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
+      "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+      "canonical": {
+        "path": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+        "url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/"
+      },
+      "buy": {
+        "path": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+        "target": "https://mybook.to/3TwcUA"
+      },
+      "topic_page": "/catalogue/government/",
+      "legacy_routes": [
+        "/book/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+        "/book/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+        "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/detail",
+        "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/detail.html",
+        "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+      "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+      "canonical": {
+        "path": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+        "url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/"
+      },
+      "buy": {
+        "path": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+        "target": "https://mybook.to/K7nVJGv"
+      },
+      "topic_page": "/catalogue/ethics/",
+      "legacy_routes": [
+        "/book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+        "/book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+        "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/detail",
+        "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/detail.html",
+        "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now/",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     }
   ]
 }
