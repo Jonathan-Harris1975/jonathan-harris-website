@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance. Pages: 286.
+A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 286-page guide to AI in banking — from fraud detection and personalised serv
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in finance affects fraud losses, compliance exposure, customer trust,
 - Length: 286 pages
 
 ## Buy
+
 - https://mybook.to/8VjT
