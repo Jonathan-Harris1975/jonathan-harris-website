@@ -1,7 +1,7 @@
 {
   "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
   "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-  "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. Pages: 333.",
+  "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. 330-page guide.",
   "topic": "Agriculture",
   "tags": [
     "Agriculture",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
   "image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
   "buy_url": "https://mybook.to/PsciMD5",
-  "pages": 333,
+  "buy_route": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+  "pages": 330,
+  "asin": "B0DMN32J3Y",
+  "datePublished": "2024-11-10",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+  "identifier": "JH-AI-EBOOK-02"
 }
