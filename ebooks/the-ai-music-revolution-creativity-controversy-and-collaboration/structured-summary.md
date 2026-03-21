@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. Pages: 320.
+Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Explores AI's role in music creation, from composition to production, addressing
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -27,7 +27,8 @@ Because AI in creativity affects authorship, originality, workflow, and commerci
 
 - Topic: Creativity
 - Tags: Creativity, Artificial Intelligence, AI Trends
-- Length: 320 pages
+- Length: 295 pages
 
 ## Buy
+
 - https://mybook.to/Io32sC3
