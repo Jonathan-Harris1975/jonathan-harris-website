@@ -1,21 +1,22 @@
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/#faq",
   "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is this book suitable for non-technical readers?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. It is written in plain English, with practical examples rather than technical jargon."
-      }
-    },
     {
       "@type": "Question",
       "name": "What will I learn from this book?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You’ll learn where AI is already being used in manufacturing, the workflows behind predictive maintenance and automation, and the trade-offs worth checking before anyone signs off on the hype."
+        "text": "This book explains where AI is already being used in manufacturing, the practical workflows behind it, and the trade-offs worth checking before anyone signs off on the sales pitch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is this book for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords."
       }
     },
     {
@@ -23,15 +24,15 @@
       "name": "How long is it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "369 pages."
+        "text": "It’s 369 pages (varies by edition)."
       }
     },
     {
       "@type": "Question",
-      "name": "Where can I buy it?",
+      "name": "What format is it available in?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the buy link on the page to purchase the eBook via Amazon."
+        "text": "Available as an eBook via Amazon using the buy link on this page."
       }
     }
   ]
