@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. Pages: 338.
+Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence optimizes smart grids, enhancing energy efficiency, pred
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in energy affects grid resilience, efficiency, emissions, and cost. G
 - Length: 338 pages
 
 ## Buy
+
 - https://mybook.to/sntL
