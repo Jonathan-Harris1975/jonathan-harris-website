@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. Pages: 334.
+Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence transforms journalism with automated reporting, fact-che
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in media affects accuracy, trust, editorial workflow, and audience re
 - Length: 334 pages
 
 ## Buy
+
 - https://mybook.to/DWfAK

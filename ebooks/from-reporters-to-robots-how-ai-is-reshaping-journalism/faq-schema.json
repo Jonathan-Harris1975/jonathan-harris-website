@@ -5,42 +5,34 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is this book about?",
+      "name": "What will I learn from this book?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "“From Reporters to Robots: How AI is Reshaping Journalism” is a practical, plain-English guide to how AI is changing this field, what works in the real world, and what to watch out for."
+        "text": "Where AI is already being used in media today — and where the claims are running ahead of reality."
       }
     },
     {
       "@type": "Question",
-      "name": "Who is it for?",
+      "name": "Who is this book for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It’s written for professionals, creators, founders, and curious readers who want useful insight without wading through academic theory."
+        "text": "This media title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
       }
     },
     {
       "@type": "Question",
-      "name": "Do I need technical skills?",
+      "name": "How long is it?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "No. It focuses on clear concepts, examples, and decision-making rather than heavy maths or code."
+        "text": "It’s 334 pages (varies by edition)."
       }
     },
     {
       "@type": "Question",
-      "name": "What will I get from it?",
+      "name": "What format is it available in?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You’ll come away with a better grasp of the key AI use-cases, risks, and opportunities — plus how to think about adoption sensibly."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Where can I buy it?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can buy the ebook via the Amazon link on this page."
+        "text": "Available as an eBook via Amazon using the buy link on this page."
       }
     }
   ]
