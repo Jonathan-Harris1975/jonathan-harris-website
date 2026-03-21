@@ -216,7 +216,7 @@ details.more[open] summary:before{transform:rotate(90deg);}
   -webkit-backdrop-filter: blur(8px);
   z-index: 9999;
 }
-.page-loader.is-active{
+html.js-enabled .page-loader.is-active{
   display: flex;
 }
 .page-loader.hide{
@@ -1201,8 +1201,9 @@ body.jh-page-404 main{
   border: 1px solid rgba(79,70,229,0.35);
 }
 @media (max-width: 768px) {
-  .jh-hamburger { display: block; }
-  .jh-topnav { display: none !important; }
+  html.js-enabled .jh-hamburger { display: block; }
+  html.js-enabled .jh-topnav { display: none !important; }
+  html:not(.js-enabled) .jh-topnav { display: flex !important; flex-wrap: wrap; gap: 8px; width: 100%; padding-top: 8px; }
   .jh-header__inner { flex-wrap: wrap; }
 }
 
