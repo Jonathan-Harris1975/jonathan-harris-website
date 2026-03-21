@@ -1,7 +1,7 @@
 {
   "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
   "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
-  "description": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. Pages: 333.",
+  "description": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. 334-page guide.",
   "topic": "Media",
   "tags": [
     "Media",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
   "image": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
   "buy_url": "https://mybook.to/rNRr",
-  "pages": 333,
+  "buy_route": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
+  "pages": 334,
+  "asin": "B0DY12Z1SP",
+  "datePublished": "2025-02-20",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
+  "identifier": "JH-AI-EBOOK-28"
 }
