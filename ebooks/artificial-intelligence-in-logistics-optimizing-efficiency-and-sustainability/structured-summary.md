@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. Pages: 339.
+Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence streamlines logistics with route optimization, demand fo
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in transportation affects safety, reliability, efficiency, and emissi
 - Length: 339 pages
 
 ## Buy
+
 - https://mybook.to/zSKnSW
