@@ -1,21 +1,22 @@
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
+  "@id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#faq",
   "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "Is this book suitable for non-technical readers?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. It is written in plain English, with practical examples rather than technical jargon."
-      }
-    },
     {
       "@type": "Question",
       "name": "What will I learn from this book?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "You will get a grounded understanding of autonomous systems, predictive intelligence, cybersecurity, oversight, and the ethical issues that come with AI in warfare."
+        "text": "Where AI is already being used in defence today — and where the claims are running ahead of reality."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who is this book for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This defence title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
       }
     },
     {
@@ -28,12 +29,11 @@
     },
     {
       "@type": "Question",
-      "name": "Where can I buy it?",
+      "name": "What format is it available in?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Use the buy link on the page to purchase the eBook via Amazon."
+        "text": "Available as an eBook via Amazon using the buy link on this page."
       }
     }
-  ],
-  "@id": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/#faq"
+  ]
 }

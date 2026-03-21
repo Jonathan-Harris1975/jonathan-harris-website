@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. Pages: 296.
+Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence transforms warfare with autonomous drones, predictive in
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in defence affects deterrence, escalation risk, accountability, and c
 - Length: 296 pages
 
 ## Buy
+
 - https://mybook.to/digitaldefense
