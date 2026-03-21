@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. Pages: 254.
+Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence modernizes railways with predictive maintenance, autonom
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in transportation affects safety, reliability, efficiency, and emissi
 - Length: 254 pages
 
 ## Buy
+
 - https://mybook.to/JkJfDp
