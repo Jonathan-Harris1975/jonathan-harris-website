@@ -1,7 +1,7 @@
 {
   "title": "The Dumbening: How AI is Reshaping Our Minds",
   "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
-  "description": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. Pages: 277.",
+  "description": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. 277-page guide.",
   "topic": "Ethics",
   "tags": [
     "Ethics",
@@ -11,9 +11,13 @@
   "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
   "image": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
   "buy_url": "https://mybook.to/YcRiCRp",
+  "buy_route": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/buy-now",
   "pages": 277,
+  "asin": "B0DMMVN17Z",
+  "datePublished": "2024-11-10",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/"
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
+  "identifier": "JH-AI-EBOOK-34"
 }
