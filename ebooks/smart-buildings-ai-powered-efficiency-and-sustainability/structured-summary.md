@@ -2,7 +2,7 @@
 
 ## Summary
 
-A 345-page guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. Pages: 345.
+A 345-page guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ A 345-page guide to AI in smart buildings — automated energy management, predi
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in construction affects project risk, site safety, delivery costs, an
 - Length: 345 pages
 
 ## Buy
+
 - https://mybook.to/QEcdy
