@@ -2,7 +2,7 @@
 
 ## Summary
 
-Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. Pages: 344.
+Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Chronicles AI's evolution in gaming, from simple state machines to advanced mach
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in gaming affects game design, player experience, monetisation, and f
 - Length: 344 pages
 
 ## Buy
+
 - https://mybook.to/e7GozY6
