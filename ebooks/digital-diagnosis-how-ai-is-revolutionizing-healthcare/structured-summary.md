@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. Pages: 348.
+Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.
 
 ## What this book covers
 
@@ -10,7 +10,7 @@ Artificial intelligence transforms healthcare with diagnostic tools, predictive 
 
 ## Who this book is for
 
-Readers who want practical, plain-English AI insight with real-world examples — without the buzzwords.
+Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
 
 ## What you’ll learn
 
@@ -30,4 +30,5 @@ Because AI in healthcare affects patient outcomes, safety, workload, and access 
 - Length: 348 pages
 
 ## Buy
+
 - https://mybook.to/hrnKOD
