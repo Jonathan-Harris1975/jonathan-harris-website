@@ -49,6 +49,17 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 4. `python3 scripts/build_book_derivatives.py --check`
 5. `python3 scripts/check_buy_now.py`
 6. `python3 scripts/check_crawlers.py`
-7. `python3 scripts/check_identifiers.py`
-8. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
-9. `python3 scripts/rebuild_ebook_subsystem.py <workbook.xlsx>`
+7. `python3 scripts/check_crawlers.py --live`
+8. `python3 scripts/check_crawlers.py --live --strict-live`
+9. `python3 scripts/check_identifiers.py`
+10. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
+11. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
+12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
+13. `python3 scripts/rebuild_ebook_subsystem.py <workbook.xlsx>`
+
+## Live crawler validation modes
+- `python3 scripts/check_crawlers.py` keeps the existing pre-deploy repo checks only.
+- `python3 scripts/check_crawlers.py --live` adds live GET validation against the published crawler URLs but does not fail the command when the deployment is drifting.
+- `python3 scripts/check_crawlers.py --live --strict-live` is the hard gate for post-deploy validation.
+- `python3 scripts/validate_release.py --post-deploy-live` runs the normal release checks first, then runs the live crawler checks as a second stage.
+- Add `--skip-live-content` when you only want reachability and do not want exact content matching.
