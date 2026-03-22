@@ -1,0 +1,22 @@
+# Robots rules (generated source snapshot)
+# Canonical publication target: https://assets.jonathan-harris.online/robots.txt
+# Canonical sitemap target: https://assets.jonathan-harris.online/site-map.xml
+
+User-agent: *
+Allow: /
+
+# Explicit AI crawler allowances
+User-agent: GPTBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: CCBot
+Allow: /
+User-agent: Applebot
+Allow: /
+
+# Sitemaps
+Sitemap: https://jonathan-harris.online/site-map.xml
+Sitemap: https://assets.jonathan-harris.online/site-map.xml
