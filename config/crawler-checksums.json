@@ -1,17 +1,17 @@
 {
-  "generated_utc": "2026-03-22T19:22:40Z",
+  "generated_utc": "2026-03-22T20:15:24Z",
   "files": {
     "robots.txt": {
       "url": "https://assets.jonathan-harris.online/robots.txt",
-      "sha256": "f1a6f0d53ed9101d42dff07f0188dad8ed3ac9a74374f9321c89658e4977d57d"
+      "sha256": "04ec7d1d574490f4a41a47ec10426e0a8882ee1204463b3306f97888ddc5f7ec"
     },
-    "sitemap.xml": {
+    "site-map.xml": {
       "url": "https://assets.jonathan-harris.online/site-map.xml",
       "sha256": "61a680503277d878e6a90afe51f0267e731daf2f5a4da4e8ad26ae9ef42150dd"
     },
     "llms.txt": {
-      "url": "https://assets.jonathan-harris.online/llms.txt",
-      "sha256": "4e31ae7f2e57b4e96af48848e9746ddbf1c15eb170cd9baff6806af12770d8d8"
+      "url": "https://jonathan-harris.online/llms.txt",
+      "sha256": "139957884c8d97b70059b43a7cb7a9a7b0ce9706016e0db0227fc5bb7aa5320c"
     }
   }
 }
