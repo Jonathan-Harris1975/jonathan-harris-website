@@ -24,6 +24,7 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `_redirects` is the primary redirect source for the deployed static site.
 - `_redirects.txt` is a generated mirror of `_redirects`; refresh it with `python3 scripts/sync_redirects.py` rather than editing both files by hand.
 - `robots.txt` and `site-map.xml` remain externally hosted in production; `llms.txt` is now published from the repo root, while generated source snapshots stay under `config/crawler-snapshots/` for release verification.
+- The sitemap snapshot is generated from the full public HTML route registry, not just canonical ebook pages.
 - Those crawler snapshots are rebuilt by the derivative pipeline and verified before release; the main domain redirects point the live host at the externally published copies.
 
 
@@ -36,6 +37,7 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Canonical `ebooks/<slug>/index.html` pages are generated and synchronised from the generated master record with `python3 scripts/fix_book_head_metadata.py`.
 - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
 - Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `config/crawler-snapshots/*`, and per-book sidecars as generated outputs, not hand-edited source files.
+- `blog/posts.json` is the committed weekly-archive manifest; the weekly blog page should enhance from that local artefact rather than from remote fallbacks.
 
 ## Route policy
 - `/ebooks/<slug>/` is the sole canonical indexable book route.
