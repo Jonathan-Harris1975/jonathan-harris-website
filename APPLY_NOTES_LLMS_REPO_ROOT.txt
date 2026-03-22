@@ -1,0 +1,11 @@
+Updated files only for the llms.txt switch.
+
+What this patch does:
+- serves /llms.txt from the repo root
+- keeps /robots.txt external
+- keeps /site-map.xml and /sitemap.xml external
+- removes the main-site /llms.txt redirect
+- points alternate-domain llms.txt requests at https://jonathan-harris.online/llms.txt
+- updates CI/release checks so llms.txt is expected at the repo root
+
+Apply by replacing the matching files in the repo with these versions.

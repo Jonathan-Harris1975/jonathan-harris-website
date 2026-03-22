@@ -1,4 +1,5 @@
 # Jonathan Harris ebook library
+# Canonical publication target: https://jonathan-harris.online/llms.txt
 # Canonical ebook routes only
 Homepage: https://jonathan-harris.online/ebooks/
 

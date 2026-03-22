@@ -26,7 +26,7 @@ https://www.books.jonathan-harris.online/*  https://books.jonathan-harris.online
 # Crawler files stay externally hosted
 /robots.txt     https://assets.jonathan-harris.online/robots.txt   301
 /sitemap.xml    https://assets.jonathan-harris.online/site-map.xml  301
-/llms.txt       https://assets.jonathan-harris.online/llms.txt     301
+/site-map.xml   https://assets.jonathan-harris.online/site-map.xml  301
 
 # Catch-all
 /*  https://jonathan-harris.online/:splat  301

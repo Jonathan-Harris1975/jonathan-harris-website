@@ -130,10 +130,9 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /author    /bio/   301
 
 
-# SEO files are published externally from repo-controlled generated snapshots
+# SEO files: robots.txt and site-map.xml stay external; llms.txt is served from the repo root
 /robots.txt    https://assets.jonathan-harris.online/robots.txt   301
 /sitemap.xml   https://assets.jonathan-harris.online/site-map.xml  301
-/llms.txt      https://assets.jonathan-harris.online/llms.txt  301
 /robot.txt    https://assets.jonathan-harris.online/robots.txt   301
 /Sitemap.xml  https://assets.jonathan-harris.online/site-map.xml  301
 /site-map.xml https://assets.jonathan-harris.online/site-map.xml 301
