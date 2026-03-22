@@ -1,0 +1,17 @@
+{
+  "generated_utc": "2026-03-21T22:25:22Z",
+  "files": {
+    "robots.txt": {
+      "url": "https://assets.jonathan-harris.online/robots.txt",
+      "sha256": "f1a6f0d53ed9101d42dff07f0188dad8ed3ac9a74374f9321c89658e4977d57d"
+    },
+    "sitemap.xml": {
+      "url": "https://assets.jonathan-harris.online/site-map.xml",
+      "sha256": "61a680503277d878e6a90afe51f0267e731daf2f5a4da4e8ad26ae9ef42150dd"
+    },
+    "llms.txt": {
+      "url": "https://assets.jonathan-harris.online/llms.txt",
+      "sha256": "4e31ae7f2e57b4e96af48848e9746ddbf1c15eb170cd9baff6806af12770d8d8"
+    }
+  }
+}
