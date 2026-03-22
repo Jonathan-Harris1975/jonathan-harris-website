@@ -1,4 +1,4 @@
-# Beyond Earth How AI is Transforming Space Exploration
+# Beyond Earth: How AI is Transforming Space Exploration
 
 ## Summary
 
