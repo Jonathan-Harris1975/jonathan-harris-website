@@ -461,6 +461,77 @@ def parse_workbook(workbook_path: Path) -> Tuple[List[str], Dict[str, Dict[str, 
     return order, records, master_sheet
 
 
+def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
+    wb = openpyxl.load_workbook(workbook_path, data_only=True)
+    if "Pages" not in wb.sheetnames:
+        return ["Workbook is missing the Pages sheet."]
+
+    ws = wb["Pages"]
+    header_row = 5
+    headers = {clean_paragraph(ws.cell(header_row, col).value).lower(): col for col in range(1, ws.max_column + 1) if clean_paragraph(ws.cell(header_row, col).value)}
+    required_headers = ["relative file path", "public url path", "full url", "url type", "buy now url", "redirect url", "asin", "amazon ebook page count", "publication date", "cover art url"]
+    missing_headers = [header for header in required_headers if header not in headers]
+    if missing_headers:
+        return [f"Pages sheet is missing required columns: {', '.join(missing_headers)}"]
+
+    base_domain = clean_paragraph(ws["B1"].value)
+    errors: List[str] = []
+    malformed_paths: List[str] = []
+    missing_full_url: List[str] = []
+    mismatched_full_url: List[str] = []
+    missing_ebook_metadata: List[str] = []
+
+    for row_idx in range(header_row + 1, ws.max_row + 1):
+        relative_path = clean_paragraph(ws.cell(row_idx, headers["relative file path"]).value)
+        if not relative_path:
+            continue
+
+        public_path = clean_paragraph(ws.cell(row_idx, headers["public url path"]).value)
+        full_url = clean_paragraph(ws.cell(row_idx, headers["full url"]).value)
+        url_type = clean_paragraph(ws.cell(row_idx, headers["url type"]).value).lower()
+        buy_now_url = clean_paragraph(ws.cell(row_idx, headers["buy now url"]).value)
+        redirect_url = clean_paragraph(ws.cell(row_idx, headers["redirect url"]).value)
+        asin = clean_paragraph(ws.cell(row_idx, headers["asin"]).value)
+        page_count = ws.cell(row_idx, headers["amazon ebook page count"]).value
+        publication_date = ws.cell(row_idx, headers["publication date"]).value
+        cover_art_url = clean_paragraph(ws.cell(row_idx, headers["cover art url"]).value)
+
+        if public_path:
+            path_without_leading_slash = public_path[1:] if public_path.startswith("/") else public_path
+            if "//" in path_without_leading_slash:
+                malformed_paths.append(relative_path)
+            if not public_path.startswith("/"):
+                malformed_paths.append(relative_path)
+        else:
+            malformed_paths.append(relative_path)
+
+        if public_path:
+            expected_full_url = f"{base_domain}{public_path}" if base_domain else ""
+            if not full_url:
+                missing_full_url.append(relative_path)
+            elif expected_full_url and full_url != expected_full_url:
+                mismatched_full_url.append(relative_path)
+
+        is_canonical_ebook_row = url_type == "canonical ebook route"
+        if is_canonical_ebook_row:
+            if not all([buy_now_url, redirect_url, asin, page_count, publication_date, cover_art_url]):
+                missing_ebook_metadata.append(relative_path)
+
+    if malformed_paths:
+        sample = ", ".join(malformed_paths[:5])
+        errors.append(f"Workbook Pages sheet has {len(malformed_paths)} malformed public URL path value(s) with double-slash or missing leading slash drift. Sample rows: {sample}")
+    if missing_full_url:
+        sample = ", ".join(missing_full_url[:5])
+        errors.append(f"Workbook Pages sheet has {len(missing_full_url)} row(s) with missing cached Full URL values. Sample rows: {sample}")
+    if mismatched_full_url:
+        sample = ", ".join(mismatched_full_url[:5])
+        errors.append(f"Workbook Pages sheet has {len(mismatched_full_url)} row(s) where Full URL does not match Base domain + Public URL path. Sample rows: {sample}")
+    if missing_ebook_metadata:
+        sample = ", ".join(missing_ebook_metadata[:5])
+        errors.append(f"Workbook Pages sheet has {len(missing_ebook_metadata)} canonical ebook row(s) missing cached metadata lookup values. Sample rows: {sample}")
+    return errors
+
+
 
 def topic_intro(topic: str) -> str:
     topic_lc = topic.lower()
@@ -1932,6 +2003,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Static blog post missing for slug {slug}.")
 
     if workbook_path and workbook_path.exists():
+        errors.extend(validate_pages_sheet_operational_view(workbook_path))
         order, workbook_map, workbook_content = parse_workbook(workbook_path)
         if order != slugs:
             errors.append("Workbook row order does not match the master record order.")
