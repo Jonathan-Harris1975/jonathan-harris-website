@@ -2,11 +2,11 @@
 
 ## Summary
 
-A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.
+A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.
 
 ## What this book covers
 
-A 286-page guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.
+A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.
 
 ## Who this book is for
 
