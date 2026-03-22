@@ -5,7 +5,7 @@
   "external_crawler_files": {
     "robots": "https://assets.jonathan-harris.online/robots.txt",
     "sitemap": "https://assets.jonathan-harris.online/site-map.xml",
-    "llms": "https://assets.jonathan-harris.online/llms.txt"
+    "llms": "https://jonathan-harris.online/llms.txt"
   },
   "host_redirect_files": {
     "books_domain": "_redirects.books-domain",
