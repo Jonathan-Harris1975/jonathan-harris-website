@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
+import sys
 
-from check_crawlers import print_live_summary, run_live_checks
-from ebook_pipeline import run_validate_command
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+import argparse
+
+from scripts.check_crawlers import print_live_summary, run_live_checks
+from scripts.ebook_pipeline import run_validate_command
 
 
 def main() -> int:

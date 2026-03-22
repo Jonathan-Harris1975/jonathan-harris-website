@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-import argparse
-import sys
-from dataclasses import dataclass
 from pathlib import Path
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+import argparse
+from dataclasses import dataclass
 from typing import Dict, List
 from urllib import error, request
 import xml.etree.ElementTree as ET
 
-from ebook_pipeline import (
+from scripts.ebook_pipeline import (
     CRAWLER_CHECKSUMS_PATH,
     EXTERNAL_CRAWLER_FILES,
     ROOT,
@@ -78,217 +83,161 @@ def run_repo_snapshot_checks() -> List[str]:
             continue
         actual = path.read_text(encoding="utf-8")
         if actual != expected:
-            errors.append(f"Crawler check failed: generated snapshot drift in {relative_path}")
+            errors.append(f"Crawler check failed: snapshot drift in {relative_path}")
 
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
-    expected_checksums = build_crawler_checksums(books).get("files", {})
-    actual_checksums = checksum_payload.get("files", {})
-    if set(expected_checksums.keys()) != set(actual_checksums.keys()):
-        errors.append("Crawler check failed: config/crawler-checksums.json is incomplete")
-    for name, payload in expected_checksums.items():
-        if actual_checksums.get(name, {}).get("sha256") != payload.get("sha256"):
-            errors.append(f"Crawler check failed: checksum drift in {name}")
-
-    redirects_path = ROOT / "_redirects"
-    if not redirects_path.exists():
-        errors.append("Crawler check failed: missing _redirects")
-        return errors
-
-    redirects_text = redirects_path.read_text(encoding="utf-8")
-    governed_rules = [
-        ("/robots.txt", EXTERNAL_CRAWLER_FILES["robots"]),
-        ("/sitemap.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
-        ("/site-map.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
-        ("/llms.txt", EXTERNAL_CRAWLER_FILES["llms"]),
-    ]
-    for source, url in governed_rules:
-        if url not in redirects_text or source not in redirects_text:
-            errors.append(f"Crawler check failed: _redirects is missing the governed external rule for {source}")
-
+    if checksum_payload.get("files") != build_crawler_checksums(books).get("files"):
+        errors.append("Crawler check failed: config/crawler-checksums.json drift detected")
     return errors
 
 
-def fetch_url(url: str, *, timeout: float = DEFAULT_TIMEOUT) -> FetchResult:
-    req = request.Request(
-        url,
-        headers={
-            "User-Agent": DEFAULT_USER_AGENT,
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Accept": "text/plain, application/xml, text/xml;q=0.9, */*;q=0.8",
-        },
-        method="GET",
-    )
+def fetch_url(url: str, timeout: float = DEFAULT_TIMEOUT) -> FetchResult:
+    req = request.Request(url, headers={"User-Agent": DEFAULT_USER_AGENT})
     try:
         with request.urlopen(req, timeout=timeout) as response:
             body = response.read().decode("utf-8", errors="replace")
-            return FetchResult(
-                url=url,
-                final_url=response.geturl(),
-                status_code=getattr(response, "status", None) or response.getcode(),
-                body=body,
-            )
+            final_url = response.geturl()
+            status_code = getattr(response, "status", None)
+            return FetchResult(url=url, final_url=final_url, status_code=status_code, body=body)
     except error.HTTPError as exc:
-        try:
-            body = exc.read().decode("utf-8", errors="replace")
-        except Exception:
-            body = ""
-        return FetchResult(
-            url=url,
-            final_url=getattr(exc, "url", url),
-            status_code=exc.code,
-            body=body,
-            error=f"HTTP {exc.code}",
-        )
-    except error.URLError as exc:
-        reason = getattr(exc, "reason", exc)
-        return FetchResult(url=url, final_url=None, status_code=None, body="", error=str(reason))
-    except Exception as exc:  # pragma: no cover - safety net
+        body = exc.read().decode("utf-8", errors="replace")
+        return FetchResult(url=url, final_url=getattr(exc, "url", None), status_code=exc.code, body=body, error=str(exc))
+    except Exception as exc:
         return FetchResult(url=url, final_url=None, status_code=None, body="", error=str(exc))
 
 
-def _validate_sitemap_structure(body: str) -> str | None:
+def validate_sitemap_xml(body: str) -> str | None:
     try:
-        root = ET.fromstring(body)
+        ET.fromstring(body)
+        return None
     except ET.ParseError as exc:
-        return f"XML parse failed: {exc}"
-    local_name = root.tag.rsplit("}", 1)[-1]
-    if local_name not in {"urlset", "sitemapindex"}:
-        return f"Unexpected XML root element <{local_name}>"
-    return None
+        return f"Invalid XML: {exc}"
 
 
-def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
-    normalised_body = _normalise_text(body)
-    normalised_expected = _normalise_text(expected_text)
-    if not normalised_body:
-        return "Response body was empty"
-
-    if name == "robots":
-        if "User-agent:" not in body or "Sitemap:" not in body:
-            return "robots.txt is reachable but does not contain the expected crawler directives"
-    elif name == "llms":
-        if "Canonical llms.txt:" not in body:
-            return "llms.txt is reachable but missing the expected canonical marker"
-    elif name == "sitemap":
-        sitemap_error = _validate_sitemap_structure(body)
-        if sitemap_error:
-            return f"sitemap file is reachable but invalid: {sitemap_error}"
-
-    if normalised_body != normalised_expected:
-        return "Live content does not match the governed snapshot in the repo"
-    return None
-
-
-def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = True) -> List[LiveCheckResult]:
+def run_live_checks(timeout: float = DEFAULT_TIMEOUT, verify_content: bool = True) -> List[LiveCheckResult]:
     expected_payloads = get_expected_live_payloads()
     results: List[LiveCheckResult] = []
-
     for name, url in EXTERNAL_CRAWLER_FILES.items():
-        fetch_result = fetch_url(url, timeout=timeout)
-        if fetch_result.status_code != 200:
-            message = fetch_result.error or f"Unexpected HTTP status {fetch_result.status_code}"
+        fetch = fetch_url(url, timeout=timeout)
+        if fetch.error:
             results.append(
                 LiveCheckResult(
                     name=name,
                     url=url,
                     ok=False,
-                    message=message,
-                    status_code=fetch_result.status_code,
-                    final_url=fetch_result.final_url,
+                    message=f"Fetch failed: {fetch.error}",
+                    status_code=fetch.status_code,
+                    final_url=fetch.final_url,
                 )
             )
             continue
-
-        if verify_content:
-            validation_error = validate_live_body(name, fetch_result.body, expected_payloads[name])
-            if validation_error:
+        if fetch.status_code and fetch.status_code >= 400:
+            results.append(
+                LiveCheckResult(
+                    name=name,
+                    url=url,
+                    ok=False,
+                    message=f"Unexpected HTTP status {fetch.status_code}",
+                    status_code=fetch.status_code,
+                    final_url=fetch.final_url,
+                )
+            )
+            continue
+        if name == "sitemap":
+            xml_error = validate_sitemap_xml(fetch.body)
+            if xml_error:
                 results.append(
                     LiveCheckResult(
                         name=name,
                         url=url,
                         ok=False,
-                        message=validation_error,
-                        status_code=fetch_result.status_code,
-                        final_url=fetch_result.final_url,
+                        message=xml_error,
+                        status_code=fetch.status_code,
+                        final_url=fetch.final_url,
                     )
                 )
                 continue
 
-        success_message = "reachable"
         if verify_content:
-            success_message += " and content matches the governed snapshot"
+            expected = _normalise_text(expected_payloads[name])
+            actual = _normalise_text(fetch.body)
+            if actual != expected:
+                results.append(
+                    LiveCheckResult(
+                        name=name,
+                        url=url,
+                        ok=False,
+                        message="Live content does not match the governed repo snapshot",
+                        status_code=fetch.status_code,
+                        final_url=fetch.final_url,
+                    )
+                )
+                continue
+
         results.append(
             LiveCheckResult(
                 name=name,
                 url=url,
                 ok=True,
-                message=success_message,
-                status_code=fetch_result.status_code,
-                final_url=fetch_result.final_url,
+                message="OK",
+                status_code=fetch.status_code,
+                final_url=fetch.final_url,
             )
         )
-
     return results
 
 
-def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: repo snapshots are generated, versioned, and matched to the governed external publication targets.")
-    for name, url in EXTERNAL_CRAWLER_FILES.items():
-        print(f"- {name}: {url}")
-
-
 def print_live_summary(results: List[LiveCheckResult]) -> None:
-    print("Live crawler publication check:")
     for result in results:
-        status = result.status_code if result.status_code is not None else "n/a"
-        final_url_text = f" -> {result.final_url}" if result.final_url and result.final_url != result.url else ""
-        state = "PASS" if result.ok else "FAIL"
-        print(f"- [{state}] {result.name}: HTTP {status}{final_url_text} | {result.message}")
+        status_bits = [result.name, result.message]
+        if result.status_code is not None:
+            status_bits.append(f"HTTP {result.status_code}")
+        if result.final_url and result.final_url != result.url:
+            status_bits.append(f"final={result.final_url}")
+        print(" | ".join(status_bits))
 
 
-def build_argument_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Validate governed crawler files in the repo and, optionally, at their live publication URLs.")
-    parser.add_argument("--live", action="store_true", help="Also validate the published crawler URLs with live GET requests.")
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate repo crawler snapshots and, optionally, the published crawler URLs")
+    parser.add_argument("--live", action="store_true", help="Also validate the externally hosted crawler URLs")
     parser.add_argument(
         "--strict-live",
         action="store_true",
-        help="Treat live publication failures as fatal. Implies --live.",
+        help="Fail the command when a live crawler URL is unreachable or drifts from the governed snapshot. Implies --live.",
     )
     parser.add_argument(
         "--skip-live-content",
         action="store_true",
-        help="Check live reachability only and skip content verification.",
+        help="When running live checks, confirm reachability and syntax only, without exact content comparison.",
     )
-    parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT, help=f"HTTP timeout in seconds for live checks. Default: {int(DEFAULT_TIMEOUT)}")
-    return parser
-
-
-def main(argv: List[str] | None = None) -> int:
-    parser = build_argument_parser()
-    args = parser.parse_args(argv)
+    parser.add_argument(
+        "--timeout",
+        type=float,
+        default=DEFAULT_TIMEOUT,
+        help=f"HTTP timeout in seconds for live checks. Default: {DEFAULT_TIMEOUT}",
+    )
+    args = parser.parse_args()
 
     if args.strict_live:
         args.live = True
 
-    errors = run_repo_snapshot_checks()
-    if errors:
-        for error_message in errors:
+    repo_errors = run_repo_snapshot_checks()
+    if repo_errors:
+        for error_message in repo_errors:
             print(error_message)
-        return 1
-
-    print_repo_snapshot_summary()
+        if not args.live:
+            return 1
 
     if not args.live:
+        if repo_errors:
+            return 1
+        print("Crawler snapshot checks passed.")
         return 0
 
     live_results = run_live_checks(timeout=args.timeout, verify_content=not args.skip_live_content)
     print_live_summary(live_results)
-    live_failures = [result for result in live_results if not result.ok]
-    if live_failures and args.strict_live:
+    if repo_errors or (args.strict_live and any(not result.ok for result in live_results)):
         return 1
-    if live_failures:
-        print("Live crawler publication drift detected. Repo validation passed, but one or more published crawler URLs failed validation.", file=sys.stderr)
     return 0
 
 

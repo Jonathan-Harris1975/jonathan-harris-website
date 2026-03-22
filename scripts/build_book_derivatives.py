@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
+from pathlib import Path
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 import argparse
-from ebook_pipeline import run_build_derivatives_command
+from scripts.ebook_pipeline import run_build_derivatives_command
 
 
 def main() -> int:
