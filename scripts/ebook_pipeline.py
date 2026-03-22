@@ -119,6 +119,24 @@ def infer_build_timestamp() -> str:
     return utc_now()
 
 
+def normalise_lastmod(value: Any) -> str:
+    cleaned = clean_paragraph(value)
+    if not cleaned:
+        return dt.date.today().isoformat()
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", cleaned):
+        return cleaned
+    try:
+        parsed = dt.datetime.fromisoformat(cleaned.replace("Z", "+00:00"))
+    except ValueError:
+        match = re.search(r"(\d{4}-\d{2}-\d{2})", cleaned)
+        return match.group(1) if match else dt.date.today().isoformat()
+    return parsed.date().isoformat()
+
+
+def file_lastmod(path: Path) -> str:
+    return dt.datetime.fromtimestamp(path.stat().st_mtime, tz=dt.timezone.utc).date().isoformat()
+
+
 def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
@@ -1101,6 +1119,8 @@ def render_topic_hub_links(books: List[Dict[str, Any]]) -> str:
 def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
     header = render_header()
     footer = render_footer()
+    canonical = f"{SITE_URL}/ebooks/"
+    description = f"Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption."
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -1120,8 +1140,9 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>AI eBooks Catalogue | Jonathan Harris</title>
-<meta content="Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption." name="description"/>
-<meta content="Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption." name="ai:summary"/>
+<meta content="{description}" name="description"/>
+<meta content="index,follow" name="robots"/>
+<meta content="{description}" name="ai:summary"/>
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
@@ -1130,18 +1151,26 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
+<meta content="website" property="og:type"/>
 <meta content="Jonathan Harris eBooks" property="og:site_name"/>
+<meta content="{canonical}" property="og:url"/>
+<meta content="AI eBooks Catalogue | Jonathan Harris" property="og:title"/>
+<meta content="{description}" property="og:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="Jonathan Harris site logo" property="og:image:alt"/>
 <meta content="1200" property="og:image:width"/>
 <meta content="630" property="og:image:height"/>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="AI eBooks Catalogue | Jonathan Harris" name="twitter:title"/>
+<meta content="{description}" name="twitter:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
 <meta content="AI ebook catalogue and practical AI guide" name="ai-role"/>
 <meta content="Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight" name="ai-target-audience"/>
 <meta content="Plain-English, practical, sceptical, no-hype" name="ai-style"/>
 <meta content="search=y, train-ai=y" name="content-usage"/>
-<link href="{SITE_URL}/ebooks/" rel="canonical"/>
+<link href="{canonical}" rel="canonical"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
@@ -1161,14 +1190,14 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>AI eBooks Catalogue</h1>
-    <p>Browse all {len(books)} titles from the ebook library. Every book now uses the same governed detail-page template and a direct path back into the wider catalogue.</p>
+    <p>Browse all {len(books)} titles from the ebook library. Each book page keeps the summary, FAQ, and Amazon route in one clear place.</p>
   </div>
 </header>
 <main class="main" id="main" role="main" aria-label="eBook catalogue">
   <div class="wrap">
     <section class="card ebook-index-intro">
       <h2>Find the right title without the faff</h2>
-      <p>Search the catalogue, filter by topic, and jump straight into a book page that keeps the full description, FAQ, and Amazon route on one canonical URL.</p>
+      <p>Search the catalogue, filter by topic, and jump straight into a book page with the full description, FAQ, and buy link in one place.</p>
       <div class="jh-topic-links">
         {render_topic_hub_links(books)}
       </div>
@@ -1218,6 +1247,8 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     footer = render_footer()
     cards = "\n".join(render_catalogue_card(book) for book in books)
     topic_slug = slugify(topic)
+    canonical = f"{SITE_URL}/catalogue/{topic_slug}/"
+    description = f"Browse Jonathan Harris AI books on {topic.lower()}."
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -1233,13 +1264,26 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>{html.escape(topic)} AI Books | Jonathan Harris</title>
-<meta content="Browse Jonathan Harris AI books on {html.escape(topic.lower())}." name="description"/>
+<meta content="{html.escape(description)}" name="description"/>
+<meta content="index,follow" name="robots"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
-<link href="{SITE_URL}/catalogue/{topic_slug}/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="{canonical}" property="og:url"/>
+<meta content="{html.escape(topic)} AI Books | Jonathan Harris" property="og:title"/>
+<meta content="{html.escape(description)}" property="og:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="Jonathan Harris site logo" property="og:image:alt"/>
+<meta content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="{html.escape(topic)} AI Books | Jonathan Harris" name="twitter:title"/>
+<meta content="{html.escape(description)}" name="twitter:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<link href="{canonical}" rel="canonical"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
@@ -1258,7 +1302,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     <nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/ebooks/">eBooks</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>
     <section class="card ebook-index-intro">
       <h2>{len(books)} title{'s' if len(books) != 1 else ''} in this topic</h2>
-      <p>These pages use the same governed detail template as the rest of the ebook subsystem, so the structure stays consistent and the discovery layer stops freelancing.</p>
+      <p>Every title keeps the same clear structure, so you can compare books quickly and jump straight to the one you need.</p>
     </section>
     <section aria-label="Topic book grid" class="grid" id="booksGrid">
       {cards}
@@ -1278,6 +1322,8 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
     header = render_header()
     footer = render_footer()
+    canonical = f"{SITE_URL}/topics/"
+    description = "Explore AI topics across the Jonathan Harris ebook library."
     cards = []
     for topic in sorted(topic_map, key=str.lower):
         slug = slugify(topic)
@@ -1291,13 +1337,26 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>AI Topics | Jonathan Harris</title>
-<meta content="Explore AI topics across the Jonathan Harris ebook library." name="description"/>
+<meta content="{description}" name="description"/>
+<meta content="index,follow" name="robots"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
-<link href="{SITE_URL}/topics/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="{canonical}" property="og:url"/>
+<meta content="AI Topics | Jonathan Harris" property="og:title"/>
+<meta content="{description}" property="og:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="Jonathan Harris site logo" property="og:image:alt"/>
+<meta content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="AI Topics | Jonathan Harris" name="twitter:title"/>
+<meta content="{description}" name="twitter:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<link href="{canonical}" rel="canonical"/>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 </head>
@@ -1307,7 +1366,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>Explore AI topics</h1>
-    <p>The topic hub now mirrors the governed ebook design system instead of improvising in the corner.</p>
+    <p>Browse the main areas covered across the Jonathan Harris ebook library and jump straight into the relevant catalogue pages.</p>
   </div>
 </header>
 <main class="main" id="main" role="main">
@@ -1329,14 +1388,58 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 
 
 
+def path_to_public_url(relative_path: Path) -> str:
+    if relative_path == Path("index.html"):
+        return f"{SITE_URL}/"
+    if relative_path.name == "index.html":
+        return f"{SITE_URL}/{relative_path.parent.as_posix()}/"
+    return f"{SITE_URL}/{relative_path.as_posix()}"
+
+
+
+def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
+    generated_timestamp = infer_build_timestamp()
+    generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
+    generated_paths.update(Path("catalogue") / slugify(book["topic"]) / "index.html" for book in books)
+    book_paths = {Path("ebooks") / book["slug"] / "index.html": book for book in books}
+    excluded_paths = {
+        Path("404.html"),
+        Path("assets/partials/header.html"),
+        Path("assets/partials/footer.html"),
+        Path("scripts/templates/blog-post.html"),
+    }
+
+    routes: List[Dict[str, str]] = []
+    for file_path in sorted(ROOT.rglob("*.html")):
+        if "node_modules" in file_path.parts:
+            continue
+        relative_path = file_path.relative_to(ROOT)
+        if relative_path in excluded_paths:
+            continue
+
+        if relative_path in book_paths:
+            lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or generated_timestamp)
+        elif relative_path in generated_paths:
+            lastmod = normalise_lastmod(generated_timestamp)
+        else:
+            lastmod = file_lastmod(file_path)
+
+        routes.append({
+            "path": f"/{relative_path.as_posix()}",
+            "loc": path_to_public_url(relative_path),
+            "lastmod": lastmod,
+        })
+    return routes
+
+
+
 def build_sitemap_xml(books: List[Dict[str, Any]]) -> str:
     urls = []
-    for book in books:
-        lastmod = book.get("datePublished") or dt.date.today().isoformat()
+    for route in build_public_route_registry(books):
         urls.append(
             "  <url>\n"
-            f"    <loc>{html.escape(book['canonical_url'])}</loc>\n"
-            f"    <lastmod>{html.escape(lastmod)}</lastmod>\n"
+            f"    <loc>{html.escape(route['loc'])}</loc>\n"
+            f"    <lastmod>{html.escape(route['lastmod'])}</lastmod>\n"
             "  </url>"
         )
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n" + "\n".join(urls) + "\n</urlset>\n"
@@ -1604,14 +1707,6 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     }
     write_json(ROOT / "llm-index.json", llm_index)
 
-    crawler_payloads = build_crawler_snapshot_payloads(books)
-    for file_path, content in build_crawler_snapshot_paths(books).items():
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-        file_path.write_text(content, encoding="utf-8")
-    remove_legacy_root_crawler_files()
-    (ROOT / "llms.txt").write_text(crawler_payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]], encoding="utf-8")
-    write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
-
     write_json(EBOOKS_DIR / "url-manifest.json", build_route_manifest(books))
     (EBOOKS_DIR / "index.html").write_text(render_ebooks_index(books), encoding="utf-8")
 
@@ -1624,6 +1719,14 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
         (topic_dir / "index.html").write_text(render_topic_page(topic, topic_books), encoding="utf-8")
     TOPICS_DIR.mkdir(parents=True, exist_ok=True)
     (TOPICS_DIR / "index.html").write_text(render_topics_index(topic_map), encoding="utf-8")
+
+    crawler_payloads = build_crawler_snapshot_payloads(books)
+    for file_path, content in build_crawler_snapshot_paths(books).items():
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+    remove_legacy_root_crawler_files()
+    (ROOT / "llms.txt").write_text(crawler_payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]], encoding="utf-8")
+    write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
 
 
@@ -1927,6 +2030,56 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if not book.get("topic_url") or not topic_page.exists():
             errors.append(f"{book['slug']} is missing a governed topic discovery page.")
 
+    discovery_pages = [
+        {
+            "path": EBOOKS_DIR / "index.html",
+            "label": "ebooks/index.html",
+            "required": [
+                '<meta content="index,follow" name="robots"/>',
+                '<meta content="website" property="og:type"/>',
+                f'<meta content="{SITE_URL}/ebooks/" property="og:url"/>',
+                '<meta content="AI eBooks Catalogue | Jonathan Harris" property="og:title"/>',
+                '<meta content="summary_large_image" name="twitter:card"/>',
+                '<meta content="AI eBooks Catalogue | Jonathan Harris" name="twitter:title"/>',
+            ],
+        },
+        {
+            "path": TOPICS_DIR / "index.html",
+            "label": "topics/index.html",
+            "required": [
+                '<meta content="index,follow" name="robots"/>',
+                '<meta content="website" property="og:type"/>',
+                f'<meta content="{SITE_URL}/topics/" property="og:url"/>',
+                '<meta content="AI Topics | Jonathan Harris" property="og:title"/>',
+                '<meta content="summary_large_image" name="twitter:card"/>',
+                '<meta content="AI Topics | Jonathan Harris" name="twitter:title"/>',
+            ],
+        },
+    ]
+    for topic in sorted({book["topic"] for book in books}, key=str.lower):
+        topic_slug = slugify(topic)
+        discovery_pages.append({
+            "path": CATALOGUE_DIR / topic_slug / "index.html",
+            "label": f"catalogue/{topic_slug}/index.html",
+            "required": [
+                '<meta content="index,follow" name="robots"/>',
+                '<meta content="website" property="og:type"/>',
+                f'<meta content="{SITE_URL}/catalogue/{topic_slug}/" property="og:url"/>',
+                f'<meta content="{html.escape(topic)} AI Books | Jonathan Harris" property="og:title"/>',
+                '<meta content="summary_large_image" name="twitter:card"/>',
+                f'<meta content="{html.escape(topic)} AI Books | Jonathan Harris" name="twitter:title"/>',
+            ],
+        })
+
+    for page in discovery_pages:
+        if not page["path"].exists():
+            errors.append(f"Discovery page missing: {page['label']}")
+            continue
+        page_text = page["path"].read_text(encoding="utf-8")
+        for marker in page["required"]:
+            if marker not in page_text:
+                errors.append(f"Discovery metadata missing from {page['label']}: {marker}")
+
     redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
     redirects_mirror = (ROOT / "_redirects.txt").read_text(encoding="utf-8")
     for line in LEGACY_DETAIL_REDIRECT_LINES:
@@ -1992,6 +2145,29 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if actual != expected:
             errors.append(f"Generated crawler snapshot drift detected: {file_path.relative_to(ROOT)}")
 
+    sitemap_routes = build_public_route_registry(books)
+    expected_sitemap_locations = {route["loc"] for route in sitemap_routes}
+    actual_sitemap = build_crawler_snapshot_payloads(books)[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
+    actual_sitemap_locations = set(re.findall(r"<loc>([^<]+)</loc>", actual_sitemap))
+    missing_sitemap_locations = sorted(expected_sitemap_locations - actual_sitemap_locations)
+    unexpected_sitemap_locations = sorted(actual_sitemap_locations - expected_sitemap_locations)
+    if missing_sitemap_locations:
+        errors.append(f"Sitemap coverage missing {len(missing_sitemap_locations)} public route(s); first missing: {missing_sitemap_locations[0]}")
+    if unexpected_sitemap_locations:
+        errors.append(f"Sitemap includes unexpected route(s); first unexpected: {unexpected_sitemap_locations[0]}")
+
+    sitemap_text = actual_sitemap
+    for book in books:
+        book_loc = html.escape(book["canonical_url"])
+        pattern = re.compile(rf"<loc>{re.escape(book_loc)}</loc>\s*<lastmod>([^<]+)</lastmod>")
+        match = pattern.search(sitemap_text)
+        expected_lastmod = normalise_lastmod(book.get("dateModified") or book.get("datePublished"))
+        if not match:
+            errors.append(f"Sitemap entry missing for canonical book page {book['slug']}.")
+            continue
+        if match.group(1) != expected_lastmod:
+            errors.append(f"Sitemap lastmod drift detected for {book['slug']}: expected {expected_lastmod}, found {match.group(1)}.")
+
     stray_catalogue_file = CATALOGUE_DIR / "cyber-security" / "1"
     if stray_catalogue_file.exists():
         errors.append("Stray catalogue artefact still exists: catalogue/cyber-security/1")
@@ -2044,6 +2220,13 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             continue
         if not (ROOT / "blog" / "posts" / slug / "index.html").exists():
             errors.append(f"Static blog post missing for slug {slug}.")
+
+    weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
+    blog_js = (ROOT / "assets" / "js" / "blog.js").read_text(encoding="utf-8")
+    if "manifest stack" in weekly_archive_html or "published manifest" in weekly_archive_html or "falls back to" in weekly_archive_html:
+        errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
+    if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
+        errors.append("assets/js/blog.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
 
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
