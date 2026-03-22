@@ -1,4 +1,4 @@
-# Artificial Intelligence in Logistics: Optimizing Efficiency and Sustainability
+# Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability
 
 ## Summary
 
