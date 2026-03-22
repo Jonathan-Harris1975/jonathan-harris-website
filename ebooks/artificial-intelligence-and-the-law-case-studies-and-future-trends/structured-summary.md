@@ -1,4 +1,4 @@
-# Artificial Intelligence and the Law: Case Studies and Future Trends
+# Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends
 
 ## Summary
 
