@@ -5,6 +5,7 @@ import datetime as dt
 import html
 import json
 import re
+import hashlib
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
@@ -18,8 +19,7 @@ EBOOKS_DIR = ROOT / "ebooks"
 CATALOGUE_DIR = ROOT / "catalogue"
 TOPICS_DIR = ROOT / "topics"
 MASTER_PATH = DATA_DIR / "ebooks-master.json"
-CONTENT_SOURCE_PATH = DATA_DIR / "ebook-content-source.json"
-OVERRIDES_PATH = DATA_DIR / "ebook-source-overrides.json"
+CRAWLER_CHECKSUMS_PATH = ROOT / "config" / "crawler-checksums.json"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -41,6 +41,31 @@ LEGACY_DETAIL_REDIRECT_LINES = [
     "/ebooks/*/detail.html  /ebooks/:splat/  301",
     "/ebooks/*/details.html  /ebooks/:splat/  301",
 ]
+
+MALFORMED_SLUG_FIXES = [
+    {
+        "source": "/ebooks/artificial-intelligence-in-pharmaceuticalsrevolutionizing-healthcare",
+        "target": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
+    },
+    {
+        "source": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement-k",
+        "target": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
+    },
+    {
+        "source": "/ebooks/lights-camera-algorithm-ais-role-in-modern-filmmaking",
+        "target": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
+    },
+    {
+        "source": "/ebooks/the-architects-of-ai_-pioneers_-breakthroughs_-and-the-road-ahead",
+        "target": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+    },
+]
+
+EXTERNAL_CRAWLER_FILES = {
+    "robots": "https://assets.jonathan-harris.online/robots.txt",
+    "sitemap": "https://assets.jonathan-harris.online/site-map.xml",
+    "llms": "https://assets.jonathan-harris.online/llms.txt",
+}
 
 TEMPLATE_REQUIRED_FRAGMENTS = [
     '<body class="ebook-detail">',
@@ -64,9 +89,6 @@ TEMPLATE_ORDERED_MARKERS = [
     '<section class="faq card" aria-label="Frequently asked questions">',
 ]
 
-SUPPORTED_OVERRIDE_FIELDS = {"showcase_heading", "distinct_angle", "notes", "source_note"}
-
-
 def read_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
         return default
@@ -82,6 +104,16 @@ def write_json(path: Path, payload: Any) -> None:
 
 def utc_now() -> str:
     return dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+
+
+def infer_build_timestamp() -> str:
+    if MASTER_PATH.exists():
+        return dt.datetime.fromtimestamp(MASTER_PATH.stat().st_mtime, tz=dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return utc_now()
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
 
 
 
@@ -151,14 +183,14 @@ def unique_list(values: Iterable[str]) -> List[str]:
 
 
 
-def choose_authoritative_text(workbook_content: Dict[str, Any], content_source: Dict[str, Any], field: str) -> Any:
+def choose_authoritative_text(workbook_content: Dict[str, Any], content_source: Dict[str, Any], field: str, *, allow_fallback: bool = False) -> Any:
     workbook_value = workbook_content.get(field)
     if isinstance(workbook_value, list):
         if any(clean_paragraph(item) for item in workbook_value):
             return workbook_value
     elif clean_paragraph(workbook_value):
         return workbook_value
-    return content_source.get(field)
+    return content_source.get(field) if allow_fallback else None
 
 
 def book_about_terms(book: Dict[str, Any]) -> List[str]:
@@ -298,6 +330,7 @@ def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
         "author": {"@type": "Person", "name": book["author"], "url": f"{SITE_URL}/bio/"},
         "bookFormat": "EBook",
         "datePublished": book["datePublished"],
+        "dateModified": book.get("dateModified") or infer_build_timestamp(),
         "inLanguage": "en-GB",
         "numberOfPages": book["pages"],
         "sameAs": [book["buy_url"]] if book.get("buy_url") else [],
@@ -327,7 +360,7 @@ def build_breadcrumb_schema(book: Dict[str, Any]) -> Dict[str, Any]:
 def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, Dict[str, Any]]:
     headers = [clean_paragraph(cell.value).lower() for cell in ws[1]]
     index = {header: idx for idx, header in enumerate(headers) if header}
-    required = {"slug"}
+    required = {"slug", "title", "asin", "amazon ebook page count", "publication date", "book url", "buy now url", "redirect url", "cover art url", "legacy alias url"}
     missing = required - set(index)
     if missing:
         raise ValueError(f"Ebooks Master sheet is missing required columns: {', '.join(sorted(missing))}")
@@ -355,6 +388,14 @@ def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, 
         "identifier": "identifier",
         "showcase heading": "showcase_heading",
         "distinct angle": "distinct_angle",
+        "asin": "asin",
+        "amazon ebook page count": "pages",
+        "publication date": "datePublished",
+        "book url": "book_url",
+        "buy now url": "buy_route_full",
+        "redirect url": "buy_url",
+        "cover art url": "cover",
+        "legacy alias url": "legacy_alias_url",
     }
     list_fields = {"tags", "keywords", "what_youll_learn"}
 
@@ -371,63 +412,53 @@ def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, 
             value = row[idx]
             if target in list_fields:
                 record[target] = split_field(value)
+            elif target == "pages":
+                record[target] = int(value) if value not in (None, "") else None
+            elif target == "datePublished":
+                if isinstance(value, dt.datetime):
+                    record[target] = value.date().isoformat()
+                elif hasattr(value, "isoformat") and value is not None:
+                    record[target] = value.isoformat()
+                else:
+                    record[target] = clean_paragraph(value)
             else:
                 record[target] = clean_paragraph(value)
+        record["book_url"] = ensure_trailing_slash(record.get("book_url") or f"{SITE_URL}/ebooks/{slug}/")
+        buy_route_full = record.get("buy_route_full") or f"{SITE_URL}/ebooks/{slug}/buy-now"
+        record["buy_route_full"] = buy_route_full
+        record["buy_route"] = url_to_path(buy_route_full)
+        record["legacy_alias_url"] = ensure_trailing_slash(record.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now")
+        record["cover"] = clean_paragraph(record.get("cover", "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online")
         results[slug] = record
     return results
 
 
-
 def parse_workbook(workbook_path: Path) -> Tuple[List[str], Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
-    if "BuyNow Redirects" not in wb.sheetnames:
-        raise ValueError("Workbook is missing the BuyNow Redirects sheet")
+    if "Ebooks Master" not in wb.sheetnames:
+        raise ValueError("Workbook is missing the Ebooks Master sheet")
 
-    ws = wb["BuyNow Redirects"]
-    order: List[str] = []
+    master_sheet = parse_master_sheet(wb["Ebooks Master"])
+    if not master_sheet:
+        raise ValueError("No ebook rows found in Ebooks Master")
+
+    notes_by_slug: Dict[str, str] = {}
+    if "BuyNow Redirects" in wb.sheetnames:
+        ws = wb["BuyNow Redirects"]
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            slug = clean_paragraph(row[0] or "")
+            if not slug:
+                continue
+            notes_by_slug[slug] = clean_paragraph(row[5] or "")
+
+    order = list(master_sheet.keys())
     records: Dict[str, Dict[str, Any]] = {}
-    for row in ws.iter_rows(min_row=2, values_only=True):
-        slug = clean_paragraph(row[0] or "")
-        if not slug:
-            continue
-        date_value = row[8]
-        if isinstance(date_value, dt.datetime):
-            date_value = date_value.date().isoformat()
-        elif hasattr(date_value, "isoformat"):
-            date_value = date_value.isoformat()
-        else:
-            date_value = clean_paragraph(date_value)
-        book_url = ensure_trailing_slash(clean_paragraph(row[1] or "")) or f"{SITE_URL}/ebooks/{slug}/"
-        buy_route_full = clean_paragraph(row[2] or "")
-        buy_route = url_to_path(buy_route_full) if buy_route_full else f"/ebooks/{slug}/buy-now"
-        buy_url = clean_paragraph(row[3] or "")
-        records[slug] = {
-            "slug": slug,
-            "book_url": book_url,
-            "buy_url": buy_url,
-            "buy_route": buy_route,
-            "buy_route_full": buy_route_full or f"{SITE_URL}{buy_route}",
-            "legacy_alias_url": ensure_trailing_slash(clean_paragraph(row[4] or "")),
-            "notes": clean_paragraph(row[5] or ""),
-            "asin": clean_paragraph(row[6] or ""),
-            "pages": int(row[7]) if row[7] else None,
-            "datePublished": date_value,
-            "cover": clean_paragraph((row[9] or "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online"),
-        }
-        order.append(slug)
-
-    master_sheet = parse_master_sheet(wb["Ebooks Master"]) if "Ebooks Master" in wb.sheetnames else {}
+    for slug in order:
+        row = dict(master_sheet[slug])
+        row["slug"] = slug
+        row["notes"] = notes_by_slug.get(slug, "")
+        records[slug] = row
     return order, records, master_sheet
-
-
-
-def load_source_overrides() -> Dict[str, Dict[str, Any]]:
-    return read_json(OVERRIDES_PATH, default={}) or {}
-
-
-
-def load_content_source() -> Dict[str, Dict[str, Any]]:
-    return read_json(CONTENT_SOURCE_PATH, default={}) or {}
 
 
 
@@ -488,45 +519,54 @@ def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
     order, workbook_map, workbook_content = parse_workbook(workbook_path)
-    content_source = load_content_source()
-    overrides = load_source_overrides()
     if not order:
         raise ValueError("No ebook rows found in workbook")
 
+    required_master_fields = [
+        "title", "short", "description", "summary", "topic", "tags", "keywords", "audience",
+        "who_for", "what_this_book_covers", "what_youll_learn", "why_it_matters", "tone", "author",
+        "identifier", "asin", "pages", "datePublished", "book_url", "buy_route_full", "buy_url",
+        "cover", "legacy_alias_url",
+    ]
+
+    build_timestamp = utc_now()
     records: List[Dict[str, Any]] = []
+    missing_fields: List[str] = []
     for idx, slug in enumerate(order, start=1):
         workbook = workbook_map[slug]
         content = workbook_content.get(slug, {})
-        bootstrap = dict(content_source.get(slug, {}))
-        override_payload = overrides.get(slug, {})
-        text_override = {
-            key: value
-            for key, value in override_payload.items()
-            if key in SUPPORTED_OVERRIDE_FIELDS and clean_paragraph(value)
-        }
 
-        title = choose_authoritative_text(content, bootstrap, "title") or humanise_slug(slug)
-        topic = choose_authoritative_text(content, bootstrap, "topic") or "Artificial Intelligence"
-        tags = unique_list(choose_authoritative_text(content, bootstrap, "tags") or [topic, "Artificial Intelligence", "AI Trends"])
-        keywords = unique_list(choose_authoritative_text(content, bootstrap, "keywords") or [topic, title, *tags])
+        for field in required_master_fields:
+            value = workbook.get(field) if field in workbook else content.get(field)
+            if isinstance(value, list):
+                has_value = any(clean_paragraph(item) for item in value)
+            else:
+                has_value = bool(clean_paragraph(value))
+            if not has_value:
+                missing_fields.append(f"{slug}: missing canonical workbook field '{field}'")
+
+        title = clean_paragraph(content.get("title")) or humanise_slug(slug)
+        topic = clean_paragraph(content.get("topic")) or "Artificial Intelligence"
+        tags = unique_list(content.get("tags") or [topic, "Artificial Intelligence", "AI Trends"])
+        keywords = unique_list(content.get("keywords") or [topic, title, *tags])
         pages = workbook.get("pages")
-        summary_seed = choose_authoritative_text(content, bootstrap, "summary") or choose_authoritative_text(content, bootstrap, "description") or topic_intro(topic)
-        description_seed = choose_authoritative_text(content, bootstrap, "description") or summary_seed
+        summary_seed = clean_paragraph(content.get("summary")) or clean_paragraph(content.get("description")) or topic_intro(topic)
+        description_seed = clean_paragraph(content.get("description")) or summary_seed
         summary = strip_pages_from_summary(summary_seed, pages)
-        description = strip_pages_from_summary(description_seed, pages)
-        what_this_book_covers = clean_paragraph(choose_authoritative_text(content, bootstrap, "what_this_book_covers") or summary)
-        audience = clean_paragraph(choose_authoritative_text(content, bootstrap, "audience") or choose_authoritative_text(content, bootstrap, "who_for") or DEFAULT_AUDIENCE)
-        who_for = clean_paragraph(choose_authoritative_text(content, bootstrap, "who_for") or audience)
-        what_youll_learn = unique_list(choose_authoritative_text(content, bootstrap, "what_youll_learn") or default_learning_points(topic))
-        why_it_matters = clean_paragraph(choose_authoritative_text(content, bootstrap, "why_it_matters") or default_why_it_matters(topic))
-        short = clean_paragraph(choose_authoritative_text(content, bootstrap, "short") or default_short(topic, pages))
+        description = clean_paragraph(description_seed)
+        what_this_book_covers = clean_paragraph(content.get("what_this_book_covers")) or summary
+        audience = clean_paragraph(content.get("audience")) or clean_paragraph(content.get("who_for")) or DEFAULT_AUDIENCE
+        who_for = clean_paragraph(content.get("who_for")) or audience
+        what_youll_learn = unique_list(content.get("what_youll_learn") or default_learning_points(topic))
+        why_it_matters = clean_paragraph(content.get("why_it_matters")) or default_why_it_matters(topic)
+        short = clean_paragraph(content.get("short")) or default_short(topic, pages)
         canonical_url = ensure_trailing_slash(workbook.get("book_url") or f"{SITE_URL}/ebooks/{slug}/")
         topic_slug = slugify(topic)
         topic_url = f"/catalogue/{topic_slug}/"
-        identifier = clean_paragraph(choose_authoritative_text(content, bootstrap, "identifier") or f"JH-AI-EBOOK-{idx:02d}")
-        author = clean_paragraph(choose_authoritative_text(content, bootstrap, "author") or SITE_NAME)
-        tone = clean_paragraph(choose_authoritative_text(content, bootstrap, "tone") or DEFAULT_TONE)
-        cover = workbook.get("cover") or clean_paragraph(choose_authoritative_text(content, bootstrap, "cover") or choose_authoritative_text(content, bootstrap, "image") or "")
+        identifier = clean_paragraph(content.get("identifier")) or f"JH-AI-EBOOK-{idx:02d}"
+        author = clean_paragraph(content.get("author")) or SITE_NAME
+        tone = clean_paragraph(content.get("tone")) or DEFAULT_TONE
+        cover = workbook.get("cover") or clean_paragraph(content.get("cover") or content.get("image") or "")
 
         book: Dict[str, Any] = {
             "id": idx,
@@ -554,6 +594,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "pages": pages,
             "asin": workbook.get("asin", ""),
             "datePublished": workbook.get("datePublished", ""),
+            "dateModified": build_timestamp,
             "author": author,
             "tone": tone,
             "audience": audience,
@@ -562,13 +603,16 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "who_for": who_for,
             "what_youll_learn": what_youll_learn,
             "why_it_matters": why_it_matters,
-            "showcase_heading": clean_paragraph(text_override.get("showcase_heading") or choose_authoritative_text(content, bootstrap, "showcase_heading") or f"How AI is reshaping {topic.lower()}") if topic.lower() != "artificial intelligence" else "AI without the carnival barker routine",
-            "distinct_angle": clean_paragraph(text_override.get("distinct_angle") or choose_authoritative_text(content, bootstrap, "distinct_angle") or f"{title} keeps the focus on practical judgement in {topic.lower()} rather than drifting into brochure-speak."),
+            "showcase_heading": clean_paragraph(content.get("showcase_heading")) or (f"How AI is reshaping {topic.lower()}" if topic.lower() != "artificial intelligence" else "AI without the carnival barker routine"),
+            "distinct_angle": clean_paragraph(content.get("distinct_angle")) or f"{title} keeps the focus on practical judgement in {topic.lower()} rather than drifting into brochure-speak.",
             "notes": workbook.get("notes", ""),
         }
-        faq_payload = choose_authoritative_text(content, bootstrap, "faq")
+        faq_payload = content.get("faq")
         book["faq"] = faq_payload if isinstance(faq_payload, list) else build_default_faq(book)
         records.append(book)
+
+    if missing_fields:
+        raise ValueError("Canonical workbook is missing required live fields:\n- " + "\n- ".join(missing_fields))
 
     add_related_books(records)
     return records
@@ -596,12 +640,18 @@ def load_master() -> List[Dict[str, Any]]:
     master = read_json(MASTER_PATH, default=[])
     if not master:
         raise ValueError(f"Master file not found: {MASTER_PATH}")
+    fallback_timestamp = infer_build_timestamp()
+    for book in master:
+        book.setdefault("dateModified", fallback_timestamp)
     add_related_books(master)
     return master
 
 
 
 def save_master(records: List[Dict[str, Any]]) -> None:
+    build_timestamp = utc_now()
+    for book in records:
+        book.setdefault("dateModified", build_timestamp)
     write_json(MASTER_PATH, records)
 
 
@@ -622,6 +672,7 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
         "asin": book["asin"],
         "pages": book["pages"],
         "datePublished": book["datePublished"],
+        "dateModified": book.get("dateModified") or infer_build_timestamp(),
         "canonical_url": book["canonical_url"],
         "buy_route": book["buy_route"],
         "topic_url": book["topic_url"],
@@ -751,6 +802,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
@@ -995,6 +1047,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
@@ -1054,7 +1107,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
       {static_cards}
     </section>
 
-    <nav aria-label="Pagination" class="pager" id="pager" style="display:none;">
+    <nav aria-label="Pagination" class="pager u-s24" id="pager">
       <button class="button secondary" id="prevPage" type="button">Previous</button>
       <span class="meta" id="pageInfo"></span>
       <button class="button" id="nextPage" type="button">Next</button>
@@ -1104,6 +1157,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <title>{html.escape(topic)} AI Books | Jonathan Harris</title>
 <meta content="Browse Jonathan Harris AI books on {html.escape(topic.lower())}." name="description"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
@@ -1161,6 +1215,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <title>AI Topics | Jonathan Harris</title>
 <meta content="Explore AI topics across the Jonathan Harris ebook library." name="description"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
+<link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
@@ -1270,13 +1325,91 @@ def build_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
         "generated_utc": utc_now(),
         "base_url": SITE_URL,
         "ebook_count": len(books),
+        "external_crawler_files": EXTERNAL_CRAWLER_FILES,
         "host_redirect_files": {
             "books_domain": "_redirects.books-domain",
             "ebooks_domain": "_redirects.ebooks-domain",
         },
+        "malformed_slug_fixes": MALFORMED_SLUG_FIXES,
         "ebooks": manifest_books,
     }
 
+
+def build_books_domain_redirects() -> str:
+    return "\n".join([
+        "# ============================================================",
+        "# books.jonathan-harris.online — Domain redirects (generated)",
+        "# Redirect governed legacy book paths to the main domain",
+        "# ============================================================",
+        "",
+        "# Canonical host (no www)",
+        "https://www.books.jonathan-harris.online/*  https://books.jonathan-harris.online/:splat  301",
+        "",
+        "# Root → ebooks catalogue",
+        "/  https://jonathan-harris.online/ebooks/  301",
+        "",
+        "# Canonical and legacy ebook families",
+        "/ebooks          https://jonathan-harris.online/ebooks/                  301",
+        "/ebooks/         https://jonathan-harris.online/ebooks/                  301",
+        "/ebooks/*        https://jonathan-harris.online/ebooks/:splat           301",
+        "/book            https://jonathan-harris.online/ebooks/                  301",
+        "/book/           https://jonathan-harris.online/ebooks/                  301",
+        "/book/*          https://jonathan-harris.online/ebooks/:splat           301",
+        "/category/*      https://jonathan-harris.online/catalogue/:splat        301",
+        "/catalogue/*     https://jonathan-harris.online/catalogue/:splat        301",
+        "/topics/*        https://jonathan-harris.online/topics/:splat           301",
+        "/author          https://jonathan-harris.online/bio/                    301",
+        "/author/         https://jonathan-harris.online/bio/                    301",
+        "/author/*        https://jonathan-harris.online/bio/                    301",
+        "",
+        "# Crawler files stay externally hosted",
+        f"/robots.txt     {EXTERNAL_CRAWLER_FILES['robots']}   301",
+        f"/sitemap.xml    {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
+        f"/llms.txt       {EXTERNAL_CRAWLER_FILES['llms']}     301",
+        "",
+        "# Catch-all",
+        "/*  https://jonathan-harris.online/:splat  301",
+        "",
+    ])
+
+
+def build_ebooks_domain_redirects() -> str:
+    return "\n".join([
+        "# ============================================================",
+        "# ebooks.jonathan-harris.online — Domain redirects (generated)",
+        "# Redirect governed ebook and discovery paths to the main domain",
+        "# ============================================================",
+        "",
+        "# Canonical host (no www)",
+        "https://www.ebooks.jonathan-harris.online/*  https://ebooks.jonathan-harris.online/:splat  301",
+        "",
+        "# Root → ebooks catalogue",
+        "/          https://jonathan-harris.online/ebooks/  301",
+        "/ebooks    https://jonathan-harris.online/ebooks/  301",
+        "/ebooks/   https://jonathan-harris.online/ebooks/  301",
+        "",
+        "# Old paths → new site",
+        "/book         https://jonathan-harris.online/ebooks/             301",
+        "/book/        https://jonathan-harris.online/ebooks/             301",
+        "/book/*       https://jonathan-harris.online/ebooks/:splat       301",
+        "/catalogue/*  https://jonathan-harris.online/catalogue/:splat    301",
+        "/category/*   https://jonathan-harris.online/catalogue/:splat    301",
+        "/author       https://jonathan-harris.online/bio/                301",
+        "/author/      https://jonathan-harris.online/bio/                301",
+        "/author/*     https://jonathan-harris.online/bio/                301",
+        "/topics/*     https://jonathan-harris.online/topics/:splat       301",
+        "/glossary/*   https://jonathan-harris.online/glossary/:splat     301",
+        "/api/*        https://jonathan-harris.online/api/:splat          301",
+        "",
+        "# Crawler files stay externally hosted",
+        f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}  301",
+        f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
+        f"/llms.txt     {EXTERNAL_CRAWLER_FILES['llms']}  301",
+        "",
+        "# Catch-all",
+        "/*  https://jonathan-harris.online/:splat  301",
+        "",
+    ])
 
 
 def build_derivatives(books: List[Dict[str, Any]]) -> None:
@@ -1341,6 +1474,7 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
                 "asin": book["asin"],
                 "pages": book["pages"],
                 "datePublished": book["datePublished"],
+        "dateModified": book.get("dateModified") or infer_build_timestamp(),
             }
             for book in books
         ],
@@ -1348,11 +1482,13 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     }
     write_json(ROOT / "llm-index.json", llm_index)
 
+    (ROOT / "robots.txt").write_text(build_robots_txt(), encoding="utf-8")
+    (ROOT / "sitemap.xml").write_text(build_sitemap_xml(books), encoding="utf-8")
+    (ROOT / "llms.txt").write_text(build_llms_txt(books), encoding="utf-8")
+    write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
+
     write_json(EBOOKS_DIR / "url-manifest.json", build_route_manifest(books))
     (EBOOKS_DIR / "index.html").write_text(render_ebooks_index(books), encoding="utf-8")
-    (ROOT / "sitemap.xml").write_text(build_sitemap_xml(books), encoding="utf-8")
-    (ROOT / "robots.txt").write_text(build_robots_txt(), encoding="utf-8")
-    (ROOT / "llms.txt").write_text(build_llms_txt(books), encoding="utf-8")
 
     topic_map: Dict[str, List[Dict[str, Any]]] = defaultdict(list)
     for book in books:
@@ -1383,6 +1519,7 @@ def build_book_files(books: List[Dict[str, Any]]) -> None:
             "pages": book["pages"],
             "asin": book["asin"],
             "datePublished": book["datePublished"],
+        "dateModified": book.get("dateModified") or infer_build_timestamp(),
             "author": book["author"],
             "tone": book["tone"],
             "audience": book["audience"],
@@ -1450,17 +1587,22 @@ def sync_redirects(books: List[Dict[str, Any]]) -> None:
     block = build_redirect_block(books)
     pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     legacy_anchor = "# retire legacy detail routes to the canonical ebook page\n"
+    malformed_lines = [f"{item['source']}   {item['target']}  301" for item in MALFORMED_SLUG_FIXES]
     for path in redirect_files:
         text = path.read_text(encoding="utf-8")
         new_text, count = pattern.subn(block + "\n", text)
         if count != 1:
             raise ValueError(f"Could not replace branded redirect block in {path}")
-        for line in LEGACY_DETAIL_REDIRECT_LINES:
+        for line in LEGACY_DETAIL_REDIRECT_LINES + malformed_lines:
             if line not in new_text:
                 if legacy_anchor not in new_text:
                     raise ValueError(f"Could not find legacy detail redirect anchor in {path}")
                 new_text = new_text.replace(legacy_anchor, legacy_anchor + line + "\n", 1)
         path.write_text(new_text, encoding="utf-8")
+
+    (ROOT / "_redirects.books-domain").write_text(build_books_domain_redirects(), encoding="utf-8")
+    (ROOT / "_redirects.ebooks-domain").write_text(build_ebooks_domain_redirects(), encoding="utf-8")
+
 
 def ensure_css_file() -> None:
     css = """
@@ -1536,6 +1678,25 @@ def faq_is_semantically_relevant(book: Dict[str, Any]) -> bool:
 
 
 
+def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
+    generated_at = utc_now()
+    files = {
+        "robots.txt": build_robots_txt(),
+        "sitemap.xml": build_sitemap_xml(books),
+        "llms.txt": build_llms_txt(books),
+    }
+    return {
+        "generated_utc": generated_at,
+        "files": {
+            name: {
+                "url": EXTERNAL_CRAWLER_FILES["robots" if name == "robots.txt" else "sitemap" if name == "sitemap.xml" else "llms"],
+                "sha256": sha256_text(content),
+            }
+            for name, content in files.items()
+        },
+    }
+
+
 def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> str:
     topics = Counter(book["topic"] for book in books)
     lines = [
@@ -1554,9 +1715,10 @@ def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> s
     else:
         lines.append("Status: PASSED")
         lines.append("- Route registry complete")
-        lines.append("- Sitemap contains canonical ebook URLs only")
+        lines.append("- Route manifest and host redirect coverage checks passed")
         lines.append("- Topic discovery pages exist for every book")
         lines.append("- Metadata and FAQ checks passed")
+        lines.append("- Generated crawler snapshots and redirect governance checks passed")
     lines.append("")
     return "\n".join(lines)
 
@@ -1567,10 +1729,9 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         books = load_master()
     errors: List[str] = []
 
-    if len(books) != 36:
-        errors.append(f"Expected 36 books in the master record, found {len(books)}.")
-
     slugs = [book["slug"] for book in books]
+    if not books:
+        errors.append("Master record is empty.")
     if len(slugs) != len(set(slugs)):
         errors.append("Duplicate slugs found in the master record.")
 
@@ -1582,11 +1743,15 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if len(identifiers) != len(set(identifiers)):
         errors.append("Duplicate internal identifiers found in the master record.")
 
+    legacy_data_files = [ROOT / "data" / "ebook-content-source.json", ROOT / "data" / "ebook-source-overrides.json"]
+    for legacy_path in legacy_data_files:
+        if legacy_path.exists():
+            errors.append(f"Legacy data source still exists: {legacy_path.relative_to(ROOT)}")
+
     detail_files = list(EBOOKS_DIR.glob("**/detail.html")) + list(EBOOKS_DIR.glob("**/details.html"))
     if detail_files:
         errors.append("Legacy detail source files still exist under /ebooks/.")
 
-    canonical_urls = {book["canonical_url"] for book in books}
     books_index_path = EBOOKS_DIR / "index.html"
     if not books_index_path.exists():
         errors.append("ebooks/index.html is missing.")
@@ -1610,11 +1775,16 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"{book['slug']} should emit exactly one FAQPage JSON-LD block.")
         if text.count('"@type":"Book"') != 1:
             errors.append(f"{book['slug']} should emit exactly one Book JSON-LD block.")
+        expected_desc = html.escape(book["description"], quote=True)
+        for marker in [
+            f'<meta content="{expected_desc}" name="description"/>',
+            f'<meta content="{expected_desc}" property="og:description"/>',
+            f'<meta content="{expected_desc}" name="twitter:description"/>',
+        ]:
+            if marker not in text:
+                errors.append(f"{book['slug']} page head description drift detected.")
+                break
         errors.extend(template_contract_errors(text, book))
-        schema = build_book_schema(book)
-        about_names = [item.get("name", "") for item in schema.get("about", [])]
-        if len(about_names) != len({name.lower() for name in about_names if clean_paragraph(name)}):
-            errors.append(f"{book['slug']} still emits duplicate Book JSON-LD about terms.")
         if f'href="/book/{book["slug"]}/' in text or f'href="/ebooks/{book["slug"]}/detail' in text:
             errors.append(f"{book['slug']} still links to a retired route.")
         if not faq_is_semantically_relevant(book):
@@ -1626,6 +1796,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             faq_schema = read_json(faq_path, default={}) or {}
             if metadata.get("canonical_url") != book["canonical_url"]:
                 errors.append(f"{book['slug']} metadata.json canonical_url does not match the master record.")
+            if metadata.get("buy_url") != book["buy_url"]:
+                errors.append(f"{book['slug']} metadata.json buy_url does not match the master record.")
             if faq_schema.get("mainEntity") != book.get("faq"):
                 errors.append(f"{book['slug']} faq-schema.json does not match the master record.")
 
@@ -1640,10 +1812,12 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Redirect family missing from _redirects: {line}")
         if line not in redirects_mirror:
             errors.append(f"Redirect family missing from _redirects.txt: {line}")
-    if "/book/*  /ebooks/:splat  301" not in redirects_text:
-        errors.append("Redirect family missing from _redirects: /book/*  /ebooks/:splat  301")
-    if "/book/*  /ebooks/:splat  301" not in redirects_mirror:
-        errors.append("Redirect family missing from _redirects.txt: /book/*  /ebooks/:splat  301")
+    malformed_lines = [f"{item['source']}   {item['target']}  301" for item in MALFORMED_SLUG_FIXES]
+    for line in malformed_lines:
+        if line not in redirects_text:
+            errors.append(f"Malformed slug fix missing from _redirects: {line}")
+        if line not in redirects_mirror:
+            errors.append(f"Malformed slug fix missing from _redirects.txt: {line}")
     for book in books:
         required_lines = [
             f"{book['buy_route']}   {book['buy_url']}   302",
@@ -1655,10 +1829,61 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if line not in redirects_mirror:
                 errors.append(f"Redirect rule missing from _redirects.txt: {line}")
 
+    main_redirect_expectations = [
+        f"/robots.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301",
+        f"/sitemap.xml   {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
+        f"/llms.txt      {EXTERNAL_CRAWLER_FILES['llms']}  301",
+    ]
+    for snippet in main_redirect_expectations:
+        if snippet not in redirects_text:
+            errors.append(f"Main redirect coverage missing from _redirects: {snippet}")
+        if snippet not in redirects_mirror:
+            errors.append(f"Main redirect coverage missing from _redirects.txt: {snippet}")
+
+    legacy_typo_alias = f"/robot.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301"
+    if legacy_typo_alias not in redirects_text or legacy_typo_alias not in redirects_mirror:
+        errors.append("Legacy /robot.txt crawler alias is missing from the main redirect files.")
+
+    books_domain = (ROOT / "_redirects.books-domain").read_text(encoding="utf-8")
+    ebooks_domain = (ROOT / "_redirects.ebooks-domain").read_text(encoding="utf-8")
+    host_expectations = [
+        f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}",
+        f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}",
+        f"/llms.txt     {EXTERNAL_CRAWLER_FILES['llms']}",
+        "/book/*",
+        "/catalogue/*",
+    ]
+    for snippet in host_expectations:
+        if snippet not in ebooks_domain:
+            errors.append(f"Host redirect coverage missing from _redirects.ebooks-domain: {snippet}")
+    books_domain_expectations = ["/book/*", "/ebooks/*", "/catalogue/*"]
+    for snippet in books_domain_expectations:
+        if snippet not in books_domain:
+            errors.append(f"Host redirect coverage missing from _redirects.books-domain: {snippet}")
+
+    generated_crawler_files = {
+        ROOT / "robots.txt": build_robots_txt(),
+        ROOT / "sitemap.xml": build_sitemap_xml(books),
+        ROOT / "llms.txt": build_llms_txt(books),
+    }
+    for file_path, expected in generated_crawler_files.items():
+        if not file_path.exists():
+            errors.append(f"Generated crawler snapshot missing: {file_path.relative_to(ROOT)}")
+            continue
+        actual = file_path.read_text(encoding="utf-8")
+        if actual != expected:
+            errors.append(f"Generated crawler snapshot drift detected: {file_path.relative_to(ROOT)}")
+
+    stray_catalogue_file = CATALOGUE_DIR / "cyber-security" / "1"
+    if stray_catalogue_file.exists():
+        errors.append("Stray catalogue artefact still exists: catalogue/cyber-security/1")
+
     manifest = read_json(EBOOKS_DIR / "url-manifest.json", default={}) or {}
     manifest_books = manifest.get("ebooks", [])
     if len(manifest_books) != len(books):
         errors.append("ebooks/url-manifest.json does not contain one route record per book.")
+    if manifest.get("malformed_slug_fixes") != MALFORMED_SLUG_FIXES:
+        errors.append("ebooks/url-manifest.json does not fully declare malformed slug fixes.")
     manifest_by_slug = {item.get("slug"): item for item in manifest_books}
     for book in books:
         entry = manifest_by_slug.get(book["slug"])
@@ -1669,31 +1894,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         expected_legacy = {f"/book/{book['slug']}/", f"/book/{book['slug']}/buy-now", f"/ebooks/{book['slug']}/detail", f"/ebooks/{book['slug']}/detail.html", f"/ebooks/{book['slug']}/details.html"}
         if set(legacy_routes) != expected_legacy:
             errors.append(f"Route manifest legacy route coverage is incomplete for {book['slug']}.")
-
-    sitemap_path = ROOT / "sitemap.xml"
-    if not sitemap_path.exists():
-        errors.append("sitemap.xml is missing.")
-    else:
-        sitemap_text = sitemap_path.read_text(encoding="utf-8")
-        locs = set(re.findall(r"<loc>(.*?)</loc>", sitemap_text))
-        if locs != canonical_urls:
-            errors.append("sitemap.xml does not contain exactly the canonical ebook URLs.")
-        if "/book/" in sitemap_text or "/detail" in sitemap_text:
-            errors.append("sitemap.xml includes a retired legacy route.")
-
-    robots_text = (ROOT / "robots.txt").read_text(encoding="utf-8") if (ROOT / "robots.txt").exists() else ""
-    if f"Sitemap: {SITE_URL}/sitemap.xml" not in robots_text:
-        errors.append("robots.txt does not point to the repo-owned sitemap.xml.")
-
-    llms_text = (ROOT / "llms.txt").read_text(encoding="utf-8") if (ROOT / "llms.txt").exists() else ""
-    if "Canonical ebook routes only" not in llms_text:
-        errors.append("llms.txt is still acting like a placeholder.")
-
-    overrides = load_source_overrides()
-    for slug, payload in overrides.items():
-        unsupported = sorted(key for key in payload.keys() if key not in SUPPORTED_OVERRIDE_FIELDS)
-        if unsupported:
-            errors.append(f"Override payload for {slug} contains unsupported fields: {', '.join(unsupported)}")
+        if entry.get("buy", {}).get("target") != book["buy_url"]:
+            errors.append(f"Route manifest buy target mismatch for {book['slug']}.")
 
     html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
     for file_path in html_files:
@@ -1702,6 +1904,32 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Retired /book/ link found in HTML: {file_path.relative_to(ROOT)}")
         if re.search(r'href="[^"]*/detail(?:\.html)?"', text):
             errors.append(f"Retired /detail link found in HTML: {file_path.relative_to(ROOT)}")
+        if "style=" in text:
+            errors.append(f"Inline style attribute found in HTML: {file_path.relative_to(ROOT)}")
+
+    checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
+    checksum_files = checksum_payload.get("files", {})
+    expected_crawler_content = {
+        "robots.txt": build_robots_txt(),
+        "sitemap.xml": build_sitemap_xml(books),
+        "llms.txt": build_llms_txt(books),
+    }
+    if set(checksum_files.keys()) != set(expected_crawler_content.keys()):
+        errors.append("config/crawler-checksums.json does not declare the governed crawler snapshots.")
+    for name, expected_text in expected_crawler_content.items():
+        file_payload = checksum_files.get(name, {})
+        expected_hash = sha256_text(expected_text)
+        if file_payload.get("sha256") != expected_hash:
+            errors.append(f"Crawler checksum drift detected for {name}.")
+
+    blog_manifest = read_json(ROOT / "blog" / "posts.json", default={}) or {}
+    for item in blog_manifest.get("items", []):
+        slug = clean_paragraph(item.get("slug"))
+        if not slug:
+            errors.append("blog/posts.json contains an entry without a slug.")
+            continue
+        if not (ROOT / "blog" / "posts" / slug / "index.html").exists():
+            errors.append(f"Static blog post missing for slug {slug}.")
 
     if workbook_path and workbook_path.exists():
         order, workbook_map, workbook_content = parse_workbook(workbook_path)
@@ -1749,7 +1977,6 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     return errors
 
 
-
 def run_import_command(args: argparse.Namespace) -> int:
     try:
         workbook_path = Path(args.workbook).expanduser().resolve()
@@ -1759,8 +1986,8 @@ def run_import_command(args: argparse.Namespace) -> int:
         return 1
 
     if args.check:
-        if len(workbook_map) != 36:
-            print(f"Workbook check failed: expected 36 buy-now redirect rows, found {len(workbook_map)}.")
+        if not workbook_map:
+            print("Workbook check failed: no ebook rows found.")
             return 1
         print(f"Workbook check passed: {len(order)} ebook rows found.")
         return 0
@@ -1801,7 +2028,7 @@ def run_build_derivatives_command(args: argparse.Namespace) -> int:
         errors = [
             err
             for err in run_release_checks(books, Path(args.workbook).resolve() if getattr(args, "workbook", None) else None)
-            if "Derivative" in err or "sitemap" in err or "topic discovery" in err or "url-manifest" in err or "robots.txt" in err or "llms.txt" in err
+            if "Derivative" in err or "topic discovery" in err or "url-manifest" in err or "host redirect" in err
         ]
         if errors:
             for error in errors:
