@@ -20,6 +20,7 @@ CATALOGUE_DIR = ROOT / "catalogue"
 TOPICS_DIR = ROOT / "topics"
 MASTER_PATH = DATA_DIR / "ebooks-master.json"
 CRAWLER_CHECKSUMS_PATH = ROOT / "config" / "crawler-checksums.json"
+CRAWLER_SNAPSHOTS_DIR = ROOT / "config" / "crawler-snapshots"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -64,7 +65,13 @@ MALFORMED_SLUG_FIXES = [
 EXTERNAL_CRAWLER_FILES = {
     "robots": "https://assets.jonathan-harris.online/robots.txt",
     "sitemap": "https://assets.jonathan-harris.online/site-map.xml",
-    "llms": "https://assets.jonathan-harris.online/llms.txt",
+    "llms": f"{SITE_URL}/llms.txt",
+}
+
+CRAWLER_SNAPSHOT_FILENAMES = {
+    "robots": "robots.txt",
+    "sitemap": "site-map.xml",
+    "llms": "llms.txt",
 }
 
 TEMPLATE_REQUIRED_FRAGMENTS = [
@@ -1338,10 +1345,28 @@ def build_sitemap_xml(books: List[Dict[str, Any]]) -> str:
 
 def build_robots_txt() -> str:
     return "\n".join([
-        "User-agent: *",
-        "Disallow:",
+        "# Robots rules (generated source snapshot)",
+        f"# Canonical publication target: {EXTERNAL_CRAWLER_FILES['robots']}",
+        f"# Canonical sitemap target: {EXTERNAL_CRAWLER_FILES['sitemap']}",
         "",
-        f"Sitemap: {SITE_URL}/sitemap.xml",
+        "User-agent: *",
+        "Allow: /",
+        "",
+        "# Explicit AI crawler allowances",
+        "User-agent: GPTBot",
+        "Allow: /",
+        "User-agent: Google-Extended",
+        "Allow: /",
+        "User-agent: ClaudeBot",
+        "Allow: /",
+        "User-agent: CCBot",
+        "Allow: /",
+        "User-agent: Applebot",
+        "Allow: /",
+        "",
+        "# Sitemaps",
+        f"Sitemap: {SITE_URL}/site-map.xml",
+        f"Sitemap: {EXTERNAL_CRAWLER_FILES['sitemap']}",
         "",
     ])
 
@@ -1350,6 +1375,7 @@ def build_robots_txt() -> str:
 def build_llms_txt(books: List[Dict[str, Any]]) -> str:
     lines = [
         "# Jonathan Harris ebook library",
+        f"# Canonical publication target: {EXTERNAL_CRAWLER_FILES['llms']}",
         "# Canonical ebook routes only",
         f"Homepage: {SITE_URL}/ebooks/",
         "",
@@ -1359,6 +1385,31 @@ def build_llms_txt(books: List[Dict[str, Any]]) -> str:
         lines.append(f"- {book['title']}: {book['canonical_url']}")
     lines.append("")
     return "\n".join(lines)
+
+def build_crawler_snapshot_payloads(books: List[Dict[str, Any]]) -> Dict[str, str]:
+    return {
+        CRAWLER_SNAPSHOT_FILENAMES["robots"]: build_robots_txt(),
+        CRAWLER_SNAPSHOT_FILENAMES["sitemap"]: build_sitemap_xml(books),
+        CRAWLER_SNAPSHOT_FILENAMES["llms"]: build_llms_txt(books),
+    }
+
+
+
+def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
+    payloads = build_crawler_snapshot_payloads(books)
+    return {
+        CRAWLER_SNAPSHOTS_DIR / name: content
+        for name, content in payloads.items()
+    }
+
+
+
+def remove_legacy_root_crawler_files() -> None:
+    legacy_files = [ROOT / "robots.txt", ROOT / "sitemap.xml", ROOT / "site-map.xml"]
+    for file_path in legacy_files:
+        if file_path.exists():
+            file_path.unlink()
+
 
 
 
@@ -1436,7 +1487,7 @@ def build_books_domain_redirects() -> str:
         "# Crawler files stay externally hosted",
         f"/robots.txt     {EXTERNAL_CRAWLER_FILES['robots']}   301",
         f"/sitemap.xml    {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
-        f"/llms.txt       {EXTERNAL_CRAWLER_FILES['llms']}     301",
+        f"/site-map.xml   {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
         "",
         "# Catch-all",
         "/*  https://jonathan-harris.online/:splat  301",
@@ -1475,7 +1526,7 @@ def build_ebooks_domain_redirects() -> str:
         "# Crawler files stay externally hosted",
         f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}  301",
         f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
-        f"/llms.txt     {EXTERNAL_CRAWLER_FILES['llms']}  301",
+        f"/site-map.xml {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
         "",
         "# Catch-all",
         "/*  https://jonathan-harris.online/:splat  301",
@@ -1553,9 +1604,12 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     }
     write_json(ROOT / "llm-index.json", llm_index)
 
-    (ROOT / "robots.txt").write_text(build_robots_txt(), encoding="utf-8")
-    (ROOT / "sitemap.xml").write_text(build_sitemap_xml(books), encoding="utf-8")
-    (ROOT / "llms.txt").write_text(build_llms_txt(books), encoding="utf-8")
+    crawler_payloads = build_crawler_snapshot_payloads(books)
+    for file_path, content in build_crawler_snapshot_paths(books).items():
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
+    remove_legacy_root_crawler_files()
+    (ROOT / "llms.txt").write_text(crawler_payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]], encoding="utf-8")
     write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
     write_json(EBOOKS_DIR / "url-manifest.json", build_route_manifest(books))
@@ -1751,16 +1805,13 @@ def faq_is_semantically_relevant(book: Dict[str, Any]) -> bool:
 
 def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
     generated_at = utc_now()
-    files = {
-        "robots.txt": build_robots_txt(),
-        "sitemap.xml": build_sitemap_xml(books),
-        "llms.txt": build_llms_txt(books),
-    }
+    files = build_crawler_snapshot_payloads(books)
+    name_to_key = {value: key for key, value in CRAWLER_SNAPSHOT_FILENAMES.items()}
     return {
         "generated_utc": generated_at,
         "files": {
             name: {
-                "url": EXTERNAL_CRAWLER_FILES["robots" if name == "robots.txt" else "sitemap" if name == "sitemap.xml" else "llms"],
+                "url": EXTERNAL_CRAWLER_FILES[name_to_key[name]],
                 "sha256": sha256_text(content),
             }
             for name, content in files.items()
@@ -1903,7 +1954,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     main_redirect_expectations = [
         f"/robots.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301",
         f"/sitemap.xml   {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
-        f"/llms.txt      {EXTERNAL_CRAWLER_FILES['llms']}  301",
+        f"/site-map.xml {EXTERNAL_CRAWLER_FILES['sitemap']} 301",
     ]
     for snippet in main_redirect_expectations:
         if snippet not in redirects_text:
@@ -1920,7 +1971,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     host_expectations = [
         f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}",
         f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}",
-        f"/llms.txt     {EXTERNAL_CRAWLER_FILES['llms']}",
+        f"/site-map.xml {EXTERNAL_CRAWLER_FILES['sitemap']}",
         "/book/*",
         "/catalogue/*",
     ]
@@ -1932,11 +1983,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if snippet not in books_domain:
             errors.append(f"Host redirect coverage missing from _redirects.books-domain: {snippet}")
 
-    generated_crawler_files = {
-        ROOT / "robots.txt": build_robots_txt(),
-        ROOT / "sitemap.xml": build_sitemap_xml(books),
-        ROOT / "llms.txt": build_llms_txt(books),
-    }
+    generated_crawler_files = build_crawler_snapshot_paths(books)
     for file_path, expected in generated_crawler_files.items():
         if not file_path.exists():
             errors.append(f"Generated crawler snapshot missing: {file_path.relative_to(ROOT)}")
@@ -1980,11 +2027,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
 
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
     checksum_files = checksum_payload.get("files", {})
-    expected_crawler_content = {
-        "robots.txt": build_robots_txt(),
-        "sitemap.xml": build_sitemap_xml(books),
-        "llms.txt": build_llms_txt(books),
-    }
+    expected_crawler_content = build_crawler_snapshot_payloads(books)
     if set(checksum_files.keys()) != set(expected_crawler_content.keys()):
         errors.append("config/crawler-checksums.json does not declare the governed crawler snapshots.")
     for name, expected_text in expected_crawler_content.items():
