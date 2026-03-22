@@ -2,11 +2,11 @@
 
 ## Summary
 
-A 324-page guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
+A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
 
 ## What this book covers
 
-A 324-page guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
+A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
 
 ## Who this book is for
 
