@@ -1,3 +1,41 @@
-# This file is redirected in production via _redirects.
-# Canonical llms.txt:
-# https://assets.jonathan-harris.online/llms.txt
+# Jonathan Harris ebook library
+# Canonical ebook routes only
+Homepage: https://jonathan-harris.online/ebooks/
+
+## Canonical books
+- AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology: https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/
+- Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation: https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/
+- AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation: https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/
+- Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability: https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/
+- Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends: https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/
+- Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention: https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/
+- The Artificial Intelligence Revolution: From Algorithms to Consciousness: https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/
+- AI in Aviation: Transforming Safety and Sustainability: https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/
+- AI in Maritime: Revolutionizing Shipping for Sustainability: https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/
+- Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare: https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/
+- The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry: https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/
+- Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future: https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/
+- Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery: https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/
+- Artificial Intelligence in Industry: A Comprehensive Guide: https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/
+- The Dumbening: How AI is Reshaping Our Minds: https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/
+- AI in Agriculture: Revolutionizing Farming for a Sustainable Future: https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/
+- AI in Education: Reimagining Learning for Every Student: https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/
+- Artificial Intelligence in Banking: Revolutionizing Finance and Data Security: https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/
+- Digital Diagnosis: How AI is Revolutionizing Healthcare: https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/
+- Artificial Intelligence in Construction: Building a Sustainable Future: https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/
+- The Artificial Intelligence Job Shift: Navigating the Future of Work: https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/
+- The Future of Government: Leveraging AI to Enhance Services and Safeguard Information: https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/
+- Smart Buildings: AI-Powered Efficiency and Sustainability: https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/
+- Digital Defense: The Role of AI in Modern Warfare: https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/
+- Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology: https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/
+- Climate Intelligence: Harnessing AI for a Greener Future: https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/
+- AI Revolution in Railways: Modernizing Travel for a Smarter Future: https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/
+- Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement: https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/
+- Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking: https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/
+- The AI Music Revolution: Creativity, Controversy, and Collaboration: https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/
+- The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead: https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/
+- The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming: https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/
+- Beyond Earth: How AI is Transforming Space Exploration: https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/
+- From Reporters to Robots: How AI is Reshaping Journalism: https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/
+- The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media: https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/
+- Game AI Unleashed: From Finite State Machines to Machine Learning: https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/

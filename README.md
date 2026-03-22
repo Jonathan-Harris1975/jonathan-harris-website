@@ -47,15 +47,15 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 2. `python3 scripts/sync_redirects.py --check`
 3. `python3 scripts/fix_book_head_metadata.py --check`
 4. `python3 scripts/build_book_derivatives.py --check`
-5. `python3 scripts/check_buy_now.py`
+5. `python3 scripts/maintenance/check_buy_now.py`
 6. `python3 scripts/check_crawlers.py`
 7. `python3 scripts/check_crawlers.py --live`
 8. `python3 scripts/check_crawlers.py --live --strict-live`
-9. `python3 scripts/check_identifiers.py`
+9. `python3 scripts/maintenance/check_identifiers.py`
 10. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
 11. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
 12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
-13. `python3 scripts/rebuild_ebook_subsystem.py <workbook.xlsx>`
+13. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
 
 ## Live crawler validation modes
 - `python3 scripts/check_crawlers.py` keeps the existing pre-deploy repo checks only.
@@ -63,3 +63,10 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `python3 scripts/check_crawlers.py --live --strict-live` is the hard gate for post-deploy validation.
 - `python3 scripts/validate_release.py --post-deploy-live` runs the normal release checks first, then runs the live crawler checks as a second stage.
 - Add `--skip-live-content` when you only want reachability and do not want exact content matching.
+
+## Deployment automation
+- `build.sh` is the Cloudflare Pages-friendly build entrypoint for this repo.
+- Set the Pages build command to `bash build.sh` and the output directory to `.`.
+- `scripts/deployment_ci.py` runs the governed build-time CI chain: optional workbook import, page regeneration, derivative rebuild, redirect sync, crawler snapshot checks, and release validation.
+- Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, or exactly one workbook is present in the repo root.
+- `.github/workflows/ebook-subsystem-ci.yml` mirrors the same validation path on GitHub push and pull request events.
