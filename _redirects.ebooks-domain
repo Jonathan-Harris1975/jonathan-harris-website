@@ -24,10 +24,10 @@ https://www.ebooks.jonathan-harris.online/*  https://ebooks.jonathan-harris.onli
 /glossary/*   https://jonathan-harris.online/glossary/:splat     301
 /api/*        https://jonathan-harris.online/api/:splat          301
 
-# Crawler files stay externally hosted
-/robots.txt   https://assets.jonathan-harris.online/robots.txt  301
-/sitemap.xml  https://assets.jonathan-harris.online/site-map.xml  301
-/site-map.xml https://assets.jonathan-harris.online/site-map.xml  301
+# Crawler files resolve on the main domain
+/robots.txt   https://jonathan-harris.online/robots.txt  301
+/sitemap.xml  https://jonathan-harris.online/site-map.xml  301
+/site-map.xml https://jonathan-harris.online/site-map.xml  301
 
 # Catch-all
 /*  https://jonathan-harris.online/:splat  301

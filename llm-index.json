@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-03-22T22:45:37Z",
+  "generated_utc": "2026-03-23T17:37:40Z",
   "books": [
     {
       "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
@@ -169,7 +169,7 @@
       "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
       "url": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
-      "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. Pages: 14.",
+      "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
       "topic": "Artificial Intelligence",
       "tags": [
         "Artificial Intelligence",
@@ -188,7 +188,7 @@
       "asin": "B0DMYF3YH3",
       "pages": 14,
       "datePublished": "2024-11-13",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T17:37:40Z"
     },
     {
       "title": "AI in Aviation: Transforming Safety and Sustainability",
