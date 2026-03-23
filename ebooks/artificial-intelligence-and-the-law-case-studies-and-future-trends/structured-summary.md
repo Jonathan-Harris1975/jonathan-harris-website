@@ -2,15 +2,15 @@
 
 ## Summary
 
-Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.
+Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in law.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for lawyers, compliance teams, policy readers, and anyone tracking legal change who need a clearer read on what AI can and cannot do in law, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in law affects risk, precedent, access to justice, and professional accountability. Getting the basics right matters long before anyone wheels in the hype machine.
+Law is one of those areas where AI can help, but only if the claims survive contact with fairness, due process, liability, and access to justice. That is where this book keeps its attention.
 
 ## Topics and tags
 
