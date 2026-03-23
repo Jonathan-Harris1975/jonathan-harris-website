@@ -211,6 +211,57 @@ def strip_pages_from_summary(text: str, pages: int | None = None) -> str:
     return clean_paragraph(cleaned)
 
 
+def canonical_text_for_role_check(value: Any, *, pages: int | None = None) -> str:
+    text = clean_paragraph(value)
+    if pages:
+        text = strip_pages_from_summary(text, pages)
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def content_role_validation_errors(records: List[Dict[str, Any]]) -> List[str]:
+    errors: List[str] = []
+    audience_counter = Counter()
+    who_for_counter = Counter()
+
+    for record in records:
+        pages = record.get("pages")
+        roles = {
+            "short": canonical_text_for_role_check(record.get("short"), pages=pages),
+            "description": canonical_text_for_role_check(record.get("description"), pages=pages),
+            "summary": canonical_text_for_role_check(record.get("summary"), pages=pages),
+            "what_this_book_covers": canonical_text_for_role_check(record.get("what_this_book_covers"), pages=pages),
+            "audience": canonical_text_for_role_check(record.get("audience")),
+            "who_for": canonical_text_for_role_check(record.get("who_for")),
+            "why_it_matters": canonical_text_for_role_check(record.get("why_it_matters")),
+        }
+
+        identical_pairs = [
+            ("short", "description"),
+            ("description", "summary"),
+            ("summary", "what_this_book_covers"),
+            ("audience", "who_for"),
+            ("summary", "why_it_matters"),
+        ]
+        for left, right in identical_pairs:
+            if roles[left] and roles[left] == roles[right]:
+                errors.append(f"{record['slug']} collapses the distinct workbook roles for {left} and {right}.")
+
+        if roles["audience"]:
+            audience_counter[roles["audience"]] += 1
+        if roles["who_for"]:
+            who_for_counter[roles["who_for"]] += 1
+
+    repeated_audience = [count for count in audience_counter.values() if count > max(6, len(records) // 4)]
+    repeated_who_for = [count for count in who_for_counter.values() if count > max(6, len(records) // 4)]
+    if repeated_audience:
+        errors.append("Workbook audience field is still over-reused across the catalogue; vary it more before publishing.")
+    if repeated_who_for:
+        errors.append("Workbook 'Who this book is for' field is still over-reused across the catalogue; vary it more before publishing.")
+    return errors
+
+
 
 def split_field(value: Any) -> List[str]:
     if value is None:
@@ -739,6 +790,10 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
     if missing_fields:
         raise ValueError("Canonical workbook is missing required live fields:\n- " + "\n- ".join(missing_fields))
 
+    role_errors = content_role_validation_errors(records)
+    if role_errors:
+        raise ValueError("Canonical workbook content roles are collapsing:\n- " + "\n- ".join(role_errors))
+
     add_related_books(records)
     existing_master = {
         clean_paragraph(item.get("slug")): item
@@ -1012,8 +1067,8 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
       <article class="card ebook-showcase__media">
         <img alt="{title} cover" class="cover ebook-showcase__cover" loading="eager" src="{cover}"/>
         <div class="ebook-actions">
-          <a class="button" href="{html.escape(book['buy_route'])}">Explore Now</a>
-          <a class="button secondary" href="/ebooks/">Browse all eBooks</a>
+          <a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
+          <a class="button secondary" href="/ebooks/">Browse related books</a>
         </div>
         <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
       </article>
@@ -1026,9 +1081,9 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
         </ul>
         <p class="ebook-showcase__note">Straight-talking, practical, and deliberately light on hype.</p>
         <div class="ebook-inline-actions">
-          <a href="{html.escape(book['buy_route'])}">Buy</a>
-          <a href="#deeper-overview">Read deeper overview</a>
-          <a href="/ebooks/">Back to catalogue</a>
+          <a href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
+          <a href="#deeper-overview">Read full overview</a>
+          <a href="/ebooks/">Browse related books</a>
         </div>
       </article>
     </section>
@@ -1507,8 +1562,7 @@ def build_robots_txt() -> str:
         "User-agent: Applebot",
         "Allow: /",
         "",
-        "# Sitemaps",
-        f"Sitemap: {SITE_URL}/site-map.xml",
+        "# Sitemap",
         f"Sitemap: {EXTERNAL_CRAWLER_FILES['sitemap']}",
         "",
     ])
@@ -2013,6 +2067,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     identifiers = [book["identifier"] for book in books if book.get("identifier")]
     if len(identifiers) != len(set(identifiers)):
         errors.append("Duplicate internal identifiers found in the master record.")
+    errors.extend(content_role_validation_errors(books))
 
     legacy_data_files = [ROOT / "data" / "ebook-content-source.json", ROOT / "data" / "ebook-source-overrides.json"]
     for legacy_path in legacy_data_files:
@@ -2128,6 +2183,13 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
 
     redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
     redirects_mirror = (ROOT / "_redirects.txt").read_text(encoding="utf-8")
+    if redirects_text != redirects_mirror:
+        errors.append("_redirects.txt is not an exact generated mirror of _redirects.")
+    redirect_block_pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
+    existing_redirect_block = redirect_block_pattern.search(redirects_text)
+    expected_redirect_block = build_redirect_block(books).strip()
+    if not existing_redirect_block or existing_redirect_block.group(0).strip() != expected_redirect_block:
+        errors.append("The governed branded buy-now redirect block in _redirects has drifted from the generated source.")
     for line in LEGACY_DETAIL_REDIRECT_LINES:
         if line not in redirects_text:
             errors.append(f"Redirect family missing from _redirects: {line}")
@@ -2170,6 +2232,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
 
     books_domain = (ROOT / "_redirects.books-domain").read_text(encoding="utf-8")
     ebooks_domain = (ROOT / "_redirects.ebooks-domain").read_text(encoding="utf-8")
+    if books_domain != build_books_domain_redirects():
+        errors.append("_redirects.books-domain has drifted from the generated host redirect source.")
+    if ebooks_domain != build_ebooks_domain_redirects():
+        errors.append("_redirects.ebooks-domain has drifted from the generated host redirect source.")
     host_expectations = [
         f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}",
         f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}",
