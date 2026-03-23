@@ -2,15 +2,15 @@
 
 ## Summary
 
-A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.
+A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
-A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.
+It shows where AI fits inside Retail, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Suits readers who want to understand how AI changes Retail in practice, especially retail operators, ecommerce teams, merchandisers, and readers tracking customer experience looking for grounded examples and fewer slogans.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in retail affects customer trust, margins, stock flow, and personalisation. Getting the basics right matters long before anyone wheels in the hype machine.
+AI is not arriving in Retail as a parlour trick. It changes how organisations handle margin, customer trust, and operational efficiency, so the boring details matter more than the slogans.
 
 ## Topics and tags
 
