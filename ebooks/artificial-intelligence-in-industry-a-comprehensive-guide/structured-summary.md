@@ -2,15 +2,15 @@
 
 ## Summary
 
-A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.
+A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Industry.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for operations leaders, analysts, engineers, and readers tracking industrial change who need a clearer read on what AI can and cannot do in Industry, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in industry affects efficiency, safety, uptime, and operating margins. Getting the basics right matters long before anyone wheels in the hype machine.
+Industry is one of those areas where AI can help, but only if the claims survive contact with output, maintenance, labour, and reliability. That is where this book keeps its attention.
 
 ## Topics and tags
 
