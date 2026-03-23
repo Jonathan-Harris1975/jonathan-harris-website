@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.
+Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Logistics.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in Logistics. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in Logistics affect safety, throughput, reliability, and emissions. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
