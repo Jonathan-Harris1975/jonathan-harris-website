@@ -2,15 +2,15 @@
 
 ## Summary
 
-Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.
+Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in social media.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for journalists, editors, platform teams, and readers tracking information systems who need a clearer read on what AI can and cannot do in social media, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in media affects accuracy, trust, editorial workflow, and audience reach. Getting the basics right matters long before anyone wheels in the hype machine.
+Social media is one of those areas where AI can help, but only if the claims survive contact with information quality, moderation, incentives, and public trust. That is where this book keeps its attention.
 
 ## Topics and tags
 
