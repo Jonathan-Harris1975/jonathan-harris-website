@@ -3,7 +3,7 @@
     "id": 1,
     "key": "1-ebook",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
-    "short": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+    "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "tags": [
@@ -25,7 +25,7 @@
     "asin": "B0DQHSD858",
     "pages": 227,
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
     "buy_route": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -34,7 +34,7 @@
     "id": 2,
     "key": "2-ebook",
     "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
-    "short": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
+    "short": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "tags": [
@@ -54,7 +54,7 @@
     "asin": "B0DQK6C563",
     "pages": 205,
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
     "buy_route": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/buy-now",
     "topic_url": "/catalogue/healthcare/"
@@ -63,7 +63,7 @@
     "id": 3,
     "key": "3-ebook",
     "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
-    "short": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
+    "short": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "tags": [
@@ -83,7 +83,7 @@
     "asin": "B0DMKFZ3W3",
     "pages": 338,
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
     "buy_route": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/buy-now",
     "topic_url": "/catalogue/energy/"
@@ -92,7 +92,7 @@
     "id": 4,
     "key": "4-ebook",
     "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
-    "short": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
+    "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "tags": [
@@ -112,7 +112,7 @@
     "asin": "B0DMQLK6LY",
     "pages": 339,
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
     "buy_route": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -121,7 +121,7 @@
     "id": 5,
     "key": "5-ebook",
     "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
-    "short": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
+    "short": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "tags": [
@@ -141,7 +141,7 @@
     "asin": "B0DQHTBSWJ",
     "pages": 224,
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
     "buy_route": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/buy-now",
     "topic_url": "/catalogue/law/"
@@ -150,7 +150,7 @@
     "id": 6,
     "key": "6-ebook",
     "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
-    "short": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
+    "short": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "tags": [
@@ -170,7 +170,7 @@
     "asin": "B0DN4GZZQ4",
     "pages": 269,
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
     "buy_route": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
     "topic_url": "/catalogue/cyber-security/"
@@ -179,7 +179,7 @@
     "id": 7,
     "key": "7-ebook",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
+    "short": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "tags": [
@@ -197,7 +197,7 @@
     "asin": "B0DMYF3YH3",
     "pages": 14,
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-23T17:37:40Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
     "buy_route": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/buy-now",
     "topic_url": "/catalogue/artificial-intelligence/"
@@ -206,7 +206,7 @@
     "id": 8,
     "key": "8-ebook",
     "title": "AI in Aviation: Transforming Safety and Sustainability",
-    "short": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
+    "short": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "main_image": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "tags": [
@@ -226,7 +226,7 @@
     "asin": "B0DMKTLMX6",
     "pages": 284,
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
     "buy_route": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -235,7 +235,7 @@
     "id": 9,
     "key": "9-ebook",
     "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
-    "short": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+    "short": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "tags": [
@@ -255,7 +255,7 @@
     "asin": "B0DMMTGNDJ",
     "pages": 312,
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
     "buy_route": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -264,7 +264,7 @@
     "id": 10,
     "key": "10-ebook",
     "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
-    "short": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
+    "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "tags": [
@@ -284,7 +284,7 @@
     "asin": "B0DN4XSLK9",
     "pages": 328,
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
     "buy_route": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/buy-now",
     "topic_url": "/catalogue/healthcare/"
@@ -293,7 +293,7 @@
     "id": 11,
     "key": "11-ebook",
     "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
-    "short": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+    "short": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "main_image": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "tags": [
@@ -313,7 +313,7 @@
     "asin": "B0DMYQV1LY",
     "pages": 324,
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
     "buy_route": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -322,7 +322,7 @@
     "id": 12,
     "key": "12-ebook",
     "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
-    "short": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+    "short": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "tags": [
@@ -342,7 +342,7 @@
     "asin": "B0DMYHW17M",
     "pages": 234,
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
     "buy_route": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/buy-now",
     "topic_url": "/catalogue/retail/"
@@ -351,7 +351,7 @@
     "id": 13,
     "key": "13-ebook",
     "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
-    "short": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
+    "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "tags": [
@@ -371,7 +371,7 @@
     "asin": "B0DMV2Q6TF",
     "pages": 369,
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
     "buy_route": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/buy-now",
     "topic_url": "/catalogue/manufacturing/"
@@ -380,7 +380,7 @@
     "id": 14,
     "key": "14-ebook",
     "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
-    "short": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
+    "short": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "tags": [
@@ -400,7 +400,7 @@
     "asin": "B0DMV47ZRL",
     "pages": 347,
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
     "buy_route": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/buy-now",
     "topic_url": "/catalogue/industry/"
@@ -409,7 +409,7 @@
     "id": 15,
     "key": "15-ebook",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
-    "short": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
+    "short": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "main_image": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "tags": [
@@ -429,7 +429,7 @@
     "asin": "B0DMMVN17Z",
     "pages": 277,
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
     "buy_route": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/buy-now",
     "topic_url": "/catalogue/ethics/"
@@ -438,7 +438,7 @@
     "id": 16,
     "key": "16-ebook",
     "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
-    "short": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
+    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "main_image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "tags": [
@@ -458,7 +458,7 @@
     "asin": "B0DMN32J3Y",
     "pages": 330,
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
     "buy_route": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
     "topic_url": "/catalogue/agriculture/"
@@ -467,7 +467,7 @@
     "id": 17,
     "key": "17-ebook",
     "title": "AI in Education: Reimagining Learning for Every Student",
-    "short": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
+    "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "main_image": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "tags": [
@@ -487,7 +487,7 @@
     "asin": "B0DMKXWQDK",
     "pages": 323,
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
     "buy_route": "/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
     "topic_url": "/catalogue/education/"
@@ -496,7 +496,7 @@
     "id": 18,
     "key": "18-ebook",
     "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "short": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
+    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "tags": [
@@ -516,7 +516,7 @@
     "asin": "B0DML75B3C",
     "pages": 286,
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
     "buy_route": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
     "topic_url": "/catalogue/finance/"
@@ -525,7 +525,7 @@
     "id": 19,
     "key": "19-ebook",
     "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
-    "short": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
+    "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "tags": [
@@ -545,7 +545,7 @@
     "asin": "B0DM73FR3W",
     "pages": 348,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
     "buy_route": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/buy-now",
     "topic_url": "/catalogue/healthcare/"
@@ -554,7 +554,7 @@
     "id": 20,
     "key": "20-ebook",
     "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-    "short": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
+    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "tags": [
@@ -574,7 +574,7 @@
     "asin": "B0DMQMGLP4",
     "pages": 319,
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
     "buy_route": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
     "topic_url": "/catalogue/construction/"
@@ -583,7 +583,7 @@
     "id": 21,
     "key": "21-ebook",
     "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "short": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
+    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "tags": [
@@ -603,7 +603,7 @@
     "asin": "B0DMQHQTQH",
     "pages": 315,
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
     "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
     "topic_url": "/catalogue/future-of-work/"
@@ -612,7 +612,7 @@
     "id": 22,
     "key": "22-ebook",
     "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "short": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
+    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "main_image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "tags": [
@@ -632,7 +632,7 @@
     "asin": "B0DM74CRSD",
     "pages": 328,
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
     "buy_route": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
     "topic_url": "/catalogue/government/"
@@ -641,7 +641,7 @@
     "id": 23,
     "key": "23-ebook",
     "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
-    "short": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+    "short": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "tags": [
@@ -661,7 +661,7 @@
     "asin": "B0DMHBQVCR",
     "pages": 345,
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
     "buy_route": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/buy-now",
     "topic_url": "/catalogue/construction/"
@@ -670,7 +670,7 @@
     "id": 24,
     "key": "24-ebook",
     "title": "Digital Defense: The Role of AI in Modern Warfare",
-    "short": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
+    "short": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "tags": [
@@ -690,7 +690,7 @@
     "asin": "B0DM8256SL",
     "pages": 296,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
     "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
     "topic_url": "/catalogue/defence/"
@@ -699,7 +699,7 @@
     "id": 25,
     "key": "25-ebook",
     "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
-    "short": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
+    "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "tags": [
@@ -719,7 +719,7 @@
     "asin": "B0DQK6B53Z",
     "pages": 221,
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
     "buy_route": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/buy-now",
     "topic_url": "/catalogue/environment/"
@@ -728,7 +728,7 @@
     "id": 26,
     "key": "26-ebook",
     "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-    "short": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
+    "short": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "main_image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "tags": [
@@ -748,7 +748,7 @@
     "asin": "B0DM72JZ44",
     "pages": 338,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
     "buy_route": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
     "topic_url": "/catalogue/environment/"
@@ -757,7 +757,7 @@
     "id": 27,
     "key": "27-ebook",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-    "short": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
+    "short": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "main_image": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "tags": [
@@ -777,7 +777,7 @@
     "asin": "B0DWM19MZH",
     "pages": 254,
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
     "buy_route": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/buy-now",
     "topic_url": "/catalogue/transportation/"
@@ -786,7 +786,7 @@
     "id": 28,
     "key": "28-ebook",
     "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
-    "short": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
+    "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "tags": [
@@ -806,7 +806,7 @@
     "asin": "B0DQFJ6XP5",
     "pages": 229,
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
     "buy_route": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/buy-now",
     "topic_url": "/catalogue/sports/"
@@ -815,7 +815,7 @@
     "id": 29,
     "key": "29-ebook",
     "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-    "short": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
+    "short": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "main_image": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "tags": [
@@ -835,7 +835,7 @@
     "asin": "B0DY672VRB",
     "pages": 336,
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
     "buy_route": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
     "topic_url": "/catalogue/creativity/"
@@ -844,7 +844,7 @@
     "id": 30,
     "key": "30-ebook",
     "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
-    "short": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
+    "short": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "tags": [
@@ -864,7 +864,7 @@
     "asin": "B0DY666TZJ",
     "pages": 295,
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
     "buy_route": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/buy-now",
     "topic_url": "/catalogue/creativity/"
@@ -873,7 +873,7 @@
     "id": 31,
     "key": "31-ebook",
     "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "short": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
+    "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "main_image": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "tags": [
@@ -893,7 +893,7 @@
     "asin": "B0DY5MRT6K",
     "pages": 302,
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
     "buy_route": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
     "topic_url": "/catalogue/history/"
@@ -902,7 +902,7 @@
     "id": 32,
     "key": "32-ebook",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+    "short": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "main_image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "tags": [
@@ -924,7 +924,7 @@
     "asin": "B0DY4PSD8Z",
     "pages": 327,
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
     "buy_route": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
     "topic_url": "/catalogue/ethics/"
@@ -933,7 +933,7 @@
     "id": 33,
     "key": "33-ebook",
     "title": "Beyond Earth: How AI is Transforming Space Exploration",
-    "short": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
+    "short": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "main_image": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "tags": [
@@ -953,7 +953,7 @@
     "asin": "B0DY4Q2Q2D",
     "pages": 350,
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
     "buy_route": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/buy-now",
     "topic_url": "/catalogue/science/"
@@ -962,7 +962,7 @@
     "id": 34,
     "key": "34-ebook",
     "title": "From Reporters to Robots: How AI is Reshaping Journalism",
-    "short": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
+    "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "tags": [
@@ -982,7 +982,7 @@
     "asin": "B0DY4NP1WF",
     "pages": 334,
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
     "buy_route": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/buy-now",
     "topic_url": "/catalogue/media/"
@@ -991,7 +991,7 @@
     "id": 35,
     "key": "35-ebook",
     "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "short": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
+    "short": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "tags": [
@@ -1011,7 +1011,7 @@
     "asin": "B0DY12Z1SP",
     "pages": 334,
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
     "buy_route": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
     "topic_url": "/catalogue/media/"
@@ -1020,7 +1020,7 @@
     "id": 36,
     "key": "36-ebook",
     "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "short": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
+    "short": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
     "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "main_image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "tags": [
@@ -1040,7 +1040,7 @@
     "asin": "B0DY18CYT6",
     "pages": 344,
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T19:34:35Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
     "buy_route": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
     "topic_url": "/catalogue/gaming/"
