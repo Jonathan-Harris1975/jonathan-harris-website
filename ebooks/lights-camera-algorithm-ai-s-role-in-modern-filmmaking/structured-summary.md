@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.
+Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in filmmaking.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for creators, producers, editors, and readers tracking how tools reshape creative work who need a clearer read on what AI can and cannot do in filmmaking, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in creativity affects authorship, originality, workflow, and commercial control. Getting the basics right matters long before anyone wheels in the hype machine.
+Filmmaking is one of those areas where AI can help, but only if the claims survive contact with authorship, livelihoods, rights, and creative control. That is where this book keeps its attention.
 
 ## Topics and tags
 
