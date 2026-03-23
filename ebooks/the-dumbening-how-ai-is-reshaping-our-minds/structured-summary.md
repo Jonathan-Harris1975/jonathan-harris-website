@@ -2,15 +2,15 @@
 
 ## Summary
 
-Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.
+Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI changes the day-to-day reality of how ai shapes attention and thinking: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
-Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.
+It shows where AI fits inside how ai shapes attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Suits readers who want to understand how AI changes how ai shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in ethics affects fairness, accountability, public trust, and long-term safety. Getting the basics right matters long before anyone wheels in the hype machine.
+AI is not arriving in how ai shapes attention and thinking as a parlour trick. It changes how organisations handle autonomy, fairness, consent, and social trust, so the boring details matter more than the slogans.
 
 ## Topics and tags
 
