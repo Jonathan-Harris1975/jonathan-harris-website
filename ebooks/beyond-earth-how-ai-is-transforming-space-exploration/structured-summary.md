@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.
+Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.
+It shows where AI fits inside space exploration, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Suits readers who want to understand how AI changes space exploration in practice, especially science readers, engineers, mission planners, and anyone tracking research-heavy systems looking for grounded examples and fewer slogans.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in science affects mission success, data interpretation, and what can be automated far from Earth. Getting the basics right matters long before anyone wheels in the hype machine.
+AI is not arriving in space exploration as a parlour trick. It changes how organisations handle mission risk, cost, discovery speed, and scientific return, so the boring details matter more than the slogans.
 
 ## Topics and tags
 
