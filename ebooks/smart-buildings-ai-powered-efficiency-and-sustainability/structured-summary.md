@@ -2,15 +2,15 @@
 
 ## Summary
 
-A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.
+A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in smart buildings.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for developers, site managers, architects, and readers tracking the built environment who need a clearer read on what AI can and cannot do in smart buildings, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in construction affects project risk, site safety, delivery costs, and sustainability targets. Getting the basics right matters long before anyone wheels in the hype machine.
+Smart buildings is one of those areas where AI can help, but only if the claims survive contact with cost, safety, scheduling, and energy use. That is where this book keeps its attention.
 
 ## Topics and tags
 
