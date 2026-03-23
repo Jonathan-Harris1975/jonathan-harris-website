@@ -4,9 +4,9 @@
     "key": "1-ebook",
     "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
-    "short": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+    "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
-    "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+    "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -36,20 +36,20 @@
     "pages": 227,
     "asin": "B0DQHSD858",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-01",
-    "what_this_book_covers": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Formula 1.",
+    "who_for": "Best for people weighing real adoption choices in Formula 1. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Formula 1 affect safety, throughput, reliability, and emissions. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -67,7 +67,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -99,9 +99,9 @@
     "key": "2-ebook",
     "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
     "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
-    "short": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
+    "short": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
-    "summary": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
+    "summary": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Healthcare",
     "topic_slug": "healthcare",
     "topic_url": "/catalogue/healthcare/",
@@ -129,20 +129,20 @@
     "pages": 205,
     "asin": "B0DQK6C563",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
     "identifier": "JH-AI-EBOOK-17",
-    "what_this_book_covers": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Veterinary Medicine.",
+    "who_for": "Written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who need a clearer read on what AI can and cannot do in Veterinary Medicine, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in healthcare affects patient outcomes, safety, workload, and access to care. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Veterinary Medicine is one of those areas where AI can help, but only if the claims survive contact with outcomes, safety, workload, and trust. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping healthcare",
     "distinct_angle": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation keeps the focus on practical judgement in healthcare rather than drifting into brochure-speak.",
     "notes": "",
@@ -160,7 +160,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This healthcare title is aimed at A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
         }
       },
       {
@@ -192,9 +192,9 @@
     "key": "3-ebook",
     "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
     "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
-    "short": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
+    "short": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
-    "summary": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
+    "summary": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Energy",
     "topic_slug": "energy",
     "topic_url": "/catalogue/energy/",
@@ -222,20 +222,20 @@
     "pages": 338,
     "asin": "B0DMKFZ3W3",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems.",
     "identifier": "JH-AI-EBOOK-06",
-    "what_this_book_covers": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside Smart Grid, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes Smart Grid in practice, especially grid operators, infrastructure planners, policy teams, and readers tracking energy systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in energy today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical energy use cases, explained in plain English.",
       "Key themes including demand forecasting, grid balancing, renewables, efficiency.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in energy affects grid resilience, efficiency, emissions, and cost. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in Smart Grid as a parlour trick. It changes how organisations handle grid reliability, cost, resilience, and decarbonisation, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping energy",
     "distinct_angle": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation keeps the focus on practical judgement in energy rather than drifting into brochure-speak.",
     "notes": "",
@@ -253,7 +253,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This energy title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This energy title is aimed at A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems"
         }
       },
       {
@@ -285,9 +285,9 @@
     "key": "4-ebook",
     "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
     "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
-    "short": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
+    "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
-    "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
+    "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -315,20 +315,20 @@
     "pages": 339,
     "asin": "B0DMQLK6LY",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-14",
-    "what_this_book_covers": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Logistics.",
+    "who_for": "Best for people weighing real adoption choices in Logistics. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Logistics affect safety, throughput, reliability, and emissions. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -346,7 +346,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -378,9 +378,9 @@
     "key": "5-ebook",
     "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
     "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
-    "short": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
+    "short": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
     "description": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
-    "summary": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
+    "summary": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Law",
     "topic_slug": "law",
     "topic_url": "/catalogue/law/",
@@ -408,20 +408,20 @@
     "pages": 224,
     "asin": "B0DQHTBSWJ",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change.",
     "identifier": "JH-AI-EBOOK-08",
-    "what_this_book_covers": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in law.",
+    "who_for": "Written for lawyers, compliance teams, policy readers, and anyone tracking legal change who need a clearer read on what AI can and cannot do in law, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in law today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical law use cases, explained in plain English.",
       "Key themes including contracts, research, compliance, risk.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in law affects risk, precedent, access to justice, and professional accountability. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Law is one of those areas where AI can help, but only if the claims survive contact with fairness, due process, liability, and access to justice. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping law",
     "distinct_angle": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends keeps the focus on practical judgement in law rather than drifting into brochure-speak.",
     "notes": "",
@@ -439,7 +439,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This law title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This law title is aimed at A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change"
         }
       },
       {
@@ -471,9 +471,9 @@
     "key": "6-ebook",
     "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
     "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
-    "short": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
+    "short": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
     "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
-    "summary": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
+    "summary": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Cyber Security",
     "topic_slug": "cyber-security",
     "topic_url": "/catalogue/cyber-security/",
@@ -501,20 +501,20 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
     "identifier": "JH-AI-EBOOK-09",
-    "what_this_book_covers": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside Cyber Security, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes Cyber Security in practice, especially security teams, risk managers, founders, and readers tracking digital defence looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in cyber security today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical cyber security use cases, explained in plain English.",
       "Key themes including threat detection, breach prevention, automation, response.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in cyber security affects breach response, resilience, trust, and regulatory exposure. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in Cyber Security as a parlour trick. It changes how organisations handle breach risk, response speed, and resilience, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping cyber security",
     "distinct_angle": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention keeps the focus on practical judgement in cyber security rather than drifting into brochure-speak.",
     "notes": "",
@@ -532,7 +532,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This cyber security title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This cyber security title is aimed at A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence"
         }
       },
       {
@@ -564,9 +564,9 @@
     "key": "7-ebook",
     "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
+    "short": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
-    "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
+    "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
     "topic": "Artificial Intelligence",
     "topic_slug": "artificial-intelligence",
     "topic_url": "/catalogue/artificial-intelligence/",
@@ -592,20 +592,20 @@
     "pages": 14,
     "asin": "B0DMYF3YH3",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-23T17:37:40Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
     "identifier": "JH-AI-EBOOK-32",
-    "what_this_book_covers": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in artificial intelligence itself.",
+    "who_for": "Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in artificial intelligence today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical artificial intelligence use cases, explained in plain English.",
       "Key themes including use cases, governance, trade-offs, adoption.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in real-world AI adoption affects how people deploy, govern, and live with AI across real organisations. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in artificial intelligence itself affect how people judge the technology in the first place. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "AI without the carnival barker routine",
     "distinct_angle": "The Artificial Intelligence Revolution: From Algorithms to Consciousness keeps the focus on practical judgement in artificial intelligence rather than drifting into brochure-speak.",
     "notes": "",
@@ -623,7 +623,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This artificial intelligence title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This artificial intelligence title is aimed at Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre"
         }
       },
       {
@@ -655,9 +655,9 @@
     "key": "8-ebook",
     "slug": "ai-in-aviation-transforming-safety-and-sustainability",
     "title": "AI in Aviation: Transforming Safety and Sustainability",
-    "short": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
+    "short": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
-    "summary": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
+    "summary": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -685,20 +685,20 @@
     "pages": 284,
     "asin": "B0DMKTLMX6",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-03",
-    "what_this_book_covers": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Aviation.",
+    "who_for": "Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in Aviation, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Aviation is one of those areas where AI can help, but only if the claims survive contact with safety, throughput, reliability, and emissions. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "AI in Aviation: Transforming Safety and Sustainability keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -716,7 +716,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -748,9 +748,9 @@
     "key": "9-ebook",
     "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
     "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
-    "short": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+    "short": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
-    "summary": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+    "summary": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -778,20 +778,20 @@
     "pages": 312,
     "asin": "B0DMMTGNDJ",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-05",
-    "what_this_book_covers": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside Maritime, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes Maritime in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in Maritime as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "AI in Maritime: Revolutionizing Shipping for Sustainability keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -809,7 +809,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -841,9 +841,9 @@
     "key": "10-ebook",
     "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
     "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
-    "short": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
+    "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
-    "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
+    "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
     "topic": "Healthcare",
     "topic_slug": "healthcare",
     "topic_url": "/catalogue/healthcare/",
@@ -871,20 +871,20 @@
     "pages": 328,
     "asin": "B0DN4XSLK9",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
     "identifier": "JH-AI-EBOOK-15",
-    "what_this_book_covers": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Pharmaceuticals.",
+    "who_for": "Best for people weighing real adoption choices in Pharmaceuticals. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in healthcare affects patient outcomes, safety, workload, and access to care. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Pharmaceuticals affect outcomes, safety, workload, and trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping healthcare",
     "distinct_angle": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare keeps the focus on practical judgement in healthcare rather than drifting into brochure-speak.",
     "notes": "",
@@ -902,7 +902,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This healthcare title is aimed at Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
         }
       },
       {
@@ -934,9 +934,9 @@
     "key": "11-ebook",
     "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
     "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
-    "short": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+    "short": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
     "description": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
-    "summary": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+    "summary": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -964,20 +964,20 @@
     "pages": 324,
     "asin": "B0DMYQV1LY",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-33",
-    "what_this_book_covers": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry.",
+    "who_for": "Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in the automotive industry, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "The automotive industry is one of those areas where AI can help, but only if the claims survive contact with safety, throughput, reliability, and emissions. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -995,7 +995,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -1027,9 +1027,9 @@
     "key": "12-ebook",
     "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
     "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
-    "short": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+    "short": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
-    "summary": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+    "summary": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Retail",
     "topic_slug": "retail",
     "topic_url": "/catalogue/retail/",
@@ -1057,20 +1057,20 @@
     "pages": 234,
     "asin": "B0DMYHW17M",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience.",
     "identifier": "JH-AI-EBOOK-18",
-    "what_this_book_covers": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside Retail, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes Retail in practice, especially retail operators, ecommerce teams, merchandisers, and readers tracking customer experience looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in retail today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical retail use cases, explained in plain English.",
       "Key themes including personalisation, inventory, forecasting, customer experience.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in retail affects customer trust, margins, stock flow, and personalisation. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in Retail as a parlour trick. It changes how organisations handle margin, customer trust, and operational efficiency, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping retail",
     "distinct_angle": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future keeps the focus on practical judgement in retail rather than drifting into brochure-speak.",
     "notes": "",
@@ -1088,7 +1088,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This retail title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This retail title is aimed at A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience"
         }
       },
       {
@@ -1120,9 +1120,9 @@
     "key": "13-ebook",
     "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
     "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
-    "short": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
+    "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
-    "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
+    "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
     "topic": "Manufacturing",
     "topic_slug": "manufacturing",
     "topic_url": "/catalogue/manufacturing/",
@@ -1150,20 +1150,20 @@
     "pages": 369,
     "asin": "B0DMV2Q6TF",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation.",
     "identifier": "JH-AI-EBOOK-19",
-    "what_this_book_covers": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Manufacturing.",
+    "who_for": "Best for people weighing real adoption choices in Manufacturing. It is written for operations leaders, plant teams, engineers, and readers tracking industrial automation who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in manufacturing today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical manufacturing use cases, explained in plain English.",
       "Key themes including predictive maintenance, quality control, automation, supply chains.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in manufacturing affects quality, uptime, worker safety, and supply-chain resilience. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Manufacturing affect uptime, throughput, quality, and worker safety. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping manufacturing",
     "distinct_angle": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery keeps the focus on practical judgement in manufacturing rather than drifting into brochure-speak.",
     "notes": "",
@@ -1181,7 +1181,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This manufacturing title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This manufacturing title is aimed at Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation"
         }
       },
       {
@@ -1213,9 +1213,9 @@
     "key": "14-ebook",
     "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
     "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
-    "short": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
+    "short": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
     "description": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
-    "summary": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
+    "summary": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Industry",
     "topic_slug": "industry",
     "topic_url": "/catalogue/industry/",
@@ -1243,20 +1243,20 @@
     "pages": 347,
     "asin": "B0DMV47ZRL",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change.",
     "identifier": "JH-AI-EBOOK-13",
-    "what_this_book_covers": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Industry.",
+    "who_for": "Written for operations leaders, analysts, engineers, and readers tracking industrial change who need a clearer read on what AI can and cannot do in Industry, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in industry today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical industry use cases, explained in plain English.",
       "Key themes including industry, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in industry affects efficiency, safety, uptime, and operating margins. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Industry is one of those areas where AI can help, but only if the claims survive contact with output, maintenance, labour, and reliability. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping industry",
     "distinct_angle": "Artificial Intelligence in Industry: A Comprehensive Guide keeps the focus on practical judgement in industry rather than drifting into brochure-speak.",
     "notes": "",
@@ -1274,7 +1274,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This industry title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This industry title is aimed at A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change"
         }
       },
       {
@@ -1306,9 +1306,9 @@
     "key": "15-ebook",
     "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
-    "short": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
+    "short": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
     "description": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
-    "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
+    "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI changes the day-to-day reality of how ai shapes attention and thinking: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Ethics",
     "topic_slug": "ethics",
     "topic_url": "/catalogue/ethics/",
@@ -1336,20 +1336,20 @@
     "pages": 277,
     "asin": "B0DMMVN17Z",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in how ai shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
     "identifier": "JH-AI-EBOOK-34",
-    "what_this_book_covers": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside how ai shapes attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes how ai shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in ethics today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.",
       "Key themes including ethics, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in ethics affects fairness, accountability, public trust, and long-term safety. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in how ai shapes attention and thinking as a parlour trick. It changes how organisations handle autonomy, fairness, consent, and social trust, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping ethics",
     "distinct_angle": "The Dumbening: How AI is Reshaping Our Minds keeps the focus on practical judgement in ethics rather than drifting into brochure-speak.",
     "notes": "",
@@ -1367,7 +1367,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This ethics title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This ethics title is aimed at A practical overview of AI in how ai shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
         }
       },
       {
@@ -1399,9 +1399,9 @@
     "key": "16-ebook",
     "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
     "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
-    "short": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
+    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
-    "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
+    "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
     "topic": "Agriculture",
     "topic_slug": "agriculture",
     "topic_url": "/catalogue/agriculture/",
@@ -1429,20 +1429,20 @@
     "pages": 330,
     "asin": "B0DMN32J3Y",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers.",
     "identifier": "JH-AI-EBOOK-02",
-    "what_this_book_covers": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Agriculture.",
+    "who_for": "Best for people weighing real adoption choices in Agriculture. It is written for farm operators, ag-tech teams, sustainability readers, and policy-minded observers who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in agriculture today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical agriculture use cases, explained in plain English.",
       "Key themes including agriculture, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in agriculture affects yields, input costs, food security, and sustainability. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Agriculture affect yield, waste, labour pressure, and sustainability. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping agriculture",
     "distinct_angle": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future keeps the focus on practical judgement in agriculture rather than drifting into brochure-speak.",
     "notes": "",
@@ -1460,7 +1460,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This agriculture title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This agriculture title is aimed at Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers"
         }
       },
       {
@@ -1492,9 +1492,9 @@
     "key": "17-ebook",
     "slug": "ai-in-education-reimagining-learning-for-every-student",
     "title": "AI in Education: Reimagining Learning for Every Student",
-    "short": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
+    "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
-    "summary": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
+    "summary": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Education",
     "topic_slug": "education",
     "topic_url": "/catalogue/education/",
@@ -1522,20 +1522,20 @@
     "pages": 323,
     "asin": "B0DMKXWQDK",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change.",
     "identifier": "JH-AI-EBOOK-04",
-    "what_this_book_covers": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Education.",
+    "who_for": "Written for teachers, school leaders, edtech teams, and readers tracking classroom change who need a clearer read on what AI can and cannot do in Education, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in education today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical education use cases, explained in plain English.",
       "Key themes including adaptive learning, assessment, admin automation, access.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in education affects learning outcomes, access, workload, and fairness. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Education is one of those areas where AI can help, but only if the claims survive contact with student outcomes, teacher workload, and equity. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping education",
     "distinct_angle": "AI in Education: Reimagining Learning for Every Student keeps the focus on practical judgement in education rather than drifting into brochure-speak.",
     "notes": "",
@@ -1553,7 +1553,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This education title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This education title is aimed at A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change"
         }
       },
       {
@@ -1585,9 +1585,9 @@
     "key": "18-ebook",
     "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
     "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "short": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
+    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
-    "summary": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
+    "summary": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Finance",
     "topic_slug": "finance",
     "topic_url": "/catalogue/finance/",
@@ -1615,20 +1615,20 @@
     "pages": 286,
     "asin": "B0DML75B3C",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure.",
     "identifier": "JH-AI-EBOOK-11",
-    "what_this_book_covers": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside Banking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes Banking in practice, especially bankers, risk teams, fintech readers, and anyone tracking financial infrastructure looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in finance today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical finance use cases, explained in plain English.",
       "Key themes including fraud detection, risk scoring, compliance, personalisation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in finance affects fraud losses, compliance exposure, customer trust, and competitive positioning. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in Banking as a parlour trick. It changes how organisations handle risk, fraud, compliance, and customer trust, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping finance",
     "distinct_angle": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security keeps the focus on practical judgement in finance rather than drifting into brochure-speak.",
     "notes": "",
@@ -1646,7 +1646,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This finance title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This finance title is aimed at A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure"
         }
       },
       {
@@ -1678,9 +1678,9 @@
     "key": "19-ebook",
     "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
     "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
-    "short": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
+    "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
-    "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
+    "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
     "topic": "Healthcare",
     "topic_slug": "healthcare",
     "topic_url": "/catalogue/healthcare/",
@@ -1708,20 +1708,20 @@
     "pages": 348,
     "asin": "B0DM73FR3W",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
     "identifier": "JH-AI-EBOOK-23",
-    "what_this_book_covers": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in healthcare.",
+    "who_for": "Best for people weighing real adoption choices in healthcare. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in healthcare affects patient outcomes, safety, workload, and access to care. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in healthcare affect outcomes, safety, workload, and trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping healthcare",
     "distinct_angle": "Digital Diagnosis: How AI is Revolutionizing Healthcare keeps the focus on practical judgement in healthcare rather than drifting into brochure-speak.",
     "notes": "",
@@ -1739,7 +1739,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This healthcare title is aimed at Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
         }
       },
       {
@@ -1771,9 +1771,9 @@
     "key": "20-ebook",
     "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
     "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-    "short": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
+    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
-    "summary": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
+    "summary": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Construction",
     "topic_slug": "construction",
     "topic_url": "/catalogue/construction/",
@@ -1801,20 +1801,20 @@
     "pages": 319,
     "asin": "B0DMQMGLP4",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment.",
     "identifier": "JH-AI-EBOOK-12",
-    "what_this_book_covers": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Construction.",
+    "who_for": "Written for developers, site managers, architects, and readers tracking the built environment who need a clearer read on what AI can and cannot do in Construction, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in construction today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.",
       "Key themes including planning, site safety, computer vision, digital twins.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in construction affects project risk, site safety, delivery costs, and sustainability targets. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Construction is one of those areas where AI can help, but only if the claims survive contact with cost, safety, scheduling, and energy use. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping construction",
     "distinct_angle": "Artificial Intelligence in Construction: Building a Sustainable Future keeps the focus on practical judgement in construction rather than drifting into brochure-speak.",
     "notes": "",
@@ -1832,7 +1832,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This construction title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This construction title is aimed at A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment"
         }
       },
       {
@@ -1864,9 +1864,9 @@
     "key": "21-ebook",
     "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
     "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "short": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
+    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
     "description": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
-    "summary": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
+    "summary": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Future of Work",
     "topic_slug": "future-of-work",
     "topic_url": "/catalogue/future-of-work/",
@@ -1894,20 +1894,20 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
     "identifier": "JH-AI-EBOOK-31",
-    "what_this_book_covers": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside the future of work, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes the future of work in practice, especially managers, workers, founders, and readers tracking labour-market change looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in future of work today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical future of work use cases, explained in plain English.",
       "Key themes including automation, reskilling, productivity, labour markets.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in future of work affects jobs, skills, productivity, and how organisations adapt. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in the future of work as a parlour trick. It changes how organisations handle jobs, skills, bargaining power, and organisational design, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping future of work",
     "distinct_angle": "The Artificial Intelligence Job Shift: Navigating the Future of Work keeps the focus on practical judgement in future of work rather than drifting into brochure-speak.",
     "notes": "",
@@ -1925,7 +1925,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This future of work title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This future of work title is aimed at A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change"
         }
       },
       {
@@ -1957,9 +1957,9 @@
     "key": "22-ebook",
     "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
     "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "short": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
+    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
-    "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
+    "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
     "topic": "Government",
     "topic_slug": "government",
     "topic_url": "/catalogue/government/",
@@ -1987,20 +1987,20 @@
     "pages": 328,
     "asin": "B0DM74CRSD",
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
     "identifier": "JH-AI-EBOOK-35",
-    "what_this_book_covers": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in government.",
+    "who_for": "Best for people weighing real adoption choices in government. It is written for public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in government today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical government use cases, explained in plain English.",
       "Key themes including service delivery, fraud prevention, policy analysis, public trust.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in government affects public trust, service quality, fraud prevention, and accountability. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in government affect service quality, accountability, privacy, and public trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping government",
     "distinct_angle": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information keeps the focus on practical judgement in government rather than drifting into brochure-speak.",
     "notes": "",
@@ -2018,7 +2018,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This government title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This government title is aimed at Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity"
         }
       },
       {
@@ -2050,9 +2050,9 @@
     "key": "23-ebook",
     "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
     "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
-    "short": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+    "short": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
     "description": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
-    "summary": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+    "summary": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Construction",
     "topic_slug": "construction",
     "topic_url": "/catalogue/construction/",
@@ -2080,20 +2080,20 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
     "identifier": "JH-AI-EBOOK-27",
-    "what_this_book_covers": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in smart buildings.",
+    "who_for": "Written for developers, site managers, architects, and readers tracking the built environment who need a clearer read on what AI can and cannot do in smart buildings, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in construction today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.",
       "Key themes including planning, site safety, computer vision, digital twins.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in construction affects project risk, site safety, delivery costs, and sustainability targets. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Smart buildings is one of those areas where AI can help, but only if the claims survive contact with cost, safety, scheduling, and energy use. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping construction",
     "distinct_angle": "Smart Buildings: AI-Powered Efficiency and Sustainability keeps the focus on practical judgement in construction rather than drifting into brochure-speak.",
     "notes": "",
@@ -2111,7 +2111,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This construction title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This construction title is aimed at A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment"
         }
       },
       {
@@ -2143,9 +2143,9 @@
     "key": "24-ebook",
     "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
     "title": "Digital Defense: The Role of AI in Modern Warfare",
-    "short": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
+    "short": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
-    "summary": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
+    "summary": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Defence",
     "topic_slug": "defence",
     "topic_url": "/catalogue/defence/",
@@ -2173,20 +2173,20 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
     "identifier": "JH-AI-EBOOK-22",
-    "what_this_book_covers": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside modern warfare, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes modern warfare in practice, especially defence analysts, procurement teams, policy readers, and anyone tracking military technology looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in defence today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical defence use cases, explained in plain English.",
       "Key themes including defence, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in defence affects deterrence, escalation risk, accountability, and civilian safety. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in modern warfare as a parlour trick. It changes how organisations handle escalation risk, targeting, accountability, and resilience, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping defence",
     "distinct_angle": "Digital Defense: The Role of AI in Modern Warfare keeps the focus on practical judgement in defence rather than drifting into brochure-speak.",
     "notes": "",
@@ -2204,7 +2204,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This defence title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This defence title is aimed at A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology"
         }
       },
       {
@@ -2236,9 +2236,9 @@
     "key": "25-ebook",
     "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
     "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
-    "short": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
+    "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
-    "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
+    "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
     "topic": "Environment",
     "topic_slug": "environment",
     "topic_url": "/catalogue/environment/",
@@ -2266,20 +2266,20 @@
     "pages": 221,
     "asin": "B0DQK6B53Z",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators.",
     "identifier": "JH-AI-EBOOK-10",
-    "what_this_book_covers": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Wildlife Conservation.",
+    "who_for": "Best for people weighing real adoption choices in Wildlife Conservation. It is written for conservation teams, climate readers, policy staff, and sustainability-minded operators who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in environment today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.",
       "Key themes including monitoring, biodiversity, satellite analysis, conservation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in environment affects biodiversity, monitoring accuracy, and conservation outcomes. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Wildlife Conservation affect biodiversity, emissions, climate resilience, and scarce resources. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping environment",
     "distinct_angle": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology keeps the focus on practical judgement in environment rather than drifting into brochure-speak.",
     "notes": "",
@@ -2297,7 +2297,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This environment title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This environment title is aimed at Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators"
         }
       },
       {
@@ -2329,9 +2329,9 @@
     "key": "26-ebook",
     "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
     "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-    "short": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
+    "short": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
-    "summary": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
+    "summary": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Environment",
     "topic_slug": "environment",
     "topic_url": "/catalogue/environment/",
@@ -2359,20 +2359,20 @@
     "pages": 338,
     "asin": "B0DM72JZ44",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators.",
     "identifier": "JH-AI-EBOOK-21",
-    "what_this_book_covers": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in climate and environmental strategy.",
+    "who_for": "Written for conservation teams, climate readers, policy staff, and sustainability-minded operators who need a clearer read on what AI can and cannot do in climate and environmental strategy, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in environment today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.",
       "Key themes including monitoring, biodiversity, satellite analysis, conservation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in environment affects biodiversity, monitoring accuracy, and conservation outcomes. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Climate and environmental strategy is one of those areas where AI can help, but only if the claims survive contact with biodiversity, emissions, climate resilience, and scarce resources. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping environment",
     "distinct_angle": "Climate Intelligence: Harnessing AI for a Greener Future keeps the focus on practical judgement in environment rather than drifting into brochure-speak.",
     "notes": "",
@@ -2390,7 +2390,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This environment title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This environment title is aimed at A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators"
         }
       },
       {
@@ -2422,9 +2422,9 @@
     "key": "27-ebook",
     "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-    "short": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
+    "short": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
-    "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
+    "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of AI Revolution in Railways: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -2452,20 +2452,20 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-07",
-    "what_this_book_covers": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside AI Revolution in Railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes AI Revolution in Railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in AI Revolution in Railways as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "AI Revolution in Railways: Modernizing Travel for a Smarter Future keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -2483,7 +2483,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This transportation title is aimed at A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
@@ -2515,9 +2515,9 @@
     "key": "28-ebook",
     "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
     "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
-    "short": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
+    "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
-    "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
+    "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
     "topic": "Sports",
     "topic_slug": "sports",
     "topic_url": "/catalogue/sports/",
@@ -2545,20 +2545,20 @@
     "pages": 229,
     "asin": "B0DQFJ6XP5",
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view.",
     "identifier": "JH-AI-EBOOK-16",
-    "what_this_book_covers": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Sports.",
+    "who_for": "Best for people weighing real adoption choices in Sports. It is written for coaches, analysts, operators, and fans who want the practical view who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in sports today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical sports use cases, explained in plain English.",
       "Key themes including performance analysis, injury prevention, coaching, fan engagement.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in sports affects performance, injury risk, tactics, and fan engagement. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in Sports affect performance, injury risk, fan experience, and competitive fairness. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping sports",
     "distinct_angle": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement keeps the focus on practical judgement in sports rather than drifting into brochure-speak.",
     "notes": "",
@@ -2576,7 +2576,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This sports title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This sports title is aimed at Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view"
         }
       },
       {
@@ -2608,9 +2608,9 @@
     "key": "29-ebook",
     "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
     "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-    "short": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
+    "short": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
-    "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
+    "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Creativity",
     "topic_slug": "creativity",
     "topic_url": "/catalogue/creativity/",
@@ -2638,20 +2638,20 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
     "identifier": "JH-AI-EBOOK-26",
-    "what_this_book_covers": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in filmmaking.",
+    "who_for": "Written for creators, producers, editors, and readers tracking how tools reshape creative work who need a clearer read on what AI can and cannot do in filmmaking, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in creativity today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.",
       "Key themes including music, film, writing, copyright.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in creativity affects authorship, originality, workflow, and commercial control. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Filmmaking is one of those areas where AI can help, but only if the claims survive contact with authorship, livelihoods, rights, and creative control. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping creativity",
     "distinct_angle": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking keeps the focus on practical judgement in creativity rather than drifting into brochure-speak.",
     "notes": "",
@@ -2669,7 +2669,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This creativity title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This creativity title is aimed at A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work"
         }
       },
       {
@@ -2701,9 +2701,9 @@
     "key": "30-ebook",
     "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
     "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
-    "short": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
+    "short": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
     "description": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
-    "summary": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
+    "summary": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Creativity",
     "topic_slug": "creativity",
     "topic_url": "/catalogue/creativity/",
@@ -2731,20 +2731,20 @@
     "pages": 295,
     "asin": "B0DY666TZJ",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work.",
     "identifier": "JH-AI-EBOOK-29",
-    "what_this_book_covers": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside music, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes music in practice, especially creators, producers, editors, and readers tracking how tools reshape creative work looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in creativity today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.",
       "Key themes including music, film, writing, copyright.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in creativity affects authorship, originality, workflow, and commercial control. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in music as a parlour trick. It changes how organisations handle authorship, livelihoods, rights, and creative control, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping creativity",
     "distinct_angle": "The AI Music Revolution: Creativity, Controversy, and Collaboration keeps the focus on practical judgement in creativity rather than drifting into brochure-speak.",
     "notes": "",
@@ -2762,7 +2762,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This creativity title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This creativity title is aimed at A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work"
         }
       },
       {
@@ -2794,9 +2794,9 @@
     "key": "31-ebook",
     "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
     "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "short": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
+    "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
-    "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
+    "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
     "topic": "History",
     "topic_slug": "history",
     "topic_url": "/catalogue/history/",
@@ -2824,20 +2824,20 @@
     "pages": 302,
     "asin": "B0DY5MRT6K",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field.",
     "identifier": "JH-AI-EBOOK-30",
-    "what_this_book_covers": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in the history of artificial intelligence.",
+    "who_for": "Best for people weighing real adoption choices in the history of artificial intelligence. It is written for readers who want the backstory, the milestones, and the people behind the field who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in history today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical history use cases, explained in plain English.",
       "Key themes including history, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in history affects how people understand the field, its turning points, and where the next shifts may come from. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in the history of artificial intelligence affect how we explain the field, credit its builders, and judge its turning points. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping history",
     "distinct_angle": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead keeps the focus on practical judgement in history rather than drifting into brochure-speak.",
     "notes": "",
@@ -2855,7 +2855,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This history title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This history title is aimed at Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field"
         }
       },
       {
@@ -2887,9 +2887,9 @@
     "key": "32-ebook",
     "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+    "short": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
     "description": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
-    "summary": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+    "summary": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in ai in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Ethics",
     "topic_slug": "ethics",
     "topic_url": "/catalogue/ethics/",
@@ -2919,20 +2919,20 @@
     "pages": 327,
     "asin": "B0DY4PSD8Z",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
     "identifier": "JH-AI-EBOOK-36",
-    "what_this_book_covers": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in ai in gambling.",
+    "who_for": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in ai in gambling, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in ethics today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.",
       "Key themes including ethics, artificial intelligence, ai trends, law.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in ethics affects fairness, accountability, public trust, and long-term safety. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Ai in gambling is one of those areas where AI can help, but only if the claims survive contact with autonomy, fairness, consent, and social trust. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping ethics",
     "distinct_angle": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming keeps the focus on practical judgement in ethics rather than drifting into brochure-speak.",
     "notes": "",
@@ -2950,7 +2950,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This ethics title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This ethics title is aimed at A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
         }
       },
       {
@@ -2982,9 +2982,9 @@
     "key": "33-ebook",
     "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
     "title": "Beyond Earth: How AI is Transforming Space Exploration",
-    "short": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
+    "short": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
-    "summary": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
+    "summary": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Science",
     "topic_slug": "science",
     "topic_url": "/catalogue/science/",
@@ -3012,20 +3012,20 @@
     "pages": 350,
     "asin": "B0DY4Q2Q2D",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems.",
     "identifier": "JH-AI-EBOOK-20",
-    "what_this_book_covers": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside space exploration, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes space exploration in practice, especially science readers, engineers, mission planners, and anyone tracking research-heavy systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in science today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical science use cases, explained in plain English.",
       "Key themes including autonomous systems, mission planning, sensor data, space operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in science affects mission success, data interpretation, and what can be automated far from Earth. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in space exploration as a parlour trick. It changes how organisations handle mission risk, cost, discovery speed, and scientific return, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping science",
     "distinct_angle": "Beyond Earth: How AI is Transforming Space Exploration keeps the focus on practical judgement in science rather than drifting into brochure-speak.",
     "notes": "",
@@ -3043,7 +3043,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This science title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This science title is aimed at A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems"
         }
       },
       {
@@ -3075,9 +3075,9 @@
     "key": "34-ebook",
     "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
     "title": "From Reporters to Robots: How AI is Reshaping Journalism",
-    "short": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
+    "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
-    "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
+    "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.",
     "topic": "Media",
     "topic_slug": "media",
     "topic_url": "/catalogue/media/",
@@ -3105,20 +3105,20 @@
     "pages": 334,
     "asin": "B0DY4NP1WF",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems.",
     "identifier": "JH-AI-EBOOK-24",
-    "what_this_book_covers": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in journalism.",
+    "who_for": "Best for people weighing real adoption choices in journalism. It is written for journalists, editors, platform teams, and readers tracking information systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in media today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.",
       "Key themes including reporting workflows, moderation, personalisation, deepfakes.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in media affects accuracy, trust, editorial workflow, and audience reach. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Because decisions in journalism affect information quality, moderation, incentives, and public trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.",
     "showcase_heading": "How AI is reshaping media",
     "distinct_angle": "From Reporters to Robots: How AI is Reshaping Journalism keeps the focus on practical judgement in media rather than drifting into brochure-speak.",
     "notes": "",
@@ -3136,7 +3136,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This media title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This media title is aimed at Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems"
         }
       },
       {
@@ -3168,9 +3168,9 @@
     "key": "35-ebook",
     "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
     "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "short": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
+    "short": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
     "description": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
-    "summary": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
+    "summary": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Media",
     "topic_slug": "media",
     "topic_url": "/catalogue/media/",
@@ -3198,20 +3198,20 @@
     "pages": 334,
     "asin": "B0DY12Z1SP",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems.",
     "identifier": "JH-AI-EBOOK-28",
-    "what_this_book_covers": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in social media.",
+    "who_for": "Written for journalists, editors, platform teams, and readers tracking information systems who need a clearer read on what AI can and cannot do in social media, without wading through technical theatre.",
     "what_youll_learn": [
       "Where AI is already being used in media today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.",
       "Key themes including reporting workflows, moderation, personalisation, deepfakes.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in media affects accuracy, trust, editorial workflow, and audience reach. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "Social media is one of those areas where AI can help, but only if the claims survive contact with information quality, moderation, incentives, and public trust. That is where this book keeps its attention.",
     "showcase_heading": "How AI is reshaping media",
     "distinct_angle": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media keeps the focus on practical judgement in media rather than drifting into brochure-speak.",
     "notes": "",
@@ -3229,7 +3229,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This media title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This media title is aimed at A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems"
         }
       },
       {
@@ -3261,9 +3261,9 @@
     "key": "36-ebook",
     "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
     "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "short": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
+    "short": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
     "description": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
-    "summary": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
+    "summary": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Gaming",
     "topic_slug": "gaming",
     "topic_url": "/catalogue/gaming/",
@@ -3291,20 +3291,20 @@
     "pages": 344,
     "asin": "B0DY18CYT6",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-22T16:45:07Z",
+    "dateModified": "2026-03-23T20:59:30Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "audience": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems.",
     "identifier": "JH-AI-EBOOK-25",
-    "what_this_book_covers": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
-    "who_for": "Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight",
+    "what_this_book_covers": "It shows where AI fits inside game development, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes game development in practice, especially game developers, designers, producers, and readers tracking interactive systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in gaming today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical gaming use cases, explained in plain English.",
       "Key themes including gaming, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "Because AI in gaming affects game design, player experience, monetisation, and fairness. Getting the basics right matters long before anyone wheels in the hype machine.",
+    "why_it_matters": "AI is not arriving in game development as a parlour trick. It changes how organisations handle player experience, balance, monetisation, and design complexity, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping gaming",
     "distinct_angle": "Game AI Unleashed: From Finite State Machines to Machine Learning keeps the focus on practical judgement in gaming rather than drifting into brochure-speak.",
     "notes": "",
@@ -3322,7 +3322,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This gaming title is aimed at Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight"
+          "text": "This gaming title is aimed at A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems"
         }
       },
       {
