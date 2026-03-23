@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.
+Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Agriculture.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in Agriculture. It is written for farm operators, ag-tech teams, sustainability readers, and policy-minded observers who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in agriculture affects yields, input costs, food security, and sustainability. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in Agriculture affect yield, waste, labour pressure, and sustainability. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
