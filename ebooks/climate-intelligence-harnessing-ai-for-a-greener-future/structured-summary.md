@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.
+Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in climate and environmental strategy.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for conservation teams, climate readers, policy staff, and sustainability-minded operators who need a clearer read on what AI can and cannot do in climate and environmental strategy, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in environment affects biodiversity, monitoring accuracy, and conservation outcomes. Getting the basics right matters long before anyone wheels in the hype machine.
+Climate and environmental strategy is one of those areas where AI can help, but only if the claims survive contact with biodiversity, emissions, climate resilience, and scarce resources. That is where this book keeps its attention.
 
 ## Topics and tags
 
