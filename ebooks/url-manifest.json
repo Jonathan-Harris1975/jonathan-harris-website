@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-03-22T22:45:37Z",
+  "generated_utc": "2026-03-23T17:37:40Z",
   "base_url": "https://jonathan-harris.online",
   "ebook_count": 36,
   "external_crawler_files": {
-    "robots": "https://assets.jonathan-harris.online/robots.txt",
-    "sitemap": "https://assets.jonathan-harris.online/site-map.xml",
+    "robots": "https://jonathan-harris.online/robots.txt",
+    "sitemap": "https://jonathan-harris.online/site-map.xml",
     "llms": "https://jonathan-harris.online/llms.txt"
   },
   "host_redirect_files": {
