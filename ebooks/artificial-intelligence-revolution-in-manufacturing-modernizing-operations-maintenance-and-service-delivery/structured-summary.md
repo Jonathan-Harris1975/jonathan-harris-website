@@ -2,15 +2,15 @@
 
 ## Summary
 
-A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.
+A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Manufacturing.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in Manufacturing. It is written for operations leaders, plant teams, engineers, and readers tracking industrial automation who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in manufacturing affects quality, uptime, worker safety, and supply-chain resilience. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in Manufacturing affect uptime, throughput, quality, and worker safety. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
