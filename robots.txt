@@ -17,6 +17,5 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# Sitemaps
-Sitemap: https://jonathan-harris.online/site-map.xml
+# Sitemap
 Sitemap: https://jonathan-harris.online/site-map.xml

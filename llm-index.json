@@ -1,11 +1,11 @@
 {
-  "generated_utc": "2026-03-23T17:37:40Z",
+  "generated_utc": "2026-03-23T19:34:35Z",
   "books": [
     {
       "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
       "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "url": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
-      "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+      "summary": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -28,13 +28,13 @@
       "asin": "B0DQHSD858",
       "pages": 227,
       "datePublished": "2024-12-14",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
       "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "url": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
-      "summary": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
+      "summary": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -55,13 +55,13 @@
       "asin": "B0DQK6C563",
       "pages": 205,
       "datePublished": "2024-12-15",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
       "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
       "url": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
-      "summary": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
+      "summary": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
       "topic": "Energy",
       "tags": [
         "Energy",
@@ -82,13 +82,13 @@
       "asin": "B0DMKFZ3W3",
       "pages": 338,
       "datePublished": "2024-11-08",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
       "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
       "url": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
-      "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
+      "summary": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -109,13 +109,13 @@
       "asin": "B0DMQLK6LY",
       "pages": 339,
       "datePublished": "2024-11-11",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
       "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "url": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
-      "summary": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
+      "summary": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
       "topic": "Law",
       "tags": [
         "Law",
@@ -136,13 +136,13 @@
       "asin": "B0DQHTBSWJ",
       "pages": 224,
       "datePublished": "2024-12-14",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
       "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
       "url": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
-      "summary": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
+      "summary": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
       "topic": "Cyber Security",
       "tags": [
         "Cyber Security",
@@ -163,13 +163,13 @@
       "asin": "B0DN4GZZQ4",
       "pages": 269,
       "datePublished": "2024-11-14",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
       "url": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
-      "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
+      "summary": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Artificial Intelligence",
       "tags": [
         "Artificial Intelligence",
@@ -188,13 +188,13 @@
       "asin": "B0DMYF3YH3",
       "pages": 14,
       "datePublished": "2024-11-13",
-      "dateModified": "2026-03-23T17:37:40Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI in Aviation: Transforming Safety and Sustainability",
       "slug": "ai-in-aviation-transforming-safety-and-sustainability",
       "url": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
-      "summary": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
+      "summary": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -215,13 +215,13 @@
       "asin": "B0DMKTLMX6",
       "pages": 284,
       "datePublished": "2024-11-09",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
       "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "url": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
-      "summary": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+      "summary": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -242,13 +242,13 @@
       "asin": "B0DMMTGNDJ",
       "pages": 312,
       "datePublished": "2024-11-10",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "url": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
-      "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
+      "summary": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -269,13 +269,13 @@
       "asin": "B0DN4XSLK9",
       "pages": 328,
       "datePublished": "2024-11-14",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
       "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
       "url": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
-      "summary": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+      "summary": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -296,13 +296,13 @@
       "asin": "B0DMYQV1LY",
       "pages": 324,
       "datePublished": "2024-11-13",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
       "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
       "url": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
-      "summary": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+      "summary": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
       "topic": "Retail",
       "tags": [
         "Retail",
@@ -323,13 +323,13 @@
       "asin": "B0DMYHW17M",
       "pages": 234,
       "datePublished": "2024-11-13",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
       "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
       "url": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
-      "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
+      "summary": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Manufacturing",
       "tags": [
         "Manufacturing",
@@ -350,13 +350,13 @@
       "asin": "B0DMV2Q6TF",
       "pages": 369,
       "datePublished": "2024-11-12",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
       "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
       "url": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
-      "summary": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
+      "summary": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
       "topic": "Industry",
       "tags": [
         "Industry",
@@ -377,13 +377,13 @@
       "asin": "B0DMV47ZRL",
       "pages": 347,
       "datePublished": "2024-11-12",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Dumbening: How AI is Reshaping Our Minds",
       "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
       "url": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
-      "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
+      "summary": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
       "topic": "Ethics",
       "tags": [
         "Ethics",
@@ -404,13 +404,13 @@
       "asin": "B0DMMVN17Z",
       "pages": 277,
       "datePublished": "2024-11-10",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
       "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "url": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
-      "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
+      "summary": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Agriculture",
       "tags": [
         "Agriculture",
@@ -431,13 +431,13 @@
       "asin": "B0DMN32J3Y",
       "pages": 330,
       "datePublished": "2024-11-10",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI in Education: Reimagining Learning for Every Student",
       "slug": "ai-in-education-reimagining-learning-for-every-student",
       "url": "/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-      "summary": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
+      "summary": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
       "topic": "Education",
       "tags": [
         "Education",
@@ -458,13 +458,13 @@
       "asin": "B0DMKXWQDK",
       "pages": 323,
       "datePublished": "2024-11-09",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
       "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "url": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-      "summary": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
+      "summary": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
       "topic": "Finance",
       "tags": [
         "Finance",
@@ -485,13 +485,13 @@
       "asin": "B0DML75B3C",
       "pages": 286,
       "datePublished": "2024-11-09",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
       "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "url": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
-      "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
+      "summary": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -512,13 +512,13 @@
       "asin": "B0DM73FR3W",
       "pages": 348,
       "datePublished": "2024-11-06",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
       "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
       "url": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-      "summary": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
+      "summary": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
       "topic": "Construction",
       "tags": [
         "Construction",
@@ -539,13 +539,13 @@
       "asin": "B0DMQMGLP4",
       "pages": 319,
       "datePublished": "2024-11-11",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
       "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
       "url": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-      "summary": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
+      "summary": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
       "topic": "Future of Work",
       "tags": [
         "Future of Work",
@@ -566,13 +566,13 @@
       "asin": "B0DMQHQTQH",
       "pages": 315,
       "datePublished": "2024-11-11",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
       "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
       "url": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-      "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
+      "summary": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Government",
       "tags": [
         "Government",
@@ -593,13 +593,13 @@
       "asin": "B0DM74CRSD",
       "pages": 328,
       "datePublished": "2024-11-05",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
       "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
       "url": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
-      "summary": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+      "summary": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
       "topic": "Construction",
       "tags": [
         "Construction",
@@ -620,13 +620,13 @@
       "asin": "B0DMHBQVCR",
       "pages": 345,
       "datePublished": "2024-11-08",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Digital Defense: The Role of AI in Modern Warfare",
       "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
       "url": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-      "summary": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
+      "summary": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
       "topic": "Defence",
       "tags": [
         "Defence",
@@ -647,13 +647,13 @@
       "asin": "B0DM8256SL",
       "pages": 296,
       "datePublished": "2024-11-06",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
       "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
       "url": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
-      "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
+      "summary": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Environment",
       "tags": [
         "Environment",
@@ -674,13 +674,13 @@
       "asin": "B0DQK6B53Z",
       "pages": 221,
       "datePublished": "2024-12-15",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Climate Intelligence: Harnessing AI for a Greener Future",
       "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
       "url": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-      "summary": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
+      "summary": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
       "topic": "Environment",
       "tags": [
         "Environment",
@@ -701,13 +701,13 @@
       "asin": "B0DM72JZ44",
       "pages": 338,
       "datePublished": "2024-11-06",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
       "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "url": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
-      "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
+      "summary": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -728,13 +728,13 @@
       "asin": "B0DWM19MZH",
       "pages": 254,
       "datePublished": "2025-02-08",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
       "url": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
-      "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
+      "summary": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Sports",
       "tags": [
         "Sports",
@@ -755,13 +755,13 @@
       "asin": "B0DQFJ6XP5",
       "pages": 229,
       "datePublished": "2024-12-12",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "url": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
-      "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
+      "summary": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
       "topic": "Creativity",
       "tags": [
         "Creativity",
@@ -782,13 +782,13 @@
       "asin": "B0DY672VRB",
       "pages": 336,
       "datePublished": "2025-02-22",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
       "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "url": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
-      "summary": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
+      "summary": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
       "topic": "Creativity",
       "tags": [
         "Creativity",
@@ -809,13 +809,13 @@
       "asin": "B0DY666TZJ",
       "pages": 295,
       "datePublished": "2025-02-22",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
       "url": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
-      "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
+      "summary": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
       "topic": "History",
       "tags": [
         "History",
@@ -836,13 +836,13 @@
       "asin": "B0DY5MRT6K",
       "pages": 302,
       "datePublished": "2025-02-22",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
       "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
       "url": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
-      "summary": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+      "summary": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
       "topic": "Ethics",
       "tags": [
         "Ethics",
@@ -865,13 +865,13 @@
       "asin": "B0DY4PSD8Z",
       "pages": 327,
       "datePublished": "2025-02-21",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Beyond Earth: How AI is Transforming Space Exploration",
       "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
       "url": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
-      "summary": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
+      "summary": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
       "topic": "Science",
       "tags": [
         "Science",
@@ -892,13 +892,13 @@
       "asin": "B0DY4Q2Q2D",
       "pages": 350,
       "datePublished": "2025-02-21",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "From Reporters to Robots: How AI is Reshaping Journalism",
       "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
       "url": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
-      "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
+      "summary": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
       "topic": "Media",
       "tags": [
         "Media",
@@ -919,13 +919,13 @@
       "asin": "B0DY4NP1WF",
       "pages": 334,
       "datePublished": "2025-02-21",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
       "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
       "url": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-      "summary": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
+      "summary": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
       "topic": "Media",
       "tags": [
         "Media",
@@ -946,13 +946,13 @@
       "asin": "B0DY12Z1SP",
       "pages": 334,
       "datePublished": "2025-02-20",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     },
     {
       "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
       "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
       "url": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-      "summary": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
+      "summary": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
       "topic": "Gaming",
       "tags": [
         "Gaming",
@@ -973,7 +973,7 @@
       "asin": "B0DY18CYT6",
       "pages": 344,
       "datePublished": "2025-02-20",
-      "dateModified": "2026-03-22T16:45:07Z"
+      "dateModified": "2026-03-23T19:34:35Z"
     }
   ],
   "topic_authority_pages": [
