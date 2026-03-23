@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://jonathan-harris.online/affiliate/</loc>
-    <lastmod>2026-03-23</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/api/docs/</loc>
     <lastmod>2026-03-23</lastmod>
   </url>
@@ -14,10 +10,6 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/</loc>
-    <lastmod>2026-03-23</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/blog/weekly/</loc>
     <lastmod>2026-03-23</lastmod>
   </url>
   <url>

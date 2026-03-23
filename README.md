@@ -23,9 +23,9 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 ## Redirects
 - `_redirects` is the primary redirect source for the deployed static site.
 - `_redirects.txt` is a generated mirror of `_redirects`; refresh it with `python3 scripts/sync_redirects.py` rather than editing both files by hand.
-- `robots.txt` and `site-map.xml` remain externally hosted in production; `llms.txt` is now published from the repo root, while generated source snapshots stay under `config/crawler-snapshots/` for release verification.
-- The sitemap snapshot is generated from the full public HTML route registry, not just canonical ebook pages.
-- Those crawler snapshots are rebuilt by the derivative pipeline and verified before release; the main domain redirects point the live host at the externally published copies.
+- `robots.txt`, `site-map.xml`, `sitemap.xml`, and `llms.txt` are governed artefacts published from the repo root, while generated source snapshots stay under `config/crawler-snapshots/` for release verification.
+- `site-map.xml` remains the canonical sitemap target and `sitemap.xml` is the compatibility mirror.
+- The sitemap snapshot is generated from the public HTML route registry after excluding pages that explicitly declare `noindex`.
 
 
 
@@ -38,6 +38,9 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
 - Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `config/crawler-snapshots/*`, and per-book sidecars as generated outputs, not hand-edited source files.
 - `blog/posts.json` is the committed weekly-archive manifest; the weekly blog page should enhance from that local artefact rather than from remote fallbacks.
+- Workbook routing fields are intentionally split: `Buy now URL` is the canonical internal route, `Redirect URL` is the final off-site retailer or shortlink destination, and `Legacy alias URL` is the legacy `/book/<slug>/buy-now` path.
+- Legacy buy-now aliases must resolve to the canonical internal buy route first, then continue to the final off-site destination.
+- `Summary` is the long-form structured explanation field. It is not the same source as `Short description`, which only feeds the shorter summary/card surfaces.
 
 ## Route policy
 - `/ebooks/<slug>/` is the sole canonical indexable book route.
@@ -57,7 +60,8 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 10. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
 11. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
 12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
-13. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
+13. `python3 scripts/maintenance/check_redirect_chains.py`
+14. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
 
 ## Live crawler validation modes
 - `python3 scripts/check_crawlers.py` keeps the existing pre-deploy repo checks only.
@@ -71,4 +75,4 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Set the Pages build command to `bash build.sh` and the output directory to `.`.
 - `scripts/deployment_ci.py` runs the governed build-time CI chain: optional workbook import, page regeneration, derivative rebuild, redirect sync, crawler snapshot checks, and release validation.
 - Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, or exactly one workbook is present in the repo root.
-- `.github/workflows/ebook-subsystem-ci.yml` mirrors the same validation path on GitHub push and pull request events.
+- `.github/workflows/ebook-subsystem-ci.yml` mirrors the build-time validation path on pull requests and adds a post-deploy live gate on `main` and `master` pushes.
