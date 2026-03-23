@@ -1492,6 +1492,14 @@ def path_to_public_url(relative_path: Path) -> str:
 
 
 
+def html_declares_noindex(file_path: Path) -> bool:
+    if file_path.suffix.lower() != ".html" or not file_path.exists():
+        return False
+    text = file_path.read_text(encoding="utf-8", errors="ignore")
+    return bool(re.search(r"<meta[^>]+(?:name=[\"']robots[\"'][^>]*content=[\"'][^\"']*noindex|content=[\"'][^\"']*noindex[^>]*name=[\"']robots[\"'])", text, re.I))
+
+
+
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     generated_timestamp = infer_build_timestamp()
     generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
@@ -1510,6 +1518,8 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
             continue
         relative_path = file_path.relative_to(ROOT)
         if relative_path in excluded_paths:
+            continue
+        if html_declares_noindex(file_path):
             continue
 
         if relative_path in book_paths:
@@ -1905,7 +1915,7 @@ def build_redirect_block(books: List[Dict[str, Any]]) -> str:
     lines = ["# 6A) Branded buy-now redirects"]
     for book in books:
         lines.append(f"{book['buy_route']}   {book['buy_url']}   302")
-        lines.append(f"/book/{book['slug']}/buy-now   {book['buy_url']}   302")
+        lines.append(f"/book/{book['slug']}/buy-now   {book['buy_route']}   301")
     return "\n".join(lines)
 
 
@@ -2204,7 +2214,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     for book in books:
         required_lines = [
             f"{book['buy_route']}   {book['buy_url']}   302",
-            f"/book/{book['slug']}/buy-now   {book['buy_url']}   302",
+            f"/book/{book['slug']}/buy-now   {book['buy_route']}   301",
         ]
         for line in required_lines:
             if line not in redirects_text:
@@ -2337,7 +2347,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Crawler checksum drift detected for {name}.")
 
     blog_manifest = read_json(ROOT / "blog" / "posts.json", default={}) or {}
-    for item in blog_manifest.get("items", []):
+    blog_manifest_items = blog_manifest.get("items", [])
+    for item in blog_manifest_items:
         slug = clean_paragraph(item.get("slug"))
         if not slug:
             errors.append("blog/posts.json contains an entry without a slug.")
@@ -2351,6 +2362,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
     if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
         errors.append("assets/js/blog.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
+    if not blog_manifest_items:
+        if not re.search(r"<meta[^>]+(?:name=[\"']robots[\"'][^>]*content=[\"'][^\"']*noindex|content=[\"'][^\"']*noindex[^>]*name=[\"']robots[\"'])", weekly_archive_html, re.I):
+            errors.append("blog/weekly/index.html must be noindex while blog/posts.json is empty.")
+        if f"{SITE_URL}/blog/weekly/" in actual_sitemap_locations:
+            errors.append("The weekly archive route must be excluded from the sitemap while blog/posts.json is empty.")
 
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
