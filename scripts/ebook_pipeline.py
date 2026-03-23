@@ -63,8 +63,8 @@ MALFORMED_SLUG_FIXES = [
 ]
 
 EXTERNAL_CRAWLER_FILES = {
-    "robots": "https://assets.jonathan-harris.online/robots.txt",
-    "sitemap": "https://assets.jonathan-harris.online/site-map.xml",
+    "robots": f"{SITE_URL}/robots.txt",
+    "sitemap": f"{SITE_URL}/site-map.xml",
     "llms": f"{SITE_URL}/llms.txt",
 }
 
@@ -117,6 +117,35 @@ def infer_build_timestamp() -> str:
     if MASTER_PATH.exists():
         return dt.datetime.fromtimestamp(MASTER_PATH.stat().st_mtime, tz=dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     return utc_now()
+
+
+def parse_timestamp(value: Any) -> dt.datetime | None:
+    cleaned = clean_paragraph(value)
+    if not cleaned:
+        return None
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", cleaned):
+        return dt.datetime.fromisoformat(cleaned).replace(tzinfo=dt.timezone.utc)
+    try:
+        parsed = dt.datetime.fromisoformat(cleaned.replace("Z", "+00:00"))
+    except ValueError:
+        match = re.search(r"(\d{4}-\d{2}-\d{2})", cleaned)
+        if not match:
+            return None
+        return dt.datetime.fromisoformat(match.group(1)).replace(tzinfo=dt.timezone.utc)
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=dt.timezone.utc)
+    return parsed.astimezone(dt.timezone.utc).replace(microsecond=0)
+
+
+def governed_generated_utc(books: List[Dict[str, Any]]) -> str:
+    timestamps = [
+        parse_timestamp(book.get("dateModified") or book.get("datePublished"))
+        for book in books
+    ]
+    timestamps = [timestamp for timestamp in timestamps if timestamp is not None]
+    if timestamps:
+        return max(timestamps).isoformat().replace("+00:00", "Z")
+    return infer_build_timestamp()
 
 
 def normalise_lastmod(value: Any) -> str:
@@ -655,7 +684,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
         who_for = clean_paragraph(content.get("who_for")) or audience
         what_youll_learn = unique_list(content.get("what_youll_learn") or default_learning_points(topic))
         why_it_matters = clean_paragraph(content.get("why_it_matters")) or default_why_it_matters(topic)
-        short = clean_paragraph(content.get("short")) or default_short(topic, pages)
+        short = strip_pages_from_summary(content.get("short"), pages) or default_short(topic, pages)
         canonical_url = ensure_trailing_slash(workbook.get("book_url") or f"{SITE_URL}/ebooks/{slug}/")
         topic_slug = slugify(topic)
         topic_url = f"/catalogue/{topic_slug}/"
@@ -690,7 +719,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "pages": pages,
             "asin": workbook.get("asin", ""),
             "datePublished": workbook.get("datePublished", ""),
-            "dateModified": build_timestamp,
+            "dateModified": "",
             "author": author,
             "tone": tone,
             "audience": audience,
@@ -711,6 +740,17 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
         raise ValueError("Canonical workbook is missing required live fields:\n- " + "\n- ".join(missing_fields))
 
     add_related_books(records)
+    existing_master = {
+        clean_paragraph(item.get("slug")): item
+        for item in (read_json(MASTER_PATH, default=[]) or [])
+        if isinstance(item, dict) and clean_paragraph(item.get("slug"))
+    }
+    for record in records:
+        existing = existing_master.get(record["slug"])
+        if existing and {k: v for k, v in existing.items() if k != "dateModified"} == {k: v for k, v in record.items() if k != "dateModified"}:
+            record["dateModified"] = clean_paragraph(existing.get("dateModified")) or build_timestamp
+        else:
+            record["dateModified"] = build_timestamp
     return records
 
 
@@ -1507,11 +1547,15 @@ def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]
 
 
 
-def remove_legacy_root_crawler_files() -> None:
-    legacy_files = [ROOT / "robots.txt", ROOT / "sitemap.xml", ROOT / "site-map.xml"]
-    for file_path in legacy_files:
-        if file_path.exists():
-            file_path.unlink()
+def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
+    payloads = build_crawler_snapshot_payloads(books)
+    sitemap_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
+    return {
+        ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
+        ROOT / "site-map.xml": sitemap_payload,
+        ROOT / "sitemap.xml": sitemap_payload,
+        ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
+    }
 
 
 
@@ -1547,7 +1591,7 @@ def build_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
         })
 
     return {
-        "generated_utc": utc_now(),
+        "generated_utc": governed_generated_utc(books),
         "base_url": SITE_URL,
         "ebook_count": len(books),
         "external_crawler_files": EXTERNAL_CRAWLER_FILES,
@@ -1587,7 +1631,7 @@ def build_books_domain_redirects() -> str:
         "/author/         https://jonathan-harris.online/bio/                    301",
         "/author/*        https://jonathan-harris.online/bio/                    301",
         "",
-        "# Crawler files stay externally hosted",
+        "# Crawler files resolve on the main domain",
         f"/robots.txt     {EXTERNAL_CRAWLER_FILES['robots']}   301",
         f"/sitemap.xml    {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
         f"/site-map.xml   {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
@@ -1626,7 +1670,7 @@ def build_ebooks_domain_redirects() -> str:
         "/glossary/*   https://jonathan-harris.online/glossary/:splat     301",
         "/api/*        https://jonathan-harris.online/api/:splat          301",
         "",
-        "# Crawler files stay externally hosted",
+        "# Crawler files resolve on the main domain",
         f"/robots.txt   {EXTERNAL_CRAWLER_FILES['robots']}  301",
         f"/sitemap.xml  {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
         f"/site-map.xml {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
@@ -1662,8 +1706,10 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     }
     write_json(ROOT / "feed.json", feed)
 
+    generated_utc = governed_generated_utc(books)
+
     entity_map = {
-        "generated_utc": utc_now(),
+        "generated_utc": generated_utc,
         "person": {"id": f"{SITE_URL}/#person", "name": SITE_NAME},
         "podcast": {"title": "Turing’s Torch: AI Weekly", "url": f"{SITE_URL}/podcast/"},
         "books": [
@@ -1681,7 +1727,7 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     write_json(ROOT / "ai" / "entity-map.json", entity_map)
 
     llm_index = {
-        "generated_utc": utc_now(),
+        "generated_utc": generated_utc,
         "books": [
             {
                 "title": book["title"],
@@ -1699,7 +1745,7 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
                 "asin": book["asin"],
                 "pages": book["pages"],
                 "datePublished": book["datePublished"],
-        "dateModified": book.get("dateModified") or infer_build_timestamp(),
+                "dateModified": book.get("dateModified") or infer_build_timestamp(),
             }
             for book in books
         ],
@@ -1720,12 +1766,12 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     TOPICS_DIR.mkdir(parents=True, exist_ok=True)
     (TOPICS_DIR / "index.html").write_text(render_topics_index(topic_map), encoding="utf-8")
 
-    crawler_payloads = build_crawler_snapshot_payloads(books)
     for file_path, content in build_crawler_snapshot_paths(books).items():
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_text(content, encoding="utf-8")
-    remove_legacy_root_crawler_files()
-    (ROOT / "llms.txt").write_text(crawler_payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]], encoding="utf-8")
+    for file_path, content in build_published_crawler_paths(books).items():
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")
     write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
 
@@ -1907,7 +1953,7 @@ def faq_is_semantically_relevant(book: Dict[str, Any]) -> bool:
 
 
 def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
-    generated_at = utc_now()
+    generated_at = governed_generated_utc(books)
     files = build_crawler_snapshot_payloads(books)
     name_to_key = {value: key for key, value in CRAWLER_SNAPSHOT_FILENAMES.items()}
     return {
@@ -1925,7 +1971,7 @@ def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
 def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> str:
     topics = Counter(book["topic"] for book in books)
     lines = [
-        f"Validation run: {utc_now()}",
+        f"Validation run: {governed_generated_utc(books)}",
         f"Book count: {len(books)}",
         f"Topic count: {len(topics)}",
         "",
@@ -2104,20 +2150,23 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if line not in redirects_mirror:
                 errors.append(f"Redirect rule missing from _redirects.txt: {line}")
 
-    main_redirect_expectations = [
+    forbidden_main_redirects = [
         f"/robots.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301",
         f"/sitemap.xml   {EXTERNAL_CRAWLER_FILES['sitemap']}  301",
         f"/site-map.xml {EXTERNAL_CRAWLER_FILES['sitemap']} 301",
     ]
-    for snippet in main_redirect_expectations:
-        if snippet not in redirects_text:
-            errors.append(f"Main redirect coverage missing from _redirects: {snippet}")
-        if snippet not in redirects_mirror:
-            errors.append(f"Main redirect coverage missing from _redirects.txt: {snippet}")
+    for snippet in forbidden_main_redirects:
+        if snippet in redirects_text:
+            errors.append(f"Main redirect file still redirects a governed crawler asset instead of serving it directly: {snippet}")
+        if snippet in redirects_mirror:
+            errors.append(f"Main redirect mirror still redirects a governed crawler asset instead of serving it directly: {snippet}")
 
-    legacy_typo_alias = f"/robot.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301"
+    legacy_typo_alias = "/robot.txt    /robots.txt   301"
+    legacy_sitemap_alias = "/Sitemap.xml  /site-map.xml  301"
     if legacy_typo_alias not in redirects_text or legacy_typo_alias not in redirects_mirror:
         errors.append("Legacy /robot.txt crawler alias is missing from the main redirect files.")
+    if legacy_sitemap_alias not in redirects_text or legacy_sitemap_alias not in redirects_mirror:
+        errors.append("Legacy /Sitemap.xml crawler alias is missing from the main redirect files.")
 
     books_domain = (ROOT / "_redirects.books-domain").read_text(encoding="utf-8")
     ebooks_domain = (ROOT / "_redirects.ebooks-domain").read_text(encoding="utf-8")
@@ -2144,6 +2193,15 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         actual = file_path.read_text(encoding="utf-8")
         if actual != expected:
             errors.append(f"Generated crawler snapshot drift detected: {file_path.relative_to(ROOT)}")
+
+    published_crawler_files = build_published_crawler_paths(books)
+    for file_path, expected in published_crawler_files.items():
+        if not file_path.exists():
+            errors.append(f"Published crawler file missing: {file_path.relative_to(ROOT)}")
+            continue
+        actual = file_path.read_text(encoding="utf-8")
+        if actual != expected:
+            errors.append(f"Published crawler file drift detected: {file_path.relative_to(ROOT)}")
 
     sitemap_routes = build_public_route_registry(books)
     expected_sitemap_locations = {route["loc"] for route in sitemap_routes}

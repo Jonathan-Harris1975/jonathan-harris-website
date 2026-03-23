@@ -20,6 +20,7 @@ from scripts.ebook_pipeline import (
     ROOT,
     build_crawler_checksums,
     build_crawler_snapshot_paths,
+    build_published_crawler_paths,
     build_crawler_snapshot_payloads,
     load_master,
     read_json,
@@ -94,31 +95,38 @@ def run_repo_snapshot_checks() -> List[str]:
         return errors
 
     redirects_text = redirects_path.read_text(encoding="utf-8")
-    governed_rules = [
+    forbidden_rules = [
         ("/robots.txt", EXTERNAL_CRAWLER_FILES["robots"]),
         ("/sitemap.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
         ("/site-map.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
     ]
-    for source, url in governed_rules:
-        if url not in redirects_text or source not in redirects_text:
-            errors.append(f"Crawler check failed: _redirects is missing the governed external rule for {source}")
+    for source, url in forbidden_rules:
+        if url in redirects_text and source in redirects_text:
+            errors.append(f"Crawler check failed: _redirects still redirects {source} instead of serving the governed root file")
 
-    legacy_root_files = [ROOT / "robots.txt", ROOT / "sitemap.xml", ROOT / "site-map.xml"]
-    for path in legacy_root_files:
-        if path.exists():
-            errors.append(f"Crawler check failed: stale root crawler file still exists at {path.relative_to(ROOT)}")
+    alias_rules = [
+        "/robot.txt    /robots.txt   301",
+        "/Sitemap.xml  /site-map.xml  301",
+    ]
+    for rule in alias_rules:
+        if rule not in redirects_text:
+            errors.append(f"Crawler check failed: _redirects is missing crawler alias rule {rule}")
 
-    expected_llms = expected_files[ROOT / "config" / "crawler-snapshots" / "llms.txt"]
-    llms_root = ROOT / "llms.txt"
-    if not llms_root.exists():
-        errors.append("Crawler check failed: missing root llms.txt")
-    else:
-        actual_llms = llms_root.read_text(encoding="utf-8")
-        if actual_llms != expected_llms:
-            errors.append("Crawler check failed: root llms.txt drifted from the governed snapshot")
+    published_files = build_published_crawler_paths(books)
+    for path, expected in published_files.items():
+        if not path.exists():
+            errors.append(f"Crawler check failed: missing published crawler file {path.relative_to(ROOT)}")
+            continue
+        actual = path.read_text(encoding="utf-8")
+        if actual != expected:
+            errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
+    if EXTERNAL_CRAWLER_FILES["robots"].rstrip("/") != "https://jonathan-harris.online/robots.txt":
+        errors.append("Crawler check failed: robots.txt publication target is not pinned to the primary domain")
+    if EXTERNAL_CRAWLER_FILES["sitemap"].rstrip("/") != "https://jonathan-harris.online/site-map.xml":
+        errors.append("Crawler check failed: site-map.xml publication target is not pinned to the primary domain")
     if EXTERNAL_CRAWLER_FILES["llms"].rstrip("/") != "https://jonathan-harris.online/llms.txt":
-        errors.append("Crawler check failed: llms.txt publication target is not pinned to the repo-hosted root URL")
+        errors.append("Crawler check failed: llms.txt publication target is not pinned to the primary domain")
 
     return errors
 
@@ -248,7 +256,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt and site-map.xml remain governed by external snapshots, and llms.txt is mirrored to the repo root.")
+    print("Crawler file check passed: robots.txt, site-map.xml, sitemap.xml, and llms.txt are governed in-repo and published from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 
