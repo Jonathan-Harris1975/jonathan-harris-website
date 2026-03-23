@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.
+Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Pharmaceuticals.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in Pharmaceuticals. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in healthcare affects patient outcomes, safety, workload, and access to care. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in Pharmaceuticals affect outcomes, safety, workload, and trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
