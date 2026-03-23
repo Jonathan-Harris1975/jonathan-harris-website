@@ -2,15 +2,15 @@
 
 ## Summary
 
-A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
+A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
-A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.
+It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in the automotive industry, without wading through technical theatre.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
+The automotive industry is one of those areas where AI can help, but only if the claims survive contact with safety, throughput, reliability, and emissions. That is where this book keeps its attention.
 
 ## Topics and tags
 
