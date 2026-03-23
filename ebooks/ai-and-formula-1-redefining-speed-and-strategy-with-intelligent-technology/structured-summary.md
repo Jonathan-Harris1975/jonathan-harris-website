@@ -2,15 +2,15 @@
 
 ## Summary
 
-A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.
+A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Formula 1.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in Formula 1. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in transportation affects safety, reliability, efficiency, and emissions. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in Formula 1 affect safety, throughput, reliability, and emissions. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
