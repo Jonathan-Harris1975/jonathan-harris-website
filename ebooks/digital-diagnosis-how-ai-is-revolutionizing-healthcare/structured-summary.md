@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.
+Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in healthcare.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in healthcare. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in healthcare affects patient outcomes, safety, workload, and access to care. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in healthcare affect outcomes, safety, workload, and trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
