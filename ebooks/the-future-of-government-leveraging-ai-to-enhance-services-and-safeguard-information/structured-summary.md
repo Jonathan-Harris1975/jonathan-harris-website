@@ -2,15 +2,15 @@
 
 ## Summary
 
-Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.
+Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.
 
 ## What this book covers
 
-Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.
+It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in government.
 
 ## Who this book is for
 
-Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight
+Best for people weighing real adoption choices in government. It is written for public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
@@ -21,7 +21,7 @@ Curious professionals, entrepreneurs, and non-technical readers who want practic
 
 ## Why it matters
 
-Because AI in government affects public trust, service quality, fraud prevention, and accountability. Getting the basics right matters long before anyone wheels in the hype machine.
+Because decisions in government affect service quality, accountability, privacy, and public trust. Once AI enters the loop, sloppy assumptions get expensive very quickly.
 
 ## Topics and tags
 
