@@ -41,8 +41,8 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Wait for the production deploy to catch up
-        run: sleep 180
+      - name: Wait for the production deploy to become reachable
+        run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20
 
       - name: Verify live crawler publication
         run: python scripts/validate_release.py --strict-post-deploy-live
