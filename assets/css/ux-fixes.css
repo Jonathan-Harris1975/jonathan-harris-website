@@ -361,3 +361,25 @@ article p {
   max-width: 760px;
   margin: 0 auto;
 }
+
+
+/* Remediation: utility pages should lead with their main task, not a duplicated wayfinding panel. */
+.page-main > :first-child,
+.main > .wrap:first-child {
+  margin-top: 0;
+}
+
+/* Remediation: comparison tables need a cleaner mobile stacked state. */
+@media (max-width: 760px) {
+  .compare-scroll-cue {
+    display: none;
+  }
+
+  .compare-table.is-stacked tr {
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  }
+
+  .compare-table.is-stacked td {
+    line-height: 1.55;
+  }
+}
