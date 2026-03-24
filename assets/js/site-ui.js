@@ -7,12 +7,6 @@
   const FOOTER_TARGET_ID = "siteFooter";
   const FOOTER_URL = "/assets/partials/footer.html";
   const LOADER_ID = "pageLoader";
-  const SITE_CSS_HREF = "/assets/css/site.css";
-
-  // Optional web font (keeps the brand minimal, just cleaner)
-  const FONT_PRECONNECT_1 = "https://fonts.googleapis.com";
-  const FONT_PRECONNECT_2 = "https://fonts.gstatic.com";
-  const FONT_STYLESHEET = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap";
 
   
   function is404Page(){
@@ -32,35 +26,7 @@
       const head = document.head || document.getElementsByTagName("head")[0];
       if (!head) return;
 
-      // Ensure global stylesheet is present even on older standalone pages.
-      const hasSiteCss = !!document.querySelector(`link[rel="stylesheet"][href="${SITE_CSS_HREF}"],link[rel="stylesheet"][href$="${SITE_CSS_HREF}"]`);
-      if (!hasSiteCss){
-        const link = document.createElement("link");
-        link.rel = "stylesheet";
-        link.href = SITE_CSS_HREF;
-        head.appendChild(link);
-      }
-
-      // Web font (safe no-op if blocked)
-      if (!document.querySelector(`link[rel="stylesheet"][href="${FONT_STYLESHEET}"]`)){
-        const p1 = document.createElement("link");
-        p1.rel = "preconnect";
-        p1.href = FONT_PRECONNECT_1;
-        head.appendChild(p1);
-
-        const p2 = document.createElement("link");
-        p2.rel = "preconnect";
-        p2.href = FONT_PRECONNECT_2;
-        p2.crossOrigin = "anonymous";
-        head.appendChild(p2);
-
-        const f = document.createElement("link");
-        f.rel = "stylesheet";
-        f.href = FONT_STYLESHEET;
-        head.appendChild(f);
-      }
-
-      // Minimal critical styles so navigation + skip link don't look like 1998 if CSS fails to load.
+      // Minimal critical styles so navigation + skip link stay usable even before the main CSS finishes loading.
       if (!document.getElementById("jh-ui-inline")){
         const style = document.createElement("style");
         style.id = "jh-ui-inline";
