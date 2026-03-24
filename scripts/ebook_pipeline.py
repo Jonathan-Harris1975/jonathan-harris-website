@@ -853,6 +853,7 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
         "key": book["key"],
         "title": book["title"],
         "short": book["short"],
+        "short_description": book["short"],
         "cover": book["cover"],
         "main_image": book["main_image"],
         "tags": book["tags"],
@@ -1848,6 +1849,7 @@ def build_book_files(books: List[Dict[str, Any]]) -> None:
             "title": book["title"],
             "slug": book["slug"],
             "description": book["description"],
+            "short_description": book["short"],
             "topic": book["topic"],
             "tags": book["tags"],
             "cover": book["cover"],
@@ -2396,6 +2398,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 for workbook_field, master_field in [
                     ("title", "title"),
                     ("short", "short"),
+                    ("short", "short_description"),
                     ("description", "description"),
                     ("summary", "summary"),
                     ("topic", "topic"),
