@@ -92,7 +92,8 @@
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 2,
@@ -185,7 +186,8 @@
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ]
+    ],
+    "short_description": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 3,
@@ -278,7 +280,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement."
   },
   {
     "id": 4,
@@ -371,7 +374,8 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 5,
@@ -464,7 +468,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 6,
@@ -557,7 +562,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement."
   },
   {
     "id": 7,
@@ -648,7 +654,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 8,
@@ -741,7 +748,8 @@
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 9,
@@ -834,7 +842,8 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement."
   },
   {
     "id": 10,
@@ -927,7 +936,8 @@
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 11,
@@ -1020,7 +1030,8 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
-    ]
+    ],
+    "short_description": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 12,
@@ -1113,7 +1124,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement."
   },
   {
     "id": 13,
@@ -1206,7 +1218,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 14,
@@ -1299,7 +1312,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 15,
@@ -1392,7 +1406,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement."
   },
   {
     "id": 16,
@@ -1485,7 +1500,8 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 17,
@@ -1578,7 +1594,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 18,
@@ -1671,7 +1688,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement."
   },
   {
     "id": 19,
@@ -1764,7 +1782,8 @@
       "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 20,
@@ -1857,7 +1876,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 21,
@@ -1950,7 +1970,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement."
   },
   {
     "id": 22,
@@ -2043,7 +2064,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 23,
@@ -2136,7 +2158,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 24,
@@ -2229,7 +2252,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement."
   },
   {
     "id": 25,
@@ -2322,7 +2346,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 26,
@@ -2415,7 +2440,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 27,
@@ -2508,7 +2534,8 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement."
   },
   {
     "id": 28,
@@ -2601,7 +2628,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 29,
@@ -2694,7 +2722,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 30,
@@ -2787,7 +2816,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement."
   },
   {
     "id": 31,
@@ -2880,7 +2910,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 32,
@@ -2975,7 +3006,8 @@
       "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ]
+    ],
+    "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 33,
@@ -3068,7 +3100,8 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement."
   },
   {
     "id": 34,
@@ -3161,7 +3194,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions."
   },
   {
     "id": 35,
@@ -3254,7 +3288,8 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ]
+    ],
+    "short_description": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice."
   },
   {
     "id": 36,
@@ -3347,6 +3382,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ]
+    ],
+    "short_description": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement."
   }
 ]
