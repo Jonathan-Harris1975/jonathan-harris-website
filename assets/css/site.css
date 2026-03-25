@@ -564,7 +564,7 @@ details.facts li{margin:6px 0; color:var(--text)}
   outline:3px solid rgba(79,70,229,0.35);
 }
 
-/* jh-topnav desktop tweaks are set in site-ui.js inline styles */
+/* jh-topnav desktop tweaks are governed in CSS, not injected at runtime */
 
 
 /* Catalogue topic chip on cards */
