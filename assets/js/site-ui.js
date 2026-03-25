@@ -3,9 +3,6 @@
   if (window.__JH_SITE_UI_INIT__) return;
   window.__JH_SITE_UI_INIT__ = true;
 
-  const HEADER_URL = "/assets/partials/header.html";
-  const FOOTER_TARGET_ID = "siteFooter";
-  const FOOTER_URL = "/assets/partials/footer.html";
   const LOADER_ID = "pageLoader";
 
   
@@ -98,21 +95,6 @@
       main = document.querySelector("main") || document.querySelector('[role="main"]');
       if (main && !main.id) main.id = "main";
     }catch(_){}
-  }
-
-  const PARTIAL_CACHE = new Map();
-
-  async function fetchPartial(url){
-    try{
-      if (PARTIAL_CACHE.has(url)) return PARTIAL_CACHE.get(url);
-      const res = await fetch(url, { cache: "force-cache" });
-      if (!res.ok) return "";
-      const html = await res.text();
-      PARTIAL_CACHE.set(url, html);
-      return html;
-    }catch(_){
-      return "";
-    }
   }
 
   function setBodyScrollLock(locked){
@@ -229,26 +211,8 @@
 
   async function injectHeader(){
     try{
-      let header = document.querySelector('.jh-header');
-
-      if (!header){
-        const html = await fetchPartial(HEADER_URL);
-        if (!html) return;
-
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = html;
-        const nextHeader = wrapper.querySelector('.jh-header') || wrapper.firstElementChild;
-        if (!nextHeader) return;
-
-        const skipLink = document.querySelector('.skip-link');
-        if (skipLink && skipLink.parentNode === document.body){
-          skipLink.insertAdjacentElement('afterend', nextHeader);
-        } else {
-          document.body.insertBefore(nextHeader, document.body.firstChild);
-        }
-        header = nextHeader;
-        header.classList.add('jh-header--injected');
-      }
+      const header = document.querySelector('.jh-header');
+      if (!header) return;
 
       header.dataset.jhShared = '1';
       markActiveNav(header);
@@ -376,31 +340,12 @@
     window.addEventListener('orientationchange', updateVisibility, { passive: true });
   }
 
-  function ensureFooterTarget(){
-    let target = document.getElementById(FOOTER_TARGET_ID);
-    if (target) return target;
-
-    target = document.createElement("div");
-    target.id = FOOTER_TARGET_ID;
-    document.body.appendChild(target);
-    return target;
-  }
-
   async function injectFooter(){
     try{
       const existing = document.querySelector('footer.site-footer');
       if (existing){
         existing.dataset.jhShared = '1';
-        return;
       }
-
-      const html = await fetchPartial(FOOTER_URL);
-      if (!html) return;
-
-      let target = document.getElementById(FOOTER_TARGET_ID);
-      if (!target) target = ensureFooterTarget();
-      target.innerHTML = html;
-      target.dataset.jhShared = '1';
     }catch(_){ }
   }
 
