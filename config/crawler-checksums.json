@@ -3,11 +3,11 @@
   "files": {
     "robots.txt": {
       "url": "https://jonathan-harris.online/robots.txt",
-      "sha256": "a78c42223a89e4245d3d60f91cbfd1893d45a6fd95d419c06cbc76f947388a83"
+      "sha256": "e44b08ed0fb630bd52e7a73368a8fbd6ca1c9589f862614e0d992a7cb3dd2227"
     },
     "site-map.xml": {
-      "url": "https://jonathan-harris.online/site-map.xml",
-      "sha256": "69bfefea2103228d1c7f379f5668fc9e204a9314029e51f175f8cefd390c3421"
+      "url": "https://jonathan-harris.online/sitemap.xml",
+      "sha256": "c78942915c4d97974dcf5a77e3c12443157ad6fcf06439fcbf84c6a369c8af01"
     },
     "llms.txt": {
       "url": "https://jonathan-harris.online/llms.txt",
