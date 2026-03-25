@@ -2325,7 +2325,7 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-25T19:57:54Z",
+    "dateModified": "2026-03-25T22:44:02Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
@@ -2710,10 +2710,10 @@
     "key": "27-ebook",
     "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-    "short": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
+    "short": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
-    "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of AI Revolution in Railways: the tooling, the judgement calls, and the parts that still need a human spine.",
+    "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of railways: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -2741,20 +2741,20 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-25T19:57:54Z",
+    "dateModified": "2026-03-25T22:39:31Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
+    "audience": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
     "identifier": "JH-AI-EBOOK-07",
-    "what_this_book_covers": "It shows where AI fits inside AI Revolution in Railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
-    "who_for": "Suits readers who want to understand how AI changes AI Revolution in Railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
+    "what_this_book_covers": "It shows where AI fits inside railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI changes railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "AI is not arriving in AI Revolution in Railways as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans.",
+    "why_it_matters": "AI is not arriving in railways as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping transportation",
     "distinct_angle": "AI Revolution in Railways: Modernizing Travel for a Smarter Future keeps the focus on practical judgement in transportation rather than drifting into brochure-speak.",
     "notes": "",
@@ -2772,7 +2772,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "This transportation title is aimed at A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems"
         }
       },
       {
