@@ -37,7 +37,7 @@
     "pages": 227,
     "asin": "B0DQHSD858",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -93,6 +93,17 @@
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
+    ],
+    "title_tokens": [
+      "formula",
+      "intelligent",
+      "redefin",
+      "spe",
+      "strategy",
+      "technology"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -131,7 +142,7 @@
     "pages": 205,
     "asin": "B0DQK6C563",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -185,8 +196,19 @@
     "related_slugs": [
       "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-in-aviation-transforming-safety-and-sustainability",
+      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
+    ],
+    "title_tokens": [
+      "animal",
+      "healthcare",
+      "innov",
+      "medicine",
+      "transform",
+      "veterinary"
+    ],
+    "topic_tokens": [
+      "healthcare"
     ]
   },
   {
@@ -225,7 +247,7 @@
     "pages": 338,
     "asin": "B0DMKFZ3W3",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems.",
@@ -277,10 +299,22 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "smart-buildings-ai-powered-efficiency-and-sustainability",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "distribution",
+      "electric",
+      "gener",
+      "grid",
+      "power",
+      "revolutioniz",
+      "smart"
+    ],
+    "topic_tokens": [
+      "energy"
     ]
   },
   {
@@ -319,7 +353,7 @@
     "pages": 339,
     "asin": "B0DMQLK6LY",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -371,10 +405,21 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
+    ],
+    "title_tokens": [
+      "chain",
+      "efficiency",
+      "logistic",
+      "supp",
+      "sustain",
+      "transform"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -413,7 +458,7 @@
     "pages": 224,
     "asin": "B0DQHTBSWJ",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change.",
@@ -465,10 +510,21 @@
       }
     ],
     "related_slugs": [
-      "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "case",
+      "challenge",
+      "future",
+      "law",
+      "stud",
+      "trend"
+    ],
+    "topic_tokens": [
+      "law"
     ]
   },
   {
@@ -507,7 +563,7 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
@@ -559,10 +615,23 @@
       }
     ],
     "related_slugs": [
+      "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+      "artificial-intelligence-in-industry-a-comprehensive-guide",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "breach",
+      "cyb",
+      "data",
+      "guide",
+      "practical",
+      "prevention",
+      "secur"
+    ],
+    "topic_tokens": [
+      "cyb",
+      "secur"
     ]
   },
   {
@@ -599,7 +668,7 @@
     "pages": 14,
     "asin": "B0DMYF3YH3",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
@@ -651,11 +720,17 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
-    ]
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "the-ai-music-revolution-creativity-controversy-and-collaboration"
+    ],
+    "title_tokens": [
+      "algorithm",
+      "consci",
+      "revolution"
+    ],
+    "topic_tokens": []
   },
   {
     "id": 8,
@@ -693,7 +768,7 @@
     "pages": 284,
     "asin": "B0DMKTLMX6",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -745,10 +820,19 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
+    ],
+    "title_tokens": [
+      "avi",
+      "safety",
+      "sustain",
+      "transform"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -787,7 +871,7 @@
     "pages": 312,
     "asin": "B0DMMTGNDJ",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -839,10 +923,19 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
+      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
+    ],
+    "title_tokens": [
+      "maritime",
+      "revolutioniz",
+      "shipp",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -881,7 +974,7 @@
     "pages": 328,
     "asin": "B0DN4XSLK9",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -933,10 +1026,18 @@
       }
     ],
     "related_slugs": [
-      "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "healthcare",
+      "pharmaceutical",
+      "revolutioniz"
+    ],
+    "topic_tokens": [
+      "healthcare"
     ]
   },
   {
@@ -975,7 +1076,7 @@
     "pages": 324,
     "asin": "B0DMYQV1LY",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -1027,10 +1128,20 @@
       }
     ],
     "related_slugs": [
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "automotive",
+      "autonomou",
+      "future",
+      "industry",
+      "revolution"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -1069,7 +1180,7 @@
     "pages": 234,
     "asin": "B0DMYHW17M",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience.",
@@ -1121,10 +1232,22 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
+      "artificial-intelligence-in-construction-building-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "custom",
+      "experi",
+      "future",
+      "power",
+      "retail",
+      "revolutioniz",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "retail"
     ]
   },
   {
@@ -1163,7 +1286,7 @@
     "pages": 369,
     "asin": "B0DMV2Q6TF",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation.",
@@ -1215,10 +1338,22 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "the-ai-music-revolution-creativity-controversy-and-collaboration",
+      "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
+      "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry"
+    ],
+    "title_tokens": [
+      "delivery",
+      "mainten",
+      "manufactur",
+      "moderniz",
+      "operation",
+      "revolution",
+      "service"
+    ],
+    "topic_tokens": [
+      "manufactur"
     ]
   },
   {
@@ -1257,7 +1392,7 @@
     "pages": 347,
     "asin": "B0DMV47ZRL",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change.",
@@ -1309,10 +1444,18 @@
       }
     ],
     "related_slugs": [
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "comprehensive",
+      "guide",
+      "industry"
+    ],
+    "topic_tokens": [
+      "industry"
     ]
   },
   {
@@ -1320,10 +1463,10 @@
     "key": "15-ebook",
     "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
-    "short": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
+    "short": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
     "description": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
-    "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI changes the day-to-day reality of how ai shapes attention and thinking: the tooling, the judgement calls, and the parts that still need a human spine.",
+    "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI shapes attention and thinking in day-to-day life: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Ethics",
     "topic_slug": "ethics",
     "topic_url": "/catalogue/ethics/",
@@ -1351,20 +1494,20 @@
     "pages": 277,
     "asin": "B0DMMVN17Z",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "A practical overview of AI in how ai shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
+    "audience": "A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
     "identifier": "JH-AI-EBOOK-34",
-    "what_this_book_covers": "It shows where AI fits inside how ai shapes attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
-    "who_for": "Suits readers who want to understand how AI changes how ai shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.",
+    "what_this_book_covers": "It shows how AI affects attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
+    "who_for": "Suits readers who want to understand how AI shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
       "Where AI is already being used in ethics today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.",
       "Key themes including ethics, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
-    "why_it_matters": "AI is not arriving in how ai shapes attention and thinking as a parlour trick. It changes how organisations handle autonomy, fairness, consent, and social trust, so the boring details matter more than the slogans.",
+    "why_it_matters": "AI is not just arriving as a parlour trick. It changes attention, judgement, autonomy, and social trust, so the boring details matter more than the slogans.",
     "showcase_heading": "How AI is reshaping ethics",
     "distinct_angle": "The Dumbening: How AI is Reshaping Our Minds keeps the focus on practical judgement in ethics rather than drifting into brochure-speak.",
     "notes": "",
@@ -1382,7 +1525,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This ethics title is aimed at A practical overview of AI in how ai shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
+          "text": "This ethics title is aimed at A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
         }
       },
       {
@@ -1404,9 +1547,17 @@
     ],
     "related_slugs": [
       "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+      "from-reporters-to-robots-how-ai-is-reshaping-journalism",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "dumben",
+      "mind",
+      "reshap"
+    ],
+    "topic_tokens": [
+      "ethic"
     ]
   },
   {
@@ -1445,7 +1596,7 @@
     "pages": 330,
     "asin": "B0DMN32J3Y",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers.",
@@ -1497,10 +1648,20 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student",
-      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "ai-in-aviation-transforming-safety-and-sustainability"
+    ],
+    "title_tokens": [
+      "agriculture",
+      "farm",
+      "future",
+      "revolutioniz",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "agriculture"
     ]
   },
   {
@@ -1539,7 +1700,7 @@
     "pages": 323,
     "asin": "B0DMKXWQDK",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change.",
@@ -1591,10 +1752,20 @@
       }
     ],
     "related_slugs": [
+      "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+      "ai-in-aviation-transforming-safety-and-sustainability"
+    ],
+    "title_tokens": [
+      "educ",
+      "every",
+      "learn",
+      "reimagin",
+      "student"
+    ],
+    "topic_tokens": [
+      "educ"
     ]
   },
   {
@@ -1633,7 +1804,7 @@
     "pages": 286,
     "asin": "B0DML75B3C",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure.",
@@ -1685,10 +1856,20 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation"
+    ],
+    "title_tokens": [
+      "bank",
+      "data",
+      "fin",
+      "revolutioniz",
+      "secur"
+    ],
+    "topic_tokens": [
+      "fin"
     ]
   },
   {
@@ -1727,7 +1908,7 @@
     "pages": 348,
     "asin": "B0DM73FR3W",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -1781,8 +1962,17 @@
     "related_slugs": [
       "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "diagnosi",
+      "digital",
+      "healthcare",
+      "revolutioniz"
+    ],
+    "topic_tokens": [
+      "healthcare"
     ]
   },
   {
@@ -1821,7 +2011,7 @@
     "pages": 319,
     "asin": "B0DMQMGLP4",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment.",
@@ -1874,9 +2064,18 @@
     ],
     "related_slugs": [
       "smart-buildings-ai-powered-efficiency-and-sustainability",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
+    ],
+    "title_tokens": [
+      "build",
+      "construction",
+      "future",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "construction"
     ]
   },
   {
@@ -1915,7 +2114,7 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
@@ -1967,10 +2166,21 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "artificial-intelligence-in-construction-building-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "future",
+      "job",
+      "navigat",
+      "shift",
+      "work"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
     ]
   },
   {
@@ -2009,7 +2219,7 @@
     "pages": 328,
     "asin": "B0DM74CRSD",
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
@@ -2061,10 +2271,22 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "artificial-intelligence-in-construction-building-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "enh",
+      "future",
+      "govern",
+      "inform",
+      "leverag",
+      "safeguard",
+      "service"
+    ],
+    "topic_tokens": [
+      "govern"
     ]
   },
   {
@@ -2103,7 +2325,7 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
@@ -2156,9 +2378,19 @@
     ],
     "related_slugs": [
       "artificial-intelligence-in-construction-building-a-sustainable-future",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
+      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "building",
+      "efficiency",
+      "power",
+      "smart",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "construction"
     ]
   },
   {
@@ -2197,7 +2429,7 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
@@ -2249,10 +2481,20 @@
       }
     ],
     "related_slugs": [
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "defense",
+      "digital",
+      "modern",
+      "role",
+      "warfare"
+    ],
+    "topic_tokens": [
+      "def"
     ]
   },
   {
@@ -2291,7 +2533,7 @@
     "pages": 221,
     "asin": "B0DQK6B53Z",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2346,7 +2588,18 @@
       "climate-intelligence-harnessing-ai-for-a-greener-future",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "biodivers",
+      "conserv",
+      "protection",
+      "revolutioniz",
+      "technology",
+      "wildlife"
+    ],
+    "topic_tokens": [
+      "environ"
     ]
   },
   {
@@ -2385,7 +2638,7 @@
     "pages": 338,
     "asin": "B0DM72JZ44",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2438,9 +2691,18 @@
     ],
     "related_slugs": [
       "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends"
+    ],
+    "title_tokens": [
+      "climate",
+      "future",
+      "green",
+      "harness"
+    ],
+    "topic_tokens": [
+      "environ"
     ]
   },
   {
@@ -2479,7 +2741,7 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -2531,10 +2793,21 @@
       }
     ],
     "related_slugs": [
+      "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability"
+    ],
+    "title_tokens": [
+      "future",
+      "moderniz",
+      "railway",
+      "revolution",
+      "smart",
+      "travel"
+    ],
+    "topic_tokens": [
+      "transport"
     ]
   },
   {
@@ -2573,7 +2846,7 @@
     "pages": 229,
     "asin": "B0DQFJ6XP5",
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view.",
@@ -2625,10 +2898,20 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
+      "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology"
+    ],
+    "title_tokens": [
+      "engag",
+      "fan",
+      "perform",
+      "revolutioniz",
+      "sport"
+    ],
+    "topic_tokens": [
+      "sport"
     ]
   },
   {
@@ -2667,7 +2950,7 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2720,9 +3003,20 @@
     ],
     "related_slugs": [
       "the-ai-music-revolution-creativity-controversy-and-collaboration",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "digital-defense-the-role-of-ai-in-modern-warfare",
+      "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+    ],
+    "title_tokens": [
+      "algorithm",
+      "camera",
+      "filmmak",
+      "light",
+      "modern",
+      "role"
+    ],
+    "topic_tokens": [
+      "creativ"
     ]
   },
   {
@@ -2761,7 +3055,7 @@
     "pages": 295,
     "asin": "B0DY666TZJ",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2814,9 +3108,19 @@
     ],
     "related_slugs": [
       "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "the-artificial-intelligence-revolution-from-algorithms-to-consciousness"
+    ],
+    "title_tokens": [
+      "collabor",
+      "controversy",
+      "creativ",
+      "music",
+      "revolution"
+    ],
+    "topic_tokens": [
+      "creativ"
     ]
   },
   {
@@ -2855,7 +3159,7 @@
     "pages": 302,
     "asin": "B0DY5MRT6K",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field.",
@@ -2911,6 +3215,16 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
+    ],
+    "title_tokens": [
+      "ahead",
+      "architect",
+      "breakthrough",
+      "pione",
+      "road"
+    ],
+    "topic_tokens": [
+      "history"
     ]
   },
   {
@@ -2951,7 +3265,7 @@
     "pages": 327,
     "asin": "B0DY4PSD8Z",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -3005,8 +3319,20 @@
     "related_slugs": [
       "the-dumbening-how-ai-is-reshaping-our-minds",
       "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+    ],
+    "title_tokens": [
+      "alway",
+      "ethic",
+      "gam",
+      "gambl",
+      "house",
+      "know",
+      "personaliz"
+    ],
+    "topic_tokens": [
+      "ethic"
     ]
   },
   {
@@ -3045,7 +3371,7 @@
     "pages": 350,
     "asin": "B0DY4Q2Q2D",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems.",
@@ -3097,10 +3423,20 @@
       }
     ],
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+      "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+    ],
+    "title_tokens": [
+      "beyond",
+      "earth",
+      "explor",
+      "space",
+      "transform"
+    ],
+    "topic_tokens": [
+      "sci"
     ]
   },
   {
@@ -3139,7 +3475,7 @@
     "pages": 334,
     "asin": "B0DY4NP1WF",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems.",
@@ -3192,9 +3528,18 @@
     ],
     "related_slugs": [
       "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
+      "the-dumbening-how-ai-is-reshaping-our-minds",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "journalism",
+      "report",
+      "reshap",
+      "robot"
+    ],
+    "topic_tokens": [
+      "media"
     ]
   },
   {
@@ -3233,7 +3578,7 @@
     "pages": 334,
     "asin": "B0DY12Z1SP",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems.",
@@ -3286,9 +3631,21 @@
     ],
     "related_slugs": [
       "from-reporters-to-robots-how-ai-is-reshaping-journalism",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends"
+    ],
+    "title_tokens": [
+      "behind",
+      "feed",
+      "future",
+      "media",
+      "moder",
+      "personal",
+      "social"
+    ],
+    "topic_tokens": [
+      "media"
     ]
   },
   {
@@ -3327,7 +3684,7 @@
     "pages": 344,
     "asin": "B0DY18CYT6",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-25T03:25:40Z",
+    "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems.",
@@ -3379,10 +3736,21 @@
       }
     ],
     "related_slugs": [
+      "ai-in-education-reimagining-learning-for-every-student",
+      "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+    ],
+    "title_tokens": [
+      "finite",
+      "game",
+      "learn",
+      "machine",
+      "state",
+      "unleash"
+    ],
+    "topic_tokens": [
+      "gam"
     ]
   }
 ]
