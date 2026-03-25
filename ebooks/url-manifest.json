@@ -4,7 +4,7 @@
   "ebook_count": 36,
   "external_crawler_files": {
     "robots": "https://jonathan-harris.online/robots.txt",
-    "sitemap": "https://jonathan-harris.online/site-map.xml",
+    "sitemap": "https://jonathan-harris.online/sitemap.xml",
     "llms": "https://jonathan-harris.online/llms.txt"
   },
   "host_redirect_files": {
