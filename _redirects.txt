@@ -132,4 +132,5 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 # SEO files: serve governed crawler assets from the primary domain root
 /robot.txt    /robots.txt   301
-/Sitemap.xml  /site-map.xml  301
+/Sitemap.xml  /sitemap.xml  301
+/site-map.xml  /sitemap.xml  301

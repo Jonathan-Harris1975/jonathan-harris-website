@@ -1,6 +1,6 @@
 # Robots rules (generated source snapshot)
 # Canonical publication target: https://jonathan-harris.online/robots.txt
-# Canonical sitemap target: https://jonathan-harris.online/site-map.xml
+# Canonical sitemap target: https://jonathan-harris.online/sitemap.xml
 
 User-agent: *
 Allow: /
@@ -18,4 +18,4 @@ User-agent: Applebot
 Allow: /
 
 # Sitemap
-Sitemap: https://jonathan-harris.online/site-map.xml
+Sitemap: https://jonathan-harris.online/sitemap.xml
