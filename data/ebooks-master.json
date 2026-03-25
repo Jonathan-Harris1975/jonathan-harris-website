@@ -5,6 +5,7 @@
     "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
     "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
     "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
     "topic": "Transportation",
@@ -36,7 +37,7 @@
     "pages": 227,
     "asin": "B0DQHSD858",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -92,8 +93,7 @@
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ],
-    "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 2,
@@ -101,6 +101,7 @@
     "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
     "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
     "short": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
     "summary": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Healthcare",
@@ -130,7 +131,7 @@
     "pages": 205,
     "asin": "B0DQK6C563",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -186,8 +187,7 @@
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ],
-    "short_description": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 3,
@@ -195,6 +195,7 @@
     "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
     "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
     "short": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
     "summary": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Energy",
@@ -224,7 +225,7 @@
     "pages": 338,
     "asin": "B0DMKFZ3W3",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems.",
@@ -280,8 +281,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 4,
@@ -289,6 +289,7 @@
     "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
     "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
     "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
     "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
     "topic": "Transportation",
@@ -318,7 +319,7 @@
     "pages": 339,
     "asin": "B0DMQLK6LY",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -374,8 +375,7 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
-    ],
-    "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 5,
@@ -383,6 +383,7 @@
     "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
     "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
     "short": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
     "description": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
     "summary": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Law",
@@ -412,7 +413,7 @@
     "pages": 224,
     "asin": "B0DQHTBSWJ",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change.",
@@ -468,8 +469,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 6,
@@ -477,6 +477,7 @@
     "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
     "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
     "short": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
     "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
     "summary": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Cyber Security",
@@ -506,7 +507,7 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
@@ -562,8 +563,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 7,
@@ -571,6 +571,7 @@
     "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
     "short": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
     "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
     "topic": "Artificial Intelligence",
@@ -598,7 +599,7 @@
     "pages": 14,
     "asin": "B0DMYF3YH3",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
@@ -654,8 +655,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 8,
@@ -663,6 +663,7 @@
     "slug": "ai-in-aviation-transforming-safety-and-sustainability",
     "title": "AI in Aviation: Transforming Safety and Sustainability",
     "short": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
     "summary": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Transportation",
@@ -692,7 +693,7 @@
     "pages": 284,
     "asin": "B0DMKTLMX6",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -748,8 +749,7 @@
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 9,
@@ -757,6 +757,7 @@
     "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
     "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
     "short": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
     "summary": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Transportation",
@@ -786,7 +787,7 @@
     "pages": 312,
     "asin": "B0DMMTGNDJ",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -842,8 +843,7 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ],
-    "short_description": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 10,
@@ -851,6 +851,7 @@
     "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
     "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
     "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
     "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
     "topic": "Healthcare",
@@ -880,7 +881,7 @@
     "pages": 328,
     "asin": "B0DN4XSLK9",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -936,8 +937,7 @@
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ],
-    "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 11,
@@ -945,6 +945,7 @@
     "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
     "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
     "short": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
     "description": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
     "summary": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Transportation",
@@ -974,7 +975,7 @@
     "pages": 324,
     "asin": "B0DMYQV1LY",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -1030,8 +1031,7 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
-    ],
-    "short_description": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 12,
@@ -1039,6 +1039,7 @@
     "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
     "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
     "short": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
     "summary": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Retail",
@@ -1068,7 +1069,7 @@
     "pages": 234,
     "asin": "B0DMYHW17M",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience.",
@@ -1124,8 +1125,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 13,
@@ -1133,6 +1133,7 @@
     "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
     "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
     "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
     "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
     "topic": "Manufacturing",
@@ -1162,7 +1163,7 @@
     "pages": 369,
     "asin": "B0DMV2Q6TF",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation.",
@@ -1218,8 +1219,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 14,
@@ -1227,6 +1227,7 @@
     "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
     "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
     "short": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
     "description": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
     "summary": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Industry",
@@ -1256,7 +1257,7 @@
     "pages": 347,
     "asin": "B0DMV47ZRL",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change.",
@@ -1312,8 +1313,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 15,
@@ -1321,6 +1321,7 @@
     "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
     "short": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement.",
     "description": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
     "summary": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI changes the day-to-day reality of how ai shapes attention and thinking: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Ethics",
@@ -1350,7 +1351,7 @@
     "pages": 277,
     "asin": "B0DMMVN17Z",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in how ai shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -1406,8 +1407,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A no-hype introduction to AI in how ai shapes attention and thinking, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 16,
@@ -1415,6 +1415,7 @@
     "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
     "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
     "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
     "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
     "topic": "Agriculture",
@@ -1444,7 +1445,7 @@
     "pages": 330,
     "asin": "B0DMN32J3Y",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers.",
@@ -1500,8 +1501,7 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability"
-    ],
-    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 17,
@@ -1509,6 +1509,7 @@
     "slug": "ai-in-education-reimagining-learning-for-every-student",
     "title": "AI in Education: Reimagining Learning for Every Student",
     "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
     "summary": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Education",
@@ -1538,7 +1539,7 @@
     "pages": 323,
     "asin": "B0DMKXWQDK",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change.",
@@ -1594,8 +1595,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability"
-    ],
-    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 18,
@@ -1603,6 +1603,7 @@
     "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
     "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
     "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
     "description": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
     "summary": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Finance",
@@ -1632,7 +1633,7 @@
     "pages": 286,
     "asin": "B0DML75B3C",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure.",
@@ -1688,8 +1689,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 19,
@@ -1697,6 +1697,7 @@
     "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
     "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
     "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
     "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
     "topic": "Healthcare",
@@ -1726,7 +1727,7 @@
     "pages": 348,
     "asin": "B0DM73FR3W",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -1782,8 +1783,7 @@
       "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ],
-    "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 20,
@@ -1791,6 +1791,7 @@
     "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
     "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
     "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
     "summary": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Construction",
@@ -1820,7 +1821,7 @@
     "pages": 319,
     "asin": "B0DMQMGLP4",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment.",
@@ -1876,8 +1877,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 21,
@@ -1885,6 +1885,7 @@
     "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
     "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
     "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
     "description": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
     "summary": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Future of Work",
@@ -1914,7 +1915,7 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
@@ -1970,8 +1971,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 22,
@@ -1979,6 +1979,7 @@
     "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
     "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
     "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
     "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
     "topic": "Government",
@@ -2008,7 +2009,7 @@
     "pages": 328,
     "asin": "B0DM74CRSD",
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
@@ -2064,8 +2065,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 23,
@@ -2073,6 +2073,7 @@
     "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
     "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
     "short": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
     "description": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
     "summary": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Construction",
@@ -2102,7 +2103,7 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
@@ -2158,8 +2159,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 24,
@@ -2167,6 +2167,7 @@
     "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
     "title": "Digital Defense: The Role of AI in Modern Warfare",
     "short": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
     "summary": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Defence",
@@ -2196,7 +2197,7 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
@@ -2252,8 +2253,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 25,
@@ -2261,6 +2261,7 @@
     "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
     "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
     "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
     "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
     "topic": "Environment",
@@ -2290,7 +2291,7 @@
     "pages": 221,
     "asin": "B0DQK6B53Z",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2346,8 +2347,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 26,
@@ -2355,6 +2355,7 @@
     "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
     "title": "Climate Intelligence: Harnessing AI for a Greener Future",
     "short": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
     "summary": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Environment",
@@ -2384,7 +2385,7 @@
     "pages": 338,
     "asin": "B0DM72JZ44",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2440,8 +2441,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 27,
@@ -2449,6 +2449,7 @@
     "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
     "short": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
     "summary": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of AI Revolution in Railways: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Transportation",
@@ -2478,7 +2479,7 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -2534,8 +2535,7 @@
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability"
-    ],
-    "short_description": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 28,
@@ -2543,6 +2543,7 @@
     "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
     "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
     "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
     "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
     "topic": "Sports",
@@ -2572,7 +2573,7 @@
     "pages": 229,
     "asin": "B0DQFJ6XP5",
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view.",
@@ -2628,8 +2629,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 29,
@@ -2637,6 +2637,7 @@
     "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
     "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
     "short": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
     "description": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
     "summary": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Creativity",
@@ -2666,7 +2667,7 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2722,8 +2723,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 30,
@@ -2731,6 +2731,7 @@
     "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
     "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
     "short": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
     "description": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
     "summary": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Creativity",
@@ -2760,7 +2761,7 @@
     "pages": 295,
     "asin": "B0DY666TZJ",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2816,8 +2817,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 31,
@@ -2825,6 +2825,7 @@
     "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
     "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
     "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
     "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
     "topic": "History",
@@ -2854,7 +2855,7 @@
     "pages": 302,
     "asin": "B0DY5MRT6K",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field.",
@@ -2910,8 +2911,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 32,
@@ -2919,6 +2919,7 @@
     "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
     "short": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
     "description": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
     "summary": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in ai in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Ethics",
@@ -2950,7 +2951,7 @@
     "pages": 327,
     "asin": "B0DY4PSD8Z",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -3006,8 +3007,7 @@
       "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
-    ],
-    "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 33,
@@ -3015,6 +3015,7 @@
     "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
     "title": "Beyond Earth: How AI is Transforming Space Exploration",
     "short": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
     "description": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
     "summary": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Science",
@@ -3044,7 +3045,7 @@
     "pages": 350,
     "asin": "B0DY4Q2Q2D",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems.",
@@ -3100,8 +3101,7 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement."
+    ]
   },
   {
     "id": 34,
@@ -3109,6 +3109,7 @@
     "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
     "title": "From Reporters to Robots: How AI is Reshaping Journalism",
     "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
     "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.",
     "topic": "Media",
@@ -3138,7 +3139,7 @@
     "pages": 334,
     "asin": "B0DY4NP1WF",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems.",
@@ -3194,8 +3195,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions."
+    ]
   },
   {
     "id": 35,
@@ -3203,6 +3203,7 @@
     "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
     "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
     "short": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
     "description": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
     "summary": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Media",
@@ -3232,7 +3233,7 @@
     "pages": 334,
     "asin": "B0DY12Z1SP",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems.",
@@ -3288,8 +3289,7 @@
       "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability"
-    ],
-    "short_description": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice."
+    ]
   },
   {
     "id": 36,
@@ -3297,6 +3297,7 @@
     "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
     "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
     "short": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
     "description": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
     "summary": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine.",
     "topic": "Gaming",
@@ -3326,7 +3327,7 @@
     "pages": 344,
     "asin": "B0DY18CYT6",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-23T20:59:30Z",
+    "dateModified": "2026-03-25T03:25:40Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems.",
@@ -3382,7 +3383,6 @@
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-in-aviation-transforming-safety-and-sustainability",
       "ai-in-education-reimagining-learning-for-every-student"
-    ],
-    "short_description": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement."
+    ]
   }
 ]
