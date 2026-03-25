@@ -72,7 +72,8 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
 def validate_support_redirects(timeout: float) -> list[str]:
     checks = [
         (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias"),
-        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/site-map.xml", "Sitemap.xml alias"),
+        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/sitemap.xml", "Sitemap.xml alias"),
+        (f"{SITE_URL}/site-map.xml", f"{SITE_URL}/sitemap.xml", "site-map.xml alias"),
     ]
     errors: list[str] = []
     for source, expected_target, label in checks:
