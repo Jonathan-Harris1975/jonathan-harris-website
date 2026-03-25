@@ -1,25 +1,26 @@
 {
-  "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-  "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
-  "description": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
-  "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
-  "topic": "Government",
+  "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+  "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+  "description": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+  "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
+  "topic": "Ethics",
   "tags": [
-    "Government",
+    "Ethics",
     "Artificial Intelligence",
-    "AI Trends"
+    "AI Trends",
+    "Law"
   ],
-  "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
-  "image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
-  "buy_url": "https://mybook.to/3TwcUA",
-  "buy_route": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
-  "pages": 328,
-  "asin": "B0DM74CRSD",
-  "datePublished": "2024-11-05",
+  "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
+  "image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
+  "buy_url": "https://mybook.to/K7nVJGv",
+  "buy_route": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+  "pages": 327,
+  "asin": "B0DY4PSD8Z",
+  "datePublished": "2025-02-21",
   "dateModified": "2026-03-23T20:59:30Z",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
-  "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
-  "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-  "identifier": "JH-AI-EBOOK-35"
+  "audience": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
+  "canonical_url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+  "identifier": "JH-AI-EBOOK-36"
 }
