@@ -1702,6 +1702,7 @@ body .jh-header--injected.is-visible{
   outline-offset:3px;
 }
 .jh-back-to-top svg{ pointer-events:none; }
+.jh-back-to-top-sentinel{position:absolute;top:400px;left:0;width:1px;height:1px;pointer-events:none;}
 
 body.jh-page-404{
   min-height:100vh;
