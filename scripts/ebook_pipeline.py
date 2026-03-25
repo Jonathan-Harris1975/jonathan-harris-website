@@ -28,6 +28,8 @@ SITE_NAME = "Jonathan Harris"
 SITE_URL = "https://jonathan-harris.online"
 DEFAULT_AUDIENCE = "Readers who want practical, plain-English AI insight without the buzzwords."
 DEFAULT_TONE = "Plain-English, practical, sceptical, no-hype"
+BOOK_COVER_WIDTH = 2480
+BOOK_COVER_HEIGHT = 3508
 VALIDATION_REPORT = ROOT / "VALIDATION_OUTPUT.txt"
 
 STOPWORDS = {
@@ -750,6 +752,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "slug": slug,
             "title": title,
             "short": short,
+            "short_description": short,
             "description": description,
             "summary": summary,
             "topic": topic,
@@ -834,6 +837,7 @@ def load_master() -> List[Dict[str, Any]]:
     fallback_timestamp = infer_build_timestamp()
     for book in master:
         book.setdefault("dateModified", fallback_timestamp)
+        book.setdefault("short_description", book.get("short", ""))
     add_related_books(master)
     return master
 
@@ -860,6 +864,7 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
         "filter": book["filter"],
         "keywords": book["keywords"],
         "buy_url": book["buy_url"],
+        "buy_target_url": book["buy_url"],
         "slug": book["slug"],
         "asin": book["asin"],
         "pages": book["pages"],
@@ -867,6 +872,7 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
         "dateModified": book.get("dateModified") or infer_build_timestamp(),
         "canonical_url": book["canonical_url"],
         "buy_route": book["buy_route"],
+        "buy_route_full": book["buy_route_full"],
         "topic_url": book["topic_url"],
     }
 
@@ -919,6 +925,31 @@ def render_breadcrumbs(book: Dict[str, Any]) -> str:
         '<span>{title}</span>'.format(title=html.escape(book["title"])),
     ])
     return "".join(crumbs)
+
+def render_image_tag(*, src: str, alt: str, class_name: str, loading: str = "lazy", width: int | None = None, height: int | None = None) -> str:
+    attrs = [
+        f'alt="{html.escape(alt)}"',
+        f'class="{html.escape(class_name)}"',
+        f'loading="{html.escape(loading)}"',
+        f'src="{html.escape(src)}"',
+    ]
+    if width is not None:
+        attrs.append(f'width="{width}"')
+    if height is not None:
+        attrs.append(f'height="{height}"')
+    return "<img " + " ".join(attrs) + "/>"
+
+
+def render_cover_image(book: Dict[str, Any], class_name: str, loading: str = "lazy") -> str:
+    return render_image_tag(
+        src=book["cover"],
+        alt=f"{book['title']} cover",
+        class_name=class_name,
+        loading=loading,
+        width=BOOK_COVER_WIDTH,
+        height=BOOK_COVER_HEIGHT,
+    )
+
 
 def audience_bullets(book: Dict[str, Any]) -> List[str]:
     topic_lc = book["topic"].lower()
@@ -1066,7 +1097,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 
     <section class="ebook-showcase">
       <article class="card ebook-showcase__media">
-        <img alt="{title} cover" class="cover ebook-showcase__cover" loading="eager" src="{cover}"/>
+        {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
         <div class="ebook-actions">
           <a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
           <a class="button secondary" href="/ebooks/">Browse related books</a>
@@ -1188,7 +1219,7 @@ def render_catalogue_card(book: Dict[str, Any]) -> str:
     tags = "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in book.get("tags", [])[:4])
     return f'''
 <article class="card ebook-card" aria-label="{html.escape(book['title'])}">
-  <img alt="{html.escape(book['title'])}" class="cover" loading="lazy" src="{html.escape(book['cover'])}"/>
+  {render_cover_image(book, class_name="cover")}
   <h2>{html.escape(book['title'])}</h2>
   <div class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
   <p>{html.escape(book['short'])}</p>
@@ -1803,7 +1834,9 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
                 "tags": book["tags"],
                 "keywords": [clean_paragraph(k).lower() for k in book["keywords"]],
                 "buy_url": book["buy_url"],
+                "buy_target_url": book["buy_url"],
                 "buy_route": book["buy_route"],
+                "buy_route_full": book["buy_route_full"],
                 "cover": book["cover"],
                 "identifier": book["identifier"],
                 "entity_id": f"{book['canonical_url']}#book",
