@@ -98,6 +98,14 @@ TEMPLATE_ORDERED_MARKERS = [
     '<section class="faq card" aria-label="Frequently asked questions">',
 ]
 
+BROKEN_PHRASE_FRAGMENTS = [
+    "AI in how ai shapes attention and thinking",
+    "how AI changes the day-to-day reality of how ai shapes attention and thinking",
+    "how AI changes how ai shapes attention and thinking in practice",
+    "where AI fits inside how ai shapes attention and thinking",
+    "AI is not arriving in how ai shapes attention and thinking",
+]
+
 def read_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
         return default
@@ -336,6 +344,103 @@ def text_tokens(value: str) -> set[str]:
         for token in re.findall(r"[a-z0-9]+", clean_paragraph(value).lower())
         if len(token) > 2 and token not in STOPWORDS
     }
+
+
+def stem_token(token: str) -> str:
+    token = clean_paragraph(token).lower()
+    for suffix in (
+        "ization", "isation", "ational", "ability", "ibility", "ation", "ition",
+        "fulness", "ousness", "iveness", "ingly", "ments", "ement", "ment",
+        "able", "ible", "ness", "ship", "ance", "ence", "ally", "fully",
+        "less", "iest", "ies", "ied", "ing", "ers", "er", "ed", "ly",
+        "ity", "s",
+    ):
+        if len(token) > len(suffix) + 2 and token.endswith(suffix):
+            return token[: -len(suffix)]
+    return token
+
+
+def significant_tokens(value: str) -> set[str]:
+    return {stem_token(token) for token in text_tokens(value)}
+
+
+def book_token_groups(book: Dict[str, Any]) -> Dict[str, set[str]]:
+    return {
+        "topic": significant_tokens(book.get("topic", "")),
+        "title": significant_tokens(book.get("title", "")),
+        "tags": {token for item in book.get("tags", []) for token in significant_tokens(item)},
+        "keywords": {token for item in book.get("keywords", []) for token in significant_tokens(item)},
+    }
+
+
+def related_book_score(candidate: Dict[str, Any], current: Dict[str, Any], current_tokens: Dict[str, set[str]], candidate_tokens: Dict[str, set[str]]) -> tuple[int, tuple[int, int, int, int, str]]:
+    same_topic = int(candidate.get("topic") == current.get("topic"))
+    title_overlap = len(current_tokens["title"] & candidate_tokens["title"])
+    topic_overlap = len(current_tokens["topic"] & candidate_tokens["topic"])
+    tag_overlap = len(current_tokens["tags"] & candidate_tokens["tags"])
+    keyword_overlap = len(current_tokens["keywords"] & candidate_tokens["keywords"])
+    score = (same_topic * 100) + (title_overlap * 35) + (topic_overlap * 30) + (tag_overlap * 18) + (keyword_overlap * 8)
+    tie_breaker = (same_topic, title_overlap, topic_overlap + tag_overlap, keyword_overlap, candidate["title"].lower())
+    return score, tie_breaker
+
+
+def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
+    errors: List[str] = []
+    for book in books:
+        for field in ("short", "description", "summary", "audience", "who_for", "what_this_book_covers", "why_it_matters"):
+            value = clean_paragraph(book.get(field, ""))
+            for fragment in BROKEN_PHRASE_FRAGMENTS:
+                if fragment.lower() in value.lower():
+                    errors.append(f"Broken phrase lint failed for {book['slug']} field {field}: {fragment}")
+    return errors
+
+
+def workbook_static_route_contract_errors(workbook_path: Path) -> List[str]:
+    wb = openpyxl.load_workbook(workbook_path, data_only=True)
+    if "Pages" not in wb.sheetnames:
+        return ["Workbook is missing the Pages sheet."]
+
+    ws = wb["Pages"]
+    header_row = 5
+    headers = {clean_paragraph(ws.cell(header_row, col).value).lower(): col for col in range(1, ws.max_column + 1) if clean_paragraph(ws.cell(header_row, col).value)}
+    required = {"relative file path", "public url path", "page title"}
+    if not required.issubset(headers):
+        return []
+
+    errors: List[str] = []
+    for row_idx in range(header_row + 1, ws.max_row + 1):
+        relative_path = clean_paragraph(ws.cell(row_idx, headers["relative file path"]).value)
+        public_path = clean_paragraph(ws.cell(row_idx, headers["public url path"]).value)
+        workbook_title = clean_paragraph(ws.cell(row_idx, headers["page title"]).value)
+        if not relative_path or not workbook_title or relative_path.startswith("/book/"):
+            continue
+        file_path = ROOT / relative_path
+        if not file_path.exists() or file_path.suffix.lower() != ".html":
+            continue
+        html_text = file_path.read_text(encoding="utf-8", errors="ignore")
+        title_match = re.search(r"<title>(.*?)</title>", html_text, re.I | re.S)
+        if title_match:
+            repo_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
+            if repo_title != workbook_title:
+                errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
+        canonical_match = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', html_text, re.I)
+        if canonical_match and public_path:
+            canonical_path = url_to_path(canonical_match.group(1))
+            if canonical_path != public_path:
+                errors.append(f"Workbook Pages canonical mismatch for {relative_path}: workbook path '{public_path}' != canonical '{canonical_path}'.")
+    return errors
+
+
+def related_book_contract_errors(books: List[Dict[str, Any]]) -> List[str]:
+    errors: List[str] = []
+    books_by_slug = {book["slug"]: book for book in books}
+    for book in books:
+        same_topic_slugs = [candidate["slug"] for candidate in books if candidate["slug"] != book["slug"] and candidate.get("topic") == book.get("topic")]
+        governed_related = [slug for slug in book.get("related_slugs", []) if slug in books_by_slug]
+        expected_same_topic = min(4, len(same_topic_slugs))
+        if expected_same_topic and any(books_by_slug[slug].get("topic") != book.get("topic") for slug in governed_related[:expected_same_topic]):
+            errors.append(f"Related book contract drift for {book['slug']}: same-topic titles are not ranked first.")
+    return errors
 
 
 
@@ -813,20 +918,21 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
 
 
 def add_related_books(records: List[Dict[str, Any]]) -> None:
-    def score(candidate: Dict[str, Any], current: Dict[str, Any]) -> int:
-        total = 0
-        if candidate.get("topic") == current.get("topic"):
-            total += 60
-        total += 10 * len(set(tag.lower() for tag in current.get("tags", [])) & set(tag.lower() for tag in candidate.get("tags", [])))
-        total += 2 * len(set(keyword.lower() for keyword in current.get("keywords", [])) & set(keyword.lower() for keyword in candidate.get("keywords", [])))
-        return total
+    token_map = {record["slug"]: book_token_groups(record) for record in records}
+
+    def sort_key(current: Dict[str, Any], candidate: Dict[str, Any]) -> tuple[int, int, int, int, int, str]:
+        score, tie_breaker = related_book_score(candidate, current, token_map[current["slug"]], token_map[candidate["slug"]])
+        same_topic, title_overlap, grouped_overlap, keyword_overlap, candidate_title = tie_breaker
+        return (-same_topic, -score, -title_overlap, -grouped_overlap, -keyword_overlap, candidate_title)
 
     for current in records:
         ranked = sorted(
             [candidate for candidate in records if candidate["slug"] != current["slug"]],
-            key=lambda candidate: (-score(candidate, current), candidate["title"].lower()),
+            key=lambda candidate: sort_key(current, candidate),
         )
         current["related_slugs"] = [book["slug"] for book in ranked[:4]]
+        current["title_tokens"] = sorted(token_map[current["slug"]]["title"])
+        current["topic_tokens"] = sorted(token_map[current["slug"]]["topic"])
 
 
 
@@ -874,6 +980,9 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
         "buy_route": book["buy_route"],
         "buy_route_full": book["buy_route_full"],
         "topic_url": book["topic_url"],
+        "related_slugs": book.get("related_slugs", []),
+        "title_tokens": book.get("title_tokens", []),
+        "topic_tokens": book.get("topic_tokens", []),
     }
 
 
@@ -2127,6 +2236,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if len(identifiers) != len(set(identifiers)):
         errors.append("Duplicate internal identifiers found in the master record.")
     errors.extend(content_role_validation_errors(books))
+    errors.extend(broken_phrase_errors(books))
+    errors.extend(related_book_contract_errors(books))
 
     legacy_data_files = [ROOT / "data" / "ebook-content-source.json", ROOT / "data" / "ebook-source-overrides.json"]
     for legacy_path in legacy_data_files:
@@ -2380,6 +2491,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
     for file_path in html_files:
         text = file_path.read_text(encoding="utf-8", errors="ignore")
+        if file_path == ROOT / "index.html" and "\"@type\": \"Organization\"" not in text:
+            errors.append("Homepage Organisation schema is missing from index.html.")
         if re.search(r'href="/book/', text):
             errors.append(f"Retired /book/ link found in HTML: {file_path.relative_to(ROOT)}")
         if re.search(r'href="[^"]*/detail(?:\.html)?"', text):
@@ -2409,11 +2522,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Static blog post missing for slug {slug}.")
 
     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
+    site_ui_js = (ROOT / "assets" / "js" / "site-ui.js").read_text(encoding="utf-8")
     blog_js = (ROOT / "assets" / "js" / "blog.js").read_text(encoding="utf-8")
     if "manifest stack" in weekly_archive_html or "published manifest" in weekly_archive_html or "falls back to" in weekly_archive_html:
         errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
     if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
         errors.append("assets/js/blog.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
+    if "createElement(\"style\")" in site_ui_js or "createElement('style')" in site_ui_js:
+        errors.append("assets/js/site-ui.js still injects runtime style tags instead of relying on governed CSS.")
     if not blog_manifest_items:
         if not re.search(r"<meta[^>]+(?:name=[\"']robots[\"'][^>]*content=[\"'][^\"']*noindex|content=[\"'][^\"']*noindex[^>]*name=[\"']robots[\"'])", weekly_archive_html, re.I):
             errors.append("blog/weekly/index.html must be noindex while blog/posts.json is empty.")
@@ -2422,6 +2538,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
 
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
+        errors.extend(workbook_static_route_contract_errors(workbook_path))
         order, workbook_map, workbook_content = parse_workbook(workbook_path)
         if order != slugs:
             errors.append("Workbook row order does not match the master record order.")
