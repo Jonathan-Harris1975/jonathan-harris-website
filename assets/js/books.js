@@ -232,10 +232,10 @@
   function updatePager(totalPages){
     if (!pager || !prevBtn || !nextBtn || !pageInfo) return;
     if (totalPages <= 1){
-      pager.style.display = "none";
+      pager.hidden = true;
       return;
     }
-    pager.style.display = "flex";
+    pager.hidden = false;
     pageInfo.textContent = `Page ${state.page} of ${totalPages}`;
     prevBtn.disabled = state.page <= 1;
     nextBtn.disabled = state.page >= totalPages;
