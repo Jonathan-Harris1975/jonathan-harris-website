@@ -64,7 +64,7 @@ MALFORMED_SLUG_FIXES = [
 
 EXTERNAL_CRAWLER_FILES = {
     "robots": f"{SITE_URL}/robots.txt",
-    "sitemap": f"{SITE_URL}/site-map.xml",
+    "sitemap": f"{SITE_URL}/sitemap.xml",
     "llms": f"{SITE_URL}/llms.txt",
 }
 
@@ -1928,6 +1928,14 @@ def sync_redirects(books: List[Dict[str, Any]]) -> None:
     pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     legacy_anchor = "# retire legacy detail routes to the canonical ebook page\n"
     malformed_lines = [f"{item['source']}   {item['target']}  301" for item in MALFORMED_SLUG_FIXES]
+    crawler_alias_anchor = "# SEO files: serve governed crawler assets from the primary domain root\n"
+    crawler_alias_lines = [
+        "/robot.txt    /robots.txt   301",
+        "/Sitemap.xml  /sitemap.xml  301",
+        "/site-map.xml  /sitemap.xml  301",
+    ]
+    crawler_alias_pattern = re.compile(r"# SEO files: serve governed crawler assets from the primary domain root\n(?:[^#].*\n?)*", re.M)
+
     for path in redirect_files:
         text = path.read_text(encoding="utf-8")
         new_text, count = pattern.subn(block + "\n", text)
@@ -1938,6 +1946,12 @@ def sync_redirects(books: List[Dict[str, Any]]) -> None:
                 if legacy_anchor not in new_text:
                     raise ValueError(f"Could not find legacy detail redirect anchor in {path}")
                 new_text = new_text.replace(legacy_anchor, legacy_anchor + line + "\n", 1)
+        alias_block = crawler_alias_anchor + "\n".join(crawler_alias_lines) + "\n"
+        if crawler_alias_anchor not in new_text:
+            raise ValueError(f"Could not find crawler alias anchor in {path}")
+        new_text, alias_count = crawler_alias_pattern.subn(alias_block, new_text, count=1)
+        if alias_count != 1:
+            raise ValueError(f"Could not refresh crawler alias block in {path}")
         path.write_text(new_text, encoding="utf-8")
 
     (ROOT / "_redirects.books-domain").write_text(build_books_domain_redirects(), encoding="utf-8")
@@ -2236,11 +2250,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Main redirect mirror still redirects a governed crawler asset instead of serving it directly: {snippet}")
 
     legacy_typo_alias = "/robot.txt    /robots.txt   301"
-    legacy_sitemap_alias = "/Sitemap.xml  /site-map.xml  301"
+    legacy_sitemap_alias = "/Sitemap.xml  /sitemap.xml  301"
+    legacy_site_map_alias = "/site-map.xml  /sitemap.xml  301"
     if legacy_typo_alias not in redirects_text or legacy_typo_alias not in redirects_mirror:
         errors.append("Legacy /robot.txt crawler alias is missing from the main redirect files.")
     if legacy_sitemap_alias not in redirects_text or legacy_sitemap_alias not in redirects_mirror:
         errors.append("Legacy /Sitemap.xml crawler alias is missing from the main redirect files.")
+    if legacy_site_map_alias not in redirects_text or legacy_site_map_alias not in redirects_mirror:
+        errors.append("Legacy /site-map.xml crawler alias is missing from the main redirect files.")
 
     books_domain = (ROOT / "_redirects.books-domain").read_text(encoding="utf-8")
     ebooks_domain = (ROOT / "_redirects.ebooks-domain").read_text(encoding="utf-8")

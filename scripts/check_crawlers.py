@@ -98,7 +98,6 @@ def run_repo_snapshot_checks() -> List[str]:
     forbidden_rules = [
         ("/robots.txt", EXTERNAL_CRAWLER_FILES["robots"]),
         ("/sitemap.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
-        ("/site-map.xml", EXTERNAL_CRAWLER_FILES["sitemap"]),
     ]
     for source, url in forbidden_rules:
         if url in redirects_text and source in redirects_text:
@@ -106,7 +105,8 @@ def run_repo_snapshot_checks() -> List[str]:
 
     alias_rules = [
         "/robot.txt    /robots.txt   301",
-        "/Sitemap.xml  /site-map.xml  301",
+        "/Sitemap.xml  /sitemap.xml  301",
+        "/site-map.xml  /sitemap.xml  301",
     ]
     for rule in alias_rules:
         if rule not in redirects_text:
@@ -123,8 +123,8 @@ def run_repo_snapshot_checks() -> List[str]:
 
     if EXTERNAL_CRAWLER_FILES["robots"].rstrip("/") != "https://jonathan-harris.online/robots.txt":
         errors.append("Crawler check failed: robots.txt publication target is not pinned to the primary domain")
-    if EXTERNAL_CRAWLER_FILES["sitemap"].rstrip("/") != "https://jonathan-harris.online/site-map.xml":
-        errors.append("Crawler check failed: site-map.xml publication target is not pinned to the primary domain")
+    if EXTERNAL_CRAWLER_FILES["sitemap"].rstrip("/") != "https://jonathan-harris.online/sitemap.xml":
+        errors.append("Crawler check failed: sitemap.xml publication target is not pinned to the primary domain")
     if EXTERNAL_CRAWLER_FILES["llms"].rstrip("/") != "https://jonathan-harris.online/llms.txt":
         errors.append("Crawler check failed: llms.txt publication target is not pinned to the primary domain")
 
@@ -256,7 +256,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt, site-map.xml, sitemap.xml, and llms.txt are governed in-repo and published from the primary domain.")
+    print("Crawler file check passed: robots.txt, sitemap.xml, site-map.xml compatibility mirror, and llms.txt are governed in-repo and published from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 
