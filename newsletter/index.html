@@ -173,27 +173,7 @@
 <h3 aria-hidden="true" hidden="" class="u-s35">You’re in — welcome aboard!</h3>
 <p class="u-s36">Check your inbox for a confirmation email. Your first <em>AI Edge</em> briefing will arrive in the next weekly edition.</p>
 </div>
-<script>
-(function(){
-  function isCompletedMessage(data){
-    if (!data) return false;
-    if (typeof data === 'object') return data.action === 'submission-completed';
-    if (typeof data !== 'string') return false;
-    if (data.indexOf('submission-completed') === -1) return false;
-    try {
-      var parsed = JSON.parse(data);
-      return parsed && parsed.action === 'submission-completed';
-    } catch(_) {
-      return data.indexOf('JotForm') > -1;
-    }
-  }
-  window.addEventListener('message',function(e){
-    if(!isCompletedMessage(e.data)) return;
-    var w=document.getElementById('newsletter-form-wrap'),s=document.getElementById('newsletter-success');
-    if(w&&s){w.style.display='none';s.style.display='block';s.focus();}
-  });
-})();
-</script>
+<script defer="" src="/assets/js/newsletter-inline.js"></script>
 </section>
 <section aria-label="What readers say" class="card card--accent u-s37" role="region">
 <h2>What readers say</h2>
@@ -213,9 +193,7 @@
 </section>
 </main>
 <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>
-    window.jotformEmbedHandler("iframe[id='JotFormIFrame-260277027608054']", "https://form.jotform.com/");
-  </script>
+<script src="/assets/js/newsletter-jotform.js"></script>
 <footer aria-label="Website footer" class="site-footer" role="contentinfo">
 <div class="wrap footer-shell">
 <div class="footer-grid">
