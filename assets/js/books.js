@@ -139,10 +139,8 @@
   if (chipsWrap) chipsWrap.appendChild(makeChip("All"));
   Array.from(filters).sort((a,b)=>a.localeCompare(b)).forEach(f => chipsWrap && chipsWrap.appendChild(makeChip(f)));
 
-  function buildSameSourceSrcset(src, widths){
-    if (!src || !Array.isArray(widths)) return "";
-    const unique = Array.from(new Set(widths.filter(Boolean))).sort((a, b) => a - b);
-    return unique.map(width => `${src} ${width}w`).join(", ");
+  function buildSameSourceSrcset(){
+    return "";
   }
 
   function matches(book){
@@ -170,8 +168,11 @@
     img.decoding = "async";
     img.alt = book.title;
     img.src = book.cover;
-    img.srcset = buildSameSourceSrcset(book.cover, [180, 240, 320, 480, 640, 960, 1280]);
-    img.sizes = "(min-width: 1200px) 248px, (min-width: 768px) 33vw, 48vw";
+    const srcset = buildSameSourceSrcset(book.cover, [180, 240, 320, 480, 640, 960, 1280]);
+    if (srcset) {
+      img.srcset = srcset;
+      img.sizes = "(min-width: 1200px) 248px, (min-width: 768px) 33vw, 48vw";
+    }
     img.width = 2480;
     img.height = 3508;
 

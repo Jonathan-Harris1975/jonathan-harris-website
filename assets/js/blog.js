@@ -13,10 +13,8 @@
     return (s||"").replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
 
-  function buildSameSourceSrcset(src, widths){
-    if (!src || !Array.isArray(widths)) return "";
-    const unique = Array.from(new Set(widths.filter(Boolean))).sort((a, b) => a - b);
-    return unique.map(width => `${src} ${width}w`).join(", ");
+  function buildSameSourceSrcset(){
+    return "";
   }
 
   function render(items){
@@ -38,7 +36,11 @@
       const safeTitle = escapeHtml(it.title || "Untitled");
       const safeDesc = escapeHtml((it.desc || it.summary || "").trim());
       const image = (it.image || it.cover || "").trim();
-      const img = image ? `<img class="cover" src="${escapeHtml(image)}" srcset="${escapeHtml(buildSameSourceSrcset(image, [320, 480, 640, 960]))}" sizes="(min-width: 1000px) 320px, 90vw" alt="${safeTitle}" loading="lazy" decoding="async">` : "";
+      const imageSrcset = buildSameSourceSrcset(image, [320, 480, 640, 960]);
+      const imgAttrs = imageSrcset
+        ? ` class="cover" src="${escapeHtml(image)}" srcset="${escapeHtml(imageSrcset)}" sizes="(min-width: 1000px) 320px, 90vw" alt="${safeTitle}" loading="lazy" decoding="async"`
+        : ` class="cover" src="${escapeHtml(image)}" alt="${safeTitle}" loading="lazy" decoding="async"`;
+      const img = image ? `<img${imgAttrs}>` : "";
       const href = (it.url || it.link || "").trim() || "#";
 
       return `
