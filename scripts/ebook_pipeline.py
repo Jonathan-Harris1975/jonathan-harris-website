@@ -581,6 +581,8 @@ def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
             for fragment in BROKEN_PHRASE_FRAGMENTS:
                 if fragment.lower() in lower:
                     errors.append(f"Broken phrase lint failed for {book['slug']} field {field}: {fragment}")
+            if " in ai in " in f" {lower} ":
+                errors.append(f"Broken phrase lint failed for {book['slug']} field {field}: in ai in")
             for fragment in suspicious_fragments:
                 if fragment in lower:
                     errors.append(f"Broken title-substitution phrase detected for {book['slug']} field {field}: {fragment}")

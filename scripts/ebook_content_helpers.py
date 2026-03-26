@@ -60,6 +60,10 @@ def normalise_topic_copy(value: str, topic: str) -> str:
         (r"\bAI is not arriving in artificial intelligence itself\b", "AI is not arriving out of nowhere"),
         (r"\bAI in ai in\s+", "AI in "),
         (r"\bof AI in ai in\s+", "of AI in "),
+        (r"\bin ai in\s+", "in "),
+        (r"\bdeployment in ai in\s+", "deployment in "),
+        (r"\bdo in ai in\s+", "do in "),
+        (r"\bAi in gambling\b", "AI in gambling"),
         (r"\bconnect AI with artificial intelligence\b", "cover artificial intelligence directly"),
         (r"\bBest for people weighing real adoption choices in artificial intelligence itself\b", "Best for people weighing real adoption choices across artificial intelligence"),
     ]
