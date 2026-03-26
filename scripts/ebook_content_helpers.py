@@ -92,13 +92,13 @@ def audience_faq_answer(audience: str, topic: str) -> str:
 
 
 def build_same_source_srcset(src: str, intrinsic_width: int | None) -> str:
-    if not src:
-        return ""
-    widths = [w for w in RESPONSIVE_IMAGE_WIDTHS if intrinsic_width is None or w <= intrinsic_width]
-    if intrinsic_width and intrinsic_width not in widths:
-        widths.append(intrinsic_width)
-    widths = sorted(set(widths))
-    return ", ".join(f"{src} {width}w" for width in widths)
+    """Return an empty srcset until the pipeline has real width-specific variants.
+
+    Repeating the same source URL across width descriptors misleads browsers and
+    validation tooling into believing responsive candidates exist when they do not.
+    The caller should fall back to a plain src-only image in that case.
+    """
+    return ""
 
 
 def cover_sizes(class_name: str = "") -> str:

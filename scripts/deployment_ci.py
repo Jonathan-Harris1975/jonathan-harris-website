@@ -44,7 +44,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Run the ebook deployment maintenance pipeline as a build-time CI gate."
     )
-    parser.add_argument("--workbook", help="Optional workbook path. Falls back to EBOOK_WORKBOOK_PATH or a single workbook in the repo root.")
+    parser.add_argument("--workbook", help="Workbook path. Falls back to EBOOK_WORKBOOK_PATH or a single workbook in the repo root.")
+    parser.add_argument(
+        "--allow-missing-workbook",
+        action="store_true",
+        help="Allow the build to continue without a workbook. Use only for local diagnostics.",
+    )
     parser.add_argument(
         "--post-deploy-live",
         action="store_true",
@@ -78,11 +83,19 @@ def main() -> int:
         return 1
 
     workbook_path = detect_workbook(args.workbook)
+    if not workbook_path and not args.allow_missing_workbook:
+        print("\n==> Workbook import failed")
+        print(
+            f"No workbook supplied via --workbook, {WORKBOOK_ENV_VAR}, or a single *.xlsx/*.xlsm file in the repo root. "
+            "Governed builds require the workbook source of truth."
+        )
+        return 1
+
     if workbook_path:
         run_step("Import workbook into the governed master record", [sys.executable, "scripts/import_ebook_workbook.py", str(workbook_path)])
     else:
         print("\n==> Workbook import skipped")
-        print(f"No workbook supplied via --workbook, {WORKBOOK_ENV_VAR}, or a single *.xlsx/*.xlsm file in the repo root.")
+        print("Proceeding without workbook only because --allow-missing-workbook was supplied.")
 
     run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
     run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])

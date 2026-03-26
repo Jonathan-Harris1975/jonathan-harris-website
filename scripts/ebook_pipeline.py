@@ -1241,8 +1241,8 @@ def render_image_tag(*, src: str, alt: str, class_name: str, loading: str = "laz
     ]
     if srcset:
         attrs.append(f'srcset="{html.escape(srcset)}"')
-    if sizes:
-        attrs.append(f'sizes="{html.escape(sizes)}"')
+        if sizes:
+            attrs.append(f'sizes="{html.escape(sizes)}"')
     if fetchpriority:
         attrs.append(f'fetchpriority="{html.escape(fetchpriority)}"')
     if width is not None:
