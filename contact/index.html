@@ -52,12 +52,12 @@
 <li><a href="/ebooks/">eBooks</a></li>
 <li><a href="/podcast/">Podcast</a></li>
 <li><a href="/newsletter/">Newsletter</a></li>
-<li><a href="/blog/">Blog</a></li>
 <li><a href="/topics/">Topics</a></li>
 <li><a href="/bio/">About</a></li>
 <li class="jh-nav-dropdown">
 <button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
 <ul class="jh-nav-dropdown__menu" role="menu">
+<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
 <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
 <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
 <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
@@ -81,12 +81,12 @@
 <a href="/ebooks/">eBooks</a>
 <a href="/podcast/">Podcast</a>
 <a href="/newsletter/">Newsletter</a>
-<a href="/blog/">Blog</a>
 <a href="/topics/">Topics</a>
 <a href="/bio/">About</a>
 <div class="jh-mobile-nav__group">
 <span class="jh-mobile-nav__group-label">Resources</span>
 <div class="jh-mobile-nav__group-links">
+<a href="/blog/">Blog</a>
 <a href="/glossary/">Glossary</a>
 <a href="/topics/">Topics</a>
 <a href="/compare/">Comparisons</a>
@@ -111,8 +111,38 @@
 <div id="contact-form-wrap">
 <h2>Contact Me</h2>
 <p class="contact-meta-note">✉️ <strong>Typical response time: 2–3 business days.</strong> For book or podcast questions, check the <a href="/ebooks/">eBooks catalogue</a> or <a href="/podcast/">podcast page</a> first — the answer is usually there.</p>
-<p class="subtle u-s52">If the embedded form does not load cleanly in your browser, open the direct form instead.</p>
-<p class="u-s53"><a class="button secondary" href="https://form.jotform.com/260281179574362" rel="noopener" target="_blank">Open the contact form directly</a></p>
+<div class="fallback-form-wrap">
+<h3>Direct email fallback</h3>
+<p>Use this first-party fallback if you would rather skip the embedded form. It opens your email app with the details filled in and sends the message to <a href="mailto:hello@jonathan-harris.online">hello@jonathan-harris.online</a>.</p>
+<form class="fallback-form" data-mailto-form="contact" data-mailto-recipient="hello@jonathan-harris.online" data-mailto-status="contact-mailto-status" data-mailto-subject-prefix="Website contact">
+<div class="fallback-form__grid">
+<div class="fallback-form__field">
+<label for="contact-name">Name</label>
+<input class="newsletter-form__input" data-label="Name" id="contact-name" name="name" required="" type="text"/>
+</div>
+<div class="fallback-form__field">
+<label for="contact-email">Email</label>
+<input class="newsletter-form__input" data-label="Email" id="contact-email" name="email" required="" type="email"/>
+</div>
+</div>
+<div class="fallback-form__field">
+<label for="contact-subject">Subject</label>
+<input class="newsletter-form__input" data-label="Subject" id="contact-subject" name="subject" required="" type="text"/>
+</div>
+<div class="fallback-form__field">
+<label for="contact-message">Message</label>
+<textarea class="newsletter-form__input" data-label="Message" id="contact-message" name="message" required=""></textarea>
+</div>
+<div class="fallback-form__actions">
+<button class="newsletter-form__btn" type="submit">Open email app</button>
+<a class="button secondary" href="mailto:hello@jonathan-harris.online?subject=Website%20contact">Email directly instead</a>
+</div>
+<p class="fallback-form__status" id="contact-mailto-status" role="status" aria-live="polite"></p>
+<p class="fallback-form__microcopy">The hosted Jotform version is still available below if you prefer an embedded form.</p>
+</form>
+</div>
+<p class="subtle u-s52">If the embedded form does not load cleanly in your browser, open the hosted form instead.</p>
+<p class="u-s53"><a class="button secondary" href="https://form.jotform.com/260281179574362" rel="noopener" target="_blank">Open the hosted contact form</a></p>
 <noscript><p class="subtle u-s52">JavaScript is off, so the embedded form will not load here. Use the direct contact form instead: <a href="https://form.jotform.com/260281179574362" rel="noopener" class="u-s54" target="_blank">open it directly</a></p></noscript>
 <div class="embed-wrap">
 <iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260281179574362" loading="lazy" scrolling="no" src="https://form.jotform.com/260281179574362" class="u-s55" title="Web Contact"></iframe>
@@ -122,6 +152,7 @@
 </main>
 <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
 <script src="/assets/js/contact-inline.js"></script>
+<script defer="" src="/assets/js/mailto-fallback.js"></script>
 <footer aria-label="Website footer" class="site-footer" role="contentinfo">
 <div class="wrap footer-shell">
 <div class="footer-grid">
