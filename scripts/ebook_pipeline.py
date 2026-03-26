@@ -106,6 +106,147 @@ BROKEN_PHRASE_FRAGMENTS = [
     "AI is not arriving in how ai shapes attention and thinking",
 ]
 
+TITLE_SUBSTITUTION_FIELD_NAMES = (
+    "short",
+    "description",
+    "summary",
+    "audience",
+    "who_for",
+    "what_this_book_covers",
+    "why_it_matters",
+)
+
+SLUG_SUBJECT_PREFIXES = (
+    "ai-revolution-in-",
+    "ai-in-",
+    "artificial-intelligence-revolution-in-",
+    "artificial-intelligence-in-",
+    "artificial-intelligence-for-",
+    "artificial-intelligence-powered-",
+    "digital-diagnosis-how-ai-is-revolutionizing-",
+    "digital-defense-the-role-of-ai-in-",
+    "from-reporters-to-robots-how-ai-is-reshaping-",
+    "lights-camera-algorithm-ai-s-role-in-",
+    "smart-buildings-ai-powered-",
+    "beyond-earth-how-ai-is-transforming-",
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-",
+    "the-future-of-",
+    "the-ai-behind-your-feed-",
+    "the-ai-music-revolution-",
+    "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-",
+)
+
+SLUG_SUBJECT_STOP_WORDS = {
+    "revolutionizing",
+    "transforming",
+    "modernizing",
+    "redefining",
+    "reimagining",
+    "leveraging",
+    "harnessing",
+    "optimizing",
+    "building",
+    "navigating",
+    "reshaping",
+    "enhance",
+    "enhancing",
+    "through",
+    "with",
+    "for",
+    "a",
+    "an",
+    "the",
+    "future",
+    "how",
+    "what",
+}
+
+SLUG_SUBJECT_OVERRIDES = {
+    "smart-buildings-ai-powered-efficiency-and-sustainability": "smart buildings",
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": "healthcare",
+    "digital-defense-the-role-of-ai-in-modern-warfare": "modern warfare",
+    "from-reporters-to-robots-how-ai-is-reshaping-journalism": "journalism",
+    "lights-camera-algorithm-ai-s-role-in-modern-filmmaking": "modern filmmaking",
+    "beyond-earth-how-ai-is-transforming-space-exploration": "space exploration",
+    "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media": "social media",
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": "government",
+    "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": "gaming",
+}
+
+
+def infer_subject_phrase(slug: str, title: str, topic: str) -> str:
+    slug_clean = slugify(slug)
+    if slug_clean in SLUG_SUBJECT_OVERRIDES:
+        return SLUG_SUBJECT_OVERRIDES[slug_clean]
+    for prefix in SLUG_SUBJECT_PREFIXES:
+        if slug_clean.startswith(prefix):
+            remainder = slug_clean[len(prefix):]
+            words = []
+            for part in remainder.split("-"):
+                if words and part in SLUG_SUBJECT_STOP_WORDS:
+                    break
+                words.append(part)
+            candidate = clean_paragraph(" ".join(words))
+            if candidate:
+                return candidate
+
+    title_core = clean_paragraph(title).split(":", 1)[0].strip()
+    patterns = [
+        r"^AI Revolution in (.+)$",
+        r"^AI in (.+)$",
+        r"^Artificial Intelligence Revolution in (.+)$",
+        r"^Artificial Intelligence in (.+)$",
+        r"^Artificial Intelligence for (.+)$",
+        r"^Artificial Intelligence Powered (.+)$",
+        r"^The Future of (.+)$",
+    ]
+    for title_pattern in patterns:
+        title_match = re.match(title_pattern, title_core, flags=re.I)
+        if title_match:
+            candidate = clean_paragraph(title_match.group(1))
+            if candidate:
+                return candidate.lower()
+
+    topic_candidate = clean_paragraph(topic)
+    if topic_candidate:
+        return topic_candidate.lower()
+    return title_core.lower()
+
+
+
+def normalise_title_substitution_text(value: str, *, slug: str, title: str, topic: str) -> str:
+    cleaned = clean_paragraph(value)
+    if not cleaned:
+        return cleaned
+
+    title_core = clean_paragraph(title).split(":", 1)[0].strip()
+    if not title_core:
+        return cleaned
+
+    subject = infer_subject_phrase(slug, title, topic)
+    replacements = [
+        (rf"\bAI in {re.escape(title_core)}\b", f"AI in {subject}"),
+        (rf"\bA practical overview of AI in {re.escape(title_core)}\b", f"A practical overview of AI in {subject}"),
+        (rf"\bhow AI changes the day-to-day reality of {re.escape(title_core)}\b", f"how AI changes the day-to-day reality of {subject}"),
+        (rf"\bhow AI changes {re.escape(title_core)} in practice\b", f"how AI changes {subject} in practice"),
+        (rf"\bwhere AI fits inside {re.escape(title_core)}\b", f"where AI fits inside {subject}"),
+        (rf"\bAI is not arriving in {re.escape(title_core)}\b", f"AI is not arriving in {subject}"),
+    ]
+    for phrase_pattern, replacement_text in replacements:
+        cleaned = re.sub(phrase_pattern, replacement_text, cleaned, flags=re.I)
+    return cleaned
+
+
+
+def sanitise_record_copy(record: Dict[str, Any]) -> Dict[str, Any]:
+    slug = clean_paragraph(record.get("slug", ""))
+    title = clean_paragraph(record.get("title", ""))
+    topic = clean_paragraph(record.get("topic", ""))
+    for field in TITLE_SUBSTITUTION_FIELD_NAMES:
+        if field in record:
+            record[field] = normalise_title_substitution_text(record.get(field, ""), slug=slug, title=title, topic=topic)
+    return record
+
 def read_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
         return default
@@ -387,11 +528,27 @@ def related_book_score(candidate: Dict[str, Any], current: Dict[str, Any], curre
 def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
     errors: List[str] = []
     for book in books:
-        for field in ("short", "description", "summary", "audience", "who_for", "what_this_book_covers", "why_it_matters"):
+        title_core = clean_paragraph(book.get("title", "")).split(":", 1)[0].strip().lower()
+        if not title_core:
+            continue
+        suspicious_fragments: List[str] = []
+        if "ai" in title_core or "artificial intelligence" in title_core:
+            suspicious_fragments = [
+                f"ai in {title_core}",
+                f"day-to-day reality of {title_core}",
+                f"{title_core} in practice",
+                f"fits inside {title_core}",
+                f"arriving in {title_core}",
+            ]
+        for field in TITLE_SUBSTITUTION_FIELD_NAMES:
             value = clean_paragraph(book.get(field, ""))
+            lower = value.lower()
             for fragment in BROKEN_PHRASE_FRAGMENTS:
-                if fragment.lower() in value.lower():
+                if fragment.lower() in lower:
                     errors.append(f"Broken phrase lint failed for {book['slug']} field {field}: {fragment}")
+            for fragment in suspicious_fragments:
+                if fragment in lower:
+                    errors.append(f"Broken title-substitution phrase detected for {book['slug']} field {field}: {fragment}")
     return errors
 
 
@@ -641,6 +798,7 @@ def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, 
         record["buy_route"] = url_to_path(buy_route_full)
         record["legacy_alias_url"] = ensure_trailing_slash(record.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now")
         record["cover"] = clean_paragraph(record.get("cover", "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online")
+        record = sanitise_record_copy(record)
         results[slug] = record
     return results
 
@@ -2065,7 +2223,8 @@ def build_redirect_block(books: List[Dict[str, Any]]) -> str:
 
 
 def sync_redirects(books: List[Dict[str, Any]]) -> None:
-    redirect_files = [ROOT / "_redirects", ROOT / "_redirects.txt"]
+    primary_path = ROOT / "_redirects"
+    mirror_path = ROOT / "_redirects.txt"
     block = build_redirect_block(books)
     pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     legacy_anchor = "# retire legacy detail routes to the canonical ebook page\n"
@@ -2078,24 +2237,24 @@ def sync_redirects(books: List[Dict[str, Any]]) -> None:
     ]
     crawler_alias_pattern = re.compile(r"# SEO files: serve governed crawler assets from the primary domain root\n(?:[^#].*\n?)*", re.M)
 
-    for path in redirect_files:
-        text = path.read_text(encoding="utf-8")
-        new_text, count = pattern.subn(block + "\n", text)
-        if count != 1:
-            raise ValueError(f"Could not replace branded redirect block in {path}")
-        for line in LEGACY_DETAIL_REDIRECT_LINES + malformed_lines:
-            if line not in new_text:
-                if legacy_anchor not in new_text:
-                    raise ValueError(f"Could not find legacy detail redirect anchor in {path}")
-                new_text = new_text.replace(legacy_anchor, legacy_anchor + line + "\n", 1)
-        alias_block = crawler_alias_anchor + "\n".join(crawler_alias_lines) + "\n"
-        if crawler_alias_anchor not in new_text:
-            raise ValueError(f"Could not find crawler alias anchor in {path}")
-        new_text, alias_count = crawler_alias_pattern.subn(alias_block, new_text, count=1)
-        if alias_count != 1:
-            raise ValueError(f"Could not refresh crawler alias block in {path}")
-        path.write_text(new_text, encoding="utf-8")
+    text = primary_path.read_text(encoding="utf-8")
+    new_text, count = pattern.subn(block + "\n", text)
+    if count != 1:
+        raise ValueError(f"Could not replace branded redirect block in {primary_path}")
+    for line in LEGACY_DETAIL_REDIRECT_LINES + malformed_lines:
+        if line not in new_text:
+            if legacy_anchor not in new_text:
+                raise ValueError(f"Could not find legacy detail redirect anchor in {primary_path}")
+            new_text = new_text.replace(legacy_anchor, legacy_anchor + line + "\n", 1)
+    alias_block = crawler_alias_anchor + "\n".join(crawler_alias_lines) + "\n"
+    if crawler_alias_anchor not in new_text:
+        raise ValueError(f"Could not find crawler alias anchor in {primary_path}")
+    new_text, alias_count = crawler_alias_pattern.subn(alias_block, new_text, count=1)
+    if alias_count != 1:
+        raise ValueError(f"Could not refresh crawler alias block in {primary_path}")
 
+    primary_path.write_text(new_text, encoding="utf-8")
+    mirror_path.write_text(new_text, encoding="utf-8")
     (ROOT / "_redirects.books-domain").write_text(build_books_domain_redirects(), encoding="utf-8")
     (ROOT / "_redirects.ebooks-domain").write_text(build_ebooks_domain_redirects(), encoding="utf-8")
 
@@ -2352,9 +2511,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 errors.append(f"Discovery metadata missing from {page['label']}: {marker}")
 
     redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
-    redirects_mirror = (ROOT / "_redirects.txt").read_text(encoding="utf-8")
-    if redirects_text != redirects_mirror:
-        errors.append("_redirects.txt is not an exact generated mirror of _redirects.")
+    redirects_mirror_path = ROOT / "_redirects.txt"
+    if not redirects_mirror_path.exists():
+        errors.append("_redirects.txt is missing. Run scripts/sync_redirects.py to regenerate the governed mirror.")
+        redirects_mirror = ""
+    else:
+        redirects_mirror = redirects_mirror_path.read_text(encoding="utf-8")
+        if redirects_text != redirects_mirror:
+            errors.append("_redirects.txt is not an exact generated mirror of _redirects.")
     redirect_block_pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     existing_redirect_block = redirect_block_pattern.search(redirects_text)
     expected_redirect_block = build_redirect_block(books).strip()
