@@ -1,12 +1,5 @@
 // Shared low-risk UX fixes that replace page-local inline handlers.
 document.addEventListener("DOMContentLoaded", function(){
-  document.querySelectorAll("img").forEach(function(img){
-    if(!img.hasAttribute("alt") || img.getAttribute("alt").trim()===""){
-      var name = img.src.split("/").pop().replace(/[-_]/g, " ").replace(/\..+$/, "");
-      img.setAttribute("alt", name);
-    }
-  });
-
   var searchInput = document.getElementById("jh404-input");
   var searchButton = document.getElementById("jh404-search-button");
   function run404Search(){
