@@ -51,12 +51,12 @@
 <li><a href="/ebooks/">eBooks</a></li>
 <li><a href="/podcast/">Podcast</a></li>
 <li><a href="/newsletter/">Newsletter</a></li>
-<li><a href="/blog/">Blog</a></li>
 <li><a href="/topics/">Topics</a></li>
 <li><a href="/bio/">About</a></li>
 <li class="jh-nav-dropdown">
 <button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
 <ul class="jh-nav-dropdown__menu" role="menu">
+<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
 <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
 <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
 <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
@@ -80,12 +80,12 @@
 <a href="/ebooks/">eBooks</a>
 <a href="/podcast/">Podcast</a>
 <a href="/newsletter/">Newsletter</a>
-<a href="/blog/">Blog</a>
 <a href="/topics/">Topics</a>
 <a href="/bio/">About</a>
 <div class="jh-mobile-nav__group">
 <span class="jh-mobile-nav__group-label">Resources</span>
 <div class="jh-mobile-nav__group-links">
+<a href="/blog/">Blog</a>
 <a href="/glossary/">Glossary</a>
 <a href="/topics/">Topics</a>
 <a href="/compare/">Comparisons</a>
@@ -156,8 +156,34 @@
 </section>
 <section aria-label="Sign up form" class="card card--accent" role="region">
 <h2>Newsletter Sign-Up</h2>
-<p class="subtle u-s52">If the embedded form plays up, use the direct sign-up page instead.</p>
-<p class="u-s53"><a class="button secondary" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Open the sign-up form directly</a></p>
+<div class="fallback-form-wrap">
+<h3>Email sign-up fallback</h3>
+<p>Prefer a first-party route? This fallback opens your email app with a prefilled sign-up request to <a href="mailto:hello@jonathan-harris.online">hello@jonathan-harris.online</a>. It works even if the embedded form misbehaves.</p>
+<form class="fallback-form" data-mailto-form="newsletter" data-mailto-recipient="hello@jonathan-harris.online" data-mailto-status="newsletter-mailto-status" data-mailto-subject-prefix="Newsletter sign-up" data-mailto-subject="Please add me to AI Edge">
+<div class="fallback-form__grid">
+<div class="fallback-form__field">
+<label for="newsletter-name">Name</label>
+<input class="newsletter-form__input" data-label="Name" id="newsletter-name" name="name" type="text"/>
+</div>
+<div class="fallback-form__field">
+<label for="newsletter-email">Email</label>
+<input class="newsletter-form__input" data-label="Email" id="newsletter-email" name="email" required="" type="email"/>
+</div>
+</div>
+<div class="fallback-form__field">
+<label for="newsletter-notes">Notes (optional)</label>
+<textarea class="newsletter-form__input" data-label="Notes" id="newsletter-notes" name="notes" placeholder="Anything useful to mention before you join?"></textarea>
+</div>
+<div class="fallback-form__actions">
+<button class="newsletter-form__btn" type="submit">Open email app</button>
+<a class="button secondary" href="mailto:hello@jonathan-harris.online?subject=Newsletter%20sign-up%3A%20Please%20add%20me%20to%20AI%20Edge">Email sign-up instead</a>
+</div>
+<p class="fallback-form__status" id="newsletter-mailto-status" role="status" aria-live="polite"></p>
+<p class="fallback-form__microcopy">The hosted Jotform sign-up remains available below if you want the embedded version.</p>
+</form>
+</div>
+<p class="subtle u-s52">If the embedded form plays up, use the hosted sign-up page instead.</p>
+<p class="u-s53"><a class="button secondary" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Open the hosted sign-up form</a></p>
 <div id="newsletter-form-wrap">
 <noscript><p class="subtle u-s52">JavaScript is off, so the embedded form will not load here. Use the direct sign-up page instead: <a class="newsletter-fallback" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">Sign up here →</a></p></noscript>
 <div class="embed-wrap">
@@ -194,6 +220,7 @@
 </main>
 <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
 <script src="/assets/js/newsletter-jotform.js"></script>
+<script defer="" src="/assets/js/mailto-fallback.js"></script>
 <footer aria-label="Website footer" class="site-footer" role="contentinfo">
 <div class="wrap footer-shell">
 <div class="footer-grid">
