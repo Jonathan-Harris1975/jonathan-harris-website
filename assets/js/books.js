@@ -139,6 +139,12 @@
   if (chipsWrap) chipsWrap.appendChild(makeChip("All"));
   Array.from(filters).sort((a,b)=>a.localeCompare(b)).forEach(f => chipsWrap && chipsWrap.appendChild(makeChip(f)));
 
+  function buildSameSourceSrcset(src, widths){
+    if (!src || !Array.isArray(widths)) return "";
+    const unique = Array.from(new Set(widths.filter(Boolean))).sort((a, b) => a - b);
+    return unique.map(width => `${src} ${width}w`).join(", ");
+  }
+
   function matches(book){
     if (!book) return false;
     if (state.filter !== "All" && norm(book.filter) !== norm(state.filter)) return false;
@@ -161,8 +167,13 @@
     const img = document.createElement("img");
     img.className = "cover";
     img.loading = "lazy";
+    img.decoding = "async";
     img.alt = book.title;
     img.src = book.cover;
+    img.srcset = buildSameSourceSrcset(book.cover, [180, 240, 320, 480, 640, 960, 1280]);
+    img.sizes = "(min-width: 1200px) 248px, (min-width: 768px) 33vw, 48vw";
+    img.width = 2480;
+    img.height = 3508;
 
     const h = document.createElement("h2");
     h.textContent = book.title;

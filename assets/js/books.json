@@ -302,8 +302,8 @@
     "id": 7,
     "key": "7-ebook",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "tags": [
@@ -1495,8 +1495,8 @@
     "id": 32,
     "key": "32-ebook",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
     "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "main_image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "tags": [

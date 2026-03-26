@@ -72,6 +72,12 @@
     el.setAttribute(attr, value);
   }
 
+  function buildSameSourceSrcset(src, widths) {
+    if (!src || !Array.isArray(widths)) return "";
+    var unique = Array.from(new Set(widths.filter(Boolean))).sort(function(a, b){ return a - b; });
+    return unique.map(function(width){ return src + " " + width + "w"; }).join(", ");
+  }
+
   async function render() {
     var books = await loadBooks();
     var b = pickBook(books);
@@ -83,6 +89,11 @@
 
     setAttr("featuredEbookCover", "src", b.cover);
     setAttr("featuredEbookCover", "alt", b.title + " cover");
+    setAttr("featuredEbookCover", "srcset", buildSameSourceSrcset(b.cover, [180, 240, 320, 480, 640]));
+    setAttr("featuredEbookCover", "sizes", "(min-width: 1100px) 180px, (min-width: 768px) 28vw, 50vw");
+    setAttr("featuredEbookCover", "width", "2480");
+    setAttr("featuredEbookCover", "height", "3508");
+    setAttr("featuredEbookCover", "decoding", "async");
 
     setAttr("featuredEbookLink", "href", b.url);
     setAttr("featuredEbookPage", "href", b.url);
