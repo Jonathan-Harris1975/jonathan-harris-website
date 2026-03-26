@@ -10,7 +10,7 @@ It covers the main use cases, the workflow and data changes behind them, the cla
 
 ## Who this book is for
 
-Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.
+Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.
 
 ## What you’ll learn
 
