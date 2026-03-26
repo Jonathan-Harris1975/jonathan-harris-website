@@ -193,6 +193,59 @@ article p {
   font-weight: 700;
 }
 
+/* ── First-party mailto fallback forms ───────────────────────────────── */
+.fallback-form-wrap {
+  background: linear-gradient(135deg, #EEF2FF 0%, #F8FAFF 100%);
+  border: 1px solid rgba(79,70,229,0.18);
+  border-radius: 18px;
+  padding: 22px 20px;
+  margin: 0 0 18px;
+}
+.fallback-form-wrap h3 {
+  margin: 0 0 8px;
+  color: #111827;
+}
+.fallback-form-wrap p {
+  margin: 0 0 14px;
+}
+.fallback-form {
+  display: grid;
+  gap: 12px;
+}
+.fallback-form__grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.fallback-form__field {
+  display: grid;
+  gap: 6px;
+}
+.fallback-form__field label {
+  font-weight: 700;
+  color: #111827;
+}
+.fallback-form__field textarea.newsletter-form__input {
+  min-height: 144px;
+  resize: vertical;
+}
+.fallback-form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.fallback-form__status {
+  margin: 0;
+  color: #374151;
+  font-size: 0.92rem;
+}
+.fallback-form__microcopy {
+  margin: 0;
+  color: #6B7280;
+  font-size: 0.9rem;
+}
+
 /* ── Comparison tables: keep them usable on small screens ───────────── */
 @media (max-width: 800px) {
   .compare-table-wrap {
