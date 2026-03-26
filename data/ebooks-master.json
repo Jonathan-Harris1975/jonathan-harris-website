@@ -68,7 +68,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -173,7 +173,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
+          "text": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
         }
       },
       {
@@ -278,7 +278,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This energy title is aimed at A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems"
+          "text": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems."
         }
       },
       {
@@ -384,7 +384,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -489,7 +489,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This law title is aimed at A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change"
+          "text": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change."
         }
       },
       {
@@ -594,7 +594,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This cyber security title is aimed at A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence"
+          "text": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence."
         }
       },
       {
@@ -639,8 +639,8 @@
     "key": "7-ebook",
     "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
     "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
     "topic": "Artificial Intelligence",
@@ -671,10 +671,10 @@
     "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
+    "audience": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
     "identifier": "JH-AI-EBOOK-32",
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in artificial intelligence itself.",
-    "who_for": "Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
+    "who_for": "Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
     "what_youll_learn": [
       "Where AI is already being used in artificial intelligence today — and where the claims are running ahead of reality.",
       "The workflows, systems, and trade-offs behind practical artificial intelligence use cases, explained in plain English.",
@@ -699,7 +699,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This artificial intelligence title is aimed at Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre"
+          "text": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre."
         }
       },
       {
@@ -799,7 +799,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -902,7 +902,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -1005,7 +1005,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
+          "text": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
         }
       },
       {
@@ -1107,7 +1107,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -1211,7 +1211,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This retail title is aimed at A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience"
+          "text": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience."
         }
       },
       {
@@ -1317,7 +1317,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This manufacturing title is aimed at Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation"
+          "text": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation."
         }
       },
       {
@@ -1423,7 +1423,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This industry title is aimed at A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change"
+          "text": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change."
         }
       },
       {
@@ -1525,7 +1525,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This ethics title is aimed at A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
+          "text": "A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences."
         }
       },
       {
@@ -1627,7 +1627,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This agriculture title is aimed at Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers"
+          "text": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers."
         }
       },
       {
@@ -1731,7 +1731,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This education title is aimed at A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change"
+          "text": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change."
         }
       },
       {
@@ -1835,7 +1835,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This finance title is aimed at A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure"
+          "text": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure."
         }
       },
       {
@@ -1939,7 +1939,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This healthcare title is aimed at Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery"
+          "text": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
         }
       },
       {
@@ -2042,7 +2042,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This construction title is aimed at A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment"
+          "text": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment."
         }
       },
       {
@@ -2145,7 +2145,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This future of work title is aimed at A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change"
+          "text": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change."
         }
       },
       {
@@ -2250,7 +2250,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This government title is aimed at Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity"
+          "text": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity."
         }
       },
       {
@@ -2356,7 +2356,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This construction title is aimed at A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment"
+          "text": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment."
         }
       },
       {
@@ -2460,7 +2460,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This defence title is aimed at A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology"
+          "text": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology."
         }
       },
       {
@@ -2564,7 +2564,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This environment title is aimed at Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators"
+          "text": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators."
         }
       },
       {
@@ -2669,7 +2669,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This environment title is aimed at A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators"
+          "text": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators."
         }
       },
       {
@@ -2772,7 +2772,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This transportation title is aimed at A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems"
+          "text": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems."
         }
       },
       {
@@ -2877,7 +2877,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This sports title is aimed at Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view"
+          "text": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view."
         }
       },
       {
@@ -2981,7 +2981,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This creativity title is aimed at A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work"
+          "text": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work."
         }
       },
       {
@@ -3086,7 +3086,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This creativity title is aimed at A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work"
+          "text": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work."
         }
       },
       {
@@ -3190,7 +3190,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This history title is aimed at Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field"
+          "text": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field."
         }
       },
       {
@@ -3232,8 +3232,8 @@
     "key": "32-ebook",
     "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
     "description": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
     "summary": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in ai in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
     "topic": "Ethics",
@@ -3268,7 +3268,7 @@
     "dateModified": "2026-03-25T19:57:54Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
-    "audience": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
+    "audience": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
     "identifier": "JH-AI-EBOOK-36",
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in ai in gambling.",
     "who_for": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in ai in gambling, without wading through technical theatre.",
@@ -3296,7 +3296,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This ethics title is aimed at A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences"
+          "text": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences."
         }
       },
       {
@@ -3402,7 +3402,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This science title is aimed at A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems"
+          "text": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems."
         }
       },
       {
@@ -3506,7 +3506,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This media title is aimed at Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems"
+          "text": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems."
         }
       },
       {
@@ -3609,7 +3609,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This media title is aimed at A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems"
+          "text": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems."
         }
       },
       {
@@ -3715,7 +3715,7 @@
         "name": "Who is this book for?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "This gaming title is aimed at A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems"
+          "text": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems."
         }
       },
       {
