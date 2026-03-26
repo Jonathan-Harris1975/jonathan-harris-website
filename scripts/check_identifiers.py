@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-from ebook_pipeline import load_master
+from pathlib import Path
+import sys
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.ebook_pipeline import load_master
 
 
 def main() -> int:

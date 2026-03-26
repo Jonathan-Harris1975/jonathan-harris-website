@@ -763,7 +763,11 @@ def build_breadcrumb_schema(book: Dict[str, Any]) -> Dict[str, Any]:
 
 
 
-def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, Dict[str, Any]]:
+def parse_master_sheet(
+    ws: openpyxl.worksheet.worksheet.Worksheet,
+    *,
+    sanitise_content: bool = True,
+) -> Dict[str, Dict[str, Any]]:
     headers = [clean_paragraph(cell.value).lower() for cell in ws[1]]
     index = {header: idx for idx, header in enumerate(headers) if header}
     required = {"slug", "title", "asin", "amazon ebook page count", "publication date", "book url", "buy now url", "redirect url", "cover art url", "legacy alias url"}
@@ -835,17 +839,22 @@ def parse_master_sheet(ws: openpyxl.worksheet.worksheet.Worksheet) -> Dict[str, 
         record["buy_route"] = url_to_path(buy_route_full)
         record["legacy_alias_url"] = ensure_trailing_slash(record.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now")
         record["cover"] = clean_paragraph(record.get("cover", "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online")
-        record = sanitise_record_copy(record)
+        if sanitise_content:
+            record = sanitise_record_copy(record)
         results[slug] = record
     return results
 
 
-def parse_workbook(workbook_path: Path) -> Tuple[List[str], Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
+def parse_workbook(
+    workbook_path: Path,
+    *,
+    sanitise_content: bool = True,
+) -> Tuple[List[str], Dict[str, Dict[str, Any]], Dict[str, Dict[str, Any]]]:
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
     if "Ebooks Master" not in wb.sheetnames:
         raise ValueError("Workbook is missing the Ebooks Master sheet")
 
-    master_sheet = parse_master_sheet(wb["Ebooks Master"])
+    master_sheet = parse_master_sheet(wb["Ebooks Master"], sanitise_content=sanitise_content)
     if not master_sheet:
         raise ValueError("No ebook rows found in Ebooks Master")
 
@@ -961,8 +970,107 @@ def default_why_it_matters(topic: str) -> str:
 
 
 
+WORKBOOK_GOVERNED_COPY_FIELDS = (
+    ("title", "title"),
+    ("short", "short"),
+    ("short", "short_description"),
+    ("description", "description"),
+    ("summary", "summary"),
+    ("topic", "topic"),
+    ("audience", "audience"),
+    ("who_for", "who_for"),
+    ("what_this_book_covers", "what_this_book_covers"),
+    ("why_it_matters", "why_it_matters"),
+)
+
+
+
 def default_short(topic: str, pages: int | None) -> str:
     return helper_default_short(topic, pages)
+
+
+
+def book_meta_title(book: Dict[str, Any]) -> str:
+    base = clean_paragraph(book.get("title", "")).split(":", 1)[0].strip() or clean_paragraph(book.get("title", ""))
+    substitutions = [
+        ("Artificial Intelligence Revolution in ", "AI Revolution in "),
+        ("Artificial Intelligence Powered ", "AI-Powered "),
+        ("Artificial Intelligence in ", "AI in "),
+        ("Artificial Intelligence for ", "AI for "),
+        ("Artificial Intelligence and the ", "AI and the "),
+        ("Artificial Intelligence ", "AI "),
+    ]
+    candidate = base
+    if len(f"{candidate} | {SITE_NAME}") > 60:
+        for source, target in substitutions:
+            if candidate.startswith(source):
+                shortened = target + candidate[len(source):]
+                if len(f"{shortened} | {SITE_NAME}") <= 60:
+                    candidate = shortened
+                    break
+    return candidate
+
+
+
+def book_meta_description(book: Dict[str, Any]) -> str:
+    primary = clean_paragraph(book.get("description", ""))
+    if primary and len(primary) <= 155:
+        return primary
+    fallback = clean_paragraph(book.get("short") or book.get("short_description") or book.get("summary") or primary)
+    return fallback or primary
+
+
+
+def catalogue_meta_description(topic: str) -> str:
+    topic_name = clean_paragraph(topic).lower() or "artificial intelligence"
+    return f"Browse Jonathan Harris AI books on {topic_name} with plain-English guides, practical analysis, clear summaries, and direct Amazon routes."
+
+
+
+def topics_index_meta_description() -> str:
+    return "Explore AI topics across Jonathan Harris's ebook library, with practical guides, grounded summaries, and direct routes into each catalogue page."
+
+
+
+def extract_html_title(text: str) -> str:
+    match = re.search(r"<title>(.*?)</title>", text, flags=re.S | re.I)
+    return html.unescape(clean_paragraph(match.group(1))) if match else ""
+
+
+
+def extract_meta_description(text: str) -> str:
+    for meta_tag in re.findall(r"<meta\b[^>]*>", text, flags=re.I | re.S):
+        name_match = re.search(r'\bname=(["\'])(.*?)\1', meta_tag, flags=re.I | re.S)
+        if not name_match or name_match.group(2).strip().lower() != "description":
+            continue
+        content_match = re.search(r'\bcontent=(["\'])(.*?)\1', meta_tag, flags=re.I | re.S)
+        if content_match:
+            return html.unescape(clean_paragraph(content_match.group(2)))
+    return ""
+
+def metadata_budget_errors(
+    label: str,
+    text: str,
+    *,
+    max_title: int | None = None,
+    min_description: int | None = None,
+    max_description: int | None = None,
+) -> List[str]:
+    errors: List[str] = []
+    title = extract_html_title(text)
+    description = extract_meta_description(text)
+    if not title:
+        errors.append(f"{label} is missing a title tag.")
+    elif max_title is not None and len(title) > max_title:
+        errors.append(f"{label} title tag exceeds {max_title} characters ({len(title)}).")
+    if not description:
+        errors.append(f"{label} is missing a meta description.")
+    else:
+        if min_description is not None and len(description) < min_description:
+            errors.append(f"{label} meta description is shorter than {min_description} characters ({len(description)}).")
+        if max_description is not None and len(description) > max_description:
+            errors.append(f"{label} meta description exceeds {max_description} characters ({len(description)}).")
+    return errors
 
 
 
@@ -994,7 +1102,7 @@ def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
-    order, workbook_map, workbook_content = parse_workbook(workbook_path)
+    order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
     if not order:
         raise ValueError("No ebook rows found in workbook")
 
@@ -1312,7 +1420,8 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
     footer = render_footer()
     hero_summary = book["summary"] or strip_pages_from_summary(book["description"], book.get("pages"))
     title = html.escape(book["title"])
-    description = html.escape(book["description"])
+    meta_title = html.escape(book_meta_title(book))
+    description = html.escape(book_meta_description(book))
     canonical = html.escape(book["canonical_url"])
     cover = html.escape(book["cover"])
     faq_schema = {
@@ -1334,7 +1443,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<title>{title} | Jonathan Harris</title>
+<title>{meta_title} | Jonathan Harris</title>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="@jonathan_harris_01" name="twitter:creator"/>
 <meta content="#0D1420" name="theme-color"/>
@@ -1355,13 +1464,13 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <meta content="{html.escape(book['datePublished'])}" property="book:release_date"/>
 <meta content="books.book" property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
-<meta content="{title} | Jonathan Harris" property="og:title"/>
+<meta content="{meta_title} | Jonathan Harris" property="og:title"/>
 <meta content="{description}" property="og:description"/>
 <meta content="{cover}" property="og:image"/>
 <meta content="{title} cover" property="og:image:alt"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="{cover}" name="twitter:image"/>
-<meta content="{title} | Jonathan Harris" name="twitter:title"/>
+<meta content="{meta_title} | Jonathan Harris" name="twitter:title"/>
 <meta content="{description}" name="twitter:description"/>
 <meta content="{title}" name="ai:topic"/>
 <meta content="Artificial Intelligence" name="ai:primary"/>
@@ -1690,7 +1799,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     cards = "\n".join(render_catalogue_card(book) for book in books)
     topic_slug = slugify(topic)
     canonical = f"{SITE_URL}/catalogue/{topic_slug}/"
-    description = f"Browse Jonathan Harris AI books on {topic.lower()}."
+    description = catalogue_meta_description(topic)
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -1765,7 +1874,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
     header = render_header()
     footer = render_footer()
     canonical = f"{SITE_URL}/topics/"
-    description = "Explore AI topics across the Jonathan Harris ebook library."
+    description = topics_index_meta_description()
     cards = []
     for topic in sorted(topic_map, key=str.lower):
         slug = slugify(topic)
@@ -2478,7 +2587,16 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"{book['slug']} should emit exactly one FAQPage JSON-LD block.")
         if text.count('"@type":"Book"') != 1:
             errors.append(f"{book['slug']} should emit exactly one Book JSON-LD block.")
-        expected_desc = html.escape(book["description"], quote=True)
+        expected_title = html.escape(f"{book_meta_title(book)} | {SITE_NAME}", quote=False)
+        for marker in [
+            f'<title>{expected_title}</title>',
+            f'<meta content="{expected_title}" property="og:title"/>',
+            f'<meta content="{expected_title}" name="twitter:title"/>',
+        ]:
+            if marker not in text:
+                errors.append(f"{book['slug']} page head title drift detected.")
+                break
+        expected_desc = html.escape(book_meta_description(book), quote=True)
         for marker in [
             f'<meta content="{expected_desc}" name="description"/>',
             f'<meta content="{expected_desc}" property="og:description"/>',
@@ -2487,6 +2605,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if marker not in text:
                 errors.append(f"{book['slug']} page head description drift detected.")
                 break
+        errors.extend(metadata_budget_errors(f"ebooks/{book['slug']}/index.html", text, max_title=60, max_description=155))
         errors.extend(template_contract_errors(text, book))
         if f'href="/book/{book["slug"]}/' in text or f'href="/ebooks/{book["slug"]}/detail' in text:
             errors.append(f"{book['slug']} still links to a retired route.")
@@ -2520,6 +2639,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 '<meta content="summary_large_image" name="twitter:card"/>',
                 '<meta content="AI eBooks Catalogue | Jonathan Harris" name="twitter:title"/>',
             ],
+            "description": f"Ebook catalogue: {len(books)} AI titles by Jonathan Harris covering industries, ethics, safety, and practical adoption.",
+            "max_description": 155,
         },
         {
             "path": TOPICS_DIR / "index.html",
@@ -2532,6 +2653,9 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 '<meta content="summary_large_image" name="twitter:card"/>',
                 '<meta content="AI Topics | Jonathan Harris" name="twitter:title"/>',
             ],
+            "description": topics_index_meta_description(),
+            "min_description": 120,
+            "max_description": 155,
         },
     ]
     for topic in sorted({book["topic"] for book in books}, key=str.lower):
@@ -2547,6 +2671,9 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 '<meta content="summary_large_image" name="twitter:card"/>',
                 f'<meta content="{html.escape(topic)} AI Books | Jonathan Harris" name="twitter:title"/>',
             ],
+            "description": catalogue_meta_description(topic),
+            "min_description": 120,
+            "max_description": 155,
         })
 
     for page in discovery_pages:
@@ -2557,6 +2684,19 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         for marker in page["required"]:
             if marker not in page_text:
                 errors.append(f"Discovery metadata missing from {page['label']}: {marker}")
+        expected_description = page.get("description")
+        if expected_description:
+            description_variants = {
+                expected_description,
+                html.escape(expected_description, quote=False),
+                html.escape(expected_description, quote=True),
+            }
+            required_tags = ['name="description"', 'property="og:description"', 'name="twitter:description"']
+            for tag in required_tags:
+                if not any(f'<meta content="{variant}" {tag}/>' in page_text for variant in description_variants):
+                    errors.append(f"Discovery description drift detected for {page['label']}: {tag}")
+                    break
+        errors.extend(metadata_budget_errors(page["label"], page_text, min_description=page.get("min_description"), max_description=page.get("max_description")))
 
     redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
     redirects_mirror_path = ROOT / "_redirects.txt"
@@ -2701,6 +2841,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Route manifest buy target mismatch for {book['slug']}.")
 
     html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
+    css_bundle = "\n".join(css_path.read_text(encoding="utf-8", errors="ignore") for css_path in (ROOT / "assets" / "css").glob("*.css"))
+    if any(re.search(r"class=[\"']([^\"']*\bsr-only\b[^\"']*)[\"']", p.read_text(encoding="utf-8", errors="ignore"), re.I) for p in html_files):
+        if not re.search(r"(^|[\s,{])\.sr-only\b", css_bundle, re.M):
+            errors.append("Shared CSS is missing a governed .sr-only utility while HTML still references sr-only.")
     for file_path in html_files:
         text = file_path.read_text(encoding="utf-8", errors="ignore")
         if file_path == ROOT / "index.html" and "\"@type\": \"Organization\"" not in text:
@@ -2711,6 +2855,27 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Retired /detail link found in HTML: {file_path.relative_to(ROOT)}")
         if "style=" in text:
             errors.append(f"Inline style attribute found in HTML: {file_path.relative_to(ROOT)}")
+
+    static_metadata_pages = [
+        (ROOT / "index.html", "index.html", None, None, 155),
+        (ROOT / "bio" / "index.html", "bio/index.html", 60, None, 155),
+        (ROOT / "podcast" / "index.html", "podcast/index.html", 60, None, 155),
+        (ROOT / "blog" / "weekly" / "index.html", "blog/weekly/index.html", 60, None, 155),
+    ]
+    for page_path, label, max_title, min_description, max_description in static_metadata_pages:
+        if not page_path.exists():
+            errors.append(f"Static page missing: {label}")
+            continue
+        page_text = page_path.read_text(encoding="utf-8", errors="ignore")
+        errors.extend(
+            metadata_budget_errors(
+                label,
+                page_text,
+                max_title=max_title,
+                min_description=min_description,
+                max_description=max_description,
+            )
+        )
 
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
     checksum_files = checksum_payload.get("files", {})
@@ -2751,7 +2916,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
         errors.extend(workbook_static_route_contract_errors(workbook_path))
-        order, workbook_map, workbook_content = parse_workbook(workbook_path)
+        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
         if order != slugs:
             errors.append("Workbook row order does not match the master record order.")
         master_by_slug = {book["slug"]: book for book in books}
@@ -2774,18 +2939,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                     errors.append(f"Workbook mismatch for {slug}: {workbook_field} does not match {master_field}.")
             content = workbook_content.get(slug)
             if content:
-                for workbook_field, master_field in [
-                    ("title", "title"),
-                    ("short", "short"),
-                    ("short", "short_description"),
-                    ("description", "description"),
-                    ("summary", "summary"),
-                    ("topic", "topic"),
-                    ("audience", "audience"),
-                    ("who_for", "who_for"),
-                    ("what_this_book_covers", "what_this_book_covers"),
-                    ("why_it_matters", "why_it_matters"),
-                ]:
+                for workbook_field, master_field in WORKBOOK_GOVERNED_COPY_FIELDS:
                     workbook_value = clean_paragraph(str(content.get(workbook_field, "")))
                     master_value = clean_paragraph(str(book.get(master_field, "")))
                     if workbook_field in {"description", "summary"}:
