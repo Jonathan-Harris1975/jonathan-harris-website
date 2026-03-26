@@ -60,6 +60,11 @@ def main() -> int:
         action="store_true",
         help="When running live validation, only confirm reachability and syntax.",
     )
+    parser.add_argument(
+        "--skip-live-page-smoke",
+        action="store_true",
+        help="When running post-deploy validation, skip curated live page marker checks.",
+    )
     args = parser.parse_args()
 
     if args.strict_post_deploy_live:

@@ -13,6 +13,16 @@ from urllib.parse import urlparse
 
 import openpyxl
 
+from scripts.ebook_content_helpers import (
+    audience_faq_answer,
+    build_same_source_srcset,
+    cover_sizes,
+    default_short as helper_default_short,
+    normalise_audience_copy,
+    normalise_topic_copy,
+    topic_intro as helper_topic_intro,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 EBOOKS_DIR = ROOT / "ebooks"
@@ -220,21 +230,19 @@ def normalise_title_substitution_text(value: str, *, slug: str, title: str, topi
         return cleaned
 
     title_core = clean_paragraph(title).split(":", 1)[0].strip()
-    if not title_core:
-        return cleaned
-
-    subject = infer_subject_phrase(slug, title, topic)
-    replacements = [
-        (rf"\bAI in {re.escape(title_core)}\b", f"AI in {subject}"),
-        (rf"\bA practical overview of AI in {re.escape(title_core)}\b", f"A practical overview of AI in {subject}"),
-        (rf"\bhow AI changes the day-to-day reality of {re.escape(title_core)}\b", f"how AI changes the day-to-day reality of {subject}"),
-        (rf"\bhow AI changes {re.escape(title_core)} in practice\b", f"how AI changes {subject} in practice"),
-        (rf"\bwhere AI fits inside {re.escape(title_core)}\b", f"where AI fits inside {subject}"),
-        (rf"\bAI is not arriving in {re.escape(title_core)}\b", f"AI is not arriving in {subject}"),
-    ]
-    for phrase_pattern, replacement_text in replacements:
-        cleaned = re.sub(phrase_pattern, replacement_text, cleaned, flags=re.I)
-    return cleaned
+    if title_core:
+        subject = infer_subject_phrase(slug, title, topic)
+        replacements = [
+            (rf"\bAI in {re.escape(title_core)}\b", f"AI in {subject}"),
+            (rf"\bA practical overview of AI in {re.escape(title_core)}\b", f"A practical overview of AI in {subject}"),
+            (rf"\bhow AI changes the day-to-day reality of {re.escape(title_core)}\b", f"how AI changes the day-to-day reality of {subject}"),
+            (rf"\bhow AI changes {re.escape(title_core)} in practice\b", f"how AI changes {subject} in practice"),
+            (rf"\bwhere AI fits inside {re.escape(title_core)}\b", f"where AI fits inside {subject}"),
+            (rf"\bAI is not arriving in {re.escape(title_core)}\b", f"AI is not arriving in {subject}"),
+        ]
+        for phrase_pattern, replacement_text in replacements:
+            cleaned = re.sub(phrase_pattern, replacement_text, cleaned, flags=re.I)
+    return normalise_topic_copy(cleaned, topic)
 
 
 
@@ -245,6 +253,33 @@ def sanitise_record_copy(record: Dict[str, Any]) -> Dict[str, Any]:
     for field in TITLE_SUBSTITUTION_FIELD_NAMES:
         if field in record:
             record[field] = normalise_title_substitution_text(record.get(field, ""), slug=slug, title=title, topic=topic)
+    if "short" in record:
+        record["short_description"] = record.get("short", "")
+    if "audience" in record:
+        record["audience"] = normalise_audience_copy(record.get("audience", ""), topic) or record.get("audience", "")
+    if "who_for" in record:
+        record["who_for"] = normalise_title_substitution_text(record.get("who_for", ""), slug=slug, title=title, topic=topic)
+    faq_items = record.get("faq")
+    if isinstance(faq_items, list):
+        cleaned_faq = []
+        for item in faq_items:
+            if not isinstance(item, dict):
+                continue
+            question = clean_paragraph(item.get("name", ""))
+            answer = clean_paragraph((item.get("acceptedAnswer") or {}).get("text", ""))
+            if question.lower() == "who is this book for?":
+                answer = audience_faq_answer(record.get("audience", ""), topic)
+            else:
+                answer = normalise_title_substitution_text(answer, slug=slug, title=title, topic=topic)
+            cleaned_faq.append({
+                "@type": item.get("@type") or "Question",
+                "name": question,
+                "acceptedAnswer": {
+                    "@type": (item.get("acceptedAnswer") or {}).get("@type") or "Answer",
+                    "text": answer,
+                },
+            })
+        record["faq"] = cleaned_faq
     return record
 
 def read_json(path: Path, default: Any = None) -> Any:
@@ -904,8 +939,7 @@ def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
 
 
 def topic_intro(topic: str) -> str:
-    topic_lc = topic.lower()
-    return f"AI is already elbow-deep in {topic_lc}, but the useful part is separating grounded practice from brochure gloss."
+    return helper_topic_intro(topic)
 
 
 
@@ -926,8 +960,7 @@ def default_why_it_matters(topic: str) -> str:
 
 
 def default_short(topic: str, pages: int | None) -> str:
-    prefix = f"A {pages}-page guide" if pages else "A practical guide"
-    return f"{prefix} to AI in {topic.lower()}, written in plain English with practical examples and grounded analysis."
+    return helper_default_short(topic, pages)
 
 
 
@@ -942,7 +975,7 @@ def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
         {
             "@type": "Question",
             "name": "Who is this book for?",
-            "acceptedAnswer": {"@type": "Answer", "text": f"This {book['topic'].lower()} title is aimed at {book['audience'].rstrip('.')}"},
+            "acceptedAnswer": {"@type": "Answer", "text": audience_faq_answer(book["audience"], book["topic"])},
         },
         {
             "@type": "Question",
@@ -1049,8 +1082,10 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "distinct_angle": clean_paragraph(content.get("distinct_angle")) or f"{title} keeps the focus on practical judgement in {topic.lower()} rather than drifting into brochure-speak.",
             "notes": workbook.get("notes", ""),
         }
+        book = sanitise_record_copy(book)
         faq_payload = content.get("faq")
         book["faq"] = faq_payload if isinstance(faq_payload, list) else build_default_faq(book)
+        book = sanitise_record_copy(book)
         records.append(book)
 
     if missing_fields:
@@ -1102,6 +1137,7 @@ def load_master() -> List[Dict[str, Any]]:
     for book in master:
         book.setdefault("dateModified", fallback_timestamp)
         book.setdefault("short_description", book.get("short", ""))
+        sanitise_record_copy(book)
     add_related_books(master)
     return master
 
@@ -1193,13 +1229,20 @@ def render_breadcrumbs(book: Dict[str, Any]) -> str:
     ])
     return "".join(crumbs)
 
-def render_image_tag(*, src: str, alt: str, class_name: str, loading: str = "lazy", width: int | None = None, height: int | None = None) -> str:
+def render_image_tag(*, src: str, alt: str, class_name: str, loading: str = "lazy", width: int | None = None, height: int | None = None, srcset: str | None = None, sizes: str | None = None, fetchpriority: str | None = None) -> str:
     attrs = [
         f'alt="{html.escape(alt)}"',
         f'class="{html.escape(class_name)}"',
+        f'decoding="async"',
         f'loading="{html.escape(loading)}"',
         f'src="{html.escape(src)}"',
     ]
+    if srcset:
+        attrs.append(f'srcset="{html.escape(srcset)}"')
+    if sizes:
+        attrs.append(f'sizes="{html.escape(sizes)}"')
+    if fetchpriority:
+        attrs.append(f'fetchpriority="{html.escape(fetchpriority)}"')
     if width is not None:
         attrs.append(f'width="{width}"')
     if height is not None:
@@ -1215,6 +1258,9 @@ def render_cover_image(book: Dict[str, Any], class_name: str, loading: str = "la
         loading=loading,
         width=BOOK_COVER_WIDTH,
         height=BOOK_COVER_HEIGHT,
+        srcset=build_same_source_srcset(book["cover"], BOOK_COVER_WIDTH),
+        sizes=cover_sizes(class_name),
+        fetchpriority="high" if loading == "eager" else None,
     )
 
 
@@ -1688,7 +1734,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>{html.escape(topic)} AI Books</h1>
-    <p>Browse the Jonathan Harris titles that connect AI with {html.escape(topic.lower())}.</p>
+    <p>{html.escape(topic_intro(topic))}</p>
   </div>
 </header>
 <main class="main" id="main" role="main">
