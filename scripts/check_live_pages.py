@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import re
 import sys
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
@@ -35,26 +37,44 @@ class PageResult:
     message: str
     live_url: str
     missing_markers: list[str]
+    status_code: int | None = None
 
 
-def fetch_url(url: str, *, timeout: float) -> str:
+@dataclass
+class FetchResult:
+    body: str
+    status_code: int | None
+    final_url: str | None
+    error: str | None = None
+
+
+def fetch_url(url: str, *, timeout: float) -> FetchResult:
     req = request.Request(
         url,
         headers={
             "User-Agent": DEFAULT_USER_AGENT,
             "Cache-Control": "no-cache",
             "Pragma": "no-cache",
-            "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+            "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
         },
         method="GET",
     )
     try:
         with request.urlopen(req, timeout=timeout) as response:
-            return response.read().decode("utf-8", errors="replace")
+            return FetchResult(
+                body=response.read().decode("utf-8", errors="replace"),
+                status_code=getattr(response, "status", None) or response.getcode(),
+                final_url=response.geturl(),
+            )
     except error.HTTPError as exc:
-        raise RuntimeError(f"HTTP {exc.code} for {url}") from exc
+        return FetchResult(
+            body=exc.read().decode("utf-8", errors="replace"),
+            status_code=exc.code,
+            final_url=getattr(exc, "url", url),
+            error=f"HTTP {exc.code} for {url}",
+        )
     except error.URLError as exc:
-        raise RuntimeError(f"Request failed for {url}: {exc.reason}") from exc
+        return FetchResult(body="", status_code=None, final_url=None, error=f"Request failed for {url}: {exc.reason}")
 
 
 SCRIPT_RE = re.compile(r"<script\b.*?</script>", re.I | re.S)
@@ -129,16 +149,24 @@ def selected_page_checks() -> list[PageCheck]:
     return pages
 
 
-def run_checks(*, timeout: float) -> list[PageResult]:
+def run_page_checks(*, timeout: float) -> list[PageResult]:
     results: list[PageResult] = []
     for page in selected_page_checks():
-        try:
-            live_html = fetch_url(page.live_url, timeout=timeout)
-        except Exception as exc:
-            results.append(PageResult(page.label, False, str(exc), page.live_url, []))
+        fetch_result = fetch_url(page.live_url, timeout=timeout)
+        if fetch_result.error or fetch_result.status_code != 200:
+            results.append(
+                PageResult(
+                    page.label,
+                    False,
+                    fetch_result.error or f"Unexpected HTTP {fetch_result.status_code} for {page.live_url}",
+                    page.live_url,
+                    [],
+                    status_code=fetch_result.status_code,
+                )
+            )
             continue
 
-        live_text = normalise_visible_text(live_html)
+        live_text = normalise_visible_text(fetch_result.body)
         snippets = extract_required_snippets(page)
         missing = [snippet for snippet in snippets if snippet not in live_text]
         if missing:
@@ -149,26 +177,129 @@ def run_checks(*, timeout: float) -> list[PageResult]:
                     message="Live page is reachable but missing one or more governed content markers",
                     live_url=page.live_url,
                     missing_markers=missing,
+                    status_code=fetch_result.status_code,
                 )
             )
             continue
-        results.append(PageResult(page.label, True, "Live page contains the governed markers", page.live_url, []))
+        results.append(PageResult(page.label, True, "Live page contains the governed markers", page.live_url, [], status_code=fetch_result.status_code))
+    return results
+
+
+def run_not_found_contract_checks(*, timeout: float) -> list[PageResult]:
+    checks = [
+        PageCheck(
+            label="Explicit /404 route contract",
+            local_path=ROOT / "404.html",
+            live_url=f"{SITE_URL}/404",
+            extractors=[("not-found heading", r"<h1>(.*?)</h1>")],
+        ),
+        PageCheck(
+            label="Unknown-route 404 contract",
+            local_path=ROOT / "404.html",
+            live_url=f"{SITE_URL}/__release-smoke-missing-{uuid.uuid4().hex}/",
+            extractors=[("not-found heading", r"<h1>(.*?)</h1>")],
+        ),
+    ]
+    results: list[PageResult] = []
+    for page in checks:
+        fetch_result = fetch_url(page.live_url, timeout=timeout)
+        if fetch_result.status_code != 404:
+            results.append(
+                PageResult(
+                    page.label,
+                    False,
+                    fetch_result.error or f"Expected HTTP 404 but received {fetch_result.status_code}",
+                    page.live_url,
+                    [],
+                    status_code=fetch_result.status_code,
+                )
+            )
+            continue
+        live_text = normalise_visible_text(fetch_result.body)
+        snippets = extract_required_snippets(page)
+        missing = [snippet for snippet in snippets if snippet not in live_text]
+        if missing:
+            results.append(
+                PageResult(
+                    label=page.label,
+                    ok=False,
+                    message="Live 404 response is present but missing one or more governed content markers",
+                    live_url=page.live_url,
+                    missing_markers=missing,
+                    status_code=fetch_result.status_code,
+                )
+            )
+            continue
+        results.append(PageResult(page.label, True, "Live 404 contract is correct", page.live_url, [], status_code=fetch_result.status_code))
+    return results
+
+
+def run_api_contract_check(*, timeout: float) -> PageResult:
+    live_url = f"{SITE_URL}/api/v1/books.json"
+    fetch_result = fetch_url(live_url, timeout=timeout)
+    if fetch_result.error or fetch_result.status_code != 200:
+        return PageResult(
+            label="Public books API parity",
+            ok=False,
+            message=fetch_result.error or f"Unexpected HTTP {fetch_result.status_code} for {live_url}",
+            live_url=live_url,
+            missing_markers=[],
+            status_code=fetch_result.status_code,
+        )
+
+    try:
+        live_payload = json.loads(fetch_result.body)
+    except json.JSONDecodeError as exc:
+        return PageResult(
+            label="Public books API parity",
+            ok=False,
+            message=f"Live API returned invalid JSON: {exc}",
+            live_url=live_url,
+            missing_markers=[],
+            status_code=fetch_result.status_code,
+        )
+
+    governed_payload = json.loads((ROOT / "api" / "v1" / "books.json").read_text(encoding="utf-8"))
+    if live_payload != governed_payload:
+        return PageResult(
+            label="Public books API parity",
+            ok=False,
+            message="Live API payload does not match the governed repo artifact",
+            live_url=live_url,
+            missing_markers=[],
+            status_code=fetch_result.status_code,
+        )
+    return PageResult(
+        label="Public books API parity",
+        ok=True,
+        message="Live API payload matches the governed repo artifact",
+        live_url=live_url,
+        missing_markers=[],
+        status_code=fetch_result.status_code,
+    )
+
+
+def run_checks(*, timeout: float) -> list[PageResult]:
+    results = run_page_checks(timeout=timeout)
+    results.extend(run_not_found_contract_checks(timeout=timeout))
+    results.append(run_api_contract_check(timeout=timeout))
     return results
 
 
 def print_results(results: Iterable[PageResult]) -> None:
     for result in results:
         status = "PASS" if result.ok else "FAIL"
-        print(f"[{status}] {result.label}: {result.message}")
+        status_text = f" HTTP {result.status_code}" if result.status_code is not None else ""
+        print(f"[{status}] {result.label}:{status_text} {result.message}")
         print(f"      {result.live_url}")
         for marker in result.missing_markers[:3]:
             print(f"      missing: {marker}")
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Compare selected governed HTML markers against live pages.")
+    parser = argparse.ArgumentParser(description="Compare governed live page markers, 404 behaviour, and API parity against the published site.")
     parser.add_argument("--timeout", type=float, default=DEFAULT_TIMEOUT, help="HTTP timeout in seconds. Default: 15")
-    parser.add_argument("--strict", action="store_true", help="Exit non-zero if any page is unreachable or missing governed markers.")
+    parser.add_argument("--strict", action="store_true", help="Exit non-zero if any governed page, 404 contract, or API parity check fails.")
     args = parser.parse_args()
 
     results = run_checks(timeout=max(args.timeout, 1.0))

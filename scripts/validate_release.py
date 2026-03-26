@@ -11,6 +11,7 @@ if str(REPO_ROOT) not in sys.path:
 import argparse
 
 from scripts.check_crawlers import print_live_summary, run_live_checks
+from scripts.check_live_pages import print_results as print_live_page_summary, run_checks as run_live_page_checks
 from scripts.ebook_pipeline import run_validate_command
 
 
@@ -25,12 +26,17 @@ def main() -> int:
     parser.add_argument(
         "--strict-post-deploy-live",
         action="store_true",
-        help="Fail the command when a published crawler URL is unreachable or drifts from the governed snapshot. Implies --post-deploy-live.",
+        help="Fail the command when published crawler checks or curated live page/API checks fail. Implies --post-deploy-live.",
     )
     parser.add_argument(
         "--skip-live-content",
         action="store_true",
-        help="When running post-deploy live checks, confirm reachability only and skip content verification.",
+        help="When running post-deploy live crawler checks, confirm reachability only and skip content verification.",
+    )
+    parser.add_argument(
+        "--skip-live-page-smoke",
+        action="store_true",
+        help="When running post-deploy live validation, skip curated live page and API contract checks.",
     )
     parser.add_argument(
         "--live-timeout",
@@ -54,7 +60,14 @@ def main() -> int:
     live_results = run_live_checks(timeout=args.live_timeout, verify_content=not args.skip_live_content)
     print_live_summary(live_results)
     live_failures = [result for result in live_results if not result.ok]
-    if live_failures and args.strict_post_deploy_live:
+
+    page_failures = []
+    if not args.skip_live_page_smoke:
+        page_results = run_live_page_checks(timeout=args.live_timeout)
+        print_live_page_summary(page_results)
+        page_failures = [result for result in page_results if not result.ok]
+
+    if (live_failures or page_failures) and args.strict_post_deploy_live:
         return 1
     return 0
 

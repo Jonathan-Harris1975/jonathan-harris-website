@@ -111,6 +111,8 @@ def main() -> int:
         validate_command.append("--strict-post-deploy-live")
     if args.skip_live_content:
         validate_command.append("--skip-live-content")
+    if args.skip_live_page_smoke:
+        validate_command.append("--skip-live-page-smoke")
 
     run_step("Run release validation", validate_command)
     print("\nDeployment CI pipeline passed.")
