@@ -55,19 +55,21 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 6. `python3 scripts/check_crawlers.py`
 7. `python3 scripts/check_crawlers.py --live`
 8. `python3 scripts/check_crawlers.py --live --strict-live`
-9. `python3 scripts/maintenance/check_identifiers.py`
-10. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
-11. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
-12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
-13. `python3 scripts/maintenance/check_redirect_chains.py`
-14. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
+9. `python3 scripts/check_live_pages.py --strict`
+10. `python3 scripts/maintenance/check_identifiers.py`
+11. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
+12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
+13. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
+14. `python3 scripts/maintenance/check_redirect_chains.py`
+15. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
 
 ## Live crawler validation modes
 - `python3 scripts/check_crawlers.py` keeps the existing pre-deploy repo checks only.
 - `python3 scripts/check_crawlers.py --live` adds live GET validation against the published crawler URLs but does not fail the command when the deployment is drifting.
 - `python3 scripts/check_crawlers.py --live --strict-live` is the hard gate for post-deploy validation.
-- `python3 scripts/validate_release.py --post-deploy-live` runs the normal release checks first, then runs the live crawler checks as a second stage.
-- Add `--skip-live-content` when you only want reachability and do not want exact content matching.
+- `python3 scripts/validate_release.py --post-deploy-live` runs the normal release checks first, then runs the live crawler checks plus the curated live page/API contract smoke checks.
+- Add `--skip-live-content` when you only want crawler reachability and do not want exact crawler content matching.
+- Add `--skip-live-page-smoke` when you need to bypass the curated live page/API smoke checks for local diagnostics only.
 
 ## Deployment automation
 - `build.sh` is the Cloudflare Pages-friendly build entrypoint for this repo.
