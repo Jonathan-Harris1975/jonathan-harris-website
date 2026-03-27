@@ -63,7 +63,7 @@ def main() -> int:
 
     page_failures = []
     if not args.skip_live_page_smoke:
-        page_results = run_live_page_checks(timeout=args.live_timeout)
+        page_results = run_live_page_checks(timeout=args.live_timeout, workbook_path=workbook_path)
         print_live_page_summary(page_results)
         page_failures = [result for result in page_results if not result.ok]
 
