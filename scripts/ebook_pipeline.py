@@ -29,6 +29,7 @@ EBOOKS_DIR = ROOT / "ebooks"
 CATALOGUE_DIR = ROOT / "catalogue"
 TOPICS_DIR = ROOT / "topics"
 MASTER_PATH = DATA_DIR / "ebooks-master.json"
+WORKBOOK_NORMALISATIONS_PATH = ROOT / "config" / "workbook-normalisations.json"
 CRAWLER_CHECKSUMS_PATH = ROOT / "config" / "crawler-checksums.json"
 CRAWLER_SNAPSHOTS_DIR = ROOT / "config" / "crawler-snapshots"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
@@ -53,6 +54,13 @@ LEGACY_DETAIL_REDIRECT_LINES = [
     "/ebooks/*/detail  /ebooks/:splat/  301",
     "/ebooks/*/detail.html  /ebooks/:splat/  301",
     "/ebooks/*/details.html  /ebooks/:splat/  301",
+]
+
+LOCALE_ALIAS_REDIRECT_LINES = [
+    f"/en-gb/*  {SITE_URL}/:splat  301",
+    f"/en-us/*  {SITE_URL}/:splat  301",
+    f"/en-ca/*  {SITE_URL}/:splat  301",
+    f"/en-au/*  {SITE_URL}/:splat  301",
 ]
 
 MALFORMED_SLUG_FIXES = [
@@ -292,6 +300,27 @@ def read_json(path: Path, default: Any = None) -> Any:
 def write_json(path: Path, payload: Any) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+
+def load_workbook_normalisations() -> Dict[str, Dict[str, Dict[str, str]]]:
+    payload = read_json(WORKBOOK_NORMALISATIONS_PATH, default={}) or {}
+    if not isinstance(payload, dict):
+        return {}
+    approved: Dict[str, Dict[str, Dict[str, str]]] = {}
+    for slug, fields in payload.items():
+        if not isinstance(fields, dict):
+            continue
+        field_map: Dict[str, Dict[str, str]] = {}
+        for field_name, entry in fields.items():
+            if not isinstance(entry, dict):
+                continue
+            field_map[clean_paragraph(field_name)] = {
+                "raw": clean_paragraph(entry.get("raw", "")),
+                "approved": clean_paragraph(entry.get("approved", "")),
+            }
+        approved[clean_paragraph(slug)] = field_map
+    return approved
 
 
 
@@ -837,7 +866,7 @@ def parse_master_sheet(
         buy_route_full = record.get("buy_route_full") or f"{SITE_URL}/ebooks/{slug}/buy-now"
         record["buy_route_full"] = buy_route_full
         record["buy_route"] = url_to_path(buy_route_full)
-        record["legacy_alias_url"] = ensure_trailing_slash(record.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now")
+        record["legacy_alias_url"] = clean_paragraph(record.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now")
         record["cover"] = clean_paragraph(record.get("cover", "")).replace("https://images.Jonathan-harris.online", "https://images.jonathan-harris.online")
         if sanitise_content:
             record = sanitise_record_copy(record)
@@ -1796,15 +1825,21 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>{html.escape(topic)} AI Books | Jonathan Harris</title>
 <meta content="{html.escape(description)}" name="description"/>
 <meta content="index,follow" name="robots"/>
+<meta content="#0D1420" name="theme-color"/>
+<link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
 <meta content="{html.escape(topic)} AI Books | Jonathan Harris" property="og:title"/>
@@ -1818,6 +1853,8 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <meta content="{html.escape(description)}" name="twitter:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
 <link href="{canonical}" rel="canonical"/>
+<link href="{canonical}" hreflang="en" rel="alternate"/>
+<link href="{canonical}" hreflang="x-default" rel="alternate"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
@@ -1869,15 +1906,21 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>AI Topics | Jonathan Harris</title>
 <meta content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
+<meta content="#0D1420" name="theme-color"/>
+<link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
 <link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
 <meta content="AI Topics | Jonathan Harris" property="og:title"/>
@@ -1891,6 +1934,8 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <meta content="{description}" name="twitter:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
 <link href="{canonical}" rel="canonical"/>
+<link href="{canonical}" hreflang="en" rel="alternate"/>
+<link href="{canonical}" hreflang="x-default" rel="alternate"/>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 </head>
@@ -2629,6 +2674,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             "path": TOPICS_DIR / "index.html",
             "label": "topics/index.html",
             "required": [
+                '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+                '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
+                '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
+                '<meta content="#0D1420" name="theme-color"/>',
                 '<meta content="index,follow" name="robots"/>',
                 '<meta content="website" property="og:type"/>',
                 f'<meta content="{SITE_URL}/topics/" property="og:url"/>',
@@ -2647,6 +2696,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             "path": CATALOGUE_DIR / topic_slug / "index.html",
             "label": f"catalogue/{topic_slug}/index.html",
             "required": [
+                '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+                '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
+                '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
+                '<meta content="#0D1420" name="theme-color"/>',
                 '<meta content="index,follow" name="robots"/>',
                 '<meta content="website" property="og:type"/>',
                 f'<meta content="{SITE_URL}/catalogue/{topic_slug}/" property="og:url"/>',
@@ -2700,6 +2753,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Redirect family missing from _redirects: {line}")
         if line not in redirects_mirror:
             errors.append(f"Redirect family missing from _redirects.txt: {line}")
+    for legacy_alias in ("/en-gb/*  /:splat  200", "/en-us/*  /:splat  200", "/en-ca/*  /:splat  200", "/en-au/*  /:splat  200"):
+        if legacy_alias in redirects_text or legacy_alias in redirects_mirror:
+            errors.append(f"Locale alias pass-through must not remain live: {legacy_alias}")
+    for line in LOCALE_ALIAS_REDIRECT_LINES:
+        if line not in redirects_text:
+            errors.append(f"Locale alias redirect missing from _redirects: {line}")
+        if line not in redirects_mirror:
+            errors.append(f"Locale alias redirect missing from _redirects.txt: {line}")
     malformed_lines = [f"{item['source']}   {item['target']}  301" for item in MALFORMED_SLUG_FIXES]
     for line in malformed_lines:
         if line not in redirects_text:
@@ -2860,6 +2921,27 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             )
         )
 
+    static_topic_pages = [
+        ROOT / "topics" / "ai-for-beginners" / "index.html",
+        ROOT / "topics" / "ai-in-business" / "index.html",
+        ROOT / "topics" / "ai-in-healthcare" / "index.html",
+        ROOT / "topics" / "generative-ai" / "index.html",
+        ROOT / "topics" / "robotics-automation" / "index.html",
+    ]
+    for page_path in static_topic_pages:
+        if not page_path.exists():
+            errors.append(f"Static topic page missing: {page_path.relative_to(ROOT)}")
+            continue
+        page_text = page_path.read_text(encoding="utf-8", errors="ignore")
+        for marker in [
+            '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+            '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
+            '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
+            '<meta content="#0D1420" name="theme-color"/>',
+        ]:
+            if marker not in page_text:
+                errors.append(f"Static topic page head baseline drift detected for {page_path.relative_to(ROOT)}: {marker}")
+
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
     checksum_files = checksum_payload.get("files", {})
     expected_crawler_content = build_crawler_snapshot_payloads(books)
@@ -2899,7 +2981,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
         errors.extend(workbook_static_route_contract_errors(workbook_path))
-        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=True)
+        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
         if order != slugs:
             errors.append("Workbook row order does not match the master record order.")
         master_by_slug = {book["slug"]: book for book in books}
@@ -2922,14 +3004,19 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                     errors.append(f"Workbook mismatch for {slug}: {workbook_field} does not match {master_field}.")
             content = workbook_content.get(slug)
             if content:
+                approved_normalisations = load_workbook_normalisations()
                 for workbook_field, master_field in WORKBOOK_GOVERNED_COPY_FIELDS:
                     workbook_value = clean_paragraph(str(content.get(workbook_field, "")))
                     master_value = clean_paragraph(str(book.get(master_field, "")))
                     if workbook_field in {"description", "summary"}:
                         workbook_value = strip_pages_from_summary(workbook_value, book.get("pages"))
                         master_value = strip_pages_from_summary(master_value, book.get("pages"))
-                    if workbook_value != master_value:
-                        errors.append(f"Workbook content mismatch for {slug}: {workbook_field} does not match {master_field}.")
+                    if workbook_value == master_value:
+                        continue
+                    approved_entry = (approved_normalisations.get(slug) or {}).get(workbook_field)
+                    if approved_entry and approved_entry.get("raw") == workbook_value and approved_entry.get("approved") == master_value:
+                        continue
+                    errors.append(f"Workbook content mismatch for {slug}: {workbook_field} does not match {master_field}.")
 
     return errors
 
