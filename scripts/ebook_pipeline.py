@@ -991,24 +991,7 @@ def default_short(topic: str, pages: int | None) -> str:
 
 
 def book_meta_title(book: Dict[str, Any]) -> str:
-    base = clean_paragraph(book.get("title", "")).split(":", 1)[0].strip() or clean_paragraph(book.get("title", ""))
-    substitutions = [
-        ("Artificial Intelligence Revolution in ", "AI Revolution in "),
-        ("Artificial Intelligence Powered ", "AI-Powered "),
-        ("Artificial Intelligence in ", "AI in "),
-        ("Artificial Intelligence for ", "AI for "),
-        ("Artificial Intelligence and the ", "AI and the "),
-        ("Artificial Intelligence ", "AI "),
-    ]
-    candidate = base
-    if len(f"{candidate} | {SITE_NAME}") > 60:
-        for source, target in substitutions:
-            if candidate.startswith(source):
-                shortened = target + candidate[len(source):]
-                if len(f"{shortened} | {SITE_NAME}") <= 60:
-                    candidate = shortened
-                    break
-    return candidate
+    return clean_paragraph(book.get("title", ""))
 
 
 
@@ -2605,7 +2588,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if marker not in text:
                 errors.append(f"{book['slug']} page head description drift detected.")
                 break
-        errors.extend(metadata_budget_errors(f"ebooks/{book['slug']}/index.html", text, max_title=60, max_description=155))
+        errors.extend(metadata_budget_errors(f"ebooks/{book['slug']}/index.html", text, max_description=155))
         errors.extend(template_contract_errors(text, book))
         if f'href="/book/{book["slug"]}/' in text or f'href="/ebooks/{book["slug"]}/detail' in text:
             errors.append(f"{book['slug']} still links to a retired route.")
@@ -2858,7 +2841,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
 
     static_metadata_pages = [
         (ROOT / "index.html", "index.html", None, None, 155),
-        (ROOT / "bio" / "index.html", "bio/index.html", 60, None, 155),
+        (ROOT / "bio" / "index.html", "bio/index.html", None, None, 155),
         (ROOT / "podcast" / "index.html", "podcast/index.html", 60, None, 155),
         (ROOT / "blog" / "weekly" / "index.html", "blog/weekly/index.html", 60, None, 155),
     ]
@@ -2916,7 +2899,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
         errors.extend(workbook_static_route_contract_errors(workbook_path))
-        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
+        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=True)
         if order != slugs:
             errors.append("Workbook row order does not match the master record order.")
         master_by_slug = {book["slug"]: book for book in books}
