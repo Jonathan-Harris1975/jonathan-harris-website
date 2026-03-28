@@ -139,8 +139,17 @@
   if (chipsWrap) chipsWrap.appendChild(makeChip("All"));
   Array.from(filters).sort((a,b)=>a.localeCompare(b)).forEach(f => chipsWrap && chipsWrap.appendChild(makeChip(f)));
 
-  function buildSameSourceSrcset(){
-    return "";
+  function buildResponsiveImageUrl(src, width) {
+    if (!src || !width) return src || "";
+    if (/\/cdn-cgi\/image\//.test(src) || /\.svg(?:$|\?)/i.test(src)) return src;
+    return "/cdn-cgi/image/width=" + width + ",quality=85,fit=scale-down,format=auto/" + src;
+  }
+
+  function buildSameSourceSrcset(src, widths) {
+    if (!src || !Array.isArray(widths)) return "";
+    var unique = Array.from(new Set(widths.filter(Boolean))).sort(function(a, b){ return a - b; });
+    if (!unique.length) return "";
+    return unique.map(function(width){ return buildResponsiveImageUrl(src, width) + " " + width + "w"; }).join(", ");
   }
 
   function matches(book){
@@ -168,7 +177,7 @@
     img.decoding = "async";
     img.alt = book.title;
     img.src = book.cover;
-    const srcset = buildSameSourceSrcset(book.cover, [180, 240, 320, 480, 640, 960, 1280]);
+    const srcset = buildSameSourceSrcset(book.cover, [400, 800, 1200]);
     if (srcset) {
       img.srcset = srcset;
       img.sizes = "(min-width: 1200px) 248px, (min-width: 768px) 33vw, 48vw";
