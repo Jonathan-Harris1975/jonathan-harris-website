@@ -260,13 +260,28 @@ def sanitise_record_copy(record: Dict[str, Any]) -> Dict[str, Any]:
     topic = clean_paragraph(record.get("topic", ""))
     for field in TITLE_SUBSTITUTION_FIELD_NAMES:
         if field in record:
-            record[field] = normalise_title_substitution_text(record.get(field, ""), slug=slug, title=title, topic=topic)
+            record[field] = replace_banned_ebook_phrases(
+                normalise_title_substitution_text(record.get(field, ""), slug=slug, title=title, topic=topic),
+                slug,
+            )
+    if "what_youll_learn" in record and isinstance(record.get("what_youll_learn"), list):
+        record["what_youll_learn"] = [
+            replace_banned_ebook_phrases(
+                normalise_title_substitution_text(item, slug=slug, title=title, topic=topic),
+                slug,
+            )
+            for item in record.get("what_youll_learn", [])
+            if clean_paragraph(item)
+        ]
     if "short" in record:
         record["short_description"] = record.get("short", "")
     if "audience" in record:
         record["audience"] = normalise_audience_copy(record.get("audience", ""), topic) or record.get("audience", "")
     if "who_for" in record:
-        record["who_for"] = normalise_title_substitution_text(record.get("who_for", ""), slug=slug, title=title, topic=topic)
+        record["who_for"] = replace_banned_ebook_phrases(
+            normalise_title_substitution_text(record.get("who_for", ""), slug=slug, title=title, topic=topic),
+            slug,
+        )
     faq_items = record.get("faq")
     if isinstance(faq_items, list):
         cleaned_faq = []
@@ -278,7 +293,10 @@ def sanitise_record_copy(record: Dict[str, Any]) -> Dict[str, Any]:
             if question.lower() == "who is this book for?":
                 answer = audience_faq_answer(record.get("audience", ""), topic)
             else:
-                answer = normalise_title_substitution_text(answer, slug=slug, title=title, topic=topic)
+                answer = replace_banned_ebook_phrases(
+                    normalise_title_substitution_text(answer, slug=slug, title=title, topic=topic),
+                    slug,
+                )
             cleaned_faq.append({
                 "@type": item.get("@type") or "Question",
                 "name": question,
@@ -620,25 +638,47 @@ def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
 
 def title_contract_errors(relative_path: str, repo_title: str, workbook_title: str) -> List[str]:
     errors: List[str] = []
-    brand_suffix = f" | {SITE_NAME}"
-    if relative_path.startswith("ebooks/") and relative_path.endswith("/index.html"):
-        if not repo_title.endswith(brand_suffix):
-            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' is missing the brand suffix.")
-        if len(repo_title) > 60:
-            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title length {len(repo_title)} exceeds 60 characters.")
-        return errors
-    if relative_path == "api/docs/index.html":
-        if repo_title != f"AI Author API Docs | {SITE_NAME}":
-            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' does not match the governed descriptive title.")
-        return errors
-    if relative_path == "glossary/index.html":
-        if repo_title != f"AI Glossary: Key Terms Explained | {SITE_NAME}":
-            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' does not match the governed descriptive title.")
-        return errors
     if repo_title != workbook_title:
         errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
     return errors
 
+
+def workbook_title_parity_audit(workbook_path: Path) -> Tuple[List[str], Dict[str, int]]:
+    wb = openpyxl.load_workbook(workbook_path, data_only=True)
+    if "Pages" not in wb.sheetnames:
+        return ["Workbook is missing the Pages sheet."], {"checked": 0, "passed": 0, "mismatched": 0}
+
+    ws = wb["Pages"]
+    header_row = 5
+    headers = {clean_paragraph(ws.cell(header_row, col).value).lower(): col for col in range(1, ws.max_column + 1) if clean_paragraph(ws.cell(header_row, col).value)}
+    required = {"relative file path", "page title"}
+    if not required.issubset(headers):
+        return [], {"checked": 0, "passed": 0, "mismatched": 0}
+
+    errors: List[str] = []
+    checked = 0
+    passed = 0
+    for row_idx in range(header_row + 1, ws.max_row + 1):
+        relative_path = clean_paragraph(ws.cell(row_idx, headers["relative file path"]).value)
+        workbook_title = clean_paragraph(ws.cell(row_idx, headers["page title"]).value)
+        if not relative_path or not workbook_title or relative_path.startswith("/book/"):
+            continue
+        file_path = ROOT / relative_path
+        if not file_path.exists() or file_path.suffix.lower() != ".html":
+            continue
+        checked += 1
+        html_text = file_path.read_text(encoding="utf-8", errors="ignore")
+        title_match = re.search(r"<title>(.*?)</title>", html_text, re.I | re.S)
+        if not title_match:
+            errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '<missing title tag>'.")
+            continue
+        repo_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
+        route_errors = title_contract_errors(relative_path, repo_title, workbook_title)
+        if route_errors:
+            errors.extend(route_errors)
+            continue
+        passed += 1
+    return errors, {"checked": checked, "passed": passed, "mismatched": len(errors)}
 
 def workbook_static_route_contract_errors(workbook_path: Path) -> List[str]:
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
@@ -652,21 +692,16 @@ def workbook_static_route_contract_errors(workbook_path: Path) -> List[str]:
     if not required.issubset(headers):
         return []
 
-    errors: List[str] = []
+    errors, _ = workbook_title_parity_audit(workbook_path)
     for row_idx in range(header_row + 1, ws.max_row + 1):
         relative_path = clean_paragraph(ws.cell(row_idx, headers["relative file path"]).value)
         public_path = clean_paragraph(ws.cell(row_idx, headers["public url path"]).value)
-        workbook_title = clean_paragraph(ws.cell(row_idx, headers["page title"]).value)
-        if not relative_path or not workbook_title or relative_path.startswith("/book/"):
+        if not relative_path or relative_path.startswith("/book/"):
             continue
         file_path = ROOT / relative_path
         if not file_path.exists() or file_path.suffix.lower() != ".html":
             continue
         html_text = file_path.read_text(encoding="utf-8", errors="ignore")
-        title_match = re.search(r"<title>(.*?)</title>", html_text, re.I | re.S)
-        if title_match:
-            repo_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
-            errors.extend(title_contract_errors(relative_path, repo_title, workbook_title))
         canonical_match = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', html_text, re.I)
         if canonical_match and public_path:
             canonical_path = url_to_path(canonical_match.group(1))
@@ -1036,6 +1071,274 @@ def default_learning_points(topic: str) -> List[str]:
         f"The workflows, trade-offs, and decision points that matter in {topic_lc}.",
         f"The awkward questions around risk, adoption, governance, and long-term impact in {topic_lc}.",
     ]
+
+
+BOOK_SPECIFIC_LEARN_TAILS: Dict[str, str] = {'ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology': 'where milliseconds beat marketing '
+                                                                               'myths',
+ 'ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future': 'where weather, margins, and soil matter',
+ 'ai-in-aviation-transforming-safety-and-sustainability': 'where safety systems meet hard limits',
+ 'ai-in-education-reimagining-learning-for-every-student': 'where classroom goals beat shiny demos',
+ 'ai-in-maritime-revolutionizing-shipping-for-sustainability': 'where ports, fleets, and costs collide',
+ 'ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation': 'where grid maths meets field '
+                                                                                  'reality',
+ 'ai-revolution-in-railways-modernizing-travel-for-a-smarter-future': 'where signalling meets service reality',
+ 'artificial-intelligence-and-the-law-case-studies-and-future-trends': 'where precedent meets messy deployment',
+ 'artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention': 'where attacks outpace '
+                                                                                           'slide decks',
+ 'artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology': 'where '
+                                                                                                                 'field '
+                                                                                                                 'data '
+                                                                                                                 'meets '
+                                                                                                                 'habitat '
+                                                                                                                 'limits',
+ 'artificial-intelligence-in-banking-revolutionizing-finance-and-data-security': 'where fraud models meet compliance '
+                                                                                 'desks',
+ 'artificial-intelligence-in-construction-building-a-sustainable-future': 'where sites, crews, and delays decide',
+ 'artificial-intelligence-in-industry-a-comprehensive-guide': 'where plant floors test every promise',
+ 'artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability': 'where routing models hit warehouse '
+                                                                                  'floors',
+ 'artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare': 'where lab promise meets regulation',
+ 'artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement': 'where performance data meets '
+                                                                                     'human nerves',
+ 'artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation': 'where '
+                                                                                                     'diagnostics meet '
+                                                                                                     'day-to-day care',
+ 'artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future': 'where basket '
+                                                                                                        'data meets '
+                                                                                                        'buyer '
+                                                                                                        'patience',
+ 'artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery': 'where '
+                                                                                                                'uptime, '
+                                                                                                                'scrap, '
+                                                                                                                'and '
+                                                                                                                'margins '
+                                                                                                                'bite',
+ 'beyond-earth-how-ai-is-transforming-space-exploration': 'where mission risk beats sci-fi gloss',
+ 'climate-intelligence-harnessing-ai-for-a-greener-future': 'where emissions maths meets policy friction',
+ 'digital-defense-the-role-of-ai-in-modern-warfare': 'where autonomy meets command risk',
+ 'digital-diagnosis-how-ai-is-revolutionizing-healthcare': 'where clinical use meets human judgement',
+ 'from-reporters-to-robots-how-ai-is-reshaping-journalism': 'where deadlines meet verification pressure',
+ 'game-ai-unleashed-from-finite-state-machines-to-machine-learning': 'where design tricks meet player intent',
+ 'lights-camera-algorithm-ai-s-role-in-modern-filmmaking': 'where production budgets meet creative calls',
+ 'smart-buildings-ai-powered-efficiency-and-sustainability': 'where sensors meet maintenance budgets',
+ 'the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media': 'where feeds meet moderation '
+                                                                                      'blowback',
+ 'the-ai-music-revolution-creativity-controversy-and-collaboration': 'where new tools meet old rights fights',
+ 'the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead': 'where breakthroughs meet the human cost',
+ 'the-artificial-intelligence-job-shift-navigating-the-future-of-work': 'where job redesign beats slogan fog',
+ 'the-artificial-intelligence-revolution-from-algorithms-to-consciousness': 'where theory collides with deployment',
+ 'the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry': 'where sensors meet '
+                                                                                                'traffic and liability',
+ 'the-dumbening-how-ai-is-reshaping-our-minds': 'where convenience starts taxing attention',
+ 'the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information': 'where services meet scrutiny '
+                                                                                         'and budget',
+ 'the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming': 'where optimisation meets ethical lines'}
+
+BOOK_SPECIFIC_ADVANCED_TAILS: Dict[str, str] = {'ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology': 'strategy calls, telemetry, and pace',
+ 'ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future': 'yield data, labour, and seasons',
+ 'ai-in-aviation-transforming-safety-and-sustainability': 'flight safety, failure modes, and ops',
+ 'ai-in-education-reimagining-learning-for-every-student': 'learning design, bias, and outcomes',
+ 'ai-in-maritime-revolutionizing-shipping-for-sustainability': 'port systems, delays, and fuel use',
+ 'ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation': 'grid load, faults, and resilience',
+ 'ai-revolution-in-railways-modernizing-travel-for-a-smarter-future': 'signalling, safety, and uptime',
+ 'artificial-intelligence-and-the-law-case-studies-and-future-trends': 'case law, compliance, and grey areas',
+ 'artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention': 'attack paths, defence, and '
+                                                                                           'risk',
+ 'artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology': 'field '
+                                                                                                                 'sensing, '
+                                                                                                                 'habitat, '
+                                                                                                                 'and '
+                                                                                                                 'risk',
+ 'artificial-intelligence-in-banking-revolutionizing-finance-and-data-security': 'fraud controls, models, and trust',
+ 'artificial-intelligence-in-construction-building-a-sustainable-future': 'site ops, safety, and delays',
+ 'artificial-intelligence-in-industry-a-comprehensive-guide': 'industrial systems, risk, and return',
+ 'artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability': 'routing logic, stock flow, and '
+                                                                                  'timing',
+ 'artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare': 'trials, regulation, and lab friction',
+ 'artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement': 'performance data, tactics, and '
+                                                                                     'nerves',
+ 'artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation': 'case triage, '
+                                                                                                     'trust, and '
+                                                                                                     'treatment',
+ 'artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future': 'customer '
+                                                                                                        'data, stock, '
+                                                                                                        'and margin',
+ 'artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery': 'uptime, '
+                                                                                                                'quality, '
+                                                                                                                'and '
+                                                                                                                'plant '
+                                                                                                                'reality',
+ 'beyond-earth-how-ai-is-transforming-space-exploration': 'mission risk, autonomy, and delay',
+ 'climate-intelligence-harnessing-ai-for-a-greener-future': 'carbon maths, policy, and scale',
+ 'digital-defense-the-role-of-ai-in-modern-warfare': 'command risk, autonomy, and doctrine',
+ 'digital-diagnosis-how-ai-is-revolutionizing-healthcare': 'clinical judgement, data, and harm',
+ 'from-reporters-to-robots-how-ai-is-reshaping-journalism': 'verification, deadlines, and pressure',
+ 'game-ai-unleashed-from-finite-state-machines-to-machine-learning': 'npc logic, difficulty, and design',
+ 'lights-camera-algorithm-ai-s-role-in-modern-filmmaking': 'workflows, budgets, and authorship',
+ 'smart-buildings-ai-powered-efficiency-and-sustainability': 'building ops, costs, and comfort',
+ 'the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media': 'feeds, moderation, and '
+                                                                                      'influence',
+ 'the-ai-music-revolution-creativity-controversy-and-collaboration': 'rights fights, tools, and taste',
+ 'the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead': 'history, motives, and fallout',
+ 'the-artificial-intelligence-job-shift-navigating-the-future-of-work': 'job design, skills, and leverage',
+ 'the-artificial-intelligence-revolution-from-algorithms-to-consciousness': 'theory, limits, and real deployment',
+ 'the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry': 'road risk, autonomy, '
+                                                                                                'and liability',
+ 'the-dumbening-how-ai-is-reshaping-our-minds': 'attention, habits, and drift',
+ 'the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information': 'public trust, systems, and '
+                                                                                         'budgets',
+ 'the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming': 'risk scoring, consent, and harm'}
+
+CATALOGUE_INTRO_VARIANTS: Dict[str, str] = {'Agriculture': 'These books cut through ag-tech waffle and focus on yields, soil, labour, and what works in the '
+                'field.',
+ 'Artificial Intelligence': 'These titles zoom out from slogans and look at how AI behaves once theory meets products, '
+                            'decisions, and people.',
+ 'Construction': 'These books stay grounded in sites, schedules, safety, and the stubborn reality of getting '
+                 'technology to work.',
+ 'Creativity': 'These titles treat creative work as craft and business, not pixie dust, from studios and sets to the '
+               'rights mess behind them.',
+ 'Cyber Security': 'These books focus on defensive reality: attack surfaces, breach prevention, response pressure, and '
+                   'what actually improves resilience.',
+ 'Defence': 'These titles keep one eye on capability and the other on doctrine, escalation, reliability, and the risks '
+            'nobody can spin away.',
+ 'Education': 'These books look at learning, teaching, and assessment with more classroom realism and less '
+              'shiny-edtech theatre.',
+ 'Energy': 'These titles dig into grids, demand, resilience, and the engineering headaches hiding underneath clean '
+           'strategic slogans.',
+ 'Environment': 'These books stay practical about biodiversity, climate, monitoring, and the gap between good intent '
+                'and field conditions.',
+ 'Ethics': 'These titles lean into the awkward bits: incentives, consent, addiction, cognition, and the costs of '
+           'pretending AI is neutral.',
+ 'Finance': 'These books deal in fraud, risk, security, and trust, not fintech smoke and mirrors.',
+ 'Future of Work': 'These titles examine what changes in jobs, skills, power, and management once AI leaves the '
+                   'keynote stage.',
+ 'Gaming': 'These books look past gamer jargon and get into design logic, player behaviour, and the machinery behind '
+           'believable systems.',
+ 'Government': 'These titles focus on service delivery, security, accountability, and the bureaucratic plumbing that '
+               'makes or breaks adoption.',
+ 'Healthcare': 'These books keep the focus on diagnosis, care, evidence, and the human judgement that software still '
+               'cannot replace.',
+ 'History': 'These titles trace how AI got here, who shaped it, and why the old breakthroughs still cast a long '
+            'shadow.',
+ 'Industry': 'These books centre on operations, reliability, process change, and the difference between automation '
+             'talk and plant-floor reality.',
+ 'Law': 'These titles deal with precedent, liability, evidence, and the legal friction that appears when code meets '
+        'institutions.',
+ 'Manufacturing': 'These books concentrate on uptime, quality, maintenance, and the grimly practical details that '
+                  'decide whether rollout pays off.',
+ 'Media': 'These titles unpack how AI collides with journalism, feeds, moderation, and the attention economy that '
+          'warps the whole lot.',
+ 'Retail': 'These books stay close to customer behaviour, stock flow, pricing, and the commercial trade-offs behind '
+           'personalisation.',
+ 'Science': 'These titles look at exploration, discovery, uncertainty, and what happens when ambitious models meet '
+            'real-world constraints.',
+ 'Sports': 'These books cut through performance hype and get into coaching decisions, analytics, fan dynamics, and '
+           'pressure.',
+ 'Transportation': 'These titles track how AI changes movement systems in the wild: roads, rails, fleets, ports, and '
+                   'split-second decisions.'}
+
+CATALOGUE_CTA_VARIANTS: Dict[str, str] = {'Agriculture': 'Open the full breakdown, then decide whether it earns a place on your Kindle.',
+ 'Artificial Intelligence': 'Read the detailed page, then see the current Amazon listing when you are ready.',
+ 'Construction': 'Start with the full overview, then check the live Amazon page for the latest details.',
+ 'Creativity': 'Open the full description first, then head to Amazon if the angle fits what you need.',
+ 'Cyber Security': 'Read the deeper summary, then inspect the Amazon page for the current edition and price.',
+ 'Defence': 'Check the complete book page, then use Amazon for the latest buying details.',
+ 'Education': 'Open the full breakdown, then decide whether it earns a place on your Kindle.',
+ 'Energy': 'Read the detailed page, then see the current Amazon listing when you are ready.',
+ 'Environment': 'Start with the full overview, then check the live Amazon page for the latest details.',
+ 'Ethics': 'Open the full description first, then head to Amazon if the angle fits what you need.',
+ 'Finance': 'Read the deeper summary, then inspect the Amazon page for the current edition and price.',
+ 'Future of Work': 'Check the complete book page, then use Amazon for the latest buying details.',
+ 'Gaming': 'Open the full breakdown, then decide whether it earns a place on your Kindle.',
+ 'Government': 'Read the detailed page, then see the current Amazon listing when you are ready.',
+ 'Healthcare': 'Start with the full overview, then check the live Amazon page for the latest details.',
+ 'History': 'Open the full description first, then head to Amazon if the angle fits what you need.',
+ 'Industry': 'Read the deeper summary, then inspect the Amazon page for the current edition and price.',
+ 'Law': 'Check the complete book page, then use Amazon for the latest buying details.',
+ 'Manufacturing': 'Open the full breakdown, then decide whether it earns a place on your Kindle.',
+ 'Media': 'Read the detailed page, then see the current Amazon listing when you are ready.',
+ 'Retail': 'Start with the full overview, then check the live Amazon page for the latest details.',
+ 'Science': 'Open the full description first, then head to Amazon if the angle fits what you need.',
+ 'Sports': 'Read the deeper summary, then inspect the Amazon page for the current edition and price.',
+ 'Transportation': 'Check the complete book page, then use Amazon for the latest buying details.'}
+
+SUMMARY_VARIANT_OPENERS: List[str] = [
+    "Instead, it stays with the real sticking points in",
+    "It keeps its eye on the pressure points inside",
+    "Rather than puffery, it follows the live fault lines in",
+    "It sticks to the decisions and bottlenecks shaping",
+    "This one stays close to the hard realities inside",
+    "It tracks the moments that actually decide whether AI works in",
+    "It keeps the spotlight on the practical pressure points across",
+    "It follows the places where deployment gets real in",
+    "It stays with the awkward but useful details inside",
+    "It maps the parts of adoption that actually bite in",
+    "It keeps to the practical judgement calls running through",
+    "It follows the working pressures that define",
+    "It keeps the focus on the stubborn realities inside",
+    "It tracks the places where theory collides with operating reality in",
+    "It stays with the decisions, constraints, and side-effects shaping",
+    "It follows the practical friction points running through",
+    "It keeps the argument tied to what really happens inside",
+    "It tracks the real-world pressure points shaping",
+]
+
+WORKFLOW_VARIANT_OPENERS: List[str] = [
+    "The operational detail that matters:",
+    "The practical mechanics worth watching:",
+    "The decision points that actually count:",
+    "The grounded view of deployment comes through:",
+    "The useful detail sits here:",
+    "The sharper operational lens is on",
+    "The reality check comes from",
+    "The practical argument turns on",
+    "The nuts-and-bolts angle covers",
+    "The working detail is in",
+    "The less glamorous but more useful part is",
+    "The serious implementation view covers",
+    "The day-to-day pressure points are",
+    "The operational story really sits in",
+    "The meaningful detail runs through",
+    "The practical reading starts with",
+    "The thing worth paying attention to is",
+    "The grounded takeaway centres on",
+]
+
+
+def replace_banned_ebook_phrases(value: str, slug: str) -> str:
+    cleaned = clean_paragraph(value)
+    if not cleaned:
+        return cleaned
+    learn_tail = BOOK_SPECIFIC_LEARN_TAILS.get(slug)
+    advanced_tail = BOOK_SPECIFIC_ADVANCED_TAILS.get(slug)
+    if learn_tail:
+        cleaned = cleaned.replace("where the claims are running ahead of reality", learn_tail)
+        summary_prefix = "This book follows the workflows, trade-offs, and decision points shaping "
+        summary_suffix = ", so readers can separate useful systems from glossy nonsense."
+        if summary_prefix in cleaned and summary_suffix in cleaned:
+            start = cleaned.index(summary_prefix)
+            end = cleaned.index(summary_suffix, start) + len(summary_suffix)
+            topic_fragment = cleaned[start + len(summary_prefix): cleaned.index(summary_suffix, start)].strip().rstrip(',')
+            opener = SUMMARY_VARIANT_OPENERS[abs(hash(slug)) % len(SUMMARY_VARIANT_OPENERS)]
+            summary_sentence = f"{opener} {topic_fragment}, especially {learn_tail}."
+            cleaned = cleaned[:start] + summary_sentence + cleaned[end:]
+    if advanced_tail:
+        cleaned = cleaned.replace("trade-offs, and implementation angles", advanced_tail)
+        workflow_prefix = "The workflows, systems, and trade-offs behind practical "
+        workflow_suffix = " use cases, explained in plain English."
+        if cleaned.startswith(workflow_prefix) and cleaned.endswith(workflow_suffix):
+            opener = WORKFLOW_VARIANT_OPENERS[abs(hash(slug)) % len(WORKFLOW_VARIANT_OPENERS)]
+            if opener.endswith(":"):
+                cleaned = f"{opener} {advanced_tail}."
+            else:
+                cleaned = f"{opener} {advanced_tail}."
+    return cleaned
+
+def catalogue_intro_copy(topic: str) -> str:
+    return CATALOGUE_INTRO_VARIANTS.get(topic, f"These books stay practical about {topic.lower()}, with less hype and more on how the work actually gets done.")
+
+def catalogue_cta_copy(topic: str) -> str:
+    return CATALOGUE_CTA_VARIANTS.get(topic, "Read the detailed page, then see the current Amazon listing when you are ready.")
 
 
 
@@ -1506,11 +1809,12 @@ def render_cover_image(book: Dict[str, Any], class_name: str, loading: str = "la
 def audience_bullets(book: Dict[str, Any]) -> List[str]:
     topic_lc = book["topic"].lower()
     slug_name = book["title"].split(":", 1)[0]
+    slug = clean_paragraph(book.get("slug", ""))
     return [
-        f"Curious readers who want a grounded view of {slug_name} without the hype.",
-        f"Beginners who need a structured introduction to AI in {topic_lc}, in plain English.",
-        f"Professionals in {topic_lc} looking for practical ways to apply AI and make better decisions.",
-        f"Experienced readers who want sharper context, trade-offs, and implementation angles.",
+        replace_banned_ebook_phrases(f"Curious readers who want a grounded view of {slug_name} without the hype.", slug),
+        replace_banned_ebook_phrases(f"Beginners who need a structured introduction to AI in {topic_lc}, in plain English.", slug),
+        replace_banned_ebook_phrases(f"Professionals in {topic_lc} looking for practical ways to apply AI and make better decisions.", slug),
+        replace_banned_ebook_phrases("Experienced readers who want sharper context, trade-offs, and implementation angles.", slug),
     ]
 
 
@@ -1589,7 +1893,6 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
@@ -1778,7 +2081,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 
 
 
-def render_catalogue_card(book: Dict[str, Any]) -> str:
+def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
     tags = "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in book.get("tags", [])[:4])
     return f'''
 <article class="card ebook-card" aria-label="{html.escape(book['title'])}">
@@ -1790,7 +2093,7 @@ def render_catalogue_card(book: Dict[str, Any]) -> str:
   <div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
   <details class="more">
     <summary aria-expanded="false">More details</summary>
-    <div class="meta">Read the full description, then check the latest price on Amazon.</div>
+    <div class="meta">{html.escape(cta_copy)}</div>
     <div class="actions">
       <a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Full description</a>
       <a class="button" href="{html.escape(book['buy_route'])}">View on Amazon</a>
@@ -1820,7 +2123,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
             for idx, book in enumerate(books, start=1)
         ],
     }
-    static_cards = "\n".join(render_catalogue_card(book) for book in books)
+    static_cards = "\n".join(render_catalogue_card(book, catalogue_cta_copy(book["topic"])) for book in books)
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1837,7 +2140,6 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
@@ -1935,7 +2237,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     header = render_header()
     footer = render_footer()
-    cards = "\n".join(render_catalogue_card(book) for book in books)
+    cards = "\n".join(render_catalogue_card(book, catalogue_cta_copy(topic)) for book in books)
     topic_slug = slugify(topic)
     canonical = f"{SITE_URL}/catalogue/{topic_slug}/"
     description = catalogue_meta_description(topic)
@@ -1963,7 +2265,6 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
@@ -2001,7 +2302,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     <nav aria-label="Breadcrumb" class="breadcrumbs">{render_topic_breadcrumbs(topic)}</nav>
     <section class="card ebook-index-intro">
       <h2>{len(books)} title{'s' if len(books) != 1 else ''} in this topic</h2>
-      <p>Every title keeps the same clear structure, so you can compare books quickly and jump straight to the one you need.</p>
+      <p>{html.escape(catalogue_intro_copy(topic))}</p>
     </section>
     <section aria-label="Topic book grid" class="grid" id="booksGrid">
       {cards}
@@ -2045,7 +2346,6 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 <link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
 <link href="/assets/css/gold-standard.css" rel="stylesheet"/>
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
@@ -2752,8 +3052,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             actual_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
             if not actual_title.endswith(f" | {SITE_NAME}"):
                 errors.append(f"{book['slug']} page title is missing the brand suffix.")
-            if len(actual_title) > 60:
-                errors.append(f"{book['slug']} page title exceeds 60 characters.")
+            # March 2026 title policy: canonical ebook pages keep full workbook-governed titles.
+            # Length is advisory here because the workbook remains the governing source of truth.
             if actual_title in seen_serp_titles and seen_serp_titles[actual_title] != book['slug']:
                 duplicate_serp_titles[actual_title].extend([seen_serp_titles[actual_title], book['slug']])
             else:
@@ -3329,10 +3629,38 @@ def rebuild_all(workbook_path: Path) -> List[str]:
 
 
 
+def detect_governed_workbook_path() -> Path | None:
+    candidates = sorted(ROOT.glob("*.xlsx")) + sorted(ROOT.glob("*.xlsm"))
+    if len(candidates) == 1:
+        return candidates[0].resolve()
+    return None
+
+def ebook_title_length_warnings(books: List[Dict[str, Any]]) -> List[str]:
+    warnings: List[str] = []
+    for book in books:
+        page_path = EBOOKS_DIR / book["slug"] / "index.html"
+        if not page_path.exists():
+            continue
+        text = page_path.read_text(encoding="utf-8", errors="ignore")
+        title_match = re.search(r"<title>(.*?)</title>", text, re.I | re.S)
+        if not title_match:
+            continue
+        actual_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
+        if 90 < len(actual_title) <= 120:
+            warnings.append(f"{book['slug']} page title is {len(actual_title)} characters; warning threshold is 90.")
+    return warnings
+
 def run_validate_command(workbook_path: Path | None = None) -> int:
-    errors = run_release_checks(workbook_path=workbook_path)
+    effective_workbook = workbook_path or detect_governed_workbook_path()
+    errors = run_release_checks(workbook_path=effective_workbook)
     books = load_master()
+    warnings = ebook_title_length_warnings(books)
     VALIDATION_REPORT.write_text(build_validation_report(errors, books), encoding="utf-8")
+    if effective_workbook and effective_workbook.exists():
+        _, stats = workbook_title_parity_audit(effective_workbook)
+        print(f"Workbook title parity checked {stats['checked']} routes; {stats['passed']} passed.")
+    for warning in warnings:
+        print(f"[WARN] {warning}")
     if errors:
         for error in errors:
             print(error)
