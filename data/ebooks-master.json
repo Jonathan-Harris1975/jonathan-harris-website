@@ -7,7 +7,7 @@
     "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
-    "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
+    "summary": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -37,7 +37,7 @@
     "pages": 227,
     "asin": "B0DQHSD858",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -45,8 +45,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Formula 1.",
     "who_for": "Best for people weighing real adoption choices in Formula 1. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where milliseconds beat marketing myths.",
+      "The useful detail sits here: strategy calls, telemetry, and pace.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -60,7 +60,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where milliseconds beat marketing myths."
         }
       },
       {
@@ -142,7 +142,7 @@
     "pages": 205,
     "asin": "B0DQK6C563",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -150,8 +150,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Veterinary Medicine.",
     "who_for": "Written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who need a clearer read on what AI can and cannot do in Veterinary Medicine, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
+      "Where AI is already being used in healthcare today — and where diagnostics meet day-to-day care.",
+      "The practical argument turns on case triage, trust, and treatment.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -165,7 +165,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in healthcare today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in healthcare today — and where diagnostics meet day-to-day care."
         }
       },
       {
@@ -247,7 +247,7 @@
     "pages": 338,
     "asin": "B0DMKFZ3W3",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems.",
@@ -255,8 +255,8 @@
     "what_this_book_covers": "It shows where AI fits inside Smart Grid, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes Smart Grid in practice, especially grid operators, infrastructure planners, policy teams, and readers tracking energy systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in energy today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical energy use cases, explained in plain English.",
+      "Where AI is already being used in energy today — and where grid maths meets field reality.",
+      "The operational detail that matters: grid load, faults, and resilience.",
       "Key themes including demand forecasting, grid balancing, renewables, efficiency.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -270,7 +270,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in energy today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in energy today — and where grid maths meets field reality."
         }
       },
       {
@@ -325,7 +325,7 @@
     "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
-    "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors.",
     "topic": "Transportation",
     "topic_slug": "transportation",
     "topic_url": "/catalogue/transportation/",
@@ -353,7 +353,7 @@
     "pages": 339,
     "asin": "B0DMQLK6LY",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -361,8 +361,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Logistics.",
     "who_for": "Best for people weighing real adoption choices in Logistics. It is written for operators, planners, analysts, product teams, and readers tracking mobility systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where routing models hit warehouse floors.",
+      "The useful detail sits here: routing logic, stock flow, and timing.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -376,7 +376,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where routing models hit warehouse floors."
         }
       },
       {
@@ -458,7 +458,7 @@
     "pages": 224,
     "asin": "B0DQHTBSWJ",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change.",
@@ -466,8 +466,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in law.",
     "who_for": "Written for lawyers, compliance teams, policy readers, and anyone tracking legal change who need a clearer read on what AI can and cannot do in law, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in law today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical law use cases, explained in plain English.",
+      "Where AI is already being used in law today — and where precedent meets messy deployment.",
+      "The operational detail that matters: case law, compliance, and grey areas.",
       "Key themes including contracts, research, compliance, risk.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -481,7 +481,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in law today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in law today — and where precedent meets messy deployment."
         }
       },
       {
@@ -563,7 +563,7 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
@@ -571,8 +571,8 @@
     "what_this_book_covers": "It shows where AI fits inside Cyber Security, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes Cyber Security in practice, especially security teams, risk managers, founders, and readers tracking digital defence looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in cyber security today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical cyber security use cases, explained in plain English.",
+      "Where AI is already being used in cyber security today — and where attacks outpace slide decks.",
+      "The working detail is in attack paths, defence, and risk.",
       "Key themes including threat detection, breach prevention, automation, response.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -586,7 +586,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in cyber security today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in cyber security today — and where attacks outpace slide decks."
         }
       },
       {
@@ -642,7 +642,7 @@
     "short": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
-    "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment.",
     "topic": "Artificial Intelligence",
     "topic_slug": "artificial-intelligence",
     "topic_url": "/catalogue/artificial-intelligence/",
@@ -668,7 +668,7 @@
     "pages": 14,
     "asin": "B0DMYF3YH3",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
@@ -676,8 +676,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in artificial intelligence itself.",
     "who_for": "Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in artificial intelligence today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical artificial intelligence use cases, explained in plain English.",
+      "Where AI is already being used in artificial intelligence today — and where theory collides with deployment.",
+      "The day-to-day pressure points are theory, limits, and real deployment.",
       "Key themes including use cases, governance, trade-offs, adoption.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -691,7 +691,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in artificial intelligence today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in artificial intelligence today — and where theory collides with deployment."
         }
       },
       {
@@ -768,7 +768,7 @@
     "pages": 284,
     "asin": "B0DMKTLMX6",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -776,8 +776,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Aviation.",
     "who_for": "Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in Aviation, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where safety systems meet hard limits.",
+      "The thing worth paying attention to is flight safety, failure modes, and ops.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -791,7 +791,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where safety systems meet hard limits."
         }
       },
       {
@@ -871,7 +871,7 @@
     "pages": 312,
     "asin": "B0DMMTGNDJ",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -879,8 +879,8 @@
     "what_this_book_covers": "It shows where AI fits inside Maritime, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes Maritime in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where ports, fleets, and costs collide.",
+      "The practical reading starts with port systems, delays, and fuel use.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -894,7 +894,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where ports, fleets, and costs collide."
         }
       },
       {
@@ -946,7 +946,7 @@
     "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
-    "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation.",
     "topic": "Healthcare",
     "topic_slug": "healthcare",
     "topic_url": "/catalogue/healthcare/",
@@ -974,7 +974,7 @@
     "pages": 328,
     "asin": "B0DN4XSLK9",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -982,8 +982,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Pharmaceuticals.",
     "who_for": "Best for people weighing real adoption choices in Pharmaceuticals. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
+      "Where AI is already being used in healthcare today — and where lab promise meets regulation.",
+      "The meaningful detail runs through trials, regulation, and lab friction.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -997,7 +997,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in healthcare today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in healthcare today — and where lab promise meets regulation."
         }
       },
       {
@@ -1076,7 +1076,7 @@
     "pages": 324,
     "asin": "B0DMYQV1LY",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -1084,8 +1084,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry.",
     "who_for": "Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in the automotive industry, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where sensors meet traffic and liability.",
+      "The serious implementation view covers road risk, autonomy, and liability.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1099,7 +1099,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where sensors meet traffic and liability."
         }
       },
       {
@@ -1180,7 +1180,7 @@
     "pages": 234,
     "asin": "B0DMYHW17M",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience.",
@@ -1188,8 +1188,8 @@
     "what_this_book_covers": "It shows where AI fits inside Retail, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes Retail in practice, especially retail operators, ecommerce teams, merchandisers, and readers tracking customer experience looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in retail today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical retail use cases, explained in plain English.",
+      "Where AI is already being used in retail today — and where basket data meets buyer patience.",
+      "The grounded view of deployment comes through: customer data, stock, and margin.",
       "Key themes including personalisation, inventory, forecasting, customer experience.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1203,7 +1203,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in retail today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in retail today — and where basket data meets buyer patience."
         }
       },
       {
@@ -1258,7 +1258,7 @@
     "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
-    "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
+    "summary": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite.",
     "topic": "Manufacturing",
     "topic_slug": "manufacturing",
     "topic_url": "/catalogue/manufacturing/",
@@ -1286,7 +1286,7 @@
     "pages": 369,
     "asin": "B0DMV2Q6TF",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation.",
@@ -1294,8 +1294,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Manufacturing.",
     "who_for": "Best for people weighing real adoption choices in Manufacturing. It is written for operations leaders, plant teams, engineers, and readers tracking industrial automation who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in manufacturing today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical manufacturing use cases, explained in plain English.",
+      "Where AI is already being used in manufacturing today — and where uptime, scrap, and margins bite.",
+      "The day-to-day pressure points are uptime, quality, and plant reality.",
       "Key themes including predictive maintenance, quality control, automation, supply chains.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1309,7 +1309,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in manufacturing today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in manufacturing today — and where uptime, scrap, and margins bite."
         }
       },
       {
@@ -1392,7 +1392,7 @@
     "pages": 347,
     "asin": "B0DMV47ZRL",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change.",
@@ -1400,8 +1400,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Industry.",
     "who_for": "Written for operations leaders, analysts, engineers, and readers tracking industrial change who need a clearer read on what AI can and cannot do in Industry, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in industry today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical industry use cases, explained in plain English.",
+      "Where AI is already being used in industry today — and where plant floors test every promise.",
+      "The day-to-day pressure points are industrial systems, risk, and return.",
       "Key themes including industry, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1415,7 +1415,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in industry today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in industry today — and where plant floors test every promise."
         }
       },
       {
@@ -1494,7 +1494,7 @@
     "pages": 277,
     "asin": "B0DMMVN17Z",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -1502,8 +1502,8 @@
     "what_this_book_covers": "It shows how AI affects attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in ethics today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.",
+      "Where AI is already being used in ethics today — and where convenience starts taxing attention.",
+      "The reality check comes from attention, habits, and drift.",
       "Key themes including ethics, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1517,7 +1517,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in ethics today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in ethics today — and where convenience starts taxing attention."
         }
       },
       {
@@ -1568,7 +1568,7 @@
     "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
-    "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter.",
     "topic": "Agriculture",
     "topic_slug": "agriculture",
     "topic_url": "/catalogue/agriculture/",
@@ -1596,7 +1596,7 @@
     "pages": 330,
     "asin": "B0DMN32J3Y",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers.",
@@ -1604,8 +1604,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Agriculture.",
     "who_for": "Best for people weighing real adoption choices in Agriculture. It is written for farm operators, ag-tech teams, sustainability readers, and policy-minded observers who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in agriculture today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical agriculture use cases, explained in plain English.",
+      "Where AI is already being used in agriculture today — and where weather, margins, and soil matter.",
+      "The useful detail sits here: yield data, labour, and seasons.",
       "Key themes including agriculture, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1619,7 +1619,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in agriculture today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in agriculture today — and where weather, margins, and soil matter."
         }
       },
       {
@@ -1700,7 +1700,7 @@
     "pages": 323,
     "asin": "B0DMKXWQDK",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change.",
@@ -1708,8 +1708,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Education.",
     "who_for": "Written for teachers, school leaders, edtech teams, and readers tracking classroom change who need a clearer read on what AI can and cannot do in Education, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in education today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical education use cases, explained in plain English.",
+      "Where AI is already being used in education today — and where classroom goals beat shiny demos.",
+      "The decision points that actually count: learning design, bias, and outcomes.",
       "Key themes including adaptive learning, assessment, admin automation, access.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1723,7 +1723,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in education today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in education today — and where classroom goals beat shiny demos."
         }
       },
       {
@@ -1804,7 +1804,7 @@
     "pages": 286,
     "asin": "B0DML75B3C",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure.",
@@ -1812,8 +1812,8 @@
     "what_this_book_covers": "It shows where AI fits inside Banking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes Banking in practice, especially bankers, risk teams, fintech readers, and anyone tracking financial infrastructure looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in finance today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical finance use cases, explained in plain English.",
+      "Where AI is already being used in finance today — and where fraud models meet compliance desks.",
+      "The practical mechanics worth watching: fraud controls, models, and trust.",
       "Key themes including fraud detection, risk scoring, compliance, personalisation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1827,7 +1827,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in finance today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in finance today — and where fraud models meet compliance desks."
         }
       },
       {
@@ -1880,7 +1880,7 @@
     "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
-    "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement.",
     "topic": "Healthcare",
     "topic_slug": "healthcare",
     "topic_url": "/catalogue/healthcare/",
@@ -1908,7 +1908,7 @@
     "pages": 348,
     "asin": "B0DM73FR3W",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -1916,8 +1916,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in healthcare.",
     "who_for": "Best for people weighing real adoption choices in healthcare. It is written for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in healthcare today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.",
+      "Where AI is already being used in healthcare today — and where clinical use meets human judgement.",
+      "The less glamorous but more useful part is clinical judgement, data, and harm.",
       "Key themes including diagnosis, monitoring, decision support, workflow.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -1931,7 +1931,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in healthcare today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in healthcare today — and where clinical use meets human judgement."
         }
       },
       {
@@ -2011,7 +2011,7 @@
     "pages": 319,
     "asin": "B0DMQMGLP4",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment.",
@@ -2019,8 +2019,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Construction.",
     "who_for": "Written for developers, site managers, architects, and readers tracking the built environment who need a clearer read on what AI can and cannot do in Construction, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in construction today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.",
+      "Where AI is already being used in construction today — and where sites, crews, and delays decide.",
+      "The less glamorous but more useful part is site ops, safety, and delays.",
       "Key themes including planning, site safety, computer vision, digital twins.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2034,7 +2034,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in construction today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in construction today — and where sites, crews, and delays decide."
         }
       },
       {
@@ -2114,7 +2114,7 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
@@ -2122,8 +2122,8 @@
     "what_this_book_covers": "It shows where AI fits inside the future of work, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes the future of work in practice, especially managers, workers, founders, and readers tracking labour-market change looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in future of work today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical future of work use cases, explained in plain English.",
+      "Where AI is already being used in future of work today — and where job redesign beats slogan fog.",
+      "The grounded takeaway centres on job design, skills, and leverage.",
       "Key themes including automation, reskilling, productivity, labour markets.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2137,7 +2137,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in future of work today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in future of work today — and where job redesign beats slogan fog."
         }
       },
       {
@@ -2191,7 +2191,7 @@
     "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
-    "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. It follows the working pressures that define government, especially where services meet scrutiny and budget.",
     "topic": "Government",
     "topic_slug": "government",
     "topic_url": "/catalogue/government/",
@@ -2219,7 +2219,7 @@
     "pages": 328,
     "asin": "B0DM74CRSD",
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
@@ -2227,8 +2227,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in government.",
     "who_for": "Best for people weighing real adoption choices in government. It is written for public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in government today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical government use cases, explained in plain English.",
+      "Where AI is already being used in government today — and where services meet scrutiny and budget.",
+      "The serious implementation view covers public trust, systems, and budgets.",
       "Key themes including service delivery, fraud prevention, policy analysis, public trust.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2242,7 +2242,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in government today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in government today — and where services meet scrutiny and budget."
         }
       },
       {
@@ -2325,7 +2325,7 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
@@ -2333,8 +2333,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in smart buildings.",
     "who_for": "Written for developers, site managers, architects, and readers tracking the built environment who need a clearer read on what AI can and cannot do in smart buildings, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in construction today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.",
+      "Where AI is already being used in construction today — and where sensors meet maintenance budgets.",
+      "The less glamorous but more useful part is building ops, costs, and comfort.",
       "Key themes including planning, site safety, computer vision, digital twins.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2348,7 +2348,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in construction today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in construction today — and where sensors meet maintenance budgets."
         }
       },
       {
@@ -2429,7 +2429,7 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
@@ -2437,8 +2437,8 @@
     "what_this_book_covers": "It shows where AI fits inside modern warfare, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes modern warfare in practice, especially defence analysts, procurement teams, policy readers, and anyone tracking military technology looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in defence today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical defence use cases, explained in plain English.",
+      "Where AI is already being used in defence today — and where autonomy meets command risk.",
+      "The reality check comes from command risk, autonomy, and doctrine.",
       "Key themes including defence, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2452,7 +2452,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in defence today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in defence today — and where autonomy meets command risk."
         }
       },
       {
@@ -2505,7 +2505,7 @@
     "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
     "description": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
-    "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
+    "summary": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits.",
     "topic": "Environment",
     "topic_slug": "environment",
     "topic_url": "/catalogue/environment/",
@@ -2533,7 +2533,7 @@
     "pages": 221,
     "asin": "B0DQK6B53Z",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2541,8 +2541,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Wildlife Conservation.",
     "who_for": "Best for people weighing real adoption choices in Wildlife Conservation. It is written for conservation teams, climate readers, policy staff, and sustainability-minded operators who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in environment today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.",
+      "Where AI is already being used in environment today — and where field data meets habitat limits.",
+      "The operational story really sits in field sensing, habitat, and risk.",
       "Key themes including monitoring, biodiversity, satellite analysis, conservation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2556,7 +2556,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in environment today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in environment today — and where field data meets habitat limits."
         }
       },
       {
@@ -2638,7 +2638,7 @@
     "pages": 338,
     "asin": "B0DM72JZ44",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2646,8 +2646,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in climate and environmental strategy.",
     "who_for": "Written for conservation teams, climate readers, policy staff, and sustainability-minded operators who need a clearer read on what AI can and cannot do in climate and environmental strategy, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in environment today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.",
+      "Where AI is already being used in environment today — and where emissions maths meets policy friction.",
+      "The nuts-and-bolts angle covers carbon maths, policy, and scale.",
       "Key themes including monitoring, biodiversity, satellite analysis, conservation.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2661,7 +2661,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in environment today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in environment today — and where emissions maths meets policy friction."
         }
       },
       {
@@ -2741,7 +2741,7 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -2749,8 +2749,8 @@
     "what_this_book_covers": "It shows where AI fits inside railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in transportation today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.",
+      "Where AI is already being used in transportation today — and where signalling meets service reality.",
+      "The reality check comes from signalling, safety, and uptime.",
       "Key themes including routing, prediction, safety, operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2764,7 +2764,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in transportation today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in transportation today — and where signalling meets service reality."
         }
       },
       {
@@ -2818,7 +2818,7 @@
     "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
-    "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. It follows the working pressures that define Sports, especially where performance data meets human nerves.",
     "topic": "Sports",
     "topic_slug": "sports",
     "topic_url": "/catalogue/sports/",
@@ -2846,7 +2846,7 @@
     "pages": 229,
     "asin": "B0DQFJ6XP5",
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view.",
@@ -2854,8 +2854,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Sports.",
     "who_for": "Best for people weighing real adoption choices in Sports. It is written for coaches, analysts, operators, and fans who want the practical view who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in sports today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical sports use cases, explained in plain English.",
+      "Where AI is already being used in sports today — and where performance data meets human nerves.",
+      "The serious implementation view covers performance data, tactics, and nerves.",
       "Key themes including performance analysis, injury prevention, coaching, fan engagement.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2869,7 +2869,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in sports today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in sports today — and where performance data meets human nerves."
         }
       },
       {
@@ -2950,7 +2950,7 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2958,8 +2958,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in filmmaking.",
     "who_for": "Written for creators, producers, editors, and readers tracking how tools reshape creative work who need a clearer read on what AI can and cannot do in filmmaking, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in creativity today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.",
+      "Where AI is already being used in creativity today — and where production budgets meet creative calls.",
+      "The useful detail sits here: workflows, budgets, and authorship.",
       "Key themes including music, film, writing, copyright.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -2973,7 +2973,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in creativity today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in creativity today — and where production budgets meet creative calls."
         }
       },
       {
@@ -3055,7 +3055,7 @@
     "pages": 295,
     "asin": "B0DY666TZJ",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -3063,8 +3063,8 @@
     "what_this_book_covers": "It shows where AI fits inside music, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes music in practice, especially creators, producers, editors, and readers tracking how tools reshape creative work looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in creativity today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.",
+      "Where AI is already being used in creativity today — and where new tools meet old rights fights.",
+      "The useful detail sits here: rights fights, tools, and taste.",
       "Key themes including music, film, writing, copyright.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3078,7 +3078,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in creativity today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in creativity today — and where new tools meet old rights fights."
         }
       },
       {
@@ -3131,7 +3131,7 @@
     "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
     "description": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
-    "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost.",
     "topic": "History",
     "topic_slug": "history",
     "topic_url": "/catalogue/history/",
@@ -3159,7 +3159,7 @@
     "pages": 302,
     "asin": "B0DY5MRT6K",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field.",
@@ -3167,8 +3167,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in the history of artificial intelligence.",
     "who_for": "Best for people weighing real adoption choices in the history of artificial intelligence. It is written for readers who want the backstory, the milestones, and the people behind the field who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in history today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical history use cases, explained in plain English.",
+      "Where AI is already being used in history today — and where breakthroughs meet the human cost.",
+      "The operational story really sits in history, motives, and fallout.",
       "Key themes including history, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3182,7 +3182,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in history today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in history today — and where breakthroughs meet the human cost."
         }
       },
       {
@@ -3265,7 +3265,7 @@
     "pages": 327,
     "asin": "B0DY4PSD8Z",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -3273,8 +3273,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in gambling.",
     "who_for": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in gambling, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in ethics today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.",
+      "Where AI is already being used in ethics today — and where optimisation meets ethical lines.",
+      "The sharper operational lens is on risk scoring, consent, and harm.",
       "Key themes including ethics, artificial intelligence, ai trends, law.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3288,7 +3288,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in ethics today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in ethics today — and where optimisation meets ethical lines."
         }
       },
       {
@@ -3371,7 +3371,7 @@
     "pages": 350,
     "asin": "B0DY4Q2Q2D",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems.",
@@ -3379,8 +3379,8 @@
     "what_this_book_covers": "It shows where AI fits inside space exploration, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes space exploration in practice, especially science readers, engineers, mission planners, and anyone tracking research-heavy systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in science today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical science use cases, explained in plain English.",
+      "Where AI is already being used in science today — and where mission risk beats sci-fi gloss.",
+      "The serious implementation view covers mission risk, autonomy, and delay.",
       "Key themes including autonomous systems, mission planning, sensor data, space operations.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3394,7 +3394,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in science today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in science today — and where mission risk beats sci-fi gloss."
         }
       },
       {
@@ -3447,7 +3447,7 @@
     "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
     "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
     "description": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
-    "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.",
+    "summary": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure.",
     "topic": "Media",
     "topic_slug": "media",
     "topic_url": "/catalogue/media/",
@@ -3475,7 +3475,7 @@
     "pages": 334,
     "asin": "B0DY4NP1WF",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems.",
@@ -3483,8 +3483,8 @@
     "what_this_book_covers": "It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in journalism.",
     "who_for": "Best for people weighing real adoption choices in journalism. It is written for journalists, editors, platform teams, and readers tracking information systems who want practical context rather than brochure copy.",
     "what_youll_learn": [
-      "Where AI is already being used in media today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.",
+      "Where AI is already being used in media today — and where deadlines meet verification pressure.",
+      "The practical mechanics worth watching: verification, deadlines, and pressure.",
       "Key themes including reporting workflows, moderation, personalisation, deepfakes.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3498,7 +3498,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in media today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in media today — and where deadlines meet verification pressure."
         }
       },
       {
@@ -3578,7 +3578,7 @@
     "pages": 334,
     "asin": "B0DY12Z1SP",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems.",
@@ -3586,8 +3586,8 @@
     "what_this_book_covers": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in social media.",
     "who_for": "Written for journalists, editors, platform teams, and readers tracking information systems who need a clearer read on what AI can and cannot do in social media, without wading through technical theatre.",
     "what_youll_learn": [
-      "Where AI is already being used in media today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.",
+      "Where AI is already being used in media today — and where feeds meet moderation blowback.",
+      "The decision points that actually count: feeds, moderation, and influence.",
       "Key themes including reporting workflows, moderation, personalisation, deepfakes.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3601,7 +3601,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in media today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in media today — and where feeds meet moderation blowback."
         }
       },
       {
@@ -3684,7 +3684,7 @@
     "pages": 344,
     "asin": "B0DY18CYT6",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-28T04:19:28Z",
+    "dateModified": "2026-03-28T21:48:58Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems.",
@@ -3692,8 +3692,8 @@
     "what_this_book_covers": "It shows where AI fits inside game development, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
     "who_for": "Suits readers who want to understand how AI changes game development in practice, especially game developers, designers, producers, and readers tracking interactive systems looking for grounded examples and fewer slogans.",
     "what_youll_learn": [
-      "Where AI is already being used in gaming today — and where the claims are running ahead of reality.",
-      "The workflows, systems, and trade-offs behind practical gaming use cases, explained in plain English.",
+      "Where AI is already being used in gaming today — and where design tricks meet player intent.",
+      "The operational detail that matters: npc logic, difficulty, and design.",
       "Key themes including gaming, artificial intelligence, ai trends.",
       "The limits, risks, and awkward questions worth asking before you sign off on the sales pitch."
     ],
@@ -3707,7 +3707,7 @@
         "name": "What will I learn from this book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Where AI is already being used in gaming today — and where the claims are running ahead of reality."
+          "text": "Where AI is already being used in gaming today — and where design tricks meet player intent."
         }
       },
       {
