@@ -618,6 +618,28 @@ def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
     return errors
 
 
+def title_contract_errors(relative_path: str, repo_title: str, workbook_title: str) -> List[str]:
+    errors: List[str] = []
+    brand_suffix = f" | {SITE_NAME}"
+    if relative_path.startswith("ebooks/") and relative_path.endswith("/index.html"):
+        if not repo_title.endswith(brand_suffix):
+            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' is missing the brand suffix.")
+        if len(repo_title) > 60:
+            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title length {len(repo_title)} exceeds 60 characters.")
+        return errors
+    if relative_path == "api/docs/index.html":
+        if repo_title != f"AI Author API Docs | {SITE_NAME}":
+            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' does not match the governed descriptive title.")
+        return errors
+    if relative_path == "glossary/index.html":
+        if repo_title != f"AI Glossary: Key Terms Explained | {SITE_NAME}":
+            errors.append(f"Workbook Pages title governance failed for {relative_path}: repo title '{repo_title}' does not match the governed descriptive title.")
+        return errors
+    if repo_title != workbook_title:
+        errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
+    return errors
+
+
 def workbook_static_route_contract_errors(workbook_path: Path) -> List[str]:
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
     if "Pages" not in wb.sheetnames:
@@ -644,8 +666,7 @@ def workbook_static_route_contract_errors(workbook_path: Path) -> List[str]:
         title_match = re.search(r"<title>(.*?)</title>", html_text, re.I | re.S)
         if title_match:
             repo_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
-            if repo_title != workbook_title:
-                errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
+            errors.extend(title_contract_errors(relative_path, repo_title, workbook_title))
         canonical_match = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', html_text, re.I)
         if canonical_match and public_path:
             canonical_path = url_to_path(canonical_match.group(1))
@@ -2708,6 +2729,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if f'/ebooks/{book["slug"]}/' not in index_html:
                 errors.append(f"ebooks/index.html does not link to /ebooks/{book['slug']}/.")
 
+    seen_serp_titles: Dict[str, str] = {}
+    duplicate_serp_titles: Dict[str, List[str]] = defaultdict(list)
     for book in books:
         page_path = EBOOKS_DIR / book["slug"] / "index.html"
         metadata_path = EBOOKS_DIR / book["slug"] / "metadata.json"
@@ -2722,14 +2745,26 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"{book['slug']} should emit exactly one FAQPage JSON-LD block.")
         if text.count('"@type":"Book"') != 1:
             errors.append(f"{book['slug']} should emit exactly one Book JSON-LD block.")
-        expected_title = html.escape(f"{book_meta_title(book)} | {SITE_NAME}", quote=False)
+        title_match = re.search(r"<title>(.*?)</title>", text, re.I | re.S)
+        if not title_match:
+            errors.append(f"{book['slug']} page head title is missing.")
+        else:
+            actual_title = clean_paragraph(html.unescape(re.sub(r"\s+", " ", title_match.group(1))))
+            if not actual_title.endswith(f" | {SITE_NAME}"):
+                errors.append(f"{book['slug']} page title is missing the brand suffix.")
+            if len(actual_title) > 60:
+                errors.append(f"{book['slug']} page title exceeds 60 characters.")
+            if actual_title in seen_serp_titles and seen_serp_titles[actual_title] != book['slug']:
+                duplicate_serp_titles[actual_title].extend([seen_serp_titles[actual_title], book['slug']])
+            else:
+                seen_serp_titles[actual_title] = book['slug']
+        expected_social_title = html.escape(f"{book_meta_title(book)} | {SITE_NAME}", quote=False)
         for marker in [
-            f'<title>{expected_title}</title>',
-            f'<meta content="{expected_title}" property="og:title"/>',
-            f'<meta content="{expected_title}" name="twitter:title"/>',
+            f'<meta content="{expected_social_title}" property="og:title"/>',
+            f'<meta content="{expected_social_title}" name="twitter:title"/>',
         ]:
             if marker not in text:
-                errors.append(f"{book['slug']} page head title drift detected.")
+                errors.append(f"{book['slug']} page social title drift detected.")
                 break
         expected_desc = html.escape(book_meta_description(book), quote=True)
         for marker in [
@@ -2761,6 +2796,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         topic_page = ROOT / book["topic_url"].strip("/") / "index.html"
         if not book.get("topic_url") or not topic_page.exists():
             errors.append(f"{book['slug']} is missing a governed topic discovery page.")
+
+    for title, slugs in duplicate_serp_titles.items():
+        unique_slugs = sorted(set(slugs))
+        if len(unique_slugs) > 1:
+            errors.append(f"Duplicate ebook SERP title '{title}' used by: {', '.join(unique_slugs)}")
 
     discovery_pages = [
         {
