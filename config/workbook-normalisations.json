@@ -11,6 +11,10 @@
     "who_for": {
       "raw": "Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
       "approved": "Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy."
+    },
+    "summary": {
+      "raw": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment."
     }
   },
   "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": {
@@ -63,6 +67,72 @@
     "why_it_matters": {
       "raw": "Ai in gambling is one of those areas where AI can help, but only if the claims survive contact with autonomy, fairness, consent, and social trust. That is where this book keeps its attention.",
       "approved": "AI in gambling is one of those areas where AI can help, but only if the claims survive contact with autonomy, fairness, consent, and social trust. That is where this book keeps its attention."
+    }
+  },
+  "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": {
+    "summary": {
+      "raw": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
+      "approved": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths."
+    }
+  },
+  "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": {
+    "summary": {
+      "raw": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors."
+    }
+  },
+  "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": {
+    "summary": {
+      "raw": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation."
+    }
+  },
+  "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": {
+    "summary": {
+      "raw": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
+      "approved": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite."
+    }
+  },
+  "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": {
+    "summary": {
+      "raw": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter."
+    }
+  },
+  "digital-diagnosis-how-ai-is-revolutionizing-healthcare": {
+    "summary": {
+      "raw": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement."
+    }
+  },
+  "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": {
+    "summary": {
+      "raw": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. It follows the working pressures that define government, especially where services meet scrutiny and budget."
+    }
+  },
+  "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": {
+    "summary": {
+      "raw": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
+      "approved": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits."
+    }
+  },
+  "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": {
+    "summary": {
+      "raw": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. It follows the working pressures that define Sports, especially where performance data meets human nerves."
+    }
+  },
+  "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": {
+    "summary": {
+      "raw": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost."
+    }
+  },
+  "from-reporters-to-robots-how-ai-is-reshaping-journalism": {
+    "summary": {
+      "raw": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.",
+      "approved": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure."
     }
   }
 }
