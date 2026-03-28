@@ -1,36 +1,123 @@
-Validation run: 2026-03-28T04:19:28Z
-Book count: 36
-Topic count: 24
+POST-REMEDIATION VALIDATION RECORD
+This file is a manual post-remediation validation record for the 2026-03-28 remediation pass.
+It is not a pre-remediation clean-pass CI artefact.
+Validation timestamp (UTC): 2026-03-28T15:31:22Z
+Repository root: /mnt/data/jhsite_extract/jonathan-harris-website-main
 
-Topics:
-- Agriculture: 1
-- Artificial Intelligence: 1
-- Construction: 2
-- Creativity: 2
-- Cyber Security: 1
-- Defence: 1
-- Education: 1
-- Energy: 1
-- Environment: 2
-- Ethics: 2
-- Finance: 1
-- Future of Work: 1
-- Gaming: 1
-- Government: 1
-- Healthcare: 3
-- History: 1
-- Industry: 1
-- Law: 1
-- Manufacturing: 1
-- Media: 2
-- Retail: 1
-- Science: 1
-- Sports: 1
-- Transportation: 6
+Resolved this pass:
+- P0-001 topics/index.html stale Terms of Use artefact: RESOLVED
+- P0-002 release evidence drift: RESOLVED FOR THIS PASS via this post-remediation record plus changed-file manifest hash
+- P1-004 ebook SERP title governance: APPLIED TO 36 canonical ebook pages
+- P2-005 descriptive title expansions: APPLIED TO /api/docs/ and /glossary/
+- P2-006 404 false-affordance search block: REMOVED AND REPLACED WITH recovery CTA block
+- P2-007 podcast first-party fallback prominence: IMPROVED; /contact/ and /newsletter/ already met the visible-fallback requirement
+- P2-008 CSP script-origin pruning: PARTIALLY APPLIED (unused fonts.googleapis.com removed from script directives; unsafe-inline retained due inline scripts)
+- P2-009 ebooks/index.html payload trim: APPLIED
 
-Status: PASSED
-- Route registry complete
-- Route manifest and host redirect coverage checks passed
-- Topic discovery pages exist for every book
-- Metadata and FAQ checks passed
-- Generated crawler snapshots and redirect governance checks passed
+No source edit applied for:
+- P1-003 data/ebooks-master.json: workbook-to-master comparison returned 0 mismatches after the repository's approved workbook normalisations were applied.
+
+Validation commands and outcomes:
+1) python3 -m json.tool data/ebooks-master.json > /dev/null
+   Outcome: PASS
+2) Python workbook-normalised drift check against data/ebooks-master.json
+   Outcome: PASS (0 mismatches after approved normalisations)
+3) Python local HTML/metadata assertions for topics/index.html, 36 ebook titles, api/docs/index.html, glossary/index.html, 404.html, podcast/index.html, _headers, and ebooks/index.html
+   Outcome: PASS
+4) python3 scripts/validate_release.py --workbook /mnt/data/jonathan-harris-site-url-inventory-remediated-release-ready.xlsx
+   Outcome: PASS
+   Note: scripts/ebook_pipeline.py was updated so the repo-native validator recognises governed short SERP titles on canonical ebook pages and the deliberately expanded descriptive titles on /api/docs/ and /glossary/.
+
+Changed files in this pass:
+- topics/index.html
+- ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html
+- ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html
+- ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html
+- ebooks/ai-in-education-reimagining-learning-for-every-student/index.html
+- ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html
+- ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html
+- ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html
+- ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html
+- ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html
+- ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html
+- ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html
+- ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html
+- ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html
+- ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html
+- ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html
+- ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html
+- ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html
+- ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html
+- ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html
+- ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html
+- ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html
+- ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html
+- ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html
+- ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html
+- ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html
+- ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html
+- ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html
+- ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html
+- ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html
+- ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html
+- ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html
+- ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html
+- ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html
+- ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html
+- ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html
+- ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html
+- api/docs/index.html
+- glossary/index.html
+- 404.html
+- podcast/index.html
+- _headers
+- ebooks/index.html
+- scripts/ebook_pipeline.py
+- VALIDATION_OUTPUT.txt
+
+Changed-file manifest SHA-256 (excluding VALIDATION_OUTPUT.txt to avoid self-reference): 890c60300acbc935d5fed2b8862ad10a86033fa18ebbb90eb2a1af8f873090fa
+Changed-file SHA-256 entries:
+480907d21503e4234a653bf732015382f26cda411a9ca463fcb64b402d42791e  topics/index.html
+9af9a8dfc31c6a36d558adbe4347e0bf5acd19d7ed583d23fb5721f97de4bb6a  ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html
+0f154185befec001f1b744e17a1d3c613a6747416c11906ab8aa6d2cfa427e10  ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html
+458340827f0ad51e38932883d4557de158146007fc598815be3c71ef90b40739  ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html
+a6834177e2ed0a39fb4d7836330c9e2514abc1c90f32cc93347ab7b78673d126  ebooks/ai-in-education-reimagining-learning-for-every-student/index.html
+aec654a5d8775655babc5eb9a5775192fa2ced2e43135ded9ebcb8ac6780a51e  ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html
+dff6373fcb6db80b10c778ade34a9a8beb2b3b50027775e97f0fd07970673728  ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html
+c831663a5b7ce8df2571072412a64ad048bce7a811c39ca111192ee0f7667934  ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html
+836103da1d25f1b677c3bd74569cd9530e620ce31f4a73772b47e13b8bebc264  ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html
+2b1d48176b265fa029d92435499882d77ecda313dba993dd4928c20046dfc0b6  ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html
+f3acfaf0f5199bc39ed3f28e9df7c24e402d4f454057d99d5f500ce601c51435  ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html
+226b83def9074eec6027260881c3fe52927cb94581080ac3657eb9eb6f1b73d9  ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html
+9cf08f215b69de6825ba07ba04a8976dc1398c9469f2358e7dc2051b013f94e6  ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html
+1ece921a76fce1cae05d8181c435f3a133fcb800406f5095144040241a2d1b32  ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html
+42180683af729fb48e3a9083c4f2db931098f998159c50d811e8fba3bff7538d  ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html
+4cc9b411c8356319fbf4fa3049f6ad66457c6e2426daf4ab8fab59d437d11e50  ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html
+de151e77e7e9150fec1b63a1ce1c2179e08cce7cc034ddf4653d00b8f7641792  ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html
+629d48bb35b1454cf005651d56a2c5faf99212c2fd34b9c1e4de8166c6b88d74  ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html
+82ea50b42a1eb1f8d994df63ecb1c24a53ffd2bafd2a31c83891ed7f8fd8fcb6  ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html
+7a595aa4523928f267419775d32d6a79fa09f25bb34aade7f5522ab6bd80bf24  ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html
+afe71a5e2521d291f17c219e2cca04307058aa1c1c5bb68a2b373f83c56fe86d  ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html
+b4c5a0129b886e3ff47fcd26b81b0f6c1d9be84b3e7327ce67c28b3d8211756a  ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html
+ec4fcf082c74a83491c3e746e729c047d4e88434c63f5936105375755202fadf  ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html
+d718de5b455aa3d0bc43a6c46551dc243de555b277af0b9ec79ce297d5042fdc  ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html
+98aa797b7c7a36e3e0699ce54f47587ac2e043eda76b8d1f9154039180c25a7e  ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html
+12949428192a1fea30769de53d1b977070b3bf1f401899bce65ccb49c888a99b  ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html
+d2cd5a3aea08324ebcec090c20ed827a29c49714ab4cc74fd3e9686e22c935e8  ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html
+c166a218fa7917e866a02d1ac0f7dac44d369907644e84ccba98b76f96040af5  ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html
+4c5e67c66b7d77f1a2baf08548fd040da4abf4efa2879b6cc380c19a07a6dba0  ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html
+8bee884db2b8d0dc6d79073d3f3ba6712da48084175826a02ecc9dd461140dd7  ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html
+fa05fdf204bf93a2a2a4316260cbcc9ca8ebc1b6e5f46a79df4e41afb262a4fd  ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html
+f8382ebaf33bdbfd7164e0ef6e55b6a583ebec0eef5f3d32c6a3c2bdf7cd9999  ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html
+1845fcab9abdca0ffdfbfdcba2126b43fbb5b851fd4240d6ea32c4c6deda6b5c  ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html
+35d1aa83b2420ab06f4a24b1b5cebb8776b94418b3305ffafc82ee21bfd4c48e  ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html
+a3f7248f0d581f0e52cd148ef1550558832bc11ba6889a93febbdc8574a3bc77  ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html
+7276ad26d2c11233de7cc05cabf50c55f63f225ec10423fda489b48fb42cf88b  ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html
+65d2bd3994fcd2db6fdade8e6f010e6ace677c64435b49efea2bd3c2a83588d3  ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html
+e1dec0bd3ae35cc280055da0b4f856d08e85b5fa12a7ae3208288d20d85c86c9  api/docs/index.html
+812b3cb850629cb7624759448fa76f586b251af372751eaebd10306f3ff867d9  glossary/index.html
+4b5d0f5f0e618c7788b1409604c8fb25e785c26f9b52fd2d07456803749281df  404.html
+9e4f23b44c62f0a41d0bc972b65c09c9b81503a880a9f0ea3b6a1db93a140b5d  podcast/index.html
+6dd239da7b80f4ca5fc3f396241dde18532ed265177d580a67316bc607572ab5  _headers
+8122e80e7f49f3f47489b52e998f4973622b2918c945404c80aeea6f89266ec7  ebooks/index.html
+65821b12da26e216d9a0bd57617b0fabf1a111bd984dcf6dfdbad6dd5845dac4  scripts/ebook_pipeline.py
