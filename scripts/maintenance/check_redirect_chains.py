@@ -91,16 +91,22 @@ def validate_support_redirects(timeout: float) -> list[str]:
     return errors
 
 
+def run_redirect_checks(timeout: float) -> list[str]:
+    books = load_master()
+    errors: list[str] = []
+    for book in books:
+        errors.extend(validate_book_chain(book, timeout))
+    errors.extend(validate_support_redirects(timeout))
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Verify the live buy-now redirect chains and key support aliases.")
     parser.add_argument("--timeout", type=float, default=15.0, help="HTTP timeout in seconds. Default: 15")
     args = parser.parse_args()
 
     books = load_master()
-    errors: list[str] = []
-    for book in books:
-        errors.extend(validate_book_chain(book, args.timeout))
-    errors.extend(validate_support_redirects(args.timeout))
+    errors = run_redirect_checks(args.timeout)
 
     if errors:
         for error in errors:
