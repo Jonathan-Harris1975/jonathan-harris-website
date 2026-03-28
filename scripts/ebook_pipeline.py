@@ -792,6 +792,31 @@ def build_breadcrumb_schema(book: Dict[str, Any]) -> Dict[str, Any]:
 
 
 
+def build_topic_breadcrumb_schema(topic: str) -> Dict[str, Any]:
+    topic_slug = slugify(topic)
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE_URL}/"},
+            {"@type": "ListItem", "position": 2, "name": "Topics", "item": f"{SITE_URL}/topics/"},
+            {"@type": "ListItem", "position": 3, "name": topic, "item": f"{SITE_URL}/catalogue/{topic_slug}/"},
+        ],
+    }
+
+
+
+def render_topic_breadcrumbs(topic: str) -> str:
+    return "".join([
+        '<a href="/">Home</a>',
+        '<span aria-hidden="true">›</span>',
+        '<a href="/topics/">Topics</a>',
+        '<span aria-hidden="true">›</span>',
+        f'<span>{html.escape(topic)}</span>',
+    ])
+
+
+
 def parse_master_sheet(
     ws: openpyxl.worksheet.worksheet.Worksheet,
     *,
@@ -998,6 +1023,77 @@ def default_why_it_matters(topic: str) -> str:
     return f"Because AI in {topic_lc} changes decisions, workflows, and risk. Getting the basics right matters before the hype machine starts throwing confetti."
 
 
+TOPIC_FAMILY_GROUPS = {
+    "regulated": {"Healthcare", "Law", "Finance", "Government", "Education", "Defence"},
+    "operations": {"Manufacturing", "Industry", "Transportation", "Construction", "Energy", "Agriculture", "Retail"},
+    "security": {"Cyber Security"},
+    "creative": {"Creativity", "Media", "Gaming"},
+    "foundation": {"Artificial Intelligence", "Ethics", "History", "Science", "Future of Work"},
+    "environment": {"Environment"},
+    "sports": {"Sports"},
+}
+
+
+def topic_family(topic: str) -> str:
+    topic_name = clean_paragraph(topic)
+    for family, topics in TOPIC_FAMILY_GROUPS.items():
+        if topic_name in topics:
+            return family
+    return "general"
+
+
+def showcase_subhead(book: Dict[str, Any]) -> str:
+    family = topic_family(book.get("topic", ""))
+    return {
+        "regulated": "From adoption choices to compliance, evidence, and real-world consequence.",
+        "operations": "From plant-floor realities to process gains, failure modes, and trade-offs.",
+        "security": "From detection and response to attacker adaptation and operational noise.",
+        "creative": "From creative acceleration to ownership disputes, trust, and control.",
+        "foundation": "From first principles to practical claims, limitations, and sharper judgement.",
+        "environment": "From environmental promise to measurable outcomes, constraints, and trade-offs.",
+        "sports": "From performance analysis to human judgement, edge cases, and competitive trade-offs.",
+    }.get(family, "From practical applications to real-world trade-offs.")
+
+
+def showcase_note(book: Dict[str, Any]) -> str:
+    family = topic_family(book.get("topic", ""))
+    return {
+        "regulated": "Built for sectors where evidence, accountability, and consequences matter more than shiny demos.",
+        "operations": "Built for environments where uptime, throughput, safety, and cost have no patience for AI theatre.",
+        "security": "Built for domains where noise, adversaries, and bad assumptions tend to arrive together.",
+        "creative": "Built for work where the tool can be useful at speed and still leave a rights-shaped mess behind it.",
+        "foundation": "Built for readers who want the machinery, the claims, and the caveats without the standing ovation.",
+        "environment": "Built for readers who want environmental realism, not green-tinted product brochures.",
+        "sports": "Built for people who know the numbers matter, but not more than the humans using them.",
+    }.get(family, "Straight-talking, practical, and deliberately light on hype.")
+
+
+def practical_outcomes_intro(book: Dict[str, Any]) -> str:
+    family = topic_family(book.get("topic", ""))
+    return {
+        "regulated": "You should finish it able to spot where the tooling helps, where oversight has to tighten, and which claims deserve a raised eyebrow.",
+        "operations": "You should finish it with a clearer feel for where AI improves the workflow, where it adds fragility, and what to pilot before anyone starts chest-thumping.",
+        "security": "You should finish it better at separating useful automation from noisy promises and more alert to where attackers or blind spots creep in.",
+        "creative": "You should finish it with a sharper sense of where the tool genuinely helps the work and where it starts borrowing tomorrow's headache.",
+        "foundation": "You should finish it with the jargon translated, the stronger claims stress-tested, and a better map of where to dig deeper.",
+        "environment": "You should finish it better able to tell the difference between measurable gains, modelling optimism, and plain old green lipstick on a dashboard.",
+        "sports": "You should finish it able to judge which parts belong to data, which still belong to coaches and athletes, and where the line keeps moving.",
+    }.get(family, "You should leave this one with clearer judgement, fewer lazy assumptions, and a better sense of where to press further or walk away.")
+
+
+def default_distinct_angle(title: str, topic: str) -> str:
+    family = topic_family(topic)
+    topic_lc = topic.lower()
+    return {
+        "regulated": f"{title} keeps its eye on evidence, accountability, and the point where a slick demo meets real-world responsibility in {topic_lc}.",
+        "operations": f"{title} keeps its boots on the ground, looking at workflow, failure modes, and whether the gains survive contact with real operations in {topic_lc}.",
+        "security": f"{title} keeps the focus on signal, defence, and the cost of getting the call wrong in {topic_lc}.",
+        "creative": f"{title} keeps one eye on craft and the other on ownership, control, and the compromises hiding inside convenience in {topic_lc}.",
+        "foundation": f"{title} keeps the applause to a minimum and asks what the systems actually do, what they break, and what they are being oversold to solve in {topic_lc}.",
+        "environment": f"{title} keeps the focus on measurable environmental value in {topic_lc} rather than eco-flavoured marketing copy.",
+        "sports": f"{title} keeps the focus on performance, judgement, and how data changes decisions in {topic_lc} without pretending sport becomes an equation.",
+    }.get(family, f"{title} keeps the focus on practical judgement in {topic_lc} rather than drifting into brochure-speak.")
+
 
 WORKBOOK_GOVERNED_COPY_FIELDS = (
     ("title", "title"),
@@ -1201,7 +1297,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "what_youll_learn": what_youll_learn,
             "why_it_matters": why_it_matters,
             "showcase_heading": clean_paragraph(content.get("showcase_heading")) or (f"How AI is reshaping {topic.lower()}" if topic.lower() != "artificial intelligence" else "AI without the carnival barker routine"),
-            "distinct_angle": clean_paragraph(content.get("distinct_angle")) or f"{title} keeps the focus on practical judgement in {topic.lower()} rather than drifting into brochure-speak.",
+            "distinct_angle": clean_paragraph(content.get("distinct_angle")) or default_distinct_angle(title, topic),
             "notes": workbook.get("notes", ""),
         }
         book = sanitise_record_copy(book)
@@ -1412,9 +1508,19 @@ def chapter_signal_cards(book: Dict[str, Any]) -> str:
 
 def problem_framing(book: Dict[str, Any]) -> str:
     topic_lc = book["topic"].lower()
-    return (
-        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. "
-        f"This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches."
+    family = topic_family(book.get("topic", ""))
+    frames = {
+        "regulated": f"{book['topic']} is where speed, evidence, compliance, and accountability all start elbowing each other for room. This title keeps the focus on what AI is genuinely doing in {topic_lc}, where oversight has to tighten, and where the expensive mistakes tend to hide.",
+        "operations": f"{book['topic']} is where efficiency claims meet maintenance logs, handovers, failure modes, and people who still have to run the place. This title looks at what AI is actually changing in {topic_lc}, which gains are solid, and where the shiny promise falls apart under operational pressure.",
+        "security": f"{book['topic']} is one of those domains where signal, false positives, attacker behaviour, and tool sprawl all collide at speed. This title looks at what AI is really doing in {topic_lc}, where it strengthens the work, and where automation simply changes the shape of the problem.",
+        "creative": f"{book['topic']} gets messy fast because speed, originality, ownership, and platform incentives do not naturally get along. This title looks at what AI is really doing in {topic_lc}, what it improves, and what it muddies the moment the convenience starts looking irresistible.",
+        "foundation": f"{book['topic']} is one of those areas where the argument gets noisy very quickly: claims versus evidence, fluency versus substance, novelty versus context. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts creating fresh headaches.",
+        "environment": f"{book['topic']} attracts hopeful claims because everyone likes a cleaner future and a clever dashboard. This title looks at what AI is actually doing in {topic_lc}, where the measurable gains are, and where the story outruns the evidence.",
+        "sports": f"{book['topic']} sits in that awkward space where numbers can sharpen judgement or flatten it into false certainty. This title looks at what AI is actually doing in {topic_lc}, where the edge is real, and where the human part still refuses to disappear.",
+    }
+    return frames.get(
+        family,
+        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches.",
     )
 
 
@@ -1543,11 +1649,11 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
       <article class="card ebook-showcase__content">
         <h2>{html.escape(book['showcase_heading'])}</h2>
         <p class="ebook-showcase__lead">{html.escape(book['what_this_book_covers'])}</p>
-        <p class="ebook-showcase__subhead">From practical applications to real-world trade-offs.</p>
+        <p class="ebook-showcase__subhead">{html.escape(showcase_subhead(book))}</p>
         <ul class="ebook-signal-list">
           {''.join(f'<li>► {html.escape(item)}</li>' for item in book.get('what_youll_learn', [])[:3])}
         </ul>
-        <p class="ebook-showcase__note">Straight-talking, practical, and deliberately light on hype.</p>
+        <p class="ebook-showcase__note">{html.escape(showcase_note(book))}</p>
         <div class="ebook-inline-actions">
           <a href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
           <a href="#deeper-overview">Read full overview</a>
@@ -1595,7 +1701,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 
     <section class="card ebook-section">
       <h2>Practical outcomes</h2>
-      <p>You should leave this one with clearer judgement, fewer lazy assumptions, and a better sense of where to press further or walk away.</p>
+      <p>{html.escape(practical_outcomes_intro(book))}</p>
       <ul class="ebook-learn-list">
         {signal_items}
       </ul>
@@ -1856,6 +1962,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <link href="{canonical}" hreflang="en" rel="alternate"/>
 <link href="{canonical}" hreflang="x-default" rel="alternate"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
+<script type="application/ld+json">{json_script(build_topic_breadcrumb_schema(topic))}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 </head>
@@ -1870,7 +1977,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 </header>
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
-    <nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/ebooks/">eBooks</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>
+    <nav aria-label="Breadcrumb" class="breadcrumbs">{render_topic_breadcrumbs(topic)}</nav>
     <section class="card ebook-index-intro">
       <h2>{len(books)} title{'s' if len(books) != 1 else ''} in this topic</h2>
       <p>Every title keeps the same clear structure, so you can compare books quickly and jump straight to the one you need.</p>
@@ -2920,6 +3027,74 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 max_description=max_description,
             )
         )
+
+    for topic in sorted({book["topic"] for book in books}, key=str.lower):
+        topic_slug = slugify(topic)
+        page_path = CATALOGUE_DIR / topic_slug / "index.html"
+        if not page_path.exists():
+            errors.append(f"Catalogue topic page missing for breadcrumb validation: {page_path.relative_to(ROOT)}")
+            continue
+        page_text = page_path.read_text(encoding="utf-8", errors="ignore")
+        expected_nav = f'<nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/topics/">Topics</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>'
+        if expected_nav not in page_text:
+            errors.append(f"Catalogue breadcrumb trail drift detected for {page_path.relative_to(ROOT)}.")
+        breadcrumb_payload = json.dumps(build_topic_breadcrumb_schema(topic), ensure_ascii=False, separators=(",", ":"))
+        if breadcrumb_payload not in page_text:
+            errors.append(f"Catalogue breadcrumb schema missing or drifted for {page_path.relative_to(ROOT)}.")
+        for cover_match in re.finditer(r'<img\b[^>]*class="([^"]*\bcover\b[^"]*)"[^>]*>', page_text, re.I):
+            tag = cover_match.group(0)
+            if 'srcset="' not in tag or 'sizes="' not in tag:
+                errors.append(f"Responsive cover markup missing from {page_path.relative_to(ROOT)}.")
+                break
+            if not all(f" {width}w" in tag for width in (400, 800, 1200)):
+                errors.append(f"Responsive cover widths drift detected for {page_path.relative_to(ROOT)}.")
+                break
+
+    homepage_text = (ROOT / "index.html").read_text(encoding="utf-8", errors="ignore")
+    featured_cover_match = re.search(r'<img\b[^>]*id="featuredEbookCover"[^>]*>', homepage_text, re.I)
+    if not featured_cover_match:
+        errors.append("Homepage featured cover image is missing.")
+    else:
+        featured_tag = featured_cover_match.group(0)
+        if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
+            errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
+        elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
+            errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
+
+    for book in books:
+        page_path = EBOOKS_DIR / book["slug"] / "index.html"
+        if not page_path.exists():
+            continue
+        page_text = page_path.read_text(encoding="utf-8", errors="ignore")
+        cover_match = re.search(r'<img\b[^>]*class="([^"]*\bebook-showcase__cover\b[^"]*)"[^>]*>', page_text, re.I)
+        if not cover_match:
+            errors.append(f"Book cover block missing from {page_path.relative_to(ROOT)}.")
+            continue
+        cover_tag = cover_match.group(0)
+        if 'srcset="' not in cover_tag or 'sizes="' not in cover_tag:
+            errors.append(f"Responsive book cover markup missing from {page_path.relative_to(ROOT)}.")
+            continue
+        if not all(f" {width}w" in cover_tag for width in (400, 800, 1200)):
+            errors.append(f"Responsive book cover widths drift detected for {page_path.relative_to(ROOT)}.")
+
+    js_responsive_checks = {
+        ROOT / "assets" / "js" / "featured-book.js": ["/cdn-cgi/image/width=", "[400, 800, 1200]"],
+        ROOT / "assets" / "js" / "books.js": ["/cdn-cgi/image/width=", "[400, 800, 1200]"],
+    }
+    for file_path, required_snippets in js_responsive_checks.items():
+        file_text = file_path.read_text(encoding="utf-8", errors="ignore")
+        for snippet in required_snippets:
+            if snippet not in file_text:
+                errors.append(f"Responsive image helper drift detected in {file_path.relative_to(ROOT)}: missing {snippet}")
+
+    removal_plan_path = ROOT / "docs" / "search-console-stale-url-removal-plan.md"
+    if not removal_plan_path.exists():
+        errors.append("Search Console stale URL remediation plan is missing: docs/search-console-stale-url-removal-plan.md")
+    else:
+        removal_plan_text = removal_plan_path.read_text(encoding="utf-8", errors="ignore")
+        for snippet in ["/en-gb/", "/en-au/", "/book/", "Search Console", "Request indexing", "Removals"]:
+            if snippet not in removal_plan_text:
+                errors.append(f"Search Console stale URL remediation plan is missing required guidance: {snippet}")
 
     static_topic_pages = [
         ROOT / "topics" / "ai-for-beginners" / "index.html",

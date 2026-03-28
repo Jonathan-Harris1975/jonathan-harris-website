@@ -29,7 +29,8 @@ TOPIC_INTRO_OVERRIDES = {
     "Transportation": "These titles cover AI in transportation across road, rail, air, and sea. The emphasis is on safety, logistics, reliability, and what happens when optimisation starts steering systems people actually depend on.",
 }
 
-RESPONSIVE_IMAGE_WIDTHS = (180, 240, 320, 480, 640, 960, 1280)
+RESPONSIVE_IMAGE_WIDTHS = (400, 800, 1200)
+IMAGE_RESIZE_PREFIX = "/cdn-cgi/image"
 
 
 def topic_intro(topic: str) -> str:
@@ -91,14 +92,26 @@ def audience_faq_answer(audience: str, topic: str) -> str:
     return normalise_audience_copy(audience, topic)
 
 
-def build_same_source_srcset(src: str, intrinsic_width: int | None) -> str:
-    """Return an empty srcset until the pipeline has real width-specific variants.
+def build_resized_image_url(src: str, width: int, *, quality: int = 85, fit: str = "scale-down") -> str:
+    cleaned = (src or "").strip()
+    if not cleaned or cleaned.startswith(f"{IMAGE_RESIZE_PREFIX}/"):
+        return cleaned
+    if cleaned.lower().endswith(".svg"):
+        return cleaned
+    options = f"width={int(width)},quality={int(quality)},fit={fit},format=auto"
+    return f"{IMAGE_RESIZE_PREFIX}/{options}/{cleaned}"
 
-    Repeating the same source URL across width descriptors misleads browsers and
-    validation tooling into believing responsive candidates exist when they do not.
-    The caller should fall back to a plain src-only image in that case.
-    """
-    return ""
+
+def build_same_source_srcset(src: str, intrinsic_width: int | None) -> str:
+    cleaned = (src or "").strip()
+    if not cleaned:
+        return ""
+    if cleaned.lower().endswith(".svg"):
+        return ""
+    widths = [width for width in RESPONSIVE_IMAGE_WIDTHS if intrinsic_width is None or width <= intrinsic_width]
+    if not widths:
+        widths = [RESPONSIVE_IMAGE_WIDTHS[0]]
+    return ", ".join(f"{build_resized_image_url(cleaned, width)} {width}w" for width in widths)
 
 
 def cover_sizes(class_name: str = "") -> str:
