@@ -7,8 +7,8 @@
 https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
 # 2) Crawler / discovery assets
-/404   /404.html   404
-/404/  /404.html   404
+# Explicit /404 status is enforced by functions/404.js because Cloudflare Pages
+# does not support 404 rewrites in _redirects. Keep the branded body in 404.html.
 
 
 # 3) Locale canonicalisation (collapse locale aliases onto the canonical path)
