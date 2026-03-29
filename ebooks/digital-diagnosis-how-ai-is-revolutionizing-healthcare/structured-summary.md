@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.
+Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices in healthcare. It is written for 
 
 ## What you’ll learn
 
-- Where AI is already being used in healthcare today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.
+- Where AI is already being used in healthcare today — and where clinical use meets human judgement.
+- The less glamorous but more useful part is clinical judgement, data, and harm.
 - Key themes including diagnosis, monitoring, decision support, workflow.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
