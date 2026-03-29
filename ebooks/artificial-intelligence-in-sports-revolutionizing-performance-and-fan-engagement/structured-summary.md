@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.
+Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. It follows the working pressures that define Sports, especially where performance data meets human nerves.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices in Sports. It is written for coac
 
 ## What you’ll learn
 
-- Where AI is already being used in sports today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical sports use cases, explained in plain English.
+- Where AI is already being used in sports today — and where performance data meets human nerves.
+- The serious implementation view covers performance data, tactics, and nerves.
 - Key themes including performance analysis, injury prevention, coaching, fan engagement.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
