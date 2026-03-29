@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes the future of work in practi
 
 ## What you’ll learn
 
-- Where AI is already being used in future of work today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical future of work use cases, explained in plain English.
+- Where AI is already being used in future of work today — and where job redesign beats slogan fog.
+- The grounded takeaway centres on job design, skills, and leverage.
 - Key themes including automation, reskilling, productivity, labour markets.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
