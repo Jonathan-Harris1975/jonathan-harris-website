@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.
+Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices in Pharmaceuticals. It is written
 
 ## What you’ll learn
 
-- Where AI is already being used in healthcare today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.
+- Where AI is already being used in healthcare today — and where lab promise meets regulation.
+- The meaningful detail runs through trials, regulation, and lab friction.
 - Key themes including diagnosis, monitoring, decision support, workflow.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
