@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes Maritime in practice, especi
 
 ## What you’ll learn
 
-- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Where AI is already being used in transportation today — and where ports, fleets, and costs collide.
+- The practical reading starts with port systems, delays, and fuel use.
 - Key themes including routing, prediction, safety, operations.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
