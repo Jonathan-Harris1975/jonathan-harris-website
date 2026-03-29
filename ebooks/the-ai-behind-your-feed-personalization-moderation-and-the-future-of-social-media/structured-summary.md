@@ -14,8 +14,8 @@ Written for journalists, editors, platform teams, and readers tracking informati
 
 ## What you’ll learn
 
-- Where AI is already being used in media today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.
+- Where AI is already being used in media today — and where feeds meet moderation blowback.
+- The decision points that actually count: feeds, moderation, and influence.
 - Key themes including reporting workflows, moderation, personalisation, deepfakes.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
