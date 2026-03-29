@@ -14,8 +14,8 @@ Written for operations leaders, analysts, engineers, and readers tracking indust
 
 ## What you’ll learn
 
-- Where AI is already being used in industry today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical industry use cases, explained in plain English.
+- Where AI is already being used in industry today — and where plant floors test every promise.
+- The day-to-day pressure points are industrial systems, risk, and return.
 - Key themes including industry, artificial intelligence, ai trends.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
