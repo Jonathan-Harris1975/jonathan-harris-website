@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.
+Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices in journalism. It is written for 
 
 ## What you’ll learn
 
-- Where AI is already being used in media today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical media use cases, explained in plain English.
+- Where AI is already being used in media today — and where deadlines meet verification pressure.
+- The practical mechanics worth watching: verification, deadlines, and pressure.
 - Key themes including reporting workflows, moderation, personalisation, deepfakes.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
