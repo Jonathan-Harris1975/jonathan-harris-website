@@ -14,8 +14,8 @@ Written for conservation teams, climate readers, policy staff, and sustainabilit
 
 ## What you’ll learn
 
-- Where AI is already being used in environment today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.
+- Where AI is already being used in environment today — and where emissions maths meets policy friction.
+- The nuts-and-bolts angle covers carbon maths, policy, and scale.
 - Key themes including monitoring, biodiversity, satellite analysis, conservation.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
