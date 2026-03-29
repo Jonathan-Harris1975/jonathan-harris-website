@@ -14,8 +14,8 @@ Written for developers, site managers, architects, and readers tracking the buil
 
 ## What you’ll learn
 
-- Where AI is already being used in construction today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical construction use cases, explained in plain English.
+- Where AI is already being used in construction today — and where sensors meet maintenance budgets.
+- The less glamorous but more useful part is building ops, costs, and comfort.
 - Key themes including planning, site safety, computer vision, digital twins.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
