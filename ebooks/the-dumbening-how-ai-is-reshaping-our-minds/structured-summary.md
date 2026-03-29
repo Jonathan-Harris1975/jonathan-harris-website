@@ -14,8 +14,8 @@ Suits readers who want to understand how AI shapes attention and thinking in pra
 
 ## What you’ll learn
 
-- Where AI is already being used in ethics today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.
+- Where AI is already being used in ethics today — and where convenience starts taxing attention.
+- The reality check comes from attention, habits, and drift.
 - Key themes including ethics, artificial intelligence, ai trends.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
