@@ -14,8 +14,8 @@ Written for teachers, school leaders, edtech teams, and readers tracking classro
 
 ## What you’ll learn
 
-- Where AI is already being used in education today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical education use cases, explained in plain English.
+- Where AI is already being used in education today — and where classroom goals beat shiny demos.
+- The decision points that actually count: learning design, bias, and outcomes.
 - Key themes including adaptive learning, assessment, admin automation, access.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
