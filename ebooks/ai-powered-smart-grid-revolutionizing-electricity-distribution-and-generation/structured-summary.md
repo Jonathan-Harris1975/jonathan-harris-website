@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes Smart Grid in practice, espe
 
 ## What you’ll learn
 
-- Where AI is already being used in energy today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical energy use cases, explained in plain English.
+- Where AI is already being used in energy today — and where grid maths meets field reality.
+- The operational detail that matters: grid load, faults, and resilience.
 - Key themes including demand forecasting, grid balancing, renewables, efficiency.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
