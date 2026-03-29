@@ -14,8 +14,8 @@ Written for creators, producers, editors, and readers tracking how tools reshape
 
 ## What you’ll learn
 
-- Where AI is already being used in creativity today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.
+- Where AI is already being used in creativity today — and where production budgets meet creative calls.
+- The useful detail sits here: workflows, budgets, and authorship.
 - Key themes including music, film, writing, copyright.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
