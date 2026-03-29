@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes game development in practice
 
 ## What you’ll learn
 
-- Where AI is already being used in gaming today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical gaming use cases, explained in plain English.
+- Where AI is already being used in gaming today — and where design tricks meet player intent.
+- The operational detail that matters: npc logic, difficulty, and design.
 - Key themes including gaming, artificial intelligence, ai trends.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
