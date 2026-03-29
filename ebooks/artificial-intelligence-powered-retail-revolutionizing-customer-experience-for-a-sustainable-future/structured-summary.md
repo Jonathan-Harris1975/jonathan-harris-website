@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes Retail in practice, especial
 
 ## What you’ll learn
 
-- Where AI is already being used in retail today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical retail use cases, explained in plain English.
+- Where AI is already being used in retail today — and where basket data meets buyer patience.
+- The grounded view of deployment comes through: customer data, stock, and margin.
 - Key themes including personalisation, inventory, forecasting, customer experience.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
