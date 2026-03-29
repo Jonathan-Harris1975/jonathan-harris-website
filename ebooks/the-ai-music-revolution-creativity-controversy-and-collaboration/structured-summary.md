@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes music in practice, especiall
 
 ## What you’ll learn
 
-- Where AI is already being used in creativity today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical creativity use cases, explained in plain English.
+- Where AI is already being used in creativity today — and where new tools meet old rights fights.
+- The useful detail sits here: rights fights, tools, and taste.
 - Key themes including music, film, writing, copyright.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
