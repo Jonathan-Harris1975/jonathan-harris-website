@@ -14,8 +14,8 @@ Written for policy readers, educators, sceptics, and anyone thinking about AI's 
 
 ## What you’ll learn
 
-- Where AI is already being used in ethics today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical ethics use cases, explained in plain English.
+- Where AI is already being used in ethics today — and where optimisation meets ethical lines.
+- The sharper operational lens is on risk scoring, consent, and harm.
 - Key themes including ethics, artificial intelligence, ai trends, law.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
