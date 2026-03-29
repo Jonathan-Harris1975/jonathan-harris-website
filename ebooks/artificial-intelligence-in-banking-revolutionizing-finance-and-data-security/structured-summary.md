@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes Banking in practice, especia
 
 ## What you’ll learn
 
-- Where AI is already being used in finance today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical finance use cases, explained in plain English.
+- Where AI is already being used in finance today — and where fraud models meet compliance desks.
+- The practical mechanics worth watching: fraud controls, models, and trust.
 - Key themes including fraud detection, risk scoring, compliance, personalisation.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
