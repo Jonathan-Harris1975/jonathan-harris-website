@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes Cyber Security in practice, 
 
 ## What you’ll learn
 
-- Where AI is already being used in cyber security today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical cyber security use cases, explained in plain English.
+- Where AI is already being used in cyber security today — and where attacks outpace slide decks.
+- The working detail is in attack paths, defence, and risk.
 - Key themes including threat detection, breach prevention, automation, response.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
