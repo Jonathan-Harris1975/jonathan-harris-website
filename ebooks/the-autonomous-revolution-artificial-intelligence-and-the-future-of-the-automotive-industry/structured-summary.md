@@ -14,8 +14,8 @@ Written for operators, planners, analysts, product teams, and readers tracking m
 
 ## What you’ll learn
 
-- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Where AI is already being used in transportation today — and where sensors meet traffic and liability.
+- The serious implementation view covers road risk, autonomy, and liability.
 - Key themes including routing, prediction, safety, operations.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
