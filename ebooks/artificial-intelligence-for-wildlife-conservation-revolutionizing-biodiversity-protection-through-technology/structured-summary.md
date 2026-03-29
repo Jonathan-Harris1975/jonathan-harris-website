@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.
+A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices in Wildlife Conservation. It is w
 
 ## What you’ll learn
 
-- Where AI is already being used in environment today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical environment use cases, explained in plain English.
+- Where AI is already being used in environment today — and where field data meets habitat limits.
+- The operational story really sits in field sensing, habitat, and risk.
 - Key themes including monitoring, biodiversity, satellite analysis, conservation.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
