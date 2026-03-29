@@ -2,7 +2,7 @@
 
 ## Summary
 
-Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.
+Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment.
 
 ## What this book covers
 
@@ -14,8 +14,8 @@ Best for people weighing real adoption choices across artificial intelligence. I
 
 ## What you’ll learn
 
-- Where AI is already being used in artificial intelligence today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical artificial intelligence use cases, explained in plain English.
+- Where AI is already being used in artificial intelligence today — and where theory collides with deployment.
+- The day-to-day pressure points are theory, limits, and real deployment.
 - Key themes including use cases, governance, trade-offs, adoption.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
