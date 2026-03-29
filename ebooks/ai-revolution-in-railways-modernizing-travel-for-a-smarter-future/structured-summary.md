@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes railways in practice, especi
 
 ## What you’ll learn
 
-- Where AI is already being used in transportation today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical transportation use cases, explained in plain English.
+- Where AI is already being used in transportation today — and where signalling meets service reality.
+- The reality check comes from signalling, safety, and uptime.
 - Key themes including routing, prediction, safety, operations.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
