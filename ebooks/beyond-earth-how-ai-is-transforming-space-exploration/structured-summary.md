@@ -14,8 +14,8 @@ Suits readers who want to understand how AI changes space exploration in practic
 
 ## What you’ll learn
 
-- Where AI is already being used in science today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical science use cases, explained in plain English.
+- Where AI is already being used in science today — and where mission risk beats sci-fi gloss.
+- The serious implementation view covers mission risk, autonomy, and delay.
 - Key themes including autonomous systems, mission planning, sensor data, space operations.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
