@@ -14,8 +14,8 @@ Written for clinicians, healthcare managers, founders, analysts, and readers tra
 
 ## What you’ll learn
 
-- Where AI is already being used in healthcare today — and where the claims are running ahead of reality.
-- The workflows, systems, and trade-offs behind practical healthcare use cases, explained in plain English.
+- Where AI is already being used in healthcare today — and where diagnostics meet day-to-day care.
+- The practical argument turns on case triage, trust, and treatment.
 - Key themes including diagnosis, monitoring, decision support, workflow.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
