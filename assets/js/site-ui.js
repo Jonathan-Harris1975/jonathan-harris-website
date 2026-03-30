@@ -1,4 +1,6 @@
 (function(){
+  /* Canonical shared UI bundle.
+     Includes the former gold-standard.js and ux-fixes.js behaviours. */
   try{ document.documentElement.classList.add('js-enabled'); }catch(_){ }
   if (window.__JH_SITE_UI_INIT__) return;
   window.__JH_SITE_UI_INIT__ = true;
@@ -713,6 +715,105 @@
     } catch (_) {}
   }
 
+  function createNode(tag, attrs, html){
+    var node = document.createElement(tag);
+    if (attrs){
+      Object.keys(attrs).forEach(function(key){
+        node.setAttribute(key, attrs[key]);
+      });
+    }
+    if (html !== undefined) node.innerHTML = html;
+    return node;
+  }
+
+  function wireMergedLegacyEnhancements(){
+    try{
+      var searchInput = document.getElementById('jh404-input');
+      var searchButton = document.getElementById('jh404-search-button');
+
+      function run404Search(){
+        if (!searchInput) return;
+        var query = searchInput.value.trim();
+        if (query) window.location = '/ebooks/?q=' + encodeURIComponent(query);
+      }
+
+      if (searchButton && searchButton.dataset.jh404SearchWired !== '1'){
+        searchButton.dataset.jh404SearchWired = '1';
+        searchButton.addEventListener('click', run404Search);
+      }
+
+      if (searchInput && searchInput.dataset.jh404SearchWired !== '1'){
+        searchInput.dataset.jh404SearchWired = '1';
+        searchInput.addEventListener('keydown', function(event){
+          if (event.key === 'Enter'){
+            event.preventDefault();
+            run404Search();
+          }
+        });
+      }
+
+      var backToTop = document.getElementById('bttBtn');
+      if (backToTop && backToTop.dataset.jhBackToTopWired !== '1'){
+        backToTop.dataset.jhBackToTopWired = '1';
+        backToTop.addEventListener('click', function(){
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      var discover = Array.from(document.querySelectorAll('.footer-panel')).find(function(panel){
+        return /Discover/i.test(panel.textContent || '');
+      });
+      if (discover && !discover.querySelector('.jh-topic-links')){
+        var topicLinks = createNode('div', { 'class': 'jh-topic-links' }, '<a href="/catalogue/artificial-intelligence/">Artificial Intelligence</a><a href="/catalogue/healthcare/">Healthcare</a><a href="/catalogue/ethics/">Ethics</a><a href="/catalogue/law/">Law</a>');
+        discover.appendChild(topicLinks);
+      }
+
+      if (location.pathname.startsWith('/catalogue/') && !document.querySelector('.jh-hub-intro')){
+        var catalogueMain = document.querySelector('main');
+        if (catalogueMain){
+          var hubIntro = createNode('section', { 'class': 'jh-hub-intro', 'aria-label': 'Topic hub quick links' });
+          hubIntro.innerHTML = '<h2>Use this topic hub to find the right next step</h2><p>Start with the books in this topic, then use the links below to move into the wider catalogue, the podcast, the newsletter, or related AI topics.</p><div class="jh-hub-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse all eBooks</a><a class="jh-hub-cta" href="/podcast/">Listen to the podcast</a><a class="jh-hub-cta" href="/newsletter/">Join the newsletter</a><a class="jh-hub-cta" href="/topics/">Explore AI topics</a></div>';
+          var firstContent = catalogueMain.querySelector('.breadcrumbs, .jh-breadcrumbs, h2, section, article');
+          if (firstContent) firstContent.insertAdjacentElement('beforebegin', hubIntro);
+          else catalogueMain.prepend(hubIntro);
+        }
+      }
+
+      if (location.pathname.includes('/ebooks/') && !document.querySelector('.jh-journey-panel')){
+        var ebookMain = document.querySelector('main');
+        if (ebookMain){
+          var journeyPanel = createNode('section', { 'class': 'jh-journey-panel', 'aria-label': 'Continue exploring' });
+          var titleNode = document.querySelector('h1');
+          var safeTitle = ((titleNode && titleNode.textContent) || 'this title').replace(/</g, '&lt;');
+          journeyPanel.innerHTML = '<h2>Keep exploring the Jonathan Harris AI library</h2><p>You have reached <strong>' + safeTitle + '</strong>. Use the links below to continue into the wider catalogue, the podcast, the newsletter, or a related topic hub.</p><div class="jh-journey-actions"><a href="/ebooks/">Browse all books</a><a href="/podcast/">Podcast</a><a href="/newsletter/">Newsletter</a><a href="/topics/">AI topics</a></div><p class="jh-related-callout">A quick route to more books, the podcast, and the newsletter.</p>';
+          ebookMain.appendChild(journeyPanel);
+        }
+      }
+
+      document.querySelectorAll('footer.site-footer').forEach(function(footer){
+        if (footer.closest('#siteFooter')) return;
+        if ((footer.textContent || '').trim() === '© 2026 Jonathan Harris'){
+          var mount = document.getElementById('siteFooter');
+          if (!mount){
+            mount = createNode('div', { id: 'siteFooter' });
+            footer.insertAdjacentElement('beforebegin', mount);
+          }
+          footer.remove();
+        }
+      });
+
+      document.querySelectorAll('img').forEach(function(img){
+        if (img.hasAttribute('aria-hidden') || img.getAttribute('role') === 'presentation') return;
+        var alt = img.getAttribute('alt');
+        if (alt && alt.trim()) return;
+        var src = img.getAttribute('src') || '';
+        var guess = src.split('/').pop().split('?')[0].replace(/[-_]/g, ' ').replace(/webp|jpg|jpeg|png|avif|svg/ig, '').trim();
+        img.setAttribute('alt', guess ? guess.replace(/\s+/g, ' ').replace(/\w/g, function(chr){ return chr.toUpperCase(); }) : 'Jonathan Harris website image');
+      });
+    }catch(_){ }
+  }
+
+
 async function init(){
     ensureStyles();
     ensureSkipLink();
@@ -727,6 +828,7 @@ async function init(){
     injectBackToTop();
     injectMobileNavOverlay();
     lazyLoadLargeImages();
+    wireMergedLegacyEnhancements();
 
     if (!is404Page()){
       injectBreadcrumbs();
