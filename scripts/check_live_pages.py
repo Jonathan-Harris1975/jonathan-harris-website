@@ -28,7 +28,9 @@ STYLE_RE = re.compile(r"<style\b.*?</style>", re.I | re.S)
 TAG_RE = re.compile(r"<[^>]+>")
 WHITESPACE_RE = re.compile(r"\s+")
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.I | re.S)
-CANONICAL_RE = re.compile(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)["\']', re.I)
+LINK_TAG_RE = re.compile(r"<link\b[^>]*>", re.I)
+REL_ATTR_RE = re.compile(r'\brel=["\']([^"\']+)["\']', re.I)
+HREF_ATTR_RE = re.compile(r'\bhref=["\']([^"\']+)["\']', re.I)
 H1_RE = re.compile(r"<h1[^>]*>(.*?)</h1>", re.I | re.S)
 
 
@@ -120,6 +122,20 @@ def extract_required_snippets(page: PageCheck) -> list[str]:
     return snippets
 
 
+def extract_canonical_href(raw_html: str) -> str | None:
+    for link_tag in LINK_TAG_RE.findall(raw_html):
+        rel_match = REL_ATTR_RE.search(link_tag)
+        if not rel_match:
+            continue
+        rel_values = {value.strip().lower() for value in rel_match.group(1).split()}
+        if "canonical" not in rel_values:
+            continue
+        href_match = HREF_ATTR_RE.search(link_tag)
+        if href_match:
+            return clean_paragraph(href_match.group(1))
+    return None
+
+
 def extract_contract_markers(raw_html: str, *, label: str) -> dict[str, str]:
     markers: dict[str, str] = {}
     title_match = TITLE_RE.search(raw_html)
@@ -127,10 +143,10 @@ def extract_contract_markers(raw_html: str, *, label: str) -> dict[str, str]:
         raise ValueError(f"Could not extract title from {label}")
     markers["title"] = normalise_fragment(title_match.group(1))
 
-    canonical_match = CANONICAL_RE.search(raw_html)
-    if not canonical_match:
+    canonical_href = extract_canonical_href(raw_html)
+    if not canonical_href:
         raise ValueError(f"Could not extract canonical href from {label}")
-    markers["canonical"] = clean_paragraph(canonical_match.group(1))
+    markers["canonical"] = canonical_href
 
     h1_match = H1_RE.search(raw_html)
     if not h1_match:
