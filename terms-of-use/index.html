@@ -46,7 +46,7 @@
 <link href="https://jonathan-harris.online/terms-of-use/" hreflang="en" rel="alternate"/><link href="https://jonathan-harris.online/terms-of-use/" hreflang="x-default" rel="alternate"/><link href="https://jonathan-harris.online/terms-of-use/" rel="canonical"/><meta content="Read the terms for using jonathan-harris.online — including content use, acceptable behaviour, affiliate disclosure, and liability limits." name="description"/><meta content="index,follow" name="robots"/><meta content="page" name="ai:content_type"/><meta content="terms of use, website terms, Jonathan Harris, acceptable use, affiliate disclosure" name="ai:keywords"/><meta content="https://jonathan-harris.online/terms-of-use/" property="og:url"/><meta content="Terms of Use | Jonathan Harris" property="og:title"/><meta content="Read the terms for using jonathan-harris.online — including content use, acceptable behaviour, affiliate disclosure, and liability limits." property="og:description"/><meta content="website" property="og:type"/><meta content="summary_large_image" name="twitter:card"/><meta content="Terms of Use | Jonathan Harris" name="twitter:title"/><meta content="Read the terms for using jonathan-harris.online — including content use, acceptable behaviour, affiliate disclosure, and liability limits." name="twitter:description"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Terms of Use","item":"https://jonathan-harris.online/terms-of-use/"}]}</script>
 </head>
-<body class="page-terms jh-no-hero-page">
+<body class="page-terms">
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
@@ -107,9 +107,9 @@
 <a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
 </nav>
 </header>
-<!-- FIX: Baked-in header added to ensure the hamburger menu is present on mobile
-     at the top of the page without requiring the user to scroll past the dark hero. -->
-<header aria-label="Terms of Use Header" class="dark-section" role="banner">
+<!-- Shared hero-mode marker keeps the global header visible immediately on this page
+     via the central site-ui.js reveal logic, without page-local navigation behaviour. -->
+<header aria-label="Terms of Use Header" class="dark-section hero hero--has-fixed-nav" role="banner">
 <div class="wrap">
 <img alt="Jonathan Harris site logo" class="logo" fetchpriority="high" height="180" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="180"/>
 <h1>Terms of Use</h1>
