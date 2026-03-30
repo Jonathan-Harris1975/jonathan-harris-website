@@ -2073,8 +2073,6 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <script defer="" src="/assets/js/related-books.js"></script>
 {footer}
 <script defer="" src="/assets/js/site-ui.js"></script>
-<script defer="" src="/assets/js/ux-fixes.js"></script>
-<script defer="" src="/assets/js/gold-standard.js"></script>
 </body>
 </html>
 '''
@@ -2226,8 +2224,6 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 {footer}
 <script defer="" src="/assets/js/books.js"></script>
 <script defer="" src="/assets/js/site-ui.js"></script>
-<script defer="" src="/assets/js/ux-fixes.js"></script>
-<script defer="" src="/assets/js/gold-standard.js"></script>
 </body>
 </html>
 '''
@@ -2311,8 +2307,6 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 </main>
 {footer}
 <script defer="" src="/assets/js/site-ui.js"></script>
-<script defer="" src="/assets/js/ux-fixes.js"></script>
-<script defer="" src="/assets/js/gold-standard.js"></script>
 </body>
 </html>
 '''
@@ -2387,8 +2381,6 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 </main>
 {footer}
 <script defer="" src="/assets/js/site-ui.js"></script>
-<script defer="" src="/assets/js/ux-fixes.js"></script>
-<script defer="" src="/assets/js/gold-standard.js"></script>
 </body>
 </html>
 '''
