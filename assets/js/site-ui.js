@@ -212,6 +212,7 @@
 
   function findHeaderRevealAnchor(){
     return (
+      document.querySelector('[data-jh-header-reveal-anchor]') ||
       document.querySelector('.lp-hero') ||
       document.querySelector('header.hero') ||
       document.querySelector('.hero') ||
@@ -227,7 +228,7 @@
     try{
       const target = heroEl || findHeaderRevealAnchor();
       if (!target) return true;
-      return target.classList.contains('hero--has-fixed-nav') || target.classList.contains('hero--newsletter') || target.classList.contains('hero--contact');
+      return target.hasAttribute('data-jh-header-show-immediately');
     }catch(_){
       return false;
     }
