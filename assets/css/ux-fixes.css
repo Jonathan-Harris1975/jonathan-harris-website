@@ -52,20 +52,9 @@ a.button:hover,
   }
 }
 
-/* ── Navigation: hamburger — mobile only ─────────────────────────────
-   Confirm hamburger is visible ONLY on mobile (≤768px).
-   On desktop it remains display:none from site.css.
-   This rule ensures the brand-indigo style is applied when shown. */
-.jh-hamburger {
-  background: rgba(79,70,229,0.85);
-  border: 1px solid rgba(79,70,229,0.6);
-  color: #fff;
-  min-width: 44px;
-  border-radius: 12px;
-}
-.jh-hamburger:hover {
-  background: rgba(67,56,202,0.95);
-}
+/* ── Navigation: hamburger ───────────────────────────────────────────
+   Keep blog surfaces on the canonical shared header styling from site.css.
+   Touch-target sizing remains covered by the shared 44px minimum rule above. */
 
 /* ── Active nav link indicator ───────────────────────────────────── */
 .jh-topnav a[aria-current="page"] {
