@@ -1304,6 +1304,76 @@ WORKFLOW_VARIANT_OPENERS: List[str] = [
     "The grounded takeaway centres on",
 ]
 
+SUMMARY_VARIANT_OVERRIDES: Dict[str, int] = {
+    "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": 4,
+    "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": 4,
+    "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": 12,
+    "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": 14,
+    "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": 12,
+    "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": 4,
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": 10,
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": 11,
+    "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": 13,
+    "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": 11,
+    "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": 13,
+    "from-reporters-to-robots-how-ai-is-reshaping-journalism": 1,
+}
+
+WORKFLOW_VARIANT_OVERRIDES: Dict[str, int] = {
+    "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": 4,
+    "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation": 7,
+    "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation": 0,
+    "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": 4,
+    "artificial-intelligence-and-the-law-case-studies-and-future-trends": 0,
+    "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention": 9,
+    "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": 12,
+    "ai-in-aviation-transforming-safety-and-sustainability": 16,
+    "ai-in-maritime-revolutionizing-shipping-for-sustainability": 15,
+    "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": 14,
+    "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry": 11,
+    "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future": 3,
+    "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": 12,
+    "artificial-intelligence-in-industry-a-comprehensive-guide": 12,
+    "the-dumbening-how-ai-is-reshaping-our-minds": 6,
+    "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": 4,
+    "ai-in-education-reimagining-learning-for-every-student": 2,
+    "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security": 1,
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": 10,
+    "artificial-intelligence-in-construction-building-a-sustainable-future": 10,
+    "the-artificial-intelligence-job-shift-navigating-the-future-of-work": 17,
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": 11,
+    "smart-buildings-ai-powered-efficiency-and-sustainability": 10,
+    "digital-defense-the-role-of-ai-in-modern-warfare": 6,
+    "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": 13,
+    "climate-intelligence-harnessing-ai-for-a-greener-future": 8,
+    "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": 6,
+    "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": 11,
+    "lights-camera-algorithm-ai-s-role-in-modern-filmmaking": 4,
+    "the-ai-music-revolution-creativity-controversy-and-collaboration": 4,
+    "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": 13,
+    "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": 5,
+    "beyond-earth-how-ai-is-transforming-space-exploration": 11,
+    "from-reporters-to-robots-how-ai-is-reshaping-journalism": 1,
+    "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media": 2,
+    "game-ai-unleashed-from-finite-state-machines-to-machine-learning": 0,
+}
+
+
+def stable_variant_index(key: str, size: int) -> int:
+    if size <= 0:
+        raise ValueError("Variant collections must not be empty")
+    digest = hashlib.sha256(clean_paragraph(key).encode("utf-8")).digest()
+    return int.from_bytes(digest[:8], "big") % size
+
+
+
+def variant_index_for_slug(slug: str, variants: List[str], overrides: Dict[str, int]) -> int:
+    override = overrides.get(clean_paragraph(slug))
+    if override is not None and 0 <= override < len(variants):
+        return override
+    return stable_variant_index(slug, len(variants))
+
+
 
 def replace_banned_ebook_phrases(value: str, slug: str) -> str:
     cleaned = clean_paragraph(value)
@@ -1319,7 +1389,7 @@ def replace_banned_ebook_phrases(value: str, slug: str) -> str:
             start = cleaned.index(summary_prefix)
             end = cleaned.index(summary_suffix, start) + len(summary_suffix)
             topic_fragment = cleaned[start + len(summary_prefix): cleaned.index(summary_suffix, start)].strip().rstrip(',')
-            opener = SUMMARY_VARIANT_OPENERS[abs(hash(slug)) % len(SUMMARY_VARIANT_OPENERS)]
+            opener = SUMMARY_VARIANT_OPENERS[variant_index_for_slug(slug, SUMMARY_VARIANT_OPENERS, SUMMARY_VARIANT_OVERRIDES)]
             summary_sentence = f"{opener} {topic_fragment}, especially {learn_tail}."
             cleaned = cleaned[:start] + summary_sentence + cleaned[end:]
     if advanced_tail:
@@ -1327,7 +1397,7 @@ def replace_banned_ebook_phrases(value: str, slug: str) -> str:
         workflow_prefix = "The workflows, systems, and trade-offs behind practical "
         workflow_suffix = " use cases, explained in plain English."
         if cleaned.startswith(workflow_prefix) and cleaned.endswith(workflow_suffix):
-            opener = WORKFLOW_VARIANT_OPENERS[abs(hash(slug)) % len(WORKFLOW_VARIANT_OPENERS)]
+            opener = WORKFLOW_VARIANT_OPENERS[variant_index_for_slug(slug, WORKFLOW_VARIANT_OPENERS, WORKFLOW_VARIANT_OVERRIDES)]
             if opener.endswith(":"):
                 cleaned = f"{opener} {advanced_tail}."
             else:
