@@ -988,11 +988,13 @@ def parse_workbook(
 
 
 def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
-    wb = openpyxl.load_workbook(workbook_path, data_only=True)
-    if "Pages" not in wb.sheetnames:
+    wb_values = openpyxl.load_workbook(workbook_path, data_only=True)
+    wb_formulas = openpyxl.load_workbook(workbook_path, data_only=False)
+    if "Pages" not in wb_values.sheetnames:
         return ["Workbook is missing the Pages sheet."]
 
-    ws = wb["Pages"]
+    ws = wb_values["Pages"]
+    ws_formula = wb_formulas["Pages"]
     header_row = 5
     headers = {clean_paragraph(ws.cell(header_row, col).value).lower(): col for col in range(1, ws.max_column + 1) if clean_paragraph(ws.cell(header_row, col).value)}
     required_headers = ["relative file path", "public url path", "full url", "url type", "buy now url", "redirect url", "asin", "amazon ebook page count", "publication date", "cover art url"]
@@ -1006,6 +1008,16 @@ def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
     missing_full_url: List[str] = []
     mismatched_full_url: List[str] = []
     missing_ebook_metadata: List[str] = []
+    master_by_slug = {row["slug"]: row for row in load_master()}
+
+    def has_formula(row_idx: int, header_name: str) -> bool:
+        cell = ws_formula.cell(row_idx, headers[header_name])
+        return isinstance(cell.value, str) and cell.value.startswith("=")
+
+    def slug_from_relative_path(relative_path: str) -> str:
+        if relative_path.startswith("ebooks/") and relative_path.endswith("/index.html"):
+            return relative_path[len("ebooks/"):-len("/index.html")]
+        return ""
 
     for row_idx in range(header_row + 1, ws.max_row + 1):
         relative_path = clean_paragraph(ws.cell(row_idx, headers["relative file path"]).value)
@@ -1033,15 +1045,30 @@ def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
 
         if public_path:
             expected_full_url = f"{base_domain}{public_path}" if base_domain else ""
-            if not full_url:
+            if not full_url and not has_formula(row_idx, "full url"):
                 missing_full_url.append(relative_path)
-            elif expected_full_url and full_url != expected_full_url:
+            elif full_url and expected_full_url and full_url != expected_full_url:
                 mismatched_full_url.append(relative_path)
 
         is_canonical_ebook_row = url_type == "canonical ebook route"
         if is_canonical_ebook_row:
-            if not all([buy_now_url, redirect_url, asin, page_count, publication_date, cover_art_url]):
+            slug = slug_from_relative_path(relative_path)
+            master_row = master_by_slug.get(slug, {})
+            metadata_checks = [
+                (buy_now_url, "buy now url", clean_paragraph(master_row.get("buy_route", ""))),
+                (redirect_url, "redirect url", clean_paragraph(master_row.get("buy_url", ""))),
+                (asin, "asin", clean_paragraph(master_row.get("asin", ""))),
+                (page_count, "amazon ebook page count", master_row.get("pages")),
+                (publication_date, "publication date", clean_paragraph(master_row.get("datePublished", ""))),
+                (cover_art_url, "cover art url", clean_paragraph(master_row.get("cover", ""))),
+            ]
+            for value, header_name, derived_value in metadata_checks:
+                if value not in (None, ""):
+                    continue
+                if has_formula(row_idx, header_name) and derived_value not in (None, ""):
+                    continue
                 missing_ebook_metadata.append(relative_path)
+                break
 
     if malformed_paths:
         sample = ", ".join(malformed_paths[:5])
@@ -1056,7 +1083,6 @@ def validate_pages_sheet_operational_view(workbook_path: Path) -> List[str]:
         sample = ", ".join(missing_ebook_metadata[:5])
         errors.append(f"Workbook Pages sheet has {len(missing_ebook_metadata)} canonical ebook row(s) missing cached metadata lookup values. Sample rows: {sample}")
     return errors
-
 
 
 def topic_intro(topic: str) -> str:
@@ -1510,7 +1536,14 @@ def default_short(topic: str, pages: int | None) -> str:
 
 
 def book_meta_title(book: Dict[str, Any]) -> str:
-    return clean_paragraph(book.get("title", ""))
+    title = clean_paragraph(book.get("title", ""))
+    if len(f"{title} | {SITE_NAME}") <= 90:
+        return title
+    if ":" in title:
+        short_title = clean_paragraph(title.split(":", 1)[0])
+        if short_title:
+            return short_title
+    return title
 
 
 
@@ -1549,6 +1582,16 @@ def extract_meta_description(text: str) -> str:
         if content_match:
             return html.unescape(clean_paragraph(content_match.group(2)))
     return ""
+
+def extract_img_src(tag: str) -> str:
+    match = re.search(r'\bsrc="([^"]+)"', tag, re.I)
+    return clean_paragraph(match.group(1)) if match else ""
+
+
+def is_remote_image_src(src: str) -> bool:
+    cleaned = clean_paragraph(src)
+    return cleaned.startswith(("http://", "https://"))
+
 
 def metadata_budget_errors(
     label: str,
@@ -3024,15 +3067,37 @@ def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
-def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> str:
+def build_validation_report(
+    errors: List[str],
+    books: List[Dict[str, Any]],
+    *,
+    workbook_title_stats: Dict[str, int] | None = None,
+    workbook_content_stats: Dict[str, int] | None = None,
+) -> str:
     topics = Counter(book["topic"] for book in books)
     lines = [
         f"Validation run: {governed_generated_utc(books)}",
         f"Book count: {len(books)}",
         f"Topic count: {len(topics)}",
+    ]
+    if workbook_title_stats:
+        lines.append(
+            "Workbook title parity: "
+            f"{workbook_title_stats['passed']}/{workbook_title_stats['checked']} passed, "
+            f"{workbook_title_stats['mismatched']} mismatched"
+        )
+    if workbook_content_stats:
+        lines.append(
+            "Workbook content parity: "
+            f"{workbook_content_stats['exact_matches']} exact field matches, "
+            f"{workbook_content_stats['approved_transformations']} approved transformations, "
+            f"{workbook_content_stats['mismatched']} mismatches across "
+            f"{workbook_content_stats['checked_fields']} governed field checks"
+        )
+    lines.extend([
         "",
         "Topics:",
-    ]
+    ])
     for topic, count in sorted(topics.items(), key=lambda item: item[0].lower()):
         lines.append(f"- {topic}: {count}")
     lines.append("")
@@ -3049,6 +3114,72 @@ def build_validation_report(errors: List[str], books: List[Dict[str, Any]]) -> s
     lines.append("")
     return "\n".join(lines)
 
+
+
+def workbook_content_parity_audit(
+    workbook_path: Path,
+    books: List[Dict[str, Any]] | None = None,
+) -> Tuple[List[str], Dict[str, int]]:
+    if books is None:
+        books = load_master()
+    stats = {
+        "books": 0,
+        "checked_fields": 0,
+        "exact_matches": 0,
+        "approved_transformations": 0,
+        "mismatched": 0,
+        "missing_books": 0,
+    }
+    errors: List[str] = []
+
+    order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
+    master_by_slug = {book["slug"]: book for book in books}
+    approved_normalisations = load_workbook_normalisations()
+
+    if order != [book["slug"] for book in books]:
+        errors.append("Workbook row order does not match the master record order.")
+
+    for slug, workbook in workbook_map.items():
+        stats["books"] += 1
+        book = master_by_slug.get(slug)
+        if not book:
+            stats["missing_books"] += 1
+            errors.append(f"Workbook contains slug not found in master record: {slug}")
+            continue
+        for workbook_field, master_field in [
+            ("book_url", "canonical_url"),
+            ("buy_url", "buy_url"),
+            ("buy_route", "buy_route"),
+            ("legacy_alias_url", "legacy_alias_url"),
+            ("asin", "asin"),
+            ("pages", "pages"),
+            ("datePublished", "datePublished"),
+            ("cover", "cover"),
+        ]:
+            if clean_paragraph(str(workbook.get(workbook_field, ""))) != clean_paragraph(str(book.get(master_field, ""))):
+                errors.append(f"Workbook mismatch for {slug}: {workbook_field} does not match {master_field}.")
+
+        content = workbook_content.get(slug)
+        if not content:
+            continue
+        for workbook_field, master_field in WORKBOOK_GOVERNED_COPY_FIELDS:
+            stats["checked_fields"] += 1
+            workbook_value = clean_paragraph(str(content.get(workbook_field, "")))
+            master_value = clean_paragraph(str(book.get(master_field, "")))
+            if workbook_field in {"description", "summary"}:
+                workbook_value = strip_pages_from_summary(workbook_value, book.get("pages"))
+                master_value = strip_pages_from_summary(master_value, book.get("pages"))
+            if workbook_value == master_value:
+                stats["exact_matches"] += 1
+                continue
+            approved_entry = (approved_normalisations.get(slug) or {}).get(workbook_field)
+            if approved_entry and approved_entry.get("raw") == workbook_value and approved_entry.get("approved") == master_value:
+                stats["approved_transformations"] += 1
+                continue
+            stats["mismatched"] += 1
+            errors.append(f"Workbook content mismatch for {slug}: {workbook_field} does not match {master_field}.")
+
+    return errors, stats
 
 
 def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path: Path | None = None) -> List[str]:
@@ -3445,6 +3576,12 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Catalogue breadcrumb schema missing or drifted for {page_path.relative_to(ROOT)}.")
         for cover_match in re.finditer(r'<img\b[^>]*class="([^"]*\bcover\b[^"]*)"[^>]*>', page_text, re.I):
             tag = cover_match.group(0)
+            src = extract_img_src(tag)
+            if is_remote_image_src(src):
+                if 'srcset="' in tag:
+                    errors.append(f"Remote cover should not emit generated srcset markup in {page_path.relative_to(ROOT)}.")
+                    break
+                continue
             if 'srcset="' not in tag or 'sizes="' not in tag:
                 errors.append(f"Responsive cover markup missing from {page_path.relative_to(ROOT)}.")
                 break
@@ -3458,10 +3595,15 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         errors.append("Homepage featured cover image is missing.")
     else:
         featured_tag = featured_cover_match.group(0)
-        if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
-            errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
-        elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
-            errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
+        featured_src = extract_img_src(featured_tag)
+        if is_remote_image_src(featured_src):
+            if 'srcset="' in featured_tag:
+                errors.append("Homepage featured cover should not emit generated srcset markup for a remote image.")
+        else:
+            if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
+                errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
+            elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
+                errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
 
     for book in books:
         page_path = EBOOKS_DIR / book["slug"] / "index.html"
@@ -3473,6 +3615,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Book cover block missing from {page_path.relative_to(ROOT)}.")
             continue
         cover_tag = cover_match.group(0)
+        cover_src = extract_img_src(cover_tag)
+        if is_remote_image_src(cover_src):
+            if 'srcset="' in cover_tag:
+                errors.append(f"Remote book cover should not emit generated srcset markup in {page_path.relative_to(ROOT)}.")
+            continue
         if 'srcset="' not in cover_tag or 'sizes="' not in cover_tag:
             errors.append(f"Responsive book cover markup missing from {page_path.relative_to(ROOT)}.")
             continue
@@ -3558,42 +3705,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
         errors.extend(workbook_static_route_contract_errors(workbook_path))
-        order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
-        if order != slugs:
-            errors.append("Workbook row order does not match the master record order.")
-        master_by_slug = {book["slug"]: book for book in books}
-        for slug, workbook in workbook_map.items():
-            book = master_by_slug.get(slug)
-            if not book:
-                errors.append(f"Workbook contains slug not found in master record: {slug}")
-                continue
-            for workbook_field, master_field in [
-                ("book_url", "canonical_url"),
-                ("buy_url", "buy_url"),
-                ("buy_route", "buy_route"),
-                ("legacy_alias_url", "legacy_alias_url"),
-                ("asin", "asin"),
-                ("pages", "pages"),
-                ("datePublished", "datePublished"),
-                ("cover", "cover"),
-            ]:
-                if clean_paragraph(str(workbook.get(workbook_field, ""))) != clean_paragraph(str(book.get(master_field, ""))):
-                    errors.append(f"Workbook mismatch for {slug}: {workbook_field} does not match {master_field}.")
-            content = workbook_content.get(slug)
-            if content:
-                approved_normalisations = load_workbook_normalisations()
-                for workbook_field, master_field in WORKBOOK_GOVERNED_COPY_FIELDS:
-                    workbook_value = clean_paragraph(str(content.get(workbook_field, "")))
-                    master_value = clean_paragraph(str(book.get(master_field, "")))
-                    if workbook_field in {"description", "summary"}:
-                        workbook_value = strip_pages_from_summary(workbook_value, book.get("pages"))
-                        master_value = strip_pages_from_summary(master_value, book.get("pages"))
-                    if workbook_value == master_value:
-                        continue
-                    approved_entry = (approved_normalisations.get(slug) or {}).get(workbook_field)
-                    if approved_entry and approved_entry.get("raw") == workbook_value and approved_entry.get("approved") == master_value:
-                        continue
-                    errors.append(f"Workbook content mismatch for {slug}: {workbook_field} does not match {master_field}.")
+        workbook_content_errors, _ = workbook_content_parity_audit(workbook_path, books)
+        errors.extend(workbook_content_errors)
 
     return errors
 
@@ -3717,10 +3830,30 @@ def run_validate_command(workbook_path: Path | None = None) -> int:
     errors = run_release_checks(workbook_path=effective_workbook)
     books = load_master()
     warnings = ebook_title_length_warnings(books)
-    VALIDATION_REPORT.write_text(build_validation_report(errors, books), encoding="utf-8")
+    workbook_title_stats = None
+    workbook_content_stats = None
     if effective_workbook and effective_workbook.exists():
-        _, stats = workbook_title_parity_audit(effective_workbook)
-        print(f"Workbook title parity checked {stats['checked']} routes; {stats['passed']} passed.")
+        _, workbook_title_stats = workbook_title_parity_audit(effective_workbook)
+        _, workbook_content_stats = workbook_content_parity_audit(effective_workbook, books)
+    VALIDATION_REPORT.write_text(
+        build_validation_report(
+            errors,
+            books,
+            workbook_title_stats=workbook_title_stats,
+            workbook_content_stats=workbook_content_stats,
+        ),
+        encoding="utf-8",
+    )
+    if workbook_title_stats:
+        print(f"Workbook title parity checked {workbook_title_stats['checked']} routes; {workbook_title_stats['passed']} passed.")
+    if workbook_content_stats:
+        print(
+            "Workbook content parity checked "
+            f"{workbook_content_stats['checked_fields']} governed fields across {workbook_content_stats['books']} books; "
+            f"{workbook_content_stats['exact_matches']} exact matches, "
+            f"{workbook_content_stats['approved_transformations']} approved transformations, "
+            f"{workbook_content_stats['mismatched']} mismatches."
+        )
     for warning in warnings:
         print(f"[WARN] {warning}")
     if errors:
