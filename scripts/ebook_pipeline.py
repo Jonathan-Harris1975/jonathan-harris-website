@@ -2274,6 +2274,8 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <meta content="Plain-English, practical, sceptical, no-hype" name="ai-style"/>
 <meta content="search=y, train-ai=y" name="content-usage"/>
 <link href="{canonical}" rel="canonical"/>
+<link href="{canonical}" hreflang="en" rel="alternate"/>
+<link href="{canonical}" hreflang="x-default" rel="alternate"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
@@ -2829,6 +2831,7 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
                 "pages": book["pages"],
                 "datePublished": book["datePublished"],
                 "dateModified": book.get("dateModified") or infer_build_timestamp(),
+                "related_slugs": book.get("related_slugs", []),
             }
             for book in books
         ],
@@ -3357,6 +3360,16 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Discovery page missing: {page['label']}")
             continue
         page_text = page["path"].read_text(encoding="utf-8")
+        canonical_match = re.search(r'<link[^>]+href="([^"]+)"[^>]+rel="canonical"', page_text, re.I)
+        canonical_href = canonical_match.group(1) if canonical_match else ""
+        if canonical_href:
+            expected_hreflang = [
+                f'<link href="{canonical_href}" hreflang="en" rel="alternate"/>',
+                f'<link href="{canonical_href}" hreflang="x-default" rel="alternate"/>',
+            ]
+            for marker in expected_hreflang:
+                if marker not in page_text:
+                    errors.append(f"Discovery hreflang metadata missing from {page['label']}: {marker}")
         for marker in page["required"]:
             if marker not in page_text:
                 errors.append(f"Discovery metadata missing from {page['label']}: {marker}")
@@ -3701,6 +3714,46 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append("blog/weekly/index.html must be noindex while blog/posts.json is empty.")
         if f"{SITE_URL}/blog/weekly/" in actual_sitemap_locations:
             errors.append("The weekly archive route must be excluded from the sitemap while blog/posts.json is empty.")
+
+    llm_index_payload = read_json(ROOT / "llm-index.json", default={}) or {}
+    llm_index_books = llm_index_payload.get("books") if isinstance(llm_index_payload, dict) else None
+    if not isinstance(llm_index_books, list) or len(llm_index_books) != len(books):
+        errors.append("llm-index.json is missing book records or is out of sync with the master record.")
+    else:
+        llm_index_by_slug = {clean_paragraph(item.get("slug")): item for item in llm_index_books if isinstance(item, dict) and clean_paragraph(item.get("slug"))}
+        for book in books:
+            indexed = llm_index_by_slug.get(book["slug"])
+            if not indexed:
+                errors.append(f"llm-index.json is missing record for {book['slug']}")
+                continue
+            if indexed.get("related_slugs", []) != book.get("related_slugs", []):
+                errors.append(f"llm-index.json related_slugs drift detected for {book['slug']}")
+
+    page_404 = ROOT / "404.html"
+    if not page_404.exists():
+        errors.append("404.html is missing.")
+    else:
+        not_found_text = page_404.read_text(encoding="utf-8")
+        title_match = re.search(r"<title>(.*?)</title>", not_found_text, re.I | re.S)
+        og_title_match = re.search(r'<meta[^>]+(?:property="og:title"[^>]+content="([^"]+)"|content="([^"]+)"[^>]+property="og:title")', not_found_text, re.I)
+        canonical_match = re.search(r'<link[^>]+href="([^"]+)"[^>]+rel="canonical"', not_found_text, re.I)
+        title_value = clean_paragraph(html.unescape(title_match.group(1))) if title_match else ""
+        og_title_value = clean_paragraph(html.unescape(og_title_match.group(1) or og_title_match.group(2))) if og_title_match else ""
+        canonical_href = canonical_match.group(1) if canonical_match else ""
+        if not title_value:
+            errors.append("404.html title tag is missing.")
+        if not og_title_value:
+            errors.append("404.html og:title is missing.")
+        if title_value and og_title_value and title_value != og_title_value:
+            errors.append("404.html og:title does not match the title tag.")
+        if canonical_href:
+            expected_hreflang = [
+                f'<link href="{canonical_href}" hreflang="en" rel="alternate"/>',
+                f'<link href="{canonical_href}" hreflang="x-default" rel="alternate"/>',
+            ]
+            for marker in expected_hreflang:
+                if marker not in not_found_text:
+                    errors.append(f"404.html is missing hreflang metadata: {marker}")
 
     if workbook_path and workbook_path.exists():
         errors.extend(validate_pages_sheet_operational_view(workbook_path))
