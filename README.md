@@ -79,5 +79,5 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `build.sh` is the Cloudflare Pages-friendly build entrypoint for this repo.
 - Set the Pages build command to `bash build.sh` and the output directory to `.`.
 - `scripts/deployment_ci.py` runs the governed build-time CI chain: optional workbook import, page regeneration, derivative rebuild, redirect sync, crawler snapshot checks, and release validation.
-- Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, or exactly one workbook is present in the repo root.
+- Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, exactly one workbook is present in the repo root, or a same-stem `.xlsx` and `.xlsm` pair is present, in which case the `.xlsx` file is used by default.
 - `.github/workflows/ebook-subsystem-ci.yml` mirrors the build-time validation path on pull requests and adds a post-deploy live gate on `main` and `master` pushes.
