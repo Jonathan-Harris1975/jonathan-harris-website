@@ -37,6 +37,8 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
 - Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `config/crawler-snapshots/*`, and per-book sidecars as generated outputs, not hand-edited source files.
 - `blog/posts.json` is the committed weekly-archive manifest; the weekly blog page should enhance from that local artefact rather than from remote fallbacks.
+- `docs/third-party-dependency-matrix.md` documents the governed third-party vendors, fallbacks, and failure modes for the live site.
+- `docs/image-publishing-contract.md` documents the remote image publishing contract for logos, hero art, and ebook covers.
 - Workbook routing fields are intentionally split: `Buy now URL` is the canonical internal route, `Redirect URL` is the final off-site retailer or shortlink destination, and `Legacy alias URL` is the legacy `/book/<slug>/buy-now` path.
 - Legacy buy-now aliases must resolve to the canonical internal buy route first, then continue to the final off-site destination.
 - `Summary` is the long-form structured explanation field. It is not the same source as `Short description`, which only feeds the shorter summary/card surfaces.
@@ -57,11 +59,13 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 8. `python3 scripts/check_crawlers.py --live --strict-live`
 9. `python3 scripts/check_live_pages.py --strict`
 10. `python3 scripts/maintenance/check_identifiers.py`
-11. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
-12. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
-13. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
-14. `python3 scripts/maintenance/check_redirect_chains.py`
-15. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
+11. `python3 scripts/check_image_assets.py`
+12. `python3 scripts/check_image_assets.py --live`
+13. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
+14. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
+15. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
+16. `python3 scripts/maintenance/check_redirect_chains.py`
+17. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
 
 ## Live crawler validation modes
 - `python3 scripts/check_crawlers.py` keeps the existing pre-deploy repo checks only.

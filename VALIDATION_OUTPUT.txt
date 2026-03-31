@@ -1,6 +1,8 @@
 Validation run: 2026-03-28T21:48:58Z
 Book count: 36
 Topic count: 24
+Workbook title parity: 81/81 passed, 0 mismatched
+Workbook content parity: 330 exact field matches, 30 approved transformations, 0 mismatches across 360 governed field checks
 
 Topics:
 - Agriculture: 1
