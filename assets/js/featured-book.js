@@ -72,6 +72,12 @@
     el.setAttribute(attr, value);
   }
 
+  function removeAttr(id, attr) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.removeAttribute(attr);
+  }
+
   function buildResponsiveImageUrl(src, width) {
     if (!src || !width) return src || "";
     if (/\/cdn-cgi\/image\//.test(src) || /\.svg(?:$|\?)/i.test(src)) return src;
@@ -80,6 +86,7 @@
 
   function buildSameSourceSrcset(src, widths) {
     if (!src || !Array.isArray(widths)) return "";
+    if (/^https?:\/\//i.test(src)) return "";
     var unique = Array.from(new Set(widths.filter(Boolean))).sort(function(a, b){ return a - b; });
     if (!unique.length) return "";
     return unique.map(function(width){ return buildResponsiveImageUrl(src, width) + " " + width + "w"; }).join(", ");
@@ -96,8 +103,14 @@
 
     setAttr("featuredEbookCover", "src", b.cover);
     setAttr("featuredEbookCover", "alt", b.title + " cover");
-    setAttr("featuredEbookCover", "srcset", buildSameSourceSrcset(b.cover, [400, 800, 1200]));
-    setAttr("featuredEbookCover", "sizes", "(min-width: 1100px) 180px, (min-width: 768px) 28vw, 50vw");
+    var featuredSrcset = buildSameSourceSrcset(b.cover, [400, 800, 1200]);
+    if (featuredSrcset) {
+      setAttr("featuredEbookCover", "srcset", featuredSrcset);
+      setAttr("featuredEbookCover", "sizes", "(min-width: 1100px) 180px, (min-width: 768px) 28vw, 50vw");
+    } else {
+      removeAttr("featuredEbookCover", "srcset");
+      removeAttr("featuredEbookCover", "sizes");
+    }
     setAttr("featuredEbookCover", "width", "2480");
     setAttr("featuredEbookCover", "height", "3508");
     setAttr("featuredEbookCover", "decoding", "async");

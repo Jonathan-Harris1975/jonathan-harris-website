@@ -147,6 +147,7 @@
 
   function buildSameSourceSrcset(src, widths) {
     if (!src || !Array.isArray(widths)) return "";
+    if (/^https?:\/\//i.test(src)) return "";
     var unique = Array.from(new Set(widths.filter(Boolean))).sort(function(a, b){ return a - b; });
     if (!unique.length) return "";
     return unique.map(function(width){ return buildResponsiveImageUrl(src, width) + " " + width + "w"; }).join(", ");
