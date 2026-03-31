@@ -31,6 +31,13 @@ def detect_workbook(explicit: str | None) -> Path | None:
     candidates = sorted(ROOT.glob("*.xlsx")) + sorted(ROOT.glob("*.xlsm"))
     if len(candidates) == 1:
         return candidates[0].resolve()
+
+    xlsx_candidates = {path.stem: path for path in ROOT.glob("*.xlsx")}
+    xlsm_candidates = {path.stem: path for path in ROOT.glob("*.xlsm")}
+    shared_stems = sorted(set(xlsx_candidates) & set(xlsm_candidates))
+    if len(candidates) == 2 and len(shared_stems) == 1:
+        return xlsx_candidates[shared_stems[0]].resolve()
+
     return None
 
 
