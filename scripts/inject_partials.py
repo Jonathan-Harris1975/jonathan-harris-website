@@ -25,6 +25,7 @@ Exit codes
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -42,6 +43,13 @@ EXCLUDE_DIRS = {
 }
 
 # ---------------------------------------------------------------------------
+# Font head contract
+# ---------------------------------------------------------------------------
+FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
+
+# ---------------------------------------------------------------------------
 # Regex
 # ---------------------------------------------------------------------------
 # Matches the full header block as it appears in pages:
@@ -54,6 +62,13 @@ _HEADER_BLOCK_RE = re.compile(
     r'<a class="skip-link".*?</header>',
     re.DOTALL,
 )
+
+_FONT_HEAD_BLOCK_RE = re.compile(
+    r'(?:\s*<link[^>]+href="https://fonts.googleapis.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.gstatic.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.googleapis.com/css2\?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap"[^>]*>)',
+    re.IGNORECASE,
+)
+
+_SITE_CSS_LINK_RE = re.compile(r'<link[^>]+href="/assets/css/site\.css"[^>]*>', re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -89,6 +104,35 @@ def find_header_block(text: str) -> re.Match | None:
     return _HEADER_BLOCK_RE.search(text)
 
 
+def ensure_font_head_block(text: str) -> tuple[str, bool]:
+    """Normalise the shared Inter font loading block ahead of site.css."""
+    cleaned = _FONT_HEAD_BLOCK_RE.sub("", text, count=1)
+    match = _SITE_CSS_LINK_RE.search(cleaned)
+    if match is None:
+        return text, False
+
+    updated = cleaned[:match.start()] + FONT_HEAD_BLOCK + "\n" + cleaned[match.start():]
+    return updated, updated != text
+
+
+def validate_font_head_block(text: str) -> str | None:
+    match = _SITE_CSS_LINK_RE.search(text)
+    if match is None:
+        return "site.css link not found"
+
+    font_match = _FONT_HEAD_BLOCK_RE.search(text)
+    if font_match is None:
+        return "shared Inter font head block is missing"
+
+    if font_match.start() > match.start():
+        return "shared Inter font head block must appear before site.css"
+
+    if font_match.group(0).strip() != FONT_HEAD_BLOCK:
+        return "shared Inter font head block differs from the canonical block"
+
+    return None
+
+
 # ---------------------------------------------------------------------------
 # Inject
 # ---------------------------------------------------------------------------
@@ -121,20 +165,23 @@ def inject(dry_run: bool = False) -> int:
 
         existing_block = match.group(0)
 
-        if existing_block == partial:
+        # Replace only the first occurrence (there should only be one)
+        updated_text = original[:match.start()] + partial + original[match.end():]
+        updated_text, font_changed = ensure_font_head_block(updated_text)
+
+        if existing_block == partial and not font_changed:
             in_sync += 1
             print(f"  [OK]      {rel}")
             continue
-
-        # Replace only the first occurrence (there should only be one)
-        updated_text = original[:match.start()] + partial + original[match.end():]
 
         if dry_run:
             updated += 1
             print(f"  [DRY-RUN] {rel}  (would update)")
         else:
             try:
+                stat_result = page.stat()
                 page.write_text(updated_text, encoding="utf-8")
+                os.utime(page, (stat_result.st_atime, stat_result.st_mtime))
                 updated += 1
                 print(f"  [UPDATED] {rel}")
             except Exception as exc:
@@ -189,10 +236,13 @@ def validate() -> int:
             drift.append((rel, "Header block not located"))
             continue
 
-        if match.group(0) == partial:
+        header_reason = None if match.group(0) == partial else "Header differs from partial"
+        font_reason = validate_font_head_block(text)
+        if not header_reason and not font_reason:
             ok += 1
         else:
-            drift.append((rel, "Header differs from partial"))
+            reasons = "; ".join(reason for reason in [header_reason, font_reason] if reason)
+            drift.append((rel, reasons))
 
     print()
     print("=" * 60)
@@ -220,7 +270,7 @@ def validate() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inject assets/partials/header.html into every page at build time."
+        description="Inject the shared header partial and canonical font head block into every page at build time."
     )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(

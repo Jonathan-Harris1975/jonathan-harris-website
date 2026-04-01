@@ -1536,14 +1536,7 @@ def default_short(topic: str, pages: int | None) -> str:
 
 
 def book_meta_title(book: Dict[str, Any]) -> str:
-    title = clean_paragraph(book.get("title", ""))
-    if len(f"{title} | {SITE_NAME}") <= 90:
-        return title
-    if ":" in title:
-        short_title = clean_paragraph(title.split(":", 1)[0])
-        if short_title:
-            return short_title
-    return title
+    return clean_paragraph(book.get("title", ""))
 
 
 

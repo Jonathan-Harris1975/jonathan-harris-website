@@ -32,11 +32,12 @@ def detect_workbook(explicit: str | None) -> Path | None:
     if len(candidates) == 1:
         return candidates[0].resolve()
 
-    xlsx_candidates = {path.stem: path for path in ROOT.glob("*.xlsx")}
-    xlsm_candidates = {path.stem: path for path in ROOT.glob("*.xlsm")}
-    shared_stems = sorted(set(xlsx_candidates) & set(xlsm_candidates))
-    if len(candidates) == 2 and len(shared_stems) == 1:
-        return xlsx_candidates[shared_stems[0]].resolve()
+    if len(candidates) > 1:
+        candidate_list = ", ".join(path.name for path in candidates)
+        raise ValueError(
+            "Workbook source is ambiguous. Supply --workbook or set "
+            f"{WORKBOOK_ENV_VAR}. Candidates in repo root: {candidate_list}"
+        )
 
     return None
 
@@ -51,7 +52,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Run the ebook deployment maintenance pipeline as a build-time CI gate."
     )
-    parser.add_argument("--workbook", help="Workbook path. Falls back to EBOOK_WORKBOOK_PATH or a single workbook in the repo root.")
+    parser.add_argument("--workbook", help="Workbook path. Falls back to EBOOK_WORKBOOK_PATH or a single workbook in the repo root. Multiple workbook candidates now fail fast.")
     parser.add_argument(
         "--allow-missing-workbook",
         action="store_true",
@@ -94,7 +95,7 @@ def main() -> int:
         print("\n==> Workbook import failed")
         print(
             f"No workbook supplied via --workbook, {WORKBOOK_ENV_VAR}, or a single *.xlsx/*.xlsm file in the repo root. "
-            "Governed builds require the workbook source of truth."
+            "Governed builds require one explicit workbook source of truth."
         )
         return 1
 
