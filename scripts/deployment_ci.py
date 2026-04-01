@@ -109,6 +109,7 @@ def main() -> int:
     run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
     run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
     run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
+    run_step("Validate shared partials (header — fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
     run_step("Inject shared partials (header)", [sys.executable, "scripts/inject_partials.py"])
 
     validate_command = [sys.executable, "scripts/validate_release.py"]
