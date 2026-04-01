@@ -62,8 +62,8 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 11. `python3 scripts/check_image_assets.py`
 12. `python3 scripts/check_image_assets.py --live`
 13. `python3 scripts/validate_release.py --workbook <workbook.xlsx>`
-14. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --post-deploy-live`
-15. `python3 scripts/validate_release.py --workbook <workbook.xlsx> --strict-post-deploy-live`
+14. `python3 scripts/validate_release.py --workbook <workbook.xlsm> --post-deploy-live`
+15. `python3 scripts/validate_release.py --workbook <workbook.xlsm> --strict-post-deploy-live`
 16. `python3 scripts/maintenance/check_redirect_chains.py`
 17. `python3 scripts/maintenance/rebuild_ebook_subsystem.py <workbook.xlsx>`
 
@@ -79,5 +79,5 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `build.sh` is the Cloudflare Pages-friendly build entrypoint for this repo.
 - Set the Pages build command to `bash build.sh` and the output directory to `.`.
 - `scripts/deployment_ci.py` runs the governed build-time CI chain: optional workbook import, page regeneration, derivative rebuild, redirect sync, crawler snapshot checks, and release validation.
-- Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, exactly one workbook is present in the repo root, or a same-stem `.xlsx` and `.xlsm` pair is present, in which case the `.xlsx` file is used by default.
+- Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, or exactly one workbook is present in the repo root. If multiple workbook candidates exist, the build now fails fast until one governed workbook is selected explicitly.
 - `.github/workflows/ebook-subsystem-ci.yml` mirrors the build-time validation path on pull requests and adds a post-deploy live gate on `main` and `master` pushes.
