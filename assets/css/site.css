@@ -4030,9 +4030,17 @@ article p {
   text-align: center;
 }
 .logo-plain--hero {
-  border-radius: 50%;
+  border-radius: 12px;
   margin: 0 auto 22px;
   display: block;
+}
+
+.bio-headshot {
+  border-radius: 16px;
+  object-fit: cover;
+  object-position: center 20%;
+  border: 3px solid rgba(99,102,241,0.4);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 .hero__title {
   font-size: 2.4rem;
