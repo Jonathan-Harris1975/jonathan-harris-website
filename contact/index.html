@@ -5,16 +5,38 @@
 <meta charset="utf-8"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Get in Touch | Jonathan Harris</title>
 <meta content="Jonathan Harris" name="author"/>
 <meta content="Contact page for Jonathan Harris and ways to follow updates: newsletter, podcast, and ebook catalogue." name="ai:summary"/>
+
 <meta content="strict-origin-when-cross-origin" name="referrer"/>
 <meta content="#0D1420" name="theme-color"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="https://jonathan-harris.online/contact/" rel="canonical"/><link href="https://jonathan-harris.online/contact/" hreflang="en" rel="alternate"/><link href="https://jonathan-harris.online/contact/" hreflang="x-default" rel="alternate"/>
+<!-- CookieYes -->
+<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+
+<!-- Metricool Tracking with error handling -->
+<script>
+    function loadScript(callback) {
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://tracker.metricool.com/resources/be.js";
+        script.onload = callback;
+        script.onerror = function() { console.error("Metricool script failed to load"); };
+        head.appendChild(script);
+    }
+    loadScript(function() {
+        beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
+    });
+</script>
+
+
+<link rel="icon" href="https://assets.jonathan-harris.online/favicon.ico" type="image/x-icon">
+<link href="https://jonathan-harris.online/contact/" rel="canonical"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/><link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="/assets/css/main.css" rel="stylesheet"/>
 <style>
 body.page-contact .hero--contact { padding-top: calc(var(--header-h, 72px) + 36px); }
 body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height: 560px; border: none; }
@@ -27,78 +49,74 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <meta content="https://jonathan-harris.online/contact/" property="og:url"/>
 <meta content="Get in Touch | Jonathan Harris" property="og:title"/>
 <meta content="Get in touch with Jonathan Harris — AI author and podcast host." property="og:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<meta content="summary_large_image" name="twitter:card"/>
 <meta content="Get in Touch | Jonathan Harris" name="twitter:title"/>
 <meta content="Get in touch with Jonathan Harris — AI author and podcast host." name="twitter:description"/>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"ContactPage","name":"Get in Touch","url":"https://jonathan-harris.online/contact/","description":"Contact page for Jonathan Harris — AI author and podcast host.","author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"}}</script>
-<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Get in Touch","item":"https://jonathan-harris.online/contact/"}]}</script>
-<link href="/assets/css/ux-fixes.css" rel="stylesheet"/>
-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<!-- CookieYes -->
-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/consent-managed-scripts.js"></script>
 </head>
 <body class="page-contact">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
-<div class="jh-header__inner">
-<a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
-<span aria-hidden="true" class="jh-logo-wrap">
-<img alt="" aria-hidden="true" class="jh-header__logo" decoding="async" fetchpriority="high" height="32" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="32"/>
-</span>
-<span class="jh-brand__text">Jonathan Harris</span>
-</a>
-<nav aria-label="Primary navigation">
-<ul class="jh-topnav">
-<li><a href="/">Home</a></li>
-<li><a href="/ebooks/">eBooks</a></li>
-<li><a href="/podcast/">Podcast</a></li>
-<li><a href="/newsletter/">Newsletter</a></li>
-<li><a href="/blog/">Blog</a></li>
-<li><a href="/topics/">Topics</a></li>
-<li><a href="/bio/">About</a></li>
-<li class="jh-nav-dropdown">
-<button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
-<ul class="jh-nav-dropdown__menu" role="menu">
-<li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
-<li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
-<li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+<style id="jh-dropdown-inline">
+.jh-nav-dropdown{position:relative;list-style:none;}
+.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:13px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
+.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:13px;}
+.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
+.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
+</style>
+<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
+  <div class="jh-header__inner">
+    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
+      <span class="jh-logo-wrap" aria-hidden="true">
+        <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" fetchpriority="high" decoding="async" aria-hidden="true"/>
+      </span>
+      <span class="jh-brand__text">Jonathan Harris</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <ul class="jh-topnav">
+  <li><a href="/">Home</a></li>
+  <li><a href="/ebooks/">eBooks</a></li>
+  <li><a href="/podcast/">Podcast</a></li>
+  <li><a href="/newsletter/">Newsletter</a></li>
+  <li><a href="/blog/">Blog</a></li>
+  <li><a href="/bio/">About</a></li>
+  <li class="jh-nav-dropdown">
+    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <ul class="jh-nav-dropdown__menu" role="menu">
+      <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+      <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+    </ul>
+  </li>
+  <li><a href="/contact/">Contact</a></li>
 </ul>
-</li>
-<li><a href="/contact/">Contact</a>
-</li>
-<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li>
-</ul>
-</nav>
-<button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
-</div>
-<nav aria-label="Mobile navigation" class="jh-mobile-nav" hidden="" id="jh-mobile-nav">
-<a aria-label="Jonathan Harris – home" class="jh-mobile-nav__brand" href="/">
-<span aria-hidden="true" class="jh-logo-wrap">
-<img alt="" aria-hidden="true" class="jh-mobile-nav__brand-logo" decoding="async" height="32" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="32"/>
-</span>
-<span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
-</a>
-<a href="/">Home</a>
-<a href="/ebooks/">eBooks</a>
-<a href="/podcast/">Podcast</a>
-<a href="/newsletter/">Newsletter</a>
-<a href="/blog/">Blog</a>
-<a href="/topics/">Topics</a>
-<a href="/bio/">About</a>
-<div class="jh-mobile-nav__group">
-<span class="jh-mobile-nav__group-label">Resources</span>
-<div class="jh-mobile-nav__group-links">
-<a href="/glossary/">Glossary</a>
-<a href="/topics/">Topics</a>
-<a href="/compare/">Comparisons</a>
-</div>
-</div>
-<a href="/contact/">Contact</a>
-<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
-</nav>
+    </nav>
+    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
+  </div>
+  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
+    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
+      <span class="jh-logo-wrap" aria-hidden="true">
+        <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="lazy" decoding="async" aria-hidden="true"/>
+      </span>
+      <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+    </a>
+    <a href="/">Home</a>
+    <a href="/ebooks/">eBooks</a>
+    <a href="/podcast/">Podcast</a>
+    <a href="/newsletter/">Newsletter</a>
+    <a href="/blog/">Blog</a>
+    <a href="/bio/">About</a>
+    <div class="jh-mobile-nav__group">
+      <span class="jh-mobile-nav__group-label">Resources</span>
+      <div class="jh-mobile-nav__group-links">
+        <a href="/glossary/">Glossary</a>
+        <a href="/topics/">Topics</a>
+        <a href="/compare/">Comparisons</a>
+      </div>
+    </div>
+    <a href="/contact/">Contact</a>
+  </nav>
 </header>
 
 <section aria-label="Contact header" class="hero hero--contact">
@@ -106,126 +124,97 @@ body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height:
 <h1>Get in Touch</h1>
 <p>If you’ve got something worth discussing, this is the place. Clear details beat noise every time.</p>
 </section>
-<main aria-label="Contact content" class="main page-main" id="main" role="main"><section aria-label="Priority site paths" class="jh-priority-paths"><h2>Keep exploring</h2><p>Pick the next useful path: the full eBook catalogue, the podcast, the newsletter, or the topics hub.</p><div class="jh-priority-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/ebooks/">Browse eBooks</a><a class="jh-hub-cta" href="/podcast/">Podcast</a><a class="jh-hub-cta" href="/newsletter/">Newsletter</a><a class="jh-hub-cta" href="/topics/">Topics</a></div></section>
+<main aria-label="Contact content" class="main page-main" id="main" role="main">
 <section aria-label="Contact form" class="card card--accent" role="region">
-<div aria-atomic="true" aria-live="polite" hidden="" id="contact-form-confirmation" role="status" class="u-s23" tabindex="-1">
-<svg aria-hidden="true" fill="none" height="48" stroke="#16a34a" stroke-linecap="round" stroke-width="2" class="u-s32" viewbox="0 0 24 24" width="48"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-<p>Thanks for getting in touch. I'll reply within 2–3 business days.</p>
-</div>
-<div id="contact-form-wrap">
 <h2>Contact Me</h2>
 <p class="contact-meta-note">✉️ <strong>Typical response time: 2–3 business days.</strong> For book or podcast questions, check the <a href="/ebooks/">eBooks catalogue</a> or <a href="/podcast/">podcast page</a> first — the answer is usually there.</p>
-<p class="subtle u-s52">If the embedded form does not load cleanly in your browser, open the direct form instead.</p>
-<p class="u-s53"><a class="button secondary" href="https://form.jotform.com/260281179574362" rel="noopener" target="_blank">Open the contact form directly</a></p>
-<noscript><p class="subtle u-s52">JavaScript is off, so the embedded form will not load here. Use the direct contact form instead: <a href="https://form.jotform.com/260281179574362" rel="noopener" class="u-s54" target="_blank">open it directly</a></p></noscript>
 <div class="embed-wrap">
-<iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260281179574362" loading="lazy" scrolling="no" src="https://form.jotform.com/260281179574362" class="u-s55" title="Web Contact"></iframe>
+<iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260281179574362" onload="window.parent.scrollTo(0,0)" scrolling="no" src="https://form.jotform.com/260281179574362" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Web Contact"></iframe>
 </div>
 <p class="subtle">
         If the form doesn’t load, use this:
-        <a href="https://form.jotform.com/260281179574362" rel="noopener" class="u-s54" target="_blank">
+        <a href="https://form.jotform.com/260281179574362" rel="noopener" style="color:#4F46E5;text-decoration:underline;" target="_blank">
           open it directly
         </a>
 </p>
-</div><!-- /contact-form-wrap -->
 </section>
 </main>
+
 <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
 <script>
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260281179574362']", "https://form.jotform.com/");
-    function isCompletedMessage(data) {
-      if (!data) return false;
-      if (typeof data === 'object') return data.action === 'submission-completed';
-      if (typeof data !== 'string') return false;
-      if (data.indexOf('submission-completed') === -1) return false;
-      try {
-        var parsed = JSON.parse(data);
-        return parsed && parsed.action === 'submission-completed';
-      } catch(err) {
-        return data.indexOf('JotForm') > -1;
-      }
-    }
-    window.addEventListener('message', function(e) {
-      if (!isCompletedMessage(e.data)) return;
-      var confirmation = document.getElementById('contact-form-confirmation');
-      var formWrap = document.getElementById('contact-form-wrap');
-      if (confirmation) {
-        confirmation.hidden = false;
-        confirmation.style.display = 'block';
-        confirmation.focus();
-      }
-      if (formWrap) {
-        formWrap.style.display = 'none';
-      }
-    });
   </script>
-<footer aria-label="Website footer" class="site-footer" role="contentinfo">
-<div class="wrap footer-shell">
-<div class="footer-grid">
-<section aria-label="Brand summary" class="footer-panel footer-panel--brand">
-<a class="footer-brand" href="/">Jonathan Harris</a>
-<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a weekly newsletter built for readers who prefer signal over noise.</p>
-<div aria-label="Core site areas" class="footer-badges">
-<a href="/ebooks/">36 eBooks</a>
-<a href="/podcast/">Weekly podcast</a>
-<a href="/newsletter/">Weekly newsletter</a>
-</div>
-<div aria-label="Social media links" class="footer-social">
-<a aria-label="YouTube" href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank">
-<svg aria-label="YouTube" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M51 22.5c-.5-3.3-3.1-5.8-6.3-6.2C40.8 15.8 32 15.8 32 15.8s-8.8 0-12.7.5c-3.2.4-5.8 2.9-6.3 6.2-.5 3.1-.5 6.3-.5 9.5s0 6.4.5 9.5c.5 3.3 3.1 5.8 6.3 6.2 3.9.5 12.7.5 12.7.5s8.8 0 12.7-.5c3.2-.4 5.8-2.9 6.3-6.2.5-3.1.5-6.3.5-9.5s0-6.4-.5-9.5Z" fill="#fff" opacity=".12"></path><path d="M27 24l14 8-14 8V24Z" fill="#93C5FD"></path></svg>
-</a>
-<a aria-label="Spotify podcast" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">
-<svg aria-label="Spotify" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><circle cx="32" cy="32" fill="#93C5FD" opacity=".18" r="18"></circle><path d="M23 28c7-2 15-1 22 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="4"></path><path d="M24 35c6-1 12-.4 18 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3.5"></path><path d="M25 41c4-.5 8 0 12 1.6" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3"></path></svg>
-</a>
-<a aria-label="TikTok" href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank">
-<svg aria-label="TikTok" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M38 16c1.8 4.6 5.1 7.3 10 8.1v7.2c-3-.1-5.9-.9-8.5-2.4V40c0 5.8-4.7 10.5-10.5 10.5S18.5 45.8 18.5 40 23.2 29.5 29 29.5c.8 0 1.6.1 2.4.3V37c-.7-.4-1.5-.6-2.4-.6-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6V16h5.4Z" fill="#93C5FD"></path></svg>
-</a>
-<a aria-label="Facebook" href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank">
-<svg aria-label="Facebook" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M35.5 50V34.9h5.1l.8-6h-5.9v-3.8c0-1.8.5-3 3.1-3h3.1v-5.3c-.5-.1-2.3-.2-4.3-.2-4.2 0-7.1 2.6-7.1 7.3v5h-4.8v6h4.8V50h5.2Z" fill="#93C5FD"></path></svg>
-</a>
-<a aria-label="Instagram" href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank">
-<svg aria-label="Instagram" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><rect fill="none" height="28" rx="9" stroke="#93C5FD" stroke-width="4" width="28" x="18" y="18"></rect><circle cx="32" cy="32" fill="none" r="7" stroke="#93C5FD" stroke-width="4"></circle><circle cx="41.5" cy="22.5" fill="#93C5FD" r="2.5"></circle></svg>
-</a>
-</div>
-</section>
-<nav aria-label="Navigate" class="footer-panel">
-<h2>Navigate</h2>
-<ul class="footer-links">
-<li><a href="/">Home</a></li>
-<li><a href="/ebooks/">Browse eBooks</a></li>
-<li><a href="/podcast/">Listen to the podcast</a></li>
-<li><a href="/newsletter/">Join the newsletter</a></li>
-<li><a href="/topics/">Explore AI topics</a></li>
-<li><a href="/bio/">About Jonathan Harris</a></li>
-<li><a href="/contact/">Contact</a></li>
-</ul>
-</nav>
-<nav aria-label="Discover" class="footer-panel">
-<h2>Discover</h2>
-<ul class="footer-links">
-<li><a href="/glossary/">Glossary</a></li>
-<li><a href="/topics/">Topics</a></li>
-<li><a href="/compare/">Comparisons</a></li>
-<li><a href="/catalogue/artificial-intelligence/">Artificial Intelligence</a></li>
-<li><a href="/catalogue/healthcare/">Healthcare</a></li>
-<li><a href="/catalogue/ethics/">Ethics</a></li>
-<li><a href="/catalogue/law/">Law</a></li>
-<li><a href="/affiliate/">Affiliate partners</a></li>
-<li><a href="/api/docs/">API docs</a></li>
-</ul>
-</nav>
-<section aria-label="Legal" class="footer-panel">
-<h2>Legal</h2>
-<ul class="footer-links footer-links--legal">
-<li><a href="/privacy-policy/">Privacy Policy</a></li>
-<li><a href="/terms-of-use/">Terms of Use</a></li>
-</ul>
-</section>
-</div>
-<div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
-</div>
-</footer>
-<script defer="" src="/assets/js/site-ui.js"></script>
+
+
+<div id="siteFooter"><footer class="site-footer" role="contentinfo" aria-label="Website footer">
+  <div class="wrap footer-shell">
+    <div class="footer-grid">
+      <section class="footer-panel footer-panel--brand" aria-label="Brand summary">
+        <a class="footer-brand" href="/">Jonathan Harris</a>
+        <p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a daily newsletter built for readers who prefer signal over noise.</p>
+        <div class="footer-badges" aria-label="Core site areas">
+          <a href="/ebooks/">36 eBooks</a>
+          <a href="/podcast/">Weekly podcast</a>
+          <a href="/newsletter/">Daily newsletter</a>
+        </div>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="https://youtube.com/@jonathanharris-r7i" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="YouTube" width="28" height="28"><rect width="64" height="64" rx="16" fill="#111827"/><path d="M51 22.5c-.5-3.3-3.1-5.8-6.3-6.2C40.8 15.8 32 15.8 32 15.8s-8.8 0-12.7.5c-3.2.4-5.8 2.9-6.3 6.2-.5 3.1-.5 6.3-.5 9.5s0 6.4.5 9.5c.5 3.3 3.1 5.8 6.3 6.2 3.9.5 12.7.5 12.7.5s8.8 0 12.7-.5c3.2-.4 5.8-2.9 6.3-6.2.5-3.1.5-6.3.5-9.5s0-6.4-.5-9.5Z" fill="#fff" opacity=".12"/><path d="M27 24l14 8-14 8V24Z" fill="#93C5FD"/></svg>
+          </a>
+          <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener noreferrer" aria-label="Spotify podcast">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Spotify" width="28" height="28"><rect width="64" height="64" rx="16" fill="#111827"/><circle cx="32" cy="32" r="18" fill="#93C5FD" opacity=".18"/><path d="M23 28c7-2 15-1 22 2" stroke="#93C5FD" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M24 35c6-1 12-.4 18 2" stroke="#93C5FD" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M25 41c4-.5 8 0 12 1.6" stroke="#93C5FD" stroke-width="3" stroke-linecap="round" fill="none"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@jonathan_harris_01" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="TikTok" width="28" height="28"><rect width="64" height="64" rx="16" fill="#111827"/><path d="M38 16c1.8 4.6 5.1 7.3 10 8.1v7.2c-3-.1-5.9-.9-8.5-2.4V40c0 5.8-4.7 10.5-10.5 10.5S18.5 45.8 18.5 40 23.2 29.5 29 29.5c.8 0 1.6.1 2.4.3V37c-.7-.4-1.5-.6-2.4-.6-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6V16h5.4Z" fill="#93C5FD"/></svg>
+          </a>
+          <a href="https://www.facebook.com/share/1G7v4P69xa" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Facebook" width="28" height="28"><rect width="64" height="64" rx="16" fill="#111827"/><path d="M35.5 50V34.9h5.1l.8-6h-5.9v-3.8c0-1.8.5-3 3.1-3h3.1v-5.3c-.5-.1-2.3-.2-4.3-.2-4.2 0-7.1 2.6-7.1 7.3v5h-4.8v6h4.8V50h5.2Z" fill="#93C5FD"/></svg>
+          </a>
+          <a href="https://www.instagram.com/jonathan.harris1975" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Instagram" width="28" height="28"><rect width="64" height="64" rx="16" fill="#111827"/><rect x="18" y="18" width="28" height="28" rx="9" fill="none" stroke="#93C5FD" stroke-width="4"/><circle cx="32" cy="32" r="7" fill="none" stroke="#93C5FD" stroke-width="4"/><circle cx="41.5" cy="22.5" r="2.5" fill="#93C5FD"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <nav class="footer-panel" aria-label="Navigate">
+        <h2>Navigate</h2>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/ebooks/">Browse eBooks</a></li>
+          <li><a href="/podcast/">Listen to the podcast</a></li>
+          <li><a href="/newsletter/">Join the newsletter</a></li>
+          <li><a href="/blog/">Read the blog</a></li>
+          <li><a href="/bio/">About Jonathan Harris</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+
+      <nav class="footer-panel" aria-label="Discover">
+        <h2>Discover</h2>
+        <ul class="footer-links">
+          <li><a href="/glossary/">Glossary</a></li>
+          <li><a href="/topics/">Topics</a></li>
+          <li><a href="/compare/">Comparisons</a></li>
+          <li><a href="/affiliate/">Affiliate partners</a></li>
+        </ul>
+      </nav>
+
+      <section class="footer-panel" aria-label="Legal">
+        <h2>Legal</h2>
+        <ul class="footer-links footer-links--legal">
+          <li><a href="/privacy-policy/">Privacy Policy</a></li>
+          <li><a href="/terms-of-use/">Terms of Use</a></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
+  </div>
+</footer></div>
+<script defer src="/assets/js/site-ui.js"></script>
+
+
 <!-- Chatbot -->
-<script defer="" src="/assets/js/gold-standard.js"></script></body>
+<script src="https://botsailor.com/script/webchat-link.js?code=1744067063128291" defer></script>
+</body>
 </html>
