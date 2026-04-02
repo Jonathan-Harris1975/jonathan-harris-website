@@ -1479,6 +1479,21 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
   transition: opacity 0.28s ease, transform 0.28s ease;
   box-shadow: 0 12px 30px rgba(0,0,0,0.28);
 }
+/* First-paint guard: on reveal-driven pages, keep the shared header hidden
+   until site-ui.js decides it should appear. This removes the initial mobile
+   hamburger/nav flash before JS applies .jh-header--hero-mode. */
+@supports selector(body:has(.hero)) {
+  html.js-enabled body:has([data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(.lp-hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(header.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(.about-banner[data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible) {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px);
+  }
+}
+
 /* JS adds .jh-header--hero-mode when page has a hero; adds .is-visible when scrolled past it */
 .jh-header--hero-mode:not(.is-visible){
   opacity: 0;
