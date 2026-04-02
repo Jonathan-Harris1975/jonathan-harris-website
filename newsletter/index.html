@@ -1,216 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daily AI Newsletter | Jonathan Harris</title>
+
+  <meta name="description" content="Subscribe to Jonathan Harris’ daily AI newsletter—short, practical updates on AI, machine learning, NLP, and ethical AI. No fluff, just signal.">
+  <meta name="author" content="Jonathan Harris">
+  <link rel="canonical" href="https://jonathan-harris.online/newsletter/">
   <link rel="icon" href="https://assets.jonathan-harris.online/favicon.ico" type="image/x-icon">
-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>Get the AI Edge | Jonathan Harris</title>
-<meta content="AI Edge newsletter sign-up — weekly AI commentary, ebook offers, and podcast updates from Jonathan Harris." name="ai:summary"/>
-<meta content="Jonathan Harris" name="author"/>
-<meta content="#0D1420" name="theme-color"/>
-<link as="style" href="/assets/css/site.css" rel="preload"/>
-<link href="/assets/css/site.css" rel="stylesheet"/>
+  <meta name="theme-color" content="#0D1420">
 
-<!-- CookieYes -->
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Daily AI Newsletter | Jonathan Harris">
+  <meta property="og:description" content="Short, practical daily AI updates — no fluff, just signal.">
+  <meta property="og:url" content="https://jonathan-harris.online/newsletter/">
+  <meta property="og:image" content="https://images.jonathan-harris.online/site-newsletter">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:type" content="website">
 
-<!-- Metricool Tracking with error handling -->
-<script>
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daily AI Newsletter | Jonathan Harris">
+  <meta name="twitter:description" content="Short, practical daily AI updates — no fluff, just signal.">
+  <meta name="twitter:image" content="https://images.jonathan-harris.online/site-newsletter">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Daily AI Newsletter | Jonathan Harris",
+  "url": "https://jonathan-harris.online/newsletter/",
+  "description": "Subscribe to Jonathan Harris’ daily AI newsletter.",
+  "publisher": {
+    "@type": "Person",
+    "name": "Jonathan Harris",
+    "sameAs": [
+      "https://about.me/jonathan_harris"
+    ]
+  },
+  "datePublished": "2025-01-01",
+  "dateModified": "2026-01-01"
+}
+</script>
+
+  <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
+
+  <script>
     function loadScript(callback) {
-        var head = document.getElementsByTagName("head")[0];
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "https://tracker.metricool.com/resources/be.js";
-        script.onload = callback;
-        script.onerror = function() { console.error("Metricool script failed to load"); };
-        head.appendChild(script);
+      var head = document.getElementsByTagName("head")[0];
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "https://tracker.metricool.com/resources/be.js";
+      script.onload = callback;
+      script.onerror = function() { console.error("Metricool script failed to load"); };
+      head.appendChild(script);
     }
     loadScript(function() {
+      if (typeof beTracker !== "undefined") {
         beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
+      }
     });
-</script>
-<link href="https://jonathan-harris.online/newsletter/" rel="canonical"/>
-<meta content="Subscribe to AI Edge — Jonathan Harris's free weekly newsletter on artificial intelligence, practical insights, and ebook updates." name="description"/>
-<meta content="index,follow" name="robots"/>
-<meta content="page" name="ai:content_type"/>
-<meta content="website" property="og:type"/>
-<meta content="https://jonathan-harris.online/newsletter/" property="og:url"/>
-<meta content="Get the AI Edge | Jonathan Harris" property="og:title"/>
-<meta content="Subscribe to AI Edge — weekly AI commentary, ebook offers, and podcast updates from Jonathan Harris." property="og:description"/>
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="Get the AI Edge | Jonathan Harris" name="twitter:title"/>
-<meta content="Subscribe to AI Edge — weekly AI commentary, ebook offers, and podcast updates from Jonathan Harris." name="twitter:description"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"Get the AI Edge Newsletter","url":"https://jonathan-harris.online/newsletter/","description":"Subscribe to AI Edge — Jonathan Harris's free weekly newsletter on artificial intelligence, practical insights, and ebook updates.","author":{"@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris"},"about":{"@type":"Thing","name":"Artificial Intelligence"}}</script>
-</head>
-<body class="page-newsletter">
-<a class="skip-link" href="#main">Skip to main content</a>
+  </script>
 
-<!-- FIX: Baked-in header added to ensure the hamburger menu is present on mobile
-     at the top of the page without requiring the user to scroll past the hero. -->
-<style id="jh-dropdown-inline">
-.jh-nav-dropdown{position:relative;list-style:none;}
-.jh-nav-dropdown__btn{background:none;border:none;color:#E5E7EB;font-weight:600;font-size:14px;padding:7px 9px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.jh-nav-dropdown__btn:hover,.jh-nav-dropdown__btn:focus{background:rgba(255,255,255,0.08);outline:none;}
-.jh-nav-dropdown__menu{display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:160px;background:rgba(13,20,32,0.98);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px;list-style:none;margin:0;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
-.jh-nav-dropdown__menu li a{display:block;padding:9px 12px;border-radius:7px;color:#E5E7EB;text-decoration:none;font-weight:600;font-size:14px;}
-.jh-nav-dropdown__menu li a:hover{background:rgba(255,255,255,0.08);}
-.jh-nav-dropdown.is-open .jh-nav-dropdown__menu{display:block;}
-</style>
-<header class="jh-header" role="banner" aria-label="Primary site header" id="site-primary-nav">
-  <div class="jh-header__inner">
-    <a class="jh-brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-header__logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" loading="eager" aria-hidden="true"/>
-      <span class="jh-brand__text">Jonathan Harris</span>
-    </a>
-    <nav aria-label="Primary navigation">
-      <ul class="jh-topnav">
-  <li><a href="/">Home</a></li>
-  <li><a href="/ebooks/">eBooks</a></li>
-  <li><a href="/podcast/">Podcast</a></li>
-  <li><a href="/newsletter/">Newsletter</a></li>
-  <li><a href="/blog/">Blog</a></li>
-  <li><a href="/bio/">About</a></li>
-  <li class="jh-nav-dropdown">
-    <button class="jh-nav-dropdown__btn" aria-expanded="false" aria-haspopup="true">Resources <svg aria-hidden="true" focusable="false" width="10" height="10" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-    <ul class="jh-nav-dropdown__menu" role="menu">
-      <li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
-      <li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
-      <li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
-      <li role="none"><a href="/contact/" role="menuitem">Contact</a></li>
-    </ul>
-  </li>
-</ul>
-    </nav>
-    <button class="jh-hamburger" aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg> <span class="jh-hamburger__label">Menu</span></button>
-  </div>
-  <nav class="jh-mobile-nav" id="jh-mobile-nav" aria-label="Mobile navigation" hidden>
-    <a class="jh-mobile-nav__brand" href="/" aria-label="Jonathan Harris – home">
-      <img class="jh-mobile-nav__brand-logo" src="https://images.jonathan-harris.online/site-logo" alt="" width="32" height="32" aria-hidden="true"/>
-      <span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
-    </a>
-    <a href="/">Home</a>
-    <a href="/ebooks/">eBooks</a>
-    <a href="/podcast/">Podcast</a>
-    <a href="/newsletter/">Newsletter</a>
-    <a href="/blog/">Blog</a>
-    <a href="/bio/">About</a>
-    <div class="jh-mobile-nav__group">
-      <span class="jh-mobile-nav__group-label">Resources</span>
-      <div class="jh-mobile-nav__group-links">
-        <a href="/glossary/">Glossary</a>
-        <a href="/topics/">Topics</a>
-        <a href="/compare/">Comparisons</a>
-        <a href="/contact/">Contact</a>
-      </div>
-    </div>
-  </nav>
-</header>
-<div class="page-loader" id="pageLoader" role="status" aria-label="Loading content" aria-live="polite"><div class="spinner" aria-hidden="true"></div></div>
-<section aria-label="Newsletter header" class="hero hero--newsletter">
-<img alt="Jonathan Harris" class="logo-morph" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      font-family: Arial, Helvetica, sans-serif;
+      line-height:1.6;
+      color:#374151;
+      text-align:center;
+      background:#FFFFFF;
+    }
+
+    .hero{
+      background:#0D1420;
+      padding:64px 16px 44px;
+    }
+
+    /* Logo morph: square -> circle (page-load only) */
+    .logo-morph{
+      width:120px;
+      height:120px;
+      object-fit:cover;
+      border-radius:12px;
+      display:block;
+      margin:0 auto 16px;
+      box-shadow:0 6px 22px rgba(0,0,0,0.45);
+      animation:morphIn 1.2s ease forwards;
+    }
+    @keyframes morphIn{
+      0%{border-radius:12px; opacity:0; transform:translateY(6px);}
+      55%{border-radius:12px; opacity:1; transform:translateY(0);}
+      100%{border-radius:999px; opacity:1; transform:translateY(0);}
+    }
+
+    .hero-img{
+      width:180px;
+      max-width:90%;
+      height:auto;
+      border-radius:14px;
+      box-shadow:0 6px 22px rgba(0,0,0,0.45);
+      display:block;
+      margin:0 auto 18px;
+    }
+
+    .hero h1{
+      margin:0 0 10px;
+      font-size:40px;
+      line-height:1.15;
+      color:#93C5FD;
+      font-weight:800;
+      letter-spacing:-0.02em;
+    }
+
+    .hero p{
+      margin:0 auto;
+      max-width:760px;
+      font-size:18px;
+      line-height:1.6;
+      color:#D1D5DB;
+    }
+
+    .main{
+      background:#F5F7FA;
+      padding:54px 16px 64px;
+      width:100%;
+    }
+
+    .card{
+      background:#FFFFFF;
+      max-width:900px;
+      margin:0 auto;
+      padding:30px 18px;
+      border-radius:18px;
+      box-shadow:0 14px 40px rgba(0,0,0,0.12);
+      border:1px solid rgba(0,0,0,0.06);
+      text-align:center;
+    }
+
+    .card h2{
+      margin:0 0 10px;
+      color:#4F46E5;
+      font-weight:800;
+      font-size:34px;
+      line-height:1.2;
+    }
+
+    .card p{
+      margin:0 auto 16px;
+      max-width:760px;
+      font-size:18px;
+      color:#374151;
+    }
+
+    .subtle{
+      font-size:14px;
+      color:#6B7280;
+      margin-top:14px;
+    }
+
+    .embed-wrap{
+      max-width:650px;
+      margin:0 auto;
+    }
+
+    blockquote{
+      margin:0 0 16px;
+      padding:14px 16px;
+      border-left:4px solid #4F46E5;
+      background:#F5F7FA;
+      border-radius:12px;
+      text-align:left;
+    }
+    blockquote:last-child{ margin-bottom:0; }
+
+    @media (max-width:600px){
+      .hero{ padding:58px 14px 40px; }
+      .hero h1{ font-size:32px; }
+      .card h2{ font-size:28px; }
+      .card p{ font-size:16px; }
+    }
+  </style>
+
+<link rel="alternate" hreflang="en-GB" href="https://jonathan-harris.online/newsletter">
+<link rel="alternate" hreflang="x-default" href="https://jonathan-harris.online/newsletter">
+</head>
+
+<body>
+  <header class="hero" role="region" aria-label="Newsletter header">
+    <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-morph" loading="eager" fetchpriority="high">
 <h1>Get the AI Edge</h1>
-<p>Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like.</p>
-</section>
-<main aria-label="Newsletter sign-up content" class="main page-main" id="main" role="main">
-<!-- FIX: Added margin-top to the first card so that when the mobile hamburger
-     menu is open it does not overlap the top of the page content. -->
-<section aria-label="Newsletter at a glance" class="card" role="region" style="margin-top:24px;margin-bottom:22px;background:linear-gradient(135deg,#4F46E5 0%,#3730A3 100%);color:#fff;border:none;">
-<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:32px;padding:8px 0;">
-  <div style="text-align:center;">
-    <span style="display:block;font-size:28px;font-weight:800;color:#fff;">Daily</span>
-    <span style="font-size:13px;color:rgba(255,255,255,0.8);">Published weekdays</span>
-  </div>
-  <div style="text-align:center;">
-    <span style="display:block;font-size:28px;font-weight:800;color:#fff;">Clear daily briefings</span>
-    <span style="font-size:13px;color:rgba(255,255,255,0.8);">What you get</span>
-  </div>
-  <div style="text-align:center;">
-    <span style="display:block;font-size:28px;font-weight:800;color:#fff;">0</span>
-    <span style="font-size:13px;color:rgba(255,255,255,0.8);">Buzzwords. Zero.</span>
-  </div>
-  <div style="text-align:center;">
-    <span style="display:block;font-size:28px;font-weight:800;color:#fff;">Free</span>
-    <span style="font-size:13px;color:rgba(255,255,255,0.8);">Always</span>
-  </div>
-</div>
-</section>
-<section aria-label="What the newsletter covers" class="card card--accent" role="region" style="margin-bottom:22px;">
-<h2>What You’ll Get</h2>
-<p>
+    <p>Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like.</p>
+  </header>
+
+  <main class="main" role="main" aria-label="Newsletter sign-up content">
+    <section class="card" role="region" aria-label="What the newsletter covers" style="margin-bottom:22px;">
+      <h2>What You&#8217;ll Get</h2>
+      <p>
         This is a <strong>daily AI newsletter</strong> built for business leaders, tech professionals, and
-        AI-curious readers who want the signal without the noise. Each edition is concise, practical, and published every weekday morning.
+        AI-curious readers who want the signal without the noise. Each edition takes around three minutes to read —
+        published every weekday morning.
       </p>
-<p>
-        A typical issue covers the day’s most significant AI development, a plain-English explanation of
-        why it matters (or doesn’t), and a clear verdict on whether it’s worth your attention.
+      <p>
+        A typical issue covers the day&#8217;s most significant AI development, a plain-English explanation of
+        why it matters (or doesn&#8217;t), and a clear verdict on whether it&#8217;s worth your attention.
         Topics include generative AI tools, large language model releases, AI policy and regulation, machine learning
         research translated into plain English, and practical AI productivity tips for professionals.
       </p>
-<p>
-        It’s designed to answer one question: <em>what do I actually need to know about AI this week?</em>
+      <p>
+        It&#8217;s designed to answer one question: <em>what do I actually need to know about AI this week?</em>
         Not everything — just the things that will change how you work, think, or make decisions.
       </p>
-<p>
-        No spam. No affiliate pressure. Unsubscribe whenever you like — it’s one click.
+      <p>
+        No spam. No affiliate pressure. Unsubscribe whenever you like — it&#8217;s one click.
       </p>
-</section>
-<section aria-label="Sample edition preview" class="card card--accent" role="region" style="margin-bottom:22px;">
-<h2>What a typical edition looks like</h2>
-<div style="background:rgba(13,20,32,0.06);border:1px solid rgba(79,70,229,0.25);border-radius:12px;padding:20px 24px;font-size:0.95rem;line-height:1.7;">
-  <p style="font-weight:700;margin:0 0 6px;font-size:1rem;">📬 AI Edge — Wednesday</p>
-  <p style="color:#6B7280;margin:0 0 14px;font-size:0.85rem;">Concise weekday briefings · Plain English · No hype</p>
-  <p><strong>Today's signal:</strong> Google DeepMind published a new paper on AI-assisted drug discovery that cuts early-stage screening time by roughly 40%. Three things you should know about it — and one reason the headline number is probably too optimistic.</p>
-  <p><strong>Worth your attention?</strong> Yes, if you work in pharma, biotech, or healthcare strategy. Interesting-but-not-urgent for everyone else.</p>
-  <p><strong>One thing to watch this week:</strong> The EU AI Act's high-risk system registration deadline is approaching. If your organisation deploys AI in hiring, credit, or critical infrastructure, this is not optional reading.</p>
-  <p style="margin-bottom:0;color:#6B7280;font-size:0.85rem;font-style:italic;">That's the flavour. Delivered free, every weekday.</p>
-</div>
-</section>
-<section aria-label="Sign up form" class="card card--accent" role="region">
-<h2>Newsletter Sign-Up</h2>
-<div class="embed-wrap">
-<iframe allow="geolocation; microphone; camera; fullscreen; payment" allowtransparency="true" frameborder="0" id="JotFormIFrame-260277027608054" onload="window.parent.scrollTo(0,0)" scrolling="no" src="https://form.jotform.com/260277027608054" style="min-width:100%;max-width:100%;height:560px;border:none;" title="Get the AI Edge"></iframe>
-</div>
-<p class="subtle" style="margin-top:14px;text-align:center;">
-  If the form above doesn’t load: 
-  <a class="newsletter-fallback" href="https://form.jotform.com/260277027608054" rel="noopener" target="_blank">
-    Sign up here →
-  </a>
-</p>
-</section>
-<section aria-label="What readers say" class="card card--accent" role="region" style="margin-top:22px;">
-<h2>What readers say</h2>
-<p style="margin:0 auto 18px;max-width:760px;color:#374151;">
+    </section>
+
+    <section class="card" role="region" aria-label="Sign up form">
+      <h2>Newsletter Sign-Up</h2>
+      <div class="embed-wrap">
+        <iframe
+          id="JotFormIFrame-260277027608054"
+          title="Get the AI Edge"
+          onload="window.parent.scrollTo(0,0)"
+          allowtransparency="true"
+          allow="geolocation; microphone; camera; fullscreen; payment"
+          src="https://form.jotform.com/260277027608054"
+          frameborder="0"
+          style="min-width:100%;max-width:100%;height:560px;border:none;"
+          scrolling="no"
+        ></iframe>
+      </div>
+
+      <p class="subtle">
+        If the form doesn’t load, use this:
+        <a href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener" style="color:#4F46E5;text-decoration:underline;">
+          open the sign-up form
+        </a>
+      </p>
+    </section>
+
+    <section class="card" role="region" aria-label="What readers say" style="margin-top:22px;">
+      <h2>What readers say</h2>
+      <p style="margin:0 auto 18px;max-width:760px;color:#374151;">
         A couple of quick reactions from people who prefer signal over noise.
       </p>
-<div style="max-width:760px;margin:0 auto;">
-<blockquote>
-          “The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters.”
-          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Liam R., IT Manager</div>
-</blockquote>
-<blockquote>
-          “No hype, no waffle. Just the bits of AI news that actually change what I do at work.”
-          <div style="margin-top:8px;color:#4B5563;font-size:14px;">— Rachel D., Product Manager</div>
-</blockquote>
-</div>
-</section>
-</main>
 
-<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>
+      <div style="max-width:760px;margin:0 auto;">
+        <blockquote>
+          “The daily newsletter is the only AI update I can tolerate before coffee. Short, sharp, and it tells you what matters.”
+          <div style="margin-top:8px;color:#6B7280;font-size:14px;">— Liam R., IT Manager</div>
+        </blockquote>
+
+        <blockquote>
+          “No hype, no waffle. Just the bits of AI news that actually change what I do at work.”
+          <div style="margin-top:8px;color:#6B7280;font-size:14px;">— Rachel D., Product Manager</div>
+        </blockquote>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script>
     window.jotformEmbedHandler("iframe[id='JotFormIFrame-260277027608054']", "https://form.jotform.com/");
   </script>
-<div id="siteFooter"></div>
-<script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
-<script>
-  window.jotformEmbedHandler("iframe[id='JotFormIFrame-260277027608054']", "https://form.jotform.com/");
-</script>
-<script defer src="/assets/js/site-ui.js"></script>
 
-<!-- Chatbot -->
-<script src="https://botsailor.com/script/webchat-link.js?code=1744067063128291" defer></script>
+<!-- Animated Footer with Hover Effects -->
+<footer style="background-color:#0D1420; color:#D1D5DB; font-family:Arial, Helvetica, sans-serif; font-size:14px; padding:20px 15px;" role="contentinfo" aria-label="Website Footer">
+
+  <div style="max-width:1200px; margin:0 auto;">
+    <div style="display:flex; flex-direction:column; gap:30px; align-items:center; text-align:center;">
+
+      <!-- Navigation Links -->
+      <nav aria-label="Footer navigation">
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 40px;">
+          <li><a href="https://jonathan-harris.online/" style="color:#93C5FD; text-decoration:none;">Home</a></li>
+          <li><a href="https://jonathan-harris.online/bio" style="color:#93C5FD; text-decoration:none;">More About Me</a></li>
+          <li><a href="https://jonathan-harris.online/terms-of-use" style="color:#93C5FD; text-decoration:none;">Terms of Use</a></li>
+          <li><a href="https://jonathan-harris.online/privacy-policy" style="color:#93C5FD; text-decoration:none;">Privacy Policy</a></li>
+          <li><a href="https://jonathan-harris.online/affiliate" style="color:#93C5FD; text-decoration:none;">Affiliate Partners</a></li>
+          <li><a href="https://jonathan-harris.online/contact" style="color:#93C5FD; text-decoration:none;">Contact Me</a></li>
+        </ul>
+      </nav>
+
+      <!-- Social Media Links -->
+      <nav aria-label="Social media links">
+        <ul style="list-style:none; padding:0; margin:0; display:flex; justify-content:center; gap:25px;">
+          <li>
+            <a href="https://youtube.com/@jonathanharris-r7i" target="_blank" rel="noopener noreferrer">
+              <img src="https://images.jonathan-harris.online/youtube-logo" alt="YouTube" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
+            </a>
+          </li>
+          <li>
+            <a href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" target="_blank" rel="noopener noreferrer">
+              <img src="https://images.jonathan-harris.online/spotify-logo" alt="Spotify Podcast" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
+            </a>
+          </li>
+          <li>
+            <a href="https://www.tiktok.com/@jonathan_harris_01" target="_blank" rel="noopener noreferrer">
+              <img src="https://images.jonathan-harris.online/tiktok-icon" alt="TikTok" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/share/1G7v4P69xa" target="_blank" rel="noopener noreferrer">
+              <img src="https://images.jonathan-harris.online/facebook-icon" alt="Facebook" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/jonathan.harris1975" target="_blank" rel="noopener noreferrer">
+              <img src="https://images.jonathan-harris.online/insta-logo" alt="Instagram" style="width:30px;height:30px;opacity:0.7;" loading="lazy">
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div style="font-size:12px;">© 2026 Jonathan Harris. All rights reserved.</div>
+
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
