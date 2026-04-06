@@ -8,6 +8,12 @@
   <meta name="description" content="Subscribe to Jonathan Harris’ daily AI newsletter—short, practical updates on AI, machine learning, NLP, and ethical AI. No fluff, just signal.">
   <meta name="author" content="Jonathan Harris">
   <link rel="canonical" href="https://jonathan-harris.online/newsletter/">
+  <script>document.documentElement.classList.add('js-enabled');</script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+<link href="/assets/css/site.css" rel="stylesheet">
+  <link href="/assets/css/main.css" rel="stylesheet">
   <link rel="icon" href="https://assets.jonathan-harris.online/favicon.ico" type="image/x-icon">
   <meta name="theme-color" content="#0D1420">
 
@@ -189,14 +195,75 @@
 <link rel="alternate" hreflang="x-default" href="https://jonathan-harris.online/newsletter">
 </head>
 
-<body>
-  <header class="hero" role="region" aria-label="Newsletter header">
+<body class="page-newsletter">
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
+<div class="jh-header__inner">
+<a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
+<span aria-hidden="true" class="jh-logo-wrap">
+<img alt="" aria-hidden="true" class="jh-header__logo" decoding="async" fetchpriority="high" height="32" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+</span>
+<span class="jh-brand__text">Jonathan Harris</span>
+</a>
+<nav aria-label="Primary navigation">
+<ul class="jh-topnav">
+<li><a href="/">Home</a></li>
+<li><a href="/ebooks/">eBooks</a></li>
+<li><a href="/podcast/">Podcast</a></li>
+<li><a href="/newsletter/">Newsletter</a></li>
+<li><a href="/topics/">Topics</a></li>
+<li><a href="/bio/">About</a></li>
+<li class="jh-nav-dropdown">
+<button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
+<ul class="jh-nav-dropdown__menu" role="menu">
+<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
+<li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+<li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+<li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+</ul>
+</li>
+<li><a href="/contact/">Contact</a>
+</li>
+<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li>
+</ul>
+</nav>
+<button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
+</div>
+<nav aria-label="Mobile navigation" class="jh-mobile-nav" hidden="" id="jh-mobile-nav">
+<a aria-label="Jonathan Harris – home" class="jh-mobile-nav__brand" href="/">
+<span aria-hidden="true" class="jh-logo-wrap">
+<img alt="" aria-hidden="true" class="jh-mobile-nav__brand-logo" decoding="async" height="32" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+</span>
+<span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+</a>
+<a href="/">Home</a>
+<a href="/ebooks/">eBooks</a>
+<a href="/podcast/">Podcast</a>
+<a href="/newsletter/">Newsletter</a>
+<a href="/topics/">Topics</a>
+<a href="/bio/">About</a>
+<div class="jh-mobile-nav__group">
+<span class="jh-mobile-nav__group-label">Resources</span>
+<div class="jh-mobile-nav__group-links">
+<a href="/blog/">Blog</a>
+<a href="/glossary/">Glossary</a>
+<a href="/topics/">Topics</a>
+<a href="/compare/">Comparisons</a>
+</div>
+</div>
+<a href="/contact/">Contact</a>
+<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
+</nav>
+</header>
+
+  <header class="hero hero--newsletter hero--has-fixed-nav" role="region" aria-label="Newsletter header">
     <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-morph" loading="eager" fetchpriority="high">
 <h1>Get the AI Edge</h1>
     <p>Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like.</p>
   </header>
 
-  <main class="main" role="main" aria-label="Newsletter sign-up content">
+  <main class="main" id="main" role="main" aria-label="Newsletter sign-up content">
     <section class="card" role="region" aria-label="What the newsletter covers" style="margin-bottom:22px;">
       <h2>What You&#8217;ll Get</h2>
       <p>
@@ -323,5 +390,6 @@
   </div>
 </footer>
 
+  <script defer="" src="/assets/js/site-ui.js"></script>
 </body>
 </html>
