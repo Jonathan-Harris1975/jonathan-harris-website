@@ -4220,3 +4220,43 @@ article p {
     line-height: 1.55;
   }
 }
+
+/* ===== Header layout correction — April 2026 ===== */
+/* Keep the shared brand, desktop nav, and hamburger on one governed row.
+   The no-JS fallback may still wrap the desktop nav beneath the brand on small screens. */
+.jh-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.jh-header__inner > nav[aria-label="Primary navigation"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.jh-brand {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  min-width: 0;
+  text-decoration: none;
+}
+
+.jh-brand__text {
+  white-space: nowrap;
+}
+
+.jh-hamburger {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 768px) {
+  html.js-enabled .jh-header__inner {
+    flex-wrap: nowrap !important;
+  }
+
+  html:not(.js-enabled) .jh-header__inner {
+    flex-wrap: wrap !important;
+  }
+}
