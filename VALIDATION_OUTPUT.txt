@@ -1,7 +1,7 @@
 Validation run: 2026-03-28T21:48:58Z
 Book count: 36
 Topic count: 24
-Workbook title parity: 81/81 passed, 0 mismatched
+Workbook title parity: 79/81 passed, 2 mismatched
 Workbook content parity: 330 exact field matches, 30 approved transformations, 0 mismatches across 360 governed field checks
 
 Topics:
@@ -30,9 +30,9 @@ Topics:
 - Sports: 1
 - Transportation: 6
 
-Status: PASSED
-- Route registry complete
-- Route manifest and host redirect coverage checks passed
-- Topic discovery pages exist for every book
-- Metadata and FAQ checks passed
-- Generated crawler snapshots and redirect governance checks passed
+Status: FAILED (5 issue(s))
+- Shared CSS is missing a governed .sr-only utility while HTML still references sr-only.
+- Inline style attribute found in HTML: contact/index.html
+- Inline style attribute found in HTML: newsletter/index.html
+- Workbook Pages title mismatch for contact/index.html: workbook 'Get in Touch | Jonathan Harris' != repo 'Contact | Jonathan Harris — AI Author & Podcast Host'.
+- Workbook Pages title mismatch for newsletter/index.html: workbook 'Get the AI Edge | Jonathan Harris' != repo 'Daily AI Newsletter | Jonathan Harris'.

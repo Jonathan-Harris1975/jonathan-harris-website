@@ -1,0 +1,38 @@
+[
+  {
+    "file": "assets/css/affiliate-inline.css",
+    "before_after_same_baseline": 2856,
+    "before_runtime": 2856,
+    "after": 2856
+  },
+  {
+    "file": "assets/css/compare-inline.css",
+    "before_after_same_baseline": 928,
+    "before_runtime": 928,
+    "after": 928
+  },
+  {
+    "file": "assets/css/ebook-template.css",
+    "before_after_same_baseline": 3950,
+    "before_runtime": 3950,
+    "after": 3907
+  },
+  {
+    "file": "assets/css/glossary-inline.css",
+    "before_after_same_baseline": 828,
+    "before_runtime": 828,
+    "after": 828
+  },
+  {
+    "file": "assets/css/legal-inline.css",
+    "before_after_same_baseline": 2504,
+    "before_runtime": 2504,
+    "after": 2504
+  },
+  {
+    "file": "assets/css/site.css",
+    "before_after_same_baseline": 81045,
+    "before_runtime": 81045,
+    "after": 81045
+  }
+]
