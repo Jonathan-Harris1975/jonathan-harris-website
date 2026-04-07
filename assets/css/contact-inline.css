@@ -1,3 +1,1 @@
-body.page-contact .hero--contact { padding-top: calc(var(--header-h, 72px) + 36px); }
-body.page-contact .embed-wrap iframe { width: 100%; max-width: 100%; min-height: 560px; border: none; }
-@media (max-width: 600px) { body.page-contact .embed-wrap iframe { min-height: 640px; } }
+body.page-contact .hero--contact{padding-top:calc(var(--header-h, 72px) + 36px)}body.page-contact .embed-wrap iframe{width:100%;max-width:100%;min-height:560px;border:0}@media(max-width:600px){body.page-contact .embed-wrap iframe{min-height:640px}}
