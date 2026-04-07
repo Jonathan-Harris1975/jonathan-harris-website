@@ -1998,8 +1998,8 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+
+
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
 <link href="{canonical}" rel="canonical"/>
@@ -2243,8 +2243,8 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+
+
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
@@ -2368,8 +2368,8 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+
+
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
@@ -2447,8 +2447,8 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <meta content="#0D1420" name="theme-color"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
-<link href="/assets/css/main.css" rel="stylesheet"/>
-<link href="/assets/css/gold-standard.css" rel="stylesheet"/>
+
+
 <link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
