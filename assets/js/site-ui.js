@@ -228,9 +228,10 @@
 
   function shouldShowHeaderImmediately(heroEl){
     try{
+      if (is404Page()) return true;
       const target = heroEl || findHeaderRevealAnchor();
       if (!target) return true;
-      return target.hasAttribute('data-jh-header-show-immediately');
+      return target.hasAttribute('data-jh-header-show-immediately') || target.classList.contains('hero--has-fixed-nav');
     }catch(_){
       return false;
     }
