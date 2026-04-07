@@ -1483,10 +1483,10 @@ main > section, .main > section, .main > .card, .wrap > section{ scroll-margin-t
    until site-ui.js decides it should appear. This removes the initial mobile
    hamburger/nav flash before JS applies .jh-header--hero-mode. */
 @supports selector(body:has(.hero)) {
-  html.js-enabled body:has([data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has([data-jh-header-reveal-anchor]:not(.hero--has-fixed-nav):not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
   html.js-enabled body:has(.lp-hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
-  html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
-  html.js-enabled body:has(header.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(.hero:not(.hero--has-fixed-nav):not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
+  html.js-enabled body:has(header.hero:not(.hero--has-fixed-nav):not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),
   html.js-enabled body:has(.about-banner[data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible) {
     opacity: 0;
     pointer-events: none;
@@ -1524,11 +1524,16 @@ body .jh-header--injected.is-visible{
   transform: translateY(0) !important;
 }
 .jh-header__inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   min-height: var(--header-height);
   padding: 12px 18px !important;
   gap: 18px !important;
 }
 .jh-brand{
+  display:inline-flex;
+  align-items:center;
   gap: 10px !important;
   font-size: 1rem;
 }
@@ -4218,45 +4223,5 @@ article p {
 
   .compare-table.is-stacked td {
     line-height: 1.55;
-  }
-}
-
-/* ===== Header layout correction — April 2026 ===== */
-/* Keep the shared brand, desktop nav, and hamburger on one governed row.
-   The no-JS fallback may still wrap the desktop nav beneath the brand on small screens. */
-.jh-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.jh-header__inner > nav[aria-label="Primary navigation"] {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
-.jh-brand {
-  display: inline-flex;
-  align-items: center;
-  flex: 0 0 auto;
-  min-width: 0;
-  text-decoration: none;
-}
-
-.jh-brand__text {
-  white-space: nowrap;
-}
-
-.jh-hamburger {
-  flex: 0 0 auto;
-}
-
-@media (max-width: 768px) {
-  html.js-enabled .jh-header__inner {
-    flex-wrap: nowrap !important;
-  }
-
-  html:not(.js-enabled) .jh-header__inner {
-    flex-wrap: wrap !important;
   }
 }
