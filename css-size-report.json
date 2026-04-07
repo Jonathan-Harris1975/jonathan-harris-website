@@ -1,38 +1,44 @@
 [
   {
     "file": "assets/css/affiliate-inline.css",
-    "before_after_same_baseline": 2856,
-    "before_runtime": 2856,
-    "after": 2856
+    "original_bytes": 2856,
+    "minified_bytes": 2612,
+    "reduction_bytes": 244,
+    "reduction_pct": 8.54
   },
   {
     "file": "assets/css/compare-inline.css",
-    "before_after_same_baseline": 928,
-    "before_runtime": 928,
-    "after": 928
+    "original_bytes": 928,
+    "minified_bytes": 928,
+    "reduction_bytes": 0,
+    "reduction_pct": 0.0
   },
   {
     "file": "assets/css/ebook-template.css",
-    "before_after_same_baseline": 3950,
-    "before_runtime": 3950,
-    "after": 3907
+    "original_bytes": 3950,
+    "minified_bytes": 3884,
+    "reduction_bytes": 66,
+    "reduction_pct": 1.67
   },
   {
     "file": "assets/css/glossary-inline.css",
-    "before_after_same_baseline": 828,
-    "before_runtime": 828,
-    "after": 828
+    "original_bytes": 828,
+    "minified_bytes": 828,
+    "reduction_bytes": 0,
+    "reduction_pct": 0.0
   },
   {
     "file": "assets/css/legal-inline.css",
-    "before_after_same_baseline": 2504,
-    "before_runtime": 2504,
-    "after": 2504
+    "original_bytes": 2504,
+    "minified_bytes": 2503,
+    "reduction_bytes": 1,
+    "reduction_pct": 0.04
   },
   {
     "file": "assets/css/site.css",
-    "before_after_same_baseline": 81045,
-    "before_runtime": 81045,
-    "after": 81045
+    "original_bytes": 81045,
+    "minified_bytes": 80967,
+    "reduction_bytes": 78,
+    "reduction_pct": 0.1
   }
 ]

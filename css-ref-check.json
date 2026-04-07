@@ -1,1769 +1,1548 @@
 [
   {
-    "html": "404.html",
+    "file": "404.html",
     "line": 18,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "affiliate/index.html",
+    "file": "affiliate/index.html",
     "line": 12,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "affiliate/index.html",
+    "file": "affiliate/index.html",
     "line": 12,
     "href": "/assets/css/affiliate-inline.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/affiliate-inline.css"
   },
   {
-    "html": "api/docs/index.html",
+    "file": "api/docs/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "bio/index.html",
+    "file": "bio/index.html",
     "line": 10,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "blog/index.html",
+    "file": "blog/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "blog/index.html",
+    "file": "blog/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "blog/weekly/index.html",
+    "file": "blog/weekly/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "blog/weekly/index.html",
+    "file": "blog/weekly/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/agriculture/index.html",
+    "file": "catalogue/agriculture/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/agriculture/index.html",
+    "file": "catalogue/agriculture/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/agriculture/index.html",
+    "file": "catalogue/agriculture/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/artificial-intelligence/index.html",
+    "file": "catalogue/artificial-intelligence/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/artificial-intelligence/index.html",
+    "file": "catalogue/artificial-intelligence/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/artificial-intelligence/index.html",
+    "file": "catalogue/artificial-intelligence/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/construction/index.html",
+    "file": "catalogue/construction/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/construction/index.html",
+    "file": "catalogue/construction/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/construction/index.html",
+    "file": "catalogue/construction/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/creativity/index.html",
+    "file": "catalogue/creativity/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/creativity/index.html",
+    "file": "catalogue/creativity/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/creativity/index.html",
+    "file": "catalogue/creativity/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/cyber-security/index.html",
+    "file": "catalogue/cyber-security/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/cyber-security/index.html",
+    "file": "catalogue/cyber-security/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/cyber-security/index.html",
+    "file": "catalogue/cyber-security/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/defence/index.html",
+    "file": "catalogue/defence/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/defence/index.html",
+    "file": "catalogue/defence/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/defence/index.html",
+    "file": "catalogue/defence/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/education/index.html",
+    "file": "catalogue/education/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/education/index.html",
+    "file": "catalogue/education/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/education/index.html",
+    "file": "catalogue/education/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/energy/index.html",
+    "file": "catalogue/energy/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/energy/index.html",
+    "file": "catalogue/energy/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/energy/index.html",
+    "file": "catalogue/energy/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/environment/index.html",
+    "file": "catalogue/environment/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/environment/index.html",
+    "file": "catalogue/environment/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/environment/index.html",
+    "file": "catalogue/environment/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/ethics/index.html",
+    "file": "catalogue/ethics/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/ethics/index.html",
+    "file": "catalogue/ethics/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/ethics/index.html",
+    "file": "catalogue/ethics/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/finance/index.html",
+    "file": "catalogue/finance/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/finance/index.html",
+    "file": "catalogue/finance/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/finance/index.html",
+    "file": "catalogue/finance/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/future-of-work/index.html",
+    "file": "catalogue/future-of-work/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/future-of-work/index.html",
+    "file": "catalogue/future-of-work/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/future-of-work/index.html",
+    "file": "catalogue/future-of-work/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/gaming/index.html",
+    "file": "catalogue/gaming/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/gaming/index.html",
+    "file": "catalogue/gaming/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/gaming/index.html",
+    "file": "catalogue/gaming/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/government/index.html",
+    "file": "catalogue/government/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/government/index.html",
+    "file": "catalogue/government/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/government/index.html",
+    "file": "catalogue/government/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/healthcare/index.html",
+    "file": "catalogue/healthcare/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/healthcare/index.html",
+    "file": "catalogue/healthcare/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/healthcare/index.html",
+    "file": "catalogue/healthcare/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/history/index.html",
+    "file": "catalogue/history/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/history/index.html",
+    "file": "catalogue/history/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/history/index.html",
+    "file": "catalogue/history/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/industry/index.html",
+    "file": "catalogue/industry/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/industry/index.html",
+    "file": "catalogue/industry/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/industry/index.html",
+    "file": "catalogue/industry/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/law/index.html",
+    "file": "catalogue/law/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/law/index.html",
+    "file": "catalogue/law/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/law/index.html",
+    "file": "catalogue/law/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/manufacturing/index.html",
+    "file": "catalogue/manufacturing/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/manufacturing/index.html",
+    "file": "catalogue/manufacturing/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/manufacturing/index.html",
+    "file": "catalogue/manufacturing/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/media/index.html",
+    "file": "catalogue/media/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/media/index.html",
+    "file": "catalogue/media/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/media/index.html",
+    "file": "catalogue/media/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/retail/index.html",
+    "file": "catalogue/retail/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/retail/index.html",
+    "file": "catalogue/retail/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/retail/index.html",
+    "file": "catalogue/retail/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/science/index.html",
+    "file": "catalogue/science/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/science/index.html",
+    "file": "catalogue/science/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/science/index.html",
+    "file": "catalogue/science/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/sports/index.html",
+    "file": "catalogue/sports/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/sports/index.html",
+    "file": "catalogue/sports/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/sports/index.html",
+    "file": "catalogue/sports/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "catalogue/transportation/index.html",
+    "file": "catalogue/transportation/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/transportation/index.html",
+    "file": "catalogue/transportation/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "catalogue/transportation/index.html",
+    "file": "catalogue/transportation/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "compare/index.html",
+    "file": "compare/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "compare/index.html",
+    "file": "compare/index.html",
     "line": 43,
     "href": "/assets/css/compare-inline.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/compare-inline.css"
   },
   {
-    "html": "contact/index.html",
+    "file": "contact/index.html",
     "line": 54,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
+    "file": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
+    "file": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
+    "file": "ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
+    "file": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
+    "file": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
+    "file": "ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
+    "file": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
+    "file": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
+    "file": "ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
+    "file": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
+    "file": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
+    "file": "ebooks/ai-in-education-reimagining-learning-for-every-student/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
+    "file": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
+    "file": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
+    "file": "ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
+    "file": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
+    "file": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
+    "file": "ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
+    "file": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
+    "file": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
+    "file": "ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
+    "file": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
+    "file": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
+    "file": "ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
+    "file": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
+    "file": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
+    "file": "ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
+    "file": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
+    "file": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
+    "file": "ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
+    "file": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
+    "file": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
+    "file": "ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
+    "file": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
+    "file": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
+    "file": "ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
+    "file": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
+    "file": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
+    "file": "ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
+    "file": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
+    "file": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
+    "file": "ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
+    "file": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
+    "file": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
+    "file": "ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
+    "file": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
+    "file": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
+    "file": "ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
+    "file": "ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
+    "file": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
+    "file": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
+    "file": "ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
+    "file": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
+    "file": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
+    "file": "ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
+    "file": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
+    "file": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
+    "file": "ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
+    "file": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
+    "file": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
+    "file": "ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
+    "file": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
+    "file": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
+    "file": "ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
+    "file": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
+    "file": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
+    "file": "ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
+    "file": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
+    "file": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
+    "file": "ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/index.html",
+    "file": "ebooks/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/index.html",
+    "file": "ebooks/index.html",
     "line": 15,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/index.html",
+    "file": "ebooks/index.html",
     "line": 18,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
+    "file": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
+    "file": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
+    "file": "ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
+    "file": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
+    "file": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
+    "file": "ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
+    "file": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
+    "file": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
+    "file": "ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
+    "file": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
+    "file": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
+    "file": "ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
+    "file": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
+    "file": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
+    "file": "ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
+    "file": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
+    "file": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
+    "file": "ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
+    "file": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
+    "file": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
+    "file": "ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
+    "file": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
+    "file": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
+    "file": "ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
+    "file": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
+    "file": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
+    "file": "ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
+    "file": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
+    "file": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
+    "file": "ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
+    "file": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
+    "file": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
+    "file": "ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "glossary/index.html",
+    "file": "glossary/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "glossary/index.html",
+    "file": "glossary/index.html",
     "line": 13,
     "href": "/assets/css/glossary-inline.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/glossary-inline.css"
   },
   {
-    "html": "index.html",
+    "file": "index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "newsletter/index.html",
+    "file": "newsletter/index.html",
     "line": 15,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "podcast/index.html",
+    "file": "podcast/index.html",
     "line": 15,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "privacy-policy/index.html",
+    "file": "privacy-policy/index.html",
     "line": 44,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "privacy-policy/index.html",
+    "file": "privacy-policy/index.html",
     "line": 44,
     "href": "/assets/css/legal-inline.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/legal-inline.css"
   },
   {
-    "html": "scripts/blog-post.html",
+    "file": "scripts/blog-post.html",
     "line": 16,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "scripts/blog-post.html",
+    "file": "scripts/blog-post.html",
     "line": 16,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "scripts/templates/blog-post.html",
+    "file": "scripts/templates/blog-post.html",
     "line": 16,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "scripts/templates/blog-post.html",
+    "file": "scripts/templates/blog-post.html",
     "line": 16,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "terms-of-use/index.html",
+    "file": "terms-of-use/index.html",
     "line": 41,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "terms-of-use/index.html",
+    "file": "terms-of-use/index.html",
     "line": 41,
     "href": "/assets/css/legal-inline.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/legal-inline.css"
   },
   {
-    "html": "topics/ai-for-beginners/index.html",
+    "file": "topics/ai-for-beginners/index.html",
     "line": 19,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/ai-for-beginners/index.html",
+    "file": "topics/ai-for-beginners/index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/ai-in-business/index.html",
+    "file": "topics/ai-in-business/index.html",
     "line": 19,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/ai-in-business/index.html",
+    "file": "topics/ai-in-business/index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/ai-in-healthcare/index.html",
+    "file": "topics/ai-in-healthcare/index.html",
     "line": 19,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/ai-in-healthcare/index.html",
+    "file": "topics/ai-in-healthcare/index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/generative-ai/index.html",
+    "file": "topics/generative-ai/index.html",
     "line": 19,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/generative-ai/index.html",
+    "file": "topics/generative-ai/index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/index.html",
+    "file": "topics/index.html",
     "line": 13,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/index.html",
+    "file": "topics/index.html",
     "line": 14,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/index.html",
+    "file": "topics/index.html",
     "line": 17,
     "href": "/assets/css/ebook-template.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/ebook-template.css"
   },
   {
-    "html": "topics/robotics-automation/index.html",
+    "file": "topics/robotics-automation/index.html",
     "line": 19,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   },
   {
-    "html": "topics/robotics-automation/index.html",
+    "file": "topics/robotics-automation/index.html",
     "line": 20,
     "href": "/assets/css/site.css",
-    "local": true,
     "exists": true,
     "resolved": "assets/css/site.css"
   }
