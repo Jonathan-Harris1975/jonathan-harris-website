@@ -3270,7 +3270,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if not actual_title.endswith(f" | {SITE_NAME}"):
                 errors.append(f"{book['slug']} page title is missing the brand suffix.")
             # March 2026 title policy: canonical ebook pages keep full workbook-governed titles.
-            # Length is advisory here because the workbook remains the governing source of truth.
+            # Length is advisory here because workbook copy is governed alongside approved normalisations.
             if actual_title in seen_serp_titles and seen_serp_titles[actual_title] != book['slug']:
                 duplicate_serp_titles[actual_title].extend([seen_serp_titles[actual_title], book['slug']])
             else:
