@@ -29,7 +29,7 @@ window.__JH_BLOG__ = {
       list.innerHTML = `
         <div class="card u-s04">
           <h2 class="u-s02">No posts yet</h2>
-          <p>The archive is ready. Once weekly posts are published in the local manifest, they will appear here automatically.</p>
+          <p>No local weekly posts are published here yet. Use the curated routes on this page for the strongest live material right now.</p>
           <p><a class="button primary" href="/newsletter/">Get the newsletter instead</a></p>
         </div>`;
       return;
@@ -84,7 +84,7 @@ window.__JH_BLOG__ = {
       render(manifest);
       return;
     }
-    setStatus("No weekly posts published yet.");
+    setStatus("Using the curated weekly route.");
     render([]);
   }
 
