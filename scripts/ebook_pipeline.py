@@ -1537,8 +1537,29 @@ def default_short(topic: str, pages: int | None) -> str:
     return helper_default_short(topic, pages)
 
 
+SEO_TITLE_OVERRIDES = {
+    "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": "AI and Formula 1",
+    "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation": "AI-Powered Smart Grid",
+    "artificial-intelligence-and-the-law-case-studies-and-future-trends": "AI and the Law",
+    "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention": "AI for Cyber Security",
+    "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": "AI for Wildlife Conservation",
+    "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security": "AI in Banking",
+    "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": "AI in Logistics",
+    "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": "AI in Sports",
+    "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation": "AI in Veterinary Medicine",
+    "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future": "AI-Powered Retail",
+    "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": "AI Revolution in Manufacturing",
+    "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media": "The AI Behind Your Feed",
+    "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry": "The Autonomous Revolution",
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": "The Future of Government and AI",
+    "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": "The House Always Knows",
+}
+
 
 def book_meta_title(book: Dict[str, Any]) -> str:
+    slug = clean_paragraph(book.get("slug", ""))
+    if slug in SEO_TITLE_OVERRIDES:
+        return SEO_TITLE_OVERRIDES[slug]
     return clean_paragraph(book.get("title", ""))
 
 
