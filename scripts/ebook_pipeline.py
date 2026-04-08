@@ -42,6 +42,9 @@ DEFAULT_TONE = "Plain-English, practical, sceptical, no-hype"
 BOOK_COVER_WIDTH = 2480
 BOOK_COVER_HEIGHT = 3508
 VALIDATION_REPORT = ROOT / "VALIDATION_OUTPUT.txt"
+SHARED_INTER_FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
 
 STOPWORDS = {
     "a", "an", "and", "are", "as", "at", "be", "book", "by", "for", "from", "how", "in", "into",
@@ -1996,6 +1999,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="@jonathan_harris_01" name="twitter:creator"/>
 <meta content="#0D1420" name="theme-color"/>
+{SHARED_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
@@ -2176,9 +2180,9 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
     </section>
   </div>
 </main>
-<script defer="" src="/assets/js/related-books.js"></script>
+<script defer="" src="/assets/js/related-books.min.js"></script>
 {footer}
-<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
 '''
@@ -2241,6 +2245,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <meta content="index,follow" name="robots"/>
 <meta content="{description}" name="ai:summary"/>
 <meta content="#0D1420" name="theme-color"/>
+{SHARED_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
@@ -2330,8 +2335,8 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
   </div>
 </main>
 {footer}
-<script defer="" src="/assets/js/books.js"></script>
-<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/books.min.js"></script>
+<script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
 '''
@@ -2366,6 +2371,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <meta content="{html.escape(description)}" name="description"/>
 <meta content="index,follow" name="robots"/>
 <meta content="#0D1420" name="theme-color"/>
+{SHARED_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
@@ -2414,7 +2420,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
   </div>
 </main>
 {footer}
-<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
 '''
@@ -2445,6 +2451,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <meta content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
 <meta content="#0D1420" name="theme-color"/>
+{SHARED_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
@@ -2488,7 +2495,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
   </div>
 </main>
 {footer}
-<script defer="" src="/assets/js/site-ui.js"></script>
+<script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
 '''
@@ -3633,13 +3640,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Responsive book cover widths drift detected for {page_path.relative_to(ROOT)}.")
 
     js_responsive_checks = {
-        ROOT / "assets" / "js" / "featured-book.js": ["/cdn-cgi/image/width=", "[400, 800, 1200]"],
-        ROOT / "assets" / "js" / "books.js": ["/cdn-cgi/image/width=", "[400, 800, 1200]"],
+        ROOT / "assets" / "js" / "featured-book.min.js": ["/cdn-cgi/image/width=", "[400,800,1200]"],
+        ROOT / "assets" / "js" / "books.min.js": ["/cdn-cgi/image/width=", "[400,800,1200]"],
     }
     for file_path, required_snippets in js_responsive_checks.items():
         file_text = file_path.read_text(encoding="utf-8", errors="ignore")
+        compact_text = re.sub(r"\s+", "", file_text)
         for snippet in required_snippets:
-            if snippet not in file_text:
+            if snippet not in compact_text:
                 errors.append(f"Responsive image helper drift detected in {file_path.relative_to(ROOT)}: missing {snippet}")
 
     removal_plan_path = ROOT / "docs" / "search-console-stale-url-removal-plan.md"
@@ -3694,14 +3702,14 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Static blog post missing for slug {slug}.")
 
     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
-    site_ui_js = (ROOT / "assets" / "js" / "site-ui.js").read_text(encoding="utf-8")
-    blog_js = (ROOT / "assets" / "js" / "blog.js").read_text(encoding="utf-8")
+    site_ui_js = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8")
+    blog_js = (ROOT / "assets" / "js" / "blog.bundle.min.js").read_text(encoding="utf-8")
     if "manifest stack" in weekly_archive_html or "published manifest" in weekly_archive_html or "falls back to" in weekly_archive_html:
         errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
     if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
-        errors.append("assets/js/blog.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
+        errors.append("assets/js/blog.bundle.min.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
     if "createElement(\"style\")" in site_ui_js or "createElement('style')" in site_ui_js:
-        errors.append("assets/js/site-ui.js still injects runtime style tags instead of relying on governed CSS.")
+        errors.append("assets/js/site-ui.min.js still injects runtime style tags instead of relying on governed CSS.")
     if not blog_manifest_items:
         if not re.search(r"<meta[^>]+(?:name=[\"']robots[\"'][^>]*content=[\"'][^\"']*noindex|content=[\"'][^\"']*noindex[^>]*name=[\"']robots[\"'])", weekly_archive_html, re.I):
             errors.append("blog/weekly/index.html must be noindex while blog/posts.json is empty.")
