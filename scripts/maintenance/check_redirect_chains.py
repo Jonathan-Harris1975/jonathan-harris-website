@@ -29,14 +29,16 @@ def canonicalise_url(value: str) -> str:
     return urlunsplit((split.scheme.lower(), split.netloc.lower(), path, split.query, ""))
 
 
-def fetch_without_redirect(url: str, timeout: float) -> tuple[int, str]:
+def fetch_without_redirect(url: str, timeout: float) -> tuple[int, str, str]:
     opener = build_opener(NoRedirectHandler())
     request = Request(url, headers={"User-Agent": "JonathanHarrisRedirectCheck/1.0"})
     try:
         with opener.open(request, timeout=timeout) as response:
-            return response.getcode(), response.geturl()
+            body = response.read().decode("utf-8", errors="replace")
+            return response.getcode(), response.geturl(), body
     except HTTPError as exc:
-        return exc.code, exc.headers.get("Location", "")
+        body = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
+        return exc.code, exc.headers.get("Location", ""), body
     except URLError as exc:  # pragma: no cover
         raise RuntimeError(str(exc.reason)) from exc
 
@@ -49,7 +51,7 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
     errors: list[str] = []
 
     try:
-        legacy_status, legacy_location = fetch_without_redirect(legacy_url, timeout)
+        legacy_status, legacy_location, _ = fetch_without_redirect(legacy_url, timeout)
     except RuntimeError as exc:
         return [f"{slug}: legacy alias request failed: {exc}"]
     if legacy_status < 300 or legacy_status >= 400:
@@ -58,7 +60,7 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
         errors.append(f"{slug}: legacy alias points to {legacy_location or '[missing Location header]'} instead of the canonical internal buy route")
 
     try:
-        canonical_status, canonical_location = fetch_without_redirect(canonical_url, timeout)
+        canonical_status, canonical_location, _ = fetch_without_redirect(canonical_url, timeout)
     except RuntimeError as exc:
         return errors + [f"{slug}: canonical buy route request failed: {exc}"]
     if canonical_status < 300 or canonical_status >= 400:
@@ -71,23 +73,27 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
 
 def validate_support_redirects(timeout: float) -> list[str]:
     checks = [
-        (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias"),
-        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/sitemap.xml", "Sitemap.xml alias"),
-        (f"{SITE_URL}/site-map.xml", f"{SITE_URL}/sitemap.xml", "site-map.xml alias"),
+        (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias", (REPO_ROOT / "robots.txt").read_text(encoding="utf-8")),
+        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/sitemap.xml", "Sitemap.xml alias", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
+        (f"{SITE_URL}/site-map.xml", f"{SITE_URL}/sitemap.xml", "site-map.xml alias", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
     ]
     errors: list[str] = []
-    for source, expected_target, label in checks:
+    for source, expected_target, label, expected_body in checks:
         try:
-            status, location = fetch_without_redirect(source, timeout)
+            status, location, body = fetch_without_redirect(source, timeout)
         except RuntimeError as exc:
             errors.append(f"{label}: request failed: {exc}")
             continue
-        if status < 300 or status >= 400:
-            errors.append(f"{label}: returned HTTP {status} instead of a redirect")
+        if 300 <= status < 400:
+            actual_target = canonicalise_url(urljoin(source, location))
+            if actual_target != canonicalise_url(expected_target):
+                errors.append(f"{label}: points to {location or '[missing Location header]'} instead of {expected_target}")
             continue
-        actual_target = canonicalise_url(urljoin(source, location))
-        if actual_target != canonicalise_url(expected_target):
-            errors.append(f"{label}: points to {location or '[missing Location header]'} instead of {expected_target}")
+        if status == 200:
+            if body.strip() != expected_body.strip():
+                errors.append(f"{label}: returned HTTP 200 but the published payload does not match the governed canonical asset")
+            continue
+        errors.append(f"{label}: returned HTTP {status} instead of a redirect or governed compatibility mirror")
     return errors
 
 
