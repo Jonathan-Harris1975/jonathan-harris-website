@@ -2653,9 +2653,12 @@ def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]
 
 def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
     payloads = build_crawler_snapshot_payloads(books)
+    robots_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]]
     sitemap_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
     return {
-        ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
+        ROOT / "robot.txt": robots_payload,
+        ROOT / "robots.txt": robots_payload,
+        ROOT / "Sitemap.xml": sitemap_payload,
         ROOT / "site-map.xml": sitemap_payload,
         ROOT / "sitemap.xml": sitemap_payload,
         ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
