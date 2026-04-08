@@ -81,3 +81,11 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `scripts/deployment_ci.py` runs the governed build-time CI chain: optional workbook import, page regeneration, derivative rebuild, redirect sync, crawler snapshot checks, and release validation.
 - Workbook import is automatic when either `--workbook` is supplied, `EBOOK_WORKBOOK_PATH` is set, or exactly one workbook is present in the repo root. If multiple workbook candidates exist, the build now fails fast until one governed workbook is selected explicitly.
 - `.github/workflows/ebook-subsystem-ci.yml` mirrors the build-time validation path on pull requests and adds a post-deploy live gate on `main` and `master` pushes.
+
+## Post-deploy webhook notification
+- `scripts/post_deploy_notify.py` sends a production deployment success webhook to `https://hooks.jonathan-harris.online/b9gwu0nlgc751d`.
+- The notifier is wired in as the final step of the `post-deploy-live-gate` job in `.github/workflows/ebook-subsystem-ci.yml`.
+- It fires once per successful deployment workflow run only after the push target is `main` or `master`, the build validation job has passed, live reachability has passed, strict post-deploy live validation has passed, and live redirect validation has passed.
+- It does not fire on pull requests, on failed validation, on failed live checks, or when the workflow never reaches the final successful state of the post-deploy gate.
+- The webhook sends a JSON payload with `event`, `repository`, `branch`, `commit_sha`, `commit_message`, `actor`, `workflow`, `run_id`, `run_number`, `run_url`, `deployed_url`, `environment`, `status`, and `timestamp_utc`.
+- Delivery uses bounded retries with exponential backoff and a request timeout. If delivery still fails, the final workflow step fails visibly so the problem is not hidden.
