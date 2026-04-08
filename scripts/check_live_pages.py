@@ -181,7 +181,10 @@ def load_workbook_page_checks(workbook_path: Path) -> list[HtmlContractCheck]:
             continue
         public_path = clean_paragraph(ws.cell(row_idx, headers["public url path"]).value)
         full_url = clean_paragraph(ws.cell(row_idx, headers["full url"]).value) or f"{SITE_URL}{public_path}"
-        expected_status = 404 if public_path == "/404" else 200
+        # The workbook may govern /404 as a published compatibility route that
+        # returns HTTP 200, while the real unknown-route 404 behaviour is
+        # verified separately by run_not_found_contract_checks().
+        expected_status = 200
         checks.append(
             HtmlContractCheck(
                 label=relative_path,
