@@ -49,3 +49,7 @@ jobs:
 
       - name: Verify live redirect chains
         run: python scripts/maintenance/check_redirect_chains.py
+
+      - name: Notify post-deploy success webhook
+        if: success()
+        run: python scripts/post_deploy_notify.py
