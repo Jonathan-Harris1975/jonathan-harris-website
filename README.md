@@ -29,7 +29,7 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 
 
 ## Source-of-truth boundaries
-- The workbook is the human-editable source of truth for ebook routing fields and book content.
+- The workbook is the human-editable source of truth for ebook routing fields and raw book content, with `config/workbook-normalisations.json` acting as the approved override registry for governed copy normalisations.
 - `data/ebooks-master.json` is the generated in-repo master record produced from the workbook import path.
 - `data/ebooks-master.json` is the only in-repo source used by generated pages and derivative outputs.
 - Refresh the generated master record from the workbook with `python3 scripts/import_ebook_workbook.py <workbook.xlsx>` before rebuilding the ebook subsystem.
