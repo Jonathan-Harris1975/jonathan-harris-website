@@ -276,7 +276,7 @@
 </header>
 
   <header class="hero hero--contact hero--has-fixed-nav" role="region" aria-label="Contact header">
-    <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-plain" loading="eager" fetchpriority="high">
+    <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-plain" loading="eager" fetchpriority="high" width="96" height="96">
     <h1>Get in Touch</h1>
     <p>If you’ve got something worth discussing, this is the place. Clear details beat noise every time.</p>
   </header>
@@ -284,12 +284,20 @@
   <main class="main" id="main" role="main" aria-label="Contact content">
     <section class="card" role="region" aria-label="Contact form">
       <h2>Contact Me</h2>
+      <div class="fallback-form-wrap" aria-label="Direct contact form fallback">
+        <h3>Prefer the direct form?</h3>
+        <p>If the embedded form gets blocked by your browser, extensions, or network, open the hosted version in a new tab.</p>
+        <div class="fallback-form__actions">
+          <a class="btn btn-primary" href="https://form.jotform.com/260281179574362" target="_blank" rel="noopener">Open the contact form</a>
+        </div>
+        <p class="fallback-form__microcopy">The embedded version still loads below for the normal on-page flow.</p>
+      </div>
+
       <div class="embed-wrap">
 
         <iframe
           id="JotFormIFrame-260281179574362"
           title="Web Contact"
-          onload="window.parent.scrollTo(0,0)"
           allowtransparency="true"
           allow="geolocation; microphone; camera; fullscreen; payment"
           src="https://form.jotform.com/260281179574362"
@@ -301,10 +309,10 @@
       </div>
 
       <p class="subtle">
-        If the form doesn’t load, use this:
+        Embedded form not cooperating?
         <a class="contact-direct-link" href="https://form.jotform.com/260281179574362" target="_blank" rel="noopener">
-          open it directly
-        </a>
+          Open it directly instead
+        </a>.
       </p>
     </section>
   </main>
