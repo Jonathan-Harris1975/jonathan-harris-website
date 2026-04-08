@@ -288,7 +288,7 @@
 </header>
 
   <header class="hero hero--newsletter hero--has-fixed-nav" role="region" aria-label="Newsletter header">
-    <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-morph" loading="eager" fetchpriority="high">
+    <img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-morph" loading="eager" fetchpriority="high" width="120" height="120">
 <h1>Get the AI Edge</h1>
     <p>Quick, practical updates — what changed, what matters, and what’s overhyped. No spam. Unsubscribe whenever you like.</p>
   </header>
@@ -318,11 +318,19 @@
 
     <section class="card" role="region" aria-label="Sign up form">
       <h2>Newsletter Sign-Up</h2>
+      <div class="fallback-form-wrap" aria-label="Direct newsletter sign-up fallback">
+        <h3>Need the direct sign-up page?</h3>
+        <p>If the embedded form gets blocked by your browser, extensions, or network, open the hosted version in a new tab.</p>
+        <div class="fallback-form__actions">
+          <a class="btn btn-primary" href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Open the sign-up form</a>
+        </div>
+        <p class="fallback-form__microcopy">The embedded version still loads below for the normal on-page flow.</p>
+      </div>
+
       <div class="embed-wrap">
         <iframe
           id="JotFormIFrame-260277027608054"
           title="Get the AI Edge"
-          onload="window.parent.scrollTo(0,0)"
           allowtransparency="true"
           allow="geolocation; microphone; camera; fullscreen; payment"
           src="https://form.jotform.com/260277027608054"
@@ -333,10 +341,10 @@
       </div>
 
       <p class="subtle">
-        If the form doesn’t load, use this:
+        Embedded form not cooperating?
         <a class="newsletter-direct-link" href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">
-          open the sign-up form
-        </a>
+          Open the sign-up form directly
+        </a>.
       </p>
     </section>
 
