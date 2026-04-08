@@ -1,236 +1,38 @@
-$ /opt/pyvenv/bin/python scripts/inject_partials.py --validate
-returncode: 1
+Validation run: 2026-03-28T21:48:58Z
+Book count: 36
+Topic count: 24
+Workbook title parity: 81/81 passed, 0 mismatched
+Workbook content parity: 330 exact field matches, 30 approved transformations, 0 mismatches across 360 governed field checks
 
-STDOUT:
+Topics:
+- Agriculture: 1
+- Artificial Intelligence: 1
+- Construction: 2
+- Creativity: 2
+- Cyber Security: 1
+- Defence: 1
+- Education: 1
+- Energy: 1
+- Environment: 2
+- Ethics: 2
+- Finance: 1
+- Future of Work: 1
+- Gaming: 1
+- Government: 1
+- Healthcare: 3
+- History: 1
+- Industry: 1
+- Law: 1
+- Manufacturing: 1
+- Media: 2
+- Retail: 1
+- Science: 1
+- Sports: 1
+- Transportation: 6
 
-Partial source : assets/partials/header.html
-Repo root      : /mnt/data/repo/jonathan-harris-website-main
-
-
-============================================================
-inject_partials  —  Header validation
-============================================================
-  Pages checked  : 83
-  In sync        : 21
-  Drifted / failed: 62
-
-DRIFT DETECTED — run  python3 scripts/inject_partials.py  to fix:
-  catalogue/agriculture/index.html  (shared Inter font head block is missing)
-  catalogue/artificial-intelligence/index.html  (shared Inter font head block is missing)
-  catalogue/construction/index.html  (shared Inter font head block is missing)
-  catalogue/creativity/index.html  (shared Inter font head block is missing)
-  catalogue/cyber-security/index.html  (shared Inter font head block is missing)
-  catalogue/defence/index.html  (shared Inter font head block is missing)
-  catalogue/education/index.html  (shared Inter font head block is missing)
-  catalogue/energy/index.html  (shared Inter font head block is missing)
-  catalogue/environment/index.html  (shared Inter font head block is missing)
-  catalogue/ethics/index.html  (shared Inter font head block is missing)
-  catalogue/finance/index.html  (shared Inter font head block is missing)
-  catalogue/future-of-work/index.html  (shared Inter font head block is missing)
-  catalogue/gaming/index.html  (shared Inter font head block is missing)
-  catalogue/government/index.html  (shared Inter font head block is missing)
-  catalogue/healthcare/index.html  (shared Inter font head block is missing)
-  catalogue/history/index.html  (shared Inter font head block is missing)
-  catalogue/industry/index.html  (shared Inter font head block is missing)
-  catalogue/law/index.html  (shared Inter font head block is missing)
-  catalogue/manufacturing/index.html  (shared Inter font head block is missing)
-  catalogue/media/index.html  (shared Inter font head block is missing)
-  catalogue/retail/index.html  (shared Inter font head block is missing)
-  catalogue/science/index.html  (shared Inter font head block is missing)
-  catalogue/sports/index.html  (shared Inter font head block is missing)
-  catalogue/transportation/index.html  (shared Inter font head block is missing)
-  ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-education-reimagining-learning-for-every-student/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html  (shared Inter font head block is missing)
-  ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html  (shared Inter font head block is missing)
-  ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html  (shared Inter font head block is missing)
-  ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html  (shared Inter font head block is missing)
-  ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html  (shared Inter font head block is missing)
-  ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html  (shared Inter font head block is missing)
-  ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html  (shared Inter font head block is missing)
-  ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html  (shared Inter font head block is missing)
-  ebooks/index.html  (shared Inter font head block is missing)
-  ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html  (shared Inter font head block is missing)
-  ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html  (shared Inter font head block is missing)
-  ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html  (shared Inter font head block is missing)
-  ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html  (shared Inter font head block is missing)
-  ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html  (shared Inter font head block is missing)
-  ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html  (shared Inter font head block is missing)
-  ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html  (shared Inter font head block is missing)
-  ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html  (shared Inter font head block is missing)
-  ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html  (shared Inter font head block is missing)
-  ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html  (shared Inter font head block is missing)
-  topics/index.html  (shared Inter font head block is missing)
-
-
-STDERR:
-
-
-$ /opt/pyvenv/bin/python scripts/validate_release.py
-returncode: 1
-
-STDOUT:
-Workbook title parity checked 81 routes; 79 passed.
-Workbook content parity checked 360 governed fields across 36 books; 330 exact matches, 30 approved transformations, 0 mismatches.
-[WARN] ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology page title is 93 characters; warning threshold is 90.
-[WARN] artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation page title is 115 characters; warning threshold is 90.
-[WARN] ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation page title is 96 characters; warning threshold is 90.
-[WARN] artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability page title is 116 characters; warning threshold is 90.
-[WARN] artificial-intelligence-and-the-law-case-studies-and-future-trends page title is 98 characters; warning threshold is 90.
-[WARN] artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention page title is 105 characters; warning threshold is 90.
-[WARN] the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry page title is 110 characters; warning threshold is 90.
-[WARN] artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future page title is 118 characters; warning threshold is 90.
-[WARN] artificial-intelligence-in-banking-revolutionizing-finance-and-data-security page title is 95 characters; warning threshold is 90.
-[WARN] the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information page title is 103 characters; warning threshold is 90.
-[WARN] artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement page title is 99 characters; warning threshold is 90.
-[WARN] the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming page title is 93 characters; warning threshold is 90.
-[WARN] the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media page title is 102 characters; warning threshold is 90.
-Shared CSS is missing a governed .sr-only utility while HTML still references sr-only.
-Inline style attribute found in HTML: contact/index.html
-Inline style attribute found in HTML: newsletter/index.html
-Workbook Pages title mismatch for contact/index.html: workbook 'Get in Touch | Jonathan Harris' != repo 'Contact | Jonathan Harris — AI Author & Podcast Host'.
-Workbook Pages title mismatch for newsletter/index.html: workbook 'Get the AI Edge | Jonathan Harris' != repo 'Daily AI Newsletter | Jonathan Harris'.
-Validation failed with 5 issue(s).
-
-
-STDERR:
-
-
-$ /opt/pyvenv/bin/python scripts/deployment_ci.py
-returncode: 1
-
-STDOUT:
-Wrote 36 records to data/ebooks-master.json
-Generated 36 canonical ebook pages.
-Derivative JSON, manifests, crawler files, and governed discovery pages rebuilt.
-Redirect files synchronised.
-Crawler file check passed: robots.txt, sitemap.xml, site-map.xml compatibility mirror, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.
-- robots: https://jonathan-harris.online/robots.txt
-- sitemap: https://jonathan-harris.online/sitemap.xml
-- llms: https://jonathan-harris.online/llms.txt
-
-Partial source : assets/partials/header.html
-Repo root      : /mnt/data/repo/jonathan-harris-website-main
-
-
-============================================================
-inject_partials  —  Header validation
-============================================================
-  Pages checked  : 83
-  In sync        : 21
-  Drifted / failed: 62
-
-DRIFT DETECTED — run  python3 scripts/inject_partials.py  to fix:
-  catalogue/agriculture/index.html  (shared Inter font head block is missing)
-  catalogue/artificial-intelligence/index.html  (shared Inter font head block is missing)
-  catalogue/construction/index.html  (shared Inter font head block is missing)
-  catalogue/creativity/index.html  (shared Inter font head block is missing)
-  catalogue/cyber-security/index.html  (shared Inter font head block is missing)
-  catalogue/defence/index.html  (shared Inter font head block is missing)
-  catalogue/education/index.html  (shared Inter font head block is missing)
-  catalogue/energy/index.html  (shared Inter font head block is missing)
-  catalogue/environment/index.html  (shared Inter font head block is missing)
-  catalogue/ethics/index.html  (shared Inter font head block is missing)
-  catalogue/finance/index.html  (shared Inter font head block is missing)
-  catalogue/future-of-work/index.html  (shared Inter font head block is missing)
-  catalogue/gaming/index.html  (shared Inter font head block is missing)
-  catalogue/government/index.html  (shared Inter font head block is missing)
-  catalogue/healthcare/index.html  (shared Inter font head block is missing)
-  catalogue/history/index.html  (shared Inter font head block is missing)
-  catalogue/industry/index.html  (shared Inter font head block is missing)
-  catalogue/law/index.html  (shared Inter font head block is missing)
-  catalogue/manufacturing/index.html  (shared Inter font head block is missing)
-  catalogue/media/index.html  (shared Inter font head block is missing)
-  catalogue/retail/index.html  (shared Inter font head block is missing)
-  catalogue/science/index.html  (shared Inter font head block is missing)
-  catalogue/sports/index.html  (shared Inter font head block is missing)
-  catalogue/transportation/index.html  (shared Inter font head block is missing)
-  ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-aviation-transforming-safety-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-education-reimagining-learning-for-every-student/index.html  (shared Inter font head block is missing)
-  ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/index.html  (shared Inter font head block is missing)
-  ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/index.html  (shared Inter font head block is missing)
-  ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/index.html  (shared Inter font head block is missing)
-  ebooks/beyond-earth-how-ai-is-transforming-space-exploration/index.html  (shared Inter font head block is missing)
-  ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/index.html  (shared Inter font head block is missing)
-  ebooks/digital-defense-the-role-of-ai-in-modern-warfare/index.html  (shared Inter font head block is missing)
-  ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/index.html  (shared Inter font head block is missing)
-  ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/index.html  (shared Inter font head block is missing)
-  ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/index.html  (shared Inter font head block is missing)
-  ebooks/index.html  (shared Inter font head block is missing)
-  ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/index.html  (shared Inter font head block is missing)
-  ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/index.html  (shared Inter font head block is missing)
-  ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/index.html  (shared Inter font head block is missing)
-  ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/index.html  (shared Inter font head block is missing)
-  ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/index.html  (shared Inter font head block is missing)
-  ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/index.html  (shared Inter font head block is missing)
-  ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/index.html  (shared Inter font head block is missing)
-  ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/index.html  (shared Inter font head block is missing)
-  ebooks/the-dumbening-how-ai-is-reshaping-our-minds/index.html  (shared Inter font head block is missing)
-  ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/index.html  (shared Inter font head block is missing)
-  ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/index.html  (shared Inter font head block is missing)
-  topics/index.html  (shared Inter font head block is missing)
-
-==> Import workbook into the governed master record
-$ /opt/pyvenv/bin/python scripts/import_ebook_workbook.py /mnt/data/repo/jonathan-harris-website-main/jonathan-harris-site-url-inventory-remediated-release-ready.xlsm
-
-==> Regenerate canonical ebook pages and metadata
-$ /opt/pyvenv/bin/python scripts/fix_book_head_metadata.py
-
-==> Rebuild derivative manifests and crawler snapshots
-$ /opt/pyvenv/bin/python scripts/build_book_derivatives.py
-
-==> Synchronise redirects
-$ /opt/pyvenv/bin/python scripts/sync_redirects.py
-
-==> Validate crawler snapshots
-$ /opt/pyvenv/bin/python scripts/check_crawlers.py
-
-==> Validate shared partials (header — fail-fast gate)
-$ /opt/pyvenv/bin/python scripts/inject_partials.py --validate
-
-
-STDERR:
-Traceback (most recent call last):
-  File "/mnt/data/repo/jonathan-harris-website-main/scripts/deployment_ci.py", line 133, in <module>
-    raise SystemExit(main())
-                     ~~~~^^
-  File "/mnt/data/repo/jonathan-harris-website-main/scripts/deployment_ci.py", line 112, in main
-    run_step("Validate shared partials (header — fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
-    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/mnt/data/repo/jonathan-harris-website-main/scripts/deployment_ci.py", line 48, in run_step
-    subprocess.run(command, cwd=ROOT, check=True)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3.13/subprocess.py", line 577, in run
-    raise CalledProcessError(retcode, process.args,
-                             output=stdout, stderr=stderr)
-subprocess.CalledProcessError: Command '['/opt/pyvenv/bin/python', 'scripts/inject_partials.py', '--validate']' returned non-zero exit status 1.
+Status: PASSED
+- Route registry complete
+- Route manifest and host redirect coverage checks passed
+- Topic discovery pages exist for every book
+- Metadata and FAQ checks passed
+- Generated crawler snapshots and redirect governance checks passed
