@@ -22,6 +22,7 @@ from scripts.ebook_pipeline import (
     build_crawler_snapshot_paths,
     build_published_crawler_paths,
     build_crawler_snapshot_payloads,
+    crawler_payload_matches,
     load_master,
     read_json,
 )
@@ -77,7 +78,7 @@ def run_repo_snapshot_checks() -> List[str]:
             errors.append(f"Crawler check failed: missing {relative_path}")
             continue
         actual = path.read_text(encoding="utf-8")
-        if actual != expected:
+        if not crawler_payload_matches(path.name, actual, expected, books):
             errors.append(f"Crawler check failed: generated snapshot drift in {relative_path}")
 
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
@@ -118,7 +119,7 @@ def run_repo_snapshot_checks() -> List[str]:
             errors.append(f"Crawler check failed: missing published crawler file {path.relative_to(ROOT)}")
             continue
         actual = path.read_text(encoding="utf-8")
-        if actual != expected:
+        if not crawler_payload_matches(path.name, actual, expected, books):
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
     if EXTERNAL_CRAWLER_FILES["robots"].rstrip("/") != "https://jonathan-harris.online/robots.txt":
