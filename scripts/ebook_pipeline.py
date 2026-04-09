@@ -1853,6 +1853,71 @@ def book_to_public_record(book: Dict[str, Any]) -> Dict[str, Any]:
 
 
 
+def featured_rotation_selection(now: dt.datetime | None = None) -> Dict[str, int | str]:
+    current = now or dt.datetime.now(dt.timezone.utc)
+    if current.tzinfo is None:
+        current = current.replace(tzinfo=dt.timezone.utc)
+    current_utc = current.astimezone(dt.timezone.utc)
+    iso_year, iso_week, _ = current_utc.date().isocalendar()
+    return {
+        "method": "iso_week_rotation",
+        "iso_week": iso_week,
+        "year": iso_year,
+    }
+
+
+
+def select_featured_book_record(public_records: List[Dict[str, Any]], now: dt.datetime | None = None) -> tuple[Dict[str, Any] | None, Dict[str, int | str]]:
+    selection = featured_rotation_selection(now=now)
+    if not public_records:
+        return None, selection
+    return public_records[selection["iso_week"] % len(public_records)], selection
+
+
+
+def build_podcast_sponsor_payload(book: Dict[str, Any]) -> Dict[str, str]:
+    title = clean_paragraph(book.get("title"))
+    short = clean_paragraph(book.get("short"))
+    topic = clean_paragraph(book.get("filter"))
+    canonical_url = clean_paragraph(book.get("canonical_url"))
+    buy_route_full = clean_paragraph(book.get("buy_route_full"))
+    pages = book.get("pages")
+    tags = [clean_paragraph(tag) for tag in (book.get("tags") or []) if clean_paragraph(tag)]
+    tags_text = ", ".join(tags[:3])
+
+    page_sentence = f" It runs {pages} pages." if isinstance(pages, int) and pages > 0 else ""
+    topic_sentence = f" It focuses on {topic}." if topic else ""
+    tags_sentence = f" Topics include {tags_text}." if tags_text else ""
+    short_sentence = short if short.endswith((".", "!", "?")) else (f"{short}." if short else "")
+
+    return {
+        "label": "This week's sponsor",
+        "headline": f"This week's sponsor is {title}",
+        "cta": f"See the book at {canonical_url} or buy on Amazon at {buy_route_full}",
+        "midroll_15": f"This week's sponsor is {title}. {short_sentence} Read more at {canonical_url}".strip(),
+        "midroll_30": (
+            f"This week's sponsor is {title}."
+            f" {short_sentence}"
+            f"{topic_sentence}"
+            f"{page_sentence}"
+            f"{tags_sentence}"
+            f" See the full book page at {canonical_url} or go straight to Amazon at {buy_route_full}."
+        ).replace("  ", " ").strip(),
+    }
+
+
+
+def build_featured_book_payload(public_records: List[Dict[str, Any]], now: dt.datetime | None = None) -> Dict[str, Any]:
+    book, selection = select_featured_book_record(public_records, now=now)
+    return {
+        "version": "v1",
+        "selection": selection,
+        "book": book or {},
+        "podcast_sponsor": build_podcast_sponsor_payload(book or {}),
+    }
+
+
+
 def render_related_links(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> str:
     by_slug = {item["slug"]: item for item in all_books}
     items = []
@@ -2788,6 +2853,7 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     write_json(EBOOKS_DIR / "books.json", public_records)
     write_json(ROOT / "assets" / "js" / "books.json", public_records)
     write_json(ROOT / "api" / "v1" / "books.json", public_records)
+    write_json(ROOT / "api" / "v1" / "featured-book.json", build_featured_book_payload(public_records))
 
     feed = {
         "version": "https://jsonfeed.org/version/1.1",
@@ -3748,6 +3814,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 continue
             if indexed.get("related_slugs", []) != book.get("related_slugs", []):
                 errors.append(f"llm-index.json related_slugs drift detected for {book['slug']}")
+
+    featured_payload = read_json(ROOT / "api" / "v1" / "featured-book.json", default={}) or {}
+    expected_featured_payload = build_featured_book_payload([book_to_public_record(book) for book in books])
+    if featured_payload != expected_featured_payload:
+        errors.append("Derivative featured-book API payload drift detected for api/v1/featured-book.json.")
 
     page_404 = ROOT / "404.html"
     if not page_404.exists():
