@@ -351,16 +351,7 @@ def utc_now() -> str:
 
 def infer_build_timestamp() -> str:
     if MASTER_PATH.exists():
-        master = read_json(MASTER_PATH, default=[])
-        if isinstance(master, list):
-            timestamps = [
-                parse_timestamp(item.get("dateModified") or item.get("datePublished"))
-                for item in master
-                if isinstance(item, dict)
-            ]
-            timestamps = [timestamp for timestamp in timestamps if timestamp is not None]
-            if timestamps:
-                return max(timestamps).isoformat().replace("+00:00", "Z")
+        return dt.datetime.fromtimestamp(MASTER_PATH.stat().st_mtime, tz=dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     return utc_now()
 
 
@@ -413,37 +404,6 @@ def file_lastmod(path: Path) -> str:
 
 def sha256_text(value: str) -> str:
     return hashlib.sha256(value.encode("utf-8")).hexdigest()
-
-
-def normalise_sitemap_for_validation(value: str, books: List[Dict[str, Any]]) -> str:
-    book_urls = {book.get("canonical_url") for book in books if book.get("canonical_url")}
-    pattern = re.compile(r'(<url>\s*<loc>([^<]+)</loc>\s*<lastmod>)([^<]+)(</lastmod>\s*</url>)', re.S)
-
-    def replace(match: re.Match[str]) -> str:
-        loc = html.unescape(match.group(2))
-        if loc in book_urls:
-            return match.group(0)
-        return f"{match.group(1)}STATIC_ROUTE_LASTMOD{match.group(4)}"
-
-    normalised = value.replace("\r\n", "\n").replace("\r", "\n")
-    return pattern.sub(replace, normalised)
-
-
-def normalise_crawler_payload_for_validation(name: str, value: str, books: List[Dict[str, Any]]) -> str:
-    normalised = value.replace("\r\n", "\n").replace("\r", "\n")
-    if name in {CRAWLER_SNAPSHOT_FILENAMES["sitemap"], "sitemap.xml", "Sitemap.xml"}:
-        return normalise_sitemap_for_validation(normalised, books)
-    return normalised
-
-
-def crawler_payload_matches(name: str, actual: str, expected: str, books: List[Dict[str, Any]]) -> bool:
-    return normalise_crawler_payload_for_validation(name, actual, books) == normalise_crawler_payload_for_validation(name, expected, books)
-
-
-def crawler_payload_sha256(name: str, value: str, books: List[Dict[str, Any]]) -> str:
-    return sha256_text(normalise_crawler_payload_for_validation(name, value, books))
-def crawler_payload_sha256(name: str, value: str, books: List[Dict[str, Any]]) -> str:
-    return sha256_text(normalise_crawler_payload_for_validation(name, value, books))
 
 
 
@@ -2582,8 +2542,7 @@ def html_declares_noindex(file_path: Path) -> bool:
 
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     generated_timestamp = infer_build_timestamp()
-    generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
-    generated_paths.update(Path("catalogue") / slugify(book["topic"]) / "index.html" for book in books)
+    governed_route_lastmod = normalise_lastmod(generated_timestamp)
     book_paths = {Path("ebooks") / book["slug"] / "index.html": book for book in books}
     excluded_paths = {
         Path("404.html"),
@@ -2604,10 +2563,8 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
 
         if relative_path in book_paths:
             lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or generated_timestamp)
-        elif relative_path in generated_paths:
-            lastmod = normalise_lastmod(generated_timestamp)
         else:
-            lastmod = file_lastmod(file_path)
+            lastmod = governed_route_lastmod
 
         routes.append({
             "path": f"/{relative_path.as_posix()}",
@@ -3127,7 +3084,7 @@ def build_crawler_checksums(books: List[Dict[str, Any]]) -> Dict[str, Any]:
         "files": {
             name: {
                 "url": EXTERNAL_CRAWLER_FILES[name_to_key[name]],
-                "sha256": crawler_payload_sha256(name, content, books),
+                "sha256": sha256_text(content),
             }
             for name, content in files.items()
         },
@@ -3543,7 +3500,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Generated crawler snapshot missing: {file_path.relative_to(ROOT)}")
             continue
         actual = file_path.read_text(encoding="utf-8")
-        if not crawler_payload_matches(file_path.name, actual, expected, books):
+        if actual != expected:
             errors.append(f"Generated crawler snapshot drift detected: {file_path.relative_to(ROOT)}")
 
     published_crawler_files = build_published_crawler_paths(books)
@@ -3552,7 +3509,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Published crawler file missing: {file_path.relative_to(ROOT)}")
             continue
         actual = file_path.read_text(encoding="utf-8")
-        if not crawler_payload_matches(file_path.name, actual, expected, books):
+        if actual != expected:
             errors.append(f"Published crawler file drift detected: {file_path.relative_to(ROOT)}")
 
     sitemap_routes = build_public_route_registry(books)
@@ -3751,7 +3708,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         errors.append("config/crawler-checksums.json does not declare the governed crawler snapshots.")
     for name, expected_text in expected_crawler_content.items():
         file_payload = checksum_files.get(name, {})
-        expected_hash = crawler_payload_sha256(name, expected_text, books)
+        expected_hash = sha256_text(expected_text)
         if file_payload.get("sha256") != expected_hash:
             errors.append(f"Crawler checksum drift detected for {name}.")
 

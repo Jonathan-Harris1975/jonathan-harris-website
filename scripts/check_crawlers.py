@@ -22,7 +22,6 @@ from scripts.ebook_pipeline import (
     build_crawler_snapshot_paths,
     build_published_crawler_paths,
     build_crawler_snapshot_payloads,
-    crawler_payload_matches,
     load_master,
     read_json,
 )
@@ -78,7 +77,7 @@ def run_repo_snapshot_checks() -> List[str]:
             errors.append(f"Crawler check failed: missing {relative_path}")
             continue
         actual = path.read_text(encoding="utf-8")
-        if not crawler_payload_matches(path.name, actual, expected, books):
+        if actual != expected:
             errors.append(f"Crawler check failed: generated snapshot drift in {relative_path}")
 
     checksum_payload = read_json(CRAWLER_CHECKSUMS_PATH, default={}) or {}
@@ -119,7 +118,7 @@ def run_repo_snapshot_checks() -> List[str]:
             errors.append(f"Crawler check failed: missing published crawler file {path.relative_to(ROOT)}")
             continue
         actual = path.read_text(encoding="utf-8")
-        if not crawler_payload_matches(path.name, actual, expected, books):
+        if actual != expected:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
     if EXTERNAL_CRAWLER_FILES["robots"].rstrip("/") != "https://jonathan-harris.online/robots.txt":
@@ -182,6 +181,17 @@ def _validate_sitemap_structure(body: str) -> str | None:
     return None
 
 
+def _sitemap_loc_lastmod_map(body: str) -> Dict[str, str]:
+    root = ET.fromstring(body)
+    entries: Dict[str, str] = {}
+    for url in root.findall('.//{*}url'):
+        loc = clean_paragraph(url.findtext('{*}loc', default=''))
+        lastmod = clean_paragraph(url.findtext('{*}lastmod', default=''))
+        if loc:
+            entries[loc] = lastmod
+    return entries
+
+
 def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
     normalised_body = _normalise_text(body)
     normalised_expected = _normalise_text(expected_text)
@@ -198,6 +208,12 @@ def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
         sitemap_error = _validate_sitemap_structure(body)
         if sitemap_error:
             return f"sitemap file is reachable but invalid: {sitemap_error}"
+        expected_sitemap_error = _validate_sitemap_structure(expected_text)
+        if expected_sitemap_error:
+            return f"governed sitemap snapshot is invalid: {expected_sitemap_error}"
+        if _sitemap_loc_lastmod_map(body) != _sitemap_loc_lastmod_map(expected_text):
+            return "Live sitemap entries do not match the governed snapshot"
+        return None
 
     if normalised_body != normalised_expected:
         return "Live content does not match the governed snapshot"
