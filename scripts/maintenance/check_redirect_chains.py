@@ -13,6 +13,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
+from scripts.check_crawlers import validate_live_body
 from scripts.ebook_pipeline import SITE_URL, load_master
 
 
@@ -73,12 +74,12 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
 
 def validate_support_redirects(timeout: float) -> list[str]:
     checks = [
-        (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias", (REPO_ROOT / "robots.txt").read_text(encoding="utf-8")),
-        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/sitemap.xml", "Sitemap.xml alias", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
-        (f"{SITE_URL}/site-map.xml", f"{SITE_URL}/sitemap.xml", "site-map.xml alias", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
+        (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias", "robots", (REPO_ROOT / "robots.txt").read_text(encoding="utf-8")),
+        (f"{SITE_URL}/Sitemap.xml", f"{SITE_URL}/sitemap.xml", "Sitemap.xml alias", "sitemap", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
+        (f"{SITE_URL}/site-map.xml", f"{SITE_URL}/sitemap.xml", "site-map.xml alias", "sitemap", (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")),
     ]
     errors: list[str] = []
-    for source, expected_target, label, expected_body in checks:
+    for source, expected_target, label, content_kind, expected_body in checks:
         try:
             status, location, body = fetch_without_redirect(source, timeout)
         except RuntimeError as exc:
@@ -90,8 +91,9 @@ def validate_support_redirects(timeout: float) -> list[str]:
                 errors.append(f"{label}: points to {location or '[missing Location header]'} instead of {expected_target}")
             continue
         if status == 200:
-            if body.strip() != expected_body.strip():
-                errors.append(f"{label}: returned HTTP 200 but the published payload does not match the governed canonical asset")
+            validation_error = validate_live_body(content_kind, body, expected_body)
+            if validation_error:
+                errors.append(f"{label}: returned HTTP 200 but {validation_error.lower()}")
             continue
         errors.append(f"{label}: returned HTTP {status} instead of a redirect or governed compatibility mirror")
     return errors
