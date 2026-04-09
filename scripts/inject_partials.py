@@ -106,6 +106,9 @@ def find_header_block(text: str) -> re.Match | None:
 
 def ensure_font_head_block(text: str) -> tuple[str, bool]:
     """Normalise the shared Inter font loading block ahead of site.css."""
+    if validate_font_head_block(text) is None:
+        return text, False
+
     cleaned = _FONT_HEAD_BLOCK_RE.sub("", text, count=1)
     match = _SITE_CSS_LINK_RE.search(cleaned)
     if match is None:

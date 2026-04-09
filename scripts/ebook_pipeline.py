@@ -2624,6 +2624,8 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         relative_path = file_path.relative_to(ROOT)
         if relative_path in excluded_paths:
             continue
+        if relative_path.parts and relative_path.parts[0] == "scripts":
+            continue
         if html_declares_noindex(file_path):
             continue
 
