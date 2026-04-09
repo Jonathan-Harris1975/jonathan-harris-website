@@ -1,0 +1,63 @@
+{
+  "version": "v1",
+  "selection": {
+    "method": "iso_week_rotation",
+    "iso_week": 15,
+    "year": 2026
+  },
+  "book": {
+    "id": 16,
+    "key": "16-ebook",
+    "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+    "tags": [
+      "Agriculture",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Agriculture",
+    "keywords": [
+      "Agriculture",
+      "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+      "AI Trends",
+      "Artificial Intelligence"
+    ],
+    "buy_url": "https://mybook.to/PsciMD5",
+    "buy_target_url": "https://mybook.to/PsciMD5",
+    "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+    "asin": "B0DMN32J3Y",
+    "pages": 330,
+    "datePublished": "2024-11-10",
+    "dateModified": "2026-03-28T21:48:58Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+    "buy_route": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "topic_url": "/catalogue/agriculture/",
+    "related_slugs": [
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "artificial-intelligence-in-construction-building-a-sustainable-future",
+      "ai-in-aviation-transforming-safety-and-sustainability"
+    ],
+    "title_tokens": [
+      "agriculture",
+      "farm",
+      "future",
+      "revolutioniz",
+      "sustain"
+    ],
+    "topic_tokens": [
+      "agriculture"
+    ]
+  },
+  "podcast_sponsor": {
+    "label": "This week's sponsor",
+    "headline": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "midroll_15": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future. A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions. Read more at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+    "midroll_30": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future. A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions. It focuses on Agriculture. It runs 330 pages. Topics include Agriculture, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now."
+  }
+}
