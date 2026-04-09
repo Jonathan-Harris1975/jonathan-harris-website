@@ -2541,8 +2541,9 @@ def html_declares_noindex(file_path: Path) -> bool:
 
 
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
-    generated_timestamp = infer_build_timestamp()
-    governed_route_lastmod = normalise_lastmod(generated_timestamp)
+    governed_lastmod = normalise_lastmod(governed_generated_utc(books))
+    generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
+    generated_paths.update(Path("catalogue") / slugify(book["topic"]) / "index.html" for book in books)
     book_paths = {Path("ebooks") / book["slug"] / "index.html": book for book in books}
     excluded_paths = {
         Path("404.html"),
@@ -2562,9 +2563,9 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
             continue
 
         if relative_path in book_paths:
-            lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or generated_timestamp)
+            lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or governed_lastmod)
         else:
-            lastmod = governed_route_lastmod
+            lastmod = governed_lastmod
 
         routes.append({
             "path": f"/{relative_path.as_posix()}",
@@ -2650,12 +2651,9 @@ def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]
 
 def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
     payloads = build_crawler_snapshot_payloads(books)
-    robots_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]]
     sitemap_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
     return {
-        ROOT / "robot.txt": robots_payload,
-        ROOT / "robots.txt": robots_payload,
-        ROOT / "Sitemap.xml": sitemap_payload,
+        ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
         ROOT / "site-map.xml": sitemap_payload,
         ROOT / "sitemap.xml": sitemap_payload,
         ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
@@ -3270,7 +3268,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if not actual_title.endswith(f" | {SITE_NAME}"):
                 errors.append(f"{book['slug']} page title is missing the brand suffix.")
             # March 2026 title policy: canonical ebook pages keep full workbook-governed titles.
-            # Length is advisory here because workbook copy is governed alongside approved normalisations.
+            # Length is advisory here because the workbook remains the governing source of truth.
             if actual_title in seen_serp_titles and seen_serp_titles[actual_title] != book['slug']:
                 duplicate_serp_titles[actual_title].extend([seen_serp_titles[actual_title], book['slug']])
             else:
