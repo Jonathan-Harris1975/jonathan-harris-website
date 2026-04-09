@@ -112,26 +112,130 @@
 <p>Programmatic access to the ebook catalogue, glossary, and site data. Simple REST endpoints, no authentication required.</p>
 </div>
 </section>
-<main class="main" id="main"><div class="wrap"><h2 class="u-s57">API overview</h2><p>This site exposes a small, read-only JSON surface for the Jonathan Harris ebook catalogue. The goal is simple: make the books easy to discover, index, and reuse in websites, assistants, and internal tools without dragging people through an overbuilt integration story.</p><section class="card u-s03"><h2 class="u-s02">Version</h2><p><strong>Current version:</strong> <code>v1</code></p><p>This version is intentionally lean. There is one public catalogue endpoint and the schema is stable enough for simple integrations. Future versions should be added under a new path rather than breaking existing field names in place.</p></section><section class="card u-s03"><h2 class="u-s02">Base endpoint</h2><p><code>/api/v1/books.json</code></p><p>Returns a JSON array of book objects. No authentication. No write operations. No account drama. Just catalogue data.</p></section><section class="card u-s03"><h2 class="u-s02">Example request</h2><pre><code>GET /api/v1/books.json HTTP/1.1
+<main class="main" id="main">
+<div class="wrap">
+<h2 class="u-s57">API overview</h2>
+<p>This site exposes a small, read-only JSON surface for the Jonathan Harris ebook catalogue. The API is intentionally plain: no authentication, no write operations, and no moving parts nobody asked for.</p>
+<section class="card u-s03">
+<h2 class="u-s02">Version</h2>
+<p><strong>Current version:</strong> <code>v1</code></p>
+<p>The <code>v1</code> schema is stable for straightforward website integrations, catalogue indexing, and automation flows such as the weekly podcast sponsor selection.</p>
+</section>
+<section class="card u-s03">
+<h2 class="u-s02">Endpoints</h2>
+<ul>
+<li><code>/api/v1/books.json</code> - returns the full public ebook catalogue as a JSON array.</li>
+<li><code>/api/v1/featured-book.json</code> - returns the single featured book for the current UTC ISO week, plus sponsor-ready podcast copy.</li>
+</ul>
+</section>
+<section class="card u-s03">
+<h2 class="u-s02">Catalogue endpoint</h2>
+<p><code>GET /api/v1/books.json</code></p>
+<p>Returns the full public catalogue. This is the source used for browsing, indexing, and deterministic featured-book selection.</p>
+<h3>Example request</h3>
+<pre><code>GET /api/v1/books.json HTTP/1.1
 Host: jonathan-harris.online
-Accept: application/json</code></pre><h3>Example response</h3><pre><code>[
+Accept: application/json</code></pre>
+<h3>Example response</h3>
+<pre><code>[
   {
     "id": 1,
     "key": "1-ebook",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
-    "short": "A 227-page guide to AI in Formula 1...",
+    "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
     "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "tags": ["Transportation", "Artificial Intelligence", "AI Trends", "AI in Sports"],
     "filter": "Transportation",
-    "keywords": ["Transportation", "Artificial Intelligence", "AI Trends"],
+    "keywords": ["Transportation", "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology", "AI Trends", "Artificial Intelligence", "AI in Sports"],
     "buy_url": "https://mybook.to/Gi93rOF",
     "buy_target_url": "https://mybook.to/Gi93rOF",
     "buy_route": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/buy-now",
     "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
   }
-]</code></pre></section><section class="card u-s03"><h2 class="u-s02">Schema reference</h2><ul><li><code>id</code> - integer identifier for the book record.</li><li><code>key</code> - internal catalogue key used for site-level mapping.</li><li><code>title</code> - full public-facing title.</li><li><code>short</code> - short descriptive summary suitable for cards, previews, and search results.</li><li><code>cover</code> - primary cover image URL.</li><li><code>main_image</code> - main artwork URL used on richer layouts where a hero image is needed.</li><li><code>tags</code> - array of topical labels for browsing and related-content logic.</li><li><code>filter</code> - top-level category used by the site catalogue.</li><li><code>keywords</code> - array of discovery keywords used for indexing and downstream integrations.</li><li><code>buy_url</code> - external retailer or branded short-link destination.</li><li><code>buy_target_url</code> - explicit alias for the external retailer or branded short-link destination.</li><li><code>buy_route</code> - canonical on-site buy-now route.</li><li><code>buy_route_full</code> - absolute URL for the canonical on-site buy-now route.</li><li><code>slug</code> - canonical slug for the detail page at <code>/ebooks/&lt;slug&gt;/</code>.</li></ul></section><section class="card u-s03"><h2 class="u-s02">Notes for implementers</h2><ul><li>Use <code>slug</code> to construct canonical detail URLs.</li><li>Use <code>buy_route</code> for internal site navigation.</li><li>Use <code>buy_url</code> or <code>buy_target_url</code> for the outbound commerce target.</li><li>Do not assume every tag is unique or stable enough to act as a primary key.</li><li>If new versions are introduced, prefer <code>/api/v2/...</code> rather than silently reshaping <code>v1</code>.</li></ul></section></div></main>
+]</code></pre>
+</section>
+<section class="card u-s03">
+<h2 class="u-s02">Featured book endpoint</h2>
+<p><code>GET /api/v1/featured-book.json</code></p>
+<p>Returns the current featured book for the week. Selection is deterministic and rotates by <strong>UTC ISO week number</strong> using the public catalogue order. The selection index is calculated as <code>iso_week % catalogue_length</code>, which keeps the choice stable for the whole week and aligned with the homepage feature block.</p>
+<h3>What it returns</h3>
+<ul>
+<li><code>version</code> - API version string.</li>
+<li><code>selection</code> - deterministic rotation metadata for the current week.</li>
+<li><code>book</code> - the single featured public book record.</li>
+<li><code>podcast_sponsor</code> - plain-English sponsor copy generated only from existing book metadata.</li>
+</ul>
+<h3>Example request</h3>
+<pre><code>GET /api/v1/featured-book.json HTTP/1.1
+Host: jonathan-harris.online
+Accept: application/json</code></pre>
+<h3>Example response</h3>
+<pre><code>{
+  "version": "v1",
+  "selection": {
+    "method": "iso_week_rotation",
+    "iso_week": 15,
+    "year": 2026
+  },
+  "book": {
+    "id": 16,
+    "key": "16-ebook",
+    "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
+    "filter": "Agriculture",
+    "tags": ["Agriculture", "Artificial Intelligence", "AI Trends"],
+    "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+    "pages": 330,
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+    "buy_url": "https://mybook.to/PsciMD5",
+    "buy_target_url": "https://mybook.to/PsciMD5",
+    "buy_route": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "datePublished": "2024-11-10",
+    "dateModified": "2026-03-28T21:48:58Z"
+  },
+  "podcast_sponsor": {
+    "label": "This week's sponsor",
+    "headline": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now",
+    "midroll_15": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future. A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions. Read more at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
+    "midroll_30": "This week's sponsor is AI in Agriculture: Revolutionizing Farming for a Sustainable Future. A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions. It focuses on Agriculture. It runs 330 pages. Topics include Agriculture, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/buy-now."
+  }
+}</code></pre>
+</section>
+<section class="card u-s03">
+<h2 class="u-s02">Schema reference for book records</h2>
+<ul>
+<li><code>id</code> - integer identifier for the book record.</li>
+<li><code>key</code> - internal catalogue key used for site-level mapping.</li>
+<li><code>title</code> - full public-facing title.</li>
+<li><code>short</code> - short descriptive summary suitable for cards, previews, and sponsor copy.</li>
+<li><code>cover</code> - primary cover image URL.</li>
+<li><code>main_image</code> - main artwork URL used on richer layouts.</li>
+<li><code>tags</code> - array of topical labels for browsing and related-content logic.</li>
+<li><code>filter</code> - top-level category used by the site catalogue.</li>
+<li><code>keywords</code> - array of discovery keywords used for indexing and downstream integrations.</li>
+<li><code>buy_url</code> and <code>buy_target_url</code> - outbound retailer or branded short-link destination.</li>
+<li><code>buy_route</code> and <code>buy_route_full</code> - canonical on-site buy-now route in relative and absolute form.</li>
+<li><code>slug</code> - canonical slug for the detail page at <code>/ebooks/&lt;slug&gt;/</code>.</li>
+<li><code>datePublished</code> and <code>dateModified</code> - publication and record timestamps exposed for downstream reuse.</li>
+</ul>
+</section>
+<section class="card u-s03">
+<h2 class="u-s02">Integration notes</h2>
+<ul>
+<li>Use <code>/api/v1/books.json</code> when you need the full catalogue for listings, search, or indexing.</li>
+<li>Use <code>/api/v1/featured-book.json</code> when you need one stable weekly pick for a homepage block, newsletter slot, or podcast sponsor insert.</li>
+<li>The <code>podcast_sponsor</code> object is intentionally restrained. It uses existing book metadata only, so there are no invented endorsements, claims, or puffed-up nonsense.</li>
+<li>If future schema changes are needed, add them under a new versioned path rather than reshaping <code>v1</code> in place.</li>
+</ul>
+</section>
+</div>
+</main>
 <footer aria-label="Website footer" class="site-footer" role="contentinfo">
 <div class="wrap footer-shell">
 <div class="footer-grid">
