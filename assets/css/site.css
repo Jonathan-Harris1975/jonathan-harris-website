@@ -17,3 +17,25 @@
 .page-api-docs code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace}
 .page-api-docs :not(pre)>code{padding:.15em .45em;border-radius:999px;background:#EEF2FF;color:#312E81}
 @media (max-width:640px){.jh-topic-links,.jh-hub-actions,.jh-journey-actions{flex-direction:column}.jh-topic-links a,.jh-hub-cta,.jh-journey-actions a{width:100%}.jh-hub-intro,.jh-journey-panel{padding:24px 18px}}
+
+/* Remediation overrides: footer governance, shared button fit, glossary layout, and delayed header reveal */
+.footer-panel--discover{display:grid;gap:16px}
+.footer-link-group{display:grid;gap:10px}
+.footer-panel__label{margin:0;font-size:.78rem;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:rgba(226,232,240,.68)}
+.footer-panel--discover .footer-links{display:grid;gap:10px}
+.footer-links--utility{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.actions,.ebook-actions,.ebook-inline-actions,.jh-inline-cta__actions,.featured-actions{align-items:stretch}
+.actions .button,.ebook-actions .button,.ebook-inline-actions a,.jh-inline-cta__actions a,.featured-actions .button,.cta-row .button,.jh-hub-actions a,.jh-journey-actions a{max-width:100%;min-width:0;white-space:normal;word-break:normal;overflow-wrap:anywhere;text-align:center;line-height:1.35}
+html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),html.js-enabled body:has(header.hero:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible),html.js-enabled body:has(.about-banner[data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately])) .jh-header:not(.is-visible){opacity:0;pointer-events:none;transform:translateY(-6px)}
+.glossary-page main dl{margin:0;display:grid;gap:14px}
+.glossary-groups{display:grid;gap:14px;margin-top:18px}
+.glossary-group{border:1px solid var(--border);border-radius:18px;background:#fff;box-shadow:var(--shadow);overflow:hidden}
+.glossary-group summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px;font-weight:800;color:#111827}
+.glossary-group summary::-webkit-details-marker{display:none}
+.glossary-group summary::after{content:'+';font-size:1.2rem;line-height:1;color:#4F46E5}
+.glossary-group[open] summary::after{content:'−'}
+.glossary-group__list{padding:0 20px 18px}
+.glossary-group__list dt{margin:16px 0 6px;font-size:1.02rem;color:#111827}
+.glossary-group__list dd{margin:0;color:#374151;line-height:1.7}
+.glossary-group__list dd+dt{padding-top:16px;border-top:1px solid rgba(15,23,42,.08)}
+@media (max-width:700px){.actions .button,.ebook-actions .button,.ebook-inline-actions a,.jh-inline-cta__actions a,.featured-actions .button,.cta-row .button{width:100%}.footer-links--utility{grid-template-columns:1fr}}
