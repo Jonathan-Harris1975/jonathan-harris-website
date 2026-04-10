@@ -17,28 +17,28 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
   const surface = {
     hub: {
-      emptyTitle: "No weekly posts published yet",
+      emptyTitle: "No local blog posts published yet",
       emptyCopy:
-        "This archive populates from the AI Management Suite blog manifest. Until the next weekly post is published, use the weekly route, newsletter, or podcast for the freshest analysis.",
+        "This archive populates from the AI Management Suite blog manifest. Until the next local post is published, use the written archive, newsletter, or podcast for the freshest analysis.",
       emptyHref: "/blog/weekly/",
-      emptyLabel: "Open weekly route",
-      loading: "Loading weekly posts…",
+      emptyLabel: "Open written archive",
+      loading: "Loading blog posts…",
       emptyStatus: "No local weekly posts are published yet.",
-      loadedStatus: "Showing the latest published weekly posts."
+      loadedStatus: "Showing the latest published local blog posts."
     },
     weekly: {
-      emptyTitle: "No weekly posts published yet",
+      emptyTitle: "No local blog posts published yet",
       emptyCopy:
-        "This weekly route stays useful between published posts, with direct paths back into the blog hub, newsletter, and podcast.",
+        "This written archive stays useful between published posts, with direct paths back into the blog hub, newsletter, and podcast.",
       emptyHref: "/blog/",
       emptyLabel: "Open the blog hub",
-      loading: "Loading weekly posts…",
-      emptyStatus: "Showing the guided weekly route while the local archive is between releases.",
-      loadedStatus: "Showing the latest published weekly posts."
+      loading: "Loading blog posts…",
+      emptyStatus: "Showing the guided written archive while the local archive is between releases.",
+      loadedStatus: "Showing the latest published local blog posts."
     }
   }[surfaceKey] || {
-    emptyTitle: "No weekly posts published yet",
-    emptyCopy: "Check back for the next published weekly post.",
+    emptyTitle: "No local blog posts published yet",
+    emptyCopy: "Check back for the next published local blog post.",
     emptyHref: "/blog/",
     emptyLabel: "Open the blog hub",
     loading: "Loading posts…",
