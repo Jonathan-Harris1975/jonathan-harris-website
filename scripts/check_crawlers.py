@@ -9,6 +9,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 import argparse
+import re
 from dataclasses import dataclass
 from typing import Dict, List
 from urllib import error, request
@@ -121,6 +122,18 @@ def run_repo_snapshot_checks() -> List[str]:
         actual = path.read_text(encoding="utf-8")
         if actual != expected:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
+
+    deployable_html_files = [
+        path for path in ROOT.rglob("*.html")
+        if "node_modules" not in path.parts and "templates" not in path.parts and "assets" not in path.parts
+    ]
+    unresolved_pattern = re.compile(r"{{[^{}]+}}")
+    for path in deployable_html_files:
+        matches = unresolved_pattern.findall(path.read_text(encoding="utf-8", errors="ignore"))
+        if matches:
+            errors.append(
+                f"Crawler check failed: unresolved template tokens in deployable HTML {path.relative_to(ROOT)} -> {', '.join(sorted(set(matches))[:5])}"
+            )
 
     if EXTERNAL_CRAWLER_FILES["robots"].rstrip("/") != "https://jonathan-harris.online/robots.txt":
         errors.append("Crawler check failed: robots.txt publication target is not pinned to the primary domain")

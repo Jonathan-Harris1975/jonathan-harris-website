@@ -36,6 +36,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / "assets" / "partials"
 HEADER_PARTIAL = PARTIALS_DIR / "header.html"
+FOOTER_PARTIAL = PARTIALS_DIR / "footer.html"
 
 # Directories / files excluded from processing
 EXCLUDE_DIRS = {
@@ -63,6 +64,11 @@ _HEADER_BLOCK_RE = re.compile(
     re.DOTALL,
 )
 
+_FOOTER_BLOCK_RE = re.compile(
+    r'<footer aria-label="Website footer".*?</footer>',
+    re.DOTALL,
+)
+
 _FONT_HEAD_BLOCK_RE = re.compile(
     r'(?:\s*<link[^>]+href="https://fonts.googleapis.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.gstatic.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.googleapis.com/css2\?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap"[^>]*>)',
     re.IGNORECASE,
@@ -75,14 +81,14 @@ _SITE_CSS_LINK_RE = re.compile(r'<link[^>]+href="/assets/css/site\.css"[^>]*>', 
 # Core helpers
 # ---------------------------------------------------------------------------
 
-def load_partial() -> str:
-    """Return the canonical header partial as a string."""
-    if not HEADER_PARTIAL.exists():
+def load_partial(partial_path: Path, label: str) -> str:
+    """Return a canonical shared partial as a string."""
+    if not partial_path.exists():
         raise FileNotFoundError(
-            f"Header partial not found: {HEADER_PARTIAL}\n"
-            "Expected: assets/partials/header.html"
+            f"{label} partial not found: {partial_path}\n"
+            f"Expected: assets/partials/{partial_path.name}"
         )
-    return HEADER_PARTIAL.read_text(encoding="utf-8").rstrip("\n")
+    return partial_path.read_text(encoding="utf-8").rstrip("\n")
 
 
 def collect_pages() -> list[Path]:
@@ -102,6 +108,11 @@ def collect_pages() -> list[Path]:
 def find_header_block(text: str) -> re.Match | None:
     """Return the regex match for the header block, or None if not found."""
     return _HEADER_BLOCK_RE.search(text)
+
+
+def find_footer_block(text: str) -> re.Match | None:
+    """Return the regex match for the footer block, or None if not found."""
+    return _FOOTER_BLOCK_RE.search(text)
 
 
 def ensure_font_head_block(text: str) -> tuple[str, bool]:
@@ -146,7 +157,8 @@ def inject(dry_run: bool = False) -> int:
 
     Returns 0 on success, 1 if any page could not be processed.
     """
-    partial = load_partial()
+    header_partial = load_partial(HEADER_PARTIAL, "Header")
+    footer_partial = load_partial(FOOTER_PARTIAL, "Footer")
     pages = collect_pages()
 
     in_sync = 0
@@ -161,18 +173,29 @@ def inject(dry_run: bool = False) -> int:
             failed.append((rel, f"Read error: {exc}"))
             continue
 
-        match = find_header_block(original)
-        if match is None:
-            failed.append((rel, "Header block not found — no <a class=\"skip-link\"> before <header class=\"jh-header\">"))
+        header_match = find_header_block(original)
+        if header_match is None:
+            failed.append((rel, "Header block not found - no <a class=\"skip-link\"> before <header class=\"jh-header\">"))
             continue
 
-        existing_block = match.group(0)
+        footer_match = find_footer_block(original)
+        if footer_match is None:
+            failed.append((rel, "Footer block not found - no canonical <footer aria-label=\"Website footer\"> block"))
+            continue
 
-        # Replace only the first occurrence (there should only be one)
-        updated_text = original[:match.start()] + partial + original[match.end():]
+        existing_header_block = header_match.group(0)
+        existing_footer_block = footer_match.group(0)
+
+        # Replace the canonical header first, then replace the footer in the updated text.
+        updated_text = original[:header_match.start()] + header_partial + original[header_match.end():]
+        footer_match = find_footer_block(updated_text)
+        if footer_match is None:
+            failed.append((rel, "Footer block could not be relocated after header injection"))
+            continue
+        updated_text = updated_text[:footer_match.start()] + footer_partial + updated_text[footer_match.end():]
         updated_text, font_changed = ensure_font_head_block(updated_text)
 
-        if existing_block == partial and not font_changed:
+        if existing_header_block == header_partial and existing_footer_block == footer_partial and not font_changed:
             in_sync += 1
             print(f"  [OK]      {rel}")
             continue
@@ -193,7 +216,7 @@ def inject(dry_run: bool = False) -> int:
     # Summary
     print()
     print("=" * 60)
-    print("inject_partials  —  Header injection summary")
+    print("inject_partials  -  Header + footer injection summary")
     print("=" * 60)
     print(f"  Pages scanned : {len(pages)}")
     print(f"  Already in sync: {in_sync}")
@@ -220,7 +243,8 @@ def validate() -> int:
     Assert that every page's header block is byte-for-byte identical to the
     partial.  Does not modify any files.  Returns 1 if any drift is found.
     """
-    partial = load_partial()
+    header_partial = load_partial(HEADER_PARTIAL, "Header")
+    footer_partial = load_partial(FOOTER_PARTIAL, "Footer")
     pages = collect_pages()
 
     drift: list[tuple[Path, str]] = []
@@ -234,22 +258,28 @@ def validate() -> int:
             drift.append((rel, f"Read error: {exc}"))
             continue
 
-        match = find_header_block(text)
-        if match is None:
+        header_match = find_header_block(text)
+        if header_match is None:
             drift.append((rel, "Header block not located"))
             continue
 
-        header_reason = None if match.group(0) == partial else "Header differs from partial"
+        footer_match = find_footer_block(text)
+        if footer_match is None:
+            drift.append((rel, "Footer block not located"))
+            continue
+
+        header_reason = None if header_match.group(0) == header_partial else "Header differs from partial"
+        footer_reason = None if footer_match.group(0) == footer_partial else "Footer differs from partial"
         font_reason = validate_font_head_block(text)
-        if not header_reason and not font_reason:
+        if not header_reason and not footer_reason and not font_reason:
             ok += 1
         else:
-            reasons = "; ".join(reason for reason in [header_reason, font_reason] if reason)
+            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason] if reason)
             drift.append((rel, reasons))
 
     print()
     print("=" * 60)
-    print("inject_partials  —  Header validation")
+    print("inject_partials  -  Header + footer validation")
     print("=" * 60)
     print(f"  Pages checked  : {len(pages)}")
     print(f"  In sync        : {ok}")
@@ -273,7 +303,7 @@ def validate() -> int:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inject the shared header partial and canonical font head block into every page at build time."
+        description="Inject the shared header/footer partials and canonical font head block into every page at build time."
     )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument(

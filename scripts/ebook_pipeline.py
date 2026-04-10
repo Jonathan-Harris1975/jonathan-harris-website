@@ -2723,6 +2723,7 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
         ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
         ROOT / "site-map.xml": sitemap_payload,
         ROOT / "sitemap.xml": sitemap_payload,
+        ROOT / "Sitemap.xml": sitemap_payload,
         ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
     }
 
