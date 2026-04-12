@@ -3780,29 +3780,43 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Crawler checksum drift detected for {name}.")
 
     blog_manifest = read_json(ROOT / "blog" / "posts.json", default={}) or {}
-    blog_manifest_items = blog_manifest.get("items", [])
-    for item in blog_manifest_items:
-        slug = clean_paragraph(item.get("slug"))
-        if not slug:
-            errors.append("blog/posts.json contains an entry without a slug.")
-            continue
-        if not (ROOT / "blog" / "posts" / slug / "index.html").exists():
-            errors.append(f"Static blog post missing for slug {slug}.")
+    blog_manifest_items = blog_manifest.get("items") if isinstance(blog_manifest, dict) else None
+    if not isinstance(blog_manifest, dict):
+        errors.append("blog/posts.json must remain a JSON object.")
+    else:
+        if blog_manifest.get("schema_version") != 1:
+            errors.append("blog/posts.json must declare schema_version = 1.")
+        if not isinstance(blog_manifest_items, list):
+            errors.append("blog/posts.json must expose an items array.")
+        else:
+            for item in blog_manifest_items:
+                slug = clean_paragraph(item.get("slug")) if isinstance(item, dict) else ""
+                if item and isinstance(item, dict) and not slug:
+                    errors.append("blog/posts.json contains an entry without a slug.")
 
     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
     site_ui_js = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8")
     blog_js = (ROOT / "assets" / "js" / "blog.bundle.min.js").read_text(encoding="utf-8")
+    weekly_archive_runtime_js = ROOT / "functions" / "blog" / "weekly" / "index.js"
+    sitemap_runtime_js = ROOT / "functions" / "sitemap.xml.js"
     if "manifest stack" in weekly_archive_html or "published manifest" in weekly_archive_html or "falls back to" in weekly_archive_html:
         errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
     if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
-        errors.append("assets/js/blog.bundle.min.js still depends on remote manifest or RSS fallback instead of committed blog artefacts.")
+        errors.append("assets/js/blog.bundle.min.js still depends on remote manifest or RSS fallback instead of the same-origin weekly publication surface.")
     if "createElement(\"style\")" in site_ui_js or "createElement('style')" in site_ui_js:
         errors.append("assets/js/site-ui.min.js still injects runtime style tags instead of relying on governed CSS.")
-    if not blog_manifest_items:
-        if not re.search(r"<meta[^>]+(?:name=[\"']robots[\"'][^>]*content=[\"'][^\"']*noindex|content=[\"'][^\"']*noindex[^>]*name=[\"']robots[\"'])", weekly_archive_html, re.I):
-            errors.append("blog/weekly/index.html must be noindex while blog/posts.json is empty.")
-        if f"{SITE_URL}/blog/weekly/" in actual_sitemap_locations:
-            errors.append("The weekly archive route must be excluded from the sitemap while blog/posts.json is empty.")
+    if not weekly_archive_runtime_js.exists():
+        errors.append("functions/blog/weekly/index.js is missing; weekly archive robots state would drift from the live publication manifest.")
+    else:
+        weekly_runtime_text = weekly_archive_runtime_js.read_text(encoding="utf-8")
+        if "/blog/posts.json" not in weekly_runtime_text:
+            errors.append("functions/blog/weekly/index.js must read the same-origin /blog/posts.json publication manifest.")
+    if not sitemap_runtime_js.exists():
+        errors.append("functions/sitemap.xml.js is missing; sitemap visibility would drift from the live publication manifest.")
+    else:
+        sitemap_runtime_text = sitemap_runtime_js.read_text(encoding="utf-8")
+        if "/blog/posts.json" not in sitemap_runtime_text:
+            errors.append("functions/sitemap.xml.js must read the same-origin /blog/posts.json publication manifest.")
 
     llm_index_payload = read_json(ROOT / "llm-index.json", default={}) or {}
     llm_index_books = llm_index_payload.get("books") if isinstance(llm_index_payload, dict) else None

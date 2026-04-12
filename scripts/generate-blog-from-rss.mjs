@@ -134,7 +134,8 @@ async function main(){
   const postsDir = path.join(repoRoot, "blog", "posts");
   fs.mkdirSync(postsDir, { recursive: true });
 
-  const manifest = { generated_utc: new Date().toISOString(), source_rss: RSS_URL, items: [] };
+  const generatedUtc = new Date().toISOString();
+  const manifest = { schema_version: 1, updated_at: generatedUtc, source_rss: RSS_URL, items: [] };
 
   for (const it of items){
     const published = isoDate(it.pubDate);
@@ -173,12 +174,18 @@ async function main(){
     fs.writeFileSync(path.join(outDir, "index.html"), html, "utf8");
 
     manifest.items.push({
+      slug,
       title: it.title,
-      link: canonical,
-      pubDate: it.pubDate,
-      desc: desc,
+      summary: desc,
+      excerpt: desc,
+      url: canonical,
+      canonical_url: canonical,
+      path: `/blog/posts/${slug}/`,
       image: it.image ? it.image : `${R2_IMG}/placeholder.webp`,
-      source: it.link
+      image_url: it.image ? it.image : `${R2_IMG}/placeholder.webp`,
+      date_label: humanDate(it.pubDate),
+      published_at: isoDate(it.pubDate),
+      sources: it.link ? [{ title: it.title || "RSS item", link: it.link, pubDate: it.pubDate }] : []
     });
   }
 
