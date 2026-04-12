@@ -17,31 +17,31 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
   const surface = {
     hub: {
-      emptyTitle: "No local blog posts published yet",
+      emptyTitle: "First posts land here",
       emptyCopy:
-        "This archive populates from the AI Management Suite blog manifest. Until the next local post is published, use the written archive, newsletter, or podcast for the freshest analysis.",
+        "Published pieces appear here as the written side of the weekly editorial line. Until the first post lands, the weekly briefings, podcast, and newsletter carry the same coverage.",
       emptyHref: "/blog/weekly/",
-      emptyLabel: "Open written archive",
-      loading: "Loading blog posts…",
-      emptyStatus: "No local weekly posts are published yet.",
-      loadedStatus: "Showing the latest published local blog posts."
+      emptyLabel: "Open weekly briefings",
+      loading: "Loading published posts…",
+      emptyStatus: "The archive is ready for the first published post.",
+      loadedStatus: "Showing the latest published posts."
     },
     weekly: {
-      emptyTitle: "No local blog posts published yet",
+      emptyTitle: "Weekly briefings land here",
       emptyCopy:
-        "This written archive stays useful between published posts, with direct paths back into the blog hub, newsletter, and podcast.",
+        "Each weekly briefing appears here once published. In the meantime, the main blog hub, newsletter, and podcast keep the same editorial thread moving.",
       emptyHref: "/blog/",
       emptyLabel: "Open the blog hub",
-      loading: "Loading blog posts…",
-      emptyStatus: "Showing the guided written archive while the local archive is between releases.",
-      loadedStatus: "Showing the latest published local blog posts."
+      loading: "Loading published posts…",
+      emptyStatus: "Ready for the first weekly briefing.",
+      loadedStatus: "Showing the latest weekly briefings."
     }
   }[surfaceKey] || {
-    emptyTitle: "No local blog posts published yet",
-    emptyCopy: "Check back for the next published local blog post.",
+    emptyTitle: "Published posts land here",
+    emptyCopy: "Published posts appear here as they are released.",
     emptyHref: "/blog/",
     emptyLabel: "Open the blog hub",
-    loading: "Loading posts…",
+    loading: "Loading published posts…",
     emptyStatus: "",
     loadedStatus: ""
   };
@@ -125,7 +125,9 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
       ? payload
       : payload && Array.isArray(payload.items)
         ? payload.items
-        : [];
+        : payload && Array.isArray(payload.posts)
+          ? payload.posts
+          : [];
 
     return items
       .map(normaliseItem)
