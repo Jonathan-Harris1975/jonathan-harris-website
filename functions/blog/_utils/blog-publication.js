@@ -11,9 +11,9 @@ function normaliseItems(payload) {
   return [];
 }
 
-export async function getPublicationState(request) {
+export async function getPublicationState(request, manifestPath = MANIFEST_PATH) {
   try {
-    const manifestUrl = new URL(MANIFEST_PATH, request.url);
+    const manifestUrl = new URL(manifestPath || MANIFEST_PATH, request.url);
     const response = await fetch(manifestUrl.toString(), {
       headers: {
         Accept: "application/json"
