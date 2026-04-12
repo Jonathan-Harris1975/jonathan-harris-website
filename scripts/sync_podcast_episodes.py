@@ -72,19 +72,27 @@ def build_html(episodes):
 def inject(episodes):
     src = HTML_FILE.read_text(encoding="utf-8")
 
-    # Match the opening <section> tag (preserving it and all its attributes),
-    # then the <p class="ep-note"> paragraph (preserving it),
-    # then the existing episode <div> blocks (replacing them),
-    # then the closing </section> tag (preserving it).
+    # Actual section structure:
+    #   <section ...podcast-episodes-static...>
+    #   <h2>Recent Episodes</h2>
+    #   <p class="ep-note">...</p>          <- first </p> inside the section
+    #   <div class="podcast-episode-item">  <- replace these
+    #   ...
+    #   </div>
+    #   <p class="u-s40">...</p>            <- preserve this trailing paragraph
+    #   </section>
+    #
+    # Group 1: opening <section> tag through the ep-note closing </p> (inclusive)
+    # Discarded: the episode <div> blocks
+    # Group 2: trailing <p class="u-s40"> paragraph through </section> (inclusive)
     pattern = (
-        r"(<section[^>]*podcast-episodes-static[^>]*>)"   # group 1: opening tag
-        r"(\s*<p\s[^>]*ep-note[^>]*>.*?</p>)"             # group 2: ep-note paragraph
-        r".*?"                                             # existing episode divs (discarded)
-        r"(</section>)"                                    # group 3: closing tag
+        r"(<section[^>]*podcast-episodes-static[^>]*>.*?</p>)"  # group 1: tag + h2 + ep-note
+        r".*?"                                                   # episode divs (discarded)
+        r"(<p[^>]*u-s40[^>]*>.*?</section>)"                    # group 2: trailing p + closing tag
     )
 
     fresh_html = build_html(episodes)
-    replacement = r"\1\2\n" + fresh_html + r"\n\3"
+    replacement = r"\1" + "\n" + fresh_html + "\n" + r"\2"
 
     new_src, count = re.subn(pattern, replacement, src, flags=re.DOTALL)
 
