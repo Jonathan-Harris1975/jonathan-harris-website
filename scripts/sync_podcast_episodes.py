@@ -27,6 +27,11 @@ def fetch_episodes():
         title = item.findtext("title", "").strip()
         pub_date = item.findtext("pubDate", "").strip()
         link = item.findtext("link", "").strip()
+        # Some podcast hosts set <link> to the show homepage for every item.
+        # Fall back to <guid> which typically carries the per-episode URL.
+        guid = item.findtext("guid", "").strip()
+        if not link or link == "https://jonathan-harris.online/podcast/":
+            link = guid
         formatted_date = _format_date(pub_date)
         episodes.append(
             {
