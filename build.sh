@@ -11,4 +11,5 @@ if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then
   export EBOOK_WORKBOOK_PATH="$DEFAULT_WORKBOOK"
 fi
 
+python3 scripts/sync_podcast_episodes.py
 python3 scripts/deployment_ci.py "$@"
