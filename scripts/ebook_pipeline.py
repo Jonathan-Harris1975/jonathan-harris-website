@@ -1553,6 +1553,26 @@ SEO_TITLE_OVERRIDES = {
     "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry": "The Autonomous Revolution",
     "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": "The Future of Government and AI",
     "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": "The House Always Knows",
+    "ai-in-aviation-transforming-safety-and-sustainability": "AI in Aviation",
+    "ai-in-maritime-revolutionizing-shipping-for-sustainability": "AI in Maritime",
+    "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": "AI in Agriculture",
+    "ai-in-education-reimagining-learning-for-every-student": "AI in Education",
+    "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": "AI Revolution in Railways",
+    "artificial-intelligence-in-construction-building-a-sustainable-future": "AI in Construction",
+    "artificial-intelligence-in-industry-a-comprehensive-guide": "AI in Industry",
+    "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": "AI in Pharmaceuticals",
+    "beyond-earth-how-ai-is-transforming-space-exploration": "Beyond Earth: AI in Space",
+    "climate-intelligence-harnessing-ai-for-a-greener-future": "Climate Intelligence",
+    "digital-defense-the-role-of-ai-in-modern-warfare": "Digital Defense and AI",
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": "Digital Diagnosis",
+    "from-reporters-to-robots-how-ai-is-reshaping-journalism": "From Reporters to Robots",
+    "game-ai-unleashed-from-finite-state-machines-to-machine-learning": "Game AI Unleashed",
+    "lights-camera-algorithm-ai-s-role-in-modern-filmmaking": "Lights, Camera, Algorithm",
+    "smart-buildings-ai-powered-efficiency-and-sustainability": "Smart Buildings and AI",
+    "the-ai-music-revolution-creativity-controversy-and-collaboration": "The AI Music Revolution",
+    "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": "The Architects of AI",
+    "the-artificial-intelligence-job-shift-navigating-the-future-of-work": "The AI Job Shift",
+    "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": "The AI Revolution",
 }
 
 
@@ -2080,7 +2100,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>{meta_title} | Jonathan Harris</title>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
 <meta content="@jonathan_harris_01" name="twitter:creator"/>
@@ -2325,7 +2345,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>AI eBooks Catalogue | Jonathan Harris</title>
 <meta content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
@@ -2452,7 +2472,7 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>{html.escape(topic)} AI Books | Jonathan Harris</title>
 <meta content="{html.escape(description)}" name="description"/>
 <meta content="index,follow" name="robots"/>
@@ -2532,7 +2552,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>AI Topics | Jonathan Harris</title>
 <meta content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
