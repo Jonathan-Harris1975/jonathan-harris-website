@@ -39,3 +39,89 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
 .glossary-group__list dd{margin:0;color:#374151;line-height:1.7}
 .glossary-group__list dd+dt{padding-top:16px;border-top:1px solid rgba(15,23,42,.08)}
 @media (max-width:700px){.actions .button,.ebook-actions .button,.ebook-inline-actions a,.jh-inline-cta__actions a,.featured-actions .button,.cta-row .button{width:100%}.footer-links--utility{grid-template-columns:1fr}}
+
+/* ============================================================
+   JH-AUDIT v4.3 — Governance additions
+   Added: viewport normalisation support, 320-479px mobile
+   band, compare-table mobile layout fix.
+   ============================================================ */
+
+/* --- Compare table: neutralise the min-width that forces
+       horizontal scroll on mobile. The .is-stacked rules in
+       compare-inline.css handle vertical layout from 760px
+       downward. We only keep min-width on tablet+.          --- */
+@media (max-width:767px){
+  .compare-table-wrap{overflow-x:visible!important;-webkit-overflow-scrolling:auto}
+  .compare-table-wrap::after{display:none!important}
+  body.page-compare .compare-table,.compare-table{min-width:0!important;width:100%!important}
+  .compare-scroll-cue{display:none!important}
+}
+
+/* --- 320-479px compact mobile band
+       Covers: hero spacing, chip/CTA wrapping, nav spacing,
+       tables/panels, inline-cta, book-hero, grid columns.  --- */
+@media (max-width:479px){
+  /* Hero spacing */
+  .hero,.book-hero,.lp-hero{padding-left:14px!important;padding-right:14px!important}
+  .hero h1,.hero__title{font-size:1.9rem!important;line-height:1.15!important}
+  .hero p,.hero__lead{font-size:.97rem!important}
+  body.home .lp-hero h1{font-size:1.85rem!important}
+
+  /* Content padding */
+  .main,.wrap,.panel,.card--explore,.jh-inline-cta__inner{
+    padding-left:14px!important;padding-right:14px!important
+  }
+  .jh-inline-cta{padding-left:14px!important;padding-right:14px!important}
+
+  /* Chips and CTA rows */
+  .chips,.topic-chips,.cta-row,.actions,.featured-actions,.home-hero-actions{
+    gap:8px!important
+  }
+
+  /* Grid: single column at 320px */
+  .grid,.lp-offers,.lp-ebooks,.lp-testimonials,.lp-resources{
+    grid-template-columns:1fr!important
+  }
+
+  /* Book hero */
+  .book-hero-copy h1,.detail-copy h2{font-size:1.6rem!important}
+
+  /* Panels */
+  .panel{padding:14px!important}
+
+  /* Navigation spacing */
+  .jh-header__inner{padding:8px 12px!important;gap:8px!important}
+
+  /* Footer */
+  .footer-panel{padding:16px 14px!important}
+  .footer-meta{flex-direction:column;gap:6px!important}
+
+  /* Tables: block stack at very narrow widths */
+  .compare-table,.compare-table thead,
+  .compare-table tbody,.compare-table tr,
+  .compare-table th,.compare-table td{
+    display:block!important;width:100%!important;min-width:0!important
+  }
+  .compare-table thead{display:none!important}
+  .compare-table tr{
+    border:1px solid var(--border);border-radius:12px;
+    margin-bottom:12px;background:#fff;overflow:hidden
+  }
+  .compare-table td{
+    padding:10px 12px;border:0;
+    border-top:1px solid var(--border)
+  }
+  .compare-table td:first-child{border-top:0}
+  .compare-table td[data-label]::before{
+    content:attr(data-label);display:block;
+    font-size:.75rem;font-weight:800;color:var(--accent);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px
+  }
+
+  /* Rel/related grid */
+  .rel-grid{grid-template-columns:1fr!important}
+
+  /* Stats */
+  body.home .lp-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+/* ============================================================ */
