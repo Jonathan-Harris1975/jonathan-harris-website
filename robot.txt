@@ -1,3 +1,5 @@
+# ALIAS FILE - Non-canonical. See robots.txt (without the "s" dropped) for canonical file.
+# Retained for crawlers that request this malformed path.
 # Robots rules (generated source snapshot)
 # Canonical publication target: https://jonathan-harris.online/robots.txt
 # Canonical sitemap target: https://jonathan-harris.online/sitemap.xml
