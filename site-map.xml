@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ALIAS FILE: Canonical sitemap is /sitemap.xml - this file is retained for backwards compatibility -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jonathan-harris.online/api/docs/</loc>
@@ -11,6 +10,18 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
@@ -290,6 +301,10 @@
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/topics/ai-ethics/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/topics/ai-for-beginners/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
@@ -298,7 +313,19 @@
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/topics/ai-in-education/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/topics/ai-in-finance/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/topics/ai-in-healthcare/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/topics/deep-learning/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
@@ -307,6 +334,10 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/topics/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/topics/machine-learning/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>

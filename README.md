@@ -49,6 +49,7 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - `/ebooks/<slug>/` is the sole canonical indexable book route.
 - `/ebooks/<slug>/detail`, `/ebooks/<slug>/detail.html`, and `/ebooks/<slug>/details.html` are retired legacy routes that now 301 to `/ebooks/<slug>/`.
 - Public pages now carry the shared header/footer in initial HTML; `assets/js/site-ui.js` should enhance that shell, not create it from scratch.
+- Viewport ownership is build-governed in the page `<head>`, not in `assets/partials/header.html`. `scripts/inject_partials.py --validate` checks that each deployable page carries exactly one governed viewport tag so shell injection and head metadata do not drift independently.
 
 ## Validation commands
 1. `python3 scripts/import_ebook_workbook.py <workbook.xlsx> --check`
