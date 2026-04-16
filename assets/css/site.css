@@ -263,28 +263,7 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
 .jh-collection-list li{padding:0}
 
 
-/* --- 2026-04 remediation: mobile legibility, static blog cards, and inline-style removal --- */
-@media (max-width:320px){
-  body{font-size:16px}
-}
-@media (max-width:768px){
-  .footer-links a,
-  .breadcrumbs a,
-  .footer-badges a,
-  .card-links a,
-  .jh-journey-actions a,
-  .jh-topic-links a{
-    min-height:44px;
-    display:inline-flex;
-    align-items:center;
-    padding:8px 0;
-  }
-}
-.jh-blog-card-list{display:grid;gap:16px}
-.jh-blog-card{padding:18px}
-.jh-blog-card__meta{margin:0 0 8px;color:#6b7280;font-size:.88rem;font-weight:700}
-.jh-blog-card__title{margin:0 0 10px;font-size:1.1rem;line-height:1.28;color:#111827}
-.jh-blog-card__excerpt{margin:0 0 14px;color:#374151;line-height:1.65}
+/* CI remediation: inline-style removal for topics hub and published blog posts */
 .jh-blog-post-main{padding-top:96px;max-width:780px;margin:0 auto;padding-left:18px;padding-right:18px;padding-bottom:64px}
 .jh-blog-post-breadcrumb{font-size:.88rem;color:#6b7280;margin-bottom:18px}
 .jh-blog-post-breadcrumb a{color:inherit}
