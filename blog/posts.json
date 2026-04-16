@@ -1,5 +1,24 @@
 {
   "schema_version": 1,
-  "updated_at": null,
-  "items": []
+  "updated_at": "2026-04-14T08:00:00Z",
+  "items": [
+    {
+      "slug": "how-ai-is-actually-used-in-healthcare",
+      "url": "https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/",
+      "title": "How AI Is Actually Used in Healthcare",
+      "datePublished": "2026-04-14T08:00:00Z"
+    },
+    {
+      "slug": "what-machine-learning-actually-means-for-business",
+      "url": "https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/",
+      "title": "What Machine Learning Actually Means for Business",
+      "datePublished": "2026-04-10T08:00:00Z"
+    },
+    {
+      "slug": "generative-ai-vs-predictive-ai-the-practical-difference",
+      "url": "https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/",
+      "title": "Generative AI vs Predictive AI: The Practical Difference",
+      "datePublished": "2026-04-07T08:00:00Z"
+    }
+  ]
 }
