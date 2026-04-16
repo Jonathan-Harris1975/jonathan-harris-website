@@ -3886,6 +3886,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if indexed.get("related_slugs", []) != book.get("related_slugs", []):
                 errors.append(f"llm-index.json related_slugs drift detected for {book['slug']}")
 
+    errors.extend(static_blog_archive_errors())
+    errors.extend(blog_related_link_errors())
+    errors.extend(json_ld_validation_errors())
+
     featured_payload = read_json(ROOT / "api" / "v1" / "featured-book.json", default={}) or {}
     expected_featured_payload = build_featured_book_payload([book_to_public_record(book) for book in books])
     if featured_payload != expected_featured_payload:
@@ -4005,6 +4009,65 @@ def run_sync_redirects_command(args: argparse.Namespace) -> int:
     return 0
 
 
+
+
+
+def json_ld_validation_errors() -> List[str]:
+    errors: List[str] = []
+    for path in sorted(ROOT.rglob("*.html")):
+        relative = path.relative_to(ROOT)
+        if "node_modules" in path.parts or "assets" in path.parts or "templates" in path.parts or "partials" in path.parts:
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        blocks = re.findall(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', text, re.I | re.S)
+        for index, raw in enumerate(blocks, start=1):
+            payload = clean_paragraph(raw)
+            if not payload:
+                continue
+            try:
+                json.loads(payload)
+            except Exception as exc:
+                errors.append(f"Invalid JSON-LD in {relative} block #{index}: {exc}")
+    return errors
+
+
+def static_blog_archive_errors() -> List[str]:
+    errors: List[str] = []
+    manifest = read_json(ROOT / "blog" / "posts.json", default={}) or {}
+    items = manifest.get("items") if isinstance(manifest, dict) else None
+    if not isinstance(items, list) or not items:
+        return errors
+    expected_paths = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        slug = clean_paragraph(item.get("slug"))
+        if slug:
+            expected_paths.append(f"/blog/posts/{slug}/")
+    for rel in [Path("blog/index.html"), Path("blog/weekly/index.html")]:
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        if "Published briefings appear here" in text or "The latest briefings appear here" in text:
+            errors.append(f"{rel} still ships placeholder archive copy instead of static post discovery.")
+        missing = [path for path in expected_paths[:3] if path not in text]
+        if missing:
+            errors.append(f"{rel} is missing static links for published briefings. First missing: {missing[0]}")
+    return errors
+
+
+def blog_related_link_errors() -> List[str]:
+    errors: List[str] = []
+    for path in sorted((ROOT / "blog" / "posts").glob("*/index.html")):
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        for href, label in re.findall(r'<a href="([^"]+)">([^<]+)</a>', text):
+            href_clean = clean_paragraph(href)
+            label_clean = clean_paragraph(html.unescape(label))
+            if href_clean and not href_clean.startswith(("/", "http://", "https://", "#", "mailto:", "tel:")):
+                errors.append(f"Blog post malformed link href in {path.relative_to(ROOT)}: {href_clean}")
+                break
+            if label_clean.startswith("/ebooks/") and href_clean and not href_clean.startswith("/ebooks/"):
+                errors.append(f"Blog post related-book anchor text/href reversal detected in {path.relative_to(ROOT)}")
+                break
+    return errors
 
 def rebuild_all(workbook_path: Path) -> List[str]:
     books = build_master_from_workbook(workbook_path)

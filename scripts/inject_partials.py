@@ -50,6 +50,17 @@ FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
 
+VIEWPORT_META_VARIANTS = {
+    '<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>',
+    '<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>',
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>',
+    '<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport">',
+    '<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">',
+}
+
 # ---------------------------------------------------------------------------
 # Regex
 # ---------------------------------------------------------------------------
@@ -75,6 +86,7 @@ _FONT_HEAD_BLOCK_RE = re.compile(
 )
 
 _SITE_CSS_LINK_RE = re.compile(r'<link[^>]+href="/assets/css/site\.css"[^>]*>', re.IGNORECASE)
+_VIEWPORT_META_RE = re.compile(r'<meta[^>]+name=\"viewport\"[^>]*>', re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -127,6 +139,17 @@ def ensure_font_head_block(text: str) -> tuple[str, bool]:
 
     updated = cleaned[:match.start()] + FONT_HEAD_BLOCK + "\n" + cleaned[match.start():]
     return updated, updated != text
+
+
+def validate_viewport_head_block(text: str) -> str | None:
+    matches = _VIEWPORT_META_RE.findall(text)
+    if not matches:
+        return "viewport meta tag is missing from the page head"
+    if len(matches) != 1:
+        return f"expected exactly one viewport meta tag, found {len(matches)}"
+    if matches[0].strip() not in VIEWPORT_META_VARIANTS:
+        return "viewport meta tag differs from the governed accepted forms"
+    return None
 
 
 def validate_font_head_block(text: str) -> str | None:
@@ -271,10 +294,11 @@ def validate() -> int:
         header_reason = None if header_match.group(0) == header_partial else "Header differs from partial"
         footer_reason = None if footer_match.group(0) == footer_partial else "Footer differs from partial"
         font_reason = validate_font_head_block(text)
-        if not header_reason and not footer_reason and not font_reason:
+        viewport_reason = validate_viewport_head_block(text)
+        if not header_reason and not footer_reason and not font_reason and not viewport_reason:
             ok += 1
         else:
-            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason] if reason)
+            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason, viewport_reason] if reason)
             drift.append((rel, reasons))
 
     print()
