@@ -791,9 +791,16 @@ def build_person_schema() -> Dict[str, Any]:
         "name": SITE_NAME,
         "url": f"{SITE_URL}/",
         "jobTitle": ["AI Author", "Podcast Host"],
-        "description": "AI author and commentator publishing practical, no-hype analysis across industries.",
-        "knowsAbout": ["Artificial Intelligence", "Machine Learning", "AI strategy", "Applied AI"],
-        "sameAs": [f"{SITE_URL}/"],
+        "description": "Jonathan Harris is an artificial intelligence author and host of the Turing’s Torch AI Weekly podcast. He writes plain-English books explaining how AI works across industries including healthcare, finance, law, manufacturing, and education.",
+        "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Generative AI", "AI Ethics", "Applied AI", "LLMs"],
+        "sameAs": [
+            "https://about.me/jonathan_harris",
+            "https://youtube.com/@jonathanharris-r7i",
+            "https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF",
+            "https://www.amazon.com/kindle-dbs/author?ref=dbs_G_A_C&asin=B0DNCHC337",
+            "https://www.goodreads.com/author/show/54004095.Jonathan_Harris",
+            "https://twitter.com/jonathan_harris_01",
+        ],
     }
 
 
@@ -804,9 +811,10 @@ def build_website_schema() -> Dict[str, Any]:
         "@type": "WebSite",
         "@id": f"{SITE_URL}/#website",
         "url": f"{SITE_URL}/",
-        "name": "Jonathan Harris – AI Expert & Author",
+        "name": "Jonathan Harris - AI Author & Podcast Host",
         "publisher": {"@id": f"{SITE_URL}/#person"},
-        "inLanguage": "en-GB",
+        "about": {"@id": f"{SITE_URL}/#person"},
+        "inLanguage": "en",
     }
 
 
@@ -2066,10 +2074,36 @@ def problem_framing(book: Dict[str, Any]) -> str:
 
 
 def practical_outcomes(book: Dict[str, Any]) -> List[str]:
+    """Return practical, decision-oriented outcomes distinct from what_youll_learn bullets.
+    
+    These are action-framed: what can the reader DO or DECIDE differently after reading?
+    Derived from why_it_matters, audience, and topic — NOT from what_youll_learn items.
+    """
+    topic = book.get("topic", "AI")
+    topic_lc = topic.lower()
+    audience = book.get("audience", "")
+    why = book.get("why_it_matters", "")
+    
+    # Build decision-framed outcomes from distinct source fields
     outcomes = []
-    for item in book.get("what_youll_learn", [])[:3]:
-        outcomes.append(item[0].upper() + item[1:] if item else item)
-    return outcomes or default_learning_points(book["topic"])[:3]
+    
+    # Outcome 1: from why_it_matters (if available and not empty)
+    if why and len(why) > 20:
+        # Extract first sentence as an action-frame
+        first_sentence = why.split(".")[0].strip()
+        if first_sentence and len(first_sentence) > 15:
+            outcomes.append(f"Understand why {topic_lc} matters now and what the evidence actually says.")
+    
+    # Outcome 2: from audience/use-case context
+    if audience and len(audience) > 10:
+        outcomes.append(f"Assess whether {topic_lc} is applicable to your context before committing resources.")
+    else:
+        outcomes.append(f"Identify the specific use cases where {topic_lc} delivers measurable value.")
+    
+    # Outcome 3: always a governance/decision frame
+    outcomes.append(f"Ask the right governance and implementation questions before adoption decisions become expensive.")
+    
+    return outcomes[:3] or default_learning_points(topic)[:3]
 
 
 
