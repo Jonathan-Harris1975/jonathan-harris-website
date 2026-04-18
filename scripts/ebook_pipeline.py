@@ -3844,9 +3844,24 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append("blog/posts.json must expose an items array.")
         else:
             for item in blog_manifest_items:
-                slug = clean_paragraph(item.get("slug")) if isinstance(item, dict) else ""
-                if item and isinstance(item, dict) and not slug:
+                if not isinstance(item, dict):
+                    errors.append("blog/posts.json contains a non-object entry.")
+                    continue
+                slug = clean_paragraph(item.get("slug"))
+                url = clean_paragraph(item.get("url") or item.get("canonical_url"))
+                path = clean_paragraph(item.get("path"))
+                published_at = clean_paragraph(item.get("published_at") or item.get("datePublished") or item.get("pubDate"))
+                if not slug:
                     errors.append("blog/posts.json contains an entry without a slug.")
+                    continue
+                expected_path = f"/blog/posts/{slug}/"
+                expected_url = f"https://jonathan-harris.online{expected_path}"
+                if path and path != expected_path:
+                    errors.append(f"blog/posts.json entry for {slug} must use path {expected_path}.")
+                if url and url != expected_url:
+                    errors.append(f"blog/posts.json entry for {slug} must use url {expected_url}.")
+                if published_at and not re.match(r"^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)?$", published_at):
+                    errors.append(f"blog/posts.json entry for {slug} has an invalid published date shape.")
 
     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
     site_ui_js = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8")
