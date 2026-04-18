@@ -1,7 +1,38 @@
-# Jonathan Harris ebook library
+# Jonathan Harris — AI author and podcast host
 # Canonical publication target: https://jonathan-harris.online/llms.txt
-# Canonical ebook routes only
-Homepage: https://jonathan-harris.online/ebooks/
+# Whole-estate discovery file
+
+Homepage: https://jonathan-harris.online/
+
+## Core entity pages
+- About Jonathan Harris: https://jonathan-harris.online/bio/
+- eBooks catalogue: https://jonathan-harris.online/ebooks/
+- Podcast hub — Turing's Torch: AI Weekly: https://jonathan-harris.online/podcast/
+- Newsletter — AI Edge: https://jonathan-harris.online/newsletter/
+- Glossary: https://jonathan-harris.online/glossary/
+- Contact: https://jonathan-harris.online/contact/
+
+## Topic guides — educational layer
+- AI for Beginners: https://jonathan-harris.online/topics/ai-for-beginners/
+- AI in Business: https://jonathan-harris.online/topics/ai-in-business/
+- AI in Healthcare: https://jonathan-harris.online/topics/ai-in-healthcare/
+- AI Ethics: https://jonathan-harris.online/topics/ai-ethics/
+- AI in Education: https://jonathan-harris.online/topics/ai-in-education/
+- AI in Finance: https://jonathan-harris.online/topics/ai-in-finance/
+- Deep Learning: https://jonathan-harris.online/topics/deep-learning/
+- Generative AI: https://jonathan-harris.online/topics/generative-ai/
+- Machine Learning: https://jonathan-harris.online/topics/machine-learning/
+- Robotics & Automation: https://jonathan-harris.online/topics/robotics-automation/
+
+## Blog
+- Blog hub: https://jonathan-harris.online/blog/
+- Generative AI vs Predictive AI — The Practical Difference: https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/
+- How AI Is Actually Used in Healthcare: https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/
+- What Machine Learning Actually Means for Business: https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/
+
+## Comparisons and reference
+- AI Comparisons: https://jonathan-harris.online/compare/
+- API documentation: https://jonathan-harris.online/api/docs/
 
 ## Canonical books
 - AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology: https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/
@@ -32,7 +63,7 @@ Homepage: https://jonathan-harris.online/ebooks/
 - Climate Intelligence: Harnessing AI for a Greener Future: https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/
 - AI Revolution in Railways: Modernizing Travel for a Smarter Future: https://jonathan-harris.online/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/
 - Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement: https://jonathan-harris.online/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/
-- Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking: https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/
+- Lights, Camera, Algorithm: AI's Role in Modern Filmmaking: https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/
 - The AI Music Revolution: Creativity, Controversy, and Collaboration: https://jonathan-harris.online/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/
 - The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead: https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/
 - The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming: https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/

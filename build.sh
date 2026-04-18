@@ -12,4 +12,5 @@ if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then
 fi
 
 python3 scripts/sync_podcast_episodes.py
+python3 scripts/generate_podcast_episodes.py
 python3 scripts/deployment_ci.py "$@"

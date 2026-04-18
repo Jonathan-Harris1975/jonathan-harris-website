@@ -10,19 +10,19 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-14</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-07</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-14</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-10</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/catalogue/agriculture/</loc>
@@ -129,6 +129,10 @@
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/ebooks/</loc>
+    <lastmod>2026-04-17</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
@@ -229,10 +233,6 @@
     <lastmod>2026-03-28</lastmod>
   </url>
   <url>
-    <loc>https://jonathan-harris.online/ebooks/</loc>
-    <lastmod>2026-03-28</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/</loc>
     <lastmod>2026-03-28</lastmod>
   </url>
@@ -282,7 +282,7 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-17</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/newsletter/</loc>
@@ -290,7 +290,7 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/podcast/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-17</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/privacy-policy/</loc>
@@ -334,7 +334,7 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/topics/</loc>
-    <lastmod>2026-03-28</lastmod>
+    <lastmod>2026-04-17</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/topics/machine-learning/</loc>
@@ -343,5 +343,25 @@
   <url>
     <loc>https://jonathan-harris.online/topics/robotics-automation/</loc>
     <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/affiliate/</loc>
+    <lastmod>2026-03-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/blog/weekly/</loc>
+    <lastmod>2026-04-14</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/ai-regulation-2025-what-passed-failed-next/</loc>
+    <lastmod>2026-04-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/gpt-5-gemini-2-model-race-what-actually-changed/</loc>
+    <lastmod>2026-04-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/</loc>
+    <lastmod>2026-04-17</lastmod>
   </url>
 </urlset>
