@@ -5,7 +5,7 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What will I learn from this book?",
+      "name": "What does this book explain about AI in transportation?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Where AI is already being used in transportation today — and where sensors meet traffic and liability."
@@ -13,7 +13,7 @@
     },
     {
       "@type": "Question",
-      "name": "Who is this book for?",
+      "name": "Who gets the most value from this transportation guide?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -21,15 +21,15 @@
     },
     {
       "@type": "Question",
-      "name": "How long is it?",
+      "name": "How detailed is the coverage?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It’s 324 pages (varies by edition)."
+        "text": "It runs to 324 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry."
       }
     },
     {
       "@type": "Question",
-      "name": "What format is it available in?",
+      "name": "Where can I get the eBook?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Available as an eBook via Amazon using the buy link on this page."
