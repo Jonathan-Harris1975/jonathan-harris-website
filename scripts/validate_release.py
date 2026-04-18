@@ -11,6 +11,7 @@ if str(REPO_ROOT) not in sys.path:
 import argparse
 
 from scripts.check_crawlers import print_live_summary, run_live_checks
+from scripts.check_ungoverned_routes import run_checks as run_ungoverned_checks
 from scripts.check_live_pages import print_results as print_live_page_summary, run_checks as run_live_page_checks
 from scripts.ebook_pipeline import run_validate_command
 from scripts.maintenance.check_redirect_chains import run_redirect_checks
@@ -51,6 +52,17 @@ def main() -> int:
         args.post_deploy_live = True
 
     workbook_path = Path(args.workbook).expanduser().resolve() if args.workbook else None
+
+    # Ungoverned-route parity gate: fail when HTML files exist in repo but not in workbook
+    if workbook_path and workbook_path.exists():
+        ungoverned_errors = run_ungoverned_checks(workbook_path)
+        if ungoverned_errors:
+            for e in ungoverned_errors:
+                print(f"[FAIL] {e}")
+            print(f"\nRelease blocked: {len(ungoverned_errors)} ungoverned route(s) found.")
+            return 1
+        print("[PASS] Ungoverned route check: all routed HTML files are governed.")
+
     exit_code = run_validate_command(workbook_path=workbook_path)
     if exit_code != 0:
         return exit_code
