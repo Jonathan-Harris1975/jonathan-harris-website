@@ -17,23 +17,23 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
   const surface = {
     hub: {
-      emptyTitle: "Published briefings appear here",
+      emptyTitle: "Latest written briefings",
       emptyCopy:
-        "This section carries the latest written briefings from Jonathan Harris. The archive fills as each weekly post is published, with the newsletter and podcast tracking the same editorial line.",
+        "This section carries Jonathan Harris's weekly written briefings, with the archive, newsletter, and podcast all following the same editorial line.",
       emptyHref: "/blog/weekly/",
       emptyLabel: "Open weekly briefings",
       loading: "Loading published briefings…",
-      emptyStatus: "The next published briefing will appear here.",
+      emptyStatus: "Published briefings are collected here.",
       loadedStatus: (count) => `Showing ${count} published ${count === 1 ? "briefing" : "briefings"}.`
     },
     weekly: {
-      emptyTitle: "The weekly archive updates here",
+      emptyTitle: "Weekly archive",
       emptyCopy:
-        "Each weekly briefing joins this archive as it is published. Use the blog hub, newsletter, and podcast for the same sharp editorial line while the archive is still sparse.",
+        "Each published weekly briefing joins this archive. The blog hub, newsletter, and podcast carry the same sharp editorial line alongside it.",
       emptyHref: "/blog/",
       emptyLabel: "Open the blog hub",
       loading: "Loading weekly briefings…",
-      emptyStatus: "The archive is ready for the next published briefing.",
+      emptyStatus: "This archive collects every published weekly briefing.",
       loadedStatus: (count) => `Showing ${count} published weekly ${count === 1 ? "briefing" : "briefings"}.`
     }
   }[surfaceKey] || {
@@ -117,11 +117,9 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
   }
 
   function normaliseManifest(payload) {
-    const items = Array.isArray(payload)
-      ? payload
-      : payload && Array.isArray(payload.items)
-        ? payload.items
-        : [];
+    const items = payload && typeof payload === "object" && Array.isArray(payload.items)
+      ? payload.items
+      : [];
 
     return items
       .map(normaliseItem)
