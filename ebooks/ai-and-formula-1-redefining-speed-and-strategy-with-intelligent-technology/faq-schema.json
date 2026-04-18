@@ -5,7 +5,7 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What will I learn from this book?",
+      "name": "What does this book explain about AI in transportation?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Where AI is already being used in transportation today — and where milliseconds beat marketing myths."
@@ -13,7 +13,7 @@
     },
     {
       "@type": "Question",
-      "name": "Who is this book for?",
+      "name": "Who gets the most value from this transportation guide?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -21,15 +21,15 @@
     },
     {
       "@type": "Question",
-      "name": "How long is it?",
+      "name": "How detailed is the coverage?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It’s 227 pages (varies by edition)."
+        "text": "It runs to 227 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Formula 1."
       }
     },
     {
       "@type": "Question",
-      "name": "What format is it available in?",
+      "name": "Where can I get the eBook?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Available as an eBook via Amazon using the buy link on this page."
