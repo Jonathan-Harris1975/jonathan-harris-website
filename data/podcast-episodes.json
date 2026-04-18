@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Turing's Torch AI Weekly — 2026-03-27",
+    "slug": "turings-torch-ai-weekly-2026-03-27",
+    "date": "2026-03-27",
+    "external_url": "https://podcasts.apple.com/au/podcast/turings-torch-ai-weekly-2026-03-27/id1862839712?i=1000757746741",
+    "summary": "This week's AI Weekly covers the most significant developments in artificial intelligence from the past seven days — practical analysis, no hype, for listeners who want to understand what actually changed and why it matters.",
+    "key_takeaways": [],
+    "transcript_url": "",
+    "transcript_text": "",
+    "related_topic": {"name": "AI for Beginners", "url": "/topics/ai-for-beginners/"},
+    "related_books": []
+  },
+  {
+    "title": "GPT-5, Gemini 2, and the Model Race: What Actually Changed",
+    "slug": "gpt-5-gemini-2-model-race-what-actually-changed",
+    "date": "",
+    "external_url": "",
+    "summary": "A plain-English breakdown of the GPT-5 and Gemini 2 releases — what the benchmarks actually measure, where the models improve in practice, and how to evaluate capability claims without the press-release framing.",
+    "key_takeaways": [
+      "Benchmark scores and real-world performance diverge significantly for complex reasoning tasks.",
+      "Both models show genuine improvements in multi-step instruction following.",
+      "Context window increases matter more for enterprise users than consumer use cases."
+    ],
+    "transcript_url": "",
+    "transcript_text": "",
+    "related_topic": {"name": "Generative AI", "url": "/topics/generative-ai/"},
+    "related_books": [
+      {"title": "The Artificial Intelligence Revolution", "url": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/"}
+    ]
+  },
+  {
+    "title": "AI Regulation in 2025: What Passed, What Failed, What's Next",
+    "slug": "ai-regulation-2025-what-passed-failed-next",
+    "date": "",
+    "external_url": "",
+    "summary": "An honest accounting of AI regulatory progress in 2025 — which frameworks moved forward, which stalled in committee, and what the patchwork of national approaches means for organisations building or deploying AI systems.",
+    "key_takeaways": [
+      "The EU AI Act's high-risk classification system is operational but enforcement capacity remains limited.",
+      "US federal AI legislation failed to advance; state-level frameworks are filling the gap unevenly.",
+      "Sector-specific guidance (healthcare, finance) is proving more actionable than general AI regulation."
+    ],
+    "transcript_url": "",
+    "transcript_text": "",
+    "related_topic": {"name": "AI Ethics", "url": "/topics/ai-ethics/"},
+    "related_books": [
+      {"title": "Artificial Intelligence and the Law", "url": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"}
+    ]
+  }
+]
