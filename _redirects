@@ -119,10 +119,42 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /ai-in-business/         /topics/ai-in-business/        301
 /ai-in-healthcare        /topics/ai-in-healthcare/      301
 /ai-in-healthcare/       /topics/ai-in-healthcare/      301
+/ai-ethics               /topics/ai-ethics/             301
+/ai-ethics/              /topics/ai-ethics/             301
+/ai-in-education         /topics/ai-in-education/       301
+/ai-in-education/        /topics/ai-in-education/       301
+/ai-in-finance           /topics/ai-in-finance/         301
+/ai-in-finance/          /topics/ai-in-finance/         301
+/deep-learning           /topics/deep-learning/         301
+/deep-learning/          /topics/deep-learning/         301
 /generative-ai           /topics/generative-ai/         301
 /generative-ai/          /topics/generative-ai/         301
+/machine-learning        /topics/machine-learning/      301
+/machine-learning/       /topics/machine-learning/      301
 /robotics-automation     /topics/robotics-automation/   301
 /robotics-automation/    /topics/robotics-automation/   301
+
+# 7C) Topic guide route hardening → concrete files
+/topics/ai-for-beginners        /topics/ai-for-beginners/index.html      200
+/topics/ai-for-beginners/       /topics/ai-for-beginners/index.html      200
+/topics/ai-in-business          /topics/ai-in-business/index.html        200
+/topics/ai-in-business/         /topics/ai-in-business/index.html        200
+/topics/ai-in-healthcare        /topics/ai-in-healthcare/index.html      200
+/topics/ai-in-healthcare/       /topics/ai-in-healthcare/index.html      200
+/topics/ai-ethics               /topics/ai-ethics/index.html             200
+/topics/ai-ethics/              /topics/ai-ethics/index.html             200
+/topics/ai-in-education         /topics/ai-in-education/index.html       200
+/topics/ai-in-education/        /topics/ai-in-education/index.html       200
+/topics/ai-in-finance           /topics/ai-in-finance/index.html         200
+/topics/ai-in-finance/          /topics/ai-in-finance/index.html         200
+/topics/deep-learning           /topics/deep-learning/index.html         200
+/topics/deep-learning/          /topics/deep-learning/index.html         200
+/topics/generative-ai           /topics/generative-ai/index.html         200
+/topics/generative-ai/          /topics/generative-ai/index.html         200
+/topics/machine-learning        /topics/machine-learning/index.html      200
+/topics/machine-learning/       /topics/machine-learning/index.html      200
+/topics/robotics-automation     /topics/robotics-automation/index.html   200
+/topics/robotics-automation/    /topics/robotics-automation/index.html   200
 
 # 8) Terms
 /terms   /terms-of-use/  301
