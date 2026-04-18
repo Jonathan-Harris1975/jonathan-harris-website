@@ -43,6 +43,8 @@ EXCLUDE_DIRS = {
     PARTIALS_DIR,
 }
 
+_COMPAT_REDIRECT_RE = re.compile(r"^podcast/TT-\d{4}-\d{2}-\d{2}/index\.html$")
+
 # ---------------------------------------------------------------------------
 # Font head contract
 # ---------------------------------------------------------------------------
@@ -103,8 +105,16 @@ def load_partial(partial_path: Path, label: str) -> str:
     return partial_path.read_text(encoding="utf-8").rstrip("\n")
 
 
+def should_skip_page(path: Path) -> bool:
+    """Return True when a page is intentionally outside shared header/footer governance."""
+    rel = path.relative_to(ROOT).as_posix()
+    if _COMPAT_REDIRECT_RE.match(rel):
+        return True
+    return False
+
+
 def collect_pages() -> list[Path]:
-    """Return all .html files in the repo, excluding partials and hidden dirs."""
+    """Return all governed .html files in the repo, excluding partials and hidden dirs."""
     pages: list[Path] = []
     for path in sorted(ROOT.rglob("*.html")):
         # Skip the partials directory itself
@@ -112,6 +122,9 @@ def collect_pages() -> list[Path]:
             continue
         # Skip hidden directories (e.g. .git)
         if any(part.startswith(".") for part in path.relative_to(ROOT).parts):
+            continue
+        # Skip intentional compatibility redirect stubs generated under /podcast/TT-YYYY-MM-DD/
+        if should_skip_page(path):
             continue
         pages.append(path)
     return pages

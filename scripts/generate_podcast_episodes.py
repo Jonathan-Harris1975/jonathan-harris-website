@@ -303,7 +303,6 @@ def build_episode_page(ep: dict) -> str:
 <script defer="" src="/assets/js/consent-managed-scripts.min.js"></script>
 </head>
 <body class="page-podcast-episode jh-no-hero-page">
-<a class="skip-link" href="#main">Skip to main content</a>
 {load_partial(HEADER_PARTIAL, "header")}
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
@@ -372,7 +371,7 @@ def register_in_workbook(slugs_generated: list[str]) -> None:
         if not page.exists():
             continue
         title_m = re.search(r"<title>(.*?)</title>", page.read_text(encoding="utf-8"))
-        title = title_m.group(1).strip() if title_m else slug
+        title = html_mod.unescape(title_m.group(1).strip()) if title_m else slug
         url_path = f"/podcast/episodes/{slug}/"
         ws.cell(next_row, 1).value = rel
         ws.cell(next_row, 2).value = url_path

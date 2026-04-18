@@ -35,6 +35,16 @@ EXCLUDED_PREFIXES = (
 EXCLUDED_FILENAMES = {"404.html"}
 
 
+COMPAT_REDIRECT_PREFIX = "podcast/TT-"
+
+
+def should_exclude_route(rel: Path) -> bool:
+    rel_str = rel.as_posix()
+    if rel_str.startswith(COMPAT_REDIRECT_PREFIX) and rel.name == "index.html":
+        return True
+    return False
+
+
 def routed_html_files(root: Path) -> list[Path]:
     results = []
     for p in root.rglob("*.html"):
@@ -45,6 +55,8 @@ def routed_html_files(root: Path) -> list[Path]:
         if any(part.startswith(".") for part in parts):
             continue
         if p.name in EXCLUDED_FILENAMES:
+            continue
+        if should_exclude_route(rel):
             continue
         results.append(p)
     return sorted(results)
