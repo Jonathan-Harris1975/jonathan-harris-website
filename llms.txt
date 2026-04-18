@@ -26,9 +26,6 @@ Homepage: https://jonathan-harris.online/
 
 ## Blog
 - Blog hub: https://jonathan-harris.online/blog/
-- Generative AI vs Predictive AI — The Practical Difference: https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/
-- How AI Is Actually Used in Healthcare: https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/
-- What Machine Learning Actually Means for Business: https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/
 
 ## Comparisons and reference
 - AI Comparisons: https://jonathan-harris.online/compare/
