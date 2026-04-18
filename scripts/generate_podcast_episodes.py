@@ -2,21 +2,21 @@
 """
 generate_podcast_episodes.py
 Build-time script: generates first-party episode pages under /podcast/episodes/<slug>/
-from a podcast episodes data file (data/podcast-episodes.json).
+from live podcast RSS data merged with any existing manual enrichment stored in
+data/podcast-episodes.json.
 
 Each page includes:
   - Episode summary and key takeaways
   - Transcript text or external transcript URL
   - Related topic guide and book links
   - PodcastEpisode JSON-LD schema
-
-Creates data/podcast-episodes.json from the RSS feed if it does not exist,
-using the same RSS URL as sync_podcast_episodes.py.
+  - A compatibility redirect page for bare session IDs like /podcast/TT-2026-04-10/
 """
 from __future__ import annotations
 
 import html as html_mod
 import json
+import os
 import re
 import sys
 import urllib.request
@@ -29,78 +29,157 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
+EPISODES_DATA = ROOT / "data" / "podcast-episodes.json"
+EPISODES_DIR = ROOT / "podcast" / "episodes"
+PODCAST_COMPAT_DIR = ROOT / "podcast"
+RSS_URL = os.environ.get(
+    "PODCAST_RSS_URL",
+    "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
+)
+SITE = os.environ.get("PODCAST_SITE_BASE_URL", "https://jonathan-harris.online").rstrip("/")
+SERIES_NAME = "Turing's Torch: AI Weekly"
+SERIES_URL = f"{SITE}/podcast/"
+NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
+PAGE_HEADER_ROW = 5
 
 
 def load_partial(path: Path, label: str) -> str:
     if not path.exists():
         raise FileNotFoundError(f"{label} partial missing: {path}")
     return path.read_text(encoding="utf-8").rstrip("\n")
-EPISODES_DATA = ROOT / "data" / "podcast-episodes.json"
-EPISODES_DIR = ROOT / "podcast" / "episodes"
-RSS_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
-SITE = "https://jonathan-harris.online"
-SERIES_NAME = "Turing's Torch: AI Weekly"
-SERIES_URL = f"{SITE}/podcast/"
 
 
 def slugify(title: str) -> str:
-    slug = title.lower()
-    slug = re.sub(r"[''']", "", slug)
+    slug = (title or "").lower()
+    slug = re.sub(r"['’]", "", slug)
     slug = re.sub(r"[^a-z0-9]+", "-", slug)
     return slug.strip("-")[:80]
 
 
+def is_absolute_http_url(value: str | None) -> bool:
+    return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
+
+
+def first_non_empty(*values: object) -> str:
+    for value in values:
+        if value is None:
+            continue
+        text = str(value).strip()
+        if text:
+            return text
+    return ""
+
+
+def clean_description(raw: str) -> str:
+    text = re.sub(r"<[^>]+>", " ", raw or "")
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def format_date_iso(pub_date: str) -> str:
+    if not pub_date:
+        return ""
+    try:
+        return parsedate_to_datetime(pub_date).strftime("%Y-%m-%d")
+    except Exception:
+        return ""
+
+
+def resolve_external_url(link: str, guid: str) -> str:
+    if is_absolute_http_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
+        return link
+    if is_absolute_http_url(guid):
+        return guid
+    return ""
+
+
+def parse_transcript_url(item: ET.Element) -> str:
+    tx = item.find("podcast:transcript", NS)
+    if tx is None:
+        return ""
+    candidate = first_non_empty(tx.get("url"), tx.get("href"), tx.text)
+    return candidate if is_absolute_http_url(candidate) else ""
+
+
 def fetch_rss_episodes(limit: int = 20) -> list[dict]:
-    with urllib.request.urlopen(RSS_URL, timeout=20) as resp:
+    request = urllib.request.Request(RSS_URL, headers={"User-Agent": "PodcastEpisodePageSync/1.0"})
+    with urllib.request.urlopen(request, timeout=20) as resp:
         tree = ET.parse(resp)
-    episodes = []
+
+    episodes: list[dict] = []
     for item in tree.findall(".//item")[:limit]:
-        title = item.findtext("title", "").strip()
-        pub_date = item.findtext("pubDate", "").strip()
-        link = item.findtext("link", "").strip()
-        guid = item.findtext("guid", "").strip()
-        description = item.findtext("description", "").strip()
-        # Clean HTML from description if present
-        description = re.sub(r"<[^>]+>", " ", description)
-        description = re.sub(r"\s+", " ", description).strip()
-
-        if not link or link == SERIES_URL:
-            link = guid
-
-        date_iso = ""
-        if pub_date:
-            try:
-                date_iso = parsedate_to_datetime(pub_date).strftime("%Y-%m-%d")
-            except Exception:
-                pass
-
+        title = (item.findtext("title", "") or "").strip()
         if not title:
             continue
 
-        episodes.append({
-            "title": title,
-            "slug": slugify(title),
-            "date": date_iso,
-            "external_url": link,
-            "summary": description[:500] if description else "",
-            "key_takeaways": [],
-            "transcript_url": "",
-            "transcript_text": "",
-            "related_topic": "",
-            "related_books": [],
-        })
+        pub_date = (item.findtext("pubDate", "") or "").strip()
+        link = (item.findtext("link", "") or "").strip()
+        guid = (item.findtext("guid", "") or "").strip()
+        description = clean_description((item.findtext("description", "") or "").strip())
+        session_id = guid if guid and not is_absolute_http_url(guid) else ""
+        slug = slugify(title)
+
+        episodes.append(
+            {
+                "title": title,
+                "slug": slug,
+                "session_id": session_id,
+                "date": format_date_iso(pub_date),
+                "external_url": resolve_external_url(link, guid),
+                "summary": description[:500] if description else "",
+                "key_takeaways": [],
+                "transcript_url": parse_transcript_url(item),
+                "transcript_text": "",
+                "related_topic": {},
+                "related_books": [],
+            }
+        )
     return episodes
 
 
-def load_or_fetch_episodes() -> list[dict]:
-    if EPISODES_DATA.exists():
-        return json.loads(EPISODES_DATA.read_text(encoding="utf-8"))
-    print("data/podcast-episodes.json not found — fetching from RSS feed…")
-    episodes = fetch_rss_episodes()
+def load_existing_episodes() -> dict[str, dict]:
+    if not EPISODES_DATA.exists():
+        return {}
+    try:
+        items = json.loads(EPISODES_DATA.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    existing: dict[str, dict] = {}
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        key = first_non_empty(item.get("session_id"), item.get("slug"), item.get("title"))
+        if key:
+            existing[key] = item
+    return existing
+
+
+def merge_episode(rss_ep: dict, existing_lookup: dict[str, dict]) -> dict:
+    existing = existing_lookup.get(first_non_empty(rss_ep.get("session_id"), rss_ep.get("slug"), rss_ep.get("title")), {})
+    merged = dict(existing)
+    merged.update(rss_ep)
+
+    merged["title"] = rss_ep["title"]
+    merged["slug"] = rss_ep["slug"]
+    merged["session_id"] = first_non_empty(rss_ep.get("session_id"), existing.get("session_id"))
+    merged["date"] = first_non_empty(rss_ep.get("date"), existing.get("date"))
+    merged["external_url"] = first_non_empty(rss_ep.get("external_url"), existing.get("external_url"))
+    merged["summary"] = first_non_empty(existing.get("summary"), rss_ep.get("summary"))
+    merged["transcript_url"] = first_non_empty(rss_ep.get("transcript_url"), existing.get("transcript_url"), merged.get("external_url"))
+    merged["transcript_text"] = first_non_empty(existing.get("transcript_text"), rss_ep.get("transcript_text"))
+    merged["key_takeaways"] = existing.get("key_takeaways") or rss_ep.get("key_takeaways") or []
+    merged["related_topic"] = existing.get("related_topic") or rss_ep.get("related_topic") or {}
+    merged["related_books"] = existing.get("related_books") or rss_ep.get("related_books") or []
+    return merged
+
+
+def load_and_merge_episodes() -> list[dict]:
+    rss_episodes = fetch_rss_episodes()
+    existing_lookup = load_existing_episodes()
+    merged = [merge_episode(ep, existing_lookup) for ep in rss_episodes]
     EPISODES_DATA.parent.mkdir(parents=True, exist_ok=True)
-    EPISODES_DATA.write_text(json.dumps(episodes, indent=2, ensure_ascii=False), encoding="utf-8")
-    print(f"Saved {len(episodes)} episodes to {EPISODES_DATA.relative_to(ROOT)}")
-    return episodes
+    EPISODES_DATA.write_text(json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"Saved {len(merged)} merged episode record(s) to {EPISODES_DATA.relative_to(ROOT)}")
+    return merged
 
 
 def build_episode_page(ep: dict) -> str:
@@ -112,17 +191,15 @@ def build_episode_page(ep: dict) -> str:
     transcript_text = ep.get("transcript_text", "")
     transcript_url = ep.get("transcript_url", "")
     external_url = ep.get("external_url", "")
-    related_topic = ep.get("related_topic", "")
-    related_books = ep.get("related_books", [])
+    related_topic = ep.get("related_topic", {}) or {}
+    related_books = ep.get("related_books", []) or []
     canonical = f"{SITE}/podcast/episodes/{slug}/"
 
-    # Takeaways HTML
     takeaways_html = ""
     if takeaways:
         items = "".join(f"<li>{html_mod.escape(t)}</li>" for t in takeaways)
         takeaways_html = f'<section class="card u-s21"><h2>Key takeaways</h2><ul>{items}</ul></section>'
 
-    # Transcript HTML
     transcript_html = ""
     if transcript_text:
         paras = "".join(f"<p>{html_mod.escape(p.strip())}</p>" for p in transcript_text.split("\n\n") if p.strip())
@@ -134,24 +211,23 @@ def build_episode_page(ep: dict) -> str:
             f'</section>'
         )
 
-    # Related topic HTML
     related_topic_html = ""
-    if related_topic and related_topic.get("url"):
+    if isinstance(related_topic, dict) and related_topic.get("url"):
         related_topic_html = (
             f'<p>Related topic guide: <a href="{html_mod.escape(related_topic["url"])}">'
-            f'{html_mod.escape(related_topic["name"])}</a></p>'
+            f'{html_mod.escape(related_topic.get("name", "Related topic"))}</a></p>'
         )
 
-    # Related books HTML
     related_books_html = ""
     if related_books:
         links = " · ".join(
             f'<a href="{html_mod.escape(b["url"])}">{html_mod.escape(b["title"])}</a>'
             for b in related_books
+            if isinstance(b, dict) and b.get("url") and b.get("title")
         )
-        related_books_html = f'<section class="card u-s21"><h2>Related books</h2><p>{links}</p></section>'
+        if links:
+            related_books_html = f'<section class="card u-s21"><h2>Related books</h2><p>{links}</p></section>'
 
-    # JSON-LD
     schema: dict = {
         "@context": "https://schema.org",
         "@type": "PodcastEpisode",
@@ -249,12 +325,24 @@ def build_episode_page(ep: dict) -> str:
 </html>"""
 
 
-SITE = "https://jonathan-harris.online"
-PAGE_HEADER_ROW = 5
+def build_compat_redirect(session_id: str, slug: str) -> str:
+    canonical = f"/podcast/episodes/{slug}/"
+    return f"""<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"/>
+<meta http-equiv="refresh" content="0; url={canonical}"/>
+<link rel="canonical" href="{canonical}"/>
+<title>Redirecting…</title>
+<script>window.location.replace({json.dumps(canonical)});</script>
+</head>
+<body>
+<p>Redirecting to <a href="{canonical}">{canonical}</a>.</p>
+</body>
+</html>"""
 
 
 def register_in_workbook(slugs_generated: list[str]) -> None:
-    """Add newly generated episode pages to the workbook Pages sheet if absent."""
     wb_candidates = sorted(ROOT.glob("*.xlsm")) + sorted(ROOT.glob("*.xlsx"))
     if not wb_candidates:
         print("  [WARN] No workbook found — skipping workbook registration.")
@@ -266,7 +354,6 @@ def register_in_workbook(slugs_generated: list[str]) -> None:
         return
     ws = wb["Pages"]
 
-    # Build set of already-governed relative paths
     governed: set[str] = set()
     last_row = PAGE_HEADER_ROW
     for row in range(PAGE_HEADER_ROW + 1, ws.max_row + 1):
@@ -284,9 +371,7 @@ def register_in_workbook(slugs_generated: list[str]) -> None:
         page = ROOT / rel
         if not page.exists():
             continue
-        import re as _re
-        html = page.read_text(encoding="utf-8")
-        title_m = _re.search(r"<title>(.*?)</title>", html)
+        title_m = re.search(r"<title>(.*?)</title>", page.read_text(encoding="utf-8"))
         title = title_m.group(1).strip() if title_m else slug
         url_path = f"/podcast/episodes/{slug}/"
         ws.cell(next_row, 1).value = rel
@@ -306,26 +391,39 @@ def register_in_workbook(slugs_generated: list[str]) -> None:
 
 
 def main() -> int:
-    episodes = load_or_fetch_episodes()
+    try:
+        episodes = load_and_merge_episodes()
+    except Exception as exc:
+        print(f"Failed to fetch or merge podcast episodes: {exc}", file=sys.stderr)
+        return 1
+
     if not episodes:
         print("No episode data found.", file=sys.stderr)
         return 1
 
     EPISODES_DIR.mkdir(parents=True, exist_ok=True)
     created = 0
+    generated_slugs: list[str] = []
     for ep in episodes:
         slug = ep.get("slug")
         if not slug:
             continue
         ep_dir = EPISODES_DIR / slug
         ep_dir.mkdir(parents=True, exist_ok=True)
-        page = build_episode_page(ep)
-        (ep_dir / "index.html").write_text(page, encoding="utf-8")
+        (ep_dir / "index.html").write_text(build_episode_page(ep), encoding="utf-8")
         created += 1
+        generated_slugs.append(slug)
         print(f"  Generated: podcast/episodes/{slug}/")
 
+        session_id = ep.get("session_id")
+        if session_id:
+            compat_dir = PODCAST_COMPAT_DIR / session_id
+            compat_dir.mkdir(parents=True, exist_ok=True)
+            (compat_dir / "index.html").write_text(build_compat_redirect(session_id, slug), encoding="utf-8")
+            print(f"  Generated compatibility redirect: podcast/{session_id}/")
+
     print(f"Generated {created} episode page(s) under podcast/episodes/")
-    register_in_workbook([ep["slug"] for ep in episodes if ep.get("slug")])
+    register_in_workbook(generated_slugs)
     return 0
 
 

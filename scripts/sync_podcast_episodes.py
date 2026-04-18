@@ -6,7 +6,10 @@ rewrites the recent-episodes section of podcast/index.html with live data.
 Called from build.sh before deployment_ci.py.
 """
 
+from __future__ import annotations
+
 import html
+import os
 import re
 import sys
 import urllib.request
@@ -14,37 +17,68 @@ import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
 from pathlib import Path
 
-RSS_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
+RSS_URL = os.environ.get(
+    "PODCAST_RSS_URL",
+    "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
+)
+SITE_BASE_URL = os.environ.get("PODCAST_SITE_BASE_URL", "https://jonathan-harris.online").rstrip("/")
+SERIES_URL = f"{SITE_BASE_URL}/podcast/"
 HTML_FILE = Path("podcast/index.html")
 LIMIT = 4
+NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
 
 
-def fetch_episodes():
-    with urllib.request.urlopen(RSS_URL, timeout=15) as response:
+def slugify(value: str) -> str:
+    slug = (value or "").lower()
+    slug = re.sub(r"['’]", "", slug)
+    slug = re.sub(r"[^a-z0-9]+", "-", slug)
+    return slug.strip("-")[:80]
+
+
+def is_absolute_http_url(value: str | None) -> bool:
+    return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
+
+
+def episode_page_url(title: str) -> str:
+    return f"{SITE_BASE_URL}/podcast/episodes/{slugify(title)}/"
+
+
+def resolve_item_url(item: ET.Element, title: str) -> str:
+    link = (item.findtext("link", "") or "").strip()
+    guid = (item.findtext("guid", "") or "").strip()
+
+    if is_absolute_http_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
+        return link
+
+    if is_absolute_http_url(guid):
+        return guid
+
+    return episode_page_url(title)
+
+
+def fetch_episodes() -> list[dict]:
+    request = urllib.request.Request(RSS_URL, headers={"User-Agent": "PodcastEpisodeSync/1.0"})
+    with urllib.request.urlopen(request, timeout=15) as response:
         tree = ET.parse(response)
+
     episodes = []
     for item in tree.findall(".//item")[:LIMIT]:
-        title = item.findtext("title", "").strip()
-        pub_date = item.findtext("pubDate", "").strip()
-        link = item.findtext("link", "").strip()
-        # Some podcast hosts set <link> to the show homepage for every item.
-        # Fall back to <guid> which typically carries the per-episode URL.
-        guid = item.findtext("guid", "").strip()
-        if not link or link == "https://jonathan-harris.online/podcast/":
-            link = guid
+        title = (item.findtext("title", "") or "").strip()
+        if not title:
+            continue
+        pub_date = (item.findtext("pubDate", "") or "").strip()
         formatted_date = _format_date(pub_date)
         episodes.append(
             {
                 "title": title,
-                "link": link,
+                "link": resolve_item_url(item, title),
                 "formatted_date": formatted_date,
             }
         )
     return episodes
 
 
-def _format_date(pub_date_str):
-    """Parse RFC 2822 pubDate and return 'DD Month YYYY', e.g. '10 April 2026'."""
+def _format_date(pub_date_str: str) -> str:
     if not pub_date_str:
         return pub_date_str
     try:
@@ -54,12 +88,12 @@ def _format_date(pub_date_str):
         return pub_date_str
 
 
-def build_html(episodes):
+def build_html(episodes: list[dict]) -> str:
     rows = []
     for ep in episodes:
         t = html.escape(ep["title"])
         u = html.escape(ep["link"])
-        d = ep["formatted_date"]
+        d = html.escape(ep["formatted_date"])
         rows.append(
             '<div class="podcast-episode-item">\n'
             '  <span aria-hidden="true" class="podcast-episode-item__num">&#9654;</span>\n'
@@ -74,26 +108,12 @@ def build_html(episodes):
     return "\n".join(rows)
 
 
-def inject(episodes):
+def inject(episodes: list[dict]) -> None:
     src = HTML_FILE.read_text(encoding="utf-8")
-
-    # Actual section structure:
-    #   <section ...podcast-episodes-static...>
-    #   <h2>Recent Episodes</h2>
-    #   <p class="ep-note">...</p>          <- first </p> inside the section
-    #   <div class="podcast-episode-item">  <- replace these
-    #   ...
-    #   </div>
-    #   <p class="u-s40">...</p>            <- preserve this trailing paragraph
-    #   </section>
-    #
-    # Group 1: opening <section> tag through the ep-note closing </p> (inclusive)
-    # Discarded: the episode <div> blocks
-    # Group 2: trailing <p class="u-s40"> paragraph through </section> (inclusive)
     pattern = (
-        r"(<section[^>]*podcast-episodes-static[^>]*>.*?</p>)"  # group 1: tag + h2 + ep-note
-        r".*?"                                                   # episode divs (discarded)
-        r"(<p[^>]*u-s40[^>]*>.*?</section>)"                    # group 2: trailing p + closing tag
+        r"(<section[^>]*podcast-episodes-static[^>]*>.*?</p>)"
+        r".*?"
+        r"(<p[^>]*u-s40[^>]*>.*?</section>)"
     )
 
     fresh_html = build_html(episodes)
@@ -112,7 +132,7 @@ def inject(episodes):
     print(f"Injected {len(episodes)} episodes into podcast/index.html.")
 
 
-def main():
+def main() -> None:
     try:
         episodes = fetch_episodes()
     except Exception as exc:
