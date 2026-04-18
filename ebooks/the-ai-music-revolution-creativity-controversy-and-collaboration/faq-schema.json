@@ -5,7 +5,7 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What will I learn from this book?",
+      "name": "What does this book explain about AI in creativity?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Where AI is already being used in creativity today — and where new tools meet old rights fights."
@@ -13,7 +13,7 @@
     },
     {
       "@type": "Question",
-      "name": "Who is this book for?",
+      "name": "Who gets the most value from this creativity guide?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work."
@@ -21,15 +21,15 @@
     },
     {
       "@type": "Question",
-      "name": "How long is it?",
+      "name": "How detailed is the coverage?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It’s 295 pages (varies by edition)."
+        "text": "It runs to 295 pages and focuses on It shows where AI fits inside music, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
       }
     },
     {
       "@type": "Question",
-      "name": "What format is it available in?",
+      "name": "Where can I get the eBook?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Available as an eBook via Amazon using the buy link on this page."
