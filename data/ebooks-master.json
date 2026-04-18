@@ -37,7 +37,7 @@
     "pages": 227,
     "asin": "B0DQHSD858",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -57,7 +57,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where milliseconds beat marketing myths."
@@ -65,7 +65,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Formula 1, including operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -73,15 +73,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 227 pages (varies by edition)."
+          "text": "It runs to 227 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Formula 1."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -142,7 +142,7 @@
     "pages": 205,
     "asin": "B0DQK6C563",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -162,7 +162,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in healthcare?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in healthcare today — and where diagnostics meet day-to-day care."
@@ -170,7 +170,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this healthcare guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in Veterinary Medicine for clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
@@ -178,15 +178,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 205 pages (varies by edition)."
+          "text": "It runs to 205 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Veterinary Medicine."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -247,7 +247,7 @@
     "pages": 338,
     "asin": "B0DMKFZ3W3",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems.",
@@ -267,7 +267,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in energy?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in energy today — and where grid maths meets field reality."
@@ -275,7 +275,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this energy guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in Smart Grid for grid operators, infrastructure planners, policy teams, and readers tracking energy systems."
@@ -283,15 +283,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 338 pages (varies by edition)."
+          "text": "It runs to 338 pages and focuses on It shows where AI fits inside Smart Grid, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -353,7 +353,7 @@
     "pages": 339,
     "asin": "B0DMQLK6LY",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -373,7 +373,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where routing models hit warehouse floors."
@@ -381,7 +381,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Logistics, including operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -389,15 +389,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 339 pages (varies by edition)."
+          "text": "It runs to 339 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Logistics."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -458,7 +458,7 @@
     "pages": 224,
     "asin": "B0DQHTBSWJ",
     "datePublished": "2024-12-14",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change.",
@@ -478,7 +478,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in law?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in law today — and where precedent meets messy deployment."
@@ -486,7 +486,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this law guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in law for lawyers, compliance teams, policy readers, and anyone tracking legal change."
@@ -494,15 +494,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 224 pages (varies by edition)."
+          "text": "It runs to 224 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in law."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -563,7 +563,7 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
@@ -583,7 +583,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in cyber security?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in cyber security today — and where attacks outpace slide decks."
@@ -591,7 +591,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this cyber security guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence."
@@ -599,15 +599,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 269 pages (varies by edition)."
+          "text": "It runs to 269 pages and focuses on It shows where AI fits inside Cyber Security, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -668,7 +668,7 @@
     "pages": 14,
     "asin": "B0DMYF3YH3",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
@@ -688,7 +688,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about artificial intelligence?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in artificial intelligence today — and where theory collides with deployment."
@@ -696,7 +696,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this artificial intelligence guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre."
@@ -704,15 +704,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 14 pages (varies by edition)."
+          "text": "It runs to 14 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in artificial intelligence itself."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -768,7 +768,7 @@
     "pages": 284,
     "asin": "B0DMKTLMX6",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -788,7 +788,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where safety systems meet hard limits."
@@ -796,7 +796,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in Aviation for operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -804,15 +804,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 284 pages (varies by edition)."
+          "text": "It runs to 284 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Aviation."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -871,7 +871,7 @@
     "pages": 312,
     "asin": "B0DMMTGNDJ",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -891,7 +891,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where ports, fleets, and costs collide."
@@ -899,7 +899,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in Maritime for operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -907,15 +907,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 312 pages (varies by edition)."
+          "text": "It runs to 312 pages and focuses on It shows where AI fits inside Maritime, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -974,7 +974,7 @@
     "pages": 328,
     "asin": "B0DN4XSLK9",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -994,7 +994,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in healthcare?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in healthcare today — and where lab promise meets regulation."
@@ -1002,7 +1002,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this healthcare guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Pharmaceuticals, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
@@ -1010,15 +1010,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 328 pages (varies by edition)."
+          "text": "It runs to 328 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Pharmaceuticals."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1076,7 +1076,7 @@
     "pages": 324,
     "asin": "B0DMYQV1LY",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -1096,7 +1096,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where sensors meet traffic and liability."
@@ -1104,7 +1104,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in the automotive industry for operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -1112,15 +1112,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 324 pages (varies by edition)."
+          "text": "It runs to 324 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1180,7 +1180,7 @@
     "pages": 234,
     "asin": "B0DMYHW17M",
     "datePublished": "2024-11-13",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience.",
@@ -1200,7 +1200,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in retail?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in retail today — and where basket data meets buyer patience."
@@ -1208,7 +1208,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this retail guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in Retail for retail operators, ecommerce teams, merchandisers, and readers tracking customer experience."
@@ -1216,15 +1216,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 234 pages (varies by edition)."
+          "text": "It runs to 234 pages and focuses on It shows where AI fits inside Retail, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1286,7 +1286,7 @@
     "pages": 369,
     "asin": "B0DMV2Q6TF",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation.",
@@ -1306,7 +1306,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in manufacturing?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in manufacturing today — and where uptime, scrap, and margins bite."
@@ -1314,7 +1314,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this manufacturing guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Manufacturing, including operations leaders, plant teams, engineers, and readers tracking industrial automation."
@@ -1322,15 +1322,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 369 pages (varies by edition)."
+          "text": "It runs to 369 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Manufacturing."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1392,7 +1392,7 @@
     "pages": 347,
     "asin": "B0DMV47ZRL",
     "datePublished": "2024-11-12",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change.",
@@ -1412,7 +1412,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in industry?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in industry today — and where plant floors test every promise."
@@ -1420,7 +1420,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this industry guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in Industry for operations leaders, analysts, engineers, and readers tracking industrial change."
@@ -1428,15 +1428,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 347 pages (varies by edition)."
+          "text": "It runs to 347 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Industry."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1494,7 +1494,7 @@
     "pages": 277,
     "asin": "B0DMMVN17Z",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -1514,7 +1514,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in ethics?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in ethics today — and where convenience starts taxing attention."
@@ -1522,7 +1522,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this ethics guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of how AI shapes attention and thinking for policy readers, educators, sceptics, and anyone thinking about AI's social consequences."
@@ -1530,15 +1530,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 277 pages (varies by edition)."
+          "text": "It runs to 277 pages and focuses on It shows how AI affects attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1596,7 +1596,7 @@
     "pages": 330,
     "asin": "B0DMN32J3Y",
     "datePublished": "2024-11-10",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers.",
@@ -1616,7 +1616,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in agriculture?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in agriculture today — and where weather, margins, and soil matter."
@@ -1624,7 +1624,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this agriculture guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Agriculture, including farm operators, ag-tech teams, sustainability readers, and policy-minded observers."
@@ -1632,15 +1632,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 330 pages (varies by edition)."
+          "text": "It runs to 330 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Agriculture."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1700,7 +1700,7 @@
     "pages": 323,
     "asin": "B0DMKXWQDK",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change.",
@@ -1720,7 +1720,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in education?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in education today — and where classroom goals beat shiny demos."
@@ -1728,7 +1728,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this education guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in Education for teachers, school leaders, edtech teams, and readers tracking classroom change."
@@ -1736,15 +1736,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 323 pages (varies by edition)."
+          "text": "It runs to 323 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Education."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1804,7 +1804,7 @@
     "pages": 286,
     "asin": "B0DML75B3C",
     "datePublished": "2024-11-09",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure.",
@@ -1824,7 +1824,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in finance?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in finance today — and where fraud models meet compliance desks."
@@ -1832,7 +1832,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this finance guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in Banking for bankers, risk teams, fintech readers, and anyone tracking financial infrastructure."
@@ -1840,15 +1840,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 286 pages (varies by edition)."
+          "text": "It runs to 286 pages and focuses on It shows where AI fits inside Banking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -1908,7 +1908,7 @@
     "pages": 348,
     "asin": "B0DM73FR3W",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery.",
@@ -1928,7 +1928,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in healthcare?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in healthcare today — and where clinical use meets human judgement."
@@ -1936,7 +1936,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this healthcare guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in healthcare, including clinicians, healthcare managers, founders, analysts, and readers tracking care delivery."
@@ -1944,15 +1944,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 348 pages (varies by edition)."
+          "text": "It runs to 348 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in healthcare."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2011,7 +2011,7 @@
     "pages": 319,
     "asin": "B0DMQMGLP4",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment.",
@@ -2031,7 +2031,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in construction?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in construction today — and where sites, crews, and delays decide."
@@ -2039,7 +2039,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this construction guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in Construction for developers, site managers, architects, and readers tracking the built environment."
@@ -2047,15 +2047,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 319 pages (varies by edition)."
+          "text": "It runs to 319 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in Construction."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2114,7 +2114,7 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
@@ -2134,7 +2134,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in future of work?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in future of work today — and where job redesign beats slogan fog."
@@ -2142,7 +2142,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this future of work guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change."
@@ -2150,15 +2150,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 315 pages (varies by edition)."
+          "text": "It runs to 315 pages and focuses on It shows where AI fits inside the future of work, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2219,7 +2219,7 @@
     "pages": 328,
     "asin": "B0DM74CRSD",
     "datePublished": "2024-11-05",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity.",
@@ -2239,7 +2239,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in government?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in government today — and where services meet scrutiny and budget."
@@ -2247,7 +2247,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this government guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in government, including public-sector leaders, policy teams, civic-tech readers, and anyone tracking state capacity."
@@ -2255,15 +2255,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 328 pages (varies by edition)."
+          "text": "It runs to 328 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in government."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2325,7 +2325,7 @@
     "pages": 345,
     "asin": "B0DMHBQVCR",
     "datePublished": "2024-11-08",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment.",
@@ -2345,7 +2345,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in construction?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in construction today — and where sensors meet maintenance budgets."
@@ -2353,7 +2353,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this construction guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in smart buildings for developers, site managers, architects, and readers tracking the built environment."
@@ -2361,15 +2361,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 345 pages (varies by edition)."
+          "text": "It runs to 345 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in smart buildings."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2429,7 +2429,7 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
@@ -2449,7 +2449,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in defence?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in defence today — and where autonomy meets command risk."
@@ -2457,7 +2457,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this defence guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology."
@@ -2465,15 +2465,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 296 pages (varies by edition)."
+          "text": "It runs to 296 pages and focuses on It shows where AI fits inside modern warfare, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2533,7 +2533,7 @@
     "pages": 221,
     "asin": "B0DQK6B53Z",
     "datePublished": "2024-12-15",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2553,7 +2553,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in environment?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in environment today — and where field data meets habitat limits."
@@ -2561,7 +2561,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this environment guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Wildlife Conservation, including conservation teams, climate readers, policy staff, and sustainability-minded operators."
@@ -2569,15 +2569,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 221 pages (varies by edition)."
+          "text": "It runs to 221 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Wildlife Conservation."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2638,7 +2638,7 @@
     "pages": 338,
     "asin": "B0DM72JZ44",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators.",
@@ -2658,7 +2658,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in environment?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in environment today — and where emissions maths meets policy friction."
@@ -2666,7 +2666,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this environment guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in climate and environmental strategy for conservation teams, climate readers, policy staff, and sustainability-minded operators."
@@ -2674,15 +2674,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 338 pages (varies by edition)."
+          "text": "It runs to 338 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in climate and environmental strategy."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2741,7 +2741,7 @@
     "pages": 254,
     "asin": "B0DWM19MZH",
     "datePublished": "2025-02-08",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
@@ -2761,7 +2761,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in transportation?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in transportation today — and where signalling meets service reality."
@@ -2769,7 +2769,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this transportation guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems."
@@ -2777,15 +2777,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 254 pages (varies by edition)."
+          "text": "It runs to 254 pages and focuses on It shows where AI fits inside railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2846,7 +2846,7 @@
     "pages": 229,
     "asin": "B0DQFJ6XP5",
     "datePublished": "2024-12-12",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view.",
@@ -2866,7 +2866,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in sports?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in sports today — and where performance data meets human nerves."
@@ -2874,7 +2874,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this sports guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in Sports, including coaches, analysts, operators, and fans who want the practical view."
@@ -2882,15 +2882,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 229 pages (varies by edition)."
+          "text": "It runs to 229 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in Sports."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -2950,7 +2950,7 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -2970,7 +2970,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in creativity?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in creativity today — and where production budgets meet creative calls."
@@ -2978,7 +2978,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this creativity guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work."
@@ -2986,15 +2986,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 336 pages (varies by edition)."
+          "text": "It runs to 336 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in filmmaking."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3055,7 +3055,7 @@
     "pages": 295,
     "asin": "B0DY666TZJ",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -3075,7 +3075,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in creativity?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in creativity today — and where new tools meet old rights fights."
@@ -3083,7 +3083,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this creativity guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in music for creators, producers, editors, and readers tracking how tools reshape creative work."
@@ -3091,15 +3091,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 295 pages (varies by edition)."
+          "text": "It runs to 295 pages and focuses on It shows where AI fits inside music, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3159,7 +3159,7 @@
     "pages": 302,
     "asin": "B0DY5MRT6K",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field.",
@@ -3179,7 +3179,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in history?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in history today — and where breakthroughs meet the human cost."
@@ -3187,7 +3187,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this history guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in the history of artificial intelligence, including readers who want the backstory, the milestones, and the people behind the field."
@@ -3195,15 +3195,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 302 pages (varies by edition)."
+          "text": "It runs to 302 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in the history of artificial intelligence."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3265,7 +3265,7 @@
     "pages": 327,
     "asin": "B0DY4PSD8Z",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
@@ -3285,7 +3285,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in ethics?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in ethics today — and where optimisation meets ethical lines."
@@ -3293,7 +3293,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this ethics guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences."
@@ -3301,15 +3301,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 327 pages (varies by edition)."
+          "text": "It runs to 327 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in gambling."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3371,7 +3371,7 @@
     "pages": 350,
     "asin": "B0DY4Q2Q2D",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems.",
@@ -3391,7 +3391,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in science?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in science today — and where mission risk beats sci-fi gloss."
@@ -3399,7 +3399,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this science guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in space exploration for science readers, engineers, mission planners, and anyone tracking research-heavy systems."
@@ -3407,15 +3407,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 350 pages (varies by edition)."
+          "text": "It runs to 350 pages and focuses on It shows where AI fits inside space exploration, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3475,7 +3475,7 @@
     "pages": 334,
     "asin": "B0DY4NP1WF",
     "datePublished": "2025-02-21",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems.",
@@ -3495,7 +3495,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in media?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in media today — and where deadlines meet verification pressure."
@@ -3503,7 +3503,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this media guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems."
@@ -3511,15 +3511,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 334 pages (varies by edition)."
+          "text": "It runs to 334 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in journalism."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3578,7 +3578,7 @@
     "pages": 334,
     "asin": "B0DY12Z1SP",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems.",
@@ -3598,7 +3598,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in media?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in media today — and where feeds meet moderation blowback."
@@ -3606,7 +3606,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this media guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A clear, no-hype briefing on AI in social media for journalists, editors, platform teams, and readers tracking information systems."
@@ -3614,15 +3614,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 334 pages (varies by edition)."
+          "text": "It runs to 334 pages and focuses on It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in social media."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
@@ -3684,7 +3684,7 @@
     "pages": 344,
     "asin": "B0DY18CYT6",
     "datePublished": "2025-02-20",
-    "dateModified": "2026-03-28T21:48:58Z",
+    "dateModified": "2026-04-18T20:49:01Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems.",
@@ -3704,7 +3704,7 @@
     "faq": [
       {
         "@type": "Question",
-        "name": "What will I learn from this book?",
+        "name": "What does this book explain about AI in gaming?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Where AI is already being used in gaming today — and where design tricks meet player intent."
@@ -3712,7 +3712,7 @@
       },
       {
         "@type": "Question",
-        "name": "Who is this book for?",
+        "name": "Who gets the most value from this gaming guide?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "A practical overview of AI in game development for game developers, designers, producers, and readers tracking interactive systems."
@@ -3720,15 +3720,15 @@
       },
       {
         "@type": "Question",
-        "name": "How long is it?",
+        "name": "How detailed is the coverage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "It’s 344 pages (varies by edition)."
+          "text": "It runs to 344 pages and focuses on It shows where AI fits inside game development, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
         }
       },
       {
         "@type": "Question",
-        "name": "What format is it available in?",
+        "name": "Where can I get the eBook?",
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "Available as an eBook via Amazon using the buy link on this page."
