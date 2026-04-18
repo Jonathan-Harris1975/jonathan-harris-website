@@ -255,8 +255,8 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
    assets/partials/header.html does NOT contain the viewport tag because it
    is injected as a <header> body element, not as part of <head>.
    This is intentional: the partial is a structural header component, not a
-   head-metadata fragment. All 81 workbook page files contain the correct
-   viewport tag in their own <head> sections. --- */
+   head-metadata fragment. Governed workbook page files own the viewport tag
+   in their own <head> sections, so no brittle manual page count lives here. --- */
 
 /* --- Schema helper class for CollectionPage / ItemList context --- */
 .jh-collection-list{list-style:none;padding:0;margin:0;display:grid;gap:12px}
