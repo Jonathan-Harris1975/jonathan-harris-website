@@ -1,0 +1,1057 @@
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/README.md /mnt/data/work/website/jonathan-harris-website-main/README.md
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/README.md	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/README.md	2026-04-18 05:23:57.464895675 +0000
+@@ -36,7 +36,7 @@
+ - Canonical `ebooks/<slug>/index.html` pages are generated and synchronised from the generated master record with `python3 scripts/fix_book_head_metadata.py`.
+ - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
+ - Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `config/crawler-snapshots/*`, and per-book sidecars as generated outputs, not hand-edited source files.
+-- `blog/posts.json` is the canonical same-origin weekly publication manifest shape, with `schema_version`, `updated_at`, and `items` as the governed top-level keys.
++- `blog/posts.json` is the canonical same-origin weekly publication manifest shape, with `schema_version`, `updated_at`, and `items` as the governed top-level keys. Each `items[]` entry should resolve to `/blog/posts/<slug>/` and use the same canonical URL structure.
+ - The website repo ships the `/blog/` hub, the `/blog/weekly/` archive shell, and the runtime enhancement code. Published post HTML, per-post JSON sidecars, and the live `blog/posts.json` payload are published by the AI Management Suite to the bound blog publication surface at `/blog/posts/<slug>/` and `/blog/posts.json`.
+ - `functions/blog/weekly/index.js` and `functions/sitemap.xml.js` make the weekly archive robots and sitemap behaviour follow the live same-origin publication manifest rather than a stale in-repo placeholder.
+ - `docs/third-party-dependency-matrix.md` documents the governed third-party vendors, fallbacks, and failure modes for the live site.
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/assets/js/blog.bundle.js /mnt/data/work/website/jonathan-harris-website-main/assets/js/blog.bundle.js
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/assets/js/blog.bundle.js	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/assets/js/blog.bundle.js	2026-04-18 05:23:57.458747861 +0000
+@@ -17,23 +17,23 @@
+ 
+   const surface = {
+     hub: {
+-      emptyTitle: "Published briefings appear here",
++      emptyTitle: "Latest written briefings",
+       emptyCopy:
+-        "This section carries the latest written briefings from Jonathan Harris. The archive fills as each weekly post is published, with the newsletter and podcast tracking the same editorial line.",
++        "This section carries Jonathan Harris's weekly written briefings, with the archive, newsletter, and podcast all following the same editorial line.",
+       emptyHref: "/blog/weekly/",
+       emptyLabel: "Open weekly briefings",
+       loading: "Loading published briefings…",
+-      emptyStatus: "The next published briefing will appear here.",
++      emptyStatus: "Published briefings are collected here.",
+       loadedStatus: (count) => `Showing ${count} published ${count === 1 ? "briefing" : "briefings"}.`
+     },
+     weekly: {
+-      emptyTitle: "The weekly archive updates here",
++      emptyTitle: "Weekly archive",
+       emptyCopy:
+-        "Each weekly briefing joins this archive as it is published. Use the blog hub, newsletter, and podcast for the same sharp editorial line while the archive is still sparse.",
++        "Each published weekly briefing joins this archive. The blog hub, newsletter, and podcast carry the same sharp editorial line alongside it.",
+       emptyHref: "/blog/",
+       emptyLabel: "Open the blog hub",
+       loading: "Loading weekly briefings…",
+-      emptyStatus: "The archive is ready for the next published briefing.",
++      emptyStatus: "This archive collects every published weekly briefing.",
+       loadedStatus: (count) => `Showing ${count} published weekly ${count === 1 ? "briefing" : "briefings"}.`
+     }
+   }[surfaceKey] || {
+@@ -117,11 +117,9 @@
+   }
+ 
+   function normaliseManifest(payload) {
+-    const items = Array.isArray(payload)
+-      ? payload
+-      : payload && Array.isArray(payload.items)
+-        ? payload.items
+-        : [];
++    const items = payload && typeof payload === "object" && Array.isArray(payload.items)
++      ? payload.items
++      : [];
+ 
+     return items
+       .map(normaliseItem)
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/assets/js/blog.bundle.min.js /mnt/data/work/website/jonathan-harris-website-main/assets/js/blog.bundle.min.js
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/assets/js/blog.bundle.min.js	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/assets/js/blog.bundle.min.js	2026-04-18 05:23:57.459152285 +0000
+@@ -17,23 +17,23 @@
+ 
+   const surface = {
+     hub: {
+-      emptyTitle: "Published briefings appear here",
++      emptyTitle: "Latest written briefings",
+       emptyCopy:
+-        "This section carries the latest written briefings from Jonathan Harris. The archive fills as each weekly post is published, with the newsletter and podcast tracking the same editorial line.",
++        "This section carries Jonathan Harris's weekly written briefings, with the archive, newsletter, and podcast all following the same editorial line.",
+       emptyHref: "/blog/weekly/",
+       emptyLabel: "Open weekly briefings",
+       loading: "Loading published briefings…",
+-      emptyStatus: "The next published briefing will appear here.",
++      emptyStatus: "Published briefings are collected here.",
+       loadedStatus: (count) => `Showing ${count} published ${count === 1 ? "briefing" : "briefings"}.`
+     },
+     weekly: {
+-      emptyTitle: "The weekly archive updates here",
++      emptyTitle: "Weekly archive",
+       emptyCopy:
+-        "Each weekly briefing joins this archive as it is published. Use the blog hub, newsletter, and podcast for the same sharp editorial line while the archive is still sparse.",
++        "Each published weekly briefing joins this archive. The blog hub, newsletter, and podcast carry the same sharp editorial line alongside it.",
+       emptyHref: "/blog/",
+       emptyLabel: "Open the blog hub",
+       loading: "Loading weekly briefings…",
+-      emptyStatus: "The archive is ready for the next published briefing.",
++      emptyStatus: "This archive collects every published weekly briefing.",
+       loadedStatus: (count) => `Showing ${count} published weekly ${count === 1 ? "briefing" : "briefings"}.`
+     }
+   }[surfaceKey] || {
+@@ -117,11 +117,9 @@
+   }
+ 
+   function normaliseManifest(payload) {
+-    const items = Array.isArray(payload)
+-      ? payload
+-      : payload && Array.isArray(payload.items)
+-        ? payload.items
+-        : [];
++    const items = payload && typeof payload === "object" && Array.isArray(payload.items)
++      ? payload.items
++      : [];
+ 
+     return items
+       .map(normaliseItem)
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/index.html /mnt/data/work/website/jonathan-harris-website-main/blog/index.html
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/index.html	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/index.html	2026-04-18 05:23:57.456605425 +0000
+@@ -107,7 +107,7 @@
+   <div class="wrap">
+     <img alt="Jonathan Harris site logo" class="logo-plain" decoding="async" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+     <h1>AI Briefings and Commentary</h1>
+-    <p>Written AI briefings for readers who want the signal, the judgement, and none of the robot pageant. Start here for the latest commentary, then move into the podcast, newsletter, topics, or eBooks when you want the longer route.</p>
++    <p>The written front door to Jonathan Harris's editorial line: weekly AI briefings, plain English, and enough judgement to separate what matters from what is merely making a noise.</p>
+     <div class="cta-row">
+       <a class="button" href="/podcast/">Listen to the podcast</a>
+       <a class="button secondary" href="/newsletter/">Get AI Edge</a>
+@@ -115,42 +115,31 @@
+   </div>
+ </section>
+ <main class="main" id="main" role="main">
+-  <section aria-label="Priority site paths" class="jh-priority-paths"><h2>Start here</h2><p>The blog is the written front door to the Jonathan Harris editorial line: weekly briefings land here first, the podcast handles the audio version, the newsletter keeps pace through the week, and the topic pages and eBooks take you deeper when the short read is not enough.</p><div class="jh-priority-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/blog/weekly/">Weekly briefings</a><a class="jh-hub-cta" href="/podcast/">Podcast</a><a class="jh-hub-cta" href="/newsletter/">Newsletter</a><a class="jh-hub-cta" href="/ebooks/">eBooks</a></div></section>
++  <section aria-label="Priority site paths" class="jh-priority-paths"><h2>Start here</h2><p>The blog keeps the written record straight: weekly briefings land here, the podcast carries the audio cut, the newsletter keeps pace through the week, and the topic pages and eBooks take you further when a quick read is no longer enough.</p><div class="jh-priority-actions"><a class="jh-hub-cta jh-hub-cta--primary" href="/blog/weekly/">Weekly briefings</a><a class="jh-hub-cta" href="/podcast/">Podcast</a><a class="jh-hub-cta" href="/newsletter/">Newsletter</a><a class="jh-hub-cta" href="/ebooks/">eBooks</a></div></section>
+   <div class="wrap">
+     <section class="grid u-s21">
+-      <article class="card"><h2>Weekly briefings</h2><p>The weekly archive keeps every published briefing in one place, so you can scan the latest written pieces without trawling through the internet's usual AI melodrama.</p><p><a class="button secondary" href="/blog/weekly/">Open weekly briefings</a></p></article>
++      <article class="card"><h2>Weekly briefings</h2><p>The weekly archive keeps every published briefing in one place, so you can scan the written record without wading through the internet's usual AI melodrama.</p><p><a class="button secondary" href="/blog/weekly/">Open weekly briefings</a></p></article>
+       <article class="card"><h2>Newsletter route</h2><p>Prefer the inbox to another open tab? AI Edge carries the same plain-English, sceptical editorial line in a tighter weekday format.</p><p><a class="button secondary" href="/newsletter/">Subscribe to AI Edge</a></p></article>
+       <article class="card"><h2>Audio companion</h2><p>Turing’s Torch covers the same territory in weekly audio form for the moments when reading feels like hard labour.</p><p><a class="button secondary" href="/podcast/">Listen to Turing’s Torch</a></p></article>
+     </section>
+     <section aria-label="Latest weekly posts" class="card u-s22">
+-      <h2>Latest published briefings</h2>
+-      <p>The latest published pieces appear below. This is the quickest written route into what changed, what matters, and what is getting more applause than it has earned.</p>
++      <h2>Latest written briefings</h2>
++      <p>The latest published pieces appear below. This is the quickest written route into what changed, what deserves attention, and what is getting more applause than it has earned.</p>
+       <p class="subtle" id="blogStatus" aria-live="polite"></p>
+       <div class="jh-blog-card-list" id="blogList" data-max-items="12">
+         <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-14</p>
+-          <h3 class="jh-blog-card__title">How AI Is Actually Used in Healthcare</h3>
+-          <p class="jh-blog-card__excerpt">A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know.</p>
+-          <p><a class="button secondary" href="/blog/posts/how-ai-is-actually-used-in-healthcare/">Read briefing</a></p>
+-        </article>
+-        <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-10</p>
+-          <h3 class="jh-blog-card__title">What Machine Learning Actually Means for Business</h3>
+-          <p class="jh-blog-card__excerpt">A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it.</p>
+-          <p><a class="button secondary" href="/blog/posts/what-machine-learning-actually-means-for-business/">Read briefing</a></p>
+-        </article>
+-        <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-07</p>
+-          <h3 class="jh-blog-card__title">Generative AI vs Predictive AI: The Practical Difference</h3>
+-          <p class="jh-blog-card__excerpt">Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem.</p>
+-          <p><a class="button secondary" href="/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/">Read briefing</a></p>
++          <p class="jh-blog-card__meta">Editorial route</p>
++          <h3 class="jh-blog-card__title">Weekly briefings land here</h3>
++          <p class="jh-blog-card__excerpt">Published briefings are collected in this space. Use the weekly archive for the full written record, or move into the podcast, newsletter, and topic pages for the rest of the editorial line.</p>
++          <p><a class="button secondary" href="/blog/weekly/">Open weekly briefings</a></p>
+         </article>
+       </div>
++      <noscript><p class="subtle u-s41">Published briefings are collected in the weekly archive. For the current editorial line, use <a href="/blog/weekly/">the archive</a>, <a href="/newsletter/">AI Edge</a>, or <a href="/podcast/">the podcast</a>.</p></noscript>
+     </section>
+     <section class="card u-s22">
+       <h2>What this section does</h2>
+-      <p>This is not a content farm and it is not here to compete for the loudest AI opinions online. The job of the blog is simpler: give readers a quick written route into what changed, what matters, what is overhyped, and where to go next for the longer version.</p>
+-      <p>For deeper reading, the topic pages and eBook catalogue are the next stop. For a steady scan of the week, the published briefings, newsletter, and podcast work together as the strongest route through the site.</p>
++      <p>This is where the written line stays disciplined. The job is not to flood the page with AI hot takes. It is to give readers a clear route into what changed, what matters, what is overcooked, and where to go next for the longer version.</p>
++      <p>For deeper reading, the topic pages and eBook catalogue are the next stop. For a steady scan of the week, the briefings, newsletter, and podcast work together as one editorial system rather than three disconnected marketing props.</p>
+     </section>
+     <section class="jh-journey-panel" aria-label="Continue exploring" class="u-s22">
+       <h2>Keep exploring</h2>
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/index.html /mnt/data/work/website/jonathan-harris-website-main/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/index.html
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/index.html	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/index.html	1970-01-01 00:00:00.000000000 +0000
+@@ -1,208 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-<meta charset="utf-8"/>
+-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+-<title>Generative AI vs Predictive AI: The Practical Difference | Jonathan Harris</title>
+-<meta content="Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem." name="description"/>
+-<meta content="index,follow" name="robots"/>
+-<meta content="#0D1420" name="theme-color"/>
+-<link href="https://fonts.googleapis.com" rel="preconnect"/>
+-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+-<link as="style" href="/assets/css/site.css" rel="preload"/>
+-<script>document.documentElement.classList.add('js-enabled');</script><link href="/assets/css/site.css" rel="stylesheet"/>
+-<meta content="article" property="og:type"/>
+-<meta content="https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/" property="og:url"/>
+-<meta content="Generative AI vs Predictive AI: The Practical Difference | Jonathan Harris" property="og:title"/>
+-<meta content="Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem." property="og:description"/>
+-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+-<meta content="Jonathan Harris AI briefing" property="og:image:alt"/>
+-<meta content="summary_large_image" name="twitter:card"/>
+-<meta content="Generative AI vs Predictive AI: The Practical Difference | Jonathan Harris" name="twitter:title"/>
+-<meta content="Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem." name="twitter:description"/>
+-<link href="https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/" rel="canonical"/>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Generative AI vs Predictive AI: The Practical Difference","description":"Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem.","datePublished":"2026-04-07","dateModified":"2026-04-07","author":{"@id":"https://jonathan-harris.online/#person"},"publisher":{"@id":"https://jonathan-harris.online/#person"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/"},"inLanguage":"en"}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I use ChatGPT for business forecasting?","acceptedAnswer":{"@type":"Answer","text":"Not reliably. LLMs can discuss forecasting concepts and help you build prompts or code for forecasting models. They should not be used as the forecasting model itself, because they are not trained on your data and will hallucinate numbers that sound plausible."}},{"@type":"Question","name":"Is RAG generative or predictive AI?","acceptedAnswer":{"@type":"Answer","text":"RAG (Retrieval Augmented Generation) combines both. A retrieval component finds relevant documents or passages from a knowledge base \u00e2\u0080\u0094 a predictive/search task. A generative model synthesises an answer using those retrieved documents. The retrieval grounds the generation and reduces hallucination."}},{"@type":"Question","name":"Which is safer in regulated industries?","acceptedAnswer":{"@type":"Answer","text":"Predictive AI has a longer track record in regulated industries because its outputs are classifiable and auditable. Generative AI in regulated contexts requires careful scoping, human review, and explicit governance around what the model is and is not allowed to produce or decide."}}]}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://jonathan-harris.online/blog/"},{"@type":"ListItem","position":3,"name":"Generative AI vs Predictive AI: The Practical Difference","item":"https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/"}]}</script>
+-<script data-jh-ai-pack="person" type="application/ld+json">{"@context":"https://schema.org","@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris","url":"https://jonathan-harris.online/","jobTitle":["AI Author","Podcast Host"],"description":"Jonathan Harris is an artificial intelligence author and host of the Turing\u2019s Torch AI Weekly podcast.","knowsAbout":["Artificial Intelligence","Machine Learning","Generative AI","AI Ethics","Applied AI","LLMs"],"sameAs":["https://about.me/jonathan_harris","https://youtube.com/@jonathanharris-r7i","https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF"]}</script>
+-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
+-<script defer="" src="/assets/js/consent-managed-scripts.min.js"></script>
+-</head>
+-<body class="page-blog-post jh-no-hero-page">
+-<a class="skip-link" href="#main">Skip to main content</a>
+-
+-<header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
+-<div class="jh-header__inner">
+-<a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-header__logo" decoding="async" fetchpriority="high" height="32" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-brand__text">Jonathan Harris</span>
+-</a>
+-<nav aria-label="Primary navigation">
+-<ul class="jh-topnav">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">eBooks</a></li>
+-<li><a href="/podcast/">Podcast</a></li>
+-<li><a href="/newsletter/">Newsletter</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/bio/">About</a></li>
+-<li class="jh-nav-dropdown">
+-<button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
+-<ul class="jh-nav-dropdown__menu" role="menu">
+-<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
+-<li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+-<li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+-<li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+-</ul>
+-</li>
+-<li><a href="/contact/">Contact</a>
+-</li>
+-<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li>
+-</ul>
+-</nav>
+-<button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
+-</div>
+-<nav aria-label="Mobile navigation" class="jh-mobile-nav" hidden="" id="jh-mobile-nav">
+-<a aria-label="Jonathan Harris – home" class="jh-mobile-nav__brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-mobile-nav__brand-logo" decoding="async" height="32" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+-</a>
+-<a href="/">Home</a>
+-<a href="/ebooks/">eBooks</a>
+-<a href="/podcast/">Podcast</a>
+-<a href="/newsletter/">Newsletter</a>
+-<a href="/topics/">Topics</a>
+-<a href="/bio/">About</a>
+-<div class="jh-mobile-nav__group">
+-<span class="jh-mobile-nav__group-label">Resources</span>
+-<div class="jh-mobile-nav__group-links">
+-<a href="/blog/">Blog</a>
+-<a href="/glossary/">Glossary</a>
+-<a href="/topics/">Topics</a>
+-<a href="/compare/">Comparisons</a>
+-</div>
+-</div>
+-<a href="/contact/">Contact</a>
+-<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
+-</nav>
+-</header>
+-
+-<main class="wrap jh-blog-post-main" id="main">
+-<nav aria-label="Breadcrumb" class="jh-blog-post-breadcrumb"><a href="/">Home</a> / <a href="/blog/">Blog</a> / <span aria-current="page">Generative AI vs Predictive AI: The Practical Difference</span></nav>
+-<article>
+-<header class="jh-blog-post-header">
+-<p class="blog-date jh-blog-post-date">2026-04-07</p>
+-<h1 class="jh-blog-post-title">Generative AI vs Predictive AI: The Practical Difference</h1>
+-<p class="jh-blog-post-intro">Two types of AI are in wide deployment and they are frequently confused. Generative AI creates new content. Predictive AI classifies or forecasts existing data. They have different strengths, different failure modes, and different governance requirements.</p>
+-<p class="jh-blog-post-byline">By <a href="/bio/">Jonathan Harris</a> &mdash; AI author and host of <a href="/podcast/">Turing’s Torch AI Weekly</a></p>
+-</header>
+-<h2>What predictive AI does</h2><p>Predictive AI takes an input and produces a classification, score, or forecast. A spam filter classifies email as spam or not. A credit model scores the probability of default. A demand forecast estimates next quarter's sales. These systems are trained on historical data with known outcomes and evaluated by how accurately their predictions match reality. This is the kind of AI that has been deployed in business and finance for decades.</p>
+-<h2>What generative AI does</h2><p>Generative AI takes a prompt or input and produces new content: text, images, audio, code. Large language models like GPT-4, Claude, and Gemini are the dominant examples. They are trained on enormous text datasets and learn to generate plausible continuations of any input. The output is not a classification. It is a generation, which means it can be fluent and coherent while being factually wrong.</p>
+-<h2>Where they differ in practice</h2><p>Predictive AI fails by being wrong — making a bad classification or a poor forecast. You can measure that failure against ground truth. Generative AI fails by hallucinating — producing confident, well-formed text that is factually incorrect. That failure is harder to detect automatically because the output does not come with a confidence score attached to its factual claims. This is why hallucination is the defining governance challenge for generative AI.</p>
+-<h2>Choosing the right tool</h2><p>If your problem is: classify this, score this, predict this outcome, detect this anomaly — use predictive ML. If your problem is: draft this, summarise this, answer questions about this corpus, generate variations of this — generative AI is the relevant technology. Many real applications combine both: a retrieval system finds relevant documents (predictive/retrieval), a language model synthesises an answer (generative).</p>
+-<section class="jh-blog-post-callout">
+-<h2 class="jh-blog-post-callout-title">Questions answered in this article</h2>
+-<div class="faq"><details><summary>Can I use ChatGPT for business forecasting?</summary><p>Not reliably. LLMs can discuss forecasting concepts and help you build prompts or code for forecasting models. They should not be used as the forecasting model itself, because they are not trained on your data and will hallucinate numbers that sound plausible.</p></details>
+-<details><summary>Is RAG generative or predictive AI?</summary><p>RAG (Retrieval Augmented Generation) combines both. A retrieval component finds relevant documents or passages from a knowledge base — a predictive/search task. A generative model synthesises an answer using those retrieved documents. The retrieval grounds the generation and reduces hallucination.</p></details>
+-<details><summary>Which is safer in regulated industries?</summary><p>Predictive AI has a longer track record in regulated industries because its outputs are classifiable and auditable. Generative AI in regulated contexts requires careful scoping, human review, and explicit governance around what the model is and is not allowed to produce or decide.</p></details></div>
+-</section>
+-</article>
+-<aside class="jh-blog-post-aside">
+-<h2 class="jh-blog-post-aside-title">Go deeper</h2>
+-<p class="jh-blog-post-label">Related topic guides:</p>
+-<ul class="jh-blog-post-list"><li><a href="/topics/generative-ai/">Generative AI guide</a></li>
+-<li><a href="/topics/machine-learning/">Machine Learning guide</a></li>
+-<li><a href="/topics/ai-ethics/">AI Ethics guide</a></li></ul>
+-<p class="jh-blog-post-label">Related books by Jonathan Harris:</p>
+-<ul class="jh-blog-post-list jh-blog-post-list--books"><li><a href="/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/">The Artificial Intelligence Revolution</a></li>
+-<li><a href="/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/">The AI Behind Your Feed</a></li></ul>
+-<p class="jh-blog-post-cta"><a class="jh-blog-post-cta-link" href="/newsletter/">Subscribe to AI Edge</a> &mdash; a daily weekday briefing on AI developments.</p>
+-</aside>
+-</main>
+-<footer aria-label="Website footer" class="site-footer" role="contentinfo">
+-<div class="wrap footer-shell">
+-<div class="footer-grid">
+-<section aria-label="Brand summary" class="footer-panel footer-panel--brand">
+-<a class="footer-brand" href="/">Jonathan Harris</a>
+-<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a daily weekday newsletter built for readers who prefer signal over noise.</p>
+-<div aria-label="Core site areas" class="footer-badges">
+-<a href="/ebooks/">36 eBooks</a>
+-<a href="/podcast/">Weekly podcast</a>
+-<a href="/newsletter/">Daily AI newsletter</a>
+-</div>
+-<div aria-label="Social media links" class="footer-social">
+-<a aria-label="YouTube" href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="YouTube" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M51 22.5c-.5-3.3-3.1-5.8-6.3-6.2C40.8 15.8 32 15.8 32 15.8s-8.8 0-12.7.5c-3.2.4-5.8 2.9-6.3 6.2-.5 3.1-.5 6.3-.5 9.5s0 6.4.5 9.5c.5 3.3 3.1 5.8 6.3 6.2 3.9.5 12.7.5 12.7.5s8.8 0 12.7-.5c3.2-.4 5.8-2.9 6.3-6.2.5-3.1.5-6.3.5-9.5s0-6.4-.5-9.5Z" fill="#fff" opacity=".12"></path><path d="M27 24l14 8-14 8V24Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Spotify podcast" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Spotify" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><circle cx="32" cy="32" fill="#93C5FD" opacity=".18" r="18"></circle><path d="M23 28c7-2 15-1 22 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="4"></path><path d="M24 35c6-1 12-.4 18 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3.5"></path><path d="M25 41c4-.5 8 0 12 1.6" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3"></path></svg>
+-</a>
+-<a aria-label="TikTok" href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="TikTok" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M38 16c1.8 4.6 5.1 7.3 10 8.1v7.2c-3-.1-5.9-.9-8.5-2.4V40c0 5.8-4.7 10.5-10.5 10.5S18.5 45.8 18.5 40 23.2 29.5 29 29.5c.8 0 1.6.1 2.4.3V37c-.7-.4-1.5-.6-2.4-.6-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6V16h5.4Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Facebook" href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Facebook" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M35.5 50V34.9h5.1l.8-6h-5.9v-3.8c0-1.8.5-3 3.1-3h3.1v-5.3c-.5-.1-2.3-.2-4.3-.2-4.2 0-7.1 2.6-7.1 7.3v5h-4.8v6h4.8V50h5.2Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Instagram" href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Instagram" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><rect fill="none" height="28" rx="9" stroke="#93C5FD" stroke-width="4" width="28" x="18" y="18"></rect><circle cx="32" cy="32" fill="none" r="7" stroke="#93C5FD" stroke-width="4"></circle><circle cx="41.5" cy="22.5" fill="#93C5FD" r="2.5"></circle></svg>
+-</a>
+-</div>
+-</section>
+-<nav aria-label="Navigate" class="footer-panel">
+-<h2>Navigate</h2>
+-<ul class="footer-links">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">Browse eBooks</a></li>
+-<li><a href="/podcast/">Listen to the podcast</a></li>
+-<li><a href="/newsletter/">Join the newsletter</a></li>
+-<li><a href="/topics/">Explore AI topics</a></li>
+-<li><a href="/bio/">About Jonathan Harris</a></li>
+-<li><a href="/contact/">Contact</a></li>
+-</ul>
+-</nav>
+-<nav aria-label="Discover" class="footer-panel footer-panel--discover">
+-<h2>Discover</h2>
+-<div class="footer-link-group">
+-<p class="footer-panel__label">Explore the catalogue</p>
+-<ul class="footer-links">
+-<li><a href="/glossary/">Glossary</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/compare/">Comparisons</a></li>
+-<li><a href="/catalogue/artificial-intelligence/">Artificial Intelligence</a></li>
+-<li><a href="/catalogue/healthcare/">Healthcare</a></li>
+-<li><a href="/catalogue/ethics/">Ethics</a></li>
+-<li><a href="/catalogue/law/">Law</a></li>
+-</ul>
+-</div>
+-<div class="footer-link-group footer-link-group--utility">
+-<p class="footer-panel__label">More</p>
+-<ul class="footer-links footer-links--utility">
+-<li><a href="/affiliate/">Affiliate partners</a></li>
+-<li><a href="/api/docs/">API docs</a></li>
+-</ul>
+-</div>
+-</nav>
+-<section aria-label="Legal" class="footer-panel">
+-<h2>Legal</h2>
+-<ul class="footer-links footer-links--legal">
+-<li><a href="/privacy-policy/">Privacy Policy</a></li>
+-<li><a href="/terms-of-use/">Terms of Use</a></li>
+-</ul>
+-</section>
+-</div>
+-<div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
+-</div>
+-</footer>
+-
+-<script defer="" src="/assets/js/site-ui.min.js"></script>
+-</body>
+-</html>
+\ No newline at end of file
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/how-ai-is-actually-used-in-healthcare/index.html /mnt/data/work/website/jonathan-harris-website-main/blog/posts/how-ai-is-actually-used-in-healthcare/index.html
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/how-ai-is-actually-used-in-healthcare/index.html	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/posts/how-ai-is-actually-used-in-healthcare/index.html	1970-01-01 00:00:00.000000000 +0000
+@@ -1,208 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-<meta charset="utf-8"/>
+-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+-<title>How AI Is Actually Used in Healthcare | Jonathan Harris</title>
+-<meta content="A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know." name="description"/>
+-<meta content="index,follow" name="robots"/>
+-<meta content="#0D1420" name="theme-color"/>
+-<link href="https://fonts.googleapis.com" rel="preconnect"/>
+-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+-<link as="style" href="/assets/css/site.css" rel="preload"/>
+-<script>document.documentElement.classList.add('js-enabled');</script><link href="/assets/css/site.css" rel="stylesheet"/>
+-<meta content="article" property="og:type"/>
+-<meta content="https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/" property="og:url"/>
+-<meta content="How AI Is Actually Used in Healthcare | Jonathan Harris" property="og:title"/>
+-<meta content="A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know." property="og:description"/>
+-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+-<meta content="Jonathan Harris AI briefing" property="og:image:alt"/>
+-<meta content="summary_large_image" name="twitter:card"/>
+-<meta content="How AI Is Actually Used in Healthcare | Jonathan Harris" name="twitter:title"/>
+-<meta content="A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know." name="twitter:description"/>
+-<link href="https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/" rel="canonical"/>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How AI Is Actually Used in Healthcare","description":"A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know.","datePublished":"2026-04-14","dateModified":"2026-04-14","author":{"@id":"https://jonathan-harris.online/#person"},"publisher":{"@id":"https://jonathan-harris.online/#person"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/"},"inLanguage":"en"}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Will AI replace doctors?","acceptedAnswer":{"@type":"Answer","text":"No. The evidence from every serious implementation is that clinical AI augments medical judgement rather than replacing it. The value is in decision support, documentation reduction, and pattern detection at scale \u00e2\u0080\u0094 not autonomous diagnosis."}},{"@type":"Question","name":"Is AI in healthcare regulated?","acceptedAnswer":{"@type":"Answer","text":"Yes. In the UK, clinical AI products require MHRA registration as software medical devices. In the US, the FDA has a pathway for AI/ML-based software as a medical device. The EU MDR applies across Europe. Regulatory approval is not optional for anything used in clinical decision-making."}},{"@type":"Question","name":"What is the biggest barrier to AI adoption in the NHS?","acceptedAnswer":{"@type":"Answer","text":"Infrastructure and interoperability. Many trusts run on legacy PACS, EPR, and pathology systems that pre-date modern data standards. Connecting a new AI system to reliable, standardised data is often harder and more expensive than building the AI."}}]}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://jonathan-harris.online/blog/"},{"@type":"ListItem","position":3,"name":"How AI Is Actually Used in Healthcare","item":"https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/"}]}</script>
+-<script data-jh-ai-pack="person" type="application/ld+json">{"@context":"https://schema.org","@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris","url":"https://jonathan-harris.online/","jobTitle":["AI Author","Podcast Host"],"description":"Jonathan Harris is an artificial intelligence author and host of the Turing\u2019s Torch AI Weekly podcast.","knowsAbout":["Artificial Intelligence","Machine Learning","Generative AI","AI Ethics","Applied AI","LLMs"],"sameAs":["https://about.me/jonathan_harris","https://youtube.com/@jonathanharris-r7i","https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF"]}</script>
+-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
+-<script defer="" src="/assets/js/consent-managed-scripts.min.js"></script>
+-</head>
+-<body class="page-blog-post jh-no-hero-page">
+-<a class="skip-link" href="#main">Skip to main content</a>
+-
+-<header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
+-<div class="jh-header__inner">
+-<a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-header__logo" decoding="async" fetchpriority="high" height="32" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-brand__text">Jonathan Harris</span>
+-</a>
+-<nav aria-label="Primary navigation">
+-<ul class="jh-topnav">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">eBooks</a></li>
+-<li><a href="/podcast/">Podcast</a></li>
+-<li><a href="/newsletter/">Newsletter</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/bio/">About</a></li>
+-<li class="jh-nav-dropdown">
+-<button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
+-<ul class="jh-nav-dropdown__menu" role="menu">
+-<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
+-<li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+-<li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+-<li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+-</ul>
+-</li>
+-<li><a href="/contact/">Contact</a>
+-</li>
+-<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li>
+-</ul>
+-</nav>
+-<button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
+-</div>
+-<nav aria-label="Mobile navigation" class="jh-mobile-nav" hidden="" id="jh-mobile-nav">
+-<a aria-label="Jonathan Harris – home" class="jh-mobile-nav__brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-mobile-nav__brand-logo" decoding="async" height="32" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+-</a>
+-<a href="/">Home</a>
+-<a href="/ebooks/">eBooks</a>
+-<a href="/podcast/">Podcast</a>
+-<a href="/newsletter/">Newsletter</a>
+-<a href="/topics/">Topics</a>
+-<a href="/bio/">About</a>
+-<div class="jh-mobile-nav__group">
+-<span class="jh-mobile-nav__group-label">Resources</span>
+-<div class="jh-mobile-nav__group-links">
+-<a href="/blog/">Blog</a>
+-<a href="/glossary/">Glossary</a>
+-<a href="/topics/">Topics</a>
+-<a href="/compare/">Comparisons</a>
+-</div>
+-</div>
+-<a href="/contact/">Contact</a>
+-<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
+-</nav>
+-</header>
+-
+-<main class="wrap jh-blog-post-main" id="main">
+-<nav aria-label="Breadcrumb" class="jh-blog-post-breadcrumb"><a href="/">Home</a> / <a href="/blog/">Blog</a> / <span aria-current="page">How AI Is Actually Used in Healthcare</span></nav>
+-<article>
+-<header class="jh-blog-post-header">
+-<p class="blog-date jh-blog-post-date">2026-04-14</p>
+-<h1 class="jh-blog-post-title">How AI Is Actually Used in Healthcare</h1>
+-<p class="jh-blog-post-intro">AI in healthcare gets reported in two registers: miraculous breakthrough and impending catastrophe. Neither is accurate. The reality is more specific, more conditional, and more interesting than either headline.</p>
+-<p class="jh-blog-post-byline">By <a href="/bio/">Jonathan Harris</a> &mdash; AI author and host of <a href="/podcast/">Turing’s Torch AI Weekly</a></p>
+-</header>
+-<h2>What AI in healthcare actually does</h2><p>The commercial applications are narrower than the press suggests. Medical imaging analysis — detecting tumours, fractures, and retinal disease in scans — is the most mature and evidenced. Transcription and clinical documentation automation is now widely deployed and genuinely saves clinician time. Triage and early-warning systems in acute care settings flag deteriorating patients earlier than manual observation. Operational planning tools help with bed allocation, scheduling, and supply chain. Drug discovery platforms are accelerating the hypothesis-generation phase of pharmaceutical research.</p>
+-<h2>Where the evidence is actually solid</h2><p>Imaging AI has the strongest evidence base because the task is well-defined, the training data is abundant, and performance can be benchmarked against radiologist reads. Some systems now match or exceed radiologist accuracy on specific narrow tasks — detecting diabetic retinopathy in fundus photographs is the most frequently cited example. The clinical workflow integration is harder than the model performance: deploying a system that works in a research hospital is not the same as deploying one that works in an NHS district general on legacy PACS infrastructure.</p>
+-<h2>Where it reliably struggles</h2><p>Anything that requires contextual clinical reasoning across a full patient history. Anything where training data under-represented certain patient groups and the model therefore performs worse for them. Anything where the deployment environment differs materially from the training environment. Anything where governance, liability, and regulatory approval have not been navigated. The gap between what the benchmark says and what the model does in the real ward is the persistent problem.</p>
+-<h2>The governance and workflow problem</h2><p>A technically impressive model can fail in practice because it arrives at the wrong point in the clinical workflow, produces alerts that clinicians quickly learn to ignore, or creates documentation that does not fit the existing systems. Implementation is not a technical afterthought. It is most of the actual work. The organisations that have had success with clinical AI are the ones that treated workflow design and change management as primary, not secondary, concerns.</p>
+-<section class="jh-blog-post-callout">
+-<h2 class="jh-blog-post-callout-title">Questions answered in this article</h2>
+-<div class="faq"><details><summary>Will AI replace doctors?</summary><p>No. The evidence from every serious implementation is that clinical AI augments medical judgement rather than replacing it. The value is in decision support, documentation reduction, and pattern detection at scale — not autonomous diagnosis.</p></details>
+-<details><summary>Is AI in healthcare regulated?</summary><p>Yes. In the UK, clinical AI products require MHRA registration as software medical devices. In the US, the FDA has a pathway for AI/ML-based software as a medical device. The EU MDR applies across Europe. Regulatory approval is not optional for anything used in clinical decision-making.</p></details>
+-<details><summary>What is the biggest barrier to AI adoption in the NHS?</summary><p>Infrastructure and interoperability. Many trusts run on legacy PACS, EPR, and pathology systems that pre-date modern data standards. Connecting a new AI system to reliable, standardised data is often harder and more expensive than building the AI.</p></details></div>
+-</section>
+-</article>
+-<aside class="jh-blog-post-aside">
+-<h2 class="jh-blog-post-aside-title">Go deeper</h2>
+-<p class="jh-blog-post-label">Related topic guides:</p>
+-<ul class="jh-blog-post-list"><li><a href="/topics/ai-in-healthcare/">AI in Healthcare guide</a></li>
+-<li><a href="/topics/ai-ethics/">AI Ethics guide</a></li>
+-<li><a href="/topics/machine-learning/">Machine Learning guide</a></li></ul>
+-<p class="jh-blog-post-label">Related books by Jonathan Harris:</p>
+-<ul class="jh-blog-post-list jh-blog-post-list--books"><li><a href="/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/">Digital Diagnosis: How AI Is Revolutionizing Healthcare</a></li>
+-<li><a href="/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/">AI in Pharmaceuticals</a></li></ul>
+-<p class="jh-blog-post-cta"><a class="jh-blog-post-cta-link" href="/newsletter/">Subscribe to AI Edge</a> &mdash; a daily weekday briefing on AI developments.</p>
+-</aside>
+-</main>
+-<footer aria-label="Website footer" class="site-footer" role="contentinfo">
+-<div class="wrap footer-shell">
+-<div class="footer-grid">
+-<section aria-label="Brand summary" class="footer-panel footer-panel--brand">
+-<a class="footer-brand" href="/">Jonathan Harris</a>
+-<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a daily weekday newsletter built for readers who prefer signal over noise.</p>
+-<div aria-label="Core site areas" class="footer-badges">
+-<a href="/ebooks/">36 eBooks</a>
+-<a href="/podcast/">Weekly podcast</a>
+-<a href="/newsletter/">Daily AI newsletter</a>
+-</div>
+-<div aria-label="Social media links" class="footer-social">
+-<a aria-label="YouTube" href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="YouTube" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M51 22.5c-.5-3.3-3.1-5.8-6.3-6.2C40.8 15.8 32 15.8 32 15.8s-8.8 0-12.7.5c-3.2.4-5.8 2.9-6.3 6.2-.5 3.1-.5 6.3-.5 9.5s0 6.4.5 9.5c.5 3.3 3.1 5.8 6.3 6.2 3.9.5 12.7.5 12.7.5s8.8 0 12.7-.5c3.2-.4 5.8-2.9 6.3-6.2.5-3.1.5-6.3.5-9.5s0-6.4-.5-9.5Z" fill="#fff" opacity=".12"></path><path d="M27 24l14 8-14 8V24Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Spotify podcast" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Spotify" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><circle cx="32" cy="32" fill="#93C5FD" opacity=".18" r="18"></circle><path d="M23 28c7-2 15-1 22 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="4"></path><path d="M24 35c6-1 12-.4 18 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3.5"></path><path d="M25 41c4-.5 8 0 12 1.6" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3"></path></svg>
+-</a>
+-<a aria-label="TikTok" href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="TikTok" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M38 16c1.8 4.6 5.1 7.3 10 8.1v7.2c-3-.1-5.9-.9-8.5-2.4V40c0 5.8-4.7 10.5-10.5 10.5S18.5 45.8 18.5 40 23.2 29.5 29 29.5c.8 0 1.6.1 2.4.3V37c-.7-.4-1.5-.6-2.4-.6-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6V16h5.4Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Facebook" href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Facebook" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M35.5 50V34.9h5.1l.8-6h-5.9v-3.8c0-1.8.5-3 3.1-3h3.1v-5.3c-.5-.1-2.3-.2-4.3-.2-4.2 0-7.1 2.6-7.1 7.3v5h-4.8v6h4.8V50h5.2Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Instagram" href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Instagram" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><rect fill="none" height="28" rx="9" stroke="#93C5FD" stroke-width="4" width="28" x="18" y="18"></rect><circle cx="32" cy="32" fill="none" r="7" stroke="#93C5FD" stroke-width="4"></circle><circle cx="41.5" cy="22.5" fill="#93C5FD" r="2.5"></circle></svg>
+-</a>
+-</div>
+-</section>
+-<nav aria-label="Navigate" class="footer-panel">
+-<h2>Navigate</h2>
+-<ul class="footer-links">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">Browse eBooks</a></li>
+-<li><a href="/podcast/">Listen to the podcast</a></li>
+-<li><a href="/newsletter/">Join the newsletter</a></li>
+-<li><a href="/topics/">Explore AI topics</a></li>
+-<li><a href="/bio/">About Jonathan Harris</a></li>
+-<li><a href="/contact/">Contact</a></li>
+-</ul>
+-</nav>
+-<nav aria-label="Discover" class="footer-panel footer-panel--discover">
+-<h2>Discover</h2>
+-<div class="footer-link-group">
+-<p class="footer-panel__label">Explore the catalogue</p>
+-<ul class="footer-links">
+-<li><a href="/glossary/">Glossary</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/compare/">Comparisons</a></li>
+-<li><a href="/catalogue/artificial-intelligence/">Artificial Intelligence</a></li>
+-<li><a href="/catalogue/healthcare/">Healthcare</a></li>
+-<li><a href="/catalogue/ethics/">Ethics</a></li>
+-<li><a href="/catalogue/law/">Law</a></li>
+-</ul>
+-</div>
+-<div class="footer-link-group footer-link-group--utility">
+-<p class="footer-panel__label">More</p>
+-<ul class="footer-links footer-links--utility">
+-<li><a href="/affiliate/">Affiliate partners</a></li>
+-<li><a href="/api/docs/">API docs</a></li>
+-</ul>
+-</div>
+-</nav>
+-<section aria-label="Legal" class="footer-panel">
+-<h2>Legal</h2>
+-<ul class="footer-links footer-links--legal">
+-<li><a href="/privacy-policy/">Privacy Policy</a></li>
+-<li><a href="/terms-of-use/">Terms of Use</a></li>
+-</ul>
+-</section>
+-</div>
+-<div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
+-</div>
+-</footer>
+-
+-<script defer="" src="/assets/js/site-ui.min.js"></script>
+-</body>
+-</html>
+\ No newline at end of file
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/what-machine-learning-actually-means-for-business/index.html /mnt/data/work/website/jonathan-harris-website-main/blog/posts/what-machine-learning-actually-means-for-business/index.html
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts/what-machine-learning-actually-means-for-business/index.html	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/posts/what-machine-learning-actually-means-for-business/index.html	1970-01-01 00:00:00.000000000 +0000
+@@ -1,208 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-<meta charset="utf-8"/>
+-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
+-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
+-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+-<title>What Machine Learning Actually Means for Business | Jonathan Harris</title>
+-<meta content="A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it." name="description"/>
+-<meta content="index,follow" name="robots"/>
+-<meta content="#0D1420" name="theme-color"/>
+-<link href="https://fonts.googleapis.com" rel="preconnect"/>
+-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+-<link as="style" href="/assets/css/site.css" rel="preload"/>
+-<script>document.documentElement.classList.add('js-enabled');</script><link href="/assets/css/site.css" rel="stylesheet"/>
+-<meta content="article" property="og:type"/>
+-<meta content="https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/" property="og:url"/>
+-<meta content="What Machine Learning Actually Means for Business | Jonathan Harris" property="og:title"/>
+-<meta content="A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it." property="og:description"/>
+-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+-<meta content="Jonathan Harris AI briefing" property="og:image:alt"/>
+-<meta content="summary_large_image" name="twitter:card"/>
+-<meta content="What Machine Learning Actually Means for Business | Jonathan Harris" name="twitter:title"/>
+-<meta content="A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it." name="twitter:description"/>
+-<link href="https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/" rel="canonical"/>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"What Machine Learning Actually Means for Business","description":"A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it.","datePublished":"2026-04-10","dateModified":"2026-04-10","author":{"@id":"https://jonathan-harris.online/#person"},"publisher":{"@id":"https://jonathan-harris.online/#person"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/"},"inLanguage":"en"}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need a data science team to use machine learning?","acceptedAnswer":{"@type":"Answer","text":"Not necessarily. Mature cloud platforms (AWS SageMaker, Google Vertex AI, Azure ML) have reduced the infrastructure burden significantly. The bigger need is for people who understand the business problem clearly, can prepare and validate data, and can own the deployment and monitoring."}},{"@type":"Question","name":"How long does a machine learning project take?","acceptedAnswer":{"@type":"Answer","text":"A focused proof of concept with clean data can produce results in weeks. A production deployment that is reliable, monitored, and integrated with existing systems typically takes months. The longer projects tend to be the ones where the data preparation work was underestimated."}},{"@type":"Question","name":"What is the difference between AI and machine learning?","acceptedAnswer":{"@type":"Answer","text":"Machine learning is a subset of AI. AI is the broader field. Most commercial AI products are machine learning systems. When a vendor says AI, ask which specific technique they are using and what data it was trained on."}}]}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://jonathan-harris.online/blog/"},{"@type":"ListItem","position":3,"name":"What Machine Learning Actually Means for Business","item":"https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/"}]}</script>
+-<script data-jh-ai-pack="person" type="application/ld+json">{"@context":"https://schema.org","@type":"Person","@id":"https://jonathan-harris.online/#person","name":"Jonathan Harris","url":"https://jonathan-harris.online/","jobTitle":["AI Author","Podcast Host"],"description":"Jonathan Harris is an artificial intelligence author and host of the Turing\u2019s Torch AI Weekly podcast.","knowsAbout":["Artificial Intelligence","Machine Learning","Generative AI","AI Ethics","Applied AI","LLMs"],"sameAs":["https://about.me/jonathan_harris","https://youtube.com/@jonathanharris-r7i","https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF"]}</script>
+-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
+-<script defer="" src="/assets/js/consent-managed-scripts.min.js"></script>
+-</head>
+-<body class="page-blog-post jh-no-hero-page">
+-<a class="skip-link" href="#main">Skip to main content</a>
+-
+-<header aria-label="Primary site header" class="jh-header" id="site-primary-nav" role="banner">
+-<div class="jh-header__inner">
+-<a aria-label="Jonathan Harris – home" class="jh-brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-header__logo" decoding="async" fetchpriority="high" height="32" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-brand__text">Jonathan Harris</span>
+-</a>
+-<nav aria-label="Primary navigation">
+-<ul class="jh-topnav">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">eBooks</a></li>
+-<li><a href="/podcast/">Podcast</a></li>
+-<li><a href="/newsletter/">Newsletter</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/bio/">About</a></li>
+-<li class="jh-nav-dropdown">
+-<button aria-expanded="false" aria-haspopup="true" class="jh-nav-dropdown__btn">Resources <svg aria-hidden="true" fill="none" focusable="false" height="10" viewbox="0 0 10 6" width="10" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path></svg></button>
+-<ul class="jh-nav-dropdown__menu" role="menu">
+-<li role="none"><a href="/blog/" role="menuitem">Blog</a></li>
+-<li role="none"><a href="/glossary/" role="menuitem">Glossary</a></li>
+-<li role="none"><a href="/topics/" role="menuitem">Topics</a></li>
+-<li role="none"><a href="/compare/" role="menuitem">Comparisons</a></li>
+-</ul>
+-</li>
+-<li><a href="/contact/">Contact</a>
+-</li>
+-<li><a class="jh-topnav__cta" href="/ebooks/">Browse Books</a></li>
+-</ul>
+-</nav>
+-<button aria-controls="jh-mobile-nav" aria-expanded="false" aria-label="Open navigation menu" class="jh-hamburger"><svg aria-hidden="true" fill="none" focusable="false" height="20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="3" x2="21" y1="6" y2="6"></line><line x1="3" x2="21" y1="12" y2="12"></line><line x1="3" x2="21" y1="18" y2="18"></line></svg> <span class="jh-hamburger__label">Menu</span></button>
+-</div>
+-<nav aria-label="Mobile navigation" class="jh-mobile-nav" hidden="" id="jh-mobile-nav">
+-<a aria-label="Jonathan Harris – home" class="jh-mobile-nav__brand" href="/">
+-<span aria-hidden="true" class="jh-logo-wrap">
+-<img alt="" aria-hidden="true" class="jh-mobile-nav__brand-logo" decoding="async" height="32" loading="lazy" src="https://images.jonathan-harris.online/site-logo" width="32"/>
+-</span>
+-<span class="jh-mobile-nav__brand-text">Jonathan Harris</span>
+-</a>
+-<a href="/">Home</a>
+-<a href="/ebooks/">eBooks</a>
+-<a href="/podcast/">Podcast</a>
+-<a href="/newsletter/">Newsletter</a>
+-<a href="/topics/">Topics</a>
+-<a href="/bio/">About</a>
+-<div class="jh-mobile-nav__group">
+-<span class="jh-mobile-nav__group-label">Resources</span>
+-<div class="jh-mobile-nav__group-links">
+-<a href="/blog/">Blog</a>
+-<a href="/glossary/">Glossary</a>
+-<a href="/topics/">Topics</a>
+-<a href="/compare/">Comparisons</a>
+-</div>
+-</div>
+-<a href="/contact/">Contact</a>
+-<a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
+-</nav>
+-</header>
+-
+-<main class="wrap jh-blog-post-main" id="main">
+-<nav aria-label="Breadcrumb" class="jh-blog-post-breadcrumb"><a href="/">Home</a> / <a href="/blog/">Blog</a> / <span aria-current="page">What Machine Learning Actually Means for Business</span></nav>
+-<article>
+-<header class="jh-blog-post-header">
+-<p class="blog-date jh-blog-post-date">2026-04-10</p>
+-<h1 class="jh-blog-post-title">What Machine Learning Actually Means for Business</h1>
+-<p class="jh-blog-post-intro">Every business software vendor now claims their product uses machine learning or AI. Some do. Some use a decision tree and a marketing team. Here is how to tell the difference and what actually matters.</p>
+-<p class="jh-blog-post-byline">By <a href="/bio/">Jonathan Harris</a> &mdash; AI author and host of <a href="/podcast/">Turing’s Torch AI Weekly</a></p>
+-</header>
+-<h2>What machine learning is, briefly</h2><p>Machine learning is a method of building software that learns from examples rather than following hand-written rules. You feed it labelled data — transactions that were fraudulent or not, customers who churned or did not, parts that failed or did not — and it finds patterns that predict outcomes on new data. The prediction improves as more labelled data is added. That is the core of it.</p>
+-<h2>What it is genuinely good at in business</h2><p>Fraud detection. Credit scoring. Demand forecasting. Churn prediction. Product recommendation. Predictive maintenance. Document classification. These problems share three features: you have historical data with known outcomes, you can define what a good prediction looks like, and a better prediction has measurable business value. If your problem fits this shape, machine learning is worth serious consideration.</p>
+-<h2>Where it fails business users</h2><p>It fails when the outcome you care about is not in the training data. It fails when the world has changed since the model was trained and no one has noticed. It fails when the prediction is excellent and the action it implies is politically unacceptable. It fails when there is not enough data to find patterns that generalise. It fails when the deployment team treats the model as a black box they do not own and therefore do not monitor.</p>
+-<h2>The questions you need to answer first</h2><p>What are you predicting? What data do you have that captures the past behaviour you want to predict? How will you validate that the model is actually working — not just on test data but in production? Who owns the model after deployment? What happens when it starts performing worse, as all models eventually do? These questions do not require a data science degree. They require someone senior enough to make the decisions they imply.</p>
+-<section class="jh-blog-post-callout">
+-<h2 class="jh-blog-post-callout-title">Questions answered in this article</h2>
+-<div class="faq"><details><summary>Do I need a data science team to use machine learning?</summary><p>Not necessarily. Mature cloud platforms (AWS SageMaker, Google Vertex AI, Azure ML) have reduced the infrastructure burden significantly. The bigger need is for people who understand the business problem clearly, can prepare and validate data, and can own the deployment and monitoring.</p></details>
+-<details><summary>How long does a machine learning project take?</summary><p>A focused proof of concept with clean data can produce results in weeks. A production deployment that is reliable, monitored, and integrated with existing systems typically takes months. The longer projects tend to be the ones where the data preparation work was underestimated.</p></details>
+-<details><summary>What is the difference between AI and machine learning?</summary><p>Machine learning is a subset of AI. AI is the broader field. Most commercial AI products are machine learning systems. When a vendor says AI, ask which specific technique they are using and what data it was trained on.</p></details></div>
+-</section>
+-</article>
+-<aside class="jh-blog-post-aside">
+-<h2 class="jh-blog-post-aside-title">Go deeper</h2>
+-<p class="jh-blog-post-label">Related topic guides:</p>
+-<ul class="jh-blog-post-list"><li><a href="/topics/machine-learning/">Machine Learning guide</a></li>
+-<li><a href="/topics/ai-in-business/">AI in Business guide</a></li>
+-<li><a href="/topics/ai-in-finance/">AI in Finance guide</a></li></ul>
+-<p class="jh-blog-post-label">Related books by Jonathan Harris:</p>
+-<ul class="jh-blog-post-list jh-blog-post-list--books"><li><a href="/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/">Artificial Intelligence in Industry</a></li>
+-<li><a href="/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/">AI in Banking</a></li></ul>
+-<p class="jh-blog-post-cta"><a class="jh-blog-post-cta-link" href="/newsletter/">Subscribe to AI Edge</a> &mdash; a daily weekday briefing on AI developments.</p>
+-</aside>
+-</main>
+-<footer aria-label="Website footer" class="site-footer" role="contentinfo">
+-<div class="wrap footer-shell">
+-<div class="footer-grid">
+-<section aria-label="Brand summary" class="footer-panel footer-panel--brand">
+-<a class="footer-brand" href="/">Jonathan Harris</a>
+-<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a daily weekday newsletter built for readers who prefer signal over noise.</p>
+-<div aria-label="Core site areas" class="footer-badges">
+-<a href="/ebooks/">36 eBooks</a>
+-<a href="/podcast/">Weekly podcast</a>
+-<a href="/newsletter/">Daily AI newsletter</a>
+-</div>
+-<div aria-label="Social media links" class="footer-social">
+-<a aria-label="YouTube" href="https://youtube.com/@jonathanharris-r7i" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="YouTube" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M51 22.5c-.5-3.3-3.1-5.8-6.3-6.2C40.8 15.8 32 15.8 32 15.8s-8.8 0-12.7.5c-3.2.4-5.8 2.9-6.3 6.2-.5 3.1-.5 6.3-.5 9.5s0 6.4.5 9.5c.5 3.3 3.1 5.8 6.3 6.2 3.9.5 12.7.5 12.7.5s8.8 0 12.7-.5c3.2-.4 5.8-2.9 6.3-6.2.5-3.1.5-6.3.5-9.5s0-6.4-.5-9.5Z" fill="#fff" opacity=".12"></path><path d="M27 24l14 8-14 8V24Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Spotify podcast" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Spotify" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><circle cx="32" cy="32" fill="#93C5FD" opacity=".18" r="18"></circle><path d="M23 28c7-2 15-1 22 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="4"></path><path d="M24 35c6-1 12-.4 18 2" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3.5"></path><path d="M25 41c4-.5 8 0 12 1.6" fill="none" stroke="#93C5FD" stroke-linecap="round" stroke-width="3"></path></svg>
+-</a>
+-<a aria-label="TikTok" href="https://www.tiktok.com/@jonathan_harris_01" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="TikTok" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M38 16c1.8 4.6 5.1 7.3 10 8.1v7.2c-3-.1-5.9-.9-8.5-2.4V40c0 5.8-4.7 10.5-10.5 10.5S18.5 45.8 18.5 40 23.2 29.5 29 29.5c.8 0 1.6.1 2.4.3V37c-.7-.4-1.5-.6-2.4-.6-2 0-3.6 1.6-3.6 3.6s1.6 3.6 3.6 3.6 3.6-1.6 3.6-3.6V16h5.4Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Facebook" href="https://www.facebook.com/share/1G7v4P69xa" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Facebook" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><path d="M35.5 50V34.9h5.1l.8-6h-5.9v-3.8c0-1.8.5-3 3.1-3h3.1v-5.3c-.5-.1-2.3-.2-4.3-.2-4.2 0-7.1 2.6-7.1 7.3v5h-4.8v6h4.8V50h5.2Z" fill="#93C5FD"></path></svg>
+-</a>
+-<a aria-label="Instagram" href="https://www.instagram.com/jonathan.harris1975" rel="noopener noreferrer" target="_blank">
+-<svg aria-label="Instagram" height="28" role="img" viewbox="0 0 64 64" width="28" xmlns="http://www.w3.org/2000/svg"><rect fill="#111827" height="64" rx="16" width="64"></rect><rect fill="none" height="28" rx="9" stroke="#93C5FD" stroke-width="4" width="28" x="18" y="18"></rect><circle cx="32" cy="32" fill="none" r="7" stroke="#93C5FD" stroke-width="4"></circle><circle cx="41.5" cy="22.5" fill="#93C5FD" r="2.5"></circle></svg>
+-</a>
+-</div>
+-</section>
+-<nav aria-label="Navigate" class="footer-panel">
+-<h2>Navigate</h2>
+-<ul class="footer-links">
+-<li><a href="/">Home</a></li>
+-<li><a href="/ebooks/">Browse eBooks</a></li>
+-<li><a href="/podcast/">Listen to the podcast</a></li>
+-<li><a href="/newsletter/">Join the newsletter</a></li>
+-<li><a href="/topics/">Explore AI topics</a></li>
+-<li><a href="/bio/">About Jonathan Harris</a></li>
+-<li><a href="/contact/">Contact</a></li>
+-</ul>
+-</nav>
+-<nav aria-label="Discover" class="footer-panel footer-panel--discover">
+-<h2>Discover</h2>
+-<div class="footer-link-group">
+-<p class="footer-panel__label">Explore the catalogue</p>
+-<ul class="footer-links">
+-<li><a href="/glossary/">Glossary</a></li>
+-<li><a href="/topics/">Topics</a></li>
+-<li><a href="/compare/">Comparisons</a></li>
+-<li><a href="/catalogue/artificial-intelligence/">Artificial Intelligence</a></li>
+-<li><a href="/catalogue/healthcare/">Healthcare</a></li>
+-<li><a href="/catalogue/ethics/">Ethics</a></li>
+-<li><a href="/catalogue/law/">Law</a></li>
+-</ul>
+-</div>
+-<div class="footer-link-group footer-link-group--utility">
+-<p class="footer-panel__label">More</p>
+-<ul class="footer-links footer-links--utility">
+-<li><a href="/affiliate/">Affiliate partners</a></li>
+-<li><a href="/api/docs/">API docs</a></li>
+-</ul>
+-</div>
+-</nav>
+-<section aria-label="Legal" class="footer-panel">
+-<h2>Legal</h2>
+-<ul class="footer-links footer-links--legal">
+-<li><a href="/privacy-policy/">Privacy Policy</a></li>
+-<li><a href="/terms-of-use/">Terms of Use</a></li>
+-</ul>
+-</section>
+-</div>
+-<div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
+-</div>
+-</footer>
+-
+-<script defer="" src="/assets/js/site-ui.min.js"></script>
+-</body>
+-</html>
+\ No newline at end of file
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts.json /mnt/data/work/website/jonathan-harris-website-main/blog/posts.json
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/posts.json	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/posts.json	2026-04-18 05:23:57.458115478 +0000
+@@ -1,24 +1,5 @@
+ {
+   "schema_version": 1,
+-  "updated_at": "2026-04-14T08:00:00Z",
+-  "items": [
+-    {
+-      "slug": "how-ai-is-actually-used-in-healthcare",
+-      "url": "https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/",
+-      "title": "How AI Is Actually Used in Healthcare",
+-      "datePublished": "2026-04-14T08:00:00Z"
+-    },
+-    {
+-      "slug": "what-machine-learning-actually-means-for-business",
+-      "url": "https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/",
+-      "title": "What Machine Learning Actually Means for Business",
+-      "datePublished": "2026-04-10T08:00:00Z"
+-    },
+-    {
+-      "slug": "generative-ai-vs-predictive-ai-the-practical-difference",
+-      "url": "https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/",
+-      "title": "Generative AI vs Predictive AI: The Practical Difference",
+-      "datePublished": "2026-04-07T08:00:00Z"
+-    }
+-  ]
+-}
+\ No newline at end of file
++  "updated_at": null,
++  "items": []
++}
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/weekly/index.html /mnt/data/work/website/jonathan-harris-website-main/blog/weekly/index.html
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/blog/weekly/index.html	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/blog/weekly/index.html	2026-04-18 05:24:15.815591974 +0000
+@@ -13,8 +13,8 @@
+ <link as="style" href="/assets/css/site.css" rel="preload"/>
+ <script>document.documentElement.classList.add('js-enabled');</script><link href="/assets/css/site.css" rel="stylesheet"/>
+ 
+-<title>Weekly AI Briefing Route | Jonathan Harris</title>
+-<meta content="Weekly AI briefings from Jonathan Harris, with practical commentary, published posts, and direct routes into the podcast, newsletter, and main blog hub." name="description"/>
++<title>Weekly AI Briefings | Jonathan Harris</title>
++<meta content="The weekly archive for Jonathan Harris briefings: practical AI commentary, published posts, and a clean written record that stays aligned with the podcast and newsletter." name="description"/>
+ <meta content="noindex,follow" name="robots"/>
+ <meta content="page" name="ai:content_type"/>
+ <meta content="weekly AI briefing, Jonathan Harris blog hub, practical AI commentary, no-hype AI writing" name="ai:keywords"/>
+@@ -25,16 +25,16 @@
+ <meta content="630" property="og:image:height"/>
+ <meta content="https://jonathan-harris.online/blog/weekly/" property="og:url"/>
+ <meta content="Weekly AI Briefings | Jonathan Harris" property="og:title"/>
+-<meta content="Weekly AI briefings from Jonathan Harris, with practical commentary, published posts, and direct routes into the podcast, newsletter, and main blog hub." property="og:description"/>
++<meta content="The weekly archive for Jonathan Harris briefings: practical AI commentary, published posts, and a clean written record that stays aligned with the podcast and newsletter." property="og:description"/>
+ <meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+ <meta content="summary_large_image" name="twitter:card"/>
+ <meta content="Weekly AI Briefings | Jonathan Harris" name="twitter:title"/>
+-<meta content="Weekly AI briefings from Jonathan Harris, with practical commentary, published posts, and direct routes into the podcast, newsletter, and main blog hub." name="twitter:description"/>
++<meta content="The weekly archive for Jonathan Harris briefings: practical AI commentary, published posts, and a clean written record that stays aligned with the podcast and newsletter." name="twitter:description"/>
+ <link href="https://jonathan-harris.online/blog/weekly/" rel="canonical"/>
+ <link href="https://jonathan-harris.online/blog/weekly/" hreflang="en" rel="alternate"/>
+ <link href="https://jonathan-harris.online/blog/weekly/" hreflang="x-default" rel="alternate"/>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://jonathan-harris.online/blog/weekly/#page","name":"Jonathan Harris weekly AI briefings","url":"https://jonathan-harris.online/blog/weekly/","description":"Weekly AI briefings from Jonathan Harris, with practical commentary, published posts, and direct routes into the podcast, newsletter, and main blog hub.","isPartOf":{"@id":"https://jonathan-harris.online/#website"},"publisher":{"@id":"https://jonathan-harris.online/#person"},"inLanguage":"en"}</script>
+-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://jonathan-harris.online/blog/"},{"@type":"ListItem","position":3,"name":"Weekly posts","item":"https://jonathan-harris.online/blog/weekly/"}]}</script>
++<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://jonathan-harris.online/blog/weekly/#page","name":"Jonathan Harris weekly AI briefings","url":"https://jonathan-harris.online/blog/weekly/","description":"The weekly archive for Jonathan Harris briefings: practical AI commentary, published posts, and a clean written record that stays aligned with the podcast and newsletter.","isPartOf":{"@id":"https://jonathan-harris.online/#website"},"publisher":{"@id":"https://jonathan-harris.online/#person"},"inLanguage":"en"}</script>
++<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://jonathan-harris.online/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://jonathan-harris.online/blog/"},{"@type":"ListItem","position":3,"name":"Weekly briefings","item":"https://jonathan-harris.online/blog/weekly/"}]}</script>
+ 
+ <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
+ <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+@@ -102,11 +102,11 @@
+ <a class="jh-mobile-nav__cta" href="/ebooks/">Browse Books</a>
+ </nav>
+ </header>
+-<section aria-label="Weekly posts header" class="hero hero--has-fixed-nav" role="region">
++<section aria-label="Weekly briefings header" class="hero hero--has-fixed-nav" role="region">
+   <div class="wrap">
+     <img alt="Jonathan Harris site logo" class="logo-plain" decoding="async" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+     <h1>Weekly AI Briefings</h1>
+-    <p>The weekly archive keeps each published briefing in one place, so the written record stays tidy while the podcast and newsletter carry the same editorial thread alongside it.</p>
++    <p>The weekly archive keeps the written record in one place: practical AI commentary, plain English, and none of the usual synthetic perfume.</p>
+     <div class="cta-row">
+       <a class="button" href="/blog/">Open the blog</a>
+       <a class="button secondary" href="/podcast/">Listen to the podcast</a>
+@@ -123,39 +123,27 @@
+       </ol>
+     </nav>
+ 
+-    <section aria-label="Weekly posts overview" class="card u-s22">
++    <section aria-label="Weekly briefings overview" class="card u-s22">
+       <h2>Published weekly briefings</h2>
+       <p>This archive is the cleanest route into the published weekly pieces. It is built for quick scanning, sane summaries, and a low tolerance for AI nonsense dressed up as insight.</p>
+       <p class="subtle" id="blogStatus" aria-live="polite"></p>
+     </section>
+ 
+-    <section aria-label="Weekly posts archive" class="u-s22" data-max-items="8" id="blogList">
++    <section aria-label="Weekly briefings archive" class="u-s22" data-max-items="8" id="blogList">
+       <div class="jh-blog-card-list">
+         <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-14</p>
+-          <h2 class="jh-blog-card__title">How AI Is Actually Used in Healthcare</h2>
+-          <p class="jh-blog-card__excerpt">A plain-English briefing on how AI is used in healthcare today, where it genuinely helps, where it fails, and what clinicians and health IT teams need to know.</p>
+-          <p><a class="button secondary" href="/blog/posts/how-ai-is-actually-used-in-healthcare/">Read briefing</a></p>
+-        </article>
+-        <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-10</p>
+-          <h2 class="jh-blog-card__title">What Machine Learning Actually Means for Business</h2>
+-          <p class="jh-blog-card__excerpt">A no-nonsense guide to what machine learning is, what it can and cannot do in a business context, and the questions you need to answer before adopting it.</p>
+-          <p><a class="button secondary" href="/blog/posts/what-machine-learning-actually-means-for-business/">Read briefing</a></p>
+-        </article>
+-        <article class="card jh-blog-card">
+-          <p class="jh-blog-card__meta">2026-04-07</p>
+-          <h2 class="jh-blog-card__title">Generative AI vs Predictive AI: The Practical Difference</h2>
+-          <p class="jh-blog-card__excerpt">Generative AI creates new content. Predictive AI classifies or forecasts. Understanding the difference will stop you applying the wrong tool to the wrong problem.</p>
+-          <p><a class="button secondary" href="/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/">Read briefing</a></p>
++          <p class="jh-blog-card__meta">Archive route</p>
++          <h2 class="jh-blog-card__title">The written archive lives here</h2>
++          <p class="jh-blog-card__excerpt">Each published briefing joins this archive. It is the straight written route through the weekly editorial line, with the podcast and newsletter carrying the same judgement in different formats.</p>
++          <p><a class="button secondary" href="/blog/">Open the blog hub</a></p>
+         </article>
+       </div>
+     </section>
+-    <noscript><p class="subtle u-s41">This archive updates as new briefings are published. For the current editorial line, use <a href="/blog/">the blog hub</a>, <a href="/newsletter/">AI Edge</a>, or the <a href="https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml" rel="noopener noreferrer" target="_blank">podcast feed</a>.</p></noscript>
++    <noscript><p class="subtle u-s41">Published briefings are collected in this archive. For the current editorial line, use <a href="/blog/">the blog hub</a>, <a href="/newsletter/">AI Edge</a>, or <a href="/podcast/">the podcast</a>.</p></noscript>
+ 
+     <section aria-label="Continue exploring" class="jh-journey-panel u-s22">
+       <h2>Keep exploring the site</h2>
+-      <p>Use this route for the published weekly archive, then move into the podcast, newsletter, or topic pages when you want the same week handled in a different format.</p>
++      <p>Use this route for the published weekly archive, then move into the podcast, newsletter, or topic pages when you want the same material handled in a different format.</p>
+       <div class="jh-journey-actions"><a href="/blog/">Blog</a><a href="/newsletter/">Newsletter</a><a href="/podcast/">Podcast</a><a href="/topics/">Topics</a>
+ <a href="/ebooks/">eBooks</a></div>
+       <p class="jh-related-callout">That keeps the archive, newsletter, and podcast in one editorial lane instead of pretending they are separate universes.</p>
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/config/crawler-checksums.json /mnt/data/work/website/jonathan-harris-website-main/config/crawler-checksums.json
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/config/crawler-checksums.json	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/config/crawler-checksums.json	2026-04-18 05:23:57.470704367 +0000
+@@ -7,11 +7,11 @@
+     },
+     "llms.txt": {
+       "url": "https://jonathan-harris.online/llms.txt",
+-      "sha256": "bf463e89a13991ba2aaf547c9bd3e82debf3bc57185de34399c2643259ae90fe"
++      "sha256": "caea09d3ab15694eb99473f66384811a0de98d0ee6d6ce3535cec44bb65a5ad0"
+     },
+     "sitemap.xml": {
+       "url": "https://jonathan-harris.online/sitemap.xml",
+-      "sha256": "c53995e5242f7bba690f36c32eef817573593b50a94f91bfb0d15deaba429083"
++      "sha256": "b1451160663331bbd656b4a366299027de59636aa3362abda53b9f9224af60b5"
+     }
+   }
+-}
+\ No newline at end of file
++}
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/config/crawler-snapshots/llms.txt /mnt/data/work/website/jonathan-harris-website-main/config/crawler-snapshots/llms.txt
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/config/crawler-snapshots/llms.txt	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/config/crawler-snapshots/llms.txt	2026-04-18 05:23:57.469152594 +0000
+@@ -26,9 +26,6 @@
+ 
+ ## Blog
+ - Blog hub: https://jonathan-harris.online/blog/
+-- Generative AI vs Predictive AI — The Practical Difference: https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/
+-- How AI Is Actually Used in Healthcare: https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/
+-- What Machine Learning Actually Means for Business: https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/
+ 
+ ## Comparisons and reference
+ - AI Comparisons: https://jonathan-harris.online/compare/
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/functions/blog/weekly/index.js /mnt/data/work/website/jonathan-harris-website-main/functions/blog/weekly/index.js
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/functions/blog/weekly/index.js	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/functions/blog/weekly/index.js	2026-04-18 05:24:43.484067094 +0000
+@@ -1,4 +1,4 @@
+-import { getPublicationState } from "../../_utils/blog-publication.js";
++import { getPublicationState } from "../_utils/blog-publication.js";
+ 
+ const MANIFEST_PATH = "/blog/posts.json";
+ 
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/functions/sitemap.xml.js /mnt/data/work/website/jonathan-harris-website-main/functions/sitemap.xml.js
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/functions/sitemap.xml.js	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/functions/sitemap.xml.js	2026-04-18 05:24:43.484631355 +0000
+@@ -1,4 +1,4 @@
+-import { getPublicationState, getWeeklyArchiveUrl } from "./_utils/blog-publication.js";
++import { getPublicationState, getWeeklyArchiveUrl } from "./blog/_utils/blog-publication.js";
+ 
+ const MANIFEST_PATH = "/blog/posts.json";
+ 
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/llms.txt /mnt/data/work/website/jonathan-harris-website-main/llms.txt
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/llms.txt	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/llms.txt	2026-04-18 05:23:57.468386123 +0000
+@@ -26,9 +26,6 @@
+ 
+ ## Blog
+ - Blog hub: https://jonathan-harris.online/blog/
+-- Generative AI vs Predictive AI — The Practical Difference: https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/
+-- How AI Is Actually Used in Healthcare: https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/
+-- What Machine Learning Actually Means for Business: https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/
+ 
+ ## Comparisons and reference
+ - AI Comparisons: https://jonathan-harris.online/compare/
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/scripts/ebook_pipeline.py /mnt/data/work/website/jonathan-harris-website-main/scripts/ebook_pipeline.py
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/scripts/ebook_pipeline.py	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/scripts/ebook_pipeline.py	2026-04-18 05:23:57.464142915 +0000
+@@ -3844,9 +3844,24 @@
+             errors.append("blog/posts.json must expose an items array.")
+         else:
+             for item in blog_manifest_items:
+-                slug = clean_paragraph(item.get("slug")) if isinstance(item, dict) else ""
+-                if item and isinstance(item, dict) and not slug:
++                if not isinstance(item, dict):
++                    errors.append("blog/posts.json contains a non-object entry.")
++                    continue
++                slug = clean_paragraph(item.get("slug"))
++                url = clean_paragraph(item.get("url") or item.get("canonical_url"))
++                path = clean_paragraph(item.get("path"))
++                published_at = clean_paragraph(item.get("published_at") or item.get("datePublished") or item.get("pubDate"))
++                if not slug:
+                     errors.append("blog/posts.json contains an entry without a slug.")
++                    continue
++                expected_path = f"/blog/posts/{slug}/"
++                expected_url = f"https://jonathan-harris.online{expected_path}"
++                if path and path != expected_path:
++                    errors.append(f"blog/posts.json entry for {slug} must use path {expected_path}.")
++                if url and url != expected_url:
++                    errors.append(f"blog/posts.json entry for {slug} must use url {expected_url}.")
++                if published_at and not re.match(r"^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)?$", published_at):
++                    errors.append(f"blog/posts.json entry for {slug} has an invalid published date shape.")
+ 
+     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
+     site_ui_js = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8")
+diff -urN /mnt/data/orig_compare/website/jonathan-harris-website-main/sitemap.xml /mnt/data/work/website/jonathan-harris-website-main/sitemap.xml
+--- /mnt/data/orig_compare/website/jonathan-harris-website-main/sitemap.xml	2026-04-18 05:01:34.000000000 +0000
++++ /mnt/data/work/website/jonathan-harris-website-main/sitemap.xml	2026-04-18 05:23:57.467541701 +0000
+@@ -13,18 +13,6 @@
+     <lastmod>2026-04-14</lastmod>
+   </url>
+   <url>
+-    <loc>https://jonathan-harris.online/blog/posts/generative-ai-vs-predictive-ai-the-practical-difference/</loc>
+-    <lastmod>2026-04-07</lastmod>
+-  </url>
+-  <url>
+-    <loc>https://jonathan-harris.online/blog/posts/how-ai-is-actually-used-in-healthcare/</loc>
+-    <lastmod>2026-04-14</lastmod>
+-  </url>
+-  <url>
+-    <loc>https://jonathan-harris.online/blog/posts/what-machine-learning-actually-means-for-business/</loc>
+-    <lastmod>2026-04-10</lastmod>
+-  </url>
+-  <url>
+     <loc>https://jonathan-harris.online/catalogue/agriculture/</loc>
+     <lastmod>2026-03-28</lastmod>
+   </url>
