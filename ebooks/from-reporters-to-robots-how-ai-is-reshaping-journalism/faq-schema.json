@@ -5,7 +5,7 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What will I learn from this book?",
+      "name": "What does this book explain about AI in media?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Where AI is already being used in media today — and where deadlines meet verification pressure."
@@ -13,7 +13,7 @@
     },
     {
       "@type": "Question",
-      "name": "Who is this book for?",
+      "name": "Who gets the most value from this media guide?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Readers who want a grounded, non-technical view of AI in journalism, including journalists, editors, platform teams, and readers tracking information systems."
@@ -21,15 +21,15 @@
     },
     {
       "@type": "Question",
-      "name": "How long is it?",
+      "name": "How detailed is the coverage?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It’s 334 pages (varies by edition)."
+        "text": "It runs to 334 pages and focuses on It covers the main use cases, the workflow and data changes behind them, the claims worth taking seriously, and the governance questions that show up once AI starts steering decisions in journalism."
       }
     },
     {
       "@type": "Question",
-      "name": "What format is it available in?",
+      "name": "Where can I get the eBook?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Available as an eBook via Amazon using the buy link on this page."
