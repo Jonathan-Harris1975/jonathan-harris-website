@@ -1473,43 +1473,326 @@ def topic_family(topic: str) -> str:
     return "general"
 
 
+TOPIC_GUIDE_DIRECTORY = {
+    "ai-for-beginners": {
+        "title": "AI for Beginners",
+        "summary": "Plain-English foundations covering how AI works, where it is used, and what to pay attention to before the hype swallows the basics.",
+    },
+    "ai-in-business": {
+        "title": "AI in Business",
+        "summary": "Strategy, adoption, risk, and practical decisions for organisations implementing AI in the real world rather than in a slide deck.",
+    },
+    "ai-in-healthcare": {
+        "title": "AI in Healthcare",
+        "summary": "Clinical AI, diagnostics, NHS deployment pressures, and the regulatory questions that decide whether the tools help or hinder care.",
+    },
+    "ai-ethics": {
+        "title": "AI Ethics",
+        "summary": "Bias, accountability, transparency, safety, and the governance questions that matter when AI decisions affect real people.",
+    },
+    "ai-in-education": {
+        "title": "AI in Education",
+        "summary": "Personalised learning, classroom tools, assessment, and what the evidence actually says once the marketing smoke clears.",
+    },
+    "ai-in-finance": {
+        "title": "AI in Finance",
+        "summary": "Fraud detection, credit, trading, regulation, and the awkward trade-off between speed, risk, and accountability.",
+    },
+    "deep-learning": {
+        "title": "Deep Learning",
+        "summary": "Neural networks, training, pattern recognition, and where the models earn their reputation versus where they still fail noisily.",
+    },
+    "generative-ai": {
+        "title": "Generative AI",
+        "summary": "LLMs, image generation, content automation, and the difference between a useful tool and an expensive hallucination machine.",
+    },
+    "machine-learning": {
+        "title": "Machine Learning",
+        "summary": "Core machine-learning ideas, real-world use cases, and the data-quality problems that decide whether a model is useful or decorative.",
+    },
+    "robotics-automation": {
+        "title": "Robotics & Automation",
+        "summary": "Industrial robotics, autonomous systems, and the point where AI leaves the screen and starts affecting physical operations.",
+    },
+}
+
+CATEGORY_TO_TOPIC_GUIDE = {
+    "Agriculture": "machine-learning",
+    "Artificial Intelligence": "ai-for-beginners",
+    "Construction": "robotics-automation",
+    "Creativity": "generative-ai",
+    "Cyber Security": "machine-learning",
+    "Defence": "ai-ethics",
+    "Education": "ai-in-education",
+    "Energy": "machine-learning",
+    "Environment": "machine-learning",
+    "Ethics": "ai-ethics",
+    "Finance": "ai-in-finance",
+    "Future of Work": "ai-in-business",
+    "Gaming": "generative-ai",
+    "Government": "ai-in-business",
+    "Healthcare": "ai-in-healthcare",
+    "History": "ai-for-beginners",
+    "Industry": "ai-in-business",
+    "Law": "ai-ethics",
+    "Manufacturing": "robotics-automation",
+    "Media": "generative-ai",
+    "Retail": "ai-in-business",
+    "Science": "deep-learning",
+    "Sports": "machine-learning",
+    "Transportation": "robotics-automation",
+}
+
+
+def topic_guide_record(slug: str | None) -> Dict[str, str] | None:
+    if not slug:
+        return None
+    return TOPIC_GUIDE_DIRECTORY.get(slug)
+
+
+def category_question_heading(topic: str) -> str:
+    topic_name = clean_paragraph(topic)
+    if topic_name.lower() == "artificial intelligence":
+        return "What does this category actually cover?"
+    return f"What is AI in {topic_name}?"
+
+
+def category_answer_first_copy(topic: str, books: List[Dict[str, Any]]) -> str:
+    topic_name = clean_paragraph(topic)
+    intro = topic_intro(topic_name)
+    featured = books[0]
+    if len(books) == 1:
+        return f"{intro} This page is the cleanest starting point in this part of the catalogue because it centres on {featured['title']}, which gives you one grounded route into the main use cases, trade-offs, and implementation questions."
+    return f"{intro} This category brings together {len(books)} books, so you can move from the broad question into the title that best matches your use case instead of wandering around the shelves like a lost intern."
+
+
+def category_scope_copy(topic: str, books: List[Dict[str, Any]]) -> str:
+    topic_name = clean_paragraph(topic)
+    family = topic_family(topic_name)
+    if len(books) == 1:
+        return {
+            "regulated": f"The {topic_name.lower()} category focuses on evidence, adoption pressure, oversight, and the point where AI convenience collides with accountability. It is useful when you need more than a glossy vendor promise.",
+            "operations": f"The {topic_name.lower()} category focuses on workflow, reliability, cost, and what happens once AI has to survive contact with real operations instead of a keynote stage.",
+            "security": f"The {topic_name.lower()} category focuses on signal, attacker behaviour, operational noise, and where automation genuinely improves defence rather than just moving the mess around.",
+            "creative": f"The {topic_name.lower()} category focuses on speed, craft, control, and the rights-shaped complications that appear the moment AI output starts looking commercially useful.",
+            "foundation": f"The {topic_name.lower()} category focuses on first principles, practical claims, sharper judgement, and the context readers need before treating broad AI arguments as settled fact.",
+            "environment": f"The {topic_name.lower()} category focuses on measurable environmental outcomes, data quality, and the difference between genuine optimisation and eco-flavoured marketing copy.",
+            "sports": f"The {topic_name.lower()} category focuses on performance analysis, decision-making, and the stubborn fact that data still has to coexist with human judgement.",
+        }.get(family, f"The {topic_name.lower()} category focuses on practical use cases, trade-offs, and the questions worth asking before anyone treats AI as a magic trick.")
+    titles = ", ".join(book["title"] for book in books[:2])
+    if len(books) > 2:
+        titles += ", and more"
+    return f"This category spans {len(books)} titles, starting with {titles}. Together they cover the main use cases, trade-offs, and adjacent decisions readers normally need before choosing a narrower book."
+
+
+def category_best_start_copy(topic: str, books: List[Dict[str, Any]]) -> str:
+    featured = books[0]
+    if len(books) == 1:
+        return f"If you want one grounded entry point, start with <a href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>. It is the clearest way into this topic without having to untangle three tabs, two buzzword decks, and someone's suspiciously cheerful vendor PDF."
+    return f"Start with <a href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>, then use the related titles below to go narrower once you know which part of the subject matters most to you."
+
+
+def category_faq_markup(topic: str, books: List[Dict[str, Any]]) -> str:
+    topic_name = clean_paragraph(topic)
+    family = topic_family(topic_name)
+    questions = [
+        (
+            f"What does the {topic_name} category help me understand?",
+            category_scope_copy(topic_name, books),
+        ),
+        (
+            "Who should start here?",
+            f"Readers who want a grounded overview of {topic_name.lower()} before picking a specific title, plus professionals who need a fast way to identify the book most relevant to their role.",
+        ),
+        (
+            "Where should I go next after the featured title?",
+            {
+                "regulated": "Move into the glossary for key terms, then use the comparison page to pressure-test claims, risks, and implementation trade-offs across sectors.",
+                "operations": "Move into the glossary for core terms, then use the comparison page and related topic guide to compare workflow gains against real-world constraints.",
+                "security": "Move into the glossary for technical language, then use the comparison page and topic guide to keep the tooling anchored to risk rather than hype.",
+                "creative": "Move into the glossary for the core concepts, then use the comparison page and topic guide to separate useful creative acceleration from rights and trust problems.",
+                "foundation": "Move into the glossary for definitions, then use the comparison page and topic guide to connect the broad theory with specific use cases and trade-offs.",
+                "environment": "Move into the glossary for the key concepts, then use the comparison page and topic guide to separate measurable gains from greenwashed claims.",
+                "sports": "Move into the glossary for the core terms, then use the comparison page and topic guide to connect performance data with real-world judgement.",
+            }.get(family, "Move into the glossary, comparison page, and related topic guide to connect this category with the wider AI estate."),
+        ),
+    ]
+    parts = []
+    for idx, (question, answer) in enumerate(questions, start=1):
+        open_attr = " open" if idx == 1 else ""
+        parts.append(
+            f'<details class="ebook-faq-item"{open_attr}><summary>{html.escape(question)}</summary><div><p>{html.escape(answer)}</p></div></details>'
+        )
+    return "\n".join(parts)
+
+
+def category_internal_links(topic: str, books: List[Dict[str, Any]]) -> str:
+    topic_name = clean_paragraph(topic)
+    family = topic_family(topic_name)
+    featured = books[0]
+    guide_slug = CATEGORY_TO_TOPIC_GUIDE.get(topic_name)
+    guide = topic_guide_record(guide_slug)
+    compare_anchor = {
+        "regulated": "Compare AI risks, evidence, and trust trade-offs",
+        "operations": "Compare AI use cases across operational sectors",
+        "security": "Compare AI applications, risks, and adoption patterns",
+        "creative": "Compare generative AI use cases and trade-offs",
+        "foundation": "Compare core AI concepts, claims, and use cases",
+        "environment": "Compare AI use cases, risks, and measurable outcomes",
+        "sports": "Compare AI use cases, judgement calls, and trade-offs",
+    }.get(family, "Compare AI use cases and trade-offs")
+    links = [
+        (
+            f"/ebooks/{featured['slug']}/",
+            f"Start with {featured['title']}",
+            "Featured book page with the full summary, FAQ, and buy route.",
+        ),
+        (
+            "/glossary/",
+            f"Use the AI glossary to decode {topic_name.lower()} terms",
+            "Definitions and plain-English explanations for the jargon this category keeps bumping into.",
+        ),
+        (
+            "/compare/",
+            compare_anchor,
+            "Side-by-side context for how different AI areas solve different problems and create different headaches.",
+        ),
+    ]
+    if guide:
+        links.append(
+            (
+                f"/topics/{guide_slug}/",
+                f"Read the {guide['title']} guide",
+                guide["summary"],
+            )
+        )
+    links.append(
+        (
+            "/podcast/",
+            f"Listen to the podcast for wider {topic_name.lower()} context",
+            "Editorial context and broader AI commentary beyond the catalogue pages.",
+        )
+    )
+    links.append(
+        (
+            "/newsletter/",
+            "Get the newsletter for ongoing AI developments",
+            "Useful if you want the moving story, not just the evergreen version.",
+        )
+    )
+    return "\n".join(
+        f'<li><a href="{html.escape(href)}">{html.escape(label)}</a><span>{html.escape(description)}</span></li>'
+        for href, label, description in links[:5]
+    )
+
+
+def topic_guide_cards_markup() -> str:
+    cards = []
+    for slug, payload in TOPIC_GUIDE_DIRECTORY.items():
+        cards.append(
+            f'<article class="card topic-card topic-card--guide"><h2><a href="/topics/{slug}/">{html.escape(payload["title"])}</a></h2><p>{html.escape(payload["summary"])}</p></article>'
+        )
+    return "\n".join(cards)
+
+
+def topics_index_support_links() -> str:
+    links = [
+        ("/glossary/", "Use the AI glossary for key terms", "Start here if the language gets dense or suspiciously overconfident."),
+        ("/compare/", "Compare AI use cases and trade-offs", "Useful for seeing how different AI categories solve different problems."),
+        ("/podcast/", "Listen to the podcast for wider AI context", "Weekly editorial context for the bigger shifts around the catalogue."),
+        ("/newsletter/", "Join the newsletter for ongoing AI developments", "The moving story, minus the usual noise and confetti."),
+    ]
+    return "\n".join(
+        f'<li><a href="{html.escape(href)}">{html.escape(label)}</a><span>{html.escape(description)}</span></li>'
+        for href, label, description in links
+    )
+
+
+def book_unique_evidence_passage(book: Dict[str, Any]) -> str:
+    topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
+    learn_line = clean_paragraph(book["what_youll_learn"][0] if book.get("what_youll_learn") else "")
+    family = topic_family(book.get("topic", ""))
+    tradeoff = {
+        "regulated": f"the awkward point where speed, evidence, and accountability stop pretending to be friends in {topic_lc}",
+        "operations": f"the point where promised efficiency in {topic_lc} meets maintenance logs, handovers, and failure modes",
+        "security": f"the trade-off between stronger signal in {topic_lc} and a fresh layer of operational noise",
+        "creative": f"the clash between convenience in {topic_lc} and the control, ownership, and trust questions it drags in behind it",
+        "foundation": f"the distance between broad AI claims in {topic_lc} and what the systems can actually justify",
+        "environment": f"the gap between environmental promise in {topic_lc} and what can be measured without flattering the numbers",
+        "sports": f"the tension between data-led gains in {topic_lc} and the human judgement that still decides outcomes",
+    }.get(family, f"the gap between impressive claims in {topic_lc} and what the work actually demands")
+    audience = clean_paragraph(book.get("audience", "")).rstrip(".")
+    if audience:
+        audience_sentence = audience[0].lower() + audience[1:] if len(audience) > 1 else audience.lower()
+        audience_sentence = f"It is written for {audience_sentence},"
+    else:
+        audience_sentence = "It is written as a grounded briefing,"
+    if learn_line:
+        learn_sentence = learn_line[0].lower() + learn_line[1:]
+        learning_sentence = f"and it tackles questions such as {learn_sentence}"
+    else:
+        learning_sentence = "and it keeps the focus on the decisions that matter once AI leaves the demo stage"
+    return f"In practice, {book['title']} is most useful when the real issue is {tradeoff}. {audience_sentence} {learning_sentence}, which makes it more useful than a generic explainer when someone has to decide what happens next in an actual workflow, classroom, policy setting, or team."
+
+
+def book_semantic_journey_links(book: Dict[str, Any]) -> str:
+    guide_slug = CATEGORY_TO_TOPIC_GUIDE.get(clean_paragraph(book.get("topic", "")))
+    guide = topic_guide_record(guide_slug)
+    links = [
+        ("/ebooks/", "Browse all books"),
+        (book.get("topic_url") or "/topics/", f'Browse {clean_paragraph(book.get("topic", "AI"))} books'),
+        ("/glossary/", "Glossary"),
+        ("/compare/", "Comparisons"),
+    ]
+    if guide:
+        links.append((f"/topics/{guide_slug}/", guide["title"] + " guide"))
+    links.extend([
+        ("/podcast/", "Podcast"),
+        ("/newsletter/", "Newsletter"),
+    ])
+    return "\n".join(f'<a href="{html.escape(href)}">{html.escape(label)}</a>' for href, label in links[:6])
+
+
 def showcase_subhead(book: Dict[str, Any]) -> str:
     family = topic_family(book.get("topic", ""))
+    topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
     return {
-        "regulated": "From adoption choices to compliance, evidence, and real-world consequence.",
-        "operations": "From plant-floor realities to process gains, failure modes, and trade-offs.",
-        "security": "From detection and response to attacker adaptation and operational noise.",
-        "creative": "From creative acceleration to ownership disputes, trust, and control.",
-        "foundation": "From first principles to practical claims, limitations, and sharper judgement.",
-        "environment": "From environmental promise to measurable outcomes, constraints, and trade-offs.",
-        "sports": "From performance analysis to human judgement, edge cases, and competitive trade-offs.",
-    }.get(family, "From practical applications to real-world trade-offs.")
+        "regulated": f"From real deployment in {topic_lc} to evidence, oversight, and real-world consequence.",
+        "operations": f"From day-to-day work in {topic_lc} to gains, failure modes, and trade-offs.",
+        "security": f"From active defence in {topic_lc} to attacker adaptation, blind spots, and operational noise.",
+        "creative": f"From creative speed in {topic_lc} to ownership, control, and the compromises buried inside convenience.",
+        "foundation": f"From first principles in {topic_lc} to practical claims, limitations, and sharper judgement.",
+        "environment": f"From environmental promise in {topic_lc} to measurable outcomes, constraints, and trade-offs.",
+        "sports": f"From performance decisions in {topic_lc} to human judgement, edge cases, and competitive trade-offs.",
+    }.get(family, f"From practical deployment in {topic_lc} to trade-offs, judgement, and real-world constraints.")
 
 
 def showcase_note(book: Dict[str, Any]) -> str:
     family = topic_family(book.get("topic", ""))
+    topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
     return {
-        "regulated": "Built for sectors where evidence, accountability, and consequences matter more than shiny demos.",
-        "operations": "Built for environments where uptime, throughput, safety, and cost have no patience for AI theatre.",
-        "security": "Built for domains where noise, adversaries, and bad assumptions tend to arrive together.",
-        "creative": "Built for work where the tool can be useful at speed and still leave a rights-shaped mess behind it.",
-        "foundation": "Built for readers who want the machinery, the claims, and the caveats without the standing ovation.",
-        "environment": "Built for readers who want environmental realism, not green-tinted product brochures.",
-        "sports": "Built for people who know the numbers matter, but not more than the humans using them.",
-    }.get(family, "Straight-talking, practical, and deliberately light on hype.")
+        "regulated": f"Built for readers who need {topic_lc} explained as a real operating environment, not a compliance-free demo.",
+        "operations": f"Built for people who care whether AI in {topic_lc} survives contact with the workflow rather than just the keynote.",
+        "security": f"Built for readers who know the tooling only matters if it improves the signal without burying the team in noise.",
+        "creative": f"Built for people who want the upside in {topic_lc} without politely ignoring the rights, trust, and control problems.",
+        "foundation": f"Built for readers who want the claims around {topic_lc} translated, tested, and relieved of their marketing costume.",
+        "environment": f"Built for readers who want environmental realism in {topic_lc}, not green-tinted dashboards and applause.",
+        "sports": f"Built for people who know the numbers can help in {topic_lc}, but not more than the humans making the call.",
+    }.get(family, f"Built for readers who want practical judgement in {topic_lc} rather than brochure copy.")
 
 
 def practical_outcomes_intro(book: Dict[str, Any]) -> str:
     family = topic_family(book.get("topic", ""))
+    topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
     return {
-        "regulated": "You should finish it able to spot where the tooling helps, where oversight has to tighten, and which claims deserve a raised eyebrow.",
-        "operations": "You should finish it with a clearer feel for where AI improves the workflow, where it adds fragility, and what to pilot before anyone starts chest-thumping.",
-        "security": "You should finish it better at separating useful automation from noisy promises and more alert to where attackers or blind spots creep in.",
-        "creative": "You should finish it with a sharper sense of where the tool genuinely helps the work and where it starts borrowing tomorrow's headache.",
-        "foundation": "You should finish it with the jargon translated, the stronger claims stress-tested, and a better map of where to dig deeper.",
-        "environment": "You should finish it better able to tell the difference between measurable gains, modelling optimism, and plain old green lipstick on a dashboard.",
-        "sports": "You should finish it able to judge which parts belong to data, which still belong to coaches and athletes, and where the line keeps moving.",
-    }.get(family, "You should leave this one with clearer judgement, fewer lazy assumptions, and a better sense of where to press further or walk away.")
+        "regulated": f"You should finish it better able to separate usable AI in {topic_lc} from risky shortcuts, loose governance, and expensive confidence.",
+        "operations": f"You should finish it with a clearer feel for where AI in {topic_lc} improves the workflow, where it adds fragility, and what to pilot before anyone starts chest-thumping.",
+        "security": f"You should finish it better at separating useful automation in {topic_lc} from noisy promises and more alert to where attackers or blind spots creep in.",
+        "creative": f"You should finish it with a sharper sense of where AI in {topic_lc} genuinely helps the work and where it starts borrowing tomorrow's headache.",
+        "foundation": f"You should finish it with the jargon around {topic_lc} translated, the stronger claims stress-tested, and a better map of where to dig deeper.",
+        "environment": f"You should finish it better able to tell the difference between measurable gains in {topic_lc}, modelling optimism, and plain old green lipstick on a dashboard.",
+        "sports": f"You should finish it able to judge which parts of {topic_lc} belong to data, which still belong to people, and where the line keeps moving.",
+    }.get(family, f"You should leave this one with clearer judgement about {topic_lc}, fewer lazy assumptions, and a better sense of where to press further or walk away.")
 
 
 def default_distinct_angle(title: str, topic: str) -> str:
@@ -1564,7 +1847,7 @@ SEO_TITLE_OVERRIDES = {
     "ai-in-aviation-transforming-safety-and-sustainability": "AI in Aviation",
     "ai-in-maritime-revolutionizing-shipping-for-sustainability": "AI in Maritime",
     "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": "AI in Agriculture",
-    "ai-in-education-reimagining-learning-for-every-student": "AI in Education",
+    "ai-in-education-reimagining-learning-for-every-student": "AI in Education: Reimagining Learning for Every Student",
     "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": "AI Revolution in Railways",
     "artificial-intelligence-in-construction-building-a-sustainable-future": "AI in Construction",
     "artificial-intelligence-in-industry-a-comprehensive-guide": "AI in Industry",
@@ -1666,29 +1949,34 @@ def metadata_budget_errors(
 
 def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
     learn_line = book["what_youll_learn"][0] if book.get("what_youll_learn") else topic_intro(book["topic"])
+    topic_name = clean_paragraph(book.get("topic", "Artificial Intelligence"))
+    topic_lc = topic_name.lower()
+    topic_phrase = "artificial intelligence" if topic_name.lower() == "artificial intelligence" else f"AI in {topic_lc}"
     return [
         {
             "@type": "Question",
-            "name": "What will I learn from this book?",
+            "name": f"What does this book explain about {topic_phrase}?",
             "acceptedAnswer": {"@type": "Answer", "text": learn_line},
         },
         {
             "@type": "Question",
-            "name": "Who is this book for?",
+            "name": f"Who gets the most value from this {topic_lc} guide?",
             "acceptedAnswer": {"@type": "Answer", "text": audience_faq_answer(book["audience"], book["topic"])},
         },
         {
             "@type": "Question",
-            "name": "How long is it?",
-            "acceptedAnswer": {"@type": "Answer", "text": f"It’s {book['pages']} pages (varies by edition)."},
+            "name": "How detailed is the coverage?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f"It runs to {book['pages']} pages and focuses on {clean_paragraph(book.get('what_this_book_covers', '')).rstrip('.')}.",
+            },
         },
         {
             "@type": "Question",
-            "name": "What format is it available in?",
+            "name": "Where can I get the eBook?",
             "acceptedAnswer": {"@type": "Answer", "text": "Available as an eBook via Amazon using the buy link on this page."},
         },
     ]
-
 
 
 def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
@@ -2030,16 +2318,34 @@ def render_cover_image(book: Dict[str, Any], class_name: str, loading: str = "la
 
 
 def audience_bullets(book: Dict[str, Any]) -> List[str]:
-    topic_lc = book["topic"].lower()
-    slug_name = book["title"].split(":", 1)[0]
+    topic_name = clean_paragraph(book.get("topic", "Artificial Intelligence"))
+    topic_lc = topic_name.lower()
+    title_stem = clean_paragraph(book.get("title", "")).split(":", 1)[0]
+    family = topic_family(topic_name)
+    learn_items = book.get("what_youll_learn", [])
+    first_signal = clean_paragraph(learn_items[0] if learn_items else "").rstrip(".")
+    second_signal = clean_paragraph(learn_items[1] if len(learn_items) > 1 else "").rstrip(".")
+    family_line = {
+        "regulated": f"Readers working in or around {topic_lc} who need the practical trade-offs explained before policy, procurement, or implementation decisions harden.",
+        "operations": f"Operators, managers, and curious readers who want to know whether AI in {topic_lc} improves the workflow or just adds another dashboard to ignore.",
+        "security": f"Security-minded readers who need a clearer feel for where AI helps defenders in {topic_lc} and where it simply reshuffles the noise.",
+        "creative": f"People working around {topic_lc} who want the upside explained without pretending the ownership and control questions vanished overnight.",
+        "foundation": f"Readers who want the bigger arguments around {topic_lc} translated into plain English and tested against how the systems behave in practice.",
+        "environment": f"Readers who want environmental claims in {topic_lc} measured against evidence, costs, and real deployment constraints.",
+        "sports": f"Readers interested in how AI changes judgement, preparation, and performance in {topic_lc} without turning humans into footnotes.",
+    }.get(family, f"Readers who want a practical, grounded route into {topic_lc} rather than another brochure about inevitable disruption.")
     slug = clean_paragraph(book.get("slug", ""))
-    return [
-        replace_banned_ebook_phrases(f"Curious readers who want a grounded view of {slug_name} without the hype.", slug),
-        replace_banned_ebook_phrases(f"Beginners who need a structured introduction to AI in {topic_lc}, in plain English.", slug),
-        replace_banned_ebook_phrases(f"Professionals in {topic_lc} looking for practical ways to apply AI and make better decisions.", slug),
-        replace_banned_ebook_phrases("Experienced readers who want sharper context, trade-offs, and implementation angles.", slug),
+    signal_line = first_signal or f"How AI is being used in {topic_lc} today"
+    follow_on = second_signal or clean_paragraph(book.get("what_this_book_covers", "")).split(".")[0]
+    signal_line = signal_line[0].lower() + signal_line[1:] if signal_line else topic_lc
+    follow_on = follow_on[0].lower() + follow_on[1:] if follow_on else topic_lc
+    bullets = [
+        replace_banned_ebook_phrases(f"Curious readers who want a grounded view of {title_stem} without the applause soundtrack.", slug),
+        replace_banned_ebook_phrases(family_line, slug),
+        replace_banned_ebook_phrases(f"Anyone who wants clear context on {signal_line} before they trust the louder claims.", slug),
+        replace_banned_ebook_phrases(f"Readers looking for sharper judgement on {follow_on} rather than recycled buzzwords.", slug),
     ]
-
+    return bullets
 
 
 def chapter_signal_cards(book: Dict[str, Any]) -> str:
@@ -2055,22 +2361,23 @@ def chapter_signal_cards(book: Dict[str, Any]) -> str:
 
 
 def problem_framing(book: Dict[str, Any]) -> str:
-    topic_lc = book["topic"].lower()
+    topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
     family = topic_family(book.get("topic", ""))
+    learn_line = clean_paragraph(book["what_youll_learn"][0] if book.get("what_youll_learn") else "").rstrip(".")
+    framing_tail = f" It keeps coming back to {learn_line[0].lower() + learn_line[1:] if learn_line else 'the practical decisions that expose weak claims fastest'}."
     frames = {
-        "regulated": f"{book['topic']} is where speed, evidence, compliance, and accountability all start elbowing each other for room. This title keeps the focus on what AI is genuinely doing in {topic_lc}, where oversight has to tighten, and where the expensive mistakes tend to hide.",
-        "operations": f"{book['topic']} is where efficiency claims meet maintenance logs, handovers, failure modes, and people who still have to run the place. This title looks at what AI is actually changing in {topic_lc}, which gains are solid, and where the shiny promise falls apart under operational pressure.",
-        "security": f"{book['topic']} is one of those domains where signal, false positives, attacker behaviour, and tool sprawl all collide at speed. This title looks at what AI is really doing in {topic_lc}, where it strengthens the work, and where automation simply changes the shape of the problem.",
-        "creative": f"{book['topic']} gets messy fast because speed, originality, ownership, and platform incentives do not naturally get along. This title looks at what AI is really doing in {topic_lc}, what it improves, and what it muddies the moment the convenience starts looking irresistible.",
-        "foundation": f"{book['topic']} is one of those areas where the argument gets noisy very quickly: claims versus evidence, fluency versus substance, novelty versus context. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts creating fresh headaches.",
-        "environment": f"{book['topic']} attracts hopeful claims because everyone likes a cleaner future and a clever dashboard. This title looks at what AI is actually doing in {topic_lc}, where the measurable gains are, and where the story outruns the evidence.",
-        "sports": f"{book['topic']} sits in that awkward space where numbers can sharpen judgement or flatten it into false certainty. This title looks at what AI is actually doing in {topic_lc}, where the edge is real, and where the human part still refuses to disappear.",
+        "regulated": f"{book['topic']} is where speed, evidence, compliance, and accountability all start elbowing each other for room. This title keeps the focus on what AI is genuinely doing in {topic_lc}, where oversight has to tighten, and where the expensive mistakes tend to hide.{framing_tail}",
+        "operations": f"{book['topic']} is where efficiency claims meet maintenance logs, handovers, failure modes, and people who still have to run the place. This title looks at what AI is actually changing in {topic_lc}, which gains are solid, and where the shiny promise falls apart under operational pressure.{framing_tail}",
+        "security": f"{book['topic']} is one of those domains where signal, false positives, attacker behaviour, and tool sprawl all collide at speed. This title looks at what AI is really doing in {topic_lc}, where it strengthens the work, and where automation simply changes the shape of the problem.{framing_tail}",
+        "creative": f"{book['topic']} gets messy fast because speed, originality, ownership, and platform incentives do not naturally get along. This title looks at what AI is really doing in {topic_lc}, what it improves, and what it muddies the moment the convenience starts looking irresistible.{framing_tail}",
+        "foundation": f"{book['topic']} is one of those areas where the argument gets noisy very quickly: claims versus evidence, fluency versus substance, novelty versus context. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts creating fresh headaches.{framing_tail}",
+        "environment": f"{book['topic']} attracts hopeful claims because everyone likes a cleaner future and a clever dashboard. This title looks at what AI is actually doing in {topic_lc}, where the measurable gains are, and where the story outruns the evidence.{framing_tail}",
+        "sports": f"{book['topic']} sits in that awkward space where numbers can sharpen judgement or flatten it into false certainty. This title looks at what AI is actually doing in {topic_lc}, where the edge is real, and where the human part still refuses to disappear.{framing_tail}",
     }
     return frames.get(
         family,
-        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches.",
+        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches.{framing_tail}",
     )
-
 
 
 def practical_outcomes(book: Dict[str, Any]) -> List[str]:
@@ -2268,6 +2575,11 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
       {escape_paragraphs(book['summary'])}
     </section>
 
+    <section class="card ebook-section">
+      <h2>Why this title is useful in practice</h2>
+      <p>{html.escape(book_unique_evidence_passage(book))}</p>
+    </section>
+
     <section class="card ebook-section ebook-section--accent">
       <h2>Problem framing: where this topic gets messy</h2>
       {escape_paragraphs(problem_framing(book))}
@@ -2311,11 +2623,9 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 
     <section class="jh-journey-panel">
       <h2>Keep exploring the Jonathan Harris AI library</h2>
-      <p>Use the links below to carry on browsing the wider catalogue, the podcast, the newsletter, or a related topic.</p>
+      <p>Use the links below to carry on browsing the wider catalogue, the glossary, comparisons, podcast coverage, or a related guide.</p>
       <div class="jh-journey-actions">
-        <a href="/ebooks/">Browse all books</a>
-        <a href="/podcast/">Podcast</a>
-        <a href="/newsletter/">Newsletter</a>
+        {book_semantic_journey_links(book)}
       </div>
     </section>
   </div>
@@ -2551,6 +2861,30 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
   <div class="wrap ebook-shell">
     <nav aria-label="Breadcrumb" class="breadcrumbs">{render_topic_breadcrumbs(topic)}</nav>
     <section class="card ebook-index-intro">
+      <h2>{category_question_heading(topic)}</h2>
+      <p>{html.escape(category_answer_first_copy(topic, books))}</p>
+    </section>
+    <section class="card ebook-index-intro">
+      <h2>What this category covers</h2>
+      <p>{html.escape(category_scope_copy(topic, books))}</p>
+    </section>
+    <section class="card ebook-index-intro">
+      <h2>Best place to start</h2>
+      <p>{category_best_start_copy(topic, books)}</p>
+    </section>
+    <section class="faq card" aria-label="Category questions">
+      <h2>Common questions</h2>
+      <div class="ebook-faq-list">
+        {category_faq_markup(topic, books)}
+      </div>
+    </section>
+    <section class="related-books card">
+      <h2>Keep exploring this topic</h2>
+      <ul>
+        {category_internal_links(topic, books)}
+      </ul>
+    </section>
+    <section class="card ebook-index-intro">
       <h2>{len(books)} title{'s' if len(books) != 1 else ''} in this topic</h2>
       <p>{html.escape(catalogue_intro_copy(topic))}</p>
     </section>
@@ -2566,7 +2900,6 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
 '''
 
 
-
 def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
     header = render_header()
     footer = render_footer()
@@ -2579,6 +2912,7 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
             f'<article class="card topic-card"><h2><a href="/catalogue/{slug}/">{html.escape(topic)}</a></h2><p>{len(topic_map[topic])} title{'s' if len(topic_map[topic]) != 1 else ''}</p></article>'
         )
     cards_html = "\n".join(cards)
+    guide_cards_html = topic_guide_cards_markup()
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2622,16 +2956,31 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>Explore AI topics</h1>
-    <p>Browse the main areas covered across the Jonathan Harris ebook library and jump straight into the relevant catalogue pages.</p>
+    <p>Use this hub as the truthful cluster map for the site: topic guides for the educational layer, catalogue pages for the book shelves, and cleaner routes into glossary, comparisons, podcast, and newsletter coverage.</p>
   </div>
 </header>
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
     <section class="card ebook-index-intro">
-      <h2>Browse by topic</h2>
-      <p>Pick a lane and jump into the matching catalogue pages.</p>
+      <h2>How to use this page</h2>
+      <p>Start with a topic guide if you want the plain-English explanation first. Use the catalogue grid if you already know the lane you care about and want the relevant books without playing hide-and-seek with broken routes. Charming hobby, broken discovery paths. Terrible publishing strategy.</p>
     </section>
-    <section class="grid topic-grid">{cards_html}</section>
+    <section class="card ebook-index-intro">
+      <h2>Topic guides</h2>
+      <p>These pages carry the educational layer of the estate and are meant to explain the subject before the catalogue starts making commercial suggestions.</p>
+    </section>
+    <section class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
+    <section class="card ebook-index-intro u-mt40">
+      <h2>Browse by catalogue</h2>
+      <p>These category pages group the books by subject and now work as real landing pages rather than one-book shelves wearing a fake moustache.</p>
+    </section>
+    <section class="grid topic-grid" aria-label="Catalogue pages">{cards_html}</section>
+    <section class="related-books card">
+      <h2>Keep exploring the wider AI estate</h2>
+      <ul>
+        {topics_index_support_links()}
+      </ul>
+    </section>
   </div>
 </main>
 {footer}
@@ -2639,7 +2988,6 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
 </body>
 </html>
 '''
-
 
 
 def path_to_public_url(relative_path: Path) -> str:
@@ -3188,7 +3536,7 @@ def faq_is_semantically_relevant(book: Dict[str, Any]) -> bool:
     for item in book.get("faq", []):
         question = clean_paragraph(item.get("name", "")).lower()
         answer = clean_paragraph(item.get("acceptedAnswer", {}).get("text", ""))
-        if any(term in question for term in ["how long", "format", "buy", "who is this book for", "suitable for"]):
+        if any(term in question for term in ["how long", "format", "buy", "where can i get", "who is this book for", "who gets the most value", "how detailed is the coverage", "suitable for"]):
             continue
         if not (text_tokens(answer) & content_tokens):
             return False
