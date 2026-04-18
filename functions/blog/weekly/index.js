@@ -1,4 +1,4 @@
-import { getPublicationState } from "../../_utils/blog-publication.js";
+import { getPublicationState } from "../_utils/blog-publication.js";
 
 const MANIFEST_PATH = "/blog/posts.json";
 
