@@ -1,4 +1,4 @@
-import { getPublicationState, getWeeklyArchiveUrl } from "./_utils/blog-publication.js";
+import { getPublicationState, getWeeklyArchiveUrl } from "./blog/_utils/blog-publication.js";
 
 const MANIFEST_PATH = "/blog/posts.json";
 
