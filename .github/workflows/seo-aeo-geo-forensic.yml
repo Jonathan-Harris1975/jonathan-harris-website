@@ -1,0 +1,67 @@
+name: SEO AEO GEO forensic audit
+
+on:
+  workflow_dispatch:
+    inputs:
+      session_id:
+        description: Audit session id
+        required: true
+        type: string
+      report_prefix:
+        description: R2 prefix under brand-assets
+        required: true
+        type: string
+      base_url:
+        description: Live base URL
+        required: true
+        default: https://jonathan-harris.online
+        type: string
+      exclude_prefixes:
+        description: Comma-separated route prefixes to exclude
+        required: false
+        default: /podcast,/blog
+        type: string
+      callback_url:
+        description: AI Management Suite callback URL
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  seo-aeo-geo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      R2_REGION: ${{ secrets.R2_REGION }}
+      R2_BUCKET_BRAND_ASSETS: brand-assets
+      R2_PUBLIC_BASE_URL_BRAND_ASSETS: ${{ secrets.R2_PUBLIC_BASE_URL_BRAND_ASSETS }}
+      AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
+      WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4
+
+      - name: Run forensic SEO AEO GEO audit
+        run: |
+          python scripts/audits/seo_aeo_geo_forensic.py \
+            --base-url "${{ inputs.base_url }}" \
+            --session-id "${{ inputs.session_id }}" \
+            --report-prefix "${{ inputs.report_prefix }}" \
+            --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
+            --callback-url "${{ inputs.callback_url }}" \
+            --callback-token "$AUDIT_CALLBACK_TOKEN"
