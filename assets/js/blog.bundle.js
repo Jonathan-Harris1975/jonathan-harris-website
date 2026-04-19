@@ -19,29 +19,29 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
     hub: {
       emptyTitle: "Latest written briefings",
       emptyCopy:
-        "This section carries Jonathan Harris's weekly written briefings, with the archive, newsletter, and podcast all following the same editorial line.",
+        "This space carries the latest written briefing alongside the archive, newsletter, podcast, and topic routes that make up the wider editorial line.",
       emptyHref: "/blog/weekly/",
       emptyLabel: "Open weekly briefings",
       loading: "Loading published briefings…",
-      emptyStatus: "Published briefings are collected here.",
-      loadedStatus: (count) => `Showing ${count} published ${count === 1 ? "briefing" : "briefings"}.`
+      emptyStatus: "The latest written briefings appear here.",
+      loadedStatus: (count) => count === 1 ? "Showing the latest published briefing." : `Showing ${count} published briefings.`
     },
     weekly: {
       emptyTitle: "Weekly archive",
       emptyCopy:
-        "Each published weekly briefing joins this archive. The blog hub, newsletter, and podcast carry the same sharp editorial line alongside it.",
+        "This archive holds the published weekly briefings, with the blog hub, newsletter, and podcast carrying the same editorial line alongside it.",
       emptyHref: "/blog/",
       emptyLabel: "Open the blog hub",
       loading: "Loading weekly briefings…",
-      emptyStatus: "This archive collects every published weekly briefing.",
-      loadedStatus: (count) => `Showing ${count} published weekly ${count === 1 ? "briefing" : "briefings"}.`
+      emptyStatus: "The weekly archive sits here.",
+      loadedStatus: (count) => count === 1 ? "Showing the latest weekly briefing." : `Showing ${count} published weekly briefings.`
     }
   }[surfaceKey] || {
-    emptyTitle: "Published posts appear here",
-    emptyCopy: "Published posts appear here as they are released.",
+    emptyTitle: "Published briefings live here",
+    emptyCopy: "Published briefings appear here as they are released.",
     emptyHref: "/blog/",
     emptyLabel: "Open the blog hub",
-    loading: "Loading published posts…",
+    loading: "Loading published briefings…",
     emptyStatus: "",
     loadedStatus: () => ""
   };
@@ -159,7 +159,7 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
         ? `<img class="cover" src="${safeImage}" alt="${safeTitle}" loading="lazy" decoding="async">`
         : "";
       const actionMarkup = item.href
-        ? `<a class="button secondary" href="${safeHref}">Read briefing</a>`
+        ? `<a class="button secondary" href="${safeHref}">Read article</a>`
         : "";
 
       return `
