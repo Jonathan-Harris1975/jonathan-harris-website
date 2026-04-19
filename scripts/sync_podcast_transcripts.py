@@ -19,44 +19,23 @@ RSS_URL = os.environ.get(
     "PODCAST_RSS_URL",
     "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
 )
-SITE_BASE_URL = os.environ.get("PODCAST_SITE_BASE_URL", "https://jonathan-harris.online").rstrip("/")
-SERIES_URL = f"{SITE_BASE_URL}/podcast/"
 HTML_FILE = Path("podcast/index.html")
 LIMIT = 8
 NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
-
-
-def slugify(value: str) -> str:
-    slug = (value or "").lower()
-    slug = re.sub(r"['’]", "", slug)
-    slug = re.sub(r"[^a-z0-9]+", "-", slug)
-    return slug.strip("-")[:80]
 
 
 def is_absolute_http_url(value: str | None) -> bool:
     return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
 
 
-def page_url_for_title(title: str) -> str:
-    return f"{SITE_BASE_URL}/podcast/episodes/{slugify(title)}/"
-
-
-def extract_transcript_like_url(item: ET.Element, title: str) -> str:
+def extract_transcript_url(item: ET.Element) -> str:
     tx = item.find("podcast:transcript", NS)
-    if tx is not None:
-        for candidate in (tx.get("url"), tx.get("href"), tx.text):
-            if is_absolute_http_url(candidate):
-                return str(candidate).strip()
-
-    link = (item.findtext("link", "") or "").strip()
-    if is_absolute_http_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
-        return link
-
-    guid = (item.findtext("guid", "") or "").strip()
-    if is_absolute_http_url(guid):
-        return guid
-
-    return page_url_for_title(title)
+    if tx is None:
+        return ""
+    for candidate in (tx.get("url"), tx.get("href"), tx.text):
+        if is_absolute_http_url(candidate):
+            return str(candidate).strip()
+    return ""
 
 
 def format_date(pub_date_str: str) -> str:
@@ -80,7 +59,7 @@ def fetch_transcripts() -> list[dict]:
         if not title:
             continue
         pub_date = (item.findtext("pubDate", "") or "").strip()
-        url = extract_transcript_like_url(item, title)
+        url = extract_transcript_url(item)
         if not is_absolute_http_url(url):
             continue
         items.append({
@@ -97,7 +76,7 @@ def build_list_html(items: list[dict]) -> str:
         title = html.escape(item["title"])
         url = html.escape(item["url"])
         date = html.escape(item.get("date", ""))
-        meta = f"Published {date} · live feed link" if date else "Live feed link"
+        meta = f"Published {date} · transcript" if date else "Transcript"
         rows.append(
             "<li>"
             f'<a href="{url}" rel="noopener noreferrer" target="_blank">{title}</a>'

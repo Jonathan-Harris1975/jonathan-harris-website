@@ -39,19 +39,32 @@ def is_absolute_http_url(value: str | None) -> bool:
     return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
 
 
+def is_first_party_episode_url(value: str | None) -> bool:
+    if not is_absolute_http_url(value):
+        return False
+    candidate = str(value).strip().rstrip("/") + "/"
+    return candidate.startswith(f"{SITE_BASE_URL}/podcast/episodes/")
+
+
+def is_transcript_asset_url(value: str | None) -> bool:
+    if not is_absolute_http_url(value):
+        return False
+    stripped = str(value).strip().lower()
+    return "transcript" in stripped and (stripped.endswith(".txt") or stripped.endswith(".html"))
+
+
 def episode_page_url(title: str) -> str:
     return f"{SITE_BASE_URL}/podcast/episodes/{slugify(title)}/"
 
 
 def resolve_item_url(item: ET.Element, title: str) -> str:
     link = (item.findtext("link", "") or "").strip()
-    guid = (item.findtext("guid", "") or "").strip()
 
-    if is_absolute_http_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
+    if is_first_party_episode_url(link):
         return link
 
-    if is_absolute_http_url(guid):
-        return guid
+    if is_absolute_http_url(link) and not is_transcript_asset_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
+        return episode_page_url(title)
 
     return episode_page_url(title)
 
@@ -99,7 +112,7 @@ def build_html(episodes: list[dict]) -> str:
             '  <span aria-hidden="true" class="podcast-episode-item__num">&#9654;</span>\n'
             '  <div class="podcast-episode-item__body">\n'
             '    <div class="podcast-episode-item__title">\n'
-            f'      <a href="{u}" rel="noopener noreferrer" target="_blank">{t}</a>\n'
+            f'      <a href="{u}">{t}</a>\n'
             "    </div>\n"
             f'    <div class="podcast-episode-item__date">{d}</div>\n'
             "  </div>\n"

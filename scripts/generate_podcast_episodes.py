@@ -84,12 +84,25 @@ def format_date_iso(pub_date: str) -> str:
         return ""
 
 
-def resolve_external_url(link: str, guid: str) -> str:
-    if is_absolute_http_url(link) and link.rstrip("/") != SERIES_URL.rstrip("/"):
+def is_first_party_episode_url(value: str | None) -> bool:
+    if not is_absolute_http_url(value):
+        return False
+    candidate = str(value).strip().rstrip("/") + "/"
+    return candidate.startswith(f"{SITE}/podcast/episodes/")
+
+
+def parse_episode_page_url(link: str, title: str) -> str:
+    if is_first_party_episode_url(link):
         return link
-    if is_absolute_http_url(guid):
-        return guid
-    return ""
+    return f"{SITE}/podcast/episodes/{slugify(title)}/"
+
+
+def parse_audio_url(item: ET.Element) -> str:
+    enclosure = item.find("enclosure")
+    if enclosure is None:
+        return ""
+    candidate = first_non_empty(enclosure.get("url"), enclosure.get("href"))
+    return candidate if is_absolute_http_url(candidate) else ""
 
 
 def parse_transcript_url(item: ET.Element) -> str:
@@ -124,7 +137,9 @@ def fetch_rss_episodes(limit: int = 20) -> list[dict]:
                 "slug": slug,
                 "session_id": session_id,
                 "date": format_date_iso(pub_date),
-                "external_url": resolve_external_url(link, guid),
+                "page_url": parse_episode_page_url(link, title),
+                "audio_url": parse_audio_url(item),
+                "external_url": "",
                 "summary": description[:500] if description else "",
                 "key_takeaways": [],
                 "transcript_url": parse_transcript_url(item),
@@ -162,9 +177,11 @@ def merge_episode(rss_ep: dict, existing_lookup: dict[str, dict]) -> dict:
     merged["slug"] = rss_ep["slug"]
     merged["session_id"] = first_non_empty(rss_ep.get("session_id"), existing.get("session_id"))
     merged["date"] = first_non_empty(rss_ep.get("date"), existing.get("date"))
-    merged["external_url"] = first_non_empty(rss_ep.get("external_url"), existing.get("external_url"))
+    merged["page_url"] = first_non_empty(rss_ep.get("page_url"), existing.get("page_url"), f"{SITE}/podcast/episodes/{rss_ep['slug']}/")
+    merged["audio_url"] = first_non_empty(rss_ep.get("audio_url"), existing.get("audio_url"))
+    merged["external_url"] = first_non_empty(existing.get("external_url"), rss_ep.get("external_url"))
     merged["summary"] = first_non_empty(existing.get("summary"), rss_ep.get("summary"))
-    merged["transcript_url"] = first_non_empty(rss_ep.get("transcript_url"), existing.get("transcript_url"), merged.get("external_url"))
+    merged["transcript_url"] = first_non_empty(rss_ep.get("transcript_url"), existing.get("transcript_url"))
     merged["transcript_text"] = first_non_empty(existing.get("transcript_text"), rss_ep.get("transcript_text"))
     merged["key_takeaways"] = existing.get("key_takeaways") or rss_ep.get("key_takeaways") or []
     merged["related_topic"] = existing.get("related_topic") or rss_ep.get("related_topic") or {}
@@ -190,10 +207,11 @@ def build_episode_page(ep: dict) -> str:
     takeaways = ep.get("key_takeaways", [])
     transcript_text = ep.get("transcript_text", "")
     transcript_url = ep.get("transcript_url", "")
+    audio_url = ep.get("audio_url", "")
     external_url = ep.get("external_url", "")
     related_topic = ep.get("related_topic", {}) or {}
     related_books = ep.get("related_books", []) or []
-    canonical = f"{SITE}/podcast/episodes/{slug}/"
+    canonical = ep.get("page_url") or f"{SITE}/podcast/episodes/{slug}/"
 
     takeaways_html = ""
     if takeaways:
@@ -244,8 +262,8 @@ def build_episode_page(ep: dict) -> str:
     }
     if transcript_url:
         schema["transcript"] = transcript_url
-    if external_url:
-        schema["associatedMedia"] = {"@type": "AudioObject", "contentUrl": external_url}
+    if audio_url:
+        schema["associatedMedia"] = {"@type": "AudioObject", "contentUrl": audio_url}
 
     breadcrumb = {
         "@context": "https://schema.org",
@@ -257,9 +275,18 @@ def build_episode_page(ep: dict) -> str:
         ],
     }
 
+    audio_player = (
+        f'<section class="card u-s21"><h2>Listen</h2>'
+        f'<audio controls preload="none" style="width:100%;max-width:680px">'
+        f'<source src="{html_mod.escape(audio_url)}" type="audio/mpeg"/>'
+        f'Your browser does not support the audio element.'
+        f'</audio></section>'
+        if audio_url else ""
+    )
+
     listen_link = (
         f'<p><a class="button" href="{html_mod.escape(external_url)}" '
-        f'rel="noopener noreferrer" target="_blank">Listen to this episode ↗</a></p>'
+        f'rel="noopener noreferrer" target="_blank">Open external episode link ↗</a></p>'
         if external_url else ""
     )
 
@@ -313,6 +340,7 @@ def build_episode_page(ep: dict) -> str:
       <p>{html_mod.escape(summary)}</p>
       {listen_link}
     </section>
+    {audio_player}
     {takeaways_html}
     {transcript_html}
     {related_section}
@@ -339,6 +367,71 @@ def build_compat_redirect(session_id: str, slug: str) -> str:
 <p>Redirecting to <a href="{canonical}">{canonical}</a>.</p>
 </body>
 </html>"""
+
+
+def validate_recent_episode_contract(expected_count: int) -> list[str]:
+    if not HTML_INDEX.exists():
+        return [f"Missing podcast index: {HTML_INDEX}"]
+
+    src = HTML_INDEX.read_text(encoding="utf-8")
+    failures: list[str] = []
+    count = src.count('class="podcast-episode-item"')
+    if count != expected_count:
+        failures.append(f"Recent episode card count mismatch: expected {expected_count}, found {count}")
+
+    pattern = (
+        r"<section[^>]*podcast-episodes-static[^>]*>.*?</p>(?P<body>.*?)<p[^>]*u-s40[^>]*>"
+    )
+    match = re.search(pattern, src, flags=re.DOTALL)
+    if not match:
+        failures.append("Unable to locate recent-episodes body in podcast/index.html")
+        return failures
+
+    hrefs = re.findall(r'<a href="([^"]+)"', match.group("body"))
+    for href in hrefs[:expected_count]:
+        if not href.startswith(f"{SITE}/podcast/episodes/") and not href.startswith("/podcast/episodes/"):
+            failures.append(f"Recent episode href is not a first-party episode page: {href}")
+    return failures
+
+
+HTML_INDEX = ROOT / "podcast" / "index.html"
+
+
+def validate_generated_pages(episodes: list[dict]) -> list[str]:
+    failures: list[str] = []
+    expected_recent = min(4, len(episodes))
+    failures.extend(validate_recent_episode_contract(expected_recent))
+
+    for ep in episodes[:expected_recent]:
+        slug = ep.get("slug", "")
+        if not slug:
+            failures.append(f"Episode missing slug: {ep.get('title', '(untitled)')}")
+            continue
+
+        page_path = EPISODES_DIR / slug / "index.html"
+        if not page_path.exists():
+            failures.append(f"Missing generated page: {page_path.relative_to(ROOT)}")
+            continue
+
+        page_html = page_path.read_text(encoding="utf-8")
+        audio_url = (ep.get("audio_url") or "").strip()
+        if audio_url:
+            if '<audio controls' not in page_html:
+                failures.append(f"Audio player missing from episode page: {slug}")
+            if html_mod.escape(audio_url) not in page_html:
+                failures.append(f"Audio URL missing from episode page: {slug}")
+
+        transcript_url = (ep.get("transcript_url") or "").strip()
+        if transcript_url and html_mod.escape(transcript_url) not in page_html and "<h2>Transcript</h2>" not in page_html:
+            failures.append(f"Transcript handling missing from episode page: {slug}")
+
+        session_id = (ep.get("session_id") or "").strip()
+        if session_id:
+            compat_path = PODCAST_COMPAT_DIR / session_id / "index.html"
+            if not compat_path.exists():
+                failures.append(f"Missing compatibility redirect: {compat_path.relative_to(ROOT)}")
+
+    return failures
 
 
 def register_in_workbook(slugs_generated: list[str]) -> None:
@@ -422,6 +515,14 @@ def main() -> int:
             print(f"  Generated compatibility redirect: podcast/{session_id}/")
 
     print(f"Generated {created} episode page(s) under podcast/episodes/")
+
+    validation_failures = validate_generated_pages(episodes)
+    if validation_failures:
+        for failure in validation_failures:
+            print(f"[FAIL] {failure}", file=sys.stderr)
+        return 1
+
+    print("Podcast episode generation checks passed.")
     register_in_workbook(generated_slugs)
     return 0
 
