@@ -37,7 +37,8 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 - Generated derivatives are rebuilt from the generated master record with `python3 scripts/build_book_derivatives.py`.
 - Treat `ebooks/books.json`, `assets/js/books.json`, `api/v1/books.json`, `config/crawler-snapshots/*`, and per-book sidecars as generated outputs, not hand-edited source files.
 - `blog/posts.json` is the canonical same-origin weekly publication manifest shape, with `schema_version`, `updated_at`, and `items` as the governed top-level keys. Each `items[]` entry should resolve to `/blog/posts/<slug>/` and use the same canonical URL structure.
-- The website repo ships the `/blog/` hub, the `/blog/weekly/` archive shell, and the runtime enhancement code. Published post HTML, per-post JSON sidecars, and the live `blog/posts.json` payload are published by the AI Management Suite to the bound blog publication surface at `/blog/posts/<slug>/` and `/blog/posts.json`.
+- The website repo ships the `/blog/` hub, the `/blog/weekly/` archive shell, the runtime enhancement code, and the committed mirror of the current weekly publication artefacts under `blog/posts/` and `blog/posts.json`.
+- The AI Management Suite must publish the same path contract and manifest shape to the live same-origin publication surface at `/blog/posts/<slug>/` and `/blog/posts.json`, rather than inventing a parallel schema or route family.
 - `functions/blog/weekly/index.js` and `functions/sitemap.xml.js` make the weekly archive robots and sitemap behaviour follow the live same-origin publication manifest rather than a stale in-repo placeholder.
 - `docs/third-party-dependency-matrix.md` documents the governed third-party vendors, fallbacks, and failure modes for the live site.
 - `docs/image-publishing-contract.md` documents the remote image publishing contract for logos, hero art, and ebook covers.
