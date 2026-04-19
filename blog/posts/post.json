@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "id": "2026-W15",
+  "week": "2026-W15",
+  "slug": "2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress",
+  "title": "AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress",
+  "summary": "This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.",
+  "excerpt": "This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.",
+  "body_html": "<p class=\"standfirst\">This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.</p>\n\n<section class=\"weekly-section\">\n<h2>Washington&#39;s Regulatory Gaze</h2>\n<p>Washington is intensifying its scrutiny of AI, driven by anxieties about advanced systems. Discussions involving government, finance, and industry leaders reflect a collective unease regarding AI&#39;s rapid progress and potential societal impact. The focus is on balancing innovation with the need to mitigate risks, though the effectiveness of any resulting regulations remains to be seen.</p>\n</section>\n\n<section class=\"weekly-section\">\n<h2>Memory and Efficiency: Promises and Doubts</h2>\n<p>The introduction of AI memory layers aims to address the inefficiency of repetitive AI interactions. By allowing models to build on prior knowledge, these systems could streamline workflows. However, questions remain about whether this will genuinely improve user experience or merely add complexity.</p>\n<p>Similarly, BERTopic offers a new approach to topic modelling by integrating transformer embeddings, potentially capturing semantic relationships more effectively. While promising more interpretable topics, its ability to surpass traditional methods in diverse real-world applications is still uncertain.</p>\n</section>\n\n<section class=\"weekly-section\">\n<h2>Governance, Open Source, and Ethical Boundaries</h2>\n<p>Governance issues surrounding agentic AI are coming under increased scrutiny, particularly with the EU AI Act on the horizon. The lack of clear records for AI actions raises accountability and compliance concerns for IT leaders.</p>\n<p>Meta&#39;s entry into the open-source AI arena with its Llama model has sparked debate about the company&#39;s commitment to open-source principles, given its vast resources and user base. The potential centralisation of power within a single corporate entity raises concerns about the future of collaborative AI development.</p>\n<p>Meanwhile, companies like Apple are developing limited AI agents, intentionally restricting their autonomy. This approach reflects concerns about privacy, security, and the potential for misuse, raising questions about the balance between functionality and user control.</p>\n</section>\n\n<section class=\"weekly-section\">\n<h2>The Illusion of Progress</h2>\n<p>Despite advancements in AI, fundamental challenges persist. Agents often lack a clear understanding of what constitutes a successful outcome, leading to inefficiencies and missed opportunities. As the industry evolves, the ability to define and measure progress remains a critical hurdle.</p>\n<p>The evolution of &#39;Architecture as Code&#39; highlights the need for constant adaptation in the face of industry shifts. Both human architects and AI agents must reassess their understanding of architecture to remain relevant.</p>\n</section>",
+  "url": "https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
+  "canonical_url": "https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
+  "path": "/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
+  "image": "https://pub-0990b7b0871040f8ac0b8c7f91f6c2b9.r2.dev/BLOG-2026-W15.png",
+  "image_url": "https://pub-0990b7b0871040f8ac0b8c7f91f6c2b9.r2.dev/BLOG-2026-W15.png",
+  "image_prompt": "Create a wide editorial blog hero image for Jonathan Harris's weekly AI briefing (2026-W15). Reflect these dominant themes from the week's coverage: AI Regulation, Memory Limitations, Governance Concerns, Open Source Debate, Scepticism vs. Hype. Editorial angle: This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies. Visual tone: premium, sceptical, calm, modern. Dark navy or charcoal base with restrained neon teal and muted purple accents. Composition: landscape hero banner for a blog header, cinematic but minimal, layered depth, data-centre or interface abstractions where relevant, and motifs that hint at the themes without using logos. Do not include text, letters, numbers, watermarks, people, stock-photo office scenes, cartoon robots, or generic glowing-brain wallpaper. Anchor the image to this editorial title: AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress.",
+  "date_label": "6 April 2026 to 12 April 2026",
+  "published_at": "2026-04-13T15:00:38.673Z",
+  "themes": [
+    "AI Regulation",
+    "Memory Limitations",
+    "Governance Concerns",
+    "Open Source Debate",
+    "Scepticism vs. Hype"
+  ],
+  "source_count": 33,
+  "sources": [
+    {
+      "title": "Washington gears up to regulate AI development amid rising concerns",
+      "link": "https://rss-feeds.jonathan-harris.online/qzz9wd2c4zoy",
+      "pubDate": "Sat, 11 Apr 2026 20:01:21 GMT"
+    },
+    {
+      "title": "AI memory layers aim to enhance workflow efficiency",
+      "link": "https://rss-feeds.jonathan-harris.online/kxpc7xlwbs2q",
+      "pubDate": "Sat, 11 Apr 2026 20:01:16 GMT"
+    },
+    {
+      "title": "BERTopic offers new approach to topic modeling",
+      "link": "https://rss-feeds.jonathan-harris.online/h42voy26by2w",
+      "pubDate": "Sat, 11 Apr 2026 20:01:13 GMT"
+    },
+    {
+      "title": "NVIDIA launches AITune for optimising PyTorch model inference",
+      "link": "https://rss-feeds.jonathan-harris.online/xtvl12mxz10j",
+      "pubDate": "Sat, 11 Apr 2026 20:01:07 GMT"
+    },
+    {
+      "title": "Coding guide for markerless 3D human kinematics",
+      "link": "https://rss-feeds.jonathan-harris.online/lwcp7bqe3n17",
+      "pubDate": "Sat, 11 Apr 2026 20:01:02 GMT"
+    },
+    {
+      "title": "Alibaba introduces multimodal framework VimRAG for visual data navigation",
+      "link": "https://rss-feeds.jonathan-harris.online/idh1rq197yq7",
+      "pubDate": "Sat, 11 Apr 2026 20:00:59 GMT"
+    },
+    {
+      "title": "Knowledge distillation streamlines ensemble models for deployment",
+      "link": "https://rss-feeds.jonathan-harris.online/22mzcwe463pe",
+      "pubDate": "Sat, 11 Apr 2026 20:00:53 GMT"
+    },
+    {
+      "title": "Building a Local-First Agent Runtime with OpenClaw",
+      "link": "https://rss-feeds.jonathan-harris.online/dn734v17d3iq",
+      "pubDate": "Sat, 11 Apr 2026 20:00:47 GMT"
+    },
+    {
+      "title": "Leveraging language models for smart city knowledge graph creation",
+      "link": "https://rss-feeds.jonathan-harris.online/tl0msh7x5q63",
+      "pubDate": "Fri, 10 Apr 2026 20:48:07 GMT"
+    },
+    {
+      "title": "Malaysia updates PDPA: social listening vendors lag behind compliance",
+      "link": "https://rss-feeds.jonathan-harris.online/pd39hqswrsc1",
+      "pubDate": "Fri, 10 Apr 2026 20:48:02 GMT"
+    },
+    {
+      "title": "Unified platforms are key to successful agentic AI solutions",
+      "link": "https://rss-feeds.jonathan-harris.online/3hi54sagnd74",
+      "pubDate": "Fri, 10 Apr 2026 20:47:56 GMT"
+    },
+    {
+      "title": "Anthropic withholds AI model after discovering numerous vulnerabilities",
+      "link": "https://rss-feeds.jonathan-harris.online/1u7fgz4z2hvm",
+      "pubDate": "Fri, 10 Apr 2026 20:01:07 GMT"
+    },
+    {
+      "title": "Governance issues for agentic AI under EU AI Act",
+      "link": "https://rss-feeds.jonathan-harris.online/h9vvnbnvb6ec",
+      "pubDate": "Fri, 10 Apr 2026 20:00:57 GMT"
+    },
+    {
+      "title": "Meta&amp;apos;s Llama model raises questions about open-source principles",
+      "link": "https://rss-feeds.jonathan-harris.online/sebn4bmxs28n",
+      "pubDate": "Fri, 10 Apr 2026 20:00:44 GMT"
+    },
+    {
+      "title": "Companies like Apple are developing limited AI agents",
+      "link": "https://rss-feeds.jonathan-harris.online/2ofjo8aacm5k",
+      "pubDate": "Fri, 10 Apr 2026 20:00:33 GMT"
+    },
+    {
+      "title": "Robust AI governance seen as key to enterprise margins",
+      "link": "https://rss-feeds.jonathan-harris.online/gcebff9f0i21",
+      "pubDate": "Fri, 10 Apr 2026 20:00:22 GMT"
+    },
+    {
+      "title": "Architecture as Code evolves amid industry changes",
+      "link": "https://rss-feeds.jonathan-harris.online/xo3z4xb1cuz8",
+      "pubDate": "Fri, 10 Apr 2026 18:48:08 GMT"
+    },
+    {
+      "title": "Agents don't know what good looks like",
+      "link": "https://rss-feeds.jonathan-harris.online/ibg87jnf7mz5",
+      "pubDate": "Fri, 10 Apr 2026 18:47:58 GMT"
+    },
+    {
+      "title": "Questions to Consider After a Supply-Chain Security Incident",
+      "link": "https://rss-feeds.jonathan-harris.online/144idhzrehch",
+      "pubDate": "Fri, 10 Apr 2026 18:47:49 GMT"
+    },
+    {
+      "title": "OpenAI proposes four-day workweeks and robot taxes",
+      "link": "https://rss-feeds.jonathan-harris.online/4u2t6a48muq5",
+      "pubDate": "Fri, 10 Apr 2026 18:26:37 GMT"
+    },
+    {
+      "title": "Fragility of LLM-based social networks explored in new research",
+      "link": "https://rss-feeds.jonathan-harris.online/ceywp5q7y56j",
+      "pubDate": "Fri, 10 Apr 2026 08:01:45 GMT"
+    },
+    {
+      "title": "Anthropic's principled stand attracts UK interest",
+      "link": "https://rss-feeds.jonathan-harris.online/k01ryiuvrbcc",
+      "pubDate": "Thu, 09 Apr 2026 08:02:57 GMT"
+    },
+    {
+      "title": "Boomi claims data activation is key for AI success",
+      "link": "https://rss-feeds.jonathan-harris.online/6p6ob228of0i",
+      "pubDate": "Thu, 09 Apr 2026 08:02:43 GMT"
+    },
+    {
+      "title": "Asylon and Thrive Logic partner for AI perimeter security",
+      "link": "https://rss-feeds.jonathan-harris.online/hix7oor1gywt",
+      "pubDate": "Thu, 09 Apr 2026 08:02:35 GMT"
+    },
+    {
+      "title": "Microsoft&amp;amp;amp;amp;amp;apos;s toolkit secures AI agents during runtime",
+      "link": "https://rss-feeds.jonathan-harris.online/rfmesm8zirao",
+      "pubDate": "Thu, 09 Apr 2026 08:02:22 GMT"
+    },
+    {
+      "title": "AI's software development gains and management challenges",
+      "link": "https://rss-feeds.jonathan-harris.online/ct0nk5n2ckgq",
+      "pubDate": "Thu, 09 Apr 2026 08:02:10 GMT"
+    },
+    {
+      "title": "Meta&amp;amp;amp;amp;amp;apos;s Pause with Mercor Highlights AI Vendor Risks",
+      "link": "https://rss-feeds.jonathan-harris.online/gi9ein1llf73",
+      "pubDate": "Thu, 09 Apr 2026 08:02:02 GMT"
+    },
+    {
+      "title": "Redesigning processes for AI agents",
+      "link": "https://rss-feeds.jonathan-harris.online/h8bju7ysifmx",
+      "pubDate": "Wed, 08 Apr 2026 19:22:59 GMT"
+    },
+    {
+      "title": "Singapore&amp;amp;amp;amp;amp;amp;amp;amp;apos;s social listening rules aren&amp;amp;amp;amp;amp;amp;amp;amp;apos;t as simple as they seem",
+      "link": "https://rss-feeds.jonathan-harris.online/i1pumaqzucr9",
+      "pubDate": "Wed, 08 Apr 2026 19:21:52 GMT"
+    },
+    {
+      "title": "AI Agents Require Governance as Their Role Expands",
+      "link": "https://rss-feeds.jonathan-harris.online/3yoyx6ke8hyd",
+      "pubDate": "Wed, 08 Apr 2026 08:01:35 GMT"
+    },
+    {
+      "title": "The role of memory in AI agents",
+      "link": "https://rss-feeds.jonathan-harris.online/u8ulluts67ch",
+      "pubDate": "Tue, 07 Apr 2026 08:01:20 GMT"
+    },
+    {
+      "title": "RightNow AI Launches AutoKernel for GPU Optimization",
+      "link": "https://rss-feeds.jonathan-harris.online/h2i2ew2aq96q",
+      "pubDate": "Tue, 07 Apr 2026 08:01:10 GMT"
+    },
+    {
+      "title": "Meta AI Launches EUPE: A New Compact Vision Encoder",
+      "link": "https://rss-feeds.jonathan-harris.online/e0pvhgg0tcdl",
+      "pubDate": "Tue, 07 Apr 2026 08:01:01 GMT"
+    }
+  ],
+  "days": 7,
+  "window": {
+    "start": "2026-04-06T00:00:00Z",
+    "end": "2026-04-13T00:00:00Z",
+    "label": "6 April 2026 to 12 April 2026",
+    "mode": "iso-week"
+  },
+  "created_at": "2026-04-13T15:00:38.673Z"
+}
