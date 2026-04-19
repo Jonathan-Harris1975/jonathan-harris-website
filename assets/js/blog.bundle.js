@@ -17,30 +17,30 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
   const surface = {
     hub: {
-      emptyTitle: "Latest written briefings",
+      emptyTitle: "Published briefings",
       emptyCopy:
-        "This space carries the latest written briefing alongside the archive, newsletter, podcast, and topic routes that make up the wider editorial line.",
+        "The weekly briefings land here with the same plain-English editorial line that runs through the archive, newsletter, podcast, and topic pages.",
       emptyHref: "/blog/weekly/",
       emptyLabel: "Open weekly briefings",
       loading: "Loading published briefings…",
-      emptyStatus: "The latest written briefings appear here.",
-      loadedStatus: (count) => count === 1 ? "Showing the latest published briefing." : `Showing ${count} published briefings.`
+      emptyStatus: "Published briefings appear here as the archive fills out.",
+      loadedStatus: (count) => count === 1 ? "Showing 1 published briefing." : `Showing ${count} published briefings.`
     },
     weekly: {
       emptyTitle: "Weekly archive",
       emptyCopy:
-        "This archive holds the published weekly briefings, with the blog hub, newsletter, and podcast carrying the same editorial line alongside it.",
+        "The archive collects each published weekly briefing, with the blog hub, newsletter, and podcast carrying the same editorial line alongside it.",
       emptyHref: "/blog/",
-      emptyLabel: "Open the blog hub",
+      emptyLabel: "Open the blog",
       loading: "Loading weekly briefings…",
-      emptyStatus: "The weekly archive sits here.",
-      loadedStatus: (count) => count === 1 ? "Showing the latest weekly briefing." : `Showing ${count} published weekly briefings.`
+      emptyStatus: "The archive updates as weekly briefings are published.",
+      loadedStatus: (count) => count === 1 ? "Showing 1 published weekly briefing." : `Showing ${count} published weekly briefings.`
     }
   }[surfaceKey] || {
-    emptyTitle: "Published briefings live here",
+    emptyTitle: "Published briefings",
     emptyCopy: "Published briefings appear here as they are released.",
     emptyHref: "/blog/",
-    emptyLabel: "Open the blog hub",
+    emptyLabel: "Open the blog",
     loading: "Loading published briefings…",
     emptyStatus: "",
     loadedStatus: () => ""
@@ -99,7 +99,7 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
   function normaliseItem(item) {
     const slug = pickFirst(item, ["slug"]);
     const href =
-      pickFirst(item, ["url", "canonical_url", "canonicalUrl", "link", "permalink", "path"]) ||
+      pickFirst(item, ["url", "canonical_url", "canonicalUrl", "path"]) ||
       (slug ? `/blog/posts/${encodeURIComponent(slug)}/` : "");
     const publishedAt = pickFirst(item, ["published_at", "publishedAt", "datePublished", "date", "pubDate"]);
     const dateLabel = pickFirst(item, ["date_label", "dateLabel"]) || formatPublishedDate(publishedAt);
@@ -131,6 +131,13 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
         const rightTime = right.parsedDate ? right.parsedDate.getTime() : 0;
         return rightTime - leftTime;
       });
+  }
+
+  function countSeededItems() {
+    const anchors = Array.from(list.querySelectorAll('a[href^="/blog/posts/"], a[href^="https://jonathan-harris.online/blog/posts/"]'));
+    return new Set(anchors.map(function (anchor) {
+      return anchor.getAttribute("href");
+    }).filter(Boolean)).size;
   }
 
   function renderEmptyState() {
@@ -187,28 +194,40 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
       });
 
       if (!response.ok) {
-        return [];
+        return { ok: false, items: [] };
       }
 
       const payload = await response.json();
-      return normaliseManifest(payload);
+      return { ok: true, items: normaliseManifest(payload) };
     } catch (_error) {
-      return [];
+      return { ok: false, items: [] };
     }
   }
 
   async function init() {
     setStatus(surface.loading);
-    const items = await fetchManifest();
+    const result = await fetchManifest();
 
-    if (items.length) {
-      setStatus(surface.loadedStatus(items.length));
-      render(items);
+    if (result.items.length) {
+      setStatus(surface.loadedStatus(result.items.length));
+      render(result.items);
+      return;
+    }
+
+    if (result.ok) {
+      setStatus(surface.emptyStatus);
+      renderEmptyState();
+      return;
+    }
+
+    const seededItems = countSeededItems();
+    if (seededItems > 0) {
+      setStatus(surface.loadedStatus(seededItems));
       return;
     }
 
     setStatus(surface.emptyStatus);
-    render([]);
+    renderEmptyState();
   }
 
   document.addEventListener("DOMContentLoaded", init);
