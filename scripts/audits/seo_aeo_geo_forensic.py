@@ -2,18 +2,18 @@
 from __future__ import annotations
 
 import argparse
-import sys
 import os
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Any
+import sys
 
-
-SCRIPT_FILE = Path(__file__).resolve()
-REPO_ROOT = SCRIPT_FILE.parents[2]
+CURRENT_FILE = Path(__file__).resolve()
+REPO_ROOT = CURRENT_FILE.parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+
+from typing import Any
 
 from scripts.audits.common import (
     DEFAULT_EXCLUDES,
