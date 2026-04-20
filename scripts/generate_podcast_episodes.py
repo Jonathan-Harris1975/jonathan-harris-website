@@ -277,7 +277,7 @@ def build_episode_page(ep: dict) -> str:
 
     audio_player = (
         f'<section class="card u-s21"><h2>Listen</h2>'
-        f'<audio controls preload="none" style="width:100%;max-width:680px">'
+        f'<audio class="podcast-episode-audio" controls preload="none">'
         f'<source src="{html_mod.escape(audio_url)}" type="audio/mpeg"/>'
         f'Your browser does not support the audio element.'
         f'</audio></section>'
