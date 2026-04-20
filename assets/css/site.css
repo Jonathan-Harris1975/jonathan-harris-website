@@ -402,3 +402,4 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
   .page-form-shell .card h2 { font-size: 28px; }
   .page-form-shell .card p  { font-size: 16px; }
 }
+.podcast-episode-audio{width:100%;max-width:680px}
