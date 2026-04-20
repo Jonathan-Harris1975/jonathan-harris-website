@@ -283,11 +283,19 @@ def upload_directory_to_r2(client: Any, bucket: str, prefix: str, directory: Pat
     return uploaded
 
 
-def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> None:
+def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> bool:
     if not callback_url:
-        return
+        return False
+
     headers = {"Content-Type": "application/json"}
     if callback_token:
         headers["Authorization"] = f"Bearer {callback_token}"
-    response = requests.post(callback_url, headers=headers, data=json.dumps(payload), timeout=20)
-    response.raise_for_status()
+        headers["X-Audit-Callback-Token"] = callback_token
+
+    try:
+        response = requests.post(callback_url, headers=headers, data=json.dumps(payload), timeout=20)
+        response.raise_for_status()
+        return True
+    except requests.RequestException as exc:
+        print(f"[WARN] Audit callback failed: {exc}")
+        return False
