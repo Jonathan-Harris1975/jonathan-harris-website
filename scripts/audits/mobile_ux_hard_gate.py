@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 import json
 import os
 import re
@@ -11,6 +12,12 @@ from typing import Any
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
+
+
+SCRIPT_FILE = Path(__file__).resolve()
+REPO_ROOT = SCRIPT_FILE.parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.audits.common import (
     DEFAULT_EXCLUDES,
