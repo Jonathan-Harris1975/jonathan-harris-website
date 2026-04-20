@@ -64,13 +64,24 @@ def find_workbook(repo_root: Path = REPO_ROOT) -> Path:
     return candidates[0]
 
 
-def _find_header_row(rows: list[list[Any]]) -> tuple[int | None, int | None]:
+HEADER_ALIASES: dict[str, set[str]] = {
+    "full_url": {"url", "page url", "live url", "public url", "full url"},
+    "public_url_path": {"public url path", "url path", "public path", "route path"},
+    "relative_file_path": {"relative file path", "file path", "relative path"},
+}
+
+
+def _find_header_row(rows: list[list[Any]]) -> tuple[int | None, dict[str, int]]:
     for idx, row in enumerate(rows[:12], start=1):
         normalised = [str(cell).strip().lower() if cell is not None else "" for cell in row]
+        mapping: dict[str, int] = {}
         for col_index, value in enumerate(normalised):
-            if value in {"url", "page url", "live url", "public url"}:
-                return idx, col_index
-    return None, None
+            for key, aliases in HEADER_ALIASES.items():
+                if value in aliases and key not in mapping:
+                    mapping[key] = col_index
+        if any(key in mapping for key in ("full_url", "public_url_path", "relative_file_path")):
+            return idx, mapping
+    return None, {}
 
 
 def load_workbook_info(path: Path) -> WorkbookInfo:
@@ -82,17 +93,29 @@ def load_workbook_info(path: Path) -> WorkbookInfo:
 
     ws = wb[primary_sheet]
     rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 8), values_only=True))
-    header_row, url_col = _find_header_row(rows)
+    header_row, header_map = _find_header_row(rows)
 
     urls: list[str] = []
-    if header_row and url_col is not None:
+    if header_row:
+        preferred_columns = [
+            header_map.get("full_url"),
+            header_map.get("public_url_path"),
+            header_map.get("relative_file_path"),
+        ]
         for row in ws.iter_rows(min_row=header_row + 1, values_only=True):
-            if url_col >= len(row):
-                continue
-            value = row[url_col]
-            if not value:
-                continue
-            urls.append(str(value).strip())
+            value = None
+            for col_index in preferred_columns:
+                if col_index is None or col_index >= len(row):
+                    continue
+                candidate = row[col_index]
+                if candidate is None:
+                    continue
+                candidate_text = str(candidate).strip()
+                if candidate_text:
+                    value = candidate_text
+                    break
+            if value:
+                urls.append(value)
 
     first_rows = [list(row) for row in rows[:5]]
     return WorkbookInfo(
@@ -179,6 +202,31 @@ def fetch_html(url: str, timeout: float = 20.0) -> dict[str, Any]:
 
 def parse_html(html: str) -> BeautifulSoup:
     return BeautifulSoup(html or "", "html.parser")
+
+def detect_challenge_page(status: int, html: str) -> str | None:
+    soup = parse_html(html)
+    title = soup.title.get_text(" ", strip=True) if soup.title else ""
+    body = soup.get_text(" ", strip=True)[:6000].lower()
+    title_lower = title.lower()
+
+    challenge_markers = (
+        "just a moment",
+        "attention required",
+        "checking your browser",
+        "enable javascript and cookies to continue",
+        "cf-browser-verification",
+        "challenge-platform",
+        "cdn-cgi/challenge-platform",
+        "ddos protection by cloudflare",
+    )
+
+    if any(marker in title_lower or marker in body for marker in challenge_markers):
+        return f"challenge/interstitial detected (status={status}, title={title or '(missing title)'})"
+
+    if status in {401, 403, 429, 503} and title_lower in {"just a moment...", "attention required! | cloudflare"}:
+        return f"challenge/interstitial detected (status={status}, title={title})"
+
+    return None
 
 
 def extract_meta(soup: BeautifulSoup) -> dict[str, Any]:
@@ -283,19 +331,11 @@ def upload_directory_to_r2(client: Any, bucket: str, prefix: str, directory: Pat
     return uploaded
 
 
-def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> bool:
+def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> None:
     if not callback_url:
-        return False
-
+        return
     headers = {"Content-Type": "application/json"}
     if callback_token:
         headers["Authorization"] = f"Bearer {callback_token}"
-        headers["X-Audit-Callback-Token"] = callback_token
-
-    try:
-        response = requests.post(callback_url, headers=headers, data=json.dumps(payload), timeout=20)
-        response.raise_for_status()
-        return True
-    except requests.RequestException as exc:
-        print(f"[WARN] Audit callback failed: {exc}")
-        return False
+    response = requests.post(callback_url, headers=headers, data=json.dumps(payload), timeout=20)
+    response.raise_for_status()

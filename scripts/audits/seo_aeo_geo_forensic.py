@@ -20,6 +20,7 @@ from scripts.audits.common import (
     REPO_ROOT,
     build_r2_client,
     ensure_dir,
+    detect_challenge_page,
     extract_meta,
     fetch_html,
     find_workbook,
@@ -36,17 +37,6 @@ from scripts.audits.common import (
     write_json,
     write_text,
 )
-
-FOCUS_ROUTES = [
-    "/",
-    "/ebooks",
-    "/newsletter",
-    "/contact",
-    "/bio",
-    "/compare",
-    "/topics",
-    "/catalogue/artificial-intelligence",
-]
 
 
 def parse_args() -> argparse.Namespace:
@@ -186,6 +176,9 @@ def issue(issue_id: str, severity: str, lens: str, route: str, why: str, fix: st
 def inspect_page(base_url: str, route: str) -> dict[str, Any]:
     url = route_to_url(base_url, route)
     fetched = fetch_html(url)
+    challenge_reason = detect_challenge_page(fetched.get("status", 0), fetched.get("text", ""))
+    if challenge_reason:
+        raise RuntimeError(f"Live audit blocked on {url}: {challenge_reason}")
     soup = parse_html(fetched.get("text", ""))
     meta = extract_meta(soup)
     page = {
@@ -209,6 +202,10 @@ def inspect_page(base_url: str, route: str) -> dict[str, Any]:
 
 def build_inventory(excludes: list[str]) -> dict[str, Any]:
     workbook = load_workbook_info(find_workbook(REPO_ROOT))
+    if workbook.url_count <= 0:
+        raise RuntimeError(
+            f"Workbook {Path(workbook.path).name} produced 0 URL rows from sheet {workbook.primary_sheet or '(missing)'}; halting audit."
+        )
     repo_routes = repo_html_routes(REPO_ROOT, excludes)
     workbook_routes = [normalise_route(url) for url in workbook.urls if not should_exclude(normalise_route(url), excludes)]
     repo_only = sorted(set(repo_routes) - set(workbook_routes))
@@ -221,6 +218,18 @@ def build_inventory(excludes: list[str]) -> dict[str, Any]:
         "workbookOnly": workbook_only,
         "pageTypeCounts": Counter(classify_page(route) for route in repo_routes),
     }
+
+
+def build_audit_routes(inventory: dict[str, Any]) -> list[str]:
+    ordered: list[str] = []
+    seen: set[str] = set()
+    for route in inventory["workbookRoutes"] + inventory["repoOnly"]:
+        route = normalise_route(route)
+        if route in seen:
+            continue
+        seen.add(route)
+        ordered.append(route)
+    return ordered
 
 
 def collect_issues(pages: list[dict[str, Any]], inventory: dict[str, Any]) -> list[dict[str, Any]]:
@@ -344,20 +353,8 @@ def main() -> int:
     output_dir = ensure_dir(Path(args.output_dir))
 
     inventory = build_inventory(excludes)
-    focus = []
-    repo_routes = set(inventory["repoRoutes"])
-    for route in FOCUS_ROUTES:
-        route = normalise_route(route)
-        if route in repo_routes and not should_exclude(route, excludes):
-            focus.append(route)
-
-    for route in inventory["repoRoutes"]:
-        if route.startswith("/ebooks/") and route.count("/") > 2:
-            focus.append(route)
-            break
-
-    focus = list(dict.fromkeys(focus))
-    pages = [inspect_page(base_url, route) for route in focus]
+    audit_routes = build_audit_routes(inventory)
+    pages = [inspect_page(base_url, route) for route in audit_routes]
     issues = collect_issues(pages, inventory)
 
     serialisable_pages = [{k: v for k, v in page.items() if k != "soup"} for page in pages]
@@ -380,6 +377,7 @@ def main() -> int:
         "status": "completed",
         "reportPrefix": args.report_prefix,
         "focusPageCount": len(pages),
+        "auditedRouteCount": len(pages),
         "issueCount": len(issues),
         "generatedAt": utc_now(),
     }
