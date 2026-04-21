@@ -131,7 +131,7 @@ def run_repo_snapshot_checks() -> List[str]:
     for path in forbidden_legacy_duplicates:
         if path.exists():
             errors.append(
-                f"Crawler check failed: delete legacy duplicate crawler file {path.relative_to(ROOT)} so sitemap.xml remains the only published sitemap source"
+                f"Crawler check failed: delete stale legacy crawler duplicate {path.relative_to(ROOT)} so the governed crawler snapshot set stays clean"
             )
 
     deployable_html_files = [
