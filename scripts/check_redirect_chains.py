@@ -12,8 +12,8 @@ import argparse
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin, urlsplit, urlunsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
-import xml.etree.ElementTree as ET
 
+from scripts.check_crawlers import _validate_sitemap_structure
 from scripts.ebook_pipeline import SITE_URL, load_master
 
 
@@ -44,6 +44,27 @@ def fetch_without_redirect(url: str, timeout: float) -> tuple[int, str, str]:
         raise RuntimeError(str(exc.reason)) from exc
 
 
+
+
+def _validate_alias_mirror(content_kind: str, body: str) -> str | None:
+    normalised_body = body.strip()
+    if not normalised_body:
+        return "response body was empty"
+
+    if content_kind == "robots":
+        if "User-agent:" not in body or "Sitemap:" not in body:
+            return "robots mirror is reachable but does not contain the expected crawler directives"
+        return None
+
+    if content_kind == "sitemap":
+        sitemap_error = _validate_sitemap_structure(body)
+        if sitemap_error:
+            return f"live sitemap mirror is invalid: {sitemap_error}"
+        return None
+
+    return None
+
+
 def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
     slug = book["slug"]
     legacy_url = book.get("legacy_alias_url") or f"{SITE_URL}/book/{slug}/buy-now"
@@ -72,29 +93,6 @@ def validate_book_chain(book: dict[str, str], timeout: float) -> list[str]:
     return errors
 
 
-def _validate_alias_compatibility_body(content_kind: str, body: str) -> str | None:
-    normalised = body.strip()
-    if not normalised:
-        return "response body was empty"
-
-    if content_kind == "robots":
-        if "User-agent:" not in body or "Sitemap:" not in body:
-            return "compatibility mirror did not contain the expected crawler directives"
-        return None
-
-    if content_kind == "sitemap":
-        try:
-            root = ET.fromstring(body)
-        except ET.ParseError as exc:
-            return f"compatibility mirror XML parse failed: {exc}"
-        local_name = root.tag.rsplit("}", 1)[-1]
-        if local_name not in {"urlset", "sitemapindex"}:
-            return f"compatibility mirror used unexpected XML root element <{local_name}>"
-        return None
-
-    return None
-
-
 def validate_support_redirects(timeout: float) -> list[str]:
     checks = [
         (f"{SITE_URL}/robot.txt", f"{SITE_URL}/robots.txt", "robot.txt alias", "robots"),
@@ -114,7 +112,7 @@ def validate_support_redirects(timeout: float) -> list[str]:
                 errors.append(f"{label}: points to {location or '[missing Location header]'} instead of {expected_target}")
             continue
         if status == 200:
-            validation_error = _validate_alias_compatibility_body(content_kind, body)
+            validation_error = _validate_alias_mirror(content_kind, body)
             if validation_error:
                 errors.append(f"{label}: returned HTTP 200 but {validation_error.lower()}")
             continue
