@@ -6,9 +6,9 @@ This site depends on a small set of external services that sit outside the repos
 
 | Vendor | Role | Pages / surfaces | Failure mode | Fallback / mitigation |
 | --- | --- | --- | --- | --- |
-| CookieYes | Consent management for optional scripts | Homepage, catalogue, ebook pages, newsletter, contact, podcast, bio, compare, glossary, utility pages | Optional analytics/chat scripts may not load or may remain blocked | Core content stays server-rendered and readable without consent-managed scripts |
-| Metricool | Analytics script loaded behind consent | Core marketing pages | Measurement loss only | No content, routing, or form dependency |
-| BotSailor | Chat widget loaded behind consent | Core marketing pages | Chat entry point disappears | Navigation, CTAs, and page content remain available without chat |
+| CookieYes | Consent banner plus governed runtime loader | Homepage, catalogue, ebook pages, newsletter, contact, podcast, bio, compare, glossary, utility pages | CookieYes or CSP drift can block these loaders if the governed runtime contract is broken | Core content stays server-rendered and readable without consent-managed scripts |
+| Metricool | Analytics script loaded by the governed runtime loader | Core marketing pages | Measurement loss only | No content, routing, or form dependency |
+| BotSailor | Chat widget loaded by the governed runtime loader | Core marketing pages | Chat entry point disappears | Navigation, CTAs, and page content remain available without chat |
 | Jotform | Hosted forms and embeds | Newsletter and contact pages | Embedded form may fail or be blocked | Hosted Jotform fallback links remain published on-page |
 | ImageKit via images.jonathan-harris.online | Remote delivery for logo and ebook cover images | Header, homepage, catalogue pages, ebook pages, metadata image tags | Logo / covers may fail to render if remote assets drift or image host is unavailable | `scripts/check_image_assets.py` validates the governed contract and supports live URL checks |
 | assets.jonathan-harris.online | Favicon and governed static assets | Site-wide head metadata | Favicon / asset preload drift | Repo keeps explicit asset URLs and release validation checks head markup |
