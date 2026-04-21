@@ -20,7 +20,7 @@ RSS_URL = os.environ.get(
     "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
 )
 HTML_FILE = Path("podcast/index.html")
-LIMIT = 8
+LIMIT = 24
 NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
 
 
@@ -76,7 +76,7 @@ def build_list_html(items: list[dict]) -> str:
         title = html.escape(item["title"])
         url = html.escape(item["url"])
         date = html.escape(item.get("date", ""))
-        meta = f"Published {date} · transcript" if date else "Transcript"
+        meta = f"Published {date} · transcript archive entry" if date else "Transcript archive entry"
         rows.append(
             "<li>"
             f'<a href="{url}" rel="noopener noreferrer" target="_blank">{title}</a>'

@@ -369,28 +369,30 @@ def build_compat_redirect(session_id: str, slug: str) -> str:
 </html>"""
 
 
-def validate_recent_episode_contract(expected_count: int) -> list[str]:
+def validate_podcast_index_contract() -> list[str]:
     if not HTML_INDEX.exists():
         return [f"Missing podcast index: {HTML_INDEX}"]
 
     src = HTML_INDEX.read_text(encoding="utf-8")
     failures: list[str] = []
-    count = src.count('class="podcast-episode-item"')
-    if count != expected_count:
-        failures.append(f"Recent episode card count mismatch: expected {expected_count}, found {count}")
 
-    pattern = (
-        r"<section[^>]*podcast-episodes-static[^>]*>.*?</p>(?P<body>.*?)<p[^>]*u-s40[^>]*>"
-    )
-    match = re.search(pattern, src, flags=re.DOTALL)
-    if not match:
-        failures.append("Unable to locate recent-episodes body in podcast/index.html")
-        return failures
+    if 'id="transcriptSearch"' not in src:
+        failures.append("Transcript search input missing from podcast/index.html")
 
-    hrefs = re.findall(r'<a href="([^"]+)"', match.group("body"))
-    for href in hrefs[:expected_count]:
-        if not href.startswith(f"{SITE}/podcast/episodes/") and not href.startswith("/podcast/episodes/"):
-            failures.append(f"Recent episode href is not a first-party episode page: {href}")
+    transcript_list_match = re.search(r'<ul[^>]*id="transcriptList"[^>]*>(?P<body>.*?)</ul>', src, flags=re.DOTALL)
+    if not transcript_list_match:
+        failures.append("Transcript list missing from podcast/index.html")
+    else:
+        count = transcript_list_match.group("body").count("<li")
+        if count < 4:
+            failures.append(f"Transcript archive should contain at least 4 entries, found {count}")
+
+    if 'class="transcript-list"' not in src:
+        failures.append("Transcript archive class missing from podcast/index.html")
+
+    if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in src:
+        failures.append("Elfsight podcast player embed missing from podcast/index.html")
+
     return failures
 
 
@@ -400,7 +402,7 @@ HTML_INDEX = ROOT / "podcast" / "index.html"
 def validate_generated_pages(episodes: list[dict]) -> list[str]:
     failures: list[str] = []
     expected_recent = min(4, len(episodes))
-    failures.extend(validate_recent_episode_contract(expected_recent))
+    failures.extend(validate_podcast_index_contract())
 
     for ep in episodes[:expected_recent]:
         slug = ep.get("slug", "")
@@ -416,7 +418,7 @@ def validate_generated_pages(episodes: list[dict]) -> list[str]:
         page_html = page_path.read_text(encoding="utf-8")
         audio_url = (ep.get("audio_url") or "").strip()
         if audio_url:
-            if '<audio controls' not in page_html:
+            if '<audio' not in page_html or 'controls' not in page_html:
                 failures.append(f"Audio player missing from episode page: {slug}")
             if html_mod.escape(audio_url) not in page_html:
                 failures.append(f"Audio URL missing from episode page: {slug}")

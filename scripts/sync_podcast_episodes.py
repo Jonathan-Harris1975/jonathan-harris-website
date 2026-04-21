@@ -1,7 +1,7 @@
 """
 sync_podcast_episodes.py
 Build-time script: fetches the Turing's Torch: AI Weekly RSS feed and
-rewrites the recent-episodes section of podcast/index.html with live data.
+refreshes any optional recent-episodes section of podcast/index.html with live data.
 
 Called from build.sh before deployment_ci.py.
 """
@@ -136,7 +136,7 @@ def inject(episodes: list[dict]) -> None:
 
     if count == 0:
         print(
-            "WARNING: Target section not found in podcast/index.html — file left unchanged.",
+            "INFO: Recent episodes section is not present in podcast/index.html — skipping sync.",
             file=sys.stderr,
         )
         return
