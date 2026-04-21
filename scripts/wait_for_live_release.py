@@ -11,6 +11,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.check_crawlers import print_live_summary, run_live_checks
+from scripts.maintenance.check_redirect_chains import run_redirect_checks
 
 
 def main() -> int:
@@ -18,11 +19,22 @@ def main() -> int:
     parser.add_argument("--timeout-seconds", type=int, default=600, help="Total time to wait before failing. Default: 600")
     parser.add_argument("--interval-seconds", type=int, default=20, help="Delay between checks. Default: 20")
     parser.add_argument("--request-timeout", type=float, default=15.0, help="Per-request timeout in seconds. Default: 15")
+    parser.add_argument(
+        "--require-content-match",
+        action="store_true",
+        help="Wait until the governed live crawler bodies match the repo snapshots, not just reachability.",
+    )
+    parser.add_argument(
+        "--require-redirect-contract",
+        action="store_true",
+        help="Also wait until the governed live support alias contract passes.",
+    )
     args = parser.parse_args()
 
     deadline = time.monotonic() + max(args.timeout_seconds, 1)
     attempt = 0
     last_results = []
+    last_redirect_failures: list[str] = []
 
     while time.monotonic() <= deadline:
         attempt += 1
