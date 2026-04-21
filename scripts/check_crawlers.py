@@ -17,7 +17,6 @@ import xml.etree.ElementTree as ET
 
 from scripts.ebook_pipeline import (
     CRAWLER_CHECKSUMS_PATH,
-    CRAWLER_SNAPSHOT_FILENAMES,
     EXTERNAL_CRAWLER_FILES,
     ROOT,
     build_crawler_checksums,
@@ -64,9 +63,9 @@ def build_expected_files() -> Dict[Path, str]:
 def get_expected_live_payloads() -> Dict[str, str]:
     payloads = build_crawler_snapshot_payloads(load_master())
     return {
-        "robots": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
-        "sitemap": payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]],
-        "llms": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
+        "robots": payloads["robots.txt"],
+        "sitemap": payloads["sitemap.xml"],
+        "llms": payloads["llms.txt"],
     }
 
 
@@ -124,14 +123,16 @@ def run_repo_snapshot_checks() -> List[str]:
         if actual != expected:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
-    forbidden_legacy_duplicates = [
+    legacy_duplicates = [
+        ROOT / "site-map.xml",
+        ROOT / "Sitemap.xml",
         ROOT / "sitemap (1).xml",
         ROOT / "config" / "crawler-snapshots" / "site-map.xml",
     ]
-    for path in forbidden_legacy_duplicates:
+    for path in legacy_duplicates:
         if path.exists():
             errors.append(
-                f"Crawler check failed: delete stale legacy crawler duplicate {path.relative_to(ROOT)} so the governed crawler snapshot set stays clean"
+                f"Crawler check failed: delete legacy duplicate crawler file {path.relative_to(ROOT)} so sitemap.xml remains the only published sitemap source"
             )
 
     deployable_html_files = [
@@ -206,13 +207,14 @@ def _validate_sitemap_structure(body: str) -> str | None:
     return None
 
 
-def _sitemap_loc_set(body: str) -> set[str]:
+def _sitemap_loc_lastmod_map(body: str) -> Dict[str, str]:
     root = ET.fromstring(body)
-    entries: set[str] = set()
+    entries: Dict[str, str] = {}
     for url in root.findall('.//{*}url'):
         loc = clean_paragraph(url.findtext('{*}loc', default=''))
+        lastmod = clean_paragraph(url.findtext('{*}lastmod', default=''))
         if loc:
-            entries.add(loc)
+            entries[loc] = lastmod
     return entries
 
 
@@ -235,10 +237,8 @@ def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
         expected_sitemap_error = _validate_sitemap_structure(expected_text)
         if expected_sitemap_error:
             return f"governed sitemap snapshot is invalid: {expected_sitemap_error}"
-        live_locs = _sitemap_loc_set(body)
-        expected_locs = _sitemap_loc_set(expected_text)
-        if live_locs != expected_locs:
-            return "Live sitemap URLs do not match the governed snapshot"
+        if _sitemap_loc_lastmod_map(body) != _sitemap_loc_lastmod_map(expected_text):
+            return "Live sitemap entries do not match the governed snapshot"
         return None
 
     if normalised_body != normalised_expected:
@@ -299,7 +299,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt, canonical sitemap.xml, governed crawler compatibility aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
+    print("Crawler file check passed: robots.txt, canonical sitemap.xml, redirect-only sitemap aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 
