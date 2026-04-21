@@ -1,9 +1,15 @@
-Delete these files from the repo to complete sitemap cleanup:
+Delete these tracked files from the repo to complete the sitemap single-source-of-truth cleanup:
 
 site-map.xml
 Sitemap.xml
 sitemap (1).xml
 config/crawler-snapshots/site-map.xml
+scripts/__pycache__/check_crawlers.cpython-313.pyc
+scripts/__pycache__/ebook_pipeline.cpython-313.pyc
+scripts/__pycache__/ebook_content_helpers.cpython-313.pyc
+scripts/__pycache__/check_ungoverned_routes.cpython-313.pyc
+scripts/__pycache__/check_live_pages.cpython-313.pyc
+scripts/maintenance/__pycache__/check_redirect_chains.cpython-313.pyc
 
 Canonical source of truth after this cleanup:
 config/crawler-snapshots/sitemap.xml
