@@ -1,5 +1,0 @@
-Delete these legacy duplicate sitemap files from the repo root so sitemap.xml remains the single published sitemap source:
-- Sitemap.xml
-- site-map.xml
-
-These legacy alias routes are already covered by redirect rules and should not exist as physical duplicate files.
