@@ -2,62 +2,62 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 16,
+    "iso_week": 17,
     "year": 2026
   },
   "book": {
-    "id": 17,
-    "key": "17-ebook",
-    "title": "AI in Education: Reimagining Learning for Every Student",
-    "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
-    "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
+    "id": 18,
+    "key": "18-ebook",
+    "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "tags": [
-      "Education",
+      "Finance",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Education",
+    "filter": "Finance",
     "keywords": [
-      "Education",
-      "AI in Education: Reimagining Learning for Every Student",
+      "Finance",
+      "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/Ldhe41",
-    "buy_target_url": "https://mybook.to/Ldhe41",
-    "slug": "ai-in-education-reimagining-learning-for-every-student",
-    "asin": "B0DMKXWQDK",
-    "pages": 323,
+    "buy_url": "https://mybook.to/8VjT",
+    "buy_target_url": "https://mybook.to/8VjT",
+    "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+    "asin": "B0DML75B3C",
+    "pages": 286,
     "datePublished": "2024-11-09",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-    "buy_route": "/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
-    "topic_url": "/catalogue/education/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+    "buy_route": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+    "topic_url": "/catalogue/finance/",
     "related_slugs": [
-      "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
+      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation"
     ],
     "title_tokens": [
-      "educ",
-      "every",
-      "learn",
-      "reimagin",
-      "student"
+      "bank",
+      "data",
+      "fin",
+      "revolutioniz",
+      "secur"
     ],
     "topic_tokens": [
-      "educ"
+      "fin"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is AI in Education: Reimagining Learning for Every Student",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/ or buy on Amazon at https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now",
-    "midroll_15": "This week's sponsor is AI in Education: Reimagining Learning for Every Student. A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice. Read more at https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-    "midroll_30": "This week's sponsor is AI in Education: Reimagining Learning for Every Student. A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice. It focuses on Education. It runs 323 pages. Topics include Education, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/ or go straight to Amazon at https://jonathan-harris.online/ebooks/ai-in-education-reimagining-learning-for-every-student/buy-now."
+    "headline": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/ or buy on Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
+    "midroll_15": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security. A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement. Read more at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+    "midroll_30": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security. A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement. It focuses on Finance. It runs 286 pages. Topics include Finance, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/ or go straight to Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now."
   }
 }
