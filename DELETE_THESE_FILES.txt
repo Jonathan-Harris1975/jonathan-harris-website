@@ -1,0 +1,12 @@
+Delete this stale tracked file from the repo so the canonical sitemap check passes after the transcript route refresh:
+
+site-map.xml
+
+Canonical published sitemap file:
+sitemap.xml
+
+Canonical snapshot source:
+config/crawler-snapshots/sitemap.xml
+
+Legacy alias retained via redirect only:
+/site-map.xml -> /sitemap.xml
