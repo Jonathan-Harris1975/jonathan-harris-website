@@ -1,22 +1,23 @@
-Delete these tracked files from the repo to complete the sitemap single-source-of-truth cleanup:
+Delete these tracked files from the repo to complete the sitemap single-source-of-truth cleanup.
 
-site-map.xml
-Sitemap.xml
-sitemap (1).xml
-config/crawler-snapshots/site-map.xml
-scripts/__pycache__/check_crawlers.cpython-313.pyc
-scripts/__pycache__/ebook_pipeline.cpython-313.pyc
-scripts/__pycache__/ebook_content_helpers.cpython-313.pyc
-scripts/__pycache__/check_ungoverned_routes.cpython-313.pyc
-scripts/__pycache__/check_live_pages.cpython-313.pyc
-scripts/maintenance/__pycache__/check_redirect_chains.cpython-313.pyc
+Current CI blocker confirmed in the latest run:
+- site-map.xml
 
-Canonical source of truth after this cleanup:
-config/crawler-snapshots/sitemap.xml
+Still remove these legacy duplicates as part of the same cleanup if they are still tracked in your branch:
+- Sitemap.xml
+- sitemap (1).xml
+- config/crawler-snapshots/site-map.xml
 
-Canonical published root file after this cleanup:
-sitemap.xml
+Also remove any tracked Python bytecode caches if they reappear:
+- scripts/__pycache__/*.pyc
+- scripts/maintenance/__pycache__/*.pyc
 
-Legacy routes retained via redirects only:
-/Sitemap.xml -> /sitemap.xml
-/site-map.xml -> /sitemap.xml
+Canonical source of truth after cleanup:
+- config/crawler-snapshots/sitemap.xml
+
+Canonical published root sitemap after cleanup:
+- sitemap.xml
+
+Legacy outward-facing aliases retained via redirects only:
+- /Sitemap.xml -> /sitemap.xml
+- /site-map.xml -> /sitemap.xml
