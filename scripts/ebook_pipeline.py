@@ -3129,8 +3129,6 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
         ROOT / "robots.txt": robots_payload,
         ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
-        ROOT / "Sitemap.xml": sitemap_payload,
-        ROOT / "site-map.xml": sitemap_payload,
         ROOT / "llms.txt": llms_payload,
     }
 
