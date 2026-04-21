@@ -1,4 +1,5 @@
 name: SEO AEO GEO forensic audit
+run-name: SEO AEO GEO - ${{ inputs.session_id }}
 
 on:
   workflow_dispatch:

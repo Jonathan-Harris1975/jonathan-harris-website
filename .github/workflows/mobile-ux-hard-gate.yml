@@ -1,4 +1,5 @@
 name: Mobile UX hard-gate audit
+run-name: Mobile UX - ${{ inputs.session_id }}
 
 on:
   workflow_dispatch:
