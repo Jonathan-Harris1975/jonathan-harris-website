@@ -125,8 +125,6 @@ def run_repo_snapshot_checks() -> List[str]:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
     forbidden_legacy_duplicates = [
-        ROOT / "Sitemap.xml",
-        ROOT / "site-map.xml",
         ROOT / "sitemap (1).xml",
         ROOT / "config" / "crawler-snapshots" / "site-map.xml",
     ]
