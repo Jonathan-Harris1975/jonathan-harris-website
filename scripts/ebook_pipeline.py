@@ -2487,8 +2487,9 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <script type="application/ld+json">{json_script(faq_schema)}</script>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/consent-managed-scripts.js"></script>
+<script defer="" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebook-detail">
 {header}
@@ -2729,8 +2730,9 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/consent-managed-scripts.js"></script>
+<script defer="" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebooks-catalogue">
 {header}

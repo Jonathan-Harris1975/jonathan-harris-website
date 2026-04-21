@@ -326,8 +326,9 @@ def build_episode_page(ep: dict) -> str:
 <script type="application/ld+json">{json.dumps(breadcrumb, ensure_ascii=False)}</script>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/consent-managed-scripts.min.js"></script>
+<script defer="" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="page-podcast-episode jh-no-hero-page">
 {load_partial(HEADER_PARTIAL, "header")}
