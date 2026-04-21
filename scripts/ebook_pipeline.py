@@ -3346,17 +3346,6 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     for file_path, content in build_published_crawler_paths(books).items():
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_text(content, encoding="utf-8")
-
-    legacy_crawler_duplicates = [
-        ROOT / "site-map.xml",
-        ROOT / "Sitemap.xml",
-        ROOT / "sitemap (1).xml",
-        CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
-    ]
-    for legacy_path in legacy_crawler_duplicates:
-        if legacy_path.exists():
-            legacy_path.unlink()
-
     write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
 
@@ -3989,6 +3978,18 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         actual = file_path.read_text(encoding="utf-8")
         if actual != expected:
             errors.append(f"Published crawler file drift detected: {file_path.relative_to(ROOT)}")
+
+    legacy_crawler_duplicates = [
+        ROOT / "site-map.xml",
+        ROOT / "Sitemap.xml",
+        ROOT / "sitemap (1).xml",
+        CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
+    ]
+    for legacy_path in legacy_crawler_duplicates:
+        if legacy_path.exists():
+            errors.append(
+                f"Legacy duplicate crawler file must be deleted so sitemap.xml remains the single source of truth: {legacy_path.relative_to(ROOT)}"
+            )
 
     sitemap_routes = build_public_route_registry(books)
     expected_sitemap_locations = {route["loc"] for route in sitemap_routes}

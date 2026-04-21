@@ -64,7 +64,7 @@ def get_expected_live_payloads() -> Dict[str, str]:
     payloads = build_crawler_snapshot_payloads(load_master())
     return {
         "robots": payloads["robots.txt"],
-        "sitemap": payloads["sitemap.xml"],
+        "sitemap": payloads["site-map.xml"],
         "llms": payloads["llms.txt"],
     }
 
@@ -122,6 +122,18 @@ def run_repo_snapshot_checks() -> List[str]:
         actual = path.read_text(encoding="utf-8")
         if actual != expected:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
+
+    legacy_duplicates = [
+        ROOT / "site-map.xml",
+        ROOT / "Sitemap.xml",
+        ROOT / "sitemap (1).xml",
+        ROOT / "config" / "crawler-snapshots" / "site-map.xml",
+    ]
+    for path in legacy_duplicates:
+        if path.exists():
+            errors.append(
+                f"Crawler check failed: delete legacy duplicate crawler file {path.relative_to(ROOT)} so sitemap.xml remains the only published sitemap source"
+            )
 
     deployable_html_files = [
         path for path in ROOT.rglob("*.html")
