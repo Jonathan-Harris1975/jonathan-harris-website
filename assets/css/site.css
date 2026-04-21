@@ -403,3 +403,18 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
   .page-form-shell .card p  { font-size: 16px; }
 }
 .podcast-episode-audio{width:100%;max-width:680px}
+
+/* Transcript archive page */
+.page-transcripts .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:24px}
+.page-transcripts .transcript-archive-page{margin:0 auto 56px;max-width:980px}
+.page-transcripts .transcript-list,.podcast-transcripts .transcript-list{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px;max-height:22rem;overflow:auto}
+.page-transcripts .transcript-list li,.podcast-transcripts .transcript-list li{background:#fff;border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:14px 16px;box-shadow:0 10px 24px rgba(0,0,0,0.05)}
+.page-transcripts .transcript-list a,.podcast-transcripts .transcript-list a{display:block;font-weight:700;color:#111827;text-decoration:none}
+.page-transcripts .transcript-list a:hover,.page-transcripts .transcript-list a:focus,.podcast-transcripts .transcript-list a:hover,.podcast-transcripts .transcript-list a:focus{text-decoration:underline;color:#4338ca}
+.page-transcripts .transcript-meta,.podcast-transcripts .transcript-meta{display:block;margin-top:6px;color:#6b7280;font-size:.9rem}
+.page-transcripts .transcript-search,.podcast-transcripts .transcript-search{width:100%;max-width:680px;padding:14px 16px;border-radius:14px;border:1px solid rgba(17,24,39,0.14);background:#fff;color:#111827;box-shadow:0 8px 20px rgba(0,0,0,0.04)}
+.page-transcripts .transcript-label,.podcast-transcripts .transcript-label{display:block;margin:0 0 8px;font-weight:700;color:#111827}
+.page-transcripts .transcript-empty,.podcast-transcripts .transcript-empty{margin-top:12px;color:#4b5563;font-size:.95rem}
+.page-transcripts .podcast-rss-hint,.podcast-transcripts .podcast-rss-hint{margin-top:16px;color:#4b5563}
+.page-transcripts .podcast-rss-hint .podcast-platform-btn,.podcast-transcripts .podcast-rss-hint .podcast-platform-btn{display:inline-flex;margin-top:6px}
+@media (max-width: 640px){.page-transcripts .transcript-list,.podcast-transcripts .transcript-list{max-height:20rem}}
