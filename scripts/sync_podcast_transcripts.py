@@ -1,7 +1,8 @@
 """
 sync_podcast_transcripts.py
-Build-time script: fetches the podcast RSS feed and rewrites the transcript list
-in podcast/index.html with the latest transcript-capable episode links.
+Build-time script: fetches the podcast RSS feed and rewrites the transcript lists
+in podcast/index.html and transcripts/index.html with the latest transcript-capable
+episode links.
 """
 
 from __future__ import annotations
@@ -19,13 +20,17 @@ RSS_URL = os.environ.get(
     "PODCAST_RSS_URL",
     "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
 )
-HTML_FILE = Path("podcast/index.html")
-LIMIT = 24
+HTML_FILES = [Path("podcast/index.html"), Path("transcripts/index.html")]
+LIMIT = 36
 NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
 
 
 def is_absolute_http_url(value: str | None) -> bool:
     return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
+
+
+def slugify_for_search(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (value or "").lower())).strip()
 
 
 def extract_transcript_url(item: ET.Element) -> str:
@@ -64,6 +69,7 @@ def fetch_transcripts() -> list[dict]:
             continue
         items.append({
             "title": title,
+            "title_search": slugify_for_search(title),
             "url": url,
             "date": format_date(pub_date),
         })
@@ -74,39 +80,41 @@ def build_list_html(items: list[dict]) -> str:
     rows = []
     for item in items:
         title = html.escape(item["title"])
+        title_search = html.escape(item["title_search"])
         url = html.escape(item["url"])
         date = html.escape(item.get("date", ""))
         meta = f"Published {date} · transcript archive entry" if date else "Transcript archive entry"
         rows.append(
-            "<li>"
+            f'<li data-title="{title_search}">' 
             f'<a href="{url}" rel="noopener noreferrer" target="_blank">{title}</a>'
             f'<span class="transcript-meta">{meta}</span>'
-            "</li>"
+            '</li>'
         )
     return "\n".join(rows)
 
 
 def inject(items: list[dict]) -> None:
-    src = HTML_FILE.read_text(encoding="utf-8")
-    pattern = r'(<ul[^>]*id="transcriptList"[^>]*>).*?(</ul>)'
-    replacement = r"\1\n" + build_list_html(items) + "\n" + r"\2"
-    new_src, count = re.subn(pattern, replacement, src, count=1, flags=re.DOTALL)
-    if count == 0:
-        print("WARNING: transcriptList not found in podcast/index.html — file left unchanged.", file=sys.stderr)
-        return
-    HTML_FILE.write_text(new_src, encoding="utf-8")
-    print(f"Injected {len(items)} transcript entries into podcast/index.html.")
+    for html_file in HTML_FILES:
+        src = html_file.read_text(encoding="utf-8")
+        pattern = r'(<ul[^>]*id="transcriptList"[^>]*>).*?(</ul>)'
+        replacement = r"\1\n" + build_list_html(items) + "\n" + r"\2"
+        new_src, count = re.subn(pattern, replacement, src, count=1, flags=re.DOTALL)
+        if count == 0:
+            print(f"WARNING: transcriptList not found in {html_file.as_posix()} — file left unchanged.", file=sys.stderr)
+            continue
+        html_file.write_text(new_src, encoding="utf-8")
+        print(f"Injected {len(items)} transcript entries into {html_file.as_posix()}.")
 
 
 def main() -> None:
     try:
         items = fetch_transcripts()
     except Exception as exc:
-        print(f"WARNING: RSS fetch failed — {exc}. transcript list left unchanged.", file=sys.stderr)
+        print(f"WARNING: RSS fetch failed — {exc}. transcript lists left unchanged.", file=sys.stderr)
         sys.exit(0)
 
     if not items:
-        print("WARNING: no transcript-capable podcast items found — transcript list left unchanged.", file=sys.stderr)
+        print("WARNING: no transcript-capable podcast items found — transcript lists left unchanged.", file=sys.stderr)
         sys.exit(0)
 
     inject(items)

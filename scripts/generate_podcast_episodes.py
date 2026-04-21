@@ -370,34 +370,44 @@ def build_compat_redirect(session_id: str, slug: str) -> str:
 </html>"""
 
 
-def validate_podcast_index_contract() -> list[str]:
-    if not HTML_INDEX.exists():
-        return [f"Missing podcast index: {HTML_INDEX}"]
+def _validate_transcript_archive_contract(path: Path, label: str) -> list[str]:
+    if not path.exists():
+        return [f"Missing {label}: {path}"]
 
-    src = HTML_INDEX.read_text(encoding="utf-8")
+    src = path.read_text(encoding="utf-8")
     failures: list[str] = []
 
     if 'id="transcriptSearch"' not in src:
-        failures.append("Transcript search input missing from podcast/index.html")
+        failures.append(f"Transcript search input missing from {label}")
 
     transcript_list_match = re.search(r'<ul[^>]*id="transcriptList"[^>]*>(?P<body>.*?)</ul>', src, flags=re.DOTALL)
     if not transcript_list_match:
-        failures.append("Transcript list missing from podcast/index.html")
+        failures.append(f"Transcript list missing from {label}")
     else:
         count = transcript_list_match.group("body").count("<li")
         if count < 4:
-            failures.append(f"Transcript archive should contain at least 4 entries, found {count}")
+            failures.append(f"{label} should contain at least 4 transcript entries, found {count}")
 
     if 'class="transcript-list"' not in src:
-        failures.append("Transcript archive class missing from podcast/index.html")
-
-    if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in src:
-        failures.append("Elfsight podcast player embed missing from podcast/index.html")
+        failures.append(f"Transcript archive class missing from {label}")
 
     return failures
 
 
+def validate_podcast_index_contract() -> list[str]:
+    failures = _validate_transcript_archive_contract(HTML_INDEX, "podcast/index.html")
+
+    if HTML_INDEX.exists():
+        src = HTML_INDEX.read_text(encoding="utf-8")
+        if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in src:
+            failures.append("Elfsight podcast player embed missing from podcast/index.html")
+
+    failures.extend(_validate_transcript_archive_contract(TRANSCRIPTS_INDEX, "transcripts/index.html"))
+    return failures
+
+
 HTML_INDEX = ROOT / "podcast" / "index.html"
+TRANSCRIPTS_INDEX = ROOT / "transcripts" / "index.html"
 
 
 def validate_generated_pages(episodes: list[dict]) -> list[str]:
