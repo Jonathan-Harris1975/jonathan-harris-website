@@ -3351,6 +3351,19 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     for file_path, content in build_published_crawler_paths(books).items():
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_text(content, encoding="utf-8")
+
+    for legacy_path in (
+        ROOT / "site-map.xml",
+        ROOT / "Sitemap.xml",
+        ROOT / "sitemap (1).xml",
+        CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
+    ):
+        try:
+            if legacy_path.exists():
+                legacy_path.unlink()
+        except IsADirectoryError:
+            pass
+
     write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
 
