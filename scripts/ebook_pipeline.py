@@ -2489,7 +2489,7 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/script-governance.min.js"></script>
+<script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebook-detail">
 {header}
@@ -2732,7 +2732,7 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
 <script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
-<script defer="" src="/assets/js/script-governance.min.js"></script>
+<script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebooks-catalogue">
 {header}

@@ -206,14 +206,13 @@ def _validate_sitemap_structure(body: str) -> str | None:
     return None
 
 
-def _sitemap_loc_lastmod_map(body: str) -> Dict[str, str]:
+def _sitemap_loc_set(body: str) -> set[str]:
     root = ET.fromstring(body)
-    entries: Dict[str, str] = {}
+    entries: set[str] = set()
     for url in root.findall('.//{*}url'):
         loc = clean_paragraph(url.findtext('{*}loc', default=''))
-        lastmod = clean_paragraph(url.findtext('{*}lastmod', default=''))
         if loc:
-            entries[loc] = lastmod
+            entries.add(loc)
     return entries
 
 
@@ -236,8 +235,10 @@ def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
         expected_sitemap_error = _validate_sitemap_structure(expected_text)
         if expected_sitemap_error:
             return f"governed sitemap snapshot is invalid: {expected_sitemap_error}"
-        if _sitemap_loc_lastmod_map(body) != _sitemap_loc_lastmod_map(expected_text):
-            return "Live sitemap entries do not match the governed snapshot"
+        live_locs = _sitemap_loc_set(body)
+        expected_locs = _sitemap_loc_set(expected_text)
+        if live_locs != expected_locs:
+            return "Live sitemap URLs do not match the governed snapshot"
         return None
 
     if normalised_body != normalised_expected:

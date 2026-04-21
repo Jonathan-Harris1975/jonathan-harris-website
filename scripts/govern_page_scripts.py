@@ -14,7 +14,7 @@ CANONICAL_HEAD_BLOCK = '''<link href="https://cdn-cookieyes.com" rel="dns-prefet
 <link href="https://botsailor.com" rel="dns-prefetch"/>
 <!-- CookieYes -->
 <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
-<script defer src="/assets/js/script-governance.min.js"></script>'''
+<script defer data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>'''
 
 GOOGLE_PATTERNS = [
     re.compile(r'\s*<!--\s*Google Tag Manager\s*-->.*?googletagmanager\.com/gtm\.js.*?</script>\s*<!--\s*End Google Tag Manager[^>]*-->', re.I | re.S),
@@ -81,12 +81,16 @@ def validate_page(text: str) -> list[str]:
         errors.append('missing CookieYes script')
 
     has_governed_loader = '/assets/js/script-governance.min.js' in text
+    has_governed_loader_ignore = 'data-cookieyes="ignore"' in text and 'data-cookieconsent="ignore"' in text
     has_metricool_inline = 'https://tracker.metricool.com/resources/be.js' in text
     has_metricool_init = (
         'beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});' in text
         or "beTracker.t({hash: 'fe05ab38be8b4875d12740b632198511'});" in text
     )
     has_botsailor_inline = 'https://botsailor.com/script/webchat-link.js?code=1744067063128291' in text
+
+    if has_governed_loader and not has_governed_loader_ignore:
+        errors.append('governed loader missing CookieYes ignore attributes')
 
     if not (has_governed_loader or has_metricool_inline):
         errors.append('missing Metricool loader script')
