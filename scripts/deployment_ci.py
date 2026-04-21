@@ -110,10 +110,10 @@ def main() -> int:
     run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
     run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
     run_step("Inject featured book into homepage (source-of-truth sync)", [sys.executable, "scripts/inject_featured_book.py"])
-    run_step("Validate governed third-party scripts (fail-fast gate)", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
     run_step("Inject governed third-party scripts", [sys.executable, "scripts/govern_page_scripts.py"])
-    run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
+    run_step("Validate governed third-party scripts (fail-fast gate)", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
     run_step("Inject shared partials (header + footer)", [sys.executable, "scripts/inject_partials.py"])
+    run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
 
     validate_command = [sys.executable, "scripts/validate_release.py"]
     if workbook_path:

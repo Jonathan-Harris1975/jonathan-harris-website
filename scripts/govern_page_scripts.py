@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import argparse
 import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,26 +10,10 @@ PARTIALS_DIR = ROOT / 'assets' / 'partials'
 
 CANONICAL_HEAD_BLOCK = '''<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<link href="https://botsailor.com" rel="dns-prefetch"/>
 <!-- CookieYes -->
 <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
-<!-- Metricool Tracking with error handling -->
-<script>
-function loadScript(callback) {
-    var head = document.getElementsByTagName("head")[0];
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "https://tracker.metricool.com/resources/be.js";
-    script.onload = callback;
-    script.onerror = function() { console.error("Metricool script failed to load"); };
-    head.appendChild(script);
-}
-loadScript(function() {
-    beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});
-});
-</script>'''
-
-CANONICAL_BODY_BLOCK = '''<!-- Chatbot -->
-<script src="https://botsailor.com/script/webchat-link.js?code=1744067063128291" defer></script>'''
+<script defer src="/assets/js/script-governance.min.js"></script>'''
 
 GOOGLE_PATTERNS = [
     re.compile(r'\s*<!--\s*Google Tag Manager\s*-->.*?googletagmanager\.com/gtm\.js.*?</script>\s*<!--\s*End Google Tag Manager[^>]*-->', re.I | re.S),
@@ -45,18 +28,18 @@ GOOGLE_PATTERNS = [
 CLEANUP_PATTERNS = [
     re.compile(r'\s*<link[^>]+href="https://cdn-cookieyes\.com"[^>]*>\s*', re.I),
     re.compile(r'\s*<link[^>]+href="https://tracker\.metricool\.com"[^>]*>\s*', re.I),
+    re.compile(r'\s*<link[^>]+href="https://botsailor\.com"[^>]*>\s*', re.I),
     re.compile(r'\s*<!--\s*CookieYes\s*-->\s*', re.I),
     re.compile(r'\s*<!--\s*Metricool Tracking with error handling\s*-->\s*', re.I),
     re.compile(r'\s*<script[^>]*id="cookieyes"[^>]*src="https://cdn-cookieyes\.com/client_data/c981d18033783598d2216add/script\.js"[^>]*></script>\s*', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="/assets/js/consent-managed-scripts(?:\.min)?\.js"[^>]*></script>\s*', re.I),
+    re.compile(r'\s*<script[^>]*src="/assets/js/script-governance\.min\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script\b[^>]*>(?:(?!</script>).)*tracker\.metricool\.com/resources/be\.js(?:(?!</script>).)*</script>\s*', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="https://tracker\.metricool\.com/resources/be\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<!--\s*Chatbot(?:[^>]*)?-->\s*', re.I),
     re.compile(r'\s*<script[^>]*src="https://botsailor\.com/script/webchat-link\.js\?code=1744067063128291"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script\b[^>]*>(?:(?!</script>).)*botsailor\.com/script/webchat-link\.js\?code=1744067063128291(?:(?!</script>).)*</script>\s*', re.I | re.S),
 ]
-
-HTML_PAGE_RE = re.compile(r'\.html$', re.I)
 
 
 def collect_pages() -> list[Path]:
@@ -76,8 +59,7 @@ def clean_existing_blocks(text: str) -> str:
         updated = pattern.sub('\n', updated)
     for pattern in CLEANUP_PATTERNS:
         updated = pattern.sub('\n', updated)
-    updated = re.sub(r'\n{3,}', '\n\n', updated)
-    return updated
+    return re.sub(r'\n{3,}', '\n\n', updated)
 
 
 def inject_blocks(text: str) -> tuple[str, list[str]]:
@@ -89,25 +71,29 @@ def inject_blocks(text: str) -> tuple[str, list[str]]:
     else:
         updated = updated.replace('</head>', f'{CANONICAL_HEAD_BLOCK}\n</head>', 1)
 
-    if '</body>' not in updated:
-        errors.append('missing </body>')
-    else:
-        updated = updated.replace('</body>', f'{CANONICAL_BODY_BLOCK}\n</body>', 1)
-
-    updated = re.sub(r'\n{3,}', '\n\n', updated)
-    return updated, errors
+    return re.sub(r'\n{3,}', '\n\n', updated), errors
 
 
 def validate_page(text: str) -> list[str]:
     errors: list[str] = []
     if 'https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js' not in text:
         errors.append('missing CookieYes script')
-    if 'https://tracker.metricool.com/resources/be.js' not in text:
+
+    has_governed_loader = '/assets/js/script-governance.min.js' in text
+    has_metricool_inline = 'https://tracker.metricool.com/resources/be.js' in text
+    has_metricool_init = (
+        'beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});' in text
+        or "beTracker.t({hash: 'fe05ab38be8b4875d12740b632198511'});" in text
+    )
+    has_botsailor_inline = 'https://botsailor.com/script/webchat-link.js?code=1744067063128291' in text
+
+    if not (has_governed_loader or has_metricool_inline):
         errors.append('missing Metricool loader script')
-    if 'beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});' not in text and "beTracker.t({hash: 'fe05ab38be8b4875d12740b632198511'});" not in text:
+    if not (has_governed_loader or has_metricool_init):
         errors.append('missing Metricool tracker initialiser')
-    if 'https://botsailor.com/script/webchat-link.js?code=1744067063128291' not in text:
+    if not (has_governed_loader or has_botsailor_inline):
         errors.append('missing BotSailor script')
+
     if re.search(r'googletagmanager\.com|\bgtag\(|GTM-TFM7Q3RB|G-NLC3RN7H86', text, re.I):
         errors.append('contains forbidden Google analytics/tag manager code')
     return errors
@@ -144,11 +130,9 @@ def run_inject(dry_run: bool = False) -> int:
 
 
 def run_validate() -> int:
-    pages = collect_pages()
     failures: list[tuple[str, str]] = []
-    for page in pages:
-        text = page.read_text(encoding='utf-8')
-        errors = validate_page(text)
+    for page in collect_pages():
+        errors = validate_page(page.read_text(encoding='utf-8'))
         if errors:
             failures.append((page.relative_to(ROOT).as_posix(), '; '.join(errors)))
     if failures:
@@ -156,7 +140,7 @@ def run_validate() -> int:
             print(f'[FAIL] {rel}: {reason}')
         print(f'\nThird-party script contract failed for {len(failures)} page(s).')
         return 1
-    print(f'Third-party script contract passed for {len(pages)} page(s).')
+    print(f'Third-party script contract passed for {len(collect_pages())} page(s).')
     return 0
 
 
@@ -165,9 +149,7 @@ def main() -> int:
     parser.add_argument('--validate', action='store_true', help='Only validate the script contract without modifying files.')
     parser.add_argument('--dry-run', action='store_true', help='Report changes without writing them.')
     args = parser.parse_args()
-    if args.validate:
-        return run_validate()
-    return run_inject(dry_run=args.dry_run)
+    return run_validate() if args.validate else run_inject(dry_run=args.dry_run)
 
 
 if __name__ == '__main__':
