@@ -28,6 +28,11 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
+      - name: Remove tracked Python bytecode caches
+        run: |
+          find . -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
+
       - name: Run build pipeline
         run: bash build.sh
 
@@ -81,6 +86,11 @@ jobs:
 
       - name: Install Python dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: Remove tracked Python bytecode caches
+        run: |
+          find . -type d -name '__pycache__' -prune -exec rm -rf {} +
+          find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
       - name: Wait for the production deploy to become reachable
         run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20
