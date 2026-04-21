@@ -92,8 +92,8 @@ jobs:
           find . -type d -name '__pycache__' -prune -exec rm -rf {} +
           find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
-      - name: Wait for the production deploy to become reachable
-        run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20
+      - name: Wait for the production deploy to publish the governed crawler contract
+        run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20 --require-content-match --require-redirect-contract
 
       - name: Verify live crawler publication
         run: python scripts/validate_release.py --workbook jonathan-harris-site-url-inventory-remediated-release-ready.xlsm --strict-post-deploy-live
