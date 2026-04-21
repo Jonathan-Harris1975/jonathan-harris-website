@@ -17,6 +17,7 @@ import xml.etree.ElementTree as ET
 
 from scripts.ebook_pipeline import (
     CRAWLER_CHECKSUMS_PATH,
+    CRAWLER_SNAPSHOT_FILENAMES,
     EXTERNAL_CRAWLER_FILES,
     ROOT,
     build_crawler_checksums,
@@ -63,9 +64,9 @@ def build_expected_files() -> Dict[Path, str]:
 def get_expected_live_payloads() -> Dict[str, str]:
     payloads = build_crawler_snapshot_payloads(load_master())
     return {
-        "robots": payloads["robots.txt"],
-        "sitemap": payloads["site-map.xml"],
-        "llms": payloads["llms.txt"],
+        "robots": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
+        "sitemap": payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]],
+        "llms": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
     }
 
 
