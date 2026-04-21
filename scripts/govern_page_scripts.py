@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / 'assets' / 'partials'
+LEGACY_SCRIPT_PATH = ROOT / 'assets' / 'js' / 'consent-managed-scripts.min.js'
 
 CANONICAL_HEAD_BLOCK = '''<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
@@ -131,6 +132,8 @@ def run_inject(dry_run: bool = False) -> int:
 
 def run_validate() -> int:
     failures: list[tuple[str, str]] = []
+    if LEGACY_SCRIPT_PATH.exists():
+        failures.append((LEGACY_SCRIPT_PATH.relative_to(ROOT).as_posix(), 'legacy consent-managed runtime loader must be deleted'))
     for page in collect_pages():
         errors = validate_page(page.read_text(encoding='utf-8'))
         if errors:
