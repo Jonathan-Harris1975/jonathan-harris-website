@@ -164,6 +164,10 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /author/   /bio/   301
 /author    /bio/   301
 
+# 10) Transcript archive hardening
+/transcripts    /transcripts/index.html   200
+/transcripts/   /transcripts/index.html   200
+/transcripts/*  /transcripts/             301
 
 # SEO files: serve governed crawler assets from the primary domain root
 /robot.txt    /robots.txt   301
