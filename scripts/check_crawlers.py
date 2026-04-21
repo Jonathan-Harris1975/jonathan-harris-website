@@ -64,7 +64,7 @@ def get_expected_live_payloads() -> Dict[str, str]:
     payloads = build_crawler_snapshot_payloads(load_master())
     return {
         "robots": payloads["robots.txt"],
-        "sitemap": payloads["site-map.xml"],
+        "sitemap": payloads["sitemap.xml"],
         "llms": payloads["llms.txt"],
     }
 
@@ -287,7 +287,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt, sitemap.xml, site-map.xml compatibility mirror, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
+    print("Crawler file check passed: robots.txt, canonical sitemap.xml, redirect-only sitemap aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 

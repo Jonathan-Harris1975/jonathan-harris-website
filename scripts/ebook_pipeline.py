@@ -93,7 +93,7 @@ EXTERNAL_CRAWLER_FILES = {
 
 CRAWLER_SNAPSHOT_FILENAMES = {
     "robots": "robots.txt",
-    "sitemap": "site-map.xml",
+    "sitemap": "sitemap.xml",
     "llms": "llms.txt",
 }
 
@@ -3123,9 +3123,7 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
     sitemap_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
     return {
         ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
-        ROOT / "site-map.xml": sitemap_payload,
         ROOT / "sitemap.xml": sitemap_payload,
-        ROOT / "Sitemap.xml": sitemap_payload,
         ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
     }
 
@@ -3348,6 +3346,17 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     for file_path, content in build_published_crawler_paths(books).items():
         file_path.parent.mkdir(parents=True, exist_ok=True)
         file_path.write_text(content, encoding="utf-8")
+
+    legacy_crawler_duplicates = [
+        ROOT / "site-map.xml",
+        ROOT / "Sitemap.xml",
+        ROOT / "sitemap (1).xml",
+        CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
+    ]
+    for legacy_path in legacy_crawler_duplicates:
+        if legacy_path.exists():
+            legacy_path.unlink()
+
     write_json(CRAWLER_CHECKSUMS_PATH, build_crawler_checksums(books))
 
 
