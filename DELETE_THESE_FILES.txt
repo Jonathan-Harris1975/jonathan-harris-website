@@ -1,0 +1,16 @@
+Delete these files from the repo to complete sitemap cleanup:
+
+site-map.xml
+Sitemap.xml
+sitemap (1).xml
+config/crawler-snapshots/site-map.xml
+
+Canonical source of truth after this cleanup:
+config/crawler-snapshots/sitemap.xml
+
+Canonical published root file after this cleanup:
+sitemap.xml
+
+Legacy routes retained via redirects only:
+/Sitemap.xml -> /sitemap.xml
+/site-map.xml -> /sitemap.xml

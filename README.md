@@ -22,8 +22,8 @@ This repository contains the static HTML, CSS, JavaScript, JSON manifests, parti
 
 ## Redirects
 - `_redirects` is the primary redirect source for the deployed static site refresh it with `python3 scripts/sync_redirects.py` rather than editing both files by hand.
-- `robots.txt`, `sitemap.xml`, `site-map.xml`, and `llms.txt` are governed artefacts published from the repo root, while generated source snapshots stay under `config/crawler-snapshots/` for release verification.
-- `sitemap.xml` is the canonical sitemap target and `site-map.xml` is the compatibility mirror.
+- `robots.txt`, `sitemap.xml`, and `llms.txt` are governed artefacts published from the repo root, while generated source snapshots stay under `config/crawler-snapshots/` for release verification.
+- `sitemap.xml` is the only published sitemap file. Legacy `site-map.xml` and `Sitemap.xml` routes are kept as redirects, not duplicate files.
 - The sitemap snapshot is generated from the public HTML route registry after excluding pages that explicitly declare `noindex`.
 
 
