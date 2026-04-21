@@ -3120,11 +3120,16 @@ def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]
 
 def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
     payloads = build_crawler_snapshot_payloads(books)
+    robots_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]]
     sitemap_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["sitemap"]]
+    llms_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]]
     return {
-        ROOT / "robots.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["robots"]],
+        ROOT / "robots.txt": robots_payload,
+        ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
-        ROOT / "llms.txt": payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]],
+        ROOT / "Sitemap.xml": sitemap_payload,
+        ROOT / "site-map.xml": sitemap_payload,
+        ROOT / "llms.txt": llms_payload,
     }
 
 
@@ -3979,13 +3984,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if actual != expected:
             errors.append(f"Published crawler file drift detected: {file_path.relative_to(ROOT)}")
 
-    legacy_crawler_duplicates = [
-        ROOT / "site-map.xml",
-        ROOT / "Sitemap.xml",
+    forbidden_legacy_crawler_duplicates = [
         ROOT / "sitemap (1).xml",
         CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
     ]
-    for legacy_path in legacy_crawler_duplicates:
+    for legacy_path in forbidden_legacy_crawler_duplicates:
         if legacy_path.exists():
             errors.append(
                 f"Legacy duplicate crawler file must be deleted so sitemap.xml remains the single source of truth: {legacy_path.relative_to(ROOT)}"

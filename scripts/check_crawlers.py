@@ -124,13 +124,11 @@ def run_repo_snapshot_checks() -> List[str]:
         if actual != expected:
             errors.append(f"Crawler check failed: published crawler file drift in {path.relative_to(ROOT)}")
 
-    legacy_duplicates = [
-        ROOT / "site-map.xml",
-        ROOT / "Sitemap.xml",
+    forbidden_legacy_duplicates = [
         ROOT / "sitemap (1).xml",
         ROOT / "config" / "crawler-snapshots" / "site-map.xml",
     ]
-    for path in legacy_duplicates:
+    for path in forbidden_legacy_duplicates:
         if path.exists():
             errors.append(
                 f"Crawler check failed: delete legacy duplicate crawler file {path.relative_to(ROOT)} so sitemap.xml remains the only published sitemap source"
@@ -300,7 +298,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt, canonical sitemap.xml, redirect-only sitemap aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
+    print("Crawler file check passed: robots.txt, canonical sitemap.xml, governed crawler compatibility aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 
