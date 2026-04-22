@@ -8,15 +8,12 @@
 #   Build command : bash build.sh
 #   Output dir    : .
 #
-# ── HOW TO FIND YOUR BUCKET NAME ──────────────────────────────────────────────
-# Cloudflare dashboard → R2 Object Storage → your transcript bucket → copy the
-# bucket name (NOT the public URL) and paste it as the `bucket_name` value below.
-# ──────────────────────────────────────────────────────────────────────────────
 
 name = "jonathan-harris-website"          # Your Pages project name in the dashboard
+pages_build_output_dir = "."             # Required: tells CF this is a Pages project
 compatibility_date = "2024-09-23"
 
 [[r2_buckets]]
   binding     = "TRANSCRIPTS_BUCKET"    # Must match the variable name used in
                                         # functions/transcripts/[[slug]].js
-  bucket_name = "transcripts" # ← Replace with your actual R2 bucket name
+  bucket_name = "transcripts"
