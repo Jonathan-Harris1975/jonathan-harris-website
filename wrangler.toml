@@ -13,7 +13,7 @@
 # bucket name (NOT the public URL) and paste it as the `bucket_name` value below.
 # ──────────────────────────────────────────────────────────────────────────────
 
-name = "jonathan-harris-online"          # Your Pages project name in the dashboard
+name = "jonathan-harris-website"          # Your Pages project name in the dashboard
 compatibility_date = "2024-09-23"
 
 [[r2_buckets]]
