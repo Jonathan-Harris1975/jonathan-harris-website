@@ -2,7 +2,8 @@
 # jonathan-harris.online — Redirects (Cloudflare Pages)
 # Production clean + slug-compatible
 # ============================================================
-
+# Subdomain canonicalisation — must be first rule
+https://transcripts.jonathan-harris.online/:slug  https://jonathan-harris.online/transcripts/:slug  301
 # 1) Canonical host (no www)
 https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
