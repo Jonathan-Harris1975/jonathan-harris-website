@@ -165,9 +165,16 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /author    /bio/   301
 
 # 10) Transcript archive hardening
+# Serve the index for bare /transcripts and /transcripts/ — no redirect
+# round-trip, browser URL stays clean.
 /transcripts    /transcripts/index.html   200
 /transcripts/   /transcripts/index.html   200
-/transcripts/*  /transcripts/             301
+# Individual transcript slugs — NO rule here.
+# Requests for /transcripts/<slug> fall through to the Pages Function at
+# functions/transcripts/[[slug]].js which proxies the object from R2.
+# The /transcripts/* 301 rule that previously existed here has been
+# intentionally removed — it was bouncing every slugged request back to
+# the index, preventing R2-hosted transcript pages from ever resolving.
 
 # SEO files: serve governed crawler assets from the primary domain root
 /robot.txt    /robots.txt   301
