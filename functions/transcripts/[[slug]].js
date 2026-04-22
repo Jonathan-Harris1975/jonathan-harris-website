@@ -1,21 +1,3 @@
-/**
- * functions/transcripts/[[slug]].js
- *
- * Pages Function — proxies /transcripts/<slug> requests to the R2 bucket
- * bound as TRANSCRIPTS_BUCKET.
- *
- * Route coverage (via [[slug]] catch-all):
- *   /transcripts/episode-title-slug        → R2 key: episode-title-slug
- *   /transcripts/episode-title-slug.html   → R2 key: episode-title-slug.html
- *
- * The bare /transcripts and /transcripts/ paths are handled upstream by
- * the _redirects 200-rewrite rules and never reach this function.
- *
- * R2 binding setup (Cloudflare Pages dashboard):
- *   Settings → Functions → R2 bucket bindings
- *   Variable name : TRANSCRIPTS_BUCKET
- *   R2 bucket     : <your bucket name>
- */
 
 export async function onRequest(context) {
   const { params, env, request } = context;
