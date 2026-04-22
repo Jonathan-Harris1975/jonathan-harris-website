@@ -19,4 +19,4 @@ compatibility_date = "2024-09-23"
 [[r2_buckets]]
   binding     = "TRANSCRIPTS_BUCKET"    # Must match the variable name used in
                                         # functions/transcripts/[[slug]].js
-  bucket_name = "YOUR_BUCKET_NAME_HERE" # ← Replace with your actual R2 bucket name
+  bucket_name = "transcripts" # ← Replace with your actual R2 bucket name
