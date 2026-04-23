@@ -4435,6 +4435,7 @@ def static_blog_archive_errors() -> List[str]:
     items = manifest.get("items") if isinstance(manifest, dict) else None
     if not isinstance(items, list) or not items:
         return errors
+
     expected_paths = []
     for item in items:
         if not isinstance(item, dict):
@@ -4442,13 +4443,19 @@ def static_blog_archive_errors() -> List[str]:
         slug = clean_paragraph(item.get("slug"))
         if slug:
             expected_paths.append(f"/blog/posts/{slug}/")
-    for rel in [Path("blog/index.html"), Path("blog/weekly/index.html")]:
+
+    contracts = {
+        Path("blog/index.html"): 1,
+        Path("blog/weekly/index.html"): 4,
+    }
+    for rel, required_count in contracts.items():
         text = (ROOT / rel).read_text(encoding="utf-8")
         if "Published briefings appear here" in text or "The latest briefings appear here" in text:
             errors.append(f"{rel} still ships placeholder archive copy instead of static post discovery.")
-        missing = [path for path in expected_paths[:3] if path not in text]
+        missing = [path for path in expected_paths[:required_count] if path not in text]
         if missing:
-            errors.append(f"{rel} is missing static links for published briefings. First missing: {missing[0]}")
+            qualifier = "latest published briefing" if rel == Path("blog/index.html") else "published briefings"
+            errors.append(f"{rel} is missing static links for {qualifier}. First missing: {missing[0]}")
     return errors
 
 
