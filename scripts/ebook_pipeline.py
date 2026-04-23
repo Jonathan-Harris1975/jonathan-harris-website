@@ -3018,7 +3018,6 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         Path("404.html"),
         Path("assets/partials/header.html"),
         Path("assets/partials/footer.html"),
-        Path("scripts/templates/blog-post.html"),
     }
 
     routes: List[Dict[str, str]] = []
@@ -4242,6 +4241,9 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     blog_js = (ROOT / "assets" / "js" / "blog.bundle.min.js").read_text(encoding="utf-8")
     weekly_archive_runtime_js = ROOT / "functions" / "blog" / "weekly" / "index.js"
     sitemap_runtime_js = ROOT / "functions" / "sitemap.xml.js"
+    blog_manifest_runtime_js = ROOT / "functions" / "blog" / "posts.json.js"
+    blog_post_runtime_js = ROOT / "functions" / "blog" / "posts" / "[[slug]].js"
+    blog_image_runtime_js = ROOT / "functions" / "blog" / "images" / "[[slug]].js"
     if "manifest stack" in weekly_archive_html or "published manifest" in weekly_archive_html or "falls back to" in weekly_archive_html:
         errors.append("blog/weekly/index.html still exposes runtime publication language instead of deterministic archive copy.")
     if "cfg.R2_PUBLIC_BASE_URL_BLOG" in blog_js or "cfg.RSS_URL" in blog_js:
@@ -4260,6 +4262,13 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         sitemap_runtime_text = sitemap_runtime_js.read_text(encoding="utf-8")
         if "/blog/posts.json" not in sitemap_runtime_text:
             errors.append("functions/sitemap.xml.js must read the same-origin /blog/posts.json publication manifest.")
+
+    if not blog_manifest_runtime_js.exists():
+        errors.append("functions/blog/posts.json.js is missing; /blog/posts.json would stay pinned to the stale committed snapshot instead of the live R2 manifest.")
+    if not blog_post_runtime_js.exists():
+        errors.append("functions/blog/posts/[[slug]].js is missing; same-origin blog post URLs cannot proxy published posts from R2.")
+    if not blog_image_runtime_js.exists():
+        errors.append("functions/blog/images/[[slug]].js is missing; same-origin blog image URLs cannot proxy published artwork from R2.")
 
     llm_index_payload = read_json(ROOT / "llm-index.json", default={}) or {}
     llm_index_books = llm_index_payload.get("books") if isinstance(llm_index_payload, dict) else None
