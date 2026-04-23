@@ -14,4 +14,8 @@ fi
 python3 scripts/sync_podcast_episodes.py
 python3 scripts/generate_podcast_episodes.py
 python3 scripts/sync_podcast_transcripts.py
+if command -v node >/dev/null 2>&1; then
+  node scripts/generate-blog-from-rss.mjs || echo "WARN: Blog RSS snapshot sync skipped; continuing with the committed fallback."
+fi
+
 python3 scripts/deployment_ci.py "$@"
