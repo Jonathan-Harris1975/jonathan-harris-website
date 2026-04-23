@@ -20,7 +20,7 @@ on:
       exclude_prefixes:
         description: Comma-separated route prefixes to exclude
         required: false
-        default: /podcast,/blog,/blog/weekly
+        default: ""
         type: string
       callback_url:
         description: AI Management Suite callback URL
@@ -34,7 +34,7 @@ jobs:
   seo-aeo-geo:
     environment: R2
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -60,11 +60,4 @@ jobs:
 
       - name: Run forensic SEO AEO GEO audit
         run: |
-          python scripts/audits/seo_aeo_geo_forensic.py \
-            --base-url "${{ inputs.base_url }}" \
-            --session-id "${{ inputs.session_id }}" \
-            --report-prefix "${{ inputs.report_prefix }}" \
-            --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
-            --callback-url "${{ inputs.callback_url }}" \
-            --callback-token "$AUDIT_CALLBACK_TOKEN"
-      
+          python scripts/audits/seo_aeo_geo_forensic.py                 --base-url "${{ inputs.base_url }}"                 --session-id "${{ inputs.session_id }}"                 --report-prefix "${{ inputs.report_prefix }}"                 --exclude-prefixes "${{ inputs.exclude_prefixes }}"                 --callback-url "${{ inputs.callback_url }}"                 --callback-token "$AUDIT_CALLBACK_TOKEN"
