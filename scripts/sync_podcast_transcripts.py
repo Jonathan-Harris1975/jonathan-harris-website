@@ -1,8 +1,9 @@
 """
 sync_podcast_transcripts.py
-Build-time script: fetches the podcast RSS feed and rewrites the transcript lists
-in podcast/index.html and transcripts/index.html with the latest transcript-capable
-episode links.
+Build-time script: fetches the podcast RSS feed and rewrites the dedicated
+transcript archive in transcripts/index.html with the latest transcript-capable
+episode links. The main podcast landing page links to the archive instead of
+embedding the full searchable list.
 """
 
 from __future__ import annotations
@@ -20,7 +21,7 @@ RSS_URL = os.environ.get(
     "PODCAST_RSS_URL",
     "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
 )
-HTML_FILES = [Path("podcast/index.html"), Path("transcripts/index.html")]
+HTML_FILES = [Path("transcripts/index.html")]
 LIMIT = 36
 NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
 

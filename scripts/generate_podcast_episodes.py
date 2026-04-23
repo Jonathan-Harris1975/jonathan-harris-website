@@ -394,14 +394,32 @@ def _validate_transcript_archive_contract(path: Path, label: str) -> list[str]:
     return failures
 
 
+def _validate_podcast_transcript_route(path: Path, label: str) -> list[str]:
+    if not path.exists():
+        return [f"Missing {label}: {path}"]
+
+    src = path.read_text(encoding="utf-8")
+    failures: list[str] = []
+
+    if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in src:
+        failures.append("Elfsight podcast player embed missing from podcast/index.html")
+
+    if 'href="/transcripts/"' not in src:
+        failures.append("Transcript archive route missing from podcast/index.html")
+
+    if 'Transcript Archive' not in src:
+        failures.append("Transcript archive CTA missing from podcast/index.html")
+
+    if 'id="transcriptSearch"' in src or 'id="transcriptList"' in src or 'class="transcript-list"' in src:
+        failures.append(
+            "podcast/index.html should link to the transcript archive instead of embedding the searchable transcript list"
+        )
+
+    return failures
+
+
 def validate_podcast_index_contract() -> list[str]:
-    failures = _validate_transcript_archive_contract(HTML_INDEX, "podcast/index.html")
-
-    if HTML_INDEX.exists():
-        src = HTML_INDEX.read_text(encoding="utf-8")
-        if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in src:
-            failures.append("Elfsight podcast player embed missing from podcast/index.html")
-
+    failures = _validate_podcast_transcript_route(HTML_INDEX, "podcast/index.html")
     failures.extend(_validate_transcript_archive_contract(TRANSCRIPTS_INDEX, "transcripts/index.html"))
     return failures
 
