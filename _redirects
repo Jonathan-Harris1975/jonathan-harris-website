@@ -4,6 +4,10 @@
 # ============================================================
 # Subdomain canonicalisation — must be first rule
 https://transcripts.jonathan-harris.online/:slug  https://jonathan-harris.online/transcripts/:slug  301
+https://blog.jonathan-harris.online/  https://jonathan-harris.online/blog/  301
+https://blog.jonathan-harris.online/:splat  https://jonathan-harris.online/blog/:splat  301
+https://blog-images.jonathan-harris.online/  https://jonathan-harris.online/blog/  301
+https://blog-images.jonathan-harris.online/:splat  https://jonathan-harris.online/blog/images/:splat  301
 # 1) Canonical host (no www)
 https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 

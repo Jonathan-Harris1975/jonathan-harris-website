@@ -17,3 +17,11 @@ compatibility_date = "2024-09-23"
   binding     = "TRANSCRIPTS_BUCKET"    # Must match the variable name used in
                                         # functions/transcripts/[[slug]].js
   bucket_name = "transcripts"
+
+[[r2_buckets]]
+  binding     = "BLOG_BUCKET"           # functions/blog/posts.json.js
+  bucket_name = "blog"
+
+[[r2_buckets]]
+  binding     = "BLOG_IMAGES_BUCKET"    # functions/blog/images/[[slug]].js
+  bucket_name = "blog-images"
