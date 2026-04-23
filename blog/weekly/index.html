@@ -107,10 +107,10 @@
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" decoding="async" fetchpriority="high" height="120" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>Weekly AI Briefings</h1>
-    <p>The written record of the week in AI: practical commentary, plain English, and no interest in dressing product theatre up as insight.</p>
+    <p>The archive for the previous week in AI: newest first, searchable, and written with enough Gen X suspicion to keep the robot perfume from taking over the room.</p>
     <div class="cta-row">
-      <a class="button" href="/blog/">Open the blog</a>
-      <a class="button secondary" href="/podcast/">Listen to the podcast</a>
+      <a class="button" href="/blog/">Open the latest briefing</a>
+      <a class="button secondary" href="https://blog-rss.jonathan-harris.online/feed.xml" rel="noopener noreferrer" target="_blank">Open RSS feed<span class="sr-only"> (opens in new tab)</span></a>
     </div>
   </div>
 </section>
@@ -126,31 +126,39 @@
 
     <section aria-label="Weekly briefings overview" class="card u-s22">
       <h2>The weekly archive</h2>
-      <p>Every published briefing lands here. Read the latest piece, scan backwards, and keep the written record without the usual AI perfume.</p>
+      <p>Newest first, proper links, brief summaries, and enough structure to find the week everyone acted like a demo reel counted as reality. Four tiles show at a time and the live RSS feed supplies the list.</p>
       <p class="subtle" id="blogStatus" aria-live="polite">Showing 1 published weekly briefing.</p>
     </section>
 
-    <section aria-label="Weekly briefings archive" class="u-s22" data-max-items="8" id="blogList">
-      <div class="grid">
-        <article class="card u-s05">
-          <img alt="AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress" class="cover" decoding="async" loading="lazy" src="https://pub-0990b7b0871040f8ac0b8c7f91f6c2b9.r2.dev/BLOG-2026-W15.png"/>
-          <div class="u-s06">
-            <div class="tag u-s07">6 April 2026 to 12 April 2026</div>
-            <h2 class="u-s08">AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress</h2>
-            <p class="u-s09">This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.</p>
-            <a class="button secondary" href="/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/">Read article</a>
-          </div>
-        </article>
+    <section aria-label="Weekly briefings archive" class="podcast-transcripts u-s22">
+      <label class="transcript-label" for="blogSearch">Search briefings</label>
+      <input aria-label="Search weekly briefings" class="transcript-search" id="blogSearch" placeholder="Search briefings by title or summary…" type="search"/>
+      <p class="muted">The archive shows four briefing tiles at a time, newest first. Search narrows the list without shoving you through a dozen pages of archive dust.</p>
+      <div data-max-items="4" id="blogList">
+        <!-- BLOG_ARCHIVE_SEED_START -->
+        <div class="grid">
+          <article class="card u-s05">
+            <img alt="AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress" class="cover" decoding="async" loading="lazy" src="https://pub-0990b7b0871040f8ac0b8c7f91f6c2b9.r2.dev/BLOG-2026-W15.png"/>
+            <div class="u-s06">
+              <div class="tag u-s07">6 April 2026 to 12 April 2026</div>
+              <h2 class="u-s08">AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress</h2>
+              <p class="u-s09">Regulation pressure, memory claims, and the usual gap between AI marketing and AI reality.</p>
+              <a class="button secondary" href="/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/">Read article</a>
+            </div>
+          </article>
+        </div>
+        <!-- BLOG_ARCHIVE_SEED_END -->
       </div>
+      <div class="u-s33"><button class="button secondary" hidden id="blogLoadMore" type="button">Show four more</button></div>
     </section>
-    <noscript><p class="subtle u-s41">For the same editorial line in other formats, use <a href="/blog/">the blog hub</a>, <a href="/newsletter/">AI Edge</a>, or <a href="/podcast/">the podcast</a>.</p></noscript>
+    <noscript><p class="subtle u-s41">JavaScript is off, so you are seeing the saved archive seed. For the live source of truth, open the <a href="https://blog-rss.jonathan-harris.online/feed.xml" rel="noopener noreferrer" target="_blank">blog RSS feed</a>.</p></noscript>
 
     <section aria-label="Continue exploring" class="jh-journey-panel u-s22">
-      <h2>Keep exploring the site</h2>
-      <p>Use this route for the published weekly record, then move into the blog hub, newsletter, podcast, or topic pages when you want the same material handled a different way.</p>
+      <h2>Keep the same editorial line, just in a different format</h2>
+      <p>Use this archive for the written record, then move into the blog hub, newsletter, podcast, or topic pages when you want the same material handled a different way.</p>
       <div class="jh-journey-actions"><a href="/blog/">Blog</a><a href="/newsletter/">Newsletter</a><a href="/podcast/">Podcast</a><a href="/topics/">Topics</a>
 <a href="/ebooks/">eBooks</a></div>
-      <p class="jh-related-callout">That keeps the written archive, inbox version, and audio version in one editorial lane instead of pretending they are separate universes.</p>
+      <p class="jh-related-callout">That keeps the written archive, inbox version, and audio version in one editorial lane instead of pretending they live in separate little kingdoms.</p>
     </section>
   </div>
 </main>
