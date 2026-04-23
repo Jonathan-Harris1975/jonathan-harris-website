@@ -1,11 +1,14 @@
 window.__JH_BLOG__ = window.__JH_BLOG__ || {
-  MAX_ITEMS: 20
+  MAX_ITEMS: 20,
+  WEEKLY_PAGE_SIZE: 4
 };
 
 (function () {
   const cfg = window.__JH_BLOG__ || {};
   const list = document.querySelector("#blogList");
   const status = document.querySelector("#blogStatus");
+  const search = document.querySelector("#blogSearch");
+  const loadMore = document.querySelector("#blogLoadMore");
 
   if (!list) {
     return;
@@ -17,16 +20,18 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
   const surface = {
     hub: {
+      pageSize: 1,
       emptyTitle: "Published briefings",
       emptyCopy:
         "The weekly briefings land here with the same plain-English editorial line that runs through the archive, newsletter, podcast, and topic pages.",
       emptyHref: "/blog/weekly/",
       emptyLabel: "Open weekly briefings",
-      loading: "Loading published briefings…",
-      emptyStatus: "Published briefings appear here as the archive fills out.",
-      loadedStatus: (count) => count === 1 ? "Showing 1 published briefing." : `Showing ${count} published briefings.`
+      loading: "Checking the latest briefing…",
+      emptyStatus: "The latest weekly briefing appears here when the live feed updates.",
+      loadedStatus: (count) => count > 0 ? `Latest briefing drawn from ${count} published ${count === 1 ? "post" : "posts"}.` : "",
     },
     weekly: {
+      pageSize: Number(cfg.WEEKLY_PAGE_SIZE || 4),
       emptyTitle: "Weekly archive",
       emptyCopy:
         "The archive collects each published weekly briefing, with the blog hub, newsletter, and podcast carrying the same editorial line alongside it.",
@@ -34,17 +39,30 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
       emptyLabel: "Open the blog",
       loading: "Loading weekly briefings…",
       emptyStatus: "The archive updates as weekly briefings are published.",
-      loadedStatus: (count) => count === 1 ? "Showing 1 published weekly briefing." : `Showing ${count} published weekly briefings.`
+      loadedStatus: (visible, total, query) => {
+        if (query) {
+          return visible === total
+            ? `${visible} ${visible === 1 ? "briefing" : "briefings"} found.`
+            : `Showing ${visible} of ${total} matching briefings.`;
+        }
+        return visible === total
+          ? `Showing ${visible} published weekly ${visible === 1 ? "briefing" : "briefings"}.`
+          : `Showing ${visible} of ${total} published weekly briefings.`;
+      },
     }
   }[surfaceKey] || {
+    pageSize: Number(cfg.MAX_ITEMS || 20),
     emptyTitle: "Published briefings",
     emptyCopy: "Published briefings appear here as they are released.",
     emptyHref: "/blog/",
     emptyLabel: "Open the blog",
     loading: "Loading published briefings…",
     emptyStatus: "",
-    loadedStatus: () => ""
+    loadedStatus: () => "",
   };
+
+  let allItems = [];
+  let visibleCount = surface.pageSize;
 
   function setStatus(message) {
     if (status) {
@@ -96,6 +114,14 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
     });
   }
 
+  function normaliseQuery(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
   function normaliseItem(item) {
     const slug = pickFirst(item, ["slug"]);
     const href =
@@ -103,16 +129,18 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
       (slug ? `/blog/posts/${encodeURIComponent(slug)}/` : "");
     const publishedAt = pickFirst(item, ["published_at", "publishedAt", "datePublished", "date", "pubDate"]);
     const dateLabel = pickFirst(item, ["date_label", "dateLabel"]) || formatPublishedDate(publishedAt);
+    const summary = pickFirst(item, ["summary", "excerpt", "description", "desc"]);
 
     return {
       slug,
       title: pickFirst(item, ["title", "headline"]) || "Untitled",
-      summary: pickFirst(item, ["summary", "excerpt", "description", "desc"]),
+      summary,
       image: pickFirst(item, ["image", "image_url", "cover", "heroImage", "hero_image"]),
       href,
       dateLabel,
       publishedAt,
-      parsedDate: parseDate(publishedAt)
+      parsedDate: parseDate(publishedAt),
+      searchBlob: normaliseQuery([pickFirst(item, ["title", "headline"]), summary, dateLabel].join(" "))
     };
   }
 
@@ -147,16 +175,28 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
         <p>${escapeHtml(surface.emptyCopy)}</p>
         <p><a class="button primary" href="${escapeHtml(surface.emptyHref)}">${escapeHtml(surface.emptyLabel)}</a></p>
       </div>`;
+    if (loadMore) {
+      loadMore.hidden = true;
+    }
   }
 
-  function render(items) {
-    if (!items.length) {
-      renderEmptyState();
-      return;
-    }
+  function renderHub(item) {
+    const safeTitle = escapeHtml(item.title);
+    const safeSummary = escapeHtml(item.summary);
+    const safeHref = escapeHtml(item.href);
+    const safeDateLabel = escapeHtml(item.dateLabel);
 
-    const maxItems = Number(list.dataset.maxItems || cfg.MAX_ITEMS || 20);
-    const html = items.slice(0, maxItems).map(function (item) {
+    list.innerHTML = `
+      <article class="card jh-blog-card">
+        ${safeDateLabel ? `<p class="jh-blog-card__meta">${safeDateLabel}</p>` : ""}
+        <h3 class="jh-blog-card__title"><a href="${safeHref}">${safeTitle}</a></h3>
+        ${safeSummary ? `<p class="jh-blog-card__excerpt">${safeSummary}</p>` : ""}
+        <p><a class="button secondary" href="${safeHref}">Read article</a></p>
+      </article>`;
+  }
+
+  function renderArchive(items) {
+    const html = items.map(function (item) {
       const safeTitle = escapeHtml(item.title);
       const safeSummary = escapeHtml(item.summary);
       const safeHref = escapeHtml(item.href);
@@ -164,9 +204,6 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
       const safeDateLabel = escapeHtml(item.dateLabel);
       const imageMarkup = item.image
         ? `<img class="cover" src="${safeImage}" alt="${safeTitle}" loading="lazy" decoding="async">`
-        : "";
-      const actionMarkup = item.href
-        ? `<a class="button secondary" href="${safeHref}">Read article</a>`
         : "";
 
       return `
@@ -176,12 +213,41 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
             ${safeDateLabel ? `<div class="tag u-s07">${safeDateLabel}</div>` : ""}
             <h2 class="u-s08">${safeTitle}</h2>
             ${safeSummary ? `<p class="u-s09">${safeSummary}</p>` : ""}
-            ${actionMarkup}
+            <a class="button secondary" href="${safeHref}">Read article</a>
           </div>
         </article>`;
     }).join("");
 
     list.innerHTML = `<div class="grid">${html}</div>`;
+  }
+
+  function getFilteredItems() {
+    const query = normaliseQuery(search ? search.value : "");
+    if (!query) {
+      return allItems.slice();
+    }
+    return allItems.filter(function (item) {
+      return item.searchBlob.indexOf(query) !== -1;
+    });
+  }
+
+  function updateArchiveView() {
+    const filteredItems = getFilteredItems();
+    const visibleItems = filteredItems.slice(0, visibleCount);
+    const query = normaliseQuery(search ? search.value : "");
+
+    if (!filteredItems.length) {
+      renderEmptyState();
+      setStatus(query ? "No briefings match that search." : surface.emptyStatus);
+      return;
+    }
+
+    renderArchive(visibleItems);
+    setStatus(surface.loadedStatus(visibleItems.length, filteredItems.length, query));
+
+    if (loadMore) {
+      loadMore.hidden = visibleItems.length >= filteredItems.length;
+    }
   }
 
   async function fetchManifest() {
@@ -209,8 +275,15 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
     const result = await fetchManifest();
 
     if (result.items.length) {
-      setStatus(surface.loadedStatus(result.items.length));
-      render(result.items);
+      allItems = result.items;
+      if (surfaceKey === "hub") {
+        renderHub(result.items[0]);
+        setStatus(surface.loadedStatus(result.items.length));
+        return;
+      }
+
+      visibleCount = surface.pageSize;
+      updateArchiveView();
       return;
     }
 
@@ -222,12 +295,30 @@ window.__JH_BLOG__ = window.__JH_BLOG__ || {
 
     const seededItems = countSeededItems();
     if (seededItems > 0) {
-      setStatus(surface.loadedStatus(seededItems));
+      if (surfaceKey === "hub") {
+        setStatus(surface.loadedStatus(seededItems));
+      } else {
+        setStatus(surface.loadedStatus(Math.min(surface.pageSize, seededItems), seededItems, ""));
+      }
       return;
     }
 
     setStatus(surface.emptyStatus);
     renderEmptyState();
+  }
+
+  if (search) {
+    search.addEventListener("input", function () {
+      visibleCount = surface.pageSize;
+      updateArchiveView();
+    });
+  }
+
+  if (loadMore) {
+    loadMore.addEventListener("click", function () {
+      visibleCount += surface.pageSize;
+      updateArchiveView();
+    });
   }
 
   document.addEventListener("DOMContentLoaded", init);
