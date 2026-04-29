@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import html as html_mod
 import json
 import os
 import re
@@ -13,9 +12,6 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 from urllib.parse import urljoin, urlparse
-import xml.etree.ElementTree as ET
-
-import requests
 
 CURRENT_FILE = Path(__file__).resolve()
 REPO_ROOT = CURRENT_FILE.parents[2]
@@ -226,43 +222,10 @@ def derive_route_family(url: str) -> str:
   return path if path.count("/") <= 2 else "/" + path.strip("/").split("/")[0]
 
 
-def _xml_root(xml_text: str) -> ET.Element | None:
-  payload = (xml_text or "").strip()
-  if not payload:
-    return None
-  try:
-    return ET.fromstring(payload)
-  except ET.ParseError:
-    return None
-
-
-def _local_name(tag: str) -> str:
-  return tag.rsplit("}", 1)[-1] if "}" in tag else tag
-
-
 def parse_sitemap_xml(xml_text: str) -> tuple[list[str], list[str]]:
-  root = _xml_root(xml_text)
-  if root is None:
-    return [], []
-
-  sitemap_links: list[str] = []
-  url_links: list[str] = []
-
-  for node in root.iter():
-    name = _local_name(node.tag)
-    if name not in {"sitemap", "url"}:
-      continue
-    for child in node:
-      if _local_name(child.tag) != "loc":
-        continue
-      value = (child.text or "").strip()
-      if not value:
-        continue
-      if name == "sitemap":
-        sitemap_links.append(value)
-      else:
-        url_links.append(value)
-
+  soup = BeautifulSoup(xml_text or "", "xml")
+  sitemap_links = [loc.get_text(strip=True) for sitemap in soup.find_all("sitemap") for loc in sitemap.find_all("loc")]
+  url_links = [loc.get_text(strip=True) for url in soup.find_all("url") for loc in url.find_all("loc")]
   return sitemap_links, url_links
 
 
@@ -350,34 +313,23 @@ def parse_feed_urls(feed_url: str, base_url: str) -> list[str]:
   fetched = fetch_html(feed_url, timeout=20.0, extra_headers={"Accept": "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"})
   if fetched.get("status") != 200 or not fetched.get("text"):
     return []
-
-  root = _xml_root(fetched["text"])
-  if root is None:
-    return []
-
+  soup = BeautifulSoup(fetched["text"], "xml")
   urls: list[str] = []
-  for item in root.iter():
-    if _local_name(item.tag) != "item":
-      continue
-
-    candidates: list[str] = []
-    for child in item:
-      child_name = _local_name(child.tag)
-      text_value = (child.text or "").strip()
-
-      if child_name in {"link", "guid"} and text_value:
-        candidates.append(text_value)
-        continue
-
-      if "transcript" in child_name.lower():
-        href = (child.attrib.get("url") or child.attrib.get("href") or text_value).strip()
-        if href:
-          candidates.append(href)
-
+  for item in soup.find_all("item"):
+    candidates = []
+    link = item.find("link")
+    guid = item.find("guid")
+    if link and link.text:
+      candidates.append(link.text.strip())
+    if guid and guid.text:
+      candidates.append(guid.text.strip())
+    for transcript_tag in item.find_all(lambda tag: tag.name and "transcript" in tag.name.lower()):
+      href = transcript_tag.get("url") or transcript_tag.get("href") or transcript_tag.text
+      if href:
+        candidates.append(href.strip())
     for candidate in candidates:
       if candidate and is_in_scope_url(candidate, base_url):
         urls.append(normalise_absolute_url(candidate, base_url))
-
   return urls
 
 
@@ -940,499 +892,161 @@ def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
   }
 
 
-def analysis_url_from_callback(callback_url: str | None) -> str | None:
-  if not callback_url:
-    return None
-  callback_url = str(callback_url).strip()
-  if callback_url.endswith("/callback"):
-    return callback_url[:-len("/callback")] + "/analysis"
-  return callback_url.rstrip("/") + "/analysis"
-
-
-def parse_governance_excludes(repo_root: Path) -> list[str]:
-  target = repo_root / "scripts" / "check_ungoverned_routes.py"
-  if not target.exists():
-    return []
-  text = target.read_text(encoding="utf-8")
-  match = re.search(r"EXCLUDED_ROUTE_PREFIXES\s*=\s*\((.*?)\)", text, re.S)
-  if not match:
-    return []
-  return re.findall(r'"([^"]+)"', match.group(1))
-
-
-def parse_ebook_trim_limit(repo_root: Path) -> int | None:
-  target = repo_root / "scripts" / "ebook_pipeline.py"
-  if not target.exists():
-    return None
-  text = target.read_text(encoding="utf-8")
-  match = re.search(r"heading\s*=\s*heading\[:(\d+)\]", text)
-  if match:
-    return int(match.group(1))
-  return None
-
-
-def detect_llms_scope(repo_root: Path) -> str:
-  llms_path = repo_root / "llms.txt"
-  if not llms_path.exists():
-    return "missing"
-  lines = [line.strip() for line in llms_path.read_text(encoding="utf-8").splitlines() if line.strip() and not line.strip().startswith("#")]
-  urls = [line for line in lines if line.startswith("http")]
-  if not urls:
-    return "unclear"
-  ebook_urls = [line for line in urls if "/ebooks/" in line or line.rstrip("/").endswith("/ebooks")]
-  return "ebook-only" if len(ebook_urls) == len(urls) else "mixed"
-
-
-def build_repo_signals(repo_root: Path, pages: list[dict[str, Any]], discovery_meta: dict[str, Any]) -> dict[str, Any]:
-  broken_redirects = []
-  for page in pages:
-    if "/podcast/TT-" in page["url"] and (page["status"] != 200 or page["redirectChain"]):
-      target = page["redirectChain"][-1]["url"] if page["redirectChain"] else page["finalUrl"]
-      broken_redirects.append({
-        "from": page["url"],
-        "to": target,
-        "targetStatus": page["status"],
-      })
-  generator_candidates = [
-    "scripts/generate_podcast_episodes.py",
-    "scripts/ebook_pipeline.py",
-    "scripts/generate-blog-from-rss.mjs",
-  ]
-  function_candidates = [
-    "functions/transcripts/[[slug]].js",
-  ]
-  return {
-    "governanceScriptExcludes": parse_governance_excludes(repo_root),
-    "ebookPipelineTrimLimit": parse_ebook_trim_limit(repo_root),
-    "blogManifestPath": "blog/posts.json" if (repo_root / "blog" / "posts.json").exists() else "",
-    "podcastManifestPath": "data/podcast-episodes.json" if (repo_root / "data" / "podcast-episodes.json").exists() else "",
-    "knownBrokenRedirects": broken_redirects,
-    "llmsFiles": [name for name in ("llms.txt", "llm-index.json") if (repo_root / name).exists()],
-    "llmsScope": detect_llms_scope(repo_root),
-    "buildScriptName": "build.sh" if (repo_root / "build.sh").exists() else "",
-    "functionsPresent": [item for item in function_candidates if (repo_root / item).exists()],
-    "generatorScripts": [item for item in generator_candidates if (repo_root / item).exists()],
-    "sourceCounts": discovery_meta.get("sourceCounts", {}),
-  }
-
-
-def build_inventory_context(workbook: WorkbookInfo, discovered: dict[str, dict[str, Any]], discovery_meta: dict[str, Any]) -> dict[str, Any]:
-  repo_only = []
-  workbook_only = []
-  for entry in discovered.values():
-    path = entry["path"]
-    if "repo" in entry["sources"] and "workbook" not in entry["sources"]:
-      repo_only.append(path)
-    if "workbook" in entry["sources"] and "repo" not in entry["sources"]:
-      workbook_only.append(path)
-
-  known_drift = []
-  if repo_only:
-    known_drift.append(f"Repo-only routes remain: {', '.join(repo_only[:8])}")
-  if workbook_only:
-    known_drift.append(f"Workbook-only routes remain: {', '.join(workbook_only[:8])}")
-  if discovery_meta.get("sourceCounts", {}).get("blog-manifest", 0) < 1:
-    known_drift.append("Blog manifest did not yield any URLs from the supplied repo snapshot")
-  if discovery_meta.get("sourceCounts", {}).get("podcast-manifest", 0) < 1:
-    known_drift.append("Podcast manifest did not yield any URLs from the supplied repo snapshot")
-
-  page_type_counts = Counter(entry.get("pageType") or classify_page(entry["url"]) for entry in discovered.values())
-  return {
-    "workbookUrlCount": workbook.url_count,
-    "repoRouteCount": sum(1 for entry in discovered.values() if "repo" in entry["sources"]),
-    "discoveredRouteCount": len(discovered),
-    "repoOnlyRoutes": sorted(set(repo_only)),
-    "workbookOnlyRoutes": sorted(set(workbook_only)),
-    "pageTypeCounts": dict(page_type_counts),
-    "sitemapUrlCount": int(discovery_meta.get("sourceCounts", {}).get("sitemap", 0)),
-    "blogManifestCount": int(discovery_meta.get("sourceCounts", {}).get("blog-manifest", 0)),
-    "podcastManifestCount": int(discovery_meta.get("sourceCounts", {}).get("podcast-manifest", 0)),
-    "knownDriftIssues": known_drift,
-  }
-
-
-def make_priority_payload(page: dict[str, Any]) -> dict[str, Any]:
-  soup = page.get("soup")
-  intro_text = page.get("introText", "")
-  h2_headings: list[str] = []
-  schema_types: list[str] = []
-  if soup is not None:
-    h2_headings = [h.get_text(" ", strip=True) for h in soup.select("h2")][:10]
-    for script in soup.select("script[type='application/ld+json']"):
-      try:
-        payload = json.loads(script.string or "")
-      except Exception:
-        continue
-      stack = payload if isinstance(payload, list) else [payload]
-      for item in stack:
-        if not isinstance(item, dict):
-          continue
-        schema_type = item.get("@type")
-        if isinstance(schema_type, list):
-          schema_types.extend(str(value) for value in schema_type)
-        elif schema_type:
-          schema_types.append(str(schema_type))
-  return {
-    "route": page["path"],
-    "url": page["url"],
-    "status": page["status"],
-    "pageType": page["pageType"],
-    "title": page["meta"]["title"],
-    "metaDescription": page["meta"]["metaDescription"],
-    "canonical": page["meta"]["canonical"],
-    "h1": page["meta"]["h1"],
-    "ogTitle": page["meta"]["og"].get("og:title", ""),
-    "schemaTypes": sorted(set(schema_types)),
-    "schemaCount": page["meta"]["schemaCount"],
-    "wordCount": page["wordCount"],
-    "internalLinkCount": page["internalLinkCount"],
-    "questionHeadings": page["questionHeadings"],
-    "hasFaqSchema": page["hasFaqSchema"],
-    "hasTable": page["tableCount"] > 0,
-    "introText": intro_text[:500],
-    "h2Headings": h2_headings,
-    "scores": page["scores"],
-    "total": page["total"],
-    "grade": page["grade"],
-    "riskFlag": page["riskFlag"],
-    "coverageState": page["coverageState"],
-  }
-
-
-def build_all_routes_condensed(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  return [{
-    "route": page["path"],
-    "url": page["url"],
-    "pageType": page["pageType"],
-    "status": page["status"],
-    "grade": page["grade"],
-    "riskFlag": page["riskFlag"],
-    "coverageState": page["coverageState"],
-    "sources": sorted(page.get("sources", [])),
-  } for page in pages]
-
-
-def build_live_dynamic_urls(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  results = []
-  for page in pages:
-    if page["pageType"] not in {"blog article", "blog archive", "podcast hub", "podcast episode", "podcast transcript"}:
-      continue
-    observation_bits = []
-    if page["status"] != 200:
-      observation_bits.append(f"HTTP {page['status']}")
-    if len(page["introText"].split()) < 35:
-      observation_bits.append("opening summary is thin")
-    if page["pageType"] == "blog article" and not page["questionHeadings"]:
-      observation_bits.append("no question-led subheadings detected")
-    if page["pageType"] == "podcast episode" and page["wordCount"] < 260:
-      observation_bits.append("episode page is summary-thin")
-    if page["pageType"] == "podcast transcript" and page["paragraphCount"] < 4:
-      observation_bits.append("transcript structure is weak")
-    results.append({
-      "url": page["url"],
-      "pageType": page["pageType"],
-      "source": ", ".join(sorted(page.get("sources", []))) or "discovered",
-      "httpStatus": page["status"],
-      "inRepoManifest": "repo" in page.get("sources", []),
-      "keyObservation": "; ".join(observation_bits) or "No material dynamic-family defect was mechanically observed on this URL.",
-    })
-  return results
-
-
-def call_analysis_service(base_url: str, session_id: str, callback_url: str | None, callback_token: str | None, inventory: dict[str, Any], priority_pages: list[dict[str, Any]], all_routes: list[dict[str, Any]], heuristic_issues: list[dict[str, Any]], repo_signals: dict[str, Any], live_dynamic_urls: list[dict[str, Any]], coverage: list[dict[str, Any]], coverage_families: list[dict[str, Any]]) -> dict[str, Any]:
-  analysis_url = analysis_url_from_callback(callback_url)
-  if not analysis_url:
-    raise RuntimeError("AI analysis endpoint could not be derived because callback_url is missing")
-
-  headers = {"Content-Type": "application/json"}
-  if callback_token:
-    headers["Authorization"] = f"Bearer {callback_token}"
-    headers["X-Audit-Callback-Token"] = callback_token
-
-  payload = {
-    "auditType": "seo-aeo-geo",
-    "sessionId": session_id,
-    "baseUrl": base_url,
-    "generatedAt": utc_now(),
-    "inventory": inventory,
-    "priorityPages": priority_pages,
-    "allRoutes": all_routes,
-    "heuristicIssues": heuristic_issues,
-    "repoSignals": repo_signals,
-    "liveDynamicUrls": live_dynamic_urls,
-    "coverage": coverage,
-    "coverageFamilies": coverage_families,
-  }
-
-  response = requests.post(analysis_url, headers=headers, data=json.dumps(payload), timeout=180)
-  response.raise_for_status()
-  envelope = response.json()
-  if not envelope.get("ok") or not isinstance(envelope.get("analysis"), dict):
-    raise RuntimeError("AI analysis service returned an invalid response envelope")
-  return envelope["analysis"]
-
-
-def esc(value: Any) -> str:
-  return html_mod.escape(str(value or ""))
-
-
-def render_paragraphs(text: str) -> str:
-  paragraphs = [segment.strip() for segment in re.split(r"\n\s*\n", str(text or "").strip()) if segment.strip()]
-  if not paragraphs:
-    return "<p>Not verified from supplied context.</p>"
-  return "".join(f"<p>{esc(paragraph)}</p>" for paragraph in paragraphs)
-
-
-def render_string_list(items: list[Any]) -> str:
-  cleaned = [str(item).strip() for item in items if str(item).strip()]
-  if not cleaned:
-    return "<p>None confirmed from supplied context.</p>"
-  return "<ul>" + "".join(f"<li>{esc(item)}</li>" for item in cleaned) + "</ul>"
-
-
-def health_label(value: str) -> str:
-  value = str(value or "").strip()
-  if not value:
-    return "Needs verification"
-  return value
-
-
-def render_issue_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    rows.append(
-      f"<tr><td><strong>{esc(item.get('issueId'))}</strong></td>"
-      f"<td>{esc(item.get('severity'))}</td>"
-      f"<td>{esc(item.get('lens') or item.get('auditLens'))}</td>"
-      f"<td><code>{esc(item.get('affected'))}</code></td>"
-      f"<td>{esc(item.get('whyItMatters'))}</td>"
-      f"<td>{esc(item.get('exactRemediation'))}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def render_page_type_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    rows.append(
-      f"<tr><td>{esc(item.get('pageType'))}</td><td>{esc(item.get('count'))}</td>"
-      f"<td>{esc(item.get('coverageState'))}</td><td>{esc(item.get('score') or item.get('averageScore'))}</td>"
-      f"<td>{esc(item.get('grade') or '')}</td><td>{esc(item.get('judgement') or item.get('keyNote') or '')}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def render_priority_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    issue_ids = item.get("confirmedIssueIds") or []
-    issue_text = ", ".join(str(value) for value in issue_ids)
-    rows.append(
-      f"<tr><td><code>{esc(urlparse(str(item.get('url') or '')).path or item.get('url'))}</code></td>"
-      f"<td>{esc(item.get('pageType'))}</td><td>{esc(item.get('templateSource'))}</td>"
-      f"<td>{esc(health_label(item.get('titleStatus')))}</td><td>{esc(health_label(item.get('metaStatus')))}</td>"
-      f"<td>{esc(health_label(item.get('canonicalStatus')))}</td><td>{esc(health_label(item.get('schemaStatus')))}</td>"
-      f"<td>{esc(health_label(item.get('aeoStatus')))}</td><td>{esc(health_label(item.get('geoStatus')))}</td>"
-      f"<td>{esc(item.get('score'))}</td><td>{esc(item.get('grade'))}</td><td>{esc(issue_text)}</td><td>{esc(item.get('keyNote'))}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def render_template_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    rows.append(
-      f"<tr><td><code>{esc(item.get('sourceFile') or item.get('pageType'))}</code></td>"
-      f"<td>{esc(item.get('area') or '')}</td><td>{esc(item.get('observedLogic') or '')}</td>"
-      f"<td>{esc(item.get('repeatedEffect') or '')}</td><td>{esc(item.get('fixPriority'))}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def render_code_blocks(items: list[dict[str, Any]]) -> str:
-  blocks = []
-  for item in items:
-    blocks.append(
-      f"<section><h3>{esc(item.get('issueId') or item.get('target'))}</h3>"
-      f"<p><strong>Target:</strong> <code>{esc(item.get('target'))}</code></p>"
-      f"<p>{esc(item.get('rationale'))}</p>"
-      f"<p><strong>Current pattern</strong></p><pre><code>{esc(item.get('currentPattern'))}</code></pre>"
-      f"<p><strong>Corrected pattern</strong></p><pre><code>{esc(item.get('correctedPattern'))}</code></pre></section>"
-    )
-  return "".join(blocks) if blocks else "<p>No code-level remediation block was returned.</p>"
-
-
-def render_gap_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    rows.append(
-      f"<tr><td>{esc(item.get('pageType'))}</td><td>{esc(item.get('seo'))}</td><td>{esc(item.get('aeo'))}</td><td>{esc(item.get('geo'))}</td>"
-      f"<td>{esc(item.get('confidence'))}</td><td>{esc(item.get('topMissingElement') or item.get('topMissing'))}</td><td>{esc(item.get('businessImpact'))}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def render_coverage_rows(items: list[dict[str, Any]]) -> str:
-  rows = []
-  for item in items:
-    rows.append(
-      f"<tr><td><code>{esc(urlparse(item['url']).path or item['url'])}</code></td><td>{esc(item.get('pageType'))}</td>"
-      f"<td>{esc(', '.join(item.get('sources', [])))}</td><td>{esc(item.get('status'))}</td>"
-      f"<td>{esc(item.get('canonical'))}</td><td>{esc(item.get('indexability'))}</td>"
-      f"<td>{esc(item.get('coverageState'))}</td><td>{esc(item.get('score'))}</td><td>{esc(item.get('riskFlag'))}</td></tr>"
-    )
-  return "".join(rows)
-
-
-def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], analysis: dict[str, Any], coverage_rows: list[dict[str, Any]], coverage_entries: list[dict[str, Any]], artefacts: dict[str, str]) -> str:
-  executive = analysis["executiveSummary"]
-  scores = executive["scores"]
-  limitations = []
-  partial_rows = [row for row in coverage_rows if row["coveragePercent"] < 100]
-  if partial_rows:
-    limitations.append("Coverage was partial for: " + ", ".join(f"{row['pageType']} ({row['coveragePercent']}%)" for row in partial_rows))
-  limitations.append("Search Console, analytics exports, and Core Web Vitals were not supplied, so they remain not verified from supplied context.")
-
-  score_cards = "".join(
-    f"<div class='kpi'><strong>{esc(label)}</strong><div>{esc(block.get('score'))} / 100 ({esc(block.get('grade'))})</div><div class='muted'>{esc(block.get('headline'))}</div></div>"
-    for label, block in [
-      ("SEO", scores["seo"]),
-      ("AEO", scores["aeo"]),
-      ("GEO", scores["geo"]),
-      ("Entity Authority", scores["entityAuthority"]),
-      ("Conversion Support", scores["conversionSupport"]),
-      ("Discovered URLs", {"score": len(pages), "grade": "", "headline": f"Workbook rows: {workbook.url_count}"}),
-    ]
-  )
+def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str]) -> str:
+  overall_seo = round(mean((page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"]) / 35 * 100 for page in pages))
+  overall_aeo = round(mean(page["scores"]["aeo"] / 20 * 100 for page in pages))
+  overall_geo = round(mean(page["scores"]["geo"] / 20 * 100 for page in pages))
+  overall_entity = round(mean(page["scores"]["entity"] / 10 * 100 for page in pages))
+  overall_conversion = round(mean((page["scores"]["conversion"] / 5 * 100) if page["scores"]["conversion"] else 100 for page in pages if page["pageType"] in {"lead generation", "comparison", "book hub", "book page", "service / product"})) if any(page["pageType"] in {"lead generation", "comparison", "book hub", "book page", "service / product"} for page in pages) else 0
 
   family_rows = "".join(
-    f"<tr><td>{esc(row['pageType'])}</td><td>{esc(row['discovered'])}</td><td>{esc(row['analysed'])}</td><td>{esc(row['failed'])}</td><td>{esc(row['coveragePercent'])}%</td><td>{esc(row['averageScore'])}</td></tr>"
+    f"<tr><td>{row['pageType']}</td><td>{row['discovered']}</td><td>{row['analysed']}</td><td>{row['failed']}</td><td>{row['coveragePercent']}%</td><td>{row['averageScore']}</td></tr>"
     for row in coverage_rows
   )
+  issue_rows = "".join(
+    f"<tr><td>{item['issueId']}</td><td>{item['severity']}</td><td>{item['auditLens']}</td><td>{item['affected']}</td><td>{item['whyItMatters']}</td><td>{item['exactRemediation']}</td></tr>"
+    for item in issues
+  ) or "<tr><td colspan='6'>No significant issues were confirmed from the available evidence.</td></tr>"
+  page_type_rows = "".join(
+    f"<tr><td>{item['pageType']}</td><td>{item['count']}</td><td>{item['coverageState']}</td><td>{item['averageScore']}</td><td>{item['lowestScore']}–{item['highestScore']}</td><td><code>{item['exampleUrl']}</code></td></tr>"
+    for item in page_type_findings
+  )
+  priority_rows = "".join(
+    f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{page['status']}</td><td>{page['meta']['title'] or '(missing title)'}</td><td>{page['meta']['metaDescription'] and 'Present' or 'Missing'}</td><td>{page['meta']['canonical'] and 'Present' or 'Missing'}</td><td>{page['scores']['aeo']}/20</td><td>{page['scores']['geo']}/20</td><td>{page['total']}</td><td>{page['grade']}</td></tr>"
+    for page in priority_pages
+  )
+  template_rows = "".join(
+    f"<tr><td>{row['pageType']}</td><td>{row['pagesAffected']}</td><td><code>{row['sourceFile']}</code></td><td>{row['averageScore']}</td><td>{'; '.join(row['repeatedStrengths'])}</td><td>{'; '.join(row['repeatedDefects'])}</td><td>{row['fixPriority']}</td></tr>"
+    for row in template_annex
+  )
+  gap_rows = "".join(
+    f"<tr><td>{row['pageType']}</td><td>{row['seo']}</td><td>{row['aeo']}</td><td>{row['geo']}</td><td>{row['confidence']}</td><td>{row['topMissing']}</td><td>{row['businessImpact']}</td></tr>"
+    for row in gap_matrix
+  )
+  coverage_appendix_rows = "".join(
+    f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{', '.join(sorted(page['sources']))}</td><td>{page['status']}</td><td>{page['canonicalNormalised'] or page['meta']['canonical'] or '—'}</td><td>{page['indexability']}</td><td>{page['coverageState']}</td><td>{page['total']} / {page['grade']}</td><td>{page['riskFlag']}</td></tr>"
+    for page in pages
+  )
+
+  labels = []
+  if overall_seo >= 85 and overall_geo >= 85:
+    labels.append("citation-ready")
+  if overall_aeo < 70:
+    labels.append("answer-engine weak")
+  if any(row['coveragePercent'] < 100 for row in coverage_rows):
+    labels.append("structurally weak")
+  if not labels:
+    labels.append("partially ready")
+
+  quick_wins = issues[:5]
+  top_actions = issues[:5]
+  strongest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"], reverse=True)[:3]
+  weakest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"])[:3]
 
   body = f"""
   <section id="cover">
-    <h2>Forensic SEO + AEO + GEO Audit</h2>
-    <p><strong>Website:</strong> <a href="{esc(base_url)}">{esc(base_url)}</a></p>
-    <p><strong>Date:</strong> {esc(utc_now())}</p>
-    <p><strong>Audit mode:</strong> full-estate, evidence-led, repo + live + workbook reconciliation</p>
-    <p><strong>Front-page material limitation:</strong> {esc(' '.join(limitations))}</p>
-  </section>
-
-  <section id="contents" class="toc">
-    <h2>Contents</h2>
-    <ul>
-      <li><a href="#summary">1. Executive Summary</a></li>
-      <li><a href="#method">2. Scope, Inputs, and Method</a></li>
-      <li><a href="#inventory">3. Inventory and Reconciliation Summary</a></li>
-      <li><a href="#lens">4. Findings by Audit Lens</a></li>
-      <li><a href="#issues">5. Ranked Issue Ledger</a></li>
-      <li><a href="#page-types">6. Page-Type Findings</a></li>
-      <li><a href="#priority">7. Priority Page Annex</a></li>
-      <li><a href="#templates">8. Template / Component / Generator Annex</a></li>
-      <li><a href="#code">9. Code-Level / Markup / Content Remediation Appendix</a></li>
-      <li><a href="#gap-matrix">10. Best-Practice Gap Matrix</a></li>
-      <li><a href="#implementation">11. Final Verdict and Implementation Order</a></li>
-      <li><a href="#coverage">12. Full URL Coverage Appendix</a></li>
-    </ul>
+    <h2>Cover page</h2>
+    <p><strong>Report title:</strong> Full-Estate Forensic SEO + AEO + GEO Audit</p>
+    <p><strong>Website:</strong> <a href="{base_url}">{base_url}</a></p>
+    <p><strong>Workbook:</strong> <code>{Path(workbook.path).name}</code></p>
+    <p><strong>Scope inspected:</strong> Full in-scope website estate including homepage, books, catalogue, topics, blog, podcast, archives, utilities, and programmatic families discovered from repo, workbook, sitemap, feed, and live internal links.</p>
+    <p><strong>Analyst mode:</strong> Full-estate evidence-led HTML audit</p>
   </section>
 
   <section id="summary">
-    <h2>1. Executive Summary</h2>
-    {render_paragraphs(executive.get('overallVerdict'))}
-    <div class="grid">{score_cards}</div>
-    <h3>Top five priorities</h3>
-    {render_string_list(executive.get('topFivePriorities', []))}
-    <h3>Quick wins</h3>
-    {render_string_list(executive.get('quickWins', []))}
-    <p>{''.join(f'<span class="pill">{esc(label)}</span>' for label in executive.get('estateLabels', []))}</p>
+    <h2>Executive summary</h2>
+    <div class="grid">
+      <div class="kpi"><strong>Overall SEO</strong><div>{overall_seo}</div></div>
+      <div class="kpi"><strong>Overall AEO</strong><div>{overall_aeo}</div></div>
+      <div class="kpi"><strong>Overall GEO</strong><div>{overall_geo}</div></div>
+      <div class="kpi"><strong>Entity Authority</strong><div>{overall_entity}</div></div>
+      <div class="kpi"><strong>Conversion Support</strong><div>{overall_conversion}</div></div>
+      <div class="kpi"><strong>Discovered URLs</strong><div>{len(pages)}</div></div>
+    </div>
+    <p>{' '.join(f'<span class="pill">{label}</span>' for label in labels)}</p>
+    <p><strong>Top five priorities:</strong> {'; '.join(item['issueId'] + ' ' + item['whyItMatters'] for item in top_actions) if top_actions else 'No Critical or High issue required escalation from the available evidence.'}</p>
+    <p><strong>Quick wins:</strong> {'; '.join(item['exactRemediation'] for item in quick_wins[:3]) if quick_wins else 'No immediate quick-win issue was confirmed.'}</p>
+    <p><strong>Major risks:</strong> {'; '.join(item['whyItMatters'] for item in issues[:3]) if issues else 'No estate-wide blocker was confirmed.'}</p>
+    <p><strong>Strongest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in strongest_areas)}</p>
+    <p><strong>Weakest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in weakest_areas)}</p>
   </section>
 
   <section id="method">
-    <h2>2. Scope, Inputs, and Method</h2>
-    <p><strong>What was inspected:</strong> repository routes and templates, workbook inventory, live route responses, sitemap and feed sources, and live internal links discovered during the crawl.</p>
-    <p><strong>Source ledger:</strong> {'; '.join(f'{esc(key)}: {esc(value)}' for key, value in sorted(discovery_meta.get('sourceCounts', {}).items()))}</p>
-    <p><strong>Workbook:</strong> <code>{esc(Path(workbook.path).name)}</code> using sheet <code>{esc(workbook.primary_sheet)}</code> with {esc(workbook.url_count)} URL rows.</p>
-    <p><strong>Known limitations:</strong> {' '.join(esc(item) for item in limitations)}</p>
+    <h2>Scope, inputs, and method</h2>
+    <p><strong>Inspected inputs:</strong> repository routes, live route responses, workbook inventory, sitemap sources, podcast feed sources, blog and podcast manifest files, and live internal links.</p>
+    <p><strong>Known limitations:</strong> metrics such as Core Web Vitals, Search Console, and analytics exports were not supplied, so they are marked as not verified rather than invented.</p>
+    <p><strong>Chain of truth:</strong> repo and source files, live HTML responses, workbook inventory, sitemap and feed sources, and user context.</p>
   </section>
 
   <section id="inventory">
-    <h2>3. Inventory and Reconciliation Summary</h2>
-    <p><strong>Discovered routes:</strong> {esc(len(pages))}</p>
-    <p><strong>Workbook routes:</strong> {esc(workbook.url_count)}</p>
-    <p><strong>Coverage assurance:</strong> every discovered in-scope URL received a coverage state and condensed verdict in <code>coverage.json</code>.</p>
+    <h2>Inventory and reconciliation summary</h2>
+    <p><strong>Workbook rows:</strong> {workbook.url_count}</p>
+    <p><strong>Discovery source counts:</strong> {'; '.join(f"{key}: {value}" for key, value in sorted(discovery_meta['sourceCounts'].items()))}</p>
     <table class="tight"><thead><tr><th>Page family</th><th>Discovered</th><th>Analysed</th><th>Failed</th><th>Coverage</th><th>Average score</th></tr></thead><tbody>{family_rows}</tbody></table>
+    <p class="section-note">Every discovered in-scope URL was assigned a coverage state. This audit hard-fails if a mandatory family is only partly covered.</p>
   </section>
 
   <section id="lens">
-    <h2>4. Findings by Audit Lens</h2>
-    <h3>4.1 Technical SEO</h3>{render_paragraphs(analysis['findingsByLens']['technicalSeo'])}
-    <h3>4.2 On-Page SEO and Intent Match</h3>{render_paragraphs(analysis['findingsByLens']['onPageSeo'])}
-    <h3>4.3 AEO</h3>{render_paragraphs(analysis['findingsByLens']['aeo'])}
-    <h3>4.4 GEO</h3>{render_paragraphs(analysis['findingsByLens']['geo'])}
-    <h3>4.5 Entity Authority</h3>{render_paragraphs(analysis['findingsByLens']['entityAuthority'])}
-    <h3>4.6 Structured Data</h3>{render_paragraphs(analysis['findingsByLens']['structuredData'])}
-    <h3>4.7 Internal Linking</h3>{render_paragraphs(analysis['findingsByLens']['internalLinking'])}
-    <h3>4.8 Content Architecture</h3>{render_paragraphs(analysis['findingsByLens']['contentArchitecture'])}
-    <h3>4.9 Conversion Support</h3>{render_paragraphs(analysis['findingsByLens']['conversionSupport'])}
-    <h3>4.10 Blog, Podcast, Transcript, and Programmatic Systems</h3>{render_paragraphs(analysis['findingsByLens']['blogPodcastTranscriptSystems'])}
+    <h2>Findings by audit lens</h2>
+    <div class="grid">
+      <div><h3>Technical SEO</h3><p>Canonicals, titles, descriptions, indexability, redirect histories, and route normalisation were inspected page by page.</p></div>
+      <div><h3>On-page SEO and intent match</h3><p>Openings, heading structures, visible copy depth, and title-to-page alignment were scored across the estate.</p></div>
+      <div><h3>AEO</h3><p>Answer-first summaries, extractable question headings, FAQs, tables, and snippet-friendly structures were measured family by family.</p></div>
+      <div><h3>GEO</h3><p>Entity clarity, summary safety, schema support, and reusable explanatory passages were assessed for citation readiness.</p></div>
+      <div><h3>Entity authority</h3><p>Jonathan Harris, book, podcast, and topic relationships were checked for visible reinforcement and schema support.</p></div>
+      <div><h3>Blog, podcast, transcript, and programmatic systems</h3><p>Blog article, podcast, archive, topic, catalogue, and book families were inventoried and fully analysed rather than silently sampled.</p></div>
+    </div>
   </section>
 
   <section id="issues">
-    <h2>5. Ranked Issue Ledger</h2>
-    <table class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Lens</th><th>Affected</th><th>Why it matters</th><th>Exact remediation</th></tr></thead><tbody>{render_issue_rows(analysis['issues'])}</tbody></table>
+    <h2>Ranked issue ledger</h2>
+    <table class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Lens</th><th>Affected</th><th>Why it matters</th><th>Exact remediation</th></tr></thead><tbody>{issue_rows}</tbody></table>
   </section>
 
   <section id="page-types">
-    <h2>6. Page-Type Findings</h2>
-    <table class="tight"><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Score</th><th>Grade</th><th>Judgement</th></tr></thead><tbody>{render_page_type_rows(analysis['pageTypeFindings'])}</tbody></table>
+    <h2>Page-type findings</h2>
+    <table class="tight"><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Average score</th><th>Range</th><th>Example</th></tr></thead><tbody>{page_type_rows}</tbody></table>
   </section>
 
   <section id="priority">
-    <h2>7. Priority Page Annex</h2>
-    <table class="tight"><thead><tr><th>URL</th><th>Type</th><th>Template</th><th>Title</th><th>Meta</th><th>Canonical</th><th>Schema</th><th>AEO</th><th>GEO</th><th>Score</th><th>Grade</th><th>Issue IDs</th><th>Key note</th></tr></thead><tbody>{render_priority_rows(analysis['priorityPageAnnex'])}</tbody></table>
+    <h2>Priority page annex</h2>
+    <table class="tight"><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th><th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead><tbody>{priority_rows}</tbody></table>
   </section>
 
   <section id="templates">
-    <h2>8. Template / Component / Generator Annex</h2>
-    <table class="tight"><thead><tr><th>Source file</th><th>Area</th><th>Observed logic</th><th>Repeated effect</th><th>Fix priority</th></tr></thead><tbody>{render_template_rows(analysis['templateAnnex'])}</tbody></table>
-  </section>
-
-  <section id="code">
-    <h2>9. Code-Level / Markup / Content Remediation Appendix</h2>
-    {render_code_blocks(analysis['codeRemediationAppendix'])}
+    <h2>Template / component / generator annex</h2>
+    <table class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>
   </section>
 
   <section id="gap-matrix">
-    <h2>10. Best-Practice Gap Matrix</h2>
-    <table class="tight"><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{render_gap_rows(analysis['bestPracticeGapMatrix'])}</tbody></table>
+    <h2>Best-practice gap matrix</h2>
+    <table class="tight"><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>
   </section>
 
   <section id="implementation">
-    <h2>11. Final Verdict and Implementation Order</h2>
-    {render_paragraphs(analysis['implementationOrder'].get('narrative', ''))}
-    <h3>Implementation sequence</h3>
-    {render_string_list(analysis['implementationOrder'].get('steps', []))}
-    <h3>Expected gains</h3>
-    {render_string_list(analysis['implementationOrder'].get('expectedGains', []))}
+    <h2>Final verdict and implementation order</h2>
+    <p><strong>Overall verdict:</strong> {'Full-estate coverage completed with no material family omitted.' if all(row['coveragePercent'] == 100 for row in coverage_rows) else 'Coverage was materially incomplete and should be rerun after the missing family is fixed.'}</p>
+    <p><strong>What to fix first:</strong> {'; '.join(item['issueId'] + ' ' + item['exactRemediation'] for item in issues[:5]) if issues else 'No urgent remediation item exceeded the evidence threshold.'}</p>
+    <p><strong>Implementation sequence:</strong> 1) source-of-truth reconciliation, 2) template-level metadata and canonical fixes, 3) answer-first and citation-ready copy upgrades, 4) internal linking reinforcement, 5) final validation rerun.</p>
+    <p><strong>Expected gains:</strong> better route governance, stronger answer-engine extractability, cleaner generative summaries, and tighter internal topical signals.</p>
   </section>
 
   <section id="coverage">
-    <h2>12. Full URL Coverage Appendix</h2>
-    <table class="tight"><thead><tr><th>URL</th><th>Page type</th><th>Discovered from</th><th>Status</th><th>Canonical</th><th>Indexability</th><th>Coverage state</th><th>Score</th><th>Risk</th></tr></thead><tbody>{render_coverage_rows(coverage_entries)}</tbody></table>
+    <h2>Full URL coverage appendix</h2>
+    <table class="tight"><thead><tr><th>URL</th><th>Page type</th><th>Discovered from</th><th>Status</th><th>Canonical</th><th>Indexability</th><th>Coverage state</th><th>Score</th><th>Risk</th></tr></thead><tbody>{coverage_appendix_rows}</tbody></table>
     <p class="section-note">Machine-friendly full-estate ledger is preserved separately in <code>coverage.json</code>.</p>
   </section>
 
   <section id="artefacts">
     <h2>Final artefacts</h2>
     <ul>
-      <li><a href="{esc(artefacts.get('report.html', '#'))}">report.html</a></li>
-      <li><a href="{esc(artefacts.get('summary.json', '#'))}">summary.json</a></li>
-      <li><a href="{esc(artefacts.get('coverage.json', '#'))}">coverage.json</a></li>
+      <li><a href="{artefacts.get('report.html', '#')}">report.html</a></li>
+      <li><a href="{artefacts.get('summary.json', '#')}">summary.json</a></li>
+      <li><a href="{artefacts.get('coverage.json', '#')}">coverage.json</a></li>
     </ul>
   </section>
   """
-  return html_report_shell("Forensic SEO + AEO + GEO Audit", body)
+  return html_report_shell("Full-Estate Forensic SEO + AEO + GEO Audit", body)
 
 
 def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
@@ -1443,8 +1057,7 @@ def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
     raise RuntimeError(f"Full-estate coverage incomplete. Families below 100% coverage: {', '.join(missing)}")
 
 
-def build_summary(base_url: str, pages: list[dict[str, Any]], analysis: dict[str, Any], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo) -> dict[str, Any]:
-  scores = analysis["executiveSummary"]["scores"]
+def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo) -> dict[str, Any]:
   return {
     "ok": True,
     "sessionId": args.session_id,
@@ -1453,18 +1066,10 @@ def build_summary(base_url: str, pages: list[dict[str, Any]], analysis: dict[str
     "websiteUrl": base_url,
     "generatedAt": utc_now(),
     "auditedUrlCount": len(pages),
-    "issueCount": len(analysis.get("issues", [])),
+    "issueCount": len(issues),
     "familyCoverage": coverage_rows,
     "workbookRows": workbook.url_count,
     "pageTypeCounts": dict(Counter(page["pageType"] for page in pages)),
-    "scores": {
-      "seo": scores["seo"],
-      "aeo": scores["aeo"],
-      "geo": scores["geo"],
-      "entityAuthority": scores["entityAuthority"],
-      "conversionSupport": scores["conversionSupport"],
-    },
-    "estateLabels": analysis["executiveSummary"].get("estateLabels", []),
   }
 
 
@@ -1479,10 +1084,12 @@ def main() -> int:
   pages = crawl_and_analyse(base_url, discovered, excludes)
   coverage_rows = family_coverage(pages)
   validate_full_coverage(coverage_rows)
-  heuristic_issues = collect_issues(pages, discovered)
+  issues = collect_issues(pages, discovered)
+  template_annex = build_template_annex(pages)
+  gap_matrix = build_gap_matrix(pages)
+  page_type_findings = build_page_type_findings(pages)
   priority_pages = build_priority_pages(pages)
 
-  coverage_entries = [make_url_entry(page) for page in pages]
   coverage_json = {
     "generatedAt": utc_now(),
     "websiteUrl": base_url,
@@ -1493,28 +1100,9 @@ def main() -> int:
     },
     "sourceCounts": discovery_meta["sourceCounts"],
     "pageFamilyCoverage": coverage_rows,
-    "urls": coverage_entries,
+    "urls": [make_url_entry(page) for page in pages],
   }
-
-  inventory_context = build_inventory_context(workbook, discovered, discovery_meta)
-  repo_signals = build_repo_signals(REPO_ROOT, pages, discovery_meta)
-  live_dynamic_urls = build_live_dynamic_urls(pages)
-  analysis = call_analysis_service(
-    base_url=base_url,
-    session_id=args.session_id,
-    callback_url=args.callback_url,
-    callback_token=args.callback_token,
-    inventory=inventory_context,
-    priority_pages=[make_priority_payload(page) for page in priority_pages],
-    all_routes=build_all_routes_condensed(pages),
-    heuristic_issues=heuristic_issues,
-    repo_signals=repo_signals,
-    live_dynamic_urls=live_dynamic_urls,
-    coverage=coverage_entries,
-    coverage_families=coverage_rows,
-  )
-
-  summary = build_summary(base_url, pages, analysis, coverage_rows, args.report_prefix, workbook)
+  summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook)
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
@@ -1526,7 +1114,7 @@ def main() -> int:
   }
   uploaded = upload_selected_files_to_r2(client, os.environ["R2_BUCKET_BRAND_ASSETS"], args.report_prefix, artefact_files)
 
-  report_html = build_report(base_url, workbook, discovery_meta, pages, analysis, coverage_rows, coverage_entries, uploaded)
+  report_html = build_report(base_url, workbook, discovery_meta, pages, issues, coverage_rows, template_annex, gap_matrix, page_type_findings, priority_pages, uploaded)
   report_path = write_text(output_dir / "report.html", report_html)
   artefact_files["report.html"] = report_path
   uploaded = upload_selected_files_to_r2(client, os.environ["R2_BUCKET_BRAND_ASSETS"], args.report_prefix, artefact_files)
@@ -1539,7 +1127,7 @@ def main() -> int:
     "reportUrl": uploaded.get("report.html"),
     "summaryUrl": uploaded.get("summary.json"),
     "coverageUrl": uploaded.get("coverage.json"),
-    "issueCount": len(analysis.get("issues", [])),
+    "issueCount": len(issues),
     "auditedUrlCount": len(pages),
     "artefacts": uploaded,
     "finishedAt": utc_now(),
