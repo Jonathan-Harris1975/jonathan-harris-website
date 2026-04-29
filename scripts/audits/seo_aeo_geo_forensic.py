@@ -84,6 +84,16 @@ IMPORTANT_PAGE_TYPES = {
 }
 FINAL_ARTIFACTS = ("report.html", "summary.json", "coverage.json")
 DEFAULT_PODCAST_FEED = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
+COVERED_STATES = {"Fully analysed", "Analysed through shared template plus page-specific checks"}
+SHARED_TEMPLATE_FAMILIES = {"book page", "category / hub", "topic hub", "archive / pagination / utility"}
+
+
+def coverage_state_for_page(page_type: str, status_code: int) -> str:
+  if status_code != 200:
+    return "Failed to fetch"
+  if page_type in SHARED_TEMPLATE_FAMILIES:
+    return "Analysed through shared template plus page-specific checks"
+  return "Fully analysed"
 
 
 def parse_args() -> argparse.Namespace:
@@ -601,6 +611,7 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
     a for a in soup.select("a[href]")
     if any(token in (a.get_text(" ", strip=True).lower() + " " + a.get("href", "").lower()) for token in ("contact", "newsletter", "amazon", "buy", "subscribe", "listen"))
   ]
+  page_type = classify_page(url)
   page = {
     **entry,
     "status": fetched.get("status", 0),
@@ -620,8 +631,8 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
     "hasFaqSchema": any("FAQPage" in script.get_text() for script in soup.select("script[type='application/ld+json']")),
     "indexability": "noindex" if "noindex" in robots_content else "indexable",
     "ctaCount": len(cta_candidates),
-    "pageType": classify_page(url),
-    "coverageState": "Fully analysed" if fetched.get("status") == 200 else "Failed to fetch",
+    "pageType": page_type,
+    "coverageState": coverage_state_for_page(page_type, fetched.get("status", 0)),
     "soup": soup,
   }
   page["scores"] = score_page(page)
@@ -808,7 +819,7 @@ def family_coverage(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     family_pages = family_map.get(family, [])
     if not family_pages:
       continue
-    analysed = len([page for page in family_pages if page["coverageState"] == "Fully analysed"])
+    analysed = len([page for page in family_pages if page["coverageState"] in COVERED_STATES])
     rows.append({
       "pageType": family,
       "discovered": len(family_pages),
@@ -887,7 +898,7 @@ def build_page_type_findings(pages: list[dict[str, Any]]) -> list[dict[str, Any]
       "lowestScore": min(scores),
       "highestScore": max(scores),
       "exampleUrl": family_pages[0]["url"],
-      "coverageState": "Fully analysed" if all(page["coverageState"] == "Fully analysed" for page in family_pages) else "Partial / failed",
+      "coverageState": "Fully analysed" if all(page["coverageState"] in COVERED_STATES for page in family_pages) else "Partial / failed",
     })
   return findings
 
