@@ -12,6 +12,7 @@ from pathlib import Path
 from statistics import mean
 from typing import Any
 from urllib.parse import urljoin, urlparse
+import xml.etree.ElementTree as ET
 
 CURRENT_FILE = Path(__file__).resolve()
 REPO_ROOT = CURRENT_FILE.parents[2]
@@ -222,10 +223,33 @@ def derive_route_family(url: str) -> str:
   return path if path.count("/") <= 2 else "/" + path.strip("/").split("/")[0]
 
 
+def _strip_xml_namespace(tag: str) -> str:
+  return tag.split("}", 1)[-1] if "}" in tag else tag
+
+
 def parse_sitemap_xml(xml_text: str) -> tuple[list[str], list[str]]:
-  soup = BeautifulSoup(xml_text or "", "xml")
-  sitemap_links = [loc.get_text(strip=True) for sitemap in soup.find_all("sitemap") for loc in sitemap.find_all("loc")]
-  url_links = [loc.get_text(strip=True) for url in soup.find_all("url") for loc in url.find_all("loc")]
+  sitemap_links: list[str] = []
+  url_links: list[str] = []
+  if not xml_text or not xml_text.strip():
+    return sitemap_links, url_links
+  try:
+    root = ET.fromstring(xml_text)
+  except ET.ParseError:
+    return sitemap_links, url_links
+
+  for elem in root.iter():
+    tag = _strip_xml_namespace(elem.tag)
+    if tag not in {"sitemap", "url"}:
+      continue
+    for child in elem:
+      if _strip_xml_namespace(child.tag) == "loc" and child.text:
+        value = child.text.strip()
+        if not value:
+          continue
+        if tag == "sitemap":
+          sitemap_links.append(value)
+        else:
+          url_links.append(value)
   return sitemap_links, url_links
 
 
@@ -313,20 +337,28 @@ def parse_feed_urls(feed_url: str, base_url: str) -> list[str]:
   fetched = fetch_html(feed_url, timeout=20.0, extra_headers={"Accept": "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"})
   if fetched.get("status") != 200 or not fetched.get("text"):
     return []
-  soup = BeautifulSoup(fetched["text"], "xml")
+
+  try:
+    root = ET.fromstring(fetched["text"])
+  except ET.ParseError:
+    return []
+
   urls: list[str] = []
-  for item in soup.find_all("item"):
-    candidates = []
-    link = item.find("link")
-    guid = item.find("guid")
-    if link and link.text:
-      candidates.append(link.text.strip())
-    if guid and guid.text:
-      candidates.append(guid.text.strip())
-    for transcript_tag in item.find_all(lambda tag: tag.name and "transcript" in tag.name.lower()):
-      href = transcript_tag.get("url") or transcript_tag.get("href") or transcript_tag.text
-      if href:
-        candidates.append(href.strip())
+  for item in root.iter():
+    if _strip_xml_namespace(item.tag) != "item":
+      continue
+
+    candidates: list[str] = []
+    for child in item:
+      child_tag = _strip_xml_namespace(child.tag).lower()
+      child_text = (child.text or "").strip()
+      if child_tag in {"link", "guid"} and child_text:
+        candidates.append(child_text)
+      if "transcript" in child_tag:
+        href = child.attrib.get("url") or child.attrib.get("href") or child_text
+        if href:
+          candidates.append(href.strip())
+
     for candidate in candidates:
       if candidate and is_in_scope_url(candidate, base_url):
         urls.append(normalise_absolute_url(candidate, base_url))
