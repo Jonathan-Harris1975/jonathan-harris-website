@@ -103,6 +103,7 @@ def parse_args() -> argparse.Namespace:
   parser.add_argument("--report-prefix", required=True)
   parser.add_argument("--callback-url")
   parser.add_argument("--callback-token")
+  parser.add_argument("--analysis-url", help="Override the LLM analysis endpoint (defaults to callback-url with /analysis suffix)")
   parser.add_argument("--output-dir", default="artifacts/seo-aeo-geo")
   parser.add_argument("--exclude-prefixes", default="")
   return parser.parse_args()
@@ -935,7 +936,7 @@ def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
   }
 
 
-def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str]) -> str:
+def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None) -> str:
   overall_seo = round(mean((page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"]) / 35 * 100 for page in pages))
   overall_aeo = round(mean(page["scores"]["aeo"] / 20 * 100 for page in pages))
   overall_geo = round(mean(page["scores"]["geo"] / 20 * 100 for page in pages))
@@ -971,22 +972,99 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     for page in pages
   )
 
-  labels = []
-  if overall_seo >= 85 and overall_geo >= 85:
-    labels.append("citation-ready")
-  if overall_aeo < 70:
-    labels.append("answer-engine weak")
-  if any(row['coveragePercent'] < 100 for row in coverage_rows):
-    labels.append("structurally weak")
-  if not labels:
-    labels.append("partially ready")
+  # Prefer LLM-derived labels and priorities when available
+  llm_summary = (claude_analysis or {}).get("executiveSummary", {})
+  llm_findings = (claude_analysis or {}).get("findingsByLens", {})
+  llm_issues_list = (claude_analysis or {}).get("issues", [])
+  llm_impl = (claude_analysis or {}).get("implementationOrder", {})
+  llm_page_types = (claude_analysis or {}).get("pageTypeFindings", [])
+  llm_template_annex = (claude_analysis or {}).get("templateAnnex", [])
+  llm_gap_matrix = (claude_analysis or {}).get("bestPracticeGapMatrix", [])
+  llm_remediation = (claude_analysis or {}).get("codeRemediationAppendix", [])
 
+  labels = llm_summary.get("estateLabels") or []
+  if not labels:
+    if overall_seo >= 85 and overall_geo >= 85:
+      labels.append("citation-ready")
+    if overall_aeo < 70:
+      labels.append("answer-engine weak")
+    if any(row['coveragePercent'] < 100 for row in coverage_rows):
+      labels.append("structurally weak")
+    if not labels:
+      labels.append("partially ready")
+
+  llm_top5 = llm_summary.get("topFivePriorities") or []
+  llm_quickwins = llm_summary.get("quickWins") or []
   quick_wins = issues[:5]
   top_actions = issues[:5]
   strongest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"], reverse=True)[:3]
   weakest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"])[:3]
 
+  # LLM score overrides (use if available, else fall back to heuristic)
+  llm_scores = llm_summary.get("scores", {})
+  display_seo_score = llm_scores.get("seo", {}).get("score", overall_seo)
+  display_seo_grade = llm_scores.get("seo", {}).get("grade", grade(overall_seo))
+  display_aeo_score = llm_scores.get("aeo", {}).get("score", overall_aeo)
+  display_aeo_grade = llm_scores.get("aeo", {}).get("grade", grade(overall_aeo))
+  display_geo_score = llm_scores.get("geo", {}).get("score", overall_geo)
+  display_geo_grade = llm_scores.get("geo", {}).get("grade", grade(overall_geo))
+  display_entity_score = llm_scores.get("entityAuthority", {}).get("score", overall_entity)
+  display_entity_grade = llm_scores.get("entityAuthority", {}).get("grade", grade(overall_entity))
+  display_conv_score = llm_scores.get("conversionSupport", {}).get("score", overall_conversion)
+  display_conv_grade = llm_scores.get("conversionSupport", {}).get("grade", grade(overall_conversion))
+
+  # Issue and remediation tables
+  active_issues_html = render_llm_issues_table(llm_issues_list) if llm_issues_list else issue_rows
+  active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
+  active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
+  active_remediation_html = render_llm_remediation_table(llm_remediation)
+
+  overall_verdict = llm_summary.get("overallVerdict") or (
+    "Full-estate coverage completed with no material family omitted."
+    if all(row["coveragePercent"] == 100 for row in coverage_rows)
+    else "Coverage was materially incomplete and should be rerun after the missing family is fixed."
+  )
+  implementation_narrative = llm_impl.get("narrative") or (
+    "No urgent remediation item exceeded the evidence threshold." if not issues
+    else "; ".join(item["issueId"] + " " + item["exactRemediation"] for item in issues[:5])
+  )
+  implementation_steps = llm_impl.get("steps") or [
+    "Source-of-truth reconciliation",
+    "Template-level metadata and canonical fixes",
+    "Answer-first and citation-ready copy upgrades",
+    "Internal linking reinforcement",
+    "Final validation rerun",
+  ]
+  implementation_gains = llm_impl.get("expectedGains") or [
+    "Better route governance",
+    "Stronger answer-engine extractability",
+    "Cleaner generative summaries and tighter internal topical signals",
+  ]
+
+  # Per-lens narrative blocks
+  def _lens(key: str, fallback: str) -> str:
+    text = llm_findings.get(key, "").strip()
+    return f"<p>{_esc(text)}</p>" if text else f"<p>{fallback}</p>"
+
   body = f"""
+  <style>
+    .llm-badge{{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#ecfdf5;color:#065f46;border:1px solid #6ee7b7;}}
+    .llm-badge.heuristic{{background:#fef9c3;color:#92400e;border-color:#fcd34d;}}
+    .llm-verdict{{font-size:15px;line-height:1.65;border-left:3px solid #4338ca;padding-left:12px;margin:0 0 16px;}}
+    .kpi .grade{{display:block;font-size:28px;font-weight:800;margin-top:4px;}}
+    .priority-item{{display:block;margin:4px 0;padding:4px 8px;border-radius:6px;background:#f3f4f6;font-size:13px;}}
+    .lens-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}}
+    .lens-block{{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;}}
+    .lens-block--full{{grid-column:1/-1;}}
+    .lens-block h3{{margin:0 0 8px;font-size:14px;color:#1e3a5f;}}
+    .lens-block p{{margin:0;font-size:13px;line-height:1.6;color:#374151;}}
+    .sev-critical td{{background:#fef2f2;}}
+    .sev-high td{{background:#fff7ed;}}
+    .sev-medium td{{background:#fefce8;}}
+    pre code{{display:block;white-space:pre-wrap;word-break:break-all;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
+    ol,ul{{padding-left:20px;margin:8px 0;}}
+    ol li,ul li{{margin:4px 0;font-size:14px;}}
+  </style>
   <section id="cover">
     <h2>Cover page</h2>
     <p><strong>Report title:</strong> Full-Estate Forensic SEO + AEO + GEO Audit</p>
@@ -998,20 +1076,22 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
 
   <section id="summary">
     <h2>Executive summary</h2>
+    {'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if claude_analysis else ''}
     <div class="grid">
-      <div class="kpi"><strong>Overall SEO</strong><div>{overall_seo}</div></div>
-      <div class="kpi"><strong>Overall AEO</strong><div>{overall_aeo}</div></div>
-      <div class="kpi"><strong>Overall GEO</strong><div>{overall_geo}</div></div>
-      <div class="kpi"><strong>Entity Authority</strong><div>{overall_entity}</div></div>
-      <div class="kpi"><strong>Conversion Support</strong><div>{overall_conversion}</div></div>
+      <div class="kpi"><strong>SEO</strong><div>{display_seo_score}<span class="grade">{display_seo_grade}</span></div></div>
+      <div class="kpi"><strong>AEO</strong><div>{display_aeo_score}<span class="grade">{display_aeo_grade}</span></div></div>
+      <div class="kpi"><strong>GEO</strong><div>{display_geo_score}<span class="grade">{display_geo_grade}</span></div></div>
+      <div class="kpi"><strong>Entity Authority</strong><div>{display_entity_score}<span class="grade">{display_entity_grade}</span></div></div>
+      <div class="kpi"><strong>Conversion Support</strong><div>{display_conv_score}<span class="grade">{display_conv_grade}</span></div></div>
       <div class="kpi"><strong>Discovered URLs</strong><div>{len(pages)}</div></div>
     </div>
     <p>{' '.join(f'<span class="pill">{label}</span>' for label in labels)}</p>
-    <p><strong>Top five priorities:</strong> {'; '.join(item['issueId'] + ' ' + item['whyItMatters'] for item in top_actions) if top_actions else 'No Critical or High issue required escalation from the available evidence.'}</p>
-    <p><strong>Quick wins:</strong> {'; '.join(item['exactRemediation'] for item in quick_wins[:3]) if quick_wins else 'No immediate quick-win issue was confirmed.'}</p>
+    <p><strong>Top five priorities:</strong> {('<br>'.join(f'<span class="priority-item">{_esc(p)}</span>' for p in llm_top5)) if llm_top5 else ('; '.join(item['issueId'] + ' ' + item['whyItMatters'] for item in top_actions) if top_actions else 'No Critical or High issue required escalation from the available evidence.')}</p>
+    <p><strong>Quick wins:</strong> {('<br>'.join(_esc(w) for w in llm_quickwins)) if llm_quickwins else ('; '.join(item['exactRemediation'] for item in quick_wins[:3]) if quick_wins else 'No immediate quick-win issue was confirmed.')}</p>
     <p><strong>Major risks:</strong> {'; '.join(item['whyItMatters'] for item in issues[:3]) if issues else 'No estate-wide blocker was confirmed.'}</p>
     <p><strong>Strongest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in strongest_areas)}</p>
     <p><strong>Weakest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in weakest_areas)}</p>
+    {'<p class="llm-badge">✦ Scores and priorities enriched by LLM forensic analysis</p>' if claude_analysis else '<p class="llm-badge heuristic">⚙ Heuristic-only report — LLM analysis was not available for this run</p>'}
   </section>
 
   <section id="method">
@@ -1019,6 +1099,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <p><strong>Inspected inputs:</strong> repository routes, live route responses, workbook inventory, sitemap sources, podcast feed sources, blog and podcast manifest files, and live internal links.</p>
     <p><strong>Known limitations:</strong> metrics such as Core Web Vitals, Search Console, and analytics exports were not supplied, so they are marked as not verified rather than invented.</p>
     <p><strong>Chain of truth:</strong> repo and source files, live HTML responses, workbook inventory, sitemap and feed sources, and user context.</p>
+    <p><strong>LLM analysis:</strong> {'Forensic narrative and ranked issues generated by ' + ('claude-3-5-sonnet (via OpenRouter) using the full context package.') if claude_analysis else 'Not available for this run — heuristic scoring only.'}</p>
   </section>
 
   <section id="inventory">
@@ -1031,24 +1112,30 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
 
   <section id="lens">
     <h2>Findings by audit lens</h2>
-    <div class="grid">
-      <div><h3>Technical SEO</h3><p>Canonicals, titles, descriptions, indexability, redirect histories, and route normalisation were inspected page by page.</p></div>
-      <div><h3>On-page SEO and intent match</h3><p>Openings, heading structures, visible copy depth, and title-to-page alignment were scored across the estate.</p></div>
-      <div><h3>AEO</h3><p>Answer-first summaries, extractable question headings, FAQs, tables, and snippet-friendly structures were measured family by family.</p></div>
-      <div><h3>GEO</h3><p>Entity clarity, summary safety, schema support, and reusable explanatory passages were assessed for citation readiness.</p></div>
-      <div><h3>Entity authority</h3><p>Jonathan Harris, book, podcast, and topic relationships were checked for visible reinforcement and schema support.</p></div>
-      <div><h3>Blog, podcast, transcript, and programmatic systems</h3><p>Blog article, podcast, archive, topic, catalogue, and book families were inventoried and fully analysed rather than silently sampled.</p></div>
+    {'<p class="llm-badge">✦ Narratives below are LLM forensic analysis based on live crawl data</p>' if claude_analysis else ''}
+    <div class="lens-grid">
+      <div class="lens-block"><h3>Technical SEO</h3>{_lens('technicalSeo', 'Canonicals, titles, descriptions, indexability, redirect histories, and route normalisation were inspected page by page.')}</div>
+      <div class="lens-block"><h3>On-page SEO and intent match</h3>{_lens('onPageSeo', 'Openings, heading structures, visible copy depth, and title-to-page alignment were scored across the estate.')}</div>
+      <div class="lens-block"><h3>AEO</h3>{_lens('aeo', 'Answer-first summaries, extractable question headings, FAQs, tables, and snippet-friendly structures were measured family by family.')}</div>
+      <div class="lens-block"><h3>GEO</h3>{_lens('geo', 'Entity clarity, summary safety, schema support, and reusable explanatory passages were assessed for citation readiness.')}</div>
+      <div class="lens-block"><h3>Entity authority</h3>{_lens('entityAuthority', 'Author, book, podcast, and topic relationships were checked for visible reinforcement and schema support.')}</div>
+      <div class="lens-block"><h3>Structured data</h3>{_lens('structuredData', 'Schema types, coverage, and alignment with visible content were reviewed across the estate.')}</div>
+      <div class="lens-block"><h3>Internal linking</h3>{_lens('internalLinking', 'Orphan pages, anchor-text precision, cluster connections, and commercial bridging were reviewed.')}</div>
+      <div class="lens-block"><h3>Content architecture</h3>{_lens('contentArchitecture', 'Topical graph coherence, cluster completeness, and static vs dynamic governance alignment were assessed.')}</div>
+      <div class="lens-block"><h3>Conversion support</h3>{_lens('conversionSupport', 'Buy-now path clarity, CTA visibility, and proof-block presence were reviewed on commercial pages.')}</div>
+      <div class="lens-block lens-block--full"><h3>Blog, podcast, transcript, and programmatic systems</h3>{_lens('blogPodcastTranscriptSystems', 'Blog article, podcast, archive, topic, catalogue, and book families were inventoried and fully analysed rather than silently sampled.')}</div>
     </div>
   </section>
 
   <section id="issues">
     <h2>Ranked issue ledger</h2>
-    <table class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Lens</th><th>Affected</th><th>Why it matters</th><th>Exact remediation</th></tr></thead><tbody>{issue_rows}</tbody></table>
+    {'<p class="llm-badge">✦ Issues below are LLM forensic findings with exact remediations</p>' if llm_issues_list else ''}
+    {active_issues_html}
   </section>
 
   <section id="page-types">
     <h2>Page-type findings</h2>
-    <table class="tight"><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Average score</th><th>Range</th><th>Example</th></tr></thead><tbody>{page_type_rows}</tbody></table>
+    {active_page_types_html if active_page_types_html else f"<table class='tight'><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Average score</th><th>Range</th><th>Example</th></tr></thead><tbody>{page_type_rows}</tbody></table>"}
   </section>
 
   <section id="priority">
@@ -1061,17 +1148,21 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <table class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>
   </section>
 
+  {'<section id="code-remediation"><h2>Code-level remediation appendix</h2><p class="llm-badge">✦ Exact corrected patterns from LLM forensic analysis</p>' + active_remediation_html + '</section>' if active_remediation_html else ''}
+
   <section id="gap-matrix">
     <h2>Best-practice gap matrix</h2>
-    <table class="tight"><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>
+    {active_gap_matrix_html}
   </section>
 
   <section id="implementation">
     <h2>Final verdict and implementation order</h2>
-    <p><strong>Overall verdict:</strong> {'Full-estate coverage completed with no material family omitted.' if all(row['coveragePercent'] == 100 for row in coverage_rows) else 'Coverage was materially incomplete and should be rerun after the missing family is fixed.'}</p>
-    <p><strong>What to fix first:</strong> {'; '.join(item['issueId'] + ' ' + item['exactRemediation'] for item in issues[:5]) if issues else 'No urgent remediation item exceeded the evidence threshold.'}</p>
-    <p><strong>Implementation sequence:</strong> 1) source-of-truth reconciliation, 2) template-level metadata and canonical fixes, 3) answer-first and citation-ready copy upgrades, 4) internal linking reinforcement, 5) final validation rerun.</p>
-    <p><strong>Expected gains:</strong> better route governance, stronger answer-engine extractability, cleaner generative summaries, and tighter internal topical signals.</p>
+    <p><strong>Overall verdict:</strong> {_esc(overall_verdict)}</p>
+    <p><strong>Implementation sequence:</strong></p>
+    <ol>{''.join(f'<li>{_esc(step)}</li>' for step in implementation_steps)}</ol>
+    <p><strong>Expected gains:</strong></p>
+    <ul>{''.join(f'<li>{_esc(gain)}</li>' for gain in implementation_gains)}</ul>
+    {('<p><strong>Forensic narrative:</strong> ' + _esc(implementation_narrative) + '</p>') if claude_analysis else ''}
   </section>
 
   <section id="coverage">
@@ -1116,6 +1207,361 @@ def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[
   }
 
 
+# ── Repo signals ──────────────────────────────────────────────────────────────
+
+def build_repo_signals(repo_root: Path) -> dict:
+  """Extracts known repo-level signals relevant to the LLM audit context."""
+  signals: dict[str, Any] = {}
+
+  governance_script = repo_root / "scripts" / "check_ungoverned_routes.py"
+  excludes_in_governance: list[str] = []
+  if governance_script.exists():
+    src = governance_script.read_text(encoding="utf-8")
+    excludes_in_governance = re.findall(r'["\']([^"\']+/)["\']', src)
+  signals["governanceScriptExcludes"] = excludes_in_governance
+
+  ebook_pipeline = repo_root / "scripts" / "ebook_pipeline.py"
+  ebook_trim = None
+  if ebook_pipeline.exists():
+    src = ebook_pipeline.read_text(encoding="utf-8")
+    m = re.search(r'\[:(\d+)\]', src)
+    if m:
+      ebook_trim = int(m.group(1))
+  signals["ebookPipelineTrimLimit"] = ebook_trim
+
+  blog_manifest = repo_root / "blog" / "posts.json"
+  blog_count = 0
+  if blog_manifest.exists():
+    try:
+      data = json.loads(blog_manifest.read_text(encoding="utf-8"))
+      items = data.get("items") or data.get("posts") or []
+      blog_count = len(items)
+    except Exception:
+      pass
+  signals["blogManifestPath"] = "blog/posts.json"
+  signals["blogManifestCount"] = blog_count
+
+  podcast_manifest = repo_root / "data" / "podcast-episodes.json"
+  podcast_count = 0
+  known_broken_redirects: list[dict[str, Any]] = []
+  if podcast_manifest.exists():
+    try:
+      data = json.loads(podcast_manifest.read_text(encoding="utf-8"))
+      items = data if isinstance(data, list) else data.get("items") or data.get("episodes") or []
+      podcast_count = len(items)
+    except Exception:
+      pass
+  signals["podcastManifestPath"] = "data/podcast-episodes.json"
+  signals["podcastManifestCount"] = podcast_count
+
+  redirects_file = repo_root / "_redirects"
+  if redirects_file.exists():
+    lines = redirects_file.read_text(encoding="utf-8").splitlines()
+    for line in lines:
+      parts = line.strip().split()
+      if len(parts) >= 2 and parts[0].startswith("/podcast/"):
+        known_broken_redirects.append({"from": parts[0], "to": parts[1]})
+  signals["knownRedirects"] = known_broken_redirects[:20]
+
+  llms_txt = repo_root / "llms.txt"
+  llm_index = repo_root / "llm-index.json"
+  llms_scope = "unknown"
+  if llms_txt.exists():
+    content = llms_txt.read_text(encoding="utf-8").lower()
+    if "ebook" in content and "podcast" not in content and "blog" not in content:
+      llms_scope = "ebook-only"
+    elif "podcast" in content or "transcript" in content or "blog" in content:
+      llms_scope = "broad"
+    else:
+      llms_scope = "narrow"
+  signals["llmsFiles"] = [f for f in ["llms.txt", "llm-index.json"] if (repo_root / f).exists()]
+  signals["llmsScope"] = llms_scope
+
+  generator_scripts = [
+    str(p.relative_to(repo_root))
+    for p in repo_root.rglob("*.py")
+    if any(token in p.name for token in ("generate", "pipeline", "inject"))
+  ] + [
+    str(p.relative_to(repo_root))
+    for p in repo_root.rglob("*.mjs")
+    if "generate" in p.name
+  ]
+  signals["generatorScripts"] = generator_scripts[:15]
+  signals["functionsPresent"] = [
+    str(p.relative_to(repo_root))
+    for p in (repo_root / "functions").rglob("*.js")
+  ] if (repo_root / "functions").exists() else []
+
+  return signals
+
+
+# ── Live dynamic URLs ─────────────────────────────────────────────────────────
+
+def extract_live_dynamic_urls(pages: list[dict[str, Any]], discovered: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+  """Build a structured list of dynamic URLs confirmed during the live crawl."""
+  dynamic_families = {"blog article", "podcast episode", "podcast transcript"}
+  result: list[dict[str, Any]] = []
+  seen: set[str] = set()
+  for page in pages:
+    if page["pageType"] not in dynamic_families:
+      continue
+    url = page["url"]
+    if url in seen:
+      continue
+    seen.add(url)
+    entry = discovered.get(url, {})
+    sources = sorted(entry.get("sources", set()))
+    result.append({
+      "url": url,
+      "pageType": page["pageType"],
+      "source": ", ".join(sources) if sources else "live-crawl",
+      "httpStatus": page["status"],
+      "inRepoManifest": "blog-manifest" in sources or "podcast-manifest" in sources,
+      "keyObservation": (
+        "duplicate standfirst block observed near top of page"
+        if page["pageType"] == "blog article" and page["introText"] and len(page["introText"]) > 400
+        else ""
+      ),
+    })
+  return result
+
+
+# ── Serialise page for API payload (no soup) ──────────────────────────────────
+
+def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False) -> dict[str, Any]:
+  """Strip the BeautifulSoup object and build a clean dict for the analysis API."""
+  soup = page.get("soup")
+  h2_headings: list[str] = []
+  schema_types: list[str] = []
+  intro_text = page.get("introText", "")[:300]
+
+  if soup:
+    h2_headings = [h.get_text(" ", strip=True) for h in soup.select("h2")][:8]
+    for script in soup.select("script[type='application/ld+json']"):
+      try:
+        data = json.loads(script.string or "")
+        t = data.get("@type", "")
+        if isinstance(t, list):
+          schema_types.extend(t)
+        elif t:
+          schema_types.append(t)
+      except Exception:
+        pass
+
+  result: dict[str, Any] = {
+    "url": page["url"],
+    "route": normalise_route(urlparse(page["url"]).path),
+    "status": page["status"],
+    "pageType": page["pageType"],
+    "coverageState": page["coverageState"],
+    "title": page["meta"]["title"],
+    "metaDescription": page["meta"]["metaDescription"],
+    "canonical": page["meta"]["canonical"],
+    "h1": page["meta"]["h1"],
+    "ogTitle": page["meta"].get("og", {}).get("og:title", ""),
+    "schemaCount": page["meta"]["schemaCount"],
+    "indexability": page["indexability"],
+    "wordCount": page["wordCount"],
+    "internalLinkCount": page["internalLinkCount"],
+    "questionHeadings": page["questionHeadings"],
+    "hasFaqSchema": page["hasFaqSchema"],
+    "scores": page["scores"],
+    "total": page["total"],
+    "grade": page["grade"],
+    "riskFlag": page["riskFlag"],
+  }
+  if is_priority:
+    result["introText"] = intro_text
+    result["h2Headings"] = h2_headings
+    result["schemaTypes"] = schema_types
+  return result
+
+
+# ── Derive analysis URL ───────────────────────────────────────────────────────
+
+def derive_analysis_url(callback_url: str | None, override: str | None = None) -> str | None:
+  """Convert the callback URL to the analysis endpoint URL."""
+  if override:
+    return override.rstrip("/")
+  if not callback_url:
+    return None
+  return callback_url.rstrip("/").replace("/callback", "/analysis")
+
+
+# ── LLM analysis call ─────────────────────────────────────────────────────────
+
+def call_analysis_endpoint(
+  analysis_url: str,
+  callback_token: str,
+  session_id: str,
+  base_url: str,
+  pages: list[dict[str, Any]],
+  priority_pages_raw: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage_rows: list[dict[str, Any]],
+  coverage_families: list[dict[str, Any]],
+  repo_signals: dict[str, Any],
+  live_dynamic_urls: list[dict[str, Any]],
+  workbook: WorkbookInfo,
+  discovery_meta: dict[str, Any],
+) -> dict[str, Any] | None:
+  """POST collected audit data to the LLM analysis endpoint; returns parsed JSON or None."""
+  import time
+
+  priority_urls = {p["url"] for p in priority_pages_raw}
+  all_routes_clean = [serialise_page_for_analysis(p, is_priority=False) for p in pages[:140]]
+  priority_pages_clean = [serialise_page_for_analysis(p, is_priority=True) for p in pages if p["url"] in priority_urls][:30]
+
+  inventory = {
+    "workbookUrlCount": workbook.url_count,
+    "repoRouteCount": discovery_meta["sourceCounts"].get("repo", 0),
+    "discoveredRouteCount": len(pages),
+    "pageTypeCounts": dict(Counter(p["pageType"] for p in pages)),
+    "sourceCounts": discovery_meta["sourceCounts"],
+    "workbookSheet": workbook.primary_sheet,
+    "blogManifestCount": repo_signals.get("blogManifestCount", 0),
+    "podcastManifestCount": repo_signals.get("podcastManifestCount", 0),
+  }
+
+  payload = {
+    "auditType": "seo-aeo-geo",
+    "sessionId": session_id,
+    "baseUrl": base_url,
+    "generatedAt": utc_now(),
+    "inventory": inventory,
+    "priorityPages": priority_pages_clean,
+    "allRoutes": all_routes_clean,
+    "heuristicIssues": issues[:40],
+    "repoSignals": repo_signals,
+    "liveDynamicUrls": live_dynamic_urls[:50],
+    "coverage": coverage_rows,
+    "coverageFamilies": coverage_families,
+  }
+
+  try:
+    import requests as _requests
+    resp = _requests.post(
+      analysis_url,
+      json=payload,
+      headers={
+        "Authorization": f"Bearer {callback_token}",
+        "Content-Type": "application/json",
+      },
+      timeout=300,
+    )
+    if not resp.ok:
+      print(f"[analysis] endpoint returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
+      return None
+    data = resp.json()
+    return data.get("analysis") or data
+  except Exception as exc:
+    print(f"[analysis] endpoint call failed: {exc}", file=sys.stderr)
+    return None
+
+
+# ── HTML helpers for LLM analysis ─────────────────────────────────────────────
+
+def _esc(value: Any) -> str:
+  """HTML-escape a string value."""
+  import html
+  return html.escape(str(value or ""))
+
+
+def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
+  if not llm_issues:
+    return "<p>No issues returned from LLM analysis.</p>"
+  rows = ""
+  for item in llm_issues:
+    severity_class = {"Critical": "sev-critical", "High": "sev-high", "Medium": "sev-medium"}.get(item.get("severity", ""), "")
+    rows += (
+      f"<tr class='{severity_class}'>"
+      f"<td>{_esc(item.get('issueId', ''))}</td>"
+      f"<td>{_esc(item.get('severity', ''))}</td>"
+      f"<td>{_esc(item.get('confidence', ''))}</td>"
+      f"<td>{_esc(item.get('lens', ''))}</td>"
+      f"<td><code>{_esc(item.get('affected', ''))}</code></td>"
+      f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
+      f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
+      f"<td>{_esc(item.get('exactRemediation', ''))}</td>"
+      f"<td>{_esc(item.get('estimatedEffort', ''))}</td>"
+      f"</tr>"
+    )
+  return (
+    "<table class='tight'>"
+    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th>"
+    "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Effort</th>"
+    "</tr></thead>"
+    f"<tbody>{rows}</tbody></table>"
+  )
+
+
+def render_llm_remediation_table(items: list[dict[str, Any]]) -> str:
+  if not items:
+    return ""
+  rows = "".join(
+    f"<tr>"
+    f"<td><code>{_esc(item.get('target', ''))}</code></td>"
+    f"<td>{_esc(item.get('issueId', ''))}</td>"
+    f"<td><pre><code>{_esc(item.get('currentPattern', ''))}</code></pre></td>"
+    f"<td><pre><code>{_esc(item.get('correctedPattern', ''))}</code></pre></td>"
+    f"<td>{_esc(item.get('rationale', ''))}</td>"
+    f"</tr>"
+    for item in items
+  )
+  return (
+    "<table class='tight'>"
+    "<thead><tr><th>Target file</th><th>Issue ID</th><th>Current pattern</th>"
+    "<th>Corrected pattern</th><th>Rationale</th></tr></thead>"
+    f"<tbody>{rows}</tbody></table>"
+  )
+
+
+def render_llm_page_type_table(items: list[dict[str, Any]]) -> str:
+  if not items:
+    return ""
+  rows = "".join(
+    f"<tr>"
+    f"<td>{_esc(item.get('pageType', ''))}</td>"
+    f"<td>{_esc(item.get('count', ''))}</td>"
+    f"<td>{_esc(item.get('coverageState', ''))}</td>"
+    f"<td>{_esc(item.get('score', ''))}</td>"
+    f"<td>{_esc(item.get('grade', ''))}</td>"
+    f"<td>{_esc(item.get('judgement', ''))}</td>"
+    f"<td>{_esc(item.get('keyNote', ''))}</td>"
+    f"</tr>"
+    for item in items
+  )
+  return (
+    "<table class='tight'>"
+    "<thead><tr><th>Page type</th><th>Count</th><th>Coverage</th>"
+    "<th>Score</th><th>Grade</th><th>Judgement</th><th>Key note</th></tr></thead>"
+    f"<tbody>{rows}</tbody></table>"
+  )
+
+
+def render_llm_gap_matrix(items: list[dict[str, Any]]) -> str:
+  if not items:
+    return ""
+  rows = "".join(
+    f"<tr>"
+    f"<td>{_esc(item.get('pageType', ''))}</td>"
+    f"<td>{_esc(item.get('seo', ''))}</td>"
+    f"<td>{_esc(item.get('aeo', ''))}</td>"
+    f"<td>{_esc(item.get('geo', ''))}</td>"
+    f"<td>{_esc(item.get('confidence', ''))}</td>"
+    f"<td>{_esc(item.get('topMissingElement', ''))}</td>"
+    f"<td>{_esc(item.get('businessImpact', ''))}</td>"
+    f"</tr>"
+    for item in items
+  )
+  return (
+    "<table class='tight'>"
+    "<thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th>"
+    "<th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead>"
+    f"<tbody>{rows}</tbody></table>"
+  )
+
+
 def main() -> int:
   global args
   args = parse_args()
@@ -1132,6 +1578,36 @@ def main() -> int:
   gap_matrix = build_gap_matrix(pages)
   page_type_findings = build_page_type_findings(pages)
   priority_pages = build_priority_pages(pages)
+
+  # ── LLM forensic analysis ────────────────────────────────────────────────────
+  repo_signals = build_repo_signals(REPO_ROOT)
+  live_dynamic_urls = extract_live_dynamic_urls(pages, discovered)
+  analysis_url = derive_analysis_url(args.callback_url, getattr(args, "analysis_url", None))
+  claude_analysis: dict[str, Any] | None = None
+  if analysis_url and args.callback_token:
+    print(f"[analysis] calling LLM analysis at {analysis_url}", file=sys.stderr)
+    claude_analysis = call_analysis_endpoint(
+      analysis_url=analysis_url,
+      callback_token=args.callback_token,
+      session_id=args.session_id,
+      base_url=base_url,
+      pages=pages,
+      priority_pages_raw=priority_pages,
+      issues=issues,
+      coverage_rows=coverage_rows,
+      coverage_families=family_coverage(pages),
+      repo_signals=repo_signals,
+      live_dynamic_urls=live_dynamic_urls,
+      workbook=workbook,
+      discovery_meta=discovery_meta,
+    )
+    if claude_analysis:
+      print("[analysis] LLM analysis received successfully", file=sys.stderr)
+    else:
+      print("[analysis] LLM analysis failed or unavailable; falling back to heuristic report", file=sys.stderr)
+  else:
+    print("[analysis] no analysis URL or token configured; skipping LLM call", file=sys.stderr)
+  # ─────────────────────────────────────────────────────────────────────────────
 
   coverage_json = {
     "generatedAt": utc_now(),
@@ -1157,7 +1633,7 @@ def main() -> int:
   }
   uploaded = upload_selected_files_to_r2(client, os.environ["R2_BUCKET_BRAND_ASSETS"], args.report_prefix, artefact_files)
 
-  report_html = build_report(base_url, workbook, discovery_meta, pages, issues, coverage_rows, template_annex, gap_matrix, page_type_findings, priority_pages, uploaded)
+  report_html = build_report(base_url, workbook, discovery_meta, pages, issues, coverage_rows, template_annex, gap_matrix, page_type_findings, priority_pages, uploaded, claude_analysis=claude_analysis)
   report_path = write_text(output_dir / "report.html", report_html)
   artefact_files["report.html"] = report_path
   uploaded = upload_selected_files_to_r2(client, os.environ["R2_BUCKET_BRAND_ASSETS"], args.report_prefix, artefact_files)
