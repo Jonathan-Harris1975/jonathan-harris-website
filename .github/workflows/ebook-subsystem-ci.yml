@@ -92,6 +92,9 @@ jobs:
           find . -type d -name '__pycache__' -prune -exec rm -rf {} +
           find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
+      - name: Rebuild local release contract to mirror the Pages build
+        run: bash build.sh
+
       - name: Wait for the production deploy to publish the governed crawler contract
         run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20 --require-content-match --require-redirect-contract
 
