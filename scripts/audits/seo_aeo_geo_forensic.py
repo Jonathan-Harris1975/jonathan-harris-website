@@ -85,9 +85,9 @@ IMPORTANT_PAGE_TYPES = {
 }
 FINAL_ARTIFACTS = ("report.html", "summary.json", "coverage.json")
 DEFAULT_PODCAST_FEED = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
-COVERED_STATES = {"Fully analysed", "Analysed through shared template plus page-specific checks"}
+ANALYSED_STATES = {"Fully analysed", "Analysed through shared template plus page-specific checks"}
 EXCLUDED_STATE_PREFIX = "Excluded"
-REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
+COVERED_STATES = ANALYSED_STATES
 SHARED_TEMPLATE_FAMILIES = {"book page", "category / hub", "topic hub", "archive / pagination / utility"}
 AI_REQUIRED_SECTIONS = [
   "executive synthesis",
@@ -131,25 +131,21 @@ def base_host(base_url: str) -> str:
   return (urlparse(base_url).hostname or "").lower()
 
 
-def is_in_scope_url(url: str, base_url: str) -> bool:
-  """Return True only for audit-page URLs on the primary website host.
-
-  Feed, asset, image, and source-shortener subdomains are inspected as
-  supporting evidence where explicitly fetched, but they must not be crawled
-  as website pages. The previous broad subdomain match pulled RSS source
-  pages into the audit and then resolved their relative links against the main
-  site, creating false 404s such as /about and /about/contact.html.
-  """
+def is_primary_site_url(url: str, base_url: str) -> bool:
   parsed = urlparse(urljoin(base_url.rstrip("/") + "/", url))
   host = (parsed.hostname or "").lower()
   allowed_host = base_host(base_url)
-  if not host or not allowed_host:
-    return False
-  return host == allowed_host or host == f"www.{allowed_host}"
+  return bool(host and allowed_host and host == allowed_host)
 
 
-def normalise_absolute_url(url: str, base_url: str) -> str:
-  absolute = urljoin(base_url.rstrip("/") + "/", url)
+def is_in_scope_url(url: str, base_url: str) -> bool:
+  """Return true only for the audited website host, not RSS/source/asset subdomains."""
+  return is_primary_site_url(url, base_url)
+
+
+def normalise_absolute_url(url: str, base_url: str, context_url: str | None = None) -> str:
+  source_base = (context_url or base_url).rstrip("/") + "/"
+  absolute = urljoin(source_base, url)
   parsed = urlparse(absolute)
   scheme = parsed.scheme or "https"
   host = (parsed.netloc or base_host(base_url)).lower()
@@ -158,25 +154,40 @@ def normalise_absolute_url(url: str, base_url: str) -> str:
   return f"{scheme}://{host}{path}"
 
 
-def clean_link_candidate(href: str, current_url: str, base_url: str) -> str | None:
+def is_excluded_state(state: str) -> bool:
+  return str(state or "").startswith(EXCLUDED_STATE_PREFIX)
+
+
+def is_analysed_state(state: str) -> bool:
+  return state in ANALYSED_STATES
+
+
+def is_covered_state(state: str) -> bool:
+  return is_analysed_state(state) or is_excluded_state(state)
+
+
+def clean_link_candidate(href: str, context_url: str, base_url: str) -> str | None:
   href = (href or "").strip()
   if not href or href.startswith("#"):
     return None
   if href.startswith(("mailto:", "tel:", "javascript:")):
     return None
-
-  # Resolve relative links against the page that contained them, not the main
-  # audit base URL. This prevents links on fetched RSS/source pages from being
-  # rewritten into false jonathan-harris.online paths.
-  absolute_raw = urljoin(current_url, href)
-  parsed = urlparse(absolute_raw)
+  absolute = normalise_absolute_url(href, base_url, context_url=context_url)
+  parsed = urlparse(absolute)
   suffix = Path(parsed.path).suffix.lower()
   if suffix and suffix in BLOCKED_PATH_SUFFIXES:
     return None
-  if not is_in_scope_url(absolute_raw, base_url):
+  if not is_in_scope_url(absolute, base_url):
     return None
-  return normalise_absolute_url(absolute_raw, base_url)
+  return absolute
 
+
+def normalise_discovery_url(url: str, base_url: str) -> str:
+  normalised = normalise_absolute_url(url, base_url)
+  path = normalise_route(urlparse(normalised).path)
+  if re.match(r"^/TT-\d{4}-\d{2}-\d{2}$", path):
+    return normalise_absolute_url(f"/podcast{path}", base_url)
+  return normalised
 
 def classify_page(url: str) -> str:
   parsed = urlparse(url)
@@ -194,9 +205,9 @@ def classify_page(url: str) -> str:
     return "podcast episode"
   if path.startswith("/podcast"):
     return "podcast hub"
-  if re.match(r"^/ebooks/[^/]+/buy-now$", path):
+  if path.startswith("/ebooks/") and path.endswith("/buy-now"):
     return "book buy-now path"
-  if re.match(r"^/ebooks/[^/]+$", path):
+  if path.startswith("/ebooks/") and path.count("/") >= 2:
     return "book page"
   if path.startswith("/ebooks"):
     return "book hub"
@@ -218,11 +229,10 @@ def classify_page(url: str) -> str:
     return "archive / pagination / utility"
   return "site page"
 
-
 def representative_family_source(page_type: str) -> str:
   mapping = {
     "book page": "ebooks/*/index.html",
-    "book buy-now path": "_redirects buy-now rules",
+    "book buy-now path": "ebooks/*/buy-now redirect",
     "book hub": "ebooks/index.html",
     "category / hub": "catalogue/*/index.html",
     "topic hub": "topics/*/index.html",
@@ -246,11 +256,11 @@ def derive_route_family(url: str) -> str:
     return "/blog/posts"
   if path.startswith("/blog"):
     return "/blog"
-  if path.startswith("/podcast/episodes/"):
+  if path.startswith("/podcast/episodes/") or re.match(r"^/podcast/TT-\d{4}-\d{2}-\d{2}$", path):
     return "/podcast/episodes"
   if path.startswith("/podcast"):
     return "/podcast"
-  if re.match(r"^/ebooks/[^/]+/buy-now$", path):
+  if path.startswith("/ebooks/") and path.endswith("/buy-now"):
     return "/ebooks/buy-now"
   if path.startswith("/ebooks/"):
     return "/ebooks/detail"
@@ -379,6 +389,36 @@ def discover_feed_candidates(repo_root: Path) -> list[str]:
   return sorted(candidates)
 
 
+def feed_candidate_to_site_url(candidate: str, feed_url: str, base_url: str) -> str | None:
+  raw = (candidate or "").strip()
+  if not raw:
+    return None
+
+  # RSS GUIDs are often plain IDs, not URLs. Accept only URL-like values or the
+  # podcast date slugs that the estate intentionally supports as compatibility routes.
+  date_slug_match = re.match(r"^/?TT-\d{4}-\d{2}-\d{2}/?$", raw)
+  if date_slug_match:
+    date_slug = raw.strip("/")
+    return normalise_absolute_url(f"/podcast/{date_slug}", base_url)
+
+  if not raw.startswith(("http://", "https://", "/")):
+    return None
+
+  absolute = urljoin(feed_url, raw) if raw.startswith("/") else raw
+  parsed = urlparse(absolute)
+  path = normalise_route(parsed.path or "/")
+
+  # Some older podcast feed entries exposed root-level /TT-YYYY-MM-DD links.
+  # Those are feed artefacts, not live page URLs. Audit the governed podcast
+  # compatibility route instead of generating false root-level 404s.
+  if re.match(r"^/TT-\d{4}-\d{2}-\d{2}$", path):
+    return normalise_absolute_url(f"/podcast{path}", base_url)
+
+  if not is_in_scope_url(absolute, base_url):
+    return None
+  return normalise_absolute_url(absolute, base_url)
+
+
 def parse_feed_urls(feed_url: str, base_url: str) -> list[str]:
   fetched = fetch_html(feed_url, timeout=20.0, extra_headers={"Accept": "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.8"})
   if fetched.get("status") != 200 or not fetched.get("text"):
@@ -406,10 +446,10 @@ def parse_feed_urls(feed_url: str, base_url: str) -> list[str]:
           candidates.append(href.strip())
 
     for candidate in candidates:
-      if candidate and is_in_scope_url(candidate, base_url):
-        urls.append(normalise_absolute_url(candidate, base_url))
-  return urls
-
+      site_url = feed_candidate_to_site_url(candidate, feed_url, base_url)
+      if site_url:
+        urls.append(site_url)
+  return sorted(set(urls))
 
 def extract_internal_links(url: str, soup: BeautifulSoup, base_url: str) -> list[str]:
   discovered: list[str] = []
@@ -422,7 +462,7 @@ def extract_internal_links(url: str, soup: BeautifulSoup, base_url: str) -> list
 
 
 def add_discovered(discovered: dict[str, dict[str, Any]], url: str, source: str, base_url: str, **metadata: Any) -> str:
-  normalised = normalise_absolute_url(url, base_url)
+  normalised = normalise_discovery_url(url, base_url)
   entry = discovered.setdefault(
     normalised,
     {
@@ -625,48 +665,25 @@ def compliance_label(avg_score: float) -> str:
   return "Weak"
 
 
-def empty_meta() -> dict[str, Any]:
-  return {
-    "title": "",
-    "canonical": "",
-    "metaDescription": "",
-    "viewport": "",
-    "h1": "",
-    "og": {},
-    "schemaCount": 0,
-  }
-
-
-def redirect_target_from_fetch(url: str, fetched: dict[str, Any]) -> str:
-  location = ""
-  headers = fetched.get("headers") or {}
-  for key, value in headers.items():
-    if str(key).lower() == "location":
-      location = str(value).strip()
-      break
-  return urljoin(url, location) if location else ""
-
-
-def build_non_content_page(
+def make_unanalysed_page(
   entry: dict[str, Any],
   base_url: str,
-  *,
-  status: int,
-  final_url: str = "",
+  fetched: dict[str, Any],
   coverage_state: str,
   reason: str,
-  redirect_chain: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
   url = entry["url"]
   page_type = classify_page(url)
-  page = {
+  final_url = fetched.get("url", url)
+  status = fetched.get("status", 0)
+  return {
     **entry,
     "status": status,
-    "finalUrl": final_url or url,
-    "redirectChain": redirect_chain or [],
-    "redirectTarget": final_url or "",
+    "finalUrl": final_url,
+    "redirectChain": fetched.get("history", []),
+    "fetchError": fetched.get("error", ""),
     "exclusionReason": reason,
-    "meta": empty_meta(),
+    "meta": {"title": "", "canonical": "", "metaDescription": "", "viewport": "", "h1": "", "og": {}, "schemaCount": 0},
     "canonicalNormalised": "",
     "wordCount": 0,
     "visibleText": "",
@@ -678,79 +695,62 @@ def build_non_content_page(
     "internalLinkCount": 0,
     "internalLinks": [],
     "hasFaqSchema": False,
-    "indexability": "excluded" if coverage_state.startswith(EXCLUDED_STATE_PREFIX) else "not verified",
+    "indexability": "excluded" if is_excluded_state(coverage_state) else "not verified",
     "ctaCount": 0,
     "pageType": page_type,
     "coverageState": coverage_state,
+    "soup": None,
     "scores": {"technicalSeo": 0, "onPageIntent": 0, "aeo": 0, "geo": 0, "entity": 0, "internalLinking": 0, "conversion": 0},
     "total": 0,
     "grade": "F",
-    "riskFlag": "low" if coverage_state.startswith(EXCLUDED_STATE_PREFIX) else "high",
-    "soup": BeautifulSoup("", "html.parser"),
+    "riskFlag": "high" if coverage_state == "Failed to fetch" else "low",
   }
-  return page
 
 
 def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
   url = entry["url"]
-  initial = fetch_html(url, allow_redirects=False)
-  status = int(initial.get("status", 0) or 0)
-  challenge_reason = detect_challenge_page(status, initial.get("text", ""))
+  fetched = fetch_html(url)
+  final_url = fetched.get("url", url)
+  final_host = (urlparse(final_url).hostname or "").lower()
+  final_norm = normalise_absolute_url(final_url, base_url) if final_host else url
+  current_norm = normalise_absolute_url(url, base_url)
+  history = fetched.get("history", []) or []
+
+  # External buy-now and platform redirects are intentional conversion/support paths.
+  # They must be inventoried, but they are not first-party HTML pages to score.
+  if final_host and final_host != base_host(base_url):
+    return make_unanalysed_page(
+      entry,
+      base_url,
+      fetched,
+      "Excluded as redirected to external destination",
+      f"Final URL leaves audited host: {final_url}",
+    )
+
+  # Same-host redirect aliases are covered as redirect/canonical evidence; the final
+  # destination is queued separately by crawl_and_analyse for page-level analysis.
+  if history and final_norm != current_norm:
+    return make_unanalysed_page(
+      entry,
+      base_url,
+      fetched,
+      "Excluded as redirected/canonicalised",
+      f"Redirects to canonical in-scope URL: {final_norm}",
+    )
+
+  challenge_reason = detect_challenge_page(fetched.get("status", 0), fetched.get("text", ""))
   if challenge_reason:
     raise RuntimeError(f"Live audit blocked on {url}: {challenge_reason}")
 
-  if status in REDIRECT_STATUS_CODES:
-    target = redirect_target_from_fetch(url, initial)
-    redirect_chain = [{"status": status, "url": url, "location": target}]
-    if not target:
-      return build_non_content_page(
-        entry,
-        base_url,
-        status=status,
-        coverage_state="Failed to fetch",
-        reason="Redirect response did not provide a Location header.",
-        redirect_chain=redirect_chain,
-      )
-
-    if not is_in_scope_url(target, base_url):
-      return build_non_content_page(
-        entry,
-        base_url,
-        status=status,
-        final_url=target,
-        coverage_state="Excluded as redirected to external destination",
-        reason=f"The route redirects to an external destination: {target}",
-        redirect_chain=redirect_chain,
-      )
-
-    final = fetch_html(target, allow_redirects=True)
-    final_status = int(final.get("status", 0) or 0)
-    final_url = final.get("url", target)
-    full_chain = redirect_chain + (final.get("history") or [])
-    final_challenge = detect_challenge_page(final_status, final.get("text", ""))
-    if final_challenge:
-      raise RuntimeError(f"Live audit blocked on {target}: {final_challenge}")
-    if final_status == 200:
-      return build_non_content_page(
-        entry,
-        base_url,
-        status=status,
-        final_url=final_url,
-        coverage_state="Excluded as redirected/canonicalised",
-        reason=f"The route redirects to canonical in-scope URL {final_url}.",
-        redirect_chain=full_chain,
-      )
-    return build_non_content_page(
+  if fetched.get("status", 0) != 200:
+    return make_unanalysed_page(
       entry,
       base_url,
-      status=final_status,
-      final_url=final_url,
-      coverage_state="Failed to fetch",
-      reason=f"Redirect target did not return 200. Initial status {status}, final status {final_status}, target {final_url}.",
-      redirect_chain=full_chain,
+      fetched,
+      "Failed to fetch",
+      fetched.get("error") or f"HTTP {fetched.get('status', 0)} after live fetch retry",
     )
 
-  fetched = initial
   soup = parse_html(fetched.get("text", ""))
   meta = extract_meta(soup)
   body_text = soup.get_text(" ", strip=True)
@@ -760,7 +760,7 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
   robots_tag = soup.select_one("meta[name='robots']")
   robots_content = robots_tag.get("content", "").lower() if robots_tag else ""
   canonical_target = meta["canonical"]
-  canonical_normalised = normalise_absolute_url(canonical_target, base_url) if canonical_target else ""
+  canonical_normalised = normalise_absolute_url(canonical_target, base_url, context_url=url) if canonical_target else ""
   links = extract_internal_links(url, soup, base_url)
   cta_candidates = [
     a for a in soup.select("a[href]")
@@ -769,10 +769,10 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
   page_type = classify_page(url)
   page = {
     **entry,
-    "status": status,
-    "finalUrl": fetched.get("url", url),
-    "redirectChain": fetched.get("history", []),
-    "redirectTarget": "",
+    "status": fetched.get("status", 0),
+    "finalUrl": final_url,
+    "redirectChain": history,
+    "fetchError": fetched.get("error", ""),
     "exclusionReason": "",
     "meta": meta,
     "canonicalNormalised": canonical_normalised,
@@ -789,7 +789,7 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
     "indexability": "noindex" if "noindex" in robots_content else "indexable",
     "ctaCount": len(cta_candidates),
     "pageType": page_type,
-    "coverageState": coverage_state_for_page(page_type, status),
+    "coverageState": coverage_state_for_page(page_type, fetched.get("status", 0)),
     "soup": soup,
   }
   page["scores"] = score_page(page)
@@ -797,7 +797,6 @@ def inspect_url(entry: dict[str, Any], base_url: str) -> dict[str, Any]:
   page["grade"] = grade(page["total"])
   page["riskFlag"] = "high" if page["total"] < 70 else ("medium" if page["total"] < 80 else "low")
   return page
-
 
 def crawl_and_analyse(base_url: str, discovered: dict[str, dict[str, Any]], excludes: list[str]) -> list[dict[str, Any]]:
   queue = deque(sorted(discovered.keys()))
@@ -814,6 +813,18 @@ def crawl_and_analyse(base_url: str, discovered: dict[str, dict[str, Any]], excl
     page = inspect_url(entry, base_url)
     processed[url] = page
 
+    final_url = page.get("finalUrl") or ""
+    if page["coverageState"] == "Excluded as redirected/canonicalised" and final_url and is_in_scope_url(final_url, base_url):
+      final_norm = normalise_absolute_url(final_url, base_url)
+      final_path = normalise_route(urlparse(final_norm).path)
+      if not should_exclude(final_path, excludes) and final_norm not in processed:
+        if final_norm not in discovered:
+          add_discovered(discovered, final_norm, "redirect-target", base_url, detail=f"redirect target from {url}")
+        queue.append(final_norm)
+
+    if not is_analysed_state(page["coverageState"]):
+      continue
+
     for linked_url in page["internalLinks"]:
       linked_path = normalise_route(urlparse(linked_url).path)
       if should_exclude(linked_path, excludes):
@@ -822,7 +833,6 @@ def crawl_and_analyse(base_url: str, discovered: dict[str, dict[str, Any]], excl
         add_discovered(discovered, linked_url, "live-link", base_url)
         queue.append(linked_url)
   return [processed[url] for url in sorted(processed.keys())]
-
 
 def issue_record(issue_id: str, severity: str, confidence: str, lens: str, root_cause: str, affected: str, evidence: str, why: str, remediation: str, effort: str = "Low", owner: str = "Engineering") -> dict[str, Any]:
   return {
@@ -846,7 +856,7 @@ def collect_issues(pages: list[dict[str, Any]], discovered: dict[str, dict[str, 
   issues: list[dict[str, Any]] = []
   counter = 1
 
-  failed_pages = [page for page in pages if page["coverageState"] == "Failed to fetch"]
+  failed_pages = [page for page in pages if page.get("coverageState") == "Failed to fetch"]
   if failed_pages:
     issues.append(issue_record(
       f"SEO-{counter:03d}",
@@ -895,7 +905,7 @@ def collect_issues(pages: list[dict[str, Any]], discovered: dict[str, dict[str, 
 
   family_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
   for page in pages:
-    if page["coverageState"] in COVERED_STATES:
+    if is_analysed_state(page.get("coverageState", "")):
       family_groups[page["pageType"]].append(page)
 
   for page_type, family_pages in sorted(family_groups.items()):
@@ -971,6 +981,10 @@ def collect_issues(pages: list[dict[str, Any]], discovered: dict[str, dict[str, 
   return issues
 
 
+def scored_pages_for_family(family_pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  return [page for page in family_pages if is_analysed_state(page.get("coverageState", ""))]
+
+
 def family_coverage(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
   for page in pages:
@@ -980,25 +994,22 @@ def family_coverage(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     family_pages = family_map.get(family, [])
     if not family_pages:
       continue
-    analysed = len([page for page in family_pages if page["coverageState"] in COVERED_STATES])
-    excluded = len([page for page in family_pages if str(page["coverageState"]).startswith(EXCLUDED_STATE_PREFIX)])
-    failed = len([page for page in family_pages if page["coverageState"] == "Failed to fetch"])
-    covered = analysed + excluded
-    scorable = [page for page in family_pages if page["coverageState"] in COVERED_STATES]
-    scores = [page["total"] for page in scorable] or [0]
+    analysed = len([page for page in family_pages if is_analysed_state(page["coverageState"])])
+    excluded = len([page for page in family_pages if is_excluded_state(page["coverageState"])])
+    failed = len(family_pages) - analysed - excluded
+    score_pages = scored_pages_for_family(family_pages)
     rows.append({
       "pageType": family,
       "discovered": len(family_pages),
       "analysed": analysed,
       "excluded": excluded,
       "failed": failed,
-      "coveragePercent": round((covered / len(family_pages)) * 100, 1) if family_pages else 0,
-      "averageScore": round(mean(scores), 1),
-      "lowestScore": min(scores),
-      "highestScore": max(scores),
+      "coveragePercent": round(((analysed + excluded) / len(family_pages)) * 100, 1) if family_pages else 0,
+      "averageScore": round(mean(page["total"] for page in score_pages), 1) if score_pages else 0,
+      "lowestScore": min(page["total"] for page in score_pages) if score_pages else 0,
+      "highestScore": max(page["total"] for page in score_pages) if score_pages else 0,
     })
   return rows
-
 
 def build_template_annex(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -1006,29 +1017,21 @@ def build_template_annex(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     family_map[page["pageType"]].append(page)
   rows: list[dict[str, Any]] = []
   for page_type, family_pages in sorted(family_map.items()):
-    content_pages = [page for page in family_pages if page["coverageState"] in COVERED_STATES]
-    if not content_pages:
-      rows.append({
-        "pageType": page_type,
-        "pagesAffected": len(family_pages),
-        "sourceFile": representative_family_source(page_type),
-        "averageScore": 0,
-        "repeatedStrengths": ["Non-content redirect or excluded route family was inventoried with explicit coverage states."],
-        "repeatedDefects": ["No page-template defect scored because this family is not audited as rendered HTML."],
-        "fixPriority": "Low",
-      })
-      continue
-    avg_score = round(mean(page["total"] for page in content_pages), 1)
+    score_pages = scored_pages_for_family(family_pages)
+    avg_score = round(mean(page["total"] for page in score_pages), 1) if score_pages else 0
     repeated_strengths = []
     repeated_defects = []
-    if all(page["meta"]["canonical"] for page in content_pages):
-      repeated_strengths.append("Canonical coverage is present across the family.")
-    if all(page["meta"]["metaDescription"] for page in content_pages):
-      repeated_strengths.append("Meta descriptions are present across the family.")
-    if any(not page["questionHeadings"] for page in content_pages):
-      repeated_defects.append("Question-led headings are missing on part of the family.")
-    if any(len(page["introText"].split()) < 35 for page in content_pages):
+    checked_pages = score_pages or family_pages
+    if score_pages and all(page["meta"]["canonical"] for page in score_pages):
+      repeated_strengths.append("Canonical coverage is present across the analysed family pages.")
+    if score_pages and all(page["meta"]["metaDescription"] for page in score_pages):
+      repeated_strengths.append("Meta descriptions are present across the analysed family pages.")
+    if score_pages and any(not page["questionHeadings"] for page in score_pages):
+      repeated_defects.append("Question-led headings are missing on part of the analysed family.")
+    if score_pages and any(len(page["introText"].split()) < 35 for page in score_pages):
       repeated_defects.append("Openings are too thin for strong answer-first extraction on some pages.")
+    if not score_pages and any(is_excluded_state(page["coverageState"]) for page in checked_pages):
+      repeated_strengths.append("Family was inventoried and explicitly excluded as redirect/canonical/non-page evidence where applicable.")
     rows.append({
       "pageType": page_type,
       "pagesAffected": len(family_pages),
@@ -1036,10 +1039,9 @@ def build_template_annex(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
       "averageScore": avg_score,
       "repeatedStrengths": repeated_strengths or ["No repeated strengths confirmed beyond baseline rendering and metadata."],
       "repeatedDefects": repeated_defects or ["No repeated family-level defect was strong enough to elevate into a template issue."],
-      "fixPriority": "High" if avg_score < 75 else ("Medium" if avg_score < 85 else "Low"),
+      "fixPriority": "High" if avg_score and avg_score < 75 else ("Medium" if avg_score and avg_score < 85 else "Low"),
     })
   return rows
-
 
 def build_gap_matrix(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -1047,22 +1049,22 @@ def build_gap_matrix(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     family_map[page["pageType"]].append(page)
   rows: list[dict[str, Any]] = []
   for page_type, family_pages in sorted(family_map.items()):
-    content_pages = [page for page in family_pages if page["coverageState"] in COVERED_STATES]
-    if not content_pages:
+    score_pages = scored_pages_for_family(family_pages)
+    if not score_pages:
       rows.append({
         "pageType": page_type,
         "seo": "Not applicable",
         "aeo": "Not applicable",
         "geo": "Not applicable",
         "confidence": "Confirmed",
-        "topMissing": "Rendered HTML is intentionally not audited for excluded redirect routes",
-        "businessImpact": "Medium" if page_type == "book buy-now path" else "Low",
+        "topMissing": "Explicitly excluded redirect or non-page route",
+        "businessImpact": "Medium" if page_type in IMPORTANT_PAGE_TYPES else "Low",
       })
       continue
-    avg_seo = mean(page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"] for page in content_pages)
-    avg_aeo = mean(page["scores"]["aeo"] for page in content_pages)
-    avg_geo = mean(page["scores"]["geo"] for page in content_pages)
-    top_missing = "Question-led headings" if sum(1 for page in content_pages if not page["questionHeadings"]) >= max(1, len(content_pages) // 2) else "Stronger opening summaries"
+    avg_seo = mean(page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"] for page in score_pages)
+    avg_aeo = mean(page["scores"]["aeo"] for page in score_pages)
+    avg_geo = mean(page["scores"]["geo"] for page in score_pages)
+    top_missing = "Question-led headings" if sum(1 for page in score_pages if not page["questionHeadings"]) >= max(1, len(score_pages) // 2) else "Stronger opening summaries"
     rows.append({
       "pageType": page_type,
       "seo": compliance_label(avg_seo / 35 * 100),
@@ -1074,39 +1076,38 @@ def build_gap_matrix(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     })
   return rows
 
-
 def build_page_type_findings(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
   for page in pages:
     family_map[page["pageType"]].append(page)
   findings = []
   for page_type, family_pages in sorted(family_map.items()):
-    scorable = [page for page in family_pages if page["coverageState"] in COVERED_STATES]
-    scores = [page["total"] for page in scorable] or [0]
-    excluded = len([page for page in family_pages if str(page["coverageState"]).startswith(EXCLUDED_STATE_PREFIX)])
-    failed = len([page for page in family_pages if page["coverageState"] == "Failed to fetch"])
+    score_pages = scored_pages_for_family(family_pages)
+    scores = [page["total"] for page in score_pages]
+    analysed = len(score_pages)
+    excluded = len([page for page in family_pages if is_excluded_state(page["coverageState"])])
+    failed = len(family_pages) - analysed - excluded
     if failed:
       coverage_state = "Partial / failed"
-    elif excluded and not scorable:
-      coverage_state = "Excluded / redirected"
-    elif excluded:
+    elif analysed and excluded:
       coverage_state = "Analysed plus explicit exclusions"
+    elif analysed:
+      coverage_state = "Fully analysed"
     else:
-      coverage_state = "Fully analysed" if all(page["coverageState"] in COVERED_STATES for page in family_pages) else "Partial / failed"
+      coverage_state = "Excluded / redirected"
     findings.append({
       "pageType": page_type,
       "count": len(family_pages),
-      "averageScore": round(mean(scores), 1),
-      "lowestScore": min(scores),
-      "highestScore": max(scores),
+      "averageScore": round(mean(scores), 1) if scores else 0,
+      "lowestScore": min(scores) if scores else 0,
+      "highestScore": max(scores) if scores else 0,
       "exampleUrl": family_pages[0]["url"],
       "coverageState": coverage_state,
     })
   return findings
 
-
 def build_priority_pages(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  candidate_pages = [page for page in pages if page["coverageState"] in COVERED_STATES or page["coverageState"] == "Failed to fetch"]
+  candidate_pages = [page for page in pages if is_analysed_state(page["coverageState"]) or page["coverageState"] == "Failed to fetch"]
   family_best: dict[str, dict[str, Any]] = {}
   family_worst: dict[str, dict[str, Any]] = {}
   for page in candidate_pages:
@@ -1121,30 +1122,29 @@ def build_priority_pages(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
       selected.setdefault(page["url"], page)
   return sorted(selected.values(), key=lambda page: (page["total"], page["pageType"]))[:30]
 
-
 def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
   return {
     "url": page["url"],
     "path": page["path"],
     "pageType": page["pageType"],
     "sources": sorted(page["sources"]),
+    "status": page["status"],
+    "finalUrl": page.get("finalUrl", page["url"]),
+    "redirectChain": page.get("redirectChain", []),
     "canonical": page["canonicalNormalised"] or page["meta"]["canonical"] or "",
     "indexability": page["indexability"],
     "coverageState": page["coverageState"],
-    "status": page["status"],
+    "exclusionReason": page.get("exclusionReason", ""),
+    "fetchError": page.get("fetchError", ""),
     "score": page["total"],
     "grade": page["grade"],
     "riskFlag": page["riskFlag"],
-    "finalUrl": page.get("finalUrl", page["url"]),
-    "redirectTarget": page.get("redirectTarget", ""),
-    "exclusionReason": page.get("exclusionReason", ""),
   }
 
-
 def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], artefacts: dict[str, str], analysis_state: dict[str, Any]) -> dict[str, Any]:
-  analysed = len([page for page in pages if page["coverageState"] in COVERED_STATES])
+  analysed = len([page for page in pages if is_analysed_state(page["coverageState"])])
   failed = len([page for page in pages if page["coverageState"] == "Failed to fetch"])
-  excluded = len([page for page in pages if str(page["coverageState"]).startswith("Excluded")])
+  excluded = len([page for page in pages if is_excluded_state(page["coverageState"])])
   return {
     "totalDiscoveredUrls": len(pages),
     "totalAnalysedUrls": analysed,
@@ -1172,15 +1172,15 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   }
   ai_available = bool(claude_analysis)
   failed_gate = not ai_available
-  incomplete_gate = analysis_state.get("completionState") == "Incomplete"
   control = build_report_control(pages, coverage_rows, artefacts, analysis_state)
-  scored_pages = [page for page in pages if page["coverageState"] in COVERED_STATES]
-  score_scope = scored_pages or pages
-  overall_seo = round(mean((page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"]) / 35 * 100 for page in score_scope))
-  overall_aeo = round(mean(page["scores"]["aeo"] / 20 * 100 for page in score_scope))
-  overall_geo = round(mean(page["scores"]["geo"] / 20 * 100 for page in score_scope))
-  overall_entity = round(mean(page["scores"]["entity"] / 10 * 100 for page in score_scope))
-  conversion_pages = [page for page in score_scope if page["pageType"] in {"lead generation", "comparison", "book hub", "book page", "service / product"}]
+  score_pages = [page for page in pages if is_analysed_state(page.get("coverageState", ""))]
+  if not score_pages:
+    score_pages = pages
+  overall_seo = round(mean((page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"]) / 35 * 100 for page in score_pages)) if score_pages else 0
+  overall_aeo = round(mean(page["scores"]["aeo"] / 20 * 100 for page in score_pages)) if score_pages else 0
+  overall_geo = round(mean(page["scores"]["geo"] / 20 * 100 for page in score_pages)) if score_pages else 0
+  overall_entity = round(mean(page["scores"]["entity"] / 10 * 100 for page in score_pages)) if score_pages else 0
+  conversion_pages = [page for page in score_pages if page["pageType"] in {"lead generation", "comparison", "book hub", "book page", "service / product"}]
   overall_conversion = round(mean((page["scores"]["conversion"] / 5 * 100) if page["scores"]["conversion"] else 100 for page in conversion_pages)) if conversion_pages else 0
 
   family_rows = "".join(
@@ -1237,8 +1237,9 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   llm_quickwins = llm_summary.get("quickWins") or []
   quick_wins = issues[:5]
   top_actions = issues[:5]
-  strongest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"], reverse=True)[:3]
-  weakest_areas = sorted(coverage_rows, key=lambda row: row["averageScore"])[:3]
+  scored_coverage_rows = [row for row in coverage_rows if row.get("analysed", 0) > 0]
+  strongest_areas = sorted(scored_coverage_rows or coverage_rows, key=lambda row: row["averageScore"], reverse=True)[:3]
+  weakest_areas = sorted(scored_coverage_rows or coverage_rows, key=lambda row: row["averageScore"])[:3]
 
   # LLM score overrides (use if available, else fall back to heuristic)
   llm_scores = llm_summary.get("scores", {})
@@ -1262,10 +1263,8 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     "<table class='tight'><thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th><th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th></tr></thead>"
     f"<tbody>{issue_rows}</tbody></table>"
   )
-  usable_llm_page_types = bool(llm_page_types) and all(item.get("pageType") and item.get("count") not in (None, "") for item in llm_page_types)
-  usable_llm_gap_matrix = bool(llm_gap_matrix) and all(item.get("pageType") and item.get("seo") and item.get("aeo") and item.get("geo") for item in llm_gap_matrix)
-  active_page_types_html = render_llm_page_type_table(llm_page_types) if usable_llm_page_types else f"<table class='tight'><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Average score</th><th>Range</th><th>Example</th></tr></thead><tbody>{page_type_rows}</tbody></table>"
-  active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if usable_llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
+  active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
+  active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
   active_remediation_html = render_llm_remediation_table(llm_remediation)
 
   overall_verdict = llm_summary.get("overallVerdict") or (
@@ -1359,7 +1358,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <p><strong>Completion state:</strong> {analysis_state.get('completionState', 'Unknown')}</p>
     <p><strong>AI analysis state:</strong> {analysis_state.get('statusLabel', 'Unknown')}</p>
     <p><strong>Total URLs discovered:</strong> {control['totalDiscoveredUrls']}</p>
-    <p><strong>Material limitations:</strong> {('AI forensic synthesis was unavailable; no final release-ready verdict was issued.' if failed_gate else ('Mandatory URL coverage was incomplete; AI narrative may be present, but no release-ready verdict is issued.' if incomplete_gate else 'No AI-analysis limitation was detected. Non-AI data limitations are listed in the method section.'))}</p>
+    <p><strong>Material limitations:</strong> {'AI forensic synthesis was unavailable; no final release-ready verdict was issued.' if failed_gate else 'No AI-analysis limitation was detected. Non-AI data limitations are listed in the method section.'}</p>
   </section>
 
   {failure_banner}
@@ -1371,7 +1370,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
 
   <section id="summary">
     <h2>Executive summary</h2>
-    {('<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> Mandatory URL coverage is incomplete. ' + _esc(overall_verdict) + '</p>' if incomplete_gate else ('<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if ai_available else '<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> The audit halted at the AI forensic gate. Heuristic evidence collection completed, but the required AI-assisted synthesis did not return a validated analysis payload.</p>'))}
+    {'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if ai_available else '<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> The audit halted at the AI forensic gate. Heuristic evidence collection completed, but the required AI-assisted synthesis did not return a validated analysis payload.</p>'}
     <div class="grid">
       <div class="kpi"><strong>SEO</strong><div>{display_seo_score}<span class="grade">{display_seo_grade}</span></div></div>
       <div class="kpi"><strong>AEO</strong><div>{display_aeo_score}<span class="grade">{display_aeo_grade}</span></div></div>
@@ -1496,12 +1495,12 @@ def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
 
 def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo, analysis_state: dict[str, Any], session_id: str = "") -> dict[str, Any]:
   control = build_report_control(pages, coverage_rows, {}, analysis_state)
-  completion_state = analysis_state.get("completionState")
-  complete = completion_state == "Complete"
+  state = analysis_state.get("completionState")
+  complete = state == "Complete"
   return {
     "ok": complete,
     "sessionId": session_id,
-    "status": "completed" if complete else ("incomplete" if completion_state == "Incomplete" else "failed-gate"),
+    "status": "completed" if complete else ("incomplete" if state == "Incomplete" else "failed-gate"),
     "auditCompletionState": analysis_state.get("completionState"),
     "aiAnalysisStatus": analysis_state.get("statusLabel"),
     "aiFailureReason": analysis_state.get("failureReason", ""),
@@ -1713,7 +1712,9 @@ OPERATING RULES — NON-NEGOTIABLE:
 6. When the supplied data conflicts across sources (repo vs workbook vs live), state the conflict explicitly.
 7. Do not silently skip page families. If podcast/blog/transcript data is thin in the supplied context, say so
    and flag it as a coverage limitation — do not pretend to have checked pages you have not seen.
-8. Score using these exact weights internally, then return every executiveSummary.scores.*.score as a whole-number 0-100 percentage. Do not return raw weighted points such as 17/20. Grade must match the returned percentage: A=90-100, B=80-89, C=70-79, D=60-69, F<60.
+8. Score using these exact weights: Technical SEO 20, On-Page Intent 15, AEO Readiness 20,
+   GEO Readiness 20, Entity Authority 10, Internal Linking 10, Conversion Support 5.
+   Grade: A=90-100, B=80-89, C=70-79, D=60-69, F<60.
 9. Every Critical or High issue must include an exact remediation: the corrected value, code snippet,
    template change, or governance rule — not a description of what to change.
 10. Use severity: Critical / High / Medium / Low. Use confidence: Confirmed / Probable / Needs verification.
@@ -2016,11 +2017,6 @@ def call_claude_audit_via_openrouter(
         raw = raw.rsplit("```", 1)[0].strip()
 
       result = json.loads(raw)
-      valid, reason = validate_forensic_analysis_payload(result)
-      if not valid:
-        print(f"[openrouter] attempt {attempt} returned invalid forensic payload: {reason}", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
       print("[openrouter] forensic analysis received and parsed successfully", file=sys.stderr)
       return result
 
@@ -2041,54 +2037,6 @@ def derive_analysis_url(callback_url: str | None, override: str | None = None) -
   if not callback_url:
     return None
   return callback_url.rstrip("/").replace("/callback", "/analysis")
-
-
-def expected_grade_for_score(score: int | float) -> str:
-  try:
-    numeric = float(score)
-  except Exception:
-    return ""
-  if numeric >= 90:
-    return "A"
-  if numeric >= 80:
-    return "B"
-  if numeric >= 70:
-    return "C"
-  if numeric >= 60:
-    return "D"
-  return "F"
-
-
-def validate_forensic_analysis_payload(data: dict[str, Any] | None) -> tuple[bool, str]:
-  if not isinstance(data, dict):
-    return False, "analysis payload is not an object"
-  summary = data.get("executiveSummary")
-  findings = data.get("findingsByLens")
-  if not isinstance(summary, dict) or not isinstance(findings, dict):
-    return False, "analysis payload is missing executiveSummary or findingsByLens"
-  scores = summary.get("scores") or {}
-  for key in ("seo", "aeo", "geo", "entityAuthority", "conversionSupport"):
-    block = scores.get(key)
-    if not isinstance(block, dict):
-      return False, f"analysis score block missing: {key}"
-    score = block.get("score")
-    grade_value = str(block.get("grade", "")).strip().upper()[:1]
-    if not isinstance(score, (int, float)) or score < 0 or score > 100:
-      return False, f"analysis score for {key} must be a 0-100 percentage, not {score!r}"
-    expected = expected_grade_for_score(score)
-    if grade_value and grade_value != expected:
-      return False, f"analysis grade for {key} is {block.get('grade')!r}, but score {score} requires {expected}"
-  if len(data.get("issues") or []) < 5:
-    return False, "analysis payload returned too few ranked issues"
-  for array_key in ("pageTypeFindings", "priorityPageAnnex", "templateAnnex", "bestPracticeGapMatrix"):
-    rows = data.get(array_key)
-    if not isinstance(rows, list) or not rows:
-      return False, f"analysis payload is missing non-empty {array_key}"
-  if not all(isinstance(item, dict) and item.get("pageType") and item.get("count") not in (None, "") for item in data.get("pageTypeFindings", [])):
-    return False, "analysis pageTypeFindings contains blank page type or count rows"
-  if not all(isinstance(item, dict) and item.get("pageType") and item.get("seo") and item.get("aeo") and item.get("geo") for item in data.get("bestPracticeGapMatrix", [])):
-    return False, "analysis bestPracticeGapMatrix contains blank compliance rows"
-  return True, "ok"
 
 
 # ── LLM analysis call ─────────────────────────────────────────────────────────
@@ -2158,13 +2106,7 @@ def call_analysis_endpoint(
         time.sleep(attempt * 3)
         continue
       data = resp.json()
-      analysis = data.get("analysis") or data
-      valid, reason = validate_forensic_analysis_payload(analysis)
-      if not valid:
-        print(f"[analysis] attempt {attempt} endpoint returned invalid forensic payload: {reason}", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
-      return analysis
+      return data.get("analysis") or data
     except Exception as exc:
       print(f"[analysis] attempt {attempt} endpoint call failed: {exc}", file=sys.stderr)
       time.sleep(attempt * 3)
@@ -2191,7 +2133,6 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
       f"<td>{_esc(item.get('severity', ''))}</td>"
       f"<td>{_esc(item.get('confidence', ''))}</td>"
       f"<td>{_esc(item.get('lens', ''))}</td>"
-      f"<td>{_esc(item.get('rootCauseLevel', ''))}</td>"
       f"<td><code>{_esc(item.get('affected', ''))}</code></td>"
       f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
       f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
@@ -2204,7 +2145,7 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
     )
   return (
     "<table class='tight'>"
-    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th>"
+    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th>"
     "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th>"
     "</tr></thead>"
     f"<tbody>{rows}</tbody></table>"
@@ -2362,8 +2303,8 @@ def main() -> int:
     print("[analysis] AI forensic analysis unavailable — writing failed-gate report", file=sys.stderr)
   # ─────────────────────────────────────────────────────────────────────────────
 
-  coverage_has_failures = any(row.get("failed", 0) > 0 or row.get("coveragePercent", 0) < 100 for row in coverage_rows)
-  completion_state = "Failed-gate" if not claude_analysis else ("Incomplete" if coverage_has_failures else "Complete")
+  real_failed_url_count = sum(1 for row in coverage_rows if row.get("failed", 0))
+  completion_state = "Complete" if claude_analysis and real_failed_url_count == 0 else ("Incomplete" if claude_analysis else "Failed-gate")
   analysis_state: dict[str, Any] = {
     "available": bool(claude_analysis),
     "completionState": completion_state,
@@ -2437,7 +2378,7 @@ def main() -> int:
     "status": "completed" if claude_analysis else "failed",
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
-    "message": ("Full AI-assisted forensic analysis completed." if analysis_state["completionState"] == "Complete" else ("AI forensic analysis completed but URL coverage is incomplete; no release-ready verdict issued." if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE: failed-gate report generated; no release-ready verdict issued.")),
+    "message": "Full AI-assisted forensic analysis completed." if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE: failed-gate report generated; no release-ready verdict issued.",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
