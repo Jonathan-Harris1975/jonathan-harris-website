@@ -86,6 +86,21 @@ FINAL_ARTIFACTS = ("report.html", "summary.json", "coverage.json")
 DEFAULT_PODCAST_FEED = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
 COVERED_STATES = {"Fully analysed", "Analysed through shared template plus page-specific checks"}
 SHARED_TEMPLATE_FAMILIES = {"book page", "category / hub", "topic hub", "archive / pagination / utility"}
+AI_REQUIRED_SECTIONS = [
+  "executive synthesis",
+  "issue prioritisation",
+  "AEO/GEO judgement",
+  "exact remediation language",
+  "page-family verdicts",
+  "implementation sequence",
+  "business impact explanations",
+]
+AI_RESTORE_STEPS = [
+  "Provide a callback_url that resolves to /audits/seo-aeo-geo/callback so the workflow can derive /audits/seo-aeo-geo/analysis.",
+  "Ensure AUDIT_CALLBACK_TOKEN / AI_SUITE_AUDIT_CALLBACK_TOKEN matches the AI Management Suite callback auth configuration.",
+  "Verify the AI Management Suite auditForensic route has at least one configured provider in services/shared/utils/ai-config.js with its existing OPENROUTER_* model and key variables set.",
+  "Rerun /audits/seo-aeo-geo/run after the /analysis endpoint returns a validated forensic JSON payload.",
+]
 
 
 def coverage_state_for_page(page_type: str, status_code: int) -> str:
@@ -682,6 +697,7 @@ def issue_record(issue_id: str, severity: str, confidence: str, lens: str, root_
     "expectedGain": "Stronger crawl, answer extraction, and generative retrieval quality",
     "estimatedEffort": effort,
     "recommendedOwner": owner,
+    "verificationMethod": "Rerun the SEO + AEO + GEO audit and confirm the affected URL, template, or route returns the expected evidence state in coverage.json and report.html.",
   }
 
 
@@ -936,7 +952,38 @@ def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
   }
 
 
-def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None) -> str:
+def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], artefacts: dict[str, str], analysis_state: dict[str, Any]) -> dict[str, Any]:
+  analysed = len([page for page in pages if page["coverageState"] in COVERED_STATES])
+  failed = len([page for page in pages if page["coverageState"] == "Failed to fetch"])
+  excluded = len([page for page in pages if str(page["coverageState"]).startswith("Excluded")])
+  return {
+    "totalDiscoveredUrls": len(pages),
+    "totalAnalysedUrls": analysed,
+    "totalFailedUrls": failed,
+    "totalExcludedUrls": excluded,
+    "coveragePercent": round((analysed / len(pages)) * 100, 1) if pages else 0,
+    "mandatoryFamiliesIncomplete": [row["pageType"] for row in coverage_rows if row["coveragePercent"] < 100],
+    "aiAnalysisStatus": analysis_state.get("statusLabel", "Unknown"),
+    "auditCompletionState": analysis_state.get("completionState", "Unknown"),
+    "repoSource": "jonathan-harris-website-main repository snapshot",
+    "workbookSource": "jonathan-harris-site-url-inventory-remediated-release-ready.xlsm",
+    "sitemapFeedSource": "sitemap.xml, local sitemap snapshot, podcast RSS feed, blog and podcast manifests, live internal links",
+    "liveFetchStatus": "Live route responses fetched during workflow execution; fetch failures are recorded URL-by-URL.",
+    "generatedArtefactPaths": artefacts,
+  }
+
+
+def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None, analysis_state: dict[str, Any] | None = None) -> str:
+  analysis_state = analysis_state or {
+    "available": bool(claude_analysis),
+    "completionState": "Complete" if claude_analysis else "Failed-gate",
+    "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
+    "failureReason": "",
+    "attempts": [],
+  }
+  ai_available = bool(claude_analysis)
+  failed_gate = not ai_available
+  control = build_report_control(pages, coverage_rows, artefacts, analysis_state)
   overall_seo = round(mean((page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"]) / 35 * 100 for page in pages))
   overall_aeo = round(mean(page["scores"]["aeo"] / 20 * 100 for page in pages))
   overall_geo = round(mean(page["scores"]["geo"] / 20 * 100 for page in pages))
@@ -948,9 +995,9 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     for row in coverage_rows
   )
   issue_rows = "".join(
-    f"<tr><td>{item['issueId']}</td><td>{item['severity']}</td><td>{item['auditLens']}</td><td>{item['affected']}</td><td>{item['whyItMatters']}</td><td>{item['exactRemediation']}</td></tr>"
+    f"<tr><td>{item['issueId']}</td><td>{item['severity']}</td><td>{item.get('confidence', '')}</td><td>{item['auditLens']}</td><td>{item.get('rootCauseLevel', '')}</td><td>{item['affected']}</td><td>{item.get('evidenceObserved', '')}</td><td>{item['whyItMatters']}</td><td>{item['exactRemediation']}</td><td>{item.get('expectedGain', '')}</td><td>{item.get('estimatedEffort', '')}</td><td>{item.get('recommendedOwner', '')}</td><td>{item.get('verificationMethod', '')}</td></tr>"
     for item in issues
-  ) or "<tr><td colspan='6'>No significant issues were confirmed from the available evidence.</td></tr>"
+  ) or "<tr><td colspan='13'>No significant issues were confirmed from the available evidence.</td></tr>"
   page_type_rows = "".join(
     f"<tr><td>{item['pageType']}</td><td>{item['count']}</td><td>{item['coverageState']}</td><td>{item['averageScore']}</td><td>{item['lowestScore']}–{item['highestScore']}</td><td><code>{item['exampleUrl']}</code></td></tr>"
     for item in page_type_findings
@@ -1013,8 +1060,15 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   display_conv_score = llm_scores.get("conversionSupport", {}).get("score", overall_conversion)
   display_conv_grade = llm_scores.get("conversionSupport", {}).get("grade", grade(overall_conversion))
 
+  if failed_gate:
+    display_seo_score = display_aeo_score = display_geo_score = display_entity_score = display_conv_score = "Not issued"
+    display_seo_grade = display_aeo_grade = display_geo_grade = display_entity_grade = display_conv_grade = "Blocked"
+
   # Issue and remediation tables
-  active_issues_html = render_llm_issues_table(llm_issues_list) if llm_issues_list else issue_rows
+  active_issues_html = render_llm_issues_table(llm_issues_list) if llm_issues_list else (
+    "<table class='tight'><thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th><th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th></tr></thead>"
+    f"<tbody>{issue_rows}</tbody></table>"
+  )
   active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
   active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
   active_remediation_html = render_llm_remediation_table(llm_remediation)
@@ -1046,10 +1100,44 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     text = llm_findings.get(key, "").strip()
     return f"<p>{_esc(text)}</p>" if text else f"<p>{fallback}</p>"
 
+  control_rows = "".join(
+    f"<tr><th>{_esc(key)}</th><td>{_esc(value if not isinstance(value, (dict, list)) else json.dumps(value, ensure_ascii=False))}</td></tr>"
+    for key, value in control.items()
+  )
+  ai_attempt_rows = "".join(
+    f"<tr><td>{_esc(item.get('path', ''))}</td><td>{_esc(item.get('status', ''))}</td><td>{_esc(item.get('detail', ''))}</td></tr>"
+    for item in analysis_state.get("attempts", [])
+  ) or "<tr><td colspan='3'>No AI call attempt was available from the supplied runtime configuration.</td></tr>"
+  skipped_sections_html = "".join(f"<li>{_esc(item)}</li>" for item in analysis_state.get("skippedSections", AI_REQUIRED_SECTIONS))
+  restore_steps_html = "".join(f"<li>{_esc(item)}</li>" for item in analysis_state.get("restoreSteps", AI_RESTORE_STEPS))
+  failure_banner = ""
+  if failed_gate:
+    failure_banner = f"""
+    <section class="failed-gate">
+      <h2>AI FORENSIC ANALYSIS UNAVAILABLE</h2>
+      <p><strong>Completion state:</strong> Failed-gate. This artefact is an incomplete diagnostic control report, not a release-ready forensic audit.</p>
+      <p><strong>Reason:</strong> {_esc(analysis_state.get('failureReason') or 'The required AI-assisted forensic analysis did not return a validated JSON payload.')}</p>
+      <p><strong>Skipped AI-led sections:</strong></p>
+      <ul>{skipped_sections_html}</ul>
+      <p><strong>Required remediation to restore the full audit:</strong></p>
+      <ol>{restore_steps_html}</ol>
+      <table class="tight"><thead><tr><th>AI path</th><th>Status</th><th>Detail</th></tr></thead><tbody>{ai_attempt_rows}</tbody></table>
+    </section>
+    """
+  baseline_score_note = ""
+  if failed_gate:
+    baseline_score_note = f"""
+    <p class="section-note"><strong>Diagnostic-only baseline:</strong> heuristic collection produced SEO {overall_seo}, AEO {overall_aeo}, GEO {overall_geo}, Entity Authority {overall_entity}, and Conversion Support {overall_conversion}. These are not final forensic scores and must not be used as a release-ready verdict.</p>
+    """
+
   body = f"""
   <style>
     .llm-badge{{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#ecfdf5;color:#065f46;border:1px solid #6ee7b7;}}
     .llm-badge.heuristic{{background:#fef9c3;color:#92400e;border-color:#fcd34d;}}
+    .llm-badge.failed{{background:#fee2e2;color:#991b1b;border-color:#fecaca;}}
+    .failed-gate{{border-color:#fecaca;background:#fff7f7;}}
+    .failed-gate h2{{color:#991b1b;}}
+    .control-table th{{width:260px;background:#f8fafc;}}
     .llm-verdict{{font-size:15px;line-height:1.65;border-left:3px solid #4338ca;padding-left:12px;margin:0 0 16px;}}
     .kpi .grade{{display:block;font-size:28px;font-weight:800;margin-top:4px;}}
     .priority-item{{display:block;margin:4px 0;padding:4px 8px;border-radius:6px;background:#f3f4f6;font-size:13px;}}
@@ -1069,14 +1157,26 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <h2>Cover page</h2>
     <p><strong>Report title:</strong> Full-Estate Forensic SEO + AEO + GEO Audit</p>
     <p><strong>Website:</strong> <a href="{base_url}">{base_url}</a></p>
+    <p><strong>Date/time:</strong> {utc_now()}</p>
+    <p><strong>Audit mode:</strong> {'Full AI-assisted forensic mode' if ai_available else 'Failed-gate control mode'}</p>
     <p><strong>Workbook:</strong> <code>{Path(workbook.path).name}</code></p>
     <p><strong>Scope inspected:</strong> Full in-scope website estate including homepage, books, catalogue, topics, blog, podcast, archives, utilities, and programmatic families discovered from repo, workbook, sitemap, feed, and live internal links.</p>
-    <p><strong>Analyst mode:</strong> Full-estate evidence-led HTML audit</p>
+    <p><strong>Completion state:</strong> {analysis_state.get('completionState', 'Unknown')}</p>
+    <p><strong>AI analysis state:</strong> {analysis_state.get('statusLabel', 'Unknown')}</p>
+    <p><strong>Total URLs discovered:</strong> {control['totalDiscoveredUrls']}</p>
+    <p><strong>Material limitations:</strong> {'AI forensic synthesis was unavailable; no final release-ready verdict was issued.' if failed_gate else 'No AI-analysis limitation was detected. Non-AI data limitations are listed in the method section.'}</p>
+  </section>
+
+  {failure_banner}
+
+  <section id="report-control">
+    <h2>Report control block</h2>
+    <table class="tight control-table"><tbody>{control_rows}</tbody></table>
   </section>
 
   <section id="summary">
     <h2>Executive summary</h2>
-    {'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if claude_analysis else ''}
+    {'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if ai_available else '<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> The audit halted at the AI forensic gate. Heuristic evidence collection completed, but the required AI-assisted synthesis did not return a validated analysis payload.</p>'}
     <div class="grid">
       <div class="kpi"><strong>SEO</strong><div>{display_seo_score}<span class="grade">{display_seo_grade}</span></div></div>
       <div class="kpi"><strong>AEO</strong><div>{display_aeo_score}<span class="grade">{display_aeo_grade}</span></div></div>
@@ -1091,7 +1191,8 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <p><strong>Major risks:</strong> {'; '.join(item['whyItMatters'] for item in issues[:3]) if issues else 'No estate-wide blocker was confirmed.'}</p>
     <p><strong>Strongest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in strongest_areas)}</p>
     <p><strong>Weakest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in weakest_areas)}</p>
-    {'<p class="llm-badge">✦ Scores and priorities enriched by LLM forensic analysis</p>' if claude_analysis else '<p class="llm-badge heuristic">⚙ Heuristic-only report — LLM analysis was not available for this run</p>'}
+    {baseline_score_note}
+    {'<p class="llm-badge">✦ Scores and priorities enriched by LLM forensic analysis</p>' if ai_available else '<p class="llm-badge failed">⚠ AI FORENSIC ANALYSIS UNAVAILABLE — failed gate, no final verdict</p>'}
   </section>
 
   <section id="method">
@@ -1099,7 +1200,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <p><strong>Inspected inputs:</strong> repository routes, live route responses, workbook inventory, sitemap sources, podcast feed sources, blog and podcast manifest files, and live internal links.</p>
     <p><strong>Known limitations:</strong> metrics such as Core Web Vitals, Search Console, and analytics exports were not supplied, so they are marked as not verified rather than invented.</p>
     <p><strong>Chain of truth:</strong> repo and source files, live HTML responses, workbook inventory, sitemap and feed sources, and user context.</p>
-    <p><strong>LLM analysis:</strong> {'Forensic narrative and ranked issues generated via OpenRouter (' + os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL) + ') using the full context package.' if claude_analysis else 'Not available for this run — heuristic scoring only.'}</p>
+    <p><strong>LLM analysis:</strong> {'Forensic narrative and ranked issues generated using the configured AI analysis path and the full context package.' if ai_available else 'Failed. The report was deliberately marked as failed-gate rather than completed.'}</p>
   </section>
 
   <section id="inventory">
@@ -1198,15 +1299,24 @@ def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
     print(f"[coverage] NOTE: Mandatory families not discovered: {', '.join(absent)}", file=sys.stderr)
 
 
-def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo) -> dict[str, Any]:
+def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo, analysis_state: dict[str, Any], session_id: str = "") -> dict[str, Any]:
+  control = build_report_control(pages, coverage_rows, {}, analysis_state)
+  complete = analysis_state.get("completionState") == "Complete"
   return {
-    "ok": True,
-    "sessionId": args.session_id,
-    "status": "completed",
+    "ok": complete,
+    "sessionId": session_id,
+    "status": "completed" if complete else "failed-gate",
+    "auditCompletionState": analysis_state.get("completionState"),
+    "aiAnalysisStatus": analysis_state.get("statusLabel"),
+    "aiFailureReason": analysis_state.get("failureReason", ""),
     "reportPrefix": report_prefix,
     "websiteUrl": base_url,
     "generatedAt": utc_now(),
-    "auditedUrlCount": len(pages),
+    "totalDiscoveredUrls": control["totalDiscoveredUrls"],
+    "auditedUrlCount": control["totalAnalysedUrls"],
+    "failedUrlCount": control["totalFailedUrls"],
+    "excludedUrlCount": control["totalExcludedUrls"],
+    "coveragePercent": control["coveragePercent"],
     "issueCount": len(issues),
     "familyCoverage": coverage_rows,
     "workbookRows": workbook.url_count,
@@ -1432,7 +1542,8 @@ ISSUE RECORD FORMAT (use for every entry in the `issues` array):
   "exactRemediation": "exact corrected value, code change, or governance rule",
   "expectedGain": "specific measurable improvement",
   "estimatedEffort": "Low / Medium / High",
-  "recommendedOwner": "Engineering / Content / Editorial / Frontend / Schema / Product"
+  "recommendedOwner": "Engineering / Content / Editorial / Frontend / Schema / Product",
+  "verificationMethod": "specific rerun, curl, file check, schema validation, or coverage ledger check that proves the fix"
 }
 
 OUTPUT SCHEMA:
@@ -1629,6 +1740,7 @@ def call_claude_audit_via_openrouter(
 ) -> dict[str, Any] | None:
   """Call Claude via OpenRouter and return the parsed forensic audit JSON, or None on failure."""
   import requests as _requests
+  import time
 
   model = model or os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL)
 
@@ -1642,7 +1754,7 @@ def call_claude_audit_via_openrouter(
       "riskFlag": p["riskFlag"],
       "coverageState": p["coverageState"],
     }
-    for p in pages[:140]
+    for p in pages
   ]
   priority_pages_clean = [
     serialise_page_for_analysis(p, is_priority=True)
@@ -1673,49 +1785,52 @@ def call_claude_audit_via_openrouter(
 
   print(f"[openrouter] calling {model} with {len(priority_pages_clean)} priority pages and {len(all_routes_condensed)} condensed routes", file=sys.stderr)
 
-  try:
-    resp = _requests.post(
-      OPENROUTER_API_URL,
-      headers={
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": base_url,
-        "X-Title": "SEO AEO GEO Forensic Audit",
-      },
-      json={
-        "model": model,
-        "max_tokens": 8000,
-        "messages": [
-          {"role": "system", "content": SYSTEM_PROMPT},
-          {"role": "user", "content": user_message},
-        ],
-      },
-      timeout=300,
-    )
-    if not resp.ok:
-      print(f"[openrouter] API returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
-      return None
+  raw = ""
+  for attempt in range(1, 3):
+    try:
+      resp = _requests.post(
+        OPENROUTER_API_URL,
+        headers={
+          "Authorization": f"Bearer {api_key}",
+          "Content-Type": "application/json",
+          "HTTP-Referer": base_url,
+          "X-Title": "SEO AEO GEO Forensic Audit",
+        },
+        json={
+          "model": model,
+          "max_tokens": 8000,
+          "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_message},
+          ],
+        },
+        timeout=300,
+      )
+      if not resp.ok:
+        print(f"[openrouter] attempt {attempt} returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
+        time.sleep(attempt * 3)
+        continue
 
-    data = resp.json()
-    raw = data["choices"][0]["message"]["content"].strip()
+      data = resp.json()
+      raw = data["choices"][0]["message"]["content"].strip()
 
-    # Strip accidental markdown fences
-    if raw.startswith("```"):
-      raw = raw.split("```", 2)[1]
-      if raw.startswith("json"):
-        raw = raw[4:]
-      raw = raw.rsplit("```", 1)[0].strip()
+      # Strip accidental markdown fences
+      if raw.startswith("```"):
+        raw = raw.split("```", 2)[1]
+        if raw.startswith("json"):
+          raw = raw[4:]
+        raw = raw.rsplit("```", 1)[0].strip()
 
-    result = json.loads(raw)
-    print("[openrouter] forensic analysis received and parsed successfully", file=sys.stderr)
-    return result
+      result = json.loads(raw)
+      print("[openrouter] forensic analysis received and parsed successfully", file=sys.stderr)
+      return result
 
-  except json.JSONDecodeError as exc:
-    print(f"[openrouter] JSON parse failed: {exc}; raw response snippet: {raw[:300]}", file=sys.stderr)
-    return None
-  except Exception as exc:
-    print(f"[openrouter] call failed: {exc}", file=sys.stderr)
-    return None
+    except json.JSONDecodeError as exc:
+      print(f"[openrouter] attempt {attempt} JSON parse failed: {exc}; raw response snippet: {raw[:300]}", file=sys.stderr)
+    except Exception as exc:
+      print(f"[openrouter] attempt {attempt} call failed: {exc}", file=sys.stderr)
+    time.sleep(attempt * 3)
+  return None
 
 
 # ── Derive analysis URL ───────────────────────────────────────────────────────
@@ -1750,7 +1865,7 @@ def call_analysis_endpoint(
   import time
 
   priority_urls = {p["url"] for p in priority_pages_raw}
-  all_routes_clean = [serialise_page_for_analysis(p, is_priority=False) for p in pages[:140]]
+  all_routes_clean = [serialise_page_for_analysis(p, is_priority=False) for p in pages]
   priority_pages_clean = [serialise_page_for_analysis(p, is_priority=True) for p in pages if p["url"] in priority_urls][:30]
 
   inventory = {
@@ -1779,25 +1894,28 @@ def call_analysis_endpoint(
     "coverageFamilies": coverage_families,
   }
 
-  try:
-    import requests as _requests
-    resp = _requests.post(
-      analysis_url,
-      json=payload,
-      headers={
-        "Authorization": f"Bearer {callback_token}",
-        "Content-Type": "application/json",
-      },
-      timeout=300,
-    )
-    if not resp.ok:
-      print(f"[analysis] endpoint returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
-      return None
-    data = resp.json()
-    return data.get("analysis") or data
-  except Exception as exc:
-    print(f"[analysis] endpoint call failed: {exc}", file=sys.stderr)
-    return None
+  for attempt in range(1, 3):
+    try:
+      import requests as _requests
+      resp = _requests.post(
+        analysis_url,
+        json=payload,
+        headers={
+          "Authorization": f"Bearer {callback_token}",
+          "Content-Type": "application/json",
+        },
+        timeout=300,
+      )
+      if not resp.ok:
+        print(f"[analysis] attempt {attempt} endpoint returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
+        time.sleep(attempt * 3)
+        continue
+      data = resp.json()
+      return data.get("analysis") or data
+    except Exception as exc:
+      print(f"[analysis] attempt {attempt} endpoint call failed: {exc}", file=sys.stderr)
+      time.sleep(attempt * 3)
+  return None
 
 
 # ── HTML helpers for LLM analysis ─────────────────────────────────────────────
@@ -1824,13 +1942,16 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
       f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
       f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
       f"<td>{_esc(item.get('exactRemediation', ''))}</td>"
+      f"<td>{_esc(item.get('expectedGain', ''))}</td>"
       f"<td>{_esc(item.get('estimatedEffort', ''))}</td>"
+      f"<td>{_esc(item.get('recommendedOwner', ''))}</td>"
+      f"<td>{_esc(item.get('verificationMethod', item.get('verification', '')))}</td>"
       f"</tr>"
     )
   return (
     "<table class='tight'>"
     "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th>"
-    "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Effort</th>"
+    "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th>"
     "</tr></thead>"
     f"<tbody>{rows}</tbody></table>"
   )
@@ -1924,29 +2045,10 @@ def main() -> int:
   repo_signals = build_repo_signals(REPO_ROOT)
   live_dynamic_urls = extract_live_dynamic_urls(pages, discovered)
   claude_analysis: dict[str, Any] | None = None
+  analysis_attempts: list[dict[str, str]] = []
 
-  # 1. Try OpenRouter direct call (preferred — works without callback infrastructure)
-  openrouter_key = os.environ.get("OPENROUTER_API_KEY")
-  if openrouter_key:
-    print("[openrouter] OPENROUTER_API_KEY found — calling Claude via OpenRouter", file=sys.stderr)
-    claude_analysis = call_claude_audit_via_openrouter(
-      api_key=openrouter_key,
-      session_id=args.session_id,
-      base_url=base_url,
-      pages=pages,
-      priority_pages_raw=priority_pages,
-      issues=issues,
-      coverage_rows=coverage_rows,
-      repo_signals=repo_signals,
-      live_dynamic_urls=live_dynamic_urls,
-      workbook=workbook,
-      discovery_meta=discovery_meta,
-    )
-    if not claude_analysis:
-      print("[openrouter] call failed; falling back to heuristic report", file=sys.stderr)
-
-  # 2. Fallback: external analysis endpoint (legacy callback infrastructure)
-  elif args.callback_url and args.callback_token:
+  # 1. Preferred path: AI Management Suite /analysis endpoint backed by the shared AI service wrapper.
+  if args.callback_url and args.callback_token:
     analysis_url = derive_analysis_url(args.callback_url, getattr(args, "analysis_url", None))
     if analysis_url:
       print(f"[analysis] calling external LLM analysis endpoint at {analysis_url}", file=sys.stderr)
@@ -1966,13 +2068,55 @@ def main() -> int:
         discovery_meta=discovery_meta,
       )
       if claude_analysis:
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
         print("[analysis] LLM analysis received successfully", file=sys.stderr)
       else:
-        print("[analysis] endpoint failed; heuristic report will be used", file=sys.stderr)
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": analysis_url})
+        print("[analysis] endpoint failed; audit will not be marked complete unless another AI path succeeds", file=sys.stderr)
+    else:
+      analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url did not produce an analysis endpoint"})
 
-  else:
-    print("[analysis] no OPENROUTER_API_KEY or callback URL configured — heuristic report only", file=sys.stderr)
+  # 2. Configured direct path fallback retained for manual workflow dispatches that provide OPENROUTER_API_KEY.
+  openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+  if not claude_analysis and openrouter_key:
+    print("[openrouter] OPENROUTER_API_KEY found — calling configured direct model path", file=sys.stderr)
+    claude_analysis = call_claude_audit_via_openrouter(
+      api_key=openrouter_key,
+      session_id=args.session_id,
+      base_url=base_url,
+      pages=pages,
+      priority_pages_raw=priority_pages,
+      issues=issues,
+      coverage_rows=coverage_rows,
+      repo_signals=repo_signals,
+      live_dynamic_urls=live_dynamic_urls,
+      workbook=workbook,
+      discovery_meta=discovery_meta,
+    )
+    analysis_attempts.append({
+      "path": "Direct OpenRouter model path",
+      "status": "success" if claude_analysis else "failed",
+      "detail": os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL),
+    })
+
+  if not args.callback_url or not args.callback_token:
+    analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url and/or callback_token were not supplied"})
+  if not openrouter_key:
+    analysis_attempts.append({"path": "Direct OpenRouter model path", "status": "not-configured", "detail": "OPENROUTER_API_KEY was not supplied"})
+
+  if not claude_analysis:
+    print("[analysis] AI forensic analysis unavailable — writing failed-gate report", file=sys.stderr)
   # ─────────────────────────────────────────────────────────────────────────────
+
+  analysis_state: dict[str, Any] = {
+    "available": bool(claude_analysis),
+    "completionState": "Complete" if claude_analysis else "Failed-gate",
+    "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
+    "failureReason": "" if claude_analysis else "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted.",
+    "attempts": analysis_attempts,
+    "skippedSections": [] if claude_analysis else AI_REQUIRED_SECTIONS,
+    "restoreSteps": [] if claude_analysis else AI_RESTORE_STEPS,
+  }
 
   coverage_json = {
     "generatedAt": utc_now(),
@@ -1984,9 +2128,12 @@ def main() -> int:
     },
     "sourceCounts": discovery_meta["sourceCounts"],
     "pageFamilyCoverage": coverage_rows,
+    "auditCompletionState": analysis_state["completionState"],
+    "aiAnalysisStatus": analysis_state["statusLabel"],
+    "aiAnalysisAttempts": analysis_state["attempts"],
     "urls": [make_url_entry(page) for page in pages],
   }
-  summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook)
+  summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook, analysis_state, args.session_id)
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
@@ -2011,7 +2158,7 @@ def main() -> int:
   report_html = build_report(
     base_url, workbook, discovery_meta, pages, issues, coverage_rows,
     template_annex, gap_matrix, page_type_findings, priority_pages,
-    uploaded, claude_analysis=claude_analysis,
+    uploaded, claude_analysis=claude_analysis, analysis_state=analysis_state,
   )
   report_path = write_text(output_dir / "report.html", report_html)
   print(f"[report] written to {report_path}", file=sys.stderr)
@@ -2031,7 +2178,10 @@ def main() -> int:
   callback_payload = {
     "auditType": "seo-aeo-geo",
     "sessionId": args.session_id,
-    "status": "completed",
+    "status": "completed" if claude_analysis else "failed",
+    "auditCompletionState": analysis_state["completionState"],
+    "aiAnalysisStatus": analysis_state["statusLabel"],
+    "message": "Full AI-assisted forensic analysis completed." if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE: failed-gate report generated; no release-ready verdict issued.",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
