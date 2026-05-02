@@ -206,7 +206,7 @@ def repo_html_routes(repo_root: Path = REPO_ROOT, excludes: Iterable[str] | None
   return sorted(set(route.rstrip("/") or "/" for route in routes))
 
 
-def fetch_html(url: str, timeout: float = 20.0, extra_headers: dict[str, str] | None = None) -> dict[str, Any]:
+def fetch_html(url: str, timeout: float = 20.0, extra_headers: dict[str, str] | None = None, allow_redirects: bool = True) -> dict[str, Any]:
   headers = {
     "User-Agent": "AI-management-suite/audits (+https://jonathan-harris.online)",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -214,7 +214,7 @@ def fetch_html(url: str, timeout: float = 20.0, extra_headers: dict[str, str] | 
   if extra_headers:
     headers.update({str(k): str(v) for k, v in extra_headers.items() if str(v).strip()})
   try:
-    response = requests.get(url, timeout=timeout, headers=headers)
+    response = requests.get(url, timeout=timeout, headers=headers, allow_redirects=allow_redirects)
     text = response.text or ""
     return {
       "ok": response.ok,
