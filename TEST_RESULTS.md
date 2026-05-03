@@ -12,7 +12,7 @@ Result: passed.
 python3 -m unittest scripts.audits.test_seo_aeo_geo_forensic
 ```
 
-Result: passed. 3 tests passed, 0 failed.
+Result: passed. 4 tests passed, 0 failed.
 
 ## Package scripts inspected
 
@@ -25,5 +25,6 @@ No root `package.json` was present in `jonathan-harris-website-main`, so no npm 
 
 ## Security checks
 
-- The website workflow no longer reads or sends a direct `OPENROUTER_API_KEY`.
+- The website workflow still does not read or send a direct `OPENROUTER_API_KEY`.
+- `/analysis` diagnostics mask bearer tokens and OpenRouter-looking keys before writing them into logs or report artefacts.
 - AI callback authentication remains delegated to AI Management Suite and the existing bearer token mechanism.
