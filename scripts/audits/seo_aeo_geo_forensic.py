@@ -1212,17 +1212,15 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     for page in pages
   )
 
-  # Prefer AI-derived labels and priorities when available.
-  # The AI suite returns both the strict forensic contract and compatibility aliases.
+  # Prefer LLM-derived labels and priorities when available
   llm_summary = (claude_analysis or {}).get("executiveSummary", {})
-  llm_findings = (claude_analysis or {}).get("findingsByLens") or (claude_analysis or {}).get("findingsByAuditLens", {})
-  llm_issues_list = (claude_analysis or {}).get("issues") or (claude_analysis or {}).get("rankedIssueLedger", [])
-  llm_impl = (claude_analysis or {}).get("implementationOrder") or (claude_analysis or {}).get("finalVerdictAndImplementationOrder", {})
+  llm_findings = (claude_analysis or {}).get("findingsByLens", {})
+  llm_issues_list = (claude_analysis or {}).get("issues", [])
+  llm_impl = (claude_analysis or {}).get("implementationOrder", {})
   llm_page_types = (claude_analysis or {}).get("pageTypeFindings", [])
-  llm_priority_pages = (claude_analysis or {}).get("priorityPageAnnex", [])
-  llm_template_annex = (claude_analysis or {}).get("templateComponentGeneratorAnnex") or (claude_analysis or {}).get("templateAnnex", [])
+  llm_template_annex = (claude_analysis or {}).get("templateAnnex", [])
   llm_gap_matrix = (claude_analysis or {}).get("bestPracticeGapMatrix", [])
-  llm_remediation = (claude_analysis or {}).get("codeMarkupContentRemediationAppendix") or (claude_analysis or {}).get("codeRemediationAppendix", [])
+  llm_remediation = (claude_analysis or {}).get("codeRemediationAppendix", [])
 
   labels = llm_summary.get("estateLabels") or []
   if not labels:
@@ -1266,8 +1264,6 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     f"<tbody>{issue_rows}</tbody></table>"
   )
   active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
-  active_priority_html = render_llm_priority_page_table(llm_priority_pages) if llm_priority_pages else ""
-  active_template_html = render_llm_template_table(llm_template_annex) if llm_template_annex else ""
   active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
   active_remediation_html = render_llm_remediation_table(llm_remediation)
 
@@ -1439,12 +1435,12 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
 
   <section id="priority">
     <h2>Priority page annex</h2>
-    {active_priority_html if active_priority_html else f"<table class='tight'><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th><th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead><tbody>{priority_rows}</tbody></table>"}
+    <table class="tight"><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th><th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead><tbody>{priority_rows}</tbody></table>
   </section>
 
   <section id="templates">
     <h2>Template / component / generator annex</h2>
-    {active_template_html if active_template_html else f"<table class='tight'><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>"}
+    <table class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>
   </section>
 
   {'<section id="code-remediation"><h2>Code-level remediation appendix</h2><p class="llm-badge">✦ Exact corrected patterns from LLM forensic analysis</p>' + active_remediation_html + '</section>' if active_remediation_html else ''}
@@ -1497,33 +1493,17 @@ def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
     print(f"[coverage] NOTE: Mandatory families not discovered: {', '.join(absent)}", file=sys.stderr)
 
 
-def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo, analysis_state: dict[str, Any], session_id: str = "", forensic_analysis: dict[str, Any] | None = None) -> dict[str, Any]:
+def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo, analysis_state: dict[str, Any], session_id: str = "") -> dict[str, Any]:
   control = build_report_control(pages, coverage_rows, {}, analysis_state)
   state = analysis_state.get("completionState")
   complete = state == "Complete"
-  forensic_analysis = forensic_analysis or {}
-  summary = forensic_analysis.get("executiveSummary", {}) if isinstance(forensic_analysis, dict) else {}
-  ranked_issues = forensic_analysis.get("rankedIssueLedger") or forensic_analysis.get("issues") or []
-  issue_count = len(ranked_issues) if isinstance(ranked_issues, list) and ranked_issues else len(issues)
   return {
     "ok": complete,
     "sessionId": session_id,
-    "status": "completed" if complete else "failed-gate",
+    "status": "completed" if complete else ("incomplete" if state == "Incomplete" else "failed-gate"),
     "auditCompletionState": analysis_state.get("completionState"),
     "aiAnalysisStatus": analysis_state.get("statusLabel"),
     "aiFailureReason": analysis_state.get("failureReason", ""),
-    "aiAnalysisAttempts": analysis_state.get("attempts", []),
-    "scores": forensic_analysis.get("scoreTable") or summary.get("scores") or {},
-    "overallVerdict": forensic_analysis.get("overallVerdict") or summary.get("overallVerdict", ""),
-    "topFivePriorities": forensic_analysis.get("topFivePriorities") or summary.get("topFivePriorities") or [],
-    "quickWins": forensic_analysis.get("quickWins") or summary.get("quickWins") or [],
-    "majorRisks": forensic_analysis.get("majorRisks") or summary.get("majorRisks") or [],
-    "rankedIssueLedger": ranked_issues,
-    "reportPaths": {
-      "reportHtml": f"{report_prefix}.html",
-      "summaryJson": "summary.json",
-      "coverageJson": "coverage.json",
-    },
     "reportPrefix": report_prefix,
     "websiteUrl": base_url,
     "generatedAt": utc_now(),
@@ -1532,7 +1512,7 @@ def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[
     "failedUrlCount": control["totalFailedUrls"],
     "excludedUrlCount": control["totalExcludedUrls"],
     "coveragePercent": control["coveragePercent"],
-    "issueCount": issue_count,
+    "issueCount": len(issues),
     "familyCoverage": coverage_rows,
     "workbookRows": workbook.url_count,
     "pageTypeCounts": dict(Counter(page["pageType"] for page in pages)),
@@ -1709,39 +1689,435 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
   return result
 
 
-# ── AI analysis is delegated to AI Management Suite /analysis ─────────────────
-# Provider discovery and OpenRouter model/key resolution live in services/shared/utils/ai-config.js.
-# This website workflow must not carry a second direct OpenRouter implementation.
+# ── OpenRouter / direct LLM integration ──────────────────────────────────────
+
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_DEFAULT_MODEL = "anthropic/claude-opus-4"
+
+SYSTEM_PROMPT = """You are a senior forensic SEO + AEO + GEO auditor. You operate with the precision of a technical
+SEO engineer, semantic search strategist, answer-engine analyst, and generative-search specialist.
+
+You will receive a structured JSON context block containing pre-crawled page data, inventory
+reconciliation results, workbook metadata, and heuristic issue flags collected from the jonathan-harris.online
+estate. Your job is to interpret that data forensically and produce a complete, evidence-led audit report.
+
+OPERATING RULES — NON-NEGOTIABLE:
+1. No boilerplate. No filler. No invented evidence.
+2. No vague statements such as "improve metadata", "enhance structured data", or "optimise content quality"
+   unless you immediately name the exact page, file, element, current value, defect, and corrected target.
+3. Every significant finding must cite the exact route, URL, file path, or template it applies to.
+4. If a metric cannot be measured from the supplied data, write "Not verified from supplied context" and
+   state why. Do not fabricate scores or invent crawl results.
+5. Prefer exact values: current title tag text, exact canonical href, exact heading text, exact file path.
+6. When the supplied data conflicts across sources (repo vs workbook vs live), state the conflict explicitly.
+7. Do not silently skip page families. If podcast/blog/transcript data is thin in the supplied context, say so
+   and flag it as a coverage limitation — do not pretend to have checked pages you have not seen.
+8. Score using these exact weights: Technical SEO 20, On-Page Intent 15, AEO Readiness 20,
+   GEO Readiness 20, Entity Authority 10, Internal Linking 10, Conversion Support 5.
+   Grade: A=90-100, B=80-89, C=70-79, D=60-69, F<60.
+9. Every Critical or High issue must include an exact remediation: the corrected value, code snippet,
+   template change, or governance rule — not a description of what to change.
+10. Use severity: Critical / High / Medium / Low. Use confidence: Confirmed / Probable / Needs verification.
+
+OUTPUT FORMAT:
+Return a single JSON object with the keys defined in the OUTPUT SCHEMA below.
+Do not include markdown fences, preamble, or any text outside the JSON object.
+All string values containing HTML must use valid inline HTML; no script tags.
+
+ISSUE RECORD FORMAT (use for every entry in the `issues` array):
+{
+  "issueId": "JH-SEO-001",
+  "severity": "Critical",
+  "confidence": "Confirmed",
+  "lens": "SEO / Technical",
+  "rootCauseLevel": "system / route / template / page / data / content / schema",
+  "affected": "exact route, URL, or file path",
+  "evidenceObserved": "exact current value or behaviour observed in supplied data",
+  "whyItMatters": "concrete impact on crawlability / ranking / extraction / retrieval",
+  "exactRemediation": "exact corrected value, code change, or governance rule",
+  "expectedGain": "specific measurable improvement",
+  "estimatedEffort": "Low / Medium / High",
+  "recommendedOwner": "Engineering / Content / Editorial / Frontend / Schema / Product",
+  "verificationMethod": "specific rerun, curl, file check, schema validation, or coverage ledger check that proves the fix"
+}
+
+OUTPUT SCHEMA:
+{
+  "executiveSummary": {
+    "overallVerdict": "<2-3 sentence estate verdict>",
+    "scores": {
+      "seo": { "score": 0, "grade": "?", "headline": "" },
+      "aeo": { "score": 0, "grade": "?", "headline": "" },
+      "geo": { "score": 0, "grade": "?", "headline": "" },
+      "entityAuthority": { "score": 0, "grade": "?", "headline": "" },
+      "conversionSupport": { "score": 0, "grade": "?", "headline": "" }
+    },
+    "topFivePriorities": ["", "", "", "", ""],
+    "quickWins": ["", "", ""],
+    "estateLabels": [""]
+  },
+  "findingsByLens": {
+    "technicalSeo": "<forensic narrative — exact routes, files, defects>",
+    "onPageSeo": "<forensic narrative>",
+    "aeo": "<forensic narrative>",
+    "geo": "<forensic narrative>",
+    "entityAuthority": "<forensic narrative>",
+    "structuredData": "<forensic narrative>",
+    "internalLinking": "<forensic narrative>",
+    "contentArchitecture": "<forensic narrative>",
+    "conversionSupport": "<forensic narrative>",
+    "blogPodcastTranscriptSystems": "<forensic narrative — mandatory, must cover each family>"
+  },
+  "issues": [],
+  "pageTypeFindings": [
+    {
+      "pageType": "",
+      "count": 0,
+      "coverageState": "",
+      "score": 0,
+      "grade": "",
+      "judgement": "",
+      "keyNote": ""
+    }
+  ],
+  "priorityPageAnnex": [
+    {
+      "url": "",
+      "pageType": "",
+      "templateSource": "",
+      "titleStatus": "Healthy / Needs fix / Missing",
+      "metaStatus": "Healthy / Needs fix / Missing",
+      "canonicalStatus": "Healthy / Needs fix / Missing",
+      "schemaStatus": "Healthy / Needs fix / Missing",
+      "aeoStatus": "Healthy / Mixed / Weak",
+      "geoStatus": "Healthy / Mixed / Weak",
+      "score": 0,
+      "grade": "",
+      "confirmedIssueIds": [],
+      "keyNote": ""
+    }
+  ],
+  "templateAnnex": [
+    {
+      "sourceFile": "",
+      "area": "",
+      "observedLogic": "",
+      "repeatedEffect": "",
+      "fixPriority": "Critical / High / Medium / Low"
+    }
+  ],
+  "codeRemediationAppendix": [
+    {
+      "target": "file path or template name",
+      "issueId": "",
+      "currentPattern": "",
+      "correctedPattern": "",
+      "rationale": ""
+    }
+  ],
+  "bestPracticeGapMatrix": [
+    {
+      "pageType": "",
+      "seo": "Strong / Moderate / Weak",
+      "aeo": "Strong / Moderate / Weak",
+      "geo": "Strong / Moderate / Weak",
+      "confidence": "Confirmed / Probable / Needs verification",
+      "topMissingElement": "",
+      "businessImpact": ""
+    }
+  ],
+  "implementationOrder": {
+    "narrative": "<final verdict and reasoning>",
+    "steps": ["", "", ""],
+    "expectedGains": ["", "", ""]
+  }
+}"""
+
+
+def _build_user_message(
+  base_url: str,
+  session_id: str,
+  inventory: dict[str, Any],
+  priority_pages_clean: list[dict[str, Any]],
+  all_routes_condensed: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  repo_signals: dict[str, Any],
+  live_dynamic_urls: list[dict[str, Any]],
+) -> str:
+  """Serialise collected audit data into the structured context block for the LLM."""
+  return f"""FORENSIC SEO + AEO + GEO AUDIT — CONTEXT PACKAGE
+Website: {base_url}
+Session: {session_id}
+Generated: {utc_now()}
+
+---
+SECTION 1: INVENTORY RECONCILIATION
+{json.dumps(inventory, indent=2)}
+
+---
+SECTION 2: PRIORITY PAGE DATA (full per-page metadata for every priority route)
+{json.dumps(priority_pages_clean, indent=2)}
+
+---
+SECTION 3: ALL DISCOVERED ROUTES (condensed — route, type, status, grade, risk only)
+{json.dumps(all_routes_condensed, indent=2)}
+
+---
+SECTION 4: HEURISTIC ISSUES FLAGGED BY SCRIPT
+{json.dumps(issues, indent=2)}
+
+---
+SECTION 5: REPO STRUCTURE SIGNALS
+{json.dumps(repo_signals, indent=2)}
+
+---
+SECTION 6: LIVE DYNAMIC URLS CONFIRMED
+{json.dumps(live_dynamic_urls, indent=2)}
+
+---
+SECTION 7: AUDIT INSTRUCTION
+
+Perform the full forensic SEO + AEO + GEO audit using the context package above.
+
+Apply these mandatory special rules:
+
+BLOG ENFORCEMENT:
+Analyse the blog family as a whole: governance drift between repo manifest and live archive, standfirst
+duplication on post pages, whether the archive exposes a strong crawlable listing, whether feed-derived
+posts carry full metadata and schema, and whether blog content is structured for passage extraction.
+
+PODCAST ENFORCEMENT:
+Separately analyse: podcast hub, episode pages, transcript archive, transcript leaf pages.
+Flag: absence of server-rendered episode cards on the hub, thin episode pages, unchunked transcript
+bodies, broken compatibility redirect chains, exemption of podcast/episodes/ from release governance.
+Assess whether episode and transcript pages behave as answer hubs or as thin landing pages.
+
+GEO ENFORCEMENT:
+Assess llms.txt and llm-index.json scope explicitly. If ebook-only, flag as confirmed deficiency.
+Assess whether topic guides, glossary, comparisons, blog posts, and transcript pages are machine-readable
+discovery assets that are being wasted by omission from llms files.
+
+EBOOK ENFORCEMENT:
+The hard 64-character H3 trim in scripts/ebook_pipeline.py is a confirmed defect affecting all ebook
+detail pages. Treat this as a High issue with exact code remediation required.
+
+GOVERNANCE ENFORCEMENT:
+The exclusion of blog/posts/ and podcast/episodes/ from scripts/check_ungoverned_routes.py is a
+confirmed Critical governance blind spot. Exact remediation must name the file, the exclusion list variable,
+and the corrected logic.
+
+ISSUE NUMBERING: Use JH-SEO-NNN, JH-AEO-NNN, JH-GEO-NNN, JH-TECH-NNN prefixes.
+Start numbering at 001. Order issues Critical -> High -> Medium -> Low within each prefix group.
+
+SCORE CALIBRATION:
+- Static governed pages (topic guides, book pages, bio, homepage): expected range B to B+
+- Dynamic families with governance gaps (podcast, blog): expected range D to C
+- Podcast hub (no server-rendered episode list, exempted from governance): expected D
+- Broken redirect target: F
+- Adjust all scores relative to the evidence in the supplied data, not to generic benchmarks.
+
+Now produce the complete JSON report. No preamble. No markdown fences. Pure JSON object only."""
+
+
+def call_claude_audit_via_openrouter(
+  api_key: str,
+  session_id: str,
+  base_url: str,
+  pages: list[dict[str, Any]],
+  priority_pages_raw: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage_rows: list[dict[str, Any]],
+  repo_signals: dict[str, Any],
+  live_dynamic_urls: list[dict[str, Any]],
+  workbook: "WorkbookInfo",
+  discovery_meta: dict[str, Any],
+  model: str | None = None,
+) -> dict[str, Any] | None:
+  """Call Claude via OpenRouter and return the parsed forensic audit JSON, or None on failure."""
+  import requests as _requests
+  import time
+
+  model = model or os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL)
+
+  priority_urls = {p["url"] for p in priority_pages_raw}
+  all_routes_condensed = [
+    {
+      "route": normalise_route(urlparse(p["url"]).path),
+      "pageType": p["pageType"],
+      "status": p["status"],
+      "grade": p["grade"],
+      "riskFlag": p["riskFlag"],
+      "coverageState": p["coverageState"],
+    }
+    for p in pages
+  ]
+  priority_pages_clean = [
+    serialise_page_for_analysis(p, is_priority=True)
+    for p in pages if p["url"] in priority_urls
+  ][:30]
+
+  inventory: dict[str, Any] = {
+    "workbookUrlCount": workbook.url_count,
+    "repoRouteCount": discovery_meta["sourceCounts"].get("repo", 0),
+    "discoveredRouteCount": len(pages),
+    "pageTypeCounts": dict(Counter(p["pageType"] for p in pages)),
+    "sourceCounts": discovery_meta["sourceCounts"],
+    "workbookSheet": workbook.primary_sheet,
+    "blogManifestCount": repo_signals.get("blogManifestCount", 0),
+    "podcastManifestCount": repo_signals.get("podcastManifestCount", 0),
+  }
+
+  user_message = _build_user_message(
+    base_url=base_url,
+    session_id=session_id,
+    inventory=inventory,
+    priority_pages_clean=priority_pages_clean,
+    all_routes_condensed=all_routes_condensed,
+    issues=issues[:40],
+    repo_signals=repo_signals,
+    live_dynamic_urls=live_dynamic_urls[:50],
+  )
+
+  print(f"[openrouter] calling {model} with {len(priority_pages_clean)} priority pages and {len(all_routes_condensed)} condensed routes", file=sys.stderr)
+
+  raw = ""
+  for attempt in range(1, 3):
+    try:
+      resp = _requests.post(
+        OPENROUTER_API_URL,
+        headers={
+          "Authorization": f"Bearer {api_key}",
+          "Content-Type": "application/json",
+          "HTTP-Referer": base_url,
+          "X-Title": "SEO AEO GEO Forensic Audit",
+        },
+        json={
+          "model": model,
+          "max_tokens": 8000,
+          "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_message},
+          ],
+        },
+        timeout=300,
+      )
+      if not resp.ok:
+        print(f"[openrouter] attempt {attempt} returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
+        time.sleep(attempt * 3)
+        continue
+
+      data = resp.json()
+      raw = data["choices"][0]["message"]["content"].strip()
+
+      # Strip accidental markdown fences
+      if raw.startswith("```"):
+        raw = raw.split("```", 2)[1]
+        if raw.startswith("json"):
+          raw = raw[4:]
+        raw = raw.rsplit("```", 1)[0].strip()
+
+      result = json.loads(raw)
+      print("[openrouter] forensic analysis received and parsed successfully", file=sys.stderr)
+      return result
+
+    except json.JSONDecodeError as exc:
+      print(f"[openrouter] attempt {attempt} JSON parse failed: {exc}; raw response snippet: {raw[:300]}", file=sys.stderr)
+    except Exception as exc:
+      print(f"[openrouter] attempt {attempt} call failed: {exc}", file=sys.stderr)
+    time.sleep(attempt * 3)
+  return None
 
 
 # ── Derive analysis URL ───────────────────────────────────────────────────────
 
 def derive_analysis_url(callback_url: str | None, override: str | None = None) -> str | None:
-  """Convert /audits/seo-aeo-geo/callback to sibling /analysis endpoint deterministically."""
+  """Convert the callback URL to the analysis endpoint URL."""
   if override:
     return override.rstrip("/")
   if not callback_url:
     return None
-  parsed = urlparse(callback_url.strip())
-  path = parsed.path.rstrip("/")
-  expected_suffix = "/audits/seo-aeo-geo/callback"
-  if not path.endswith(expected_suffix):
-    return None
-  analysis_path = path[: -len("/callback")] + "/analysis"
-  return parsed._replace(path=analysis_path, params="", query="", fragment="").geturl().rstrip("/")
+  return callback_url.rstrip("/").replace("/callback", "/analysis")
 
 
 # ── LLM analysis call ─────────────────────────────────────────────────────────
 
-def _safe_detail(value: Any, limit: int = 900) -> str:
-  text = str(value or "")
-  text = re.sub(r"Bearer\s+[A-Za-z0-9._~+/=:-]+", "Bearer [masked]", text, flags=re.I)
-  text = re.sub(r"sk-or-[A-Za-z0-9._~+/=:-]+", "[masked-openrouter-key]", text, flags=re.I)
-  return text[:limit]
+def _analysis_response_detail(resp: Any, limit: int = 900) -> str:
+  try:
+    body = resp.text
+  except Exception:
+    body = ""
+  snippet = re.sub(r"Bearer\s+[A-Za-z0-9._\-]+", "Bearer [masked]", str(body or ""))[:limit]
+  return f"HTTP {getattr(resp, 'status_code', 'unknown')} :: {snippet}"
 
 
-def _analysis_attempt(path: str, status: str, detail: str) -> dict[str, str]:
-  return {"path": path, "status": status, "detail": _safe_detail(detail)}
+def _extract_analysis_payload(data: dict[str, Any]) -> dict[str, Any] | None:
+  if not isinstance(data, dict):
+    return None
+  if isinstance(data.get("analysis"), dict):
+    return data["analysis"]
+  job = data.get("job") if isinstance(data.get("job"), dict) else {}
+  result = job.get("result") if isinstance(job.get("result"), dict) else {}
+  if isinstance(result.get("analysis"), dict):
+    return result["analysis"]
+  if isinstance(job.get("analysis"), dict):
+    return job["analysis"]
+  return None
+
+
+def _resolve_status_url(analysis_url: str, status_url: str | None) -> str | None:
+  if not status_url:
+    return None
+  return urljoin(analysis_url, status_url)
+
+
+def _poll_analysis_status(
+  status_url: str,
+  callback_token: str,
+  max_wait_seconds: int,
+  poll_seconds: int,
+  request_timeout: int,
+) -> dict[str, Any] | None:
+  import requests as _requests
+  import time
+
+  deadline = time.monotonic() + max_wait_seconds
+  last_detail = "analysis job did not complete before timeout"
+
+  while time.monotonic() < deadline:
+    try:
+      resp = _requests.get(
+        status_url,
+        headers={"Authorization": f"Bearer {callback_token}"},
+        timeout=request_timeout,
+      )
+      if resp.status_code == 200:
+        data = resp.json()
+        analysis = _extract_analysis_payload(data)
+        if analysis:
+          call_analysis_endpoint.last_detail = f"{status_url} :: completed"
+          return analysis
+        last_detail = f"{status_url} :: completed but no analysis payload"
+        break
+      if resp.status_code == 202:
+        try:
+          data = resp.json()
+          status = data.get("status") or data.get("job", {}).get("status") or "running"
+          last_detail = f"{status_url} :: {status}"
+        except Exception:
+          last_detail = f"{status_url} :: HTTP 202"
+        time.sleep(poll_seconds)
+        continue
+      last_detail = f"{status_url} :: {_analysis_response_detail(resp)}"
+      if resp.status_code >= 500:
+        time.sleep(poll_seconds)
+        continue
+      break
+    except Exception as exc:
+      last_detail = f"{status_url} :: poll failed: {exc}"
+      time.sleep(poll_seconds)
+
+  call_analysis_endpoint.last_detail = last_detail
+  return None
 
 
 def call_analysis_endpoint(
@@ -1758,11 +2134,12 @@ def call_analysis_endpoint(
   live_dynamic_urls: list[dict[str, Any]],
   workbook: WorkbookInfo,
   discovery_meta: dict[str, Any],
-) -> dict[str, Any]:
-  """POST collected audit data to the AI Management Suite analysis endpoint."""
-  import time
+) -> dict[str, Any] | None:
+  """POST collected audit data to the AI-suite endpoint and poll async jobs until complete."""
+  import requests as _requests
 
-  attempts: list[dict[str, str]] = []
+  call_analysis_endpoint.last_detail = analysis_url
+
   priority_urls = {p["url"] for p in priority_pages_raw}
   all_routes_clean = [serialise_page_for_analysis(p, is_priority=False) for p in pages]
   priority_pages_clean = [serialise_page_for_analysis(p, is_priority=True) for p in pages if p["url"] in priority_urls][:30]
@@ -1793,59 +2170,66 @@ def call_analysis_endpoint(
     "coverageFamilies": coverage_families,
   }
 
-  for attempt in range(1, 3):
+  post_timeout = int(os.environ.get("AUDIT_ANALYSIS_POST_TIMEOUT_SECONDS", "45"))
+  poll_timeout = int(os.environ.get("AUDIT_ANALYSIS_POLL_TIMEOUT_SECONDS", "30"))
+  poll_seconds = max(2, int(os.environ.get("AUDIT_ANALYSIS_POLL_SECONDS", "8")))
+  max_wait_seconds = max(30, int(os.environ.get("AUDIT_ANALYSIS_MAX_WAIT_SECONDS", "900")))
+
+  try:
+    resp = _requests.post(
+      analysis_url,
+      json=payload,
+      headers={
+        "Authorization": f"Bearer {callback_token}",
+        "Content-Type": "application/json",
+      },
+      timeout=post_timeout,
+    )
+  except Exception as exc:
+    call_analysis_endpoint.last_detail = f"{analysis_url} :: POST failed: {exc}"
+    print(f"[analysis] endpoint post failed: {exc}", file=sys.stderr)
+    return None
+
+  if resp.status_code == 200:
     try:
-      import requests as _requests
-      resp = _requests.post(
-        analysis_url,
-        json=payload,
-        headers={
-          "Authorization": f"Bearer {callback_token}",
-          "Content-Type": "application/json",
-        },
-        timeout=900,
-      )
-      body_text = resp.text or ""
-      if not resp.ok:
-        detail = f"{analysis_url} :: HTTP {resp.status_code} :: {_safe_detail(body_text)}"
-        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
-        print(f"[analysis] attempt {attempt} endpoint returned {resp.status_code}: {_safe_detail(body_text, 400)}", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
-
       data = resp.json()
-      if isinstance(data, dict) and data.get("ok") is False:
-        detail = f"{analysis_url} :: ok=false :: {_safe_detail(json.dumps(data, ensure_ascii=False))}"
-        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
-        print(f"[analysis] attempt {attempt} endpoint returned ok=false: {_safe_detail(json.dumps(data, ensure_ascii=False), 400)}", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
-
-      analysis = data.get("analysis") if isinstance(data, dict) else None
-      if not isinstance(analysis, dict):
-        detail = f"{analysis_url} :: response did not include analysis object :: {_safe_detail(json.dumps(data, ensure_ascii=False) if isinstance(data, dict) else body_text)}"
-        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
-        print(f"[analysis] attempt {attempt} endpoint response did not include an analysis object", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
-
-      if analysis.get("aiAnalysisStatus") == "AI FORENSIC ANALYSIS UNAVAILABLE":
-        detail = f"{analysis_url} :: endpoint returned unavailable AI analysis state"
-        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
-        print(f"[analysis] attempt {attempt} endpoint returned unavailable AI analysis state", file=sys.stderr)
-        time.sleep(attempt * 3)
-        continue
-
-      attempts.append(_analysis_attempt("AI Management Suite /analysis", "success", analysis_url))
-      return {"analysis": analysis, "attempts": attempts}
+      analysis = _extract_analysis_payload(data)
+      if analysis:
+        call_analysis_endpoint.last_detail = f"{analysis_url} :: completed synchronously"
+        return analysis
+      call_analysis_endpoint.last_detail = f"{analysis_url} :: HTTP 200 but no analysis payload"
     except Exception as exc:
-      detail = f"{analysis_url} :: {type(exc).__name__}: {_safe_detail(exc)}"
-      attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
-      print(f"[analysis] attempt {attempt} endpoint call failed: {_safe_detail(exc, 400)}", file=sys.stderr)
-      time.sleep(attempt * 3)
+      call_analysis_endpoint.last_detail = f"{analysis_url} :: HTTP 200 JSON parse failed: {exc}"
+    return None
 
-  return {"analysis": None, "attempts": attempts}
+  if resp.status_code == 202:
+    try:
+      data = resp.json()
+    except Exception as exc:
+      call_analysis_endpoint.last_detail = f"{analysis_url} :: HTTP 202 JSON parse failed: {exc}"
+      return None
+    status_url = _resolve_status_url(
+      analysis_url,
+      data.get("statusUrl") or data.get("analysisStatusUrl") or data.get("absoluteStatusUrl"),
+    )
+    if not status_url:
+      call_analysis_endpoint.last_detail = f"{analysis_url} :: HTTP 202 without statusUrl"
+      return None
+    print(f"[analysis] async job accepted; polling {status_url}", file=sys.stderr)
+    return _poll_analysis_status(
+      status_url=status_url,
+      callback_token=callback_token,
+      max_wait_seconds=max_wait_seconds,
+      poll_seconds=poll_seconds,
+      request_timeout=poll_timeout,
+    )
 
+  call_analysis_endpoint.last_detail = f"{analysis_url} :: {_analysis_response_detail(resp)}"
+  print(f"[analysis] endpoint returned {call_analysis_endpoint.last_detail}", file=sys.stderr)
+  return None
+
+
+call_analysis_endpoint.last_detail = "not attempted"
 
 
 # ── HTML helpers for LLM analysis ─────────────────────────────────────────────
@@ -1867,8 +2251,8 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
       f"<td>{_esc(item.get('issueId', ''))}</td>"
       f"<td>{_esc(item.get('severity', ''))}</td>"
       f"<td>{_esc(item.get('confidence', ''))}</td>"
-      f"<td>{_esc(item.get('lens', item.get('auditLens', '')))}</td>"
-      f"<td><code>{_esc(item.get('affected', item.get('affectedPagesTemplatesFilesOrRoutes', '')))}</code></td>"
+      f"<td>{_esc(item.get('lens', ''))}</td>"
+      f"<td><code>{_esc(item.get('affected', ''))}</code></td>"
       f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
       f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
       f"<td>{_esc(item.get('exactRemediation', ''))}</td>"
@@ -1931,57 +2315,6 @@ def render_llm_page_type_table(items: list[dict[str, Any]]) -> str:
   )
 
 
-def render_llm_priority_page_table(items: list[dict[str, Any]]) -> str:
-  if not items:
-    return ""
-  rows = "".join(
-    f"<tr>"
-    f"<td><code>{_esc(item.get('url', item.get('filePath', '')))}</code></td>"
-    f"<td>{_esc(item.get('pageType', ''))}</td>"
-    f"<td>{_esc(item.get('templateSource', item.get('templateOrigin', '')))}</td>"
-    f"<td>{_esc(item.get('titleStatus', ''))}</td>"
-    f"<td>{_esc(item.get('metaStatus', ''))}</td>"
-    f"<td>{_esc(item.get('canonicalStatus', ''))}</td>"
-    f"<td>{_esc(item.get('schemaStatus', ''))}</td>"
-    f"<td>{_esc(item.get('aeoStatus', ''))}</td>"
-    f"<td>{_esc(item.get('geoStatus', ''))}</td>"
-    f"<td>{_esc(item.get('score', ''))}</td>"
-    f"<td>{_esc(item.get('grade', ''))}</td>"
-    f"<td>{_esc('; '.join(item.get('confirmedIssueIds', [])) if isinstance(item.get('confirmedIssueIds'), list) else item.get('confirmedIssueIds', ''))}</td>"
-    f"<td>{_esc(item.get('keyNote', ''))}</td>"
-    f"</tr>"
-    for item in items
-  )
-  return (
-    "<table class='tight'>"
-    "<thead><tr><th>URL</th><th>Type</th><th>Template/source</th><th>Title</th>"
-    "<th>Meta</th><th>Canonical</th><th>Schema</th><th>AEO</th><th>GEO</th>"
-    "<th>Score</th><th>Grade</th><th>Issues</th><th>Key note</th></tr></thead>"
-    f"<tbody>{rows}</tbody></table>"
-  )
-
-
-def render_llm_template_table(items: list[dict[str, Any]]) -> str:
-  if not items:
-    return ""
-  rows = "".join(
-    f"<tr>"
-    f"<td><code>{_esc(item.get('sourceFile', ''))}</code></td>"
-    f"<td>{_esc(item.get('area', item.get('pageFamily', '')))}</td>"
-    f"<td>{_esc(item.get('observedLogic', ''))}</td>"
-    f"<td>{_esc(item.get('repeatedEffect', item.get('repeatedDefects', '')))}</td>"
-    f"<td>{_esc(item.get('fixPriority', ''))}</td>"
-    f"</tr>"
-    for item in items
-  )
-  return (
-    "<table class='tight'>"
-    "<thead><tr><th>Source file</th><th>Area</th><th>Observed logic</th>"
-    "<th>Repeated effect</th><th>Fix priority</th></tr></thead>"
-    f"<tbody>{rows}</tbody></table>"
-  )
-
-
 def render_llm_gap_matrix(items: list[dict[str, Any]]) -> str:
   if not items:
     return ""
@@ -2033,7 +2366,7 @@ def main() -> int:
     analysis_url = derive_analysis_url(args.callback_url, getattr(args, "analysis_url", None))
     if analysis_url:
       print(f"[analysis] calling external LLM analysis endpoint at {analysis_url}", file=sys.stderr)
-      analysis_result = call_analysis_endpoint(
+      claude_analysis = call_analysis_endpoint(
         analysis_url=analysis_url,
         callback_token=args.callback_token,
         session_id=args.session_id,
@@ -2048,33 +2381,32 @@ def main() -> int:
         workbook=workbook,
         discovery_meta=discovery_meta,
       )
-      analysis_attempts.extend(analysis_result.get("attempts", []))
-      claude_analysis = analysis_result.get("analysis")
       if claude_analysis:
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
         print("[analysis] LLM analysis received successfully", file=sys.stderr)
       else:
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": getattr(call_analysis_endpoint, "last_detail", analysis_url)})
         print("[analysis] endpoint failed; audit will not be marked complete unless another AI path succeeds", file=sys.stderr)
     else:
       analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url did not produce an analysis endpoint"})
 
-  # 2. Direct OpenRouter fallback is intentionally not used here. The website workflow
-  # must call AI Management Suite /analysis so provider resolution stays in
-  # services/shared/utils/ai-config.js.
+  # 2. Direct OpenRouter fallback is deliberately disabled for this workflow.
+  # The AI Management Suite owns provider discovery via services/shared/utils/ai-config.js.
   if not args.callback_url or not args.callback_token:
     analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url and/or callback_token were not supplied"})
+  analysis_attempts.append({"path": "Direct OpenRouter model path", "status": "disabled", "detail": "Provider resolution is centralised in AI Management Suite services/shared/utils/ai-config.js"})
 
   if not claude_analysis:
     print("[analysis] AI forensic analysis unavailable — writing failed-gate report", file=sys.stderr)
   # ─────────────────────────────────────────────────────────────────────────────
 
-  # Failed live URLs are audit findings, not a failed forensic gate.
-  # The release gate is whether AI Management Suite /analysis returned validated forensic JSON.
-  completion_state = "Complete" if claude_analysis else "Failed-gate"
+  real_failed_url_count = sum(1 for row in coverage_rows if row.get("failed", 0))
+  completion_state = "Complete" if claude_analysis and real_failed_url_count == 0 else ("Incomplete" if claude_analysis else "Failed-gate")
   analysis_state: dict[str, Any] = {
     "available": bool(claude_analysis),
     "completionState": completion_state,
     "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
-    "failureReason": "" if claude_analysis else "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted.",
+    "failureReason": "" if claude_analysis else (getattr(call_analysis_endpoint, "last_detail", "") or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."),
     "attempts": analysis_attempts,
     "skippedSections": [] if claude_analysis else AI_REQUIRED_SECTIONS,
     "restoreSteps": [] if claude_analysis else AI_RESTORE_STEPS,
@@ -2095,7 +2427,7 @@ def main() -> int:
     "aiAnalysisAttempts": analysis_state["attempts"],
     "urls": [make_url_entry(page) for page in pages],
   }
-  summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook, analysis_state, args.session_id, claude_analysis)
+  summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook, analysis_state, args.session_id)
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
