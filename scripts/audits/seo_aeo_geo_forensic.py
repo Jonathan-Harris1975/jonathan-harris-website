@@ -1733,6 +1733,17 @@ def derive_analysis_url(callback_url: str | None, override: str | None = None) -
 
 # ── LLM analysis call ─────────────────────────────────────────────────────────
 
+def _safe_detail(value: Any, limit: int = 900) -> str:
+  text = str(value or "")
+  text = re.sub(r"Bearer\s+[A-Za-z0-9._~+/=:-]+", "Bearer [masked]", text, flags=re.I)
+  text = re.sub(r"sk-or-[A-Za-z0-9._~+/=:-]+", "[masked-openrouter-key]", text, flags=re.I)
+  return text[:limit]
+
+
+def _analysis_attempt(path: str, status: str, detail: str) -> dict[str, str]:
+  return {"path": path, "status": status, "detail": _safe_detail(detail)}
+
+
 def call_analysis_endpoint(
   analysis_url: str,
   callback_token: str,
@@ -1747,10 +1758,11 @@ def call_analysis_endpoint(
   live_dynamic_urls: list[dict[str, Any]],
   workbook: WorkbookInfo,
   discovery_meta: dict[str, Any],
-) -> dict[str, Any] | None:
-  """POST collected audit data to the LLM analysis endpoint; returns parsed JSON or None."""
+) -> dict[str, Any]:
+  """POST collected audit data to the AI Management Suite analysis endpoint."""
   import time
 
+  attempts: list[dict[str, str]] = []
   priority_urls = {p["url"] for p in priority_pages_raw}
   all_routes_clean = [serialise_page_for_analysis(p, is_priority=False) for p in pages]
   priority_pages_clean = [serialise_page_for_analysis(p, is_priority=True) for p in pages if p["url"] in priority_urls][:30]
@@ -1791,31 +1803,49 @@ def call_analysis_endpoint(
           "Authorization": f"Bearer {callback_token}",
           "Content-Type": "application/json",
         },
-        timeout=300,
+        timeout=900,
       )
+      body_text = resp.text or ""
       if not resp.ok:
-        print(f"[analysis] attempt {attempt} endpoint returned {resp.status_code}: {resp.text[:400]}", file=sys.stderr)
+        detail = f"{analysis_url} :: HTTP {resp.status_code} :: {_safe_detail(body_text)}"
+        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
+        print(f"[analysis] attempt {attempt} endpoint returned {resp.status_code}: {_safe_detail(body_text, 400)}", file=sys.stderr)
         time.sleep(attempt * 3)
         continue
+
       data = resp.json()
       if isinstance(data, dict) and data.get("ok") is False:
-        print(f"[analysis] attempt {attempt} endpoint returned ok=false: {json.dumps(data)[:400]}", file=sys.stderr)
+        detail = f"{analysis_url} :: ok=false :: {_safe_detail(json.dumps(data, ensure_ascii=False))}"
+        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
+        print(f"[analysis] attempt {attempt} endpoint returned ok=false: {_safe_detail(json.dumps(data, ensure_ascii=False), 400)}", file=sys.stderr)
         time.sleep(attempt * 3)
         continue
+
       analysis = data.get("analysis") if isinstance(data, dict) else None
       if not isinstance(analysis, dict):
+        detail = f"{analysis_url} :: response did not include analysis object :: {_safe_detail(json.dumps(data, ensure_ascii=False) if isinstance(data, dict) else body_text)}"
+        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
         print(f"[analysis] attempt {attempt} endpoint response did not include an analysis object", file=sys.stderr)
         time.sleep(attempt * 3)
         continue
+
       if analysis.get("aiAnalysisStatus") == "AI FORENSIC ANALYSIS UNAVAILABLE":
+        detail = f"{analysis_url} :: endpoint returned unavailable AI analysis state"
+        attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
         print(f"[analysis] attempt {attempt} endpoint returned unavailable AI analysis state", file=sys.stderr)
         time.sleep(attempt * 3)
         continue
-      return analysis
+
+      attempts.append(_analysis_attempt("AI Management Suite /analysis", "success", analysis_url))
+      return {"analysis": analysis, "attempts": attempts}
     except Exception as exc:
-      print(f"[analysis] attempt {attempt} endpoint call failed: {exc}", file=sys.stderr)
+      detail = f"{analysis_url} :: {type(exc).__name__}: {_safe_detail(exc)}"
+      attempts.append(_analysis_attempt("AI Management Suite /analysis", "failed", detail))
+      print(f"[analysis] attempt {attempt} endpoint call failed: {_safe_detail(exc, 400)}", file=sys.stderr)
       time.sleep(attempt * 3)
-  return None
+
+  return {"analysis": None, "attempts": attempts}
+
 
 
 # ── HTML helpers for LLM analysis ─────────────────────────────────────────────
@@ -2003,7 +2033,7 @@ def main() -> int:
     analysis_url = derive_analysis_url(args.callback_url, getattr(args, "analysis_url", None))
     if analysis_url:
       print(f"[analysis] calling external LLM analysis endpoint at {analysis_url}", file=sys.stderr)
-      claude_analysis = call_analysis_endpoint(
+      analysis_result = call_analysis_endpoint(
         analysis_url=analysis_url,
         callback_token=args.callback_token,
         session_id=args.session_id,
@@ -2018,11 +2048,11 @@ def main() -> int:
         workbook=workbook,
         discovery_meta=discovery_meta,
       )
+      analysis_attempts.extend(analysis_result.get("attempts", []))
+      claude_analysis = analysis_result.get("analysis")
       if claude_analysis:
-        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
         print("[analysis] LLM analysis received successfully", file=sys.stderr)
       else:
-        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": analysis_url})
         print("[analysis] endpoint failed; audit will not be marked complete unless another AI path succeeds", file=sys.stderr)
     else:
       analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url did not produce an analysis endpoint"})

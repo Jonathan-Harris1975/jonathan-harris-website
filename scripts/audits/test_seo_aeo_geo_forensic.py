@@ -1,6 +1,6 @@
 import unittest
 
-from scripts.audits.seo_aeo_geo_forensic import derive_analysis_url
+from scripts.audits.seo_aeo_geo_forensic import _safe_detail, derive_analysis_url
 
 
 class SeoAeoGeoForensicWorkflowTests(unittest.TestCase):
@@ -23,6 +23,12 @@ class SeoAeoGeoForensicWorkflowTests(unittest.TestCase):
       ),
       "https://internal.example/audits/seo-aeo-geo/analysis",
     )
+
+  def test_safe_detail_masks_tokens(self):
+    detail = _safe_detail("HTTP 500 Bearer secret-token sk-or-secret-value")
+    self.assertNotIn("secret-token", detail)
+    self.assertNotIn("sk-or-secret-value", detail)
+    self.assertIn("Bearer [masked]", detail)
 
 
 if __name__ == "__main__":
