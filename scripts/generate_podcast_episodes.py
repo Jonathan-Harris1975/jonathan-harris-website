@@ -32,6 +32,7 @@ FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EPISODES_DATA = ROOT / "data" / "podcast-episodes.json"
 EPISODES_DIR = ROOT / "podcast" / "episodes"
 PODCAST_COMPAT_DIR = ROOT / "podcast"
+REDIRECTS_FILE = ROOT / "_redirects"
 RSS_URL = os.environ.get(
     "PODCAST_RSS_URL",
     "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
@@ -189,9 +190,87 @@ def merge_episode(rss_ep: dict, existing_lookup: dict[str, dict]) -> dict:
     return merged
 
 
+def trim_to_sentence(text: str, limit: int = 155) -> str:
+    cleaned = clean_description(text)
+    if len(cleaned) <= limit:
+        return cleaned
+    candidate = cleaned[:limit].rsplit(" ", 1)[0].strip(" ,;:-")
+    if not candidate:
+        candidate = cleaned[:limit].strip()
+    return candidate + "…"
+
+
+def fallback_episode_summary(title: str) -> str:
+    clean_title = clean_description(title) or "this episode"
+    return (
+        f"Jonathan Harris examines {clean_title} in plain English, cutting through AI hype and focusing on what the story means for work, policy, business, and everyday users."
+    )
+
+
+def normalise_episode_summary(ep: dict) -> str:
+    return first_non_empty(ep.get("summary"), fallback_episode_summary(ep.get("title", "")))
+
+
+def direct_answer_for_episode(ep: dict) -> str:
+    summary = normalise_episode_summary(ep)
+    title = clean_description(ep.get("title", "this episode"))
+    return (
+        f"This episode of {SERIES_NAME} explains {title} through the practical lens Jonathan Harris uses across his AI books and commentary. "
+        f"The direct answer: {summary}"
+    )
+
+
+def default_takeaways(ep: dict) -> list[str]:
+    title = clean_description(ep.get("title", "the episode"))
+    return [
+        f"Why {title} matters beyond the usual AI headline noise.",
+        "What the story means for businesses, creators, public services, and ordinary users.",
+        "Where the technology is useful, where the claims need testing, and what to watch next.",
+    ]
+
+
+def faq_schema_for_episode(ep: dict, canonical: str, summary: str, takeaways: list[str]) -> dict:
+    title = clean_description(ep.get("title", "this episode"))
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": f"What is {title} about?",
+                "acceptedAnswer": {"@type": "Answer", "text": summary},
+            },
+            {
+                "@type": "Question",
+                "name": "What should listeners take from this episode?",
+                "acceptedAnswer": {"@type": "Answer", "text": " ".join(takeaways[:3])},
+            },
+        ],
+        "url": canonical,
+    }
+
+
+def load_existing_episode_list() -> list[dict]:
+    if not EPISODES_DATA.exists():
+        return []
+    try:
+        items = json.loads(EPISODES_DATA.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    return [item for item in items if isinstance(item, dict)]
+
+
 def load_and_merge_episodes() -> list[dict]:
-    rss_episodes = fetch_rss_episodes()
     existing_lookup = load_existing_episodes()
+    try:
+        rss_episodes = fetch_rss_episodes()
+    except Exception as exc:
+        print(f"WARNING: RSS fetch failed - {exc}. Rebuilding episode pages from committed episode data.", file=sys.stderr)
+        committed = load_existing_episode_list()
+        if not committed:
+            raise
+        return committed
+
     merged = [merge_episode(ep, existing_lookup) for ep in rss_episodes]
     EPISODES_DATA.parent.mkdir(parents=True, exist_ok=True)
     EPISODES_DATA.write_text(json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -203,8 +282,9 @@ def build_episode_page(ep: dict) -> str:
     title = ep["title"]
     slug = ep["slug"]
     date = ep.get("date", "")
-    summary = ep.get("summary", "")
-    takeaways = ep.get("key_takeaways", [])
+    summary = normalise_episode_summary(ep)
+    meta_description = trim_to_sentence(summary, 155)
+    takeaways = ep.get("key_takeaways", []) or default_takeaways(ep)
     transcript_text = ep.get("transcript_text", "")
     transcript_url = ep.get("transcript_url", "")
     audio_url = ep.get("audio_url", "")
@@ -212,19 +292,18 @@ def build_episode_page(ep: dict) -> str:
     related_topic = ep.get("related_topic", {}) or {}
     related_books = ep.get("related_books", []) or []
     canonical = ep.get("page_url") or f"{SITE}/podcast/episodes/{slug}/"
+    direct_answer = direct_answer_for_episode({**ep, "summary": summary})
 
-    takeaways_html = ""
-    if takeaways:
-        items = "".join(f"<li>{html_mod.escape(t)}</li>" for t in takeaways)
-        takeaways_html = f'<section class="card u-s21"><h2>Key takeaways</h2><ul>{items}</ul></section>'
+    items = "".join(f"<li>{html_mod.escape(t)}</li>" for t in takeaways)
+    takeaways_html = f'<section class="card u-s21"><h2>What should you take from this episode?</h2><ul>{items}</ul></section>'
 
     transcript_html = ""
     if transcript_text:
         paras = "".join(f"<p>{html_mod.escape(p.strip())}</p>" for p in transcript_text.split("\n\n") if p.strip())
-        transcript_html = f'<section class="card u-s22"><h2>Transcript</h2><div class="episode-transcript">{paras}</div></section>'
+        transcript_html = f'<section class="card u-s22"><h2>What does the transcript cover?</h2><div class="episode-transcript">{paras}</div></section>'
     elif transcript_url:
         transcript_html = (
-            f'<section class="card u-s22"><h2>Transcript</h2>'
+            f'<section class="card u-s22"><h2>Where can I read the transcript?</h2>'
             f'<p><a href="{html_mod.escape(transcript_url)}" rel="noopener noreferrer" target="_blank">Read the full transcript</a></p>'
             f'</section>'
         )
@@ -244,7 +323,7 @@ def build_episode_page(ep: dict) -> str:
             if isinstance(b, dict) and b.get("url") and b.get("title")
         )
         if links:
-            related_books_html = f'<section class="card u-s21"><h2>Related books</h2><p>{links}</p></section>'
+            related_books_html = f'<section class="card u-s21"><h2>Which Jonathan Harris books connect to this episode?</h2><p>{links}</p></section>'
 
     schema: dict = {
         "@context": "https://schema.org",
@@ -253,62 +332,43 @@ def build_episode_page(ep: dict) -> str:
         "url": canonical,
         "datePublished": date,
         "description": summary,
-        "partOfSeries": {
-            "@type": "PodcastSeries",
-            "name": SERIES_NAME,
-            "url": SERIES_URL,
-        },
+        "partOfSeries": {"@type": "PodcastSeries", "name": SERIES_NAME, "url": SERIES_URL},
         "author": {"@id": f"{SITE}/#person"},
     }
     if transcript_url:
         schema["transcript"] = transcript_url
     if audio_url:
-        schema["associatedMedia"] = {"@type": "AudioObject", "contentUrl": audio_url}
+        schema["associatedMedia"] = {"@type": "MediaObject", "contentUrl": audio_url}
 
     breadcrumb = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{SITE}/"},
+            {"@type": "ListItem", "position": 1, "name": "Home", "item": SITE + "/"},
             {"@type": "ListItem", "position": 2, "name": "Podcast", "item": SERIES_URL},
             {"@type": "ListItem", "position": 3, "name": title, "item": canonical},
         ],
     }
+    faq_schema = faq_schema_for_episode({**ep, "summary": summary}, canonical, summary, takeaways)
 
-    audio_player = (
-        f'<section class="card u-s21"><h2>Listen</h2>'
-        f'<audio class="podcast-episode-audio" controls preload="none">'
-        f'<source src="{html_mod.escape(audio_url)}" type="audio/mpeg"/>'
-        f'Your browser does not support the audio element.'
-        f'</audio></section>'
-        if audio_url else ""
-    )
-
-    listen_link = (
-        f'<p><a class="button" href="{html_mod.escape(external_url)}" '
-        f'rel="noopener noreferrer" target="_blank">Open external episode link ↗</a></p>'
-        if external_url else ""
-    )
-
-    related_section = ""
-    if related_topic_html or related_books_html:
-        related_section = f'<section class="card u-s21"><h2>Related reading</h2>{related_topic_html}</section>{related_books_html}'
-
-    display_date = date if date else ""
+    display_date = date or ""
+    listen_href = first_non_empty(audio_url, external_url, SERIES_URL)
+    listen_label = "Listen to episode" if listen_href else "Open podcast"
+    listen_link = f'<p><a class="button" href="{html_mod.escape(listen_href)}" rel="noopener noreferrer" target="_blank">{listen_label}</a></p>' if listen_href else ""
+    audio_player = f'<section class="card u-s21"><h2>How can I listen?</h2><audio controls preload="none" src="{html_mod.escape(audio_url)}"></audio></section>' if audio_url else ""
+    related_section = related_topic_html or related_books_html
+    if related_topic_html and related_books_html:
+        related_section = related_topic_html + related_books_html
 
     return f"""<!DOCTYPE html>
 <html lang="en-GB">
 <head>
 <meta charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
-<title>{html_mod.escape(title)} | Turing&#39;s Torch | Jonathan Harris</title>
-<meta content="{html_mod.escape(summary[:155])}" name="description"/>
-<meta content="index,follow" name="robots"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{html_mod.escape(title)} | Turing&#39;s Torch</title>
+<meta content="{html_mod.escape(meta_description)}" name="description"/>
 <meta content="#0D1420" name="theme-color"/>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<meta content="index,follow" name="robots"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
 <link as="style" href="/assets/css/site.css" rel="preload"/>
@@ -316,14 +376,15 @@ def build_episode_page(ep: dict) -> str:
 <meta content="article" property="og:type"/>
 <meta content="{html_mod.escape(canonical)}" property="og:url"/>
 <meta content="{html_mod.escape(title)} | Turing&#39;s Torch" property="og:title"/>
-<meta content="{html_mod.escape(summary[:155])}" property="og:description"/>
+<meta content="{html_mod.escape(meta_description)}" property="og:description"/>
 <meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
 <meta content="summary_large_image" name="twitter:card"/>
 <meta content="{html_mod.escape(title)} | Turing&#39;s Torch" name="twitter:title"/>
-<meta content="{html_mod.escape(summary[:155])}" name="twitter:description"/>
+<meta content="{html_mod.escape(meta_description)}" name="twitter:description"/>
 <link href="{html_mod.escape(canonical)}" rel="canonical"/>
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 <script type="application/ld+json">{json.dumps(breadcrumb, ensure_ascii=False)}</script>
+<script type="application/ld+json">{json.dumps(faq_schema, ensure_ascii=False)}</script>
 <link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
@@ -340,6 +401,10 @@ def build_episode_page(ep: dict) -> str:
       {f'<p class="episode-meta">Published {html_mod.escape(display_date)}</p>' if display_date else ""}
       <p>{html_mod.escape(summary)}</p>
       {listen_link}
+    </section>
+    <section class="card u-s21 answer-first">
+      <h2>What is this episode about?</h2>
+      <p>{html_mod.escape(direct_answer)}</p>
     </section>
     {audio_player}
     {takeaways_html}
@@ -359,9 +424,10 @@ def build_compat_redirect(session_id: str, slug: str) -> str:
 <html lang="en-GB">
 <head>
 <meta charset="utf-8"/>
+<meta name="robots" content="noindex,follow"/>
 <meta http-equiv="refresh" content="0; url={canonical}"/>
 <link rel="canonical" href="{canonical}"/>
-<title>Redirecting…</title>
+<title>Redirecting to podcast episode</title>
 <script>window.location.replace({json.dumps(canonical)});</script>
 </head>
 <body>
@@ -369,6 +435,40 @@ def build_compat_redirect(session_id: str, slug: str) -> str:
 </body>
 </html>"""
 
+
+def sync_podcast_episode_redirects(episodes: list[dict]) -> int:
+    if not REDIRECTS_FILE.exists():
+        return 0
+    pairs: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for ep in episodes:
+        session_id = first_non_empty(ep.get("session_id"))
+        slug = first_non_empty(ep.get("slug"))
+        if not session_id or not slug:
+            continue
+        target = f"/podcast/episodes/{slug}/"
+        for source in (f"/podcast/{session_id}", f"/podcast/{session_id}/"):
+            pair = (source, target)
+            if pair not in seen:
+                seen.add(pair)
+                pairs.append(pair)
+    if not pairs:
+        return 0
+    block = "# BEGIN GENERATED PODCAST EPISODE REDIRECTS\n" + "\n".join(
+        f"{source}  {target}  301" for source, target in pairs
+    ) + "\n# END GENERATED PODCAST EPISODE REDIRECTS"
+    text = REDIRECTS_FILE.read_text(encoding="utf-8")
+    pattern = re.compile(r"\n?# BEGIN GENERATED PODCAST EPISODE REDIRECTS\n.*?\n# END GENERATED PODCAST EPISODE REDIRECTS", re.S)
+    if pattern.search(text):
+        text = pattern.sub("\n" + block, text)
+    else:
+        anchor = "# Transcript archive hardening"
+        if anchor in text:
+            text = text.replace(anchor, block + "\n\n" + anchor, 1)
+        else:
+            text = text.rstrip() + "\n\n" + block + "\n"
+    REDIRECTS_FILE.write_text(text.rstrip() + "\n", encoding="utf-8")
+    return len(pairs)
 
 def _validate_transcript_archive_contract(path: Path, label: str) -> list[str]:
     if not path.exists():
@@ -487,7 +587,7 @@ def register_in_workbook(slugs_generated: list[str]) -> None:
 
     next_row = last_row + 1
     added = 0
-    for slug in sorted(slugs_generated):
+    for slug in sorted(set(slugs_generated)):
         rel = f"podcast/episodes/{slug}/index.html"
         if rel in governed:
             continue
@@ -546,6 +646,9 @@ def main() -> int:
             print(f"  Generated compatibility redirect: podcast/{session_id}/")
 
     print(f"Generated {created} episode page(s) under podcast/episodes/")
+    redirect_count = sync_podcast_episode_redirects(episodes)
+    if redirect_count:
+        print(f"  Synced {redirect_count} podcast compatibility redirect rule(s) in _redirects.")
 
     validation_failures = validate_generated_pages(episodes)
     if validation_failures:
