@@ -100,7 +100,7 @@ AI_REQUIRED_SECTIONS = [
 ]
 AI_RESTORE_STEPS = [
   "Provide a callback_url that resolves to /audits/seo-aeo-geo/callback so the workflow can derive /audits/seo-aeo-geo/analysis.",
-  "Ensure AUDIT_CALLBACK_TOKEN matches the AI Management Suite callback auth configuration.",
+  "Ensure AUDIT_CALLBACK_TOKEN / AI_SUITE_AUDIT_CALLBACK_TOKEN matches the AI Management Suite callback auth configuration.",
   "Verify the AI Management Suite auditForensic route has at least one configured provider in services/shared/utils/ai-config.js with its existing OPENROUTER_* model and key variables set.",
   "Rerun /audits/seo-aeo-geo/run after the /analysis endpoint returns a validated forensic JSON payload.",
 ]
@@ -124,7 +124,66 @@ def parse_args() -> argparse.Namespace:
   parser.add_argument("--analysis-url", default=None, help="Override the LLM analysis endpoint")
   parser.add_argument("--output-dir", default="artifacts/seo-aeo-geo")
   parser.add_argument("--exclude-prefixes", default="")
-  return parser.parse_args()
+  args = parser.parse_args()
+  resolve_runtime_callback_config(args)
+  return args
+
+
+def _first_env(*names: str) -> str | None:
+  for name in names:
+    value = os.environ.get(name)
+    if value and str(value).strip():
+      return str(value).strip()
+  return None
+
+
+def _normalise_callback_base(value: str | None) -> str | None:
+  if not value:
+    return None
+  value = value.strip().rstrip("/")
+  if not value:
+    return None
+  if value.endswith("/audits/seo-aeo-geo/callback"):
+    return value
+  if value.endswith("/audits/seo-aeo-geo"):
+    return f"{value}/callback"
+  if value.endswith("/audits"):
+    return f"{value}/seo-aeo-geo/callback"
+  return f"{value}/audits/seo-aeo-geo/callback"
+
+
+def resolve_runtime_callback_config(args: argparse.Namespace) -> argparse.Namespace:
+  """Fill callback URL/token from GitHub Actions env when workflow inputs are blank."""
+  if not getattr(args, "callback_url", None):
+    args.callback_url = (
+      _first_env("AUDIT_CALLBACK_URL", "AI_SUITE_AUDIT_CALLBACK_URL")
+      or _normalise_callback_base(_first_env("AUDIT_CALLBACK_BASE_URL", "APP_URL"))
+    )
+  if args.callback_url:
+    args.callback_url = args.callback_url.rstrip("/")
+
+  if not getattr(args, "callback_token", None):
+    args.callback_token = _first_env("AUDIT_CALLBACK_TOKEN", "AI_SUITE_AUDIT_CALLBACK_TOKEN")
+  return args
+
+
+def callback_config_missing_reason(callback_url: str | None, callback_token: str | None) -> str | None:
+  missing = []
+  if not callback_url:
+    missing.append("callback_url")
+  if not callback_token:
+    missing.append("callback_token")
+  if not missing:
+    return None
+  return "missing " + " and ".join(missing)
+
+
+def _safe_detail(value: Any, limit: int = 900) -> str:
+  text = str(value or "")
+  text = re.sub(r"Bearer\s+[^\s,;]+", "Bearer [masked]", text)
+  text = re.sub(r"sk-or-[A-Za-z0-9._\-]+", "sk-or-[masked]", text)
+  text = re.sub(r"github_pat_[A-Za-z0-9_]+", "github_pat_[masked]", text)
+  return text[:limit]
 
 
 def base_host(base_url: str) -> str:
@@ -1691,8 +1750,8 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
 
 # ── OpenRouter / direct LLM integration ──────────────────────────────────────
 
-OPENROUTER_API_URL = os.environ.get("OPENROUTER_API_BASE", "https://openrouter.ai/api/v1").rstrip("/") + "/chat/completions"
-OPENROUTER_DEFAULT_MODEL = os.environ.get("OPENROUTER_ANTHROPIC_4_6", "anthropic/claude-sonnet-4.6")
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_DEFAULT_MODEL = "anthropic/claude-opus-4"
 
 SYSTEM_PROMPT = """You are a senior forensic SEO + AEO + GEO auditor. You operate with the precision of a technical
 SEO engineer, semantic search strategist, answer-engine analyst, and generative-search specialist.
@@ -1937,7 +1996,7 @@ def call_claude_audit_via_openrouter(
   import requests as _requests
   import time
 
-  model = model or OPENROUTER_DEFAULT_MODEL
+  model = model or os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL)
 
   priority_urls = {p["url"] for p in priority_pages_raw}
   all_routes_condensed = [
@@ -2031,23 +2090,24 @@ def call_claude_audit_via_openrouter(
 # ── Derive analysis URL ───────────────────────────────────────────────────────
 
 def derive_analysis_url(callback_url: str | None, override: str | None = None) -> str | None:
-  """Convert the callback URL to the analysis endpoint URL."""
+  """Convert the SEO/AEO/GEO callback URL to its paired analysis endpoint URL."""
   if override:
     return override.rstrip("/")
   if not callback_url:
     return None
-  return callback_url.rstrip("/").replace("/callback", "/analysis")
+  value = callback_url.rstrip("/")
+  expected_suffix = "/audits/seo-aeo-geo/callback"
+  if not value.endswith(expected_suffix):
+    return None
+  return value[: -len("/callback")] + "/analysis"
 
-
-# ── LLM analysis call ─────────────────────────────────────────────────────────
 
 def _analysis_response_detail(resp: Any, limit: int = 900) -> str:
   try:
     body = resp.text
   except Exception:
     body = ""
-  snippet = re.sub(r"Bearer\s+[A-Za-z0-9._\-]+", "Bearer [masked]", str(body or ""))[:limit]
-  return f"HTTP {getattr(resp, 'status_code', 'unknown')} :: {snippet}"
+  return f"HTTP {getattr(resp, 'status_code', 'unknown')} :: {_safe_detail(body, limit=limit)}"
 
 
 def _extract_analysis_payload(data: dict[str, Any]) -> dict[str, Any] | None:
@@ -2055,12 +2115,15 @@ def _extract_analysis_payload(data: dict[str, Any]) -> dict[str, Any] | None:
     return None
   if isinstance(data.get("analysis"), dict):
     return data["analysis"]
-  job = data.get("job") if isinstance(data.get("job"), dict) else {}
-  result = job.get("result") if isinstance(job.get("result"), dict) else {}
+  result = data.get("result") if isinstance(data.get("result"), dict) else {}
   if isinstance(result.get("analysis"), dict):
     return result["analysis"]
+  job = data.get("job") if isinstance(data.get("job"), dict) else {}
   if isinstance(job.get("analysis"), dict):
     return job["analysis"]
+  job_result = job.get("result") if isinstance(job.get("result"), dict) else {}
+  if isinstance(job_result.get("analysis"), dict):
+    return job_result["analysis"]
   return None
 
 
@@ -2120,6 +2183,8 @@ def _poll_analysis_status(
   return None
 
 
+# ── LLM analysis call ─────────────────────────────────────────────────────────
+
 def call_analysis_endpoint(
   analysis_url: str,
   callback_token: str,
@@ -2135,7 +2200,7 @@ def call_analysis_endpoint(
   workbook: WorkbookInfo,
   discovery_meta: dict[str, Any],
 ) -> dict[str, Any] | None:
-  """POST collected audit data to the AI-suite endpoint and poll async jobs until complete."""
+  """POST audit data to the AI-suite endpoint and poll async jobs until complete."""
   import requests as _requests
 
   call_analysis_endpoint.last_detail = analysis_url
@@ -2385,16 +2450,39 @@ def main() -> int:
         analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
         print("[analysis] LLM analysis received successfully", file=sys.stderr)
       else:
-        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": getattr(call_analysis_endpoint, "last_detail", analysis_url)})
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": analysis_url})
         print("[analysis] endpoint failed; audit will not be marked complete unless another AI path succeeds", file=sys.stderr)
     else:
       analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url did not produce an analysis endpoint"})
 
-  # 2. Direct OpenRouter fallback is deliberately disabled for this workflow.
-  # The AI Management Suite owns provider discovery via services/shared/utils/ai-config.js.
-  if not args.callback_url or not args.callback_token:
-    analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url and/or callback_token were not supplied"})
-  analysis_attempts.append({"path": "Direct OpenRouter model path", "status": "disabled", "detail": "Provider resolution is centralised in AI Management Suite services/shared/utils/ai-config.js"})
+  # 2. Configured direct path fallback retained for manual workflow dispatches that provide OPENROUTER_API_KEY.
+  openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+  if not claude_analysis and openrouter_key:
+    print("[openrouter] OPENROUTER_API_KEY found — calling configured direct model path", file=sys.stderr)
+    claude_analysis = call_claude_audit_via_openrouter(
+      api_key=openrouter_key,
+      session_id=args.session_id,
+      base_url=base_url,
+      pages=pages,
+      priority_pages_raw=priority_pages,
+      issues=issues,
+      coverage_rows=coverage_rows,
+      repo_signals=repo_signals,
+      live_dynamic_urls=live_dynamic_urls,
+      workbook=workbook,
+      discovery_meta=discovery_meta,
+    )
+    analysis_attempts.append({
+      "path": "Direct OpenRouter model path",
+      "status": "success" if claude_analysis else "failed",
+      "detail": os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL),
+    })
+
+  missing_callback_reason = callback_config_missing_reason(args.callback_url, args.callback_token)
+  if missing_callback_reason:
+    analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": missing_callback_reason})
+  if not openrouter_key:
+    analysis_attempts.append({"path": "Direct OpenRouter model path", "status": "not-configured", "detail": "OPENROUTER_API_KEY was not supplied"})
 
   if not claude_analysis:
     print("[analysis] AI forensic analysis unavailable — writing failed-gate report", file=sys.stderr)
@@ -2406,7 +2494,7 @@ def main() -> int:
     "available": bool(claude_analysis),
     "completionState": completion_state,
     "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
-    "failureReason": "" if claude_analysis else (getattr(call_analysis_endpoint, "last_detail", "") or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."),
+    "failureReason": "" if claude_analysis else "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted.",
     "attempts": analysis_attempts,
     "skippedSections": [] if claude_analysis else AI_REQUIRED_SECTIONS,
     "restoreSteps": [] if claude_analysis else AI_RESTORE_STEPS,
