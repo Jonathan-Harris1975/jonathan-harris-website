@@ -100,7 +100,7 @@ AI_REQUIRED_SECTIONS = [
 ]
 AI_RESTORE_STEPS = [
   "Provide a callback_url that resolves to /audits/seo-aeo-geo/callback so the workflow can derive /audits/seo-aeo-geo/analysis.",
-  "Ensure AUDIT_CALLBACK_TOKEN / AI_SUITE_AUDIT_CALLBACK_TOKEN matches the AI Management Suite callback auth configuration.",
+  "Ensure AUDIT_CALLBACK_TOKEN matches the AI Management Suite callback auth configuration.",
   "Verify the AI Management Suite auditForensic route has at least one configured provider in services/shared/utils/ai-config.js with its existing OPENROUTER_* model and key variables set.",
   "Rerun /audits/seo-aeo-geo/run after the /analysis endpoint returns a validated forensic JSON payload.",
 ]
@@ -1691,8 +1691,8 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
 
 # ── OpenRouter / direct LLM integration ──────────────────────────────────────
 
-OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_DEFAULT_MODEL = "anthropic/claude-opus-4"
+OPENROUTER_API_URL = os.environ.get("OPENROUTER_API_BASE", "https://openrouter.ai/api/v1").rstrip("/") + "/chat/completions"
+OPENROUTER_DEFAULT_MODEL = os.environ.get("OPENROUTER_ANTHROPIC_4_6", "anthropic/claude-sonnet-4.6")
 
 SYSTEM_PROMPT = """You are a senior forensic SEO + AEO + GEO auditor. You operate with the precision of a technical
 SEO engineer, semantic search strategist, answer-engine analyst, and generative-search specialist.
@@ -1937,7 +1937,7 @@ def call_claude_audit_via_openrouter(
   import requests as _requests
   import time
 
-  model = model or os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL)
+  model = model or OPENROUTER_DEFAULT_MODEL
 
   priority_urls = {p["url"] for p in priority_pages_raw}
   all_routes_condensed = [
