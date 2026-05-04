@@ -25,6 +25,12 @@ on:
       callback_url:
         description: AI Management Suite callback URL
         required: false
+        default: https://app.jonathan-harris.online/audits/seo-aeo-geo/callback
+        type: string
+      analysis_url:
+        description: Optional AI Management Suite analysis URL override
+        required: false
+        default: ""
         type: string
 
 permissions:
@@ -43,6 +49,8 @@ jobs:
       R2_BUCKET_BRAND_ASSETS: brand-assets
       R2_PUBLIC_BASE_URL_BRAND_ASSETS: ${{ secrets.R2_PUBLIC_BASE_URL_BRAND_ASSETS }}
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
+      AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
+      AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - name: Check out repository
@@ -58,6 +66,51 @@ jobs:
           python -m pip install --disable-pip-version-check -r requirements.txt
           python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
 
+      - name: Resolve AI-suite callback configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          callback_url="${{ inputs.callback_url }}"
+          if [ -z "$callback_url" ]; then
+            callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
+          fi
+          if [ -z "$callback_url" ]; then
+            callback_url="https://app.jonathan-harris.online/audits/seo-aeo-geo/callback"
+          fi
+
+          callback_token="$AUDIT_CALLBACK_TOKEN"
+          if [ -z "$callback_token" ]; then
+            callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
+          fi
+
+          if [ -z "$callback_token" ]; then
+            echo "::error::AUDIT_CALLBACK_TOKEN is missing from the website repo's GitHub Actions secrets or R2 environment. Koyeb env vars are not visible inside this workflow."
+            exit 1
+          fi
+
+          case "$callback_url" in
+            */audits/seo-aeo-geo/callback) ;;
+            *)
+              echo "::error::callback_url must end with /audits/seo-aeo-geo/callback; got $callback_url"
+              exit 1
+              ;;
+          esac
+
+          echo "::add-mask::$callback_token"
+          echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
+          {
+            echo "RESOLVED_CALLBACK_TOKEN<<__AUDIT_TOKEN__"
+            echo "$callback_token"
+            echo "__AUDIT_TOKEN__"
+          } >> "$GITHUB_ENV"
+
       - name: Run forensic SEO AEO GEO audit
         run: |
-          python scripts/audits/seo_aeo_geo_forensic.py                 --base-url "${{ inputs.base_url }}"                 --session-id "${{ inputs.session_id }}"                 --report-prefix "${{ inputs.report_prefix }}"                 --exclude-prefixes "${{ inputs.exclude_prefixes }}"                 --callback-url "${{ inputs.callback_url }}"                 --callback-token "$AUDIT_CALLBACK_TOKEN"
+          python scripts/audits/seo_aeo_geo_forensic.py \
+            --base-url "${{ inputs.base_url }}" \
+            --session-id "${{ inputs.session_id }}" \
+            --report-prefix "${{ inputs.report_prefix }}" \
+            --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
+            --callback-url "$RESOLVED_CALLBACK_URL" \
+            --callback-token "$RESOLVED_CALLBACK_TOKEN" \
+            --analysis-url "${{ inputs.analysis_url }}"
