@@ -2450,39 +2450,25 @@ def main() -> int:
         analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
         print("[analysis] LLM analysis received successfully", file=sys.stderr)
       else:
-        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": analysis_url})
+        detail = getattr(call_analysis_endpoint, "last_detail", analysis_url) or analysis_url
+        analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "failed", "detail": detail})
         print("[analysis] endpoint failed; audit will not be marked complete unless another AI path succeeds", file=sys.stderr)
     else:
       analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": "callback_url did not produce an analysis endpoint"})
 
-  # 2. Configured direct path fallback retained for manual workflow dispatches that provide OPENROUTER_API_KEY.
-  openrouter_key = os.environ.get("OPENROUTER_API_KEY")
-  if not claude_analysis and openrouter_key:
-    print("[openrouter] OPENROUTER_API_KEY found — calling configured direct model path", file=sys.stderr)
-    claude_analysis = call_claude_audit_via_openrouter(
-      api_key=openrouter_key,
-      session_id=args.session_id,
-      base_url=base_url,
-      pages=pages,
-      priority_pages_raw=priority_pages,
-      issues=issues,
-      coverage_rows=coverage_rows,
-      repo_signals=repo_signals,
-      live_dynamic_urls=live_dynamic_urls,
-      workbook=workbook,
-      discovery_meta=discovery_meta,
-    )
+  # 2. Direct model calls from the website workflow are intentionally disabled.
+  # Provider resolution is centralised in the AI Management Suite shared ai-config.js
+  # so audit provider/env failures are diagnosed in one production runtime.
+  if not claude_analysis:
     analysis_attempts.append({
       "path": "Direct OpenRouter model path",
-      "status": "success" if claude_analysis else "failed",
-      "detail": os.environ.get("OPENROUTER_MODEL", OPENROUTER_DEFAULT_MODEL),
+      "status": "disabled",
+      "detail": "Provider resolution is centralised in AI Management Suite services/shared/utils/ai-config.js",
     })
 
   missing_callback_reason = callback_config_missing_reason(args.callback_url, args.callback_token)
   if missing_callback_reason:
     analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "not-configured", "detail": missing_callback_reason})
-  if not openrouter_key:
-    analysis_attempts.append({"path": "Direct OpenRouter model path", "status": "not-configured", "detail": "OPENROUTER_API_KEY was not supplied"})
 
   if not claude_analysis:
     print("[analysis] AI forensic analysis unavailable — writing failed-gate report", file=sys.stderr)
@@ -2494,7 +2480,10 @@ def main() -> int:
     "available": bool(claude_analysis),
     "completionState": completion_state,
     "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
-    "failureReason": "" if claude_analysis else "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted.",
+    "failureReason": "" if claude_analysis else (
+      next((attempt.get("detail") for attempt in analysis_attempts if attempt.get("path") == "AI Management Suite /analysis" and attempt.get("status") in {"failed", "not-configured"} and attempt.get("detail")), "")
+      or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."
+    ),
     "attempts": analysis_attempts,
     "skippedSections": [] if claude_analysis else AI_REQUIRED_SECTIONS,
     "restoreSteps": [] if claude_analysis else AI_RESTORE_STEPS,
