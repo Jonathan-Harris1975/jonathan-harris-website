@@ -32,6 +32,11 @@ on:
         required: false
         default: ""
         type: string
+      callback_token:
+        description: AI Management Suite callback token supplied by Koyeb dispatch
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -78,13 +83,16 @@ jobs:
             callback_url="https://app.jonathan-harris.online/audits/seo-aeo-geo/callback"
           fi
 
-          callback_token="$AUDIT_CALLBACK_TOKEN"
+          callback_token="${{ inputs.callback_token }}"
+          if [ -z "$callback_token" ]; then
+            callback_token="$AUDIT_CALLBACK_TOKEN"
+          fi
           if [ -z "$callback_token" ]; then
             callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
           fi
 
           if [ -z "$callback_token" ]; then
-            echo "::error::AUDIT_CALLBACK_TOKEN is missing from the website repo's GitHub Actions secrets or R2 environment. Koyeb env vars are not visible inside this workflow."
+            echo "::error::AUDIT callback token was not supplied. The AI Management Suite should dispatch callback_token from Koyeb, or the R2 environment must define AUDIT_CALLBACK_TOKEN/AI_SUITE_AUDIT_CALLBACK_TOKEN for manual runs."
             exit 1
           fi
 
