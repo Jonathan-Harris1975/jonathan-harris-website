@@ -4,27 +4,7 @@
 
 ```bash
 python3 -m py_compile scripts/audits/seo_aeo_geo_forensic.py scripts/audits/test_seo_aeo_geo_forensic.py
-```
-
-Result: passed.
-
-```bash
 python3 -m unittest scripts.audits.test_seo_aeo_geo_forensic
 ```
 
-Result: passed. 4 tests passed, 0 failed.
-
-## Package scripts inspected
-
-No root `package.json` was present in `jonathan-harris-website-main`, so no npm scripts were available for this repo.
-
-## Not run
-
-- Cloudflare Pages build was not run because this package only contains the changed audit workflow files and no deployed Pages runtime.
-- Live audit workflow dispatch was not run because production callback tokens, R2 credentials, GitHub workflow credentials, and deployed AI suite runtime were not available in the container.
-
-## Security checks
-
-- The website workflow still does not read or send a direct `OPENROUTER_API_KEY`.
-- `/analysis` diagnostics mask bearer tokens and OpenRouter-looking keys before writing them into logs or report artefacts.
-- AI callback authentication remains delegated to AI Management Suite and the existing bearer token mechanism.
+Result: passed. 8 tests passed, 0 failed.

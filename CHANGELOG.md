@@ -1,16 +1,11 @@
 # Changelog
 
-## SEO + AEO + GEO audit workflow hardening
+## SEO/AEO/GEO audit callback configuration fix
 
-- Kept AI analysis delegated to AI Management Suite `/audits/seo-aeo-geo/analysis`; the website repo still has no duplicate direct OpenRouter stack.
-- Increased the website workflow analysis-call timeout so the GitHub audit job can wait for a real forensic JSON response instead of failing around the client timeout boundary.
-- Added per-attempt AI analysis diagnostics to `report.html`, `summary.json`, and callback payloads via the existing attempt ledger.
-- Captured safe HTTP status/body snippets from `/analysis` failures, including validation and provider diagnostics returned by AI Management Suite.
-- Masked bearer tokens and OpenRouter-looking keys in analysis diagnostics.
-- Preserved failed-gate behaviour when AI analysis genuinely fails.
-
-## Previous hardening retained
-
-- Deterministic callback-to-analysis URL derivation for `/audits/seo-aeo-geo/callback` -> `/audits/seo-aeo-geo/analysis`.
-- Strict acceptance of only a real `analysis` object from AI Management Suite.
-- Broken live URLs remain audit findings, not failed-gate causes.
+- Added a default AI Management Suite callback URL for manual `workflow_dispatch` runs.
+- Added callback configuration preflight in the GitHub Actions workflow so missing callback secrets fail the run clearly instead of generating a failed-gate report saying analysis was not attempted.
+- Added support for `AUDIT_CALLBACK_TOKEN` and `AI_SUITE_AUDIT_CALLBACK_TOKEN` in the website workflow.
+- Added optional `analysis_url` workflow input and passed it to the audit script.
+- Added runtime fallback in `seo_aeo_geo_forensic.py` so callback URL/token can be read from env when CLI args are blank.
+- Added async analysis polling support for AI Management Suite `202 Accepted` responses.
+- Improved missing callback diagnostics so the report can say exactly whether `callback_url`, `callback_token`, or both are missing.
