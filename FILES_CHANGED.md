@@ -1,4 +1,4 @@
-# FILES CHANGED
+# Files changed
 
 - `.github/workflows/seo-aeo-geo-forensic.yml`
 - `scripts/audits/seo_aeo_geo_forensic.py`

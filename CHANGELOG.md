@@ -1,8 +1,6 @@
-# CHANGELOG
+# Website Audit Workflow Fix v12
 
-## v11 - Audit caller diagnostics and OpenRouter centralisation
-
-- Kept AI provider resolution centralised in AI Management Suite.
-- Disabled the website-side direct OpenRouter fallback in the active audit workflow.
-- Improved `/analysis` failure detail propagation into the failed-gate report.
-- Preserved callback URL/token env fallback behaviour for GitHub Actions runs.
+## Fixed
+- Added `callback_token` as an optional workflow input for Koyeb-triggered audit runs.
+- The workflow now prefers the Koyeb-supplied callback token, then falls back to GitHub environment secrets for manual runs.
+- Direct website-side OpenRouter fallback remains disabled so provider resolution stays centralised in AI Management Suite.

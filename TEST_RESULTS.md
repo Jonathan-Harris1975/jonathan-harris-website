@@ -1,4 +1,6 @@
-# TEST RESULTS
+# Test results
+
+## Passed
 
 ```bash
 python3 -m py_compile scripts/audits/seo_aeo_geo_forensic.py scripts/audits/test_seo_aeo_geo_forensic.py
@@ -7,12 +9,13 @@ python3 -m unittest -v scripts.audits.test_seo_aeo_geo_forensic
 
 Result: passed. 8 tests passed, 0 failed.
 
-Covered:
+Coverage included:
+- Callback URL derivation.
+- Async analysis response extraction.
+- Relative status URL handling.
+- Runtime env fallback for callback URL/token.
+- Safe masking of token-like response details.
 
-- callback missing-field diagnostics
-- analysis URL derivation from callback URL
-- async job analysis payload extraction
-- manual analysis URL override
-- status URL resolution
-- env fallback handling for callback config
-- token masking in diagnostics
+## Not run
+
+The live GitHub Actions workflow and R2 upload path were not run because production GitHub/R2 runtime access is unavailable here.
