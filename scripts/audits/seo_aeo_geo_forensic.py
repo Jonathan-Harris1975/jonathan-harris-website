@@ -309,6 +309,310 @@ def representative_family_source(page_type: str) -> str:
   return mapping.get(page_type, "repo route family")
 
 
+def _safe_mean(values: list[float]) -> float:
+  return round(mean(values), 1) if values else 0.0
+
+
+def _sample(values: list[Any], limit: int = 5) -> list[Any]:
+  return values[:limit]
+
+
+def _route_or_url(value: str) -> str:
+  parsed = urlparse(value)
+  if parsed.scheme or parsed.netloc:
+    return normalise_route(parsed.path)
+  return normalise_route(value)
+
+
+def _jsonld_schema_types(soup: BeautifulSoup | None) -> list[str]:
+  if not soup:
+    return []
+  found: list[str] = []
+
+  def collect(value: Any) -> None:
+    if isinstance(value, dict):
+      schema_type = value.get("@type")
+      if isinstance(schema_type, list):
+        found.extend(str(item) for item in schema_type if item)
+      elif schema_type:
+        found.append(str(schema_type))
+      graph = value.get("@graph")
+      if isinstance(graph, list):
+        for node in graph:
+          collect(node)
+    elif isinstance(value, list):
+      for item in value:
+        collect(item)
+
+  for script in soup.select("script[type='application/ld+json']"):
+    try:
+      collect(json.loads(script.string or ""))
+    except Exception:
+      continue
+  return sorted(set(found))
+
+
+def _soup_text_contains(soup: BeautifulSoup | None, patterns: tuple[str, ...]) -> bool:
+  if not soup:
+    return False
+  text = soup.get_text(" ", strip=True).lower()
+  return any(pattern in text for pattern in patterns)
+
+
+def _has_internal_link_to(soup: BeautifulSoup | None, prefixes: tuple[str, ...]) -> bool:
+  if not soup:
+    return False
+  for link in soup.select("a[href]"):
+    href = (link.get("href") or "").strip()
+    if any(href.startswith(prefix) or f"jonathan-harris.online{prefix}" in href for prefix in prefixes):
+      return True
+  return False
+
+
+def _opening_paragraph_repeats(soup: BeautifulSoup | None) -> bool:
+  if not soup:
+    return False
+  paragraphs = [p.get_text(" ", strip=True) for p in soup.select("p") if len(p.get_text(" ", strip=True).split()) >= 12]
+  if len(paragraphs) < 3:
+    return False
+  normalised = [re.sub(r"\s+", " ", p.lower()).strip() for p in paragraphs[:6]]
+  counts = Counter(normalised)
+  return any(count >= 2 for text, count in counts.items() if len(text) > 80)
+
+
+def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  """Build page-family forensic diagnostics for the AI context and report annex."""
+  family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
+  for page in pages:
+    family_map[page["pageType"]].append(page)
+
+  rows: list[dict[str, Any]] = []
+  for page_type in sorted(family_map.keys(), key=lambda item: ROUTE_FAMILY_ORDER.index(item) if item in ROUTE_FAMILY_ORDER else 999):
+    family_pages = family_map[page_type]
+    analysed = [page for page in family_pages if is_analysed_state(page.get("coverageState", ""))]
+    score_pages = analysed or family_pages
+    schemas_by_type: Counter[str] = Counter()
+    audio_pages: list[str] = []
+    transcript_link_pages: list[str] = []
+    takeaway_pages: list[str] = []
+    faq_pages: list[str] = []
+    topic_link_pages: list[str] = []
+    repeated_intro_pages: list[str] = []
+    raw_transcript_wall_pages: list[str] = []
+
+    for page in analysed:
+      soup = page.get("soup")
+      for schema_type in _jsonld_schema_types(soup):
+        schemas_by_type[schema_type] += 1
+      if soup and soup.select("audio"):
+        audio_pages.append(page["url"])
+      if _has_internal_link_to(soup, ("/transcripts/",)):
+        transcript_link_pages.append(page["url"])
+      if _soup_text_contains(soup, ("key takeaway", "key takeaways", "what this means", "what changed")):
+        takeaway_pages.append(page["url"])
+      if page.get("hasFaqSchema") or "FAQPage" in schemas_by_type:
+        faq_pages.append(page["url"])
+      if _has_internal_link_to(soup, ("/topics/", "/ebooks/", "/glossary")):
+        topic_link_pages.append(page["url"])
+      if _opening_paragraph_repeats(soup):
+        repeated_intro_pages.append(page["url"])
+      if page_type == "podcast transcript" and page.get("wordCount", 0) > 1200:
+        h2_count = len(soup.select("h2")) if soup else 0
+        if h2_count < 3 or len(page.get("introText", "").split()) < 60:
+          raw_transcript_wall_pages.append(page["url"])
+
+    no_questions = [page["url"] for page in analysed if not page.get("questionHeadings")]
+    weak_intro = [page["url"] for page in analysed if len(page.get("introText", "").split()) < 35]
+    missing_meta = [page["url"] for page in analysed if not page.get("meta", {}).get("metaDescription")]
+    missing_canonical = [page["url"] for page in analysed if not page.get("meta", {}).get("canonical")]
+
+    observed: list[str] = []
+    if page_type == "podcast episode":
+      observed.append(
+        f"{len(audio_pages)}/{len(analysed)} analysed episode pages expose audio; "
+        f"{len(transcript_link_pages)}/{len(analysed)} link to transcripts; "
+        f"{len(takeaway_pages)}/{len(analysed)} expose key-takeaway style copy; "
+        f"{len(topic_link_pages)}/{len(analysed)} link into topic/book/glossary assets."
+      )
+    elif page_type == "podcast transcript":
+      observed.append(
+        f"{len(raw_transcript_wall_pages)} transcript pages behave as long transcript-first pages without enough above-the-fold summary or sectioning evidence."
+      )
+    elif page_type == "blog article":
+      observed.append(
+        f"{len(repeated_intro_pages)} analysed blog article pages repeat an opening paragraph/standfirst near the top."
+      )
+    else:
+      observed.append(
+        f"{len(no_questions)} analysed URLs lack question-led headings; {len(weak_intro)} have short openings under 35 words."
+      )
+
+    rows.append({
+      "pageType": page_type,
+      "routeFamily": derive_route_family(family_pages[0]["url"]),
+      "sourceFile": representative_family_source(page_type),
+      "totalUrls": len(family_pages),
+      "analysedUrls": len(analysed),
+      "excludedUrls": len([page for page in family_pages if is_excluded_state(page.get("coverageState", ""))]),
+      "failedUrls": len([page for page in family_pages if page.get("coverageState") == "Failed to fetch"]),
+      "averageScore": _safe_mean([float(page.get("total", 0)) for page in analysed]),
+      "averageAeo": _safe_mean([float(page.get("scores", {}).get("aeo", 0)) for page in analysed]),
+      "averageGeo": _safe_mean([float(page.get("scores", {}).get("geo", 0)) for page in analysed]),
+      "schemaTypesObserved": dict(schemas_by_type),
+      "missingMetaCount": len(missing_meta),
+      "missingCanonicalCount": len(missing_canonical),
+      "noQuestionHeadingCount": len(no_questions),
+      "weakOpeningCount": len(weak_intro),
+      "audioPageCount": len(audio_pages),
+      "transcriptLinkCount": len(transcript_link_pages),
+      "takeawayBlockCount": len(takeaway_pages),
+      "topicOrBookLinkCount": len(topic_link_pages),
+      "repeatedOpeningCount": len(repeated_intro_pages),
+      "rawTranscriptWallCount": len(raw_transcript_wall_pages),
+      "sampleUrls": _sample([page["url"] for page in family_pages], 8),
+      "sampleWeakUrls": _sample(no_questions or weak_intro or raw_transcript_wall_pages or repeated_intro_pages, 8),
+      "observedTemplateEvidence": observed,
+    })
+  return rows
+
+
+def build_source_ledger(discovery_meta: dict[str, Any], workbook: WorkbookInfo, repo_signals: dict[str, Any]) -> list[dict[str, Any]]:
+  counts = discovery_meta.get("sourceCounts", {})
+  return [
+    {
+      "source": "Repository static routes",
+      "count": counts.get("repo", 0),
+      "role": "Primary source for static HTML and route-family templates",
+      "status": "Confirmed",
+      "evidence": "Routes discovered by repo_html_routes().",
+    },
+    {
+      "source": "Workbook Pages inventory",
+      "count": workbook.url_count,
+      "role": "Governance source for intended published URLs",
+      "status": "Confirmed" if workbook.url_count else "Needs verification",
+      "evidence": f"Workbook sheet: {workbook.primary_sheet or 'not detected'}.",
+    },
+    {
+      "source": "Repository sitemap.xml",
+      "count": counts.get("sitemap", 0),
+      "role": "Crawler-facing URL ledger",
+      "status": "Confirmed" if counts.get("sitemap", 0) else "Needs verification",
+      "evidence": "Local sitemap URLs parsed from sitemap.xml.",
+    },
+    {
+      "source": "Blog manifest",
+      "count": repo_signals.get("blogManifestCount", 0),
+      "role": "Dynamic editorial article inventory",
+      "status": "Confirmed" if repo_signals.get("blogManifestCount", 0) else "Needs verification",
+      "evidence": repo_signals.get("blogManifestPath", "blog/posts.json"),
+    },
+    {
+      "source": "Podcast manifest",
+      "count": repo_signals.get("podcastManifestCount", 0),
+      "role": "Podcast episode and transcript route source",
+      "status": "Confirmed" if repo_signals.get("podcastManifestCount", 0) else "Needs verification",
+      "evidence": repo_signals.get("podcastManifestPath", "data/podcast-episodes.json"),
+    },
+    {
+      "source": "llms discovery files",
+      "count": len(repo_signals.get("llmsFiles", [])),
+      "role": "Machine-readable discovery surface for generative retrieval",
+      "status": "Confirmed" if repo_signals.get("llmsFiles") else "Needs verification",
+      "evidence": f"Scope detected: {repo_signals.get('llmsScope', 'unknown')}",
+    },
+  ]
+
+
+def build_source_mismatches(
+  discovered: dict[str, dict[str, Any]],
+  pages: list[dict[str, Any]],
+  workbook: WorkbookInfo,
+  repo_signals: dict[str, Any],
+) -> list[dict[str, Any]]:
+  mismatches: list[dict[str, Any]] = []
+  excluded_prefixes = set(repo_signals.get("governanceScriptExcludes", []))
+  if {"blog/posts/", "podcast/episodes/"} & excluded_prefixes:
+    mismatches.append({
+      "id": "SRC-001",
+      "severity": "Critical",
+      "sources": "repo release gate vs dynamic route families",
+      "evidence": f"scripts/check_ungoverned_routes.py excludes {', '.join(sorted(excluded_prefixes))}.",
+      "impact": "Canonical blog and podcast routes can drift outside workbook, sitemap, repo, and audit control.",
+      "fix": "Replace blanket dynamic exclusions with a generated route manifest consumed by CI, sitemap and audit coverage.",
+    })
+  if repo_signals.get("duplicatePodcastPageUrls"):
+    duplicate = repo_signals["duplicatePodcastPageUrls"][0]
+    mismatches.append({
+      "id": "SRC-002",
+      "severity": "Critical",
+      "sources": "data/podcast-episodes.json vs canonical episode URL ledger",
+      "evidence": f"{duplicate.get('count')} podcast records share {duplicate.get('pageUrl')}.",
+      "impact": "Multiple episodes collapse into one canonical route, making episode-level coverage and sitemap evidence unreliable.",
+      "fix": "Generate unique episode slugs by title plus session_id/date when a slug repeats.",
+    })
+  if repo_signals.get("transcriptSitemapMissingCount", 0):
+    mismatches.append({
+      "id": "SRC-003",
+      "severity": "High",
+      "sources": "data/podcast-episodes.json vs sitemap.xml",
+      "evidence": f"{repo_signals.get('transcriptSitemapMissingCount')} transcript URLs from the podcast manifest are absent from sitemap.xml.",
+      "impact": "Transcript leaves hold citation-ready text but are not exposed in the crawler-facing ledger.",
+      "fix": "Generate transcript sitemap entries from data/podcast-episodes.json with lastmod from episode date.",
+    })
+  if repo_signals.get("llmsScope") == "ebook-only":
+    mismatches.append({
+      "id": "SRC-004",
+      "severity": "High",
+      "sources": "llms.txt / llm-index.json vs full estate",
+      "evidence": "llms.txt is detected as ebook-only and does not expose blog, podcast or transcript entities.",
+      "impact": "The strongest editorial and transcript assets are missing from machine-readable discovery surfaces.",
+      "fix": "Expand llms.txt and llm-index.json to include topics, glossary, blog, podcast, transcripts and entity pages.",
+    })
+
+  workbook_only = [entry for entry in discovered.values() if "workbook" in entry.get("sources", set()) and "repo" not in entry.get("sources", set())]
+  repo_only = [entry for entry in discovered.values() if "repo" in entry.get("sources", set()) and "workbook" not in entry.get("sources", set())]
+  if workbook_only:
+    mismatches.append({
+      "id": "SRC-005",
+      "severity": "High",
+      "sources": "workbook vs repository routes",
+      "evidence": f"{len(workbook_only)} workbook-only URLs remain, including {', '.join(item.get('path', '') for item in workbook_only[:5])}.",
+      "impact": "The governance workbook and repo snapshot disagree about what the estate contains.",
+      "fix": "Restore intended workbook-only URLs or retire them from the workbook with evidence.",
+    })
+  if repo_only:
+    mismatches.append({
+      "id": "SRC-006",
+      "severity": "Medium",
+      "sources": "repository routes vs workbook",
+      "evidence": f"{len(repo_only)} repo-only URLs remain, including {', '.join(item.get('path', '') for item in repo_only[:5])}.",
+      "impact": "Repo routes absent from workbook weaken release-grade URL governance.",
+      "fix": "Add intended repo routes to workbook Pages or generated dynamic inventory.",
+    })
+  return mismatches
+
+
+def build_template_diagnostics(template_annex: list[dict[str, Any]], family_diagnostics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  by_type = {row["pageType"]: row for row in family_diagnostics}
+  rows: list[dict[str, Any]] = []
+  for item in template_annex:
+    diag = by_type.get(item["pageType"], {})
+    rows.append({
+      "sourceFile": item.get("sourceFile", ""),
+      "area": item.get("pageType", ""),
+      "pagesAffected": item.get("pagesAffected", 0),
+      "observedLogic": "; ".join(diag.get("observedTemplateEvidence", [])) or "; ".join(item.get("repeatedDefects", [])),
+      "metadataLogic": f"missing meta: {diag.get('missingMetaCount', 0)}; missing canonical: {diag.get('missingCanonicalCount', 0)}",
+      "schemaLogic": f"schema types observed: {', '.join(sorted(diag.get('schemaTypesObserved', {}).keys())) or 'none detected'}",
+      "answerPatternGap": f"no question headings: {diag.get('noQuestionHeadingCount', 0)}; weak openings: {diag.get('weakOpeningCount', 0)}",
+      "generativeSearchGap": f"raw transcript walls: {diag.get('rawTranscriptWallCount', 0)}; topic/book links: {diag.get('topicOrBookLinkCount', 0)}",
+      "fixPriority": item.get("fixPriority", "Medium"),
+      "sampleUrls": diag.get("sampleUrls", []),
+    })
+  return rows
+
+
 def derive_route_family(url: str) -> str:
   path = normalise_route(urlparse(url).path)
   if path.startswith("/blog/posts/"):
@@ -901,6 +1205,7 @@ def issue_record(issue_id: str, severity: str, confidence: str, lens: str, root_
     "auditLens": lens,
     "rootCauseLevel": root_cause,
     "affected": affected,
+    "affectedPagesTemplatesFilesOrRoutes": affected,
     "evidenceObserved": evidence,
     "whyItMatters": why,
     "exactRemediation": remediation,
@@ -911,131 +1216,240 @@ def issue_record(issue_id: str, severity: str, confidence: str, lens: str, root_
   }
 
 
-def collect_issues(pages: list[dict[str, Any]], discovered: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+def collect_issues(
+  pages: list[dict[str, Any]],
+  discovered: dict[str, dict[str, Any]],
+  repo_signals: dict[str, Any] | None = None,
+  family_diagnostics: list[dict[str, Any]] | None = None,
+) -> list[dict[str, Any]]:
+  """Create a forensic issue ledger from source conflicts and page-family evidence.
+
+  The old implementation elevated the same generic AEO recommendation for almost
+  every family. This version promotes root-cause issues first, then adds only
+  grounded family issues where the supplied evidence identifies the broken source.
+  """
+  repo_signals = repo_signals or {}
+  family_diagnostics = family_diagnostics or []
+  diag_by_type = {row.get("pageType"): row for row in family_diagnostics}
   issues: list[dict[str, Any]] = []
-  counter = 1
+
+  def add(issue: dict[str, Any]) -> None:
+    if issue["issueId"] not in {existing["issueId"] for existing in issues}:
+      issues.append(issue)
 
   failed_pages = [page for page in pages if page.get("coverageState") == "Failed to fetch"]
   if failed_pages:
-    issues.append(issue_record(
-      f"SEO-{counter:03d}",
+    add(issue_record(
+      "JH-TECH-000",
       "Critical",
       "Confirmed",
-      "Technical",
-      "route",
-      ", ".join(page["url"] for page in failed_pages[:5]),
-      f"{len(failed_pages)} in-scope URLs did not return 200.",
-      "Non-200 in-scope pages break full-estate coverage and weaken crawl reliability.",
-      "Fix the failing routes or explicitly exclude them with evidence before rerunning the audit.",
+      "Technical / Crawl / Coverage",
+      "route / fetch",
+      ", ".join(page["url"] for page in failed_pages[:8]),
+      f"{len(failed_pages)} in-scope URLs failed to fetch during the audit crawl.",
+      "Failed in-scope URLs prevent full-estate verification and create crawl reliability risk.",
+      "Restore the failing routes or mark them as explicit redirects/canonicalised exclusions with evidence before rerunning the audit.",
       "Medium",
+      "Engineering / SEO",
     ))
-    counter += 1
 
-  workbook_only = [entry for entry in discovered.values() if "workbook" in entry["sources"] and "repo" not in entry["sources"]]
-  repo_only = [entry for entry in discovered.values() if "repo" in entry["sources"] and "workbook" not in entry["sources"] and classify_page(entry["url"]) != "podcast episode"]
-  if workbook_only:
-    issues.append(issue_record(
-      f"SEO-{counter:03d}",
+  excluded_prefixes = set(repo_signals.get("governanceScriptExcludes", []))
+  dynamic_exclusions = sorted(excluded_prefixes & {"blog/posts/", "podcast/episodes/"})
+  if dynamic_exclusions:
+    add(issue_record(
+      "JH-TECH-001",
+      "Critical",
+      "Confirmed",
+      "Technical / Governance / SEO",
+      "system / release gate",
+      "scripts/check_ungoverned_routes.py; blog/posts/; podcast/episodes/; workbook Pages sheet",
+      f"EXCLUDED_ROUTE_PREFIXES contains {', '.join(dynamic_exclusions)}.",
+      "High-value dynamic blog and podcast routes can exist live without workbook, sitemap, repo, or audit parity.",
+      "Remove canonical dynamic route families from EXCLUDED_ROUTE_PREFIXES and replace the blanket exclusions with a generated route manifest consumed by sitemap, workbook/governance checks, and audit coverage. Keep only compatibility redirect pages such as podcast/TT-* exempted.",
+      "Medium",
+      "Engineering / SEO",
+    ))
+
+  duplicate_urls = repo_signals.get("duplicatePodcastPageUrls") or []
+  if duplicate_urls:
+    duplicate = duplicate_urls[0]
+    add(issue_record(
+      "JH-TECH-002",
+      "Critical",
+      "Confirmed",
+      "Technical / Canonical / SEO",
+      "data / generator",
+      "data/podcast-episodes.json; scripts/generate_podcast_episodes.py; sitemap.xml; podcast episode canonicals",
+      f"{duplicate.get('count')} podcast episode records share the same page_url: {duplicate.get('pageUrl')}.",
+      "Multiple different episodes collapse into one URL, destroying episode-level canonical integrity and making sitemap coverage misleading.",
+      "Make podcast slugs unique by appending session_id or ISO date when a title slug repeats. Regenerate episode pages, update data/podcast-episodes.json, update sitemap/workbook or dynamic inventory, and add controlled redirects only where a single legacy canonical is deliberately chosen.",
+      "Medium",
+      "Engineering",
+    ))
+
+  missing_transcripts = repo_signals.get("transcriptSitemapMissingCount", 0)
+  if missing_transcripts:
+    sample = repo_signals.get("transcriptSitemapMissingSample", [])
+    sample_paths = [item.get("path") or item.get("url") for item in sample[:6] if isinstance(item, dict)]
+    add(issue_record(
+      "JH-SEO-001",
       "High",
       "Confirmed",
-      "Technical",
-      "workbook mismatch",
-      ", ".join(item["path"] for item in workbook_only[:5]),
-      f"Workbook-only URLs remain: {', '.join(item['path'] for item in workbook_only[:8])}.",
-      "Workbook-governed routes missing from the repo weaken source-of-truth integrity.",
-      "Restore or retire the workbook-only URLs and keep the workbook aligned to the published estate.",
-      "Low",
+      "SEO / AEO / GEO",
+      "sitemap / inventory",
+      "sitemap.xml; transcript archive; transcript leaf pages under /transcripts/TT-*.html",
+      f"{missing_transcripts} transcript URLs from data/podcast-episodes.json are absent from sitemap.xml. Sample: {', '.join(sample_paths)}.",
+      "Transcript leaves contain citation-ready podcast text, but crawlers and LLM retrieval systems are not being given the full URL ledger.",
+      "Generate transcript sitemap entries from data/podcast-episodes.json and podcast RSS transcript tags. Include lastmod from episode date and add transcript URLs to workbook Pages or a generated dynamic route inventory verified in CI.",
+      "Low / Medium",
+      "SEO / Engineering",
     ))
-    counter += 1
-  if repo_only:
-    issues.append(issue_record(
-      f"SEO-{counter:03d}",
+
+  if repo_signals.get("llmsScope") == "ebook-only":
+    add(issue_record(
+      "JH-GEO-001",
+      "High",
+      "Confirmed",
+      "GEO / Entity / Retrieval",
+      "llms discovery asset",
+      "llms.txt; llm-index.json",
+      "llms.txt is detected as ebook-only and llm-index.json does not expose blog, podcast, transcript, glossary, or full topic-guide entities.",
+      "The site hides its best retrieval assets from LLM-friendly discovery files, weakening generative search visibility outside the ebook catalogue.",
+      "Expand llms.txt and llm-index.json to include homepage, bio, topic guides, glossary, comparison, blog hub, latest weekly posts, podcast hub, recent episode pages, transcript archive, and transcript leaves with short descriptions and entity relationships.",
+      "Low / Medium",
+      "GEO / Engineering",
+    ))
+
+  podcast_diag = diag_by_type.get("podcast episode") or {}
+  if podcast_diag and (podcast_diag.get("takeawayBlockCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2) or podcast_diag.get("topicOrBookLinkCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2)):
+    add(issue_record(
+      "JH-AEO-001",
+      "High",
+      "Confirmed",
+      "AEO / Content / Podcast",
+      "template / content",
+      podcast_diag.get("sourceFile", "live podcast episode routes"),
+      f"Podcast episode family evidence: {', '.join(podcast_diag.get('observedTemplateEvidence', []))}",
+      "Episode pages cannot win direct-answer or generative citation surfaces if they remain thin wrappers around audio and a transcript link.",
+      "Update the episode template to render a 60-word answer-first summary, 3-5 key takeaways, discussed entities/topics, transcript preview anchors, related topic guides/books, PodcastEpisode JSON-LD, FAQPage JSON-LD, and canonical transcript relationship.",
+      "Medium",
+      "Content / Engineering",
+    ))
+
+  transcript_diag = diag_by_type.get("podcast transcript") or {}
+  if transcript_diag and transcript_diag.get("rawTranscriptWallCount", 0):
+    add(issue_record(
+      "JH-AEO-002",
+      "High",
+      "Confirmed",
+      "AEO / GEO / Transcript",
+      "template / content structure",
+      transcript_diag.get("sourceFile", "live transcript routes"),
+      f"{transcript_diag.get('rawTranscriptWallCount')} transcript pages behave as long transcript-first pages. Sample: {', '.join(transcript_diag.get('sampleWeakUrls', [])[:5])}.",
+      "Long raw transcript walls are harder for answer engines and LLM retrievers to chunk, cite, and summarise without ambiguity.",
+      "Before the transcript body render an episode summary, what changed this week, key named entities, 5 bullet takeaways, topic index, timestamped sections, related books/topics, and Transcript/PodcastEpisode schema alignment.",
+      "Medium",
+      "Editorial / Engineering",
+    ))
+
+  blog_diag = diag_by_type.get("blog article") or {}
+  if blog_diag and blog_diag.get("repeatedOpeningCount", 0):
+    add(issue_record(
+      "JH-AEO-003",
+      "High",
+      "Confirmed",
+      "AEO / Blog / Content",
+      "template / R2 HTML",
+      blog_diag.get("sourceFile", "blog post template"),
+      f"{blog_diag.get('repeatedOpeningCount')} analysed blog article pages repeat an opening paragraph or standfirst near the top.",
+      "Repeated standfirst text wastes the first screen, looks automated, and weakens answer extraction clarity.",
+      "Render the standfirst once after the H1. Remove duplicate summary echoes in hero/article body hydration and use a distinct TL;DR bullet block only when needed.",
+      "Low",
+      "Frontend / Editorial",
+    ))
+
+  ebook_trim = repo_signals.get("ebookPipelineTrimLimit")
+  if ebook_trim and ebook_trim <= 80:
+    add(issue_record(
+      "JH-SEO-004",
       "Medium",
       "Confirmed",
-      "Technical",
-      "workbook mismatch",
-      ", ".join(item["path"] for item in repo_only[:5]),
-      f"Repo-only URLs remain: {', '.join(item['path'] for item in repo_only[:8])}.",
-      "Repo routes that are absent from the workbook dilute governance and estate reconciliation quality.",
-      "Add the missing repo routes to the workbook when they are intended to remain live.",
+      "SEO / AEO / Template",
+      "template / copy generation",
+      "scripts/ebook_pipeline.py; all ebook detail pages",
+      f"scripts/ebook_pipeline.py contains a hard heading trim of {ebook_trim} characters.",
+      "Hard-trimmed headings can cut meaning mid-phrase and weaken answer-style headings on otherwise strong ebook pages.",
+      "Remove the hard character slice. Use semantic heading source fields or a word-safe shorten utility that preserves whole words and only shortens above 96-110 characters. Let CSS handle wrapping.",
       "Low",
+      "Engineering / Content",
     ))
-    counter += 1
 
-  family_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
-  for page in pages:
-    if is_analysed_state(page.get("coverageState", "")):
-      family_groups[page["pageType"]].append(page)
+  workbook_only = [entry for entry in discovered.values() if "workbook" in entry.get("sources", set()) and "repo" not in entry.get("sources", set())]
+  repo_only = [entry for entry in discovered.values() if "repo" in entry.get("sources", set()) and "workbook" not in entry.get("sources", set()) and classify_page(entry["url"]) != "podcast episode"]
+  if workbook_only and not any(item["issueId"] == "JH-SEO-002" for item in issues):
+    add(issue_record(
+      "JH-SEO-002",
+      "High",
+      "Confirmed",
+      "SEO / Source reconciliation",
+      "workbook mismatch",
+      ", ".join(item.get("path", "") for item in workbook_only[:8]),
+      f"{len(workbook_only)} workbook-only URLs remain outside confirmed repo route evidence.",
+      "Workbook-governed routes missing from the repo weaken source-of-truth integrity and release confidence.",
+      "Restore the intended URLs, retire stale workbook rows, or move dynamic families into the generated route manifest used by sitemap and audit coverage.",
+      "Low / Medium",
+      "SEO / Engineering",
+    ))
+  if repo_only:
+    add(issue_record(
+      "JH-TECH-003",
+      "Medium",
+      "Confirmed",
+      "Technical / Governance",
+      "workbook mismatch",
+      ", ".join(item.get("path", "") for item in repo_only[:8]),
+      f"{len(repo_only)} repo routes are absent from workbook Pages evidence.",
+      "Repo routes absent from the workbook dilute governance and estate reconciliation quality.",
+      "Add intended repo routes to workbook Pages or the generated dynamic inventory; explicitly exclude only non-indexable utility routes with evidence.",
+      "Low",
+      "Engineering / SEO",
+    ))
 
-  for page_type, family_pages in sorted(family_groups.items()):
-    if not family_pages:
-      continue
-    avg_aeo = mean(page["scores"]["aeo"] for page in family_pages)
-    avg_geo = mean(page["scores"]["geo"] for page in family_pages)
-    missing_desc = [page for page in family_pages if not page["meta"]["metaDescription"]]
-    missing_canonical = [page for page in family_pages if not page["meta"]["canonical"]]
-    weak_intro = [page for page in family_pages if len(page["introText"].split()) < 35]
-    no_questions = [page for page in family_pages if not page["questionHeadings"]]
-
-    if missing_desc:
-      issues.append(issue_record(
-        f"SEO-{counter:03d}",
+  # Add a small number of grounded metadata/canonical issues only when observed.
+  issue_counter = 1
+  for diag in family_diagnostics:
+    page_type = diag.get("pageType", "route family")
+    source = diag.get("sourceFile", representative_family_source(page_type))
+    if diag.get("missingMetaCount", 0):
+      add(issue_record(
+        f"JH-META-{issue_counter:03d}",
         "Medium",
         "Confirmed",
-        "SEO",
-        "template",
-        f"{page_type} ({len(missing_desc)} URLs)",
-        f"Missing meta descriptions on {len(missing_desc)} {page_type} URL(s).",
-        "Missing descriptions reduce SERP control and weaken answer-engine summaries.",
-        "Add unique meta descriptions to the affected template or page family and align them to the opening summary.",
+        "SEO / Metadata",
+        "template / page family",
+        source,
+        f"{diag.get('missingMetaCount')} analysed {page_type} URLs have no meta description. Sample: {', '.join(diag.get('sampleUrls', [])[:5])}.",
+        "Missing descriptions reduce SERP control and weaken answer-engine page summaries.",
+        f"Add unique meta descriptions in {source}, using the first-screen answer summary as source copy and keeping every description page-specific.",
         "Medium",
-        "SEO",
+        "SEO / Frontend",
       ))
-      counter += 1
-    if missing_canonical:
-      issues.append(issue_record(
-        f"SEO-{counter:03d}",
+      issue_counter += 1
+    if diag.get("missingCanonicalCount", 0):
+      add(issue_record(
+        f"JH-CANON-{issue_counter:03d}",
         "Medium",
         "Confirmed",
-        "Technical",
-        "template",
-        f"{page_type} ({len(missing_canonical)} URLs)",
-        f"Canonical tags are missing on {len(missing_canonical)} {page_type} URL(s).",
-        "Canonical gaps weaken route normalisation and duplication control.",
-        "Emit absolute canonical tags from the affected template family.",
+        "Technical / Canonical",
+        "template / page family",
+        source,
+        f"{diag.get('missingCanonicalCount')} analysed {page_type} URLs have no canonical tag. Sample: {', '.join(diag.get('sampleUrls', [])[:5])}.",
+        "Canonical gaps weaken route normalisation and duplicate control.",
+        f"Emit absolute canonicals in {source}, matching the final intended URL after redirect/canonical policy is applied.",
         "Medium",
+        "Engineering / SEO",
       ))
-      counter += 1
-    if avg_aeo < 10 and len(family_pages) >= 1:
-      issues.append(issue_record(
-        f"SEO-{counter:03d}",
-        "Medium",
-        "Confirmed",
-        "AEO",
-        "template",
-        f"{page_type} ({len(family_pages)} URLs)",
-        f"Average AEO score for {page_type} is {avg_aeo:.1f}/20. {len(no_questions)} URLs lack question-led headings and {len(weak_intro)} have weak opening summaries.",
-        "Weak answer formatting makes the family less extractable for answer engines and zero-click surfaces.",
-        "Add answer-first summaries, extractable subheadings, and direct response blocks to the affected family.",
-        "Medium",
-        "Content",
-      ))
-      counter += 1
-    if avg_geo < 12 and len(family_pages) >= 1:
-      issues.append(issue_record(
-        f"SEO-{counter:03d}",
-        "Medium",
-        "Confirmed",
-        "GEO",
-        "template",
-        f"{page_type} ({len(family_pages)} URLs)",
-        f"Average GEO score for {page_type} is {avg_geo:.1f}/20.",
-        "Low generative-search readiness weakens citation likelihood and summarisation quality.",
-        "Strengthen opening context, entity cues, schema support, and reusable explanatory passages across the family.",
-        "Medium",
-        "Content",
-      ))
-      counter += 1
+      issue_counter += 1
 
   return issues
 
@@ -1198,6 +1612,12 @@ def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
     "score": page["total"],
     "grade": page["grade"],
     "riskFlag": page["riskFlag"],
+    "sources": sorted(page.get("sources", [])),
+    "sourceDetails": page.get("sourceDetails", []),
+    "finalUrl": page.get("finalUrl", page["url"]),
+    "canonicalNormalised": page.get("canonicalNormalised", ""),
+    "exclusionReason": page.get("exclusionReason", ""),
+    "fetchError": page.get("fetchError", ""),
   }
 
 def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], artefacts: dict[str, str], analysis_state: dict[str, Any]) -> dict[str, Any]:
@@ -1221,7 +1641,7 @@ def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[s
   }
 
 
-def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None, analysis_state: dict[str, Any] | None = None) -> str:
+def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None, analysis_state: dict[str, Any] | None = None, source_ledger: list[dict[str, Any]] | None = None, source_mismatches: list[dict[str, Any]] | None = None, template_diagnostics: list[dict[str, Any]] | None = None) -> str:
   analysis_state = analysis_state or {
     "available": bool(claude_analysis),
     "completionState": "Complete" if claude_analysis else "Failed-gate",
@@ -1231,6 +1651,9 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   }
   ai_available = bool(claude_analysis)
   failed_gate = not ai_available
+  source_ledger = (claude_analysis or {}).get("sourceLedger") or source_ledger or []
+  source_mismatches = (claude_analysis or {}).get("sourceMismatchesThatMatter") or (claude_analysis or {}).get("sourceMismatches") or source_mismatches or []
+  template_diagnostics = template_diagnostics or []
   control = build_report_control(pages, coverage_rows, artefacts, analysis_state)
   score_pages = [page for page in pages if is_analysed_state(page.get("coverageState", ""))]
   if not score_pages:
@@ -1269,6 +1692,18 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   coverage_appendix_rows = "".join(
     f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{', '.join(sorted(page['sources']))}</td><td>{page['status']}</td><td>{page['canonicalNormalised'] or page['meta']['canonical'] or '—'}</td><td>{page['indexability']}</td><td>{page['coverageState']}</td><td>{page['total']} / {page['grade']}</td><td>{page['riskFlag']}</td></tr>"
     for page in pages
+  )
+  source_ledger_rows = "".join(
+    f"<tr><td>{_esc(row.get('source', ''))}</td><td>{_esc(row.get('count', ''))}</td><td>{_esc(row.get('role', ''))}</td><td>{_esc(row.get('status', ''))}</td><td>{_esc(row.get('evidence', ''))}</td></tr>"
+    for row in source_ledger
+  ) or "<tr><td colspan='5'>No source ledger was supplied by the analysis context.</td></tr>"
+  source_mismatch_rows = "".join(
+    f"<tr><td>{_esc(row.get('id', row.get('issueId', '')))}</td><td>{_esc(row.get('severity', ''))}</td><td>{_esc(row.get('sources', ''))}</td><td>{_esc(row.get('evidence', ''))}</td><td>{_esc(row.get('impact', ''))}</td><td>{_esc(row.get('fix', ''))}</td></tr>"
+    for row in source_mismatches
+  ) or "<tr><td colspan='6'>No material source mismatch was supplied by the analysis context.</td></tr>"
+  template_diagnostic_rows = "".join(
+    f"<tr><td><code>{_esc(row.get('sourceFile', ''))}</code></td><td>{_esc(row.get('area', ''))}</td><td>{_esc(row.get('pagesAffected', ''))}</td><td>{_esc(row.get('observedLogic', ''))}</td><td>{_esc(row.get('metadataLogic', ''))}</td><td>{_esc(row.get('schemaLogic', ''))}</td><td>{_esc(row.get('answerPatternGap', ''))}</td><td>{_esc(row.get('generativeSearchGap', ''))}</td><td>{_esc(row.get('fixPriority', ''))}</td></tr>"
+    for row in template_diagnostics
   )
 
   # Prefer LLM-derived labels and priorities when available
@@ -1456,6 +1891,16 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <p><strong>LLM analysis:</strong> {'Forensic narrative and ranked issues generated using the configured AI analysis path and the full context package.' if ai_available else 'Failed. The report was deliberately marked as failed-gate rather than completed.'}</p>
   </section>
 
+  <section id="source-ledger">
+    <h2>Source ledger</h2>
+    <table class="tight"><thead><tr><th>Source</th><th>Count</th><th>Role</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{source_ledger_rows}</tbody></table>
+  </section>
+
+  <section id="source-mismatches">
+    <h2>Source mismatches that matter</h2>
+    <table class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Sources</th><th>Evidence</th><th>Impact</th><th>Fix</th></tr></thead><tbody>{source_mismatch_rows}</tbody></table>
+  </section>
+
   <section id="inventory">
     <h2>Inventory and reconciliation summary</h2>
     <p><strong>Workbook rows:</strong> {workbook.url_count}</p>
@@ -1500,6 +1945,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   <section id="templates">
     <h2>Template / component / generator annex</h2>
     <table class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>
+    {f'<h3>Template diagnostics</h3><table class="tight"><thead><tr><th>Source</th><th>Area</th><th>Pages</th><th>Observed logic</th><th>Metadata logic</th><th>Schema logic</th><th>Answer-pattern gap</th><th>GEO gap</th><th>Priority</th></tr></thead><tbody>{template_diagnostic_rows}</tbody></table>' if template_diagnostic_rows else ''}
   </section>
 
   {'<section id="code-remediation"><h2>Code-level remediation appendix</h2><p class="llm-badge">✦ Exact corrected patterns from LLM forensic analysis</p>' + active_remediation_html + '</section>' if active_remediation_html else ''}
@@ -1580,16 +2026,21 @@ def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[
 
 # ── Repo signals ──────────────────────────────────────────────────────────────
 
-def build_repo_signals(repo_root: Path) -> dict:
-  """Extracts known repo-level signals relevant to the LLM audit context."""
+def build_repo_signals(repo_root: Path, base_url: str) -> dict:
+  """Extract repo-level signals relevant to forensic source reconciliation."""
   signals: dict[str, Any] = {}
 
   governance_script = repo_root / "scripts" / "check_ungoverned_routes.py"
   excludes_in_governance: list[str] = []
   if governance_script.exists():
     src = governance_script.read_text(encoding="utf-8")
-    excludes_in_governance = re.findall(r'["\']([^"\']+/)["\']', src)
-  signals["governanceScriptExcludes"] = excludes_in_governance
+    m = re.search(r"EXCLUDED_ROUTE_PREFIXES\s*=\s*\((.*?)\)", src, re.S)
+    if m:
+      excludes_in_governance = re.findall(r'["\']([^"\']+)["\']', m.group(1))
+    else:
+      excludes_in_governance = re.findall(r'["\']([^"\']+/)["\']', src)
+  signals["governanceScriptPath"] = "scripts/check_ungoverned_routes.py" if governance_script.exists() else ""
+  signals["governanceScriptExcludes"] = sorted(set(excludes_in_governance))
 
   ebook_pipeline = repo_root / "scripts" / "ebook_pipeline.py"
   ebook_trim = None
@@ -1598,69 +2049,131 @@ def build_repo_signals(repo_root: Path) -> dict:
     m = re.search(r'\[:(\d+)\]', src)
     if m:
       ebook_trim = int(m.group(1))
+  signals["ebookPipelinePath"] = "scripts/ebook_pipeline.py" if ebook_pipeline.exists() else ""
   signals["ebookPipelineTrimLimit"] = ebook_trim
 
   blog_manifest = repo_root / "blog" / "posts.json"
   blog_count = 0
+  blog_items: list[dict[str, Any]] = []
   if blog_manifest.exists():
     try:
       data = json.loads(blog_manifest.read_text(encoding="utf-8"))
-      items = data.get("items") or data.get("posts") or []
-      blog_count = len(items)
+      items = data.get("items") or data.get("posts") or [] if isinstance(data, dict) else data
+      if isinstance(items, list):
+        blog_items = [item for item in items if isinstance(item, dict)]
+        blog_count = len(blog_items)
     except Exception:
       pass
-  signals["blogManifestPath"] = "blog/posts.json"
+  signals["blogManifestPath"] = "blog/posts.json" if blog_manifest.exists() else ""
   signals["blogManifestCount"] = blog_count
+  signals["blogManifestSample"] = [item.get("url") or item.get("path") or item.get("slug") for item in blog_items[:5]]
+
+  sitemap_urls = set(local_sitemap_urls(repo_root, base_url))
+  sitemap_paths = {_route_or_url(url) for url in sitemap_urls}
+  signals["localSitemapUrlCount"] = len(sitemap_urls)
 
   podcast_manifest = repo_root / "data" / "podcast-episodes.json"
   podcast_count = 0
-  known_broken_redirects: list[dict[str, Any]] = []
+  podcast_items: list[dict[str, Any]] = []
   if podcast_manifest.exists():
     try:
       data = json.loads(podcast_manifest.read_text(encoding="utf-8"))
       items = data if isinstance(data, list) else data.get("items") or data.get("episodes") or []
-      podcast_count = len(items)
+      if isinstance(items, list):
+        podcast_items = [item for item in items if isinstance(item, dict)]
+        podcast_count = len(podcast_items)
     except Exception:
       pass
-  signals["podcastManifestPath"] = "data/podcast-episodes.json"
+  signals["podcastManifestPath"] = "data/podcast-episodes.json" if podcast_manifest.exists() else ""
   signals["podcastManifestCount"] = podcast_count
 
+  page_url_groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+  transcript_urls: list[str] = []
+  episode_dates: list[str] = []
+  for item in podcast_items:
+    page_url = (item.get("page_url") or item.get("pageUrl") or item.get("url") or "").strip()
+    if page_url:
+      page_url_groups[_route_or_url(page_url)].append(item)
+    transcript_url = (item.get("transcript_url") or item.get("transcriptUrl") or "").strip()
+    if transcript_url:
+      transcript_urls.append(transcript_url)
+    date_value = str(item.get("date") or item.get("published") or item.get("published_at") or "")[:10]
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", date_value):
+      episode_dates.append(date_value)
+
+  duplicate_page_urls = []
+  for path, items in sorted(page_url_groups.items()):
+    if len(items) > 1:
+      duplicate_page_urls.append({
+        "pageUrl": path,
+        "count": len(items),
+        "sessionIds": [str(item.get("session_id") or item.get("sessionId") or "") for item in items[:8]],
+        "titles": [str(item.get("title") or "") for item in items[:8]],
+      })
+  signals["podcastPageUrlCount"] = sum(len(items) for items in page_url_groups.values())
+  signals["podcastUniquePageUrlCount"] = len(page_url_groups)
+  signals["duplicatePodcastPageUrls"] = duplicate_page_urls
+  signals["podcastTranscriptUrlCount"] = len(transcript_urls)
+  signals["podcastOldestDate"] = min(episode_dates) if episode_dates else ""
+  signals["podcastLatestDate"] = max(episode_dates) if episode_dates else ""
+
+  transcript_missing = []
+  for transcript_url in transcript_urls:
+    path = _route_or_url(transcript_url)
+    if transcript_url not in sitemap_urls and path not in sitemap_paths:
+      transcript_missing.append({"url": transcript_url, "path": path})
+  signals["transcriptSitemapMissingCount"] = len(transcript_missing)
+  signals["transcriptSitemapMissingSample"] = transcript_missing[:10]
+
   redirects_file = repo_root / "_redirects"
+  known_redirects: list[dict[str, Any]] = []
   if redirects_file.exists():
     lines = redirects_file.read_text(encoding="utf-8").splitlines()
     for line in lines:
       parts = line.strip().split()
       if len(parts) >= 2 and parts[0].startswith("/podcast/"):
-        known_broken_redirects.append({"from": parts[0], "to": parts[1]})
-  signals["knownRedirects"] = known_broken_redirects[:20]
+        known_redirects.append({"from": parts[0], "to": parts[1]})
+  signals["knownRedirects"] = known_redirects[:30]
 
   llms_txt = repo_root / "llms.txt"
   llm_index = repo_root / "llm-index.json"
   llms_scope = "unknown"
+  llms_summary: dict[str, Any] = {}
   if llms_txt.exists():
     content = llms_txt.read_text(encoding="utf-8").lower()
-    if "ebook" in content and "podcast" not in content and "blog" not in content:
+    llms_summary["mentionsBlog"] = "blog" in content
+    llms_summary["mentionsPodcast"] = "podcast" in content
+    llms_summary["mentionsTranscript"] = "transcript" in content
+    llms_summary["mentionsTopics"] = "topic" in content or "/topics/" in content
+    if "ebook" in content and not any(llms_summary[key] for key in ("mentionsBlog", "mentionsPodcast", "mentionsTranscript")):
       llms_scope = "ebook-only"
-    elif "podcast" in content or "transcript" in content or "blog" in content:
+    elif any(llms_summary.values()):
       llms_scope = "broad"
     else:
       llms_scope = "narrow"
+  if llm_index.exists():
+    try:
+      index_data = json.loads(llm_index.read_text(encoding="utf-8"))
+      llms_summary["llmIndexTopLevelKeys"] = sorted(index_data.keys()) if isinstance(index_data, dict) else []
+    except Exception:
+      llms_summary["llmIndexTopLevelKeys"] = []
   signals["llmsFiles"] = [f for f in ["llms.txt", "llm-index.json"] if (repo_root / f).exists()]
   signals["llmsScope"] = llms_scope
+  signals["llmsCoverageHints"] = llms_summary
 
   generator_scripts = [
-    str(p.relative_to(repo_root))
-    for p in repo_root.rglob("*.py")
-    if any(token in p.name for token in ("generate", "pipeline", "inject"))
+    str(path.relative_to(repo_root))
+    for path in repo_root.rglob("*.py")
+    if any(token in path.name for token in ("generate", "pipeline", "inject"))
   ] + [
-    str(p.relative_to(repo_root))
-    for p in repo_root.rglob("*.mjs")
-    if "generate" in p.name
+    str(path.relative_to(repo_root))
+    for path in repo_root.rglob("*.mjs")
+    if "generate" in path.name
   ]
-  signals["generatorScripts"] = generator_scripts[:15]
+  signals["generatorScripts"] = sorted(generator_scripts)[:25]
   signals["functionsPresent"] = [
-    str(p.relative_to(repo_root))
-    for p in (repo_root / "functions").rglob("*.js")
+    str(path.relative_to(repo_root))
+    for path in (repo_root / "functions").rglob("*.js")
   ] if (repo_root / "functions").exists() else []
 
   return signals
@@ -1902,6 +2415,10 @@ def _build_user_message(
   issues: list[dict[str, Any]],
   repo_signals: dict[str, Any],
   live_dynamic_urls: list[dict[str, Any]],
+  source_ledger: list[dict[str, Any]] | None = None,
+  source_mismatches: list[dict[str, Any]] | None = None,
+  family_diagnostics: list[dict[str, Any]] | None = None,
+  template_diagnostics: list[dict[str, Any]] | None = None,
 ) -> str:
   """Serialise collected audit data into the structured context block for the LLM."""
   return f"""FORENSIC SEO + AEO + GEO AUDIT — CONTEXT PACKAGE
@@ -1934,7 +2451,23 @@ SECTION 6: LIVE DYNAMIC URLS CONFIRMED
 {json.dumps(live_dynamic_urls, indent=2)}
 
 ---
-SECTION 7: AUDIT INSTRUCTION
+SECTION 7: SOURCE LEDGER
+{json.dumps(source_ledger or [], indent=2)}
+
+---
+SECTION 8: SOURCE MISMATCHES THAT MATTER
+{json.dumps(source_mismatches or [], indent=2)}
+
+---
+SECTION 9: FAMILY DIAGNOSTICS
+{json.dumps(family_diagnostics or [], indent=2)}
+
+---
+SECTION 10: TEMPLATE DIAGNOSTICS
+{json.dumps(template_diagnostics or [], indent=2)}
+
+---
+SECTION 11: AUDIT INSTRUCTION
 
 Perform the full forensic SEO + AEO + GEO audit using the context package above.
 
@@ -2035,6 +2568,10 @@ def call_claude_audit_via_openrouter(
     issues=issues[:40],
     repo_signals=repo_signals,
     live_dynamic_urls=live_dynamic_urls[:50],
+    source_ledger=[],
+    source_mismatches=[],
+    family_diagnostics=[],
+    template_diagnostics=[],
   )
 
   print(f"[openrouter] calling {model} with {len(priority_pages_clean)} priority pages and {len(all_routes_condensed)} condensed routes", file=sys.stderr)
@@ -2199,6 +2736,10 @@ def call_analysis_endpoint(
   live_dynamic_urls: list[dict[str, Any]],
   workbook: WorkbookInfo,
   discovery_meta: dict[str, Any],
+  source_ledger: list[dict[str, Any]] | None = None,
+  source_mismatches: list[dict[str, Any]] | None = None,
+  family_diagnostics: list[dict[str, Any]] | None = None,
+  template_diagnostics: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any] | None:
   """POST audit data to the AI-suite endpoint and poll async jobs until complete."""
   import requests as _requests
@@ -2233,6 +2774,11 @@ def call_analysis_endpoint(
     "liveDynamicUrls": live_dynamic_urls[:50],
     "coverage": coverage_rows,
     "coverageFamilies": coverage_families,
+    "sourceLedger": source_ledger or [],
+    "sourceMismatchesThatMatter": source_mismatches or [],
+    "familyDiagnostics": family_diagnostics or [],
+    "templateDiagnostics": template_diagnostics or [],
+    "dynamicRouteLedger": live_dynamic_urls[:50],
   }
 
   post_timeout = int(os.environ.get("AUDIT_ANALYSIS_POST_TIMEOUT_SECONDS", "45"))
@@ -2316,8 +2862,9 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
       f"<td>{_esc(item.get('issueId', ''))}</td>"
       f"<td>{_esc(item.get('severity', ''))}</td>"
       f"<td>{_esc(item.get('confidence', ''))}</td>"
-      f"<td>{_esc(item.get('lens', ''))}</td>"
-      f"<td><code>{_esc(item.get('affected', ''))}</code></td>"
+      f"<td>{_esc(item.get('lens', item.get('auditLens', '')))}</td>"
+      f"<td>{_esc(item.get('rootCauseLevel', ''))}</td>"
+      f"<td><code>{_esc(item.get('affected', item.get('affectedPagesTemplatesFilesOrRoutes', '')))}</code></td>"
       f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
       f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
       f"<td>{_esc(item.get('exactRemediation', ''))}</td>"
@@ -2329,7 +2876,7 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
     )
   return (
     "<table class='tight'>"
-    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th>"
+    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th>"
     "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th>"
     "</tr></thead>"
     f"<tbody>{rows}</tbody></table>"
@@ -2414,14 +2961,18 @@ def main() -> int:
   pages = crawl_and_analyse(base_url, discovered, excludes)
   coverage_rows = family_coverage(pages)
   validate_full_coverage(coverage_rows)
-  issues = collect_issues(pages, discovered)
+  repo_signals = build_repo_signals(REPO_ROOT, base_url)
+  family_diagnostics = build_family_diagnostics(pages)
+  issues = collect_issues(pages, discovered, repo_signals=repo_signals, family_diagnostics=family_diagnostics)
   template_annex = build_template_annex(pages)
+  template_diagnostics = build_template_diagnostics(template_annex, family_diagnostics)
+  source_ledger = build_source_ledger(discovery_meta, workbook, repo_signals)
+  source_mismatches = build_source_mismatches(discovered, pages, workbook, repo_signals)
   gap_matrix = build_gap_matrix(pages)
   page_type_findings = build_page_type_findings(pages)
   priority_pages = build_priority_pages(pages)
 
   # ── LLM forensic analysis ────────────────────────────────────────────────────
-  repo_signals = build_repo_signals(REPO_ROOT)
   live_dynamic_urls = extract_live_dynamic_urls(pages, discovered)
   claude_analysis: dict[str, Any] | None = None
   analysis_attempts: list[dict[str, str]] = []
@@ -2445,6 +2996,10 @@ def main() -> int:
         live_dynamic_urls=live_dynamic_urls,
         workbook=workbook,
         discovery_meta=discovery_meta,
+        source_ledger=source_ledger,
+        source_mismatches=source_mismatches,
+        family_diagnostics=family_diagnostics,
+        template_diagnostics=template_diagnostics,
       )
       if claude_analysis:
         analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
@@ -2498,6 +3053,11 @@ def main() -> int:
       "rows": workbook.url_count,
     },
     "sourceCounts": discovery_meta["sourceCounts"],
+    "sourceLedger": source_ledger,
+    "sourceMismatchesThatMatter": source_mismatches,
+    "repoSignals": repo_signals,
+    "familyDiagnostics": family_diagnostics,
+    "templateDiagnostics": template_diagnostics,
     "pageFamilyCoverage": coverage_rows,
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
@@ -2530,6 +3090,7 @@ def main() -> int:
     base_url, workbook, discovery_meta, pages, issues, coverage_rows,
     template_annex, gap_matrix, page_type_findings, priority_pages,
     uploaded, claude_analysis=claude_analysis, analysis_state=analysis_state,
+    source_ledger=source_ledger, source_mismatches=source_mismatches, template_diagnostics=template_diagnostics,
   )
   report_path = write_text(output_dir / "report.html", report_html)
   print(f"[report] written to {report_path}", file=sys.stderr)
