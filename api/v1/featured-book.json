@@ -2,62 +2,61 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 17,
+    "iso_week": 19,
     "year": 2026
   },
   "book": {
-    "id": 18,
-    "key": "18-ebook",
-    "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
-    "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
-    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
+    "id": 20,
+    "key": "20-ebook",
+    "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
+    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "tags": [
-      "Finance",
+      "Construction",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Finance",
+    "filter": "Construction",
     "keywords": [
-      "Finance",
-      "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
+      "Construction",
+      "Artificial Intelligence in Construction: Building a Sustainable Future",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/8VjT",
-    "buy_target_url": "https://mybook.to/8VjT",
-    "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
-    "asin": "B0DML75B3C",
-    "pages": 286,
-    "datePublished": "2024-11-09",
+    "buy_url": "https://mybook.to/v98RD",
+    "buy_target_url": "https://mybook.to/v98RD",
+    "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
+    "asin": "B0DMQMGLP4",
+    "pages": 319,
+    "datePublished": "2024-11-11",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-    "buy_route": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
-    "topic_url": "/catalogue/finance/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
+    "buy_route": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+    "topic_url": "/catalogue/construction/",
     "related_slugs": [
-      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "smart-buildings-ai-powered-efficiency-and-sustainability",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-maritime-revolutionizing-shipping-for-sustainability",
-      "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation"
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "ai-in-aviation-transforming-safety-and-sustainability"
     ],
     "title_tokens": [
-      "bank",
-      "data",
-      "fin",
-      "revolutioniz",
-      "secur"
+      "build",
+      "construction",
+      "future",
+      "sustain"
     ],
     "topic_tokens": [
-      "fin"
+      "construction"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/ or buy on Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now",
-    "midroll_15": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security. A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement. Read more at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-    "midroll_30": "This week's sponsor is Artificial Intelligence in Banking: Revolutionizing Finance and Data Security. A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement. It focuses on Finance. It runs 286 pages. Topics include Finance, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/ or go straight to Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/buy-now."
+    "headline": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
+    "midroll_15": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future. A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice. Read more at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
+    "midroll_30": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future. A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice. It focuses on Construction. It runs 319 pages. Topics include Construction, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now."
   }
 }
