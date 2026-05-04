@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jonathan-harris.online/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/api/docs/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -121,6 +125,10 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/ebooks/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -221,10 +229,6 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
-    <loc>https://jonathan-harris.online/ebooks/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -273,59 +277,7 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
-    <loc>https://jonathan-harris.online/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/newsletter/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/ai-accountability-costs-and-local-control/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/artificial-intelligence-weekly/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-06/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-13/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-20/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-04-24/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
@@ -333,11 +285,63 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/ai-accountability-costs-and-local-control/</loc>
+    <lastmod>2026-04-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/</loc>
+    <lastmod>2026-04-03</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/artificial-intelligence-weekly/</loc>
+    <lastmod>2026-02-20</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/</loc>
+    <lastmod>2025-12-05</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/</loc>
+    <lastmod>2025-12-12</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/</loc>
+    <lastmod>2026-04-10</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-06/</loc>
+    <lastmod>2026-03-06</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-13/</loc>
+    <lastmod>2026-03-13</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-20/</loc>
+    <lastmod>2026-03-20</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/</loc>
+    <lastmod>2026-03-27</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-04-24/</loc>
+    <lastmod>2026-04-24</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/</loc>
+    <lastmod>2025-12-19</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/privacy-policy/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/terms-of-use/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/topics/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
@@ -370,10 +374,6 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/topics/generative-ai/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/topics/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
