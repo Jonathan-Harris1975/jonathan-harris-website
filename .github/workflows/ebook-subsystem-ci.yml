@@ -53,7 +53,7 @@ jobs:
       - name: Install Python dependencies
         run: python -m pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Rebuild podcast artefacts from the live feed
+      - name: Refresh podcast feed-derived data
         run: |
           python3 scripts/sync_podcast_episodes.py
           python3 scripts/generate_podcast_episodes.py
@@ -67,7 +67,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add podcast/index.html data/podcast-episodes.json podcast/episodes podcast/TT-* 2>/dev/null || true
+          git add -A podcast/index.html data/podcast-episodes.json podcast/episodes podcast/TT-* 2>/dev/null || true
           git commit -m "chore: weekly podcast refresh"
           git push
 
