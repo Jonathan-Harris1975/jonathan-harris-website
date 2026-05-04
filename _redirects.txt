@@ -2,7 +2,12 @@
 # jonathan-harris.online — Redirects (Cloudflare Pages)
 # Production clean + slug-compatible
 # ============================================================
-
+# Subdomain canonicalisation — must be first rule
+https://transcripts.jonathan-harris.online/:slug  https://jonathan-harris.online/transcripts/:slug  301
+https://blog.jonathan-harris.online/  https://jonathan-harris.online/blog/  301
+https://blog.jonathan-harris.online/:splat  https://jonathan-harris.online/blog/:splat  301
+https://blog-images.jonathan-harris.online/  https://jonathan-harris.online/blog/  301
+https://blog-images.jonathan-harris.online/:splat  https://jonathan-harris.online/blog/images/:splat  301
 # 1) Canonical host (no www)
 https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 
@@ -164,8 +169,20 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /author/   /bio/   301
 /author    /bio/   301
 
+# 10) Transcript archive hardening
+# Serve the index for bare /transcripts and /transcripts/ — no redirect
+# round-trip, browser URL stays clean.
+/transcripts    /transcripts/index.html   200
+/transcripts/   /transcripts/index.html   200
+# Individual transcript slugs — NO rule here.
+# Requests for /transcripts/<slug> fall through to the Pages Function at
+# functions/transcripts/[[slug]].js which proxies the object from R2.
+# The /transcripts/* 301 rule that previously existed here has been
+# intentionally removed — it was bouncing every slugged request back to
+# the index, preventing R2-hosted transcript pages from ever resolving.
 
 # SEO files: serve governed crawler assets from the primary domain root
 /robot.txt    /robots.txt   301
 /Sitemap.xml  /sitemap.xml  301
 /site-map.xml  /sitemap.xml  301
+# END GENERATED PODCAST EPISODE REDIRECTS
