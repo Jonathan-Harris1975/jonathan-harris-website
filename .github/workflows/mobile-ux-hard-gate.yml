@@ -42,7 +42,7 @@ jobs:
       R2_REGION: ${{ secrets.R2_REGION }}
       R2_BUCKET_BRAND_ASSETS: brand-assets
       R2_PUBLIC_BASE_URL_BRAND_ASSETS: ${{ secrets.R2_PUBLIC_BASE_URL_BRAND_ASSETS }}
-      AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
+      AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - name: Check out repository
