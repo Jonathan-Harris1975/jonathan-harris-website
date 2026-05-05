@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       report_prefix:
-        description: R2 prefix under brand-assets
+        description: R2 prefix under the dedicated audits bucket
         required: true
         type: string
       base_url:
@@ -37,6 +37,26 @@ on:
         required: false
         default: ""
         type: string
+      audit_bucket:
+        description: Dedicated audits R2 bucket name
+        required: false
+        default: ""
+        type: string
+      audit_public_base_url:
+        description: Dedicated audits R2 public base URL
+        required: false
+        default: ""
+        type: string
+      audit_bucket_env:
+        description: Compatibility input; expected value R2_BUCKET_AUDITS
+        required: false
+        default: R2_BUCKET_AUDITS
+        type: string
+      audit_public_base_env:
+        description: Compatibility input; expected value R2_PUBLIC_BASE_URL_AUDITS
+        required: false
+        default: R2_PUBLIC_BASE_URL_AUDITS
+        type: string
 
 permissions:
   contents: read
@@ -51,8 +71,6 @@ jobs:
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
       R2_REGION: ${{ secrets.R2_REGION }}
-      R2_BUCKET_BRAND_ASSETS: brand-assets
-      R2_PUBLIC_BASE_URL_BRAND_ASSETS: ${{ secrets.R2_PUBLIC_BASE_URL_BRAND_ASSETS }}
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
@@ -71,7 +89,7 @@ jobs:
           python -m pip install --disable-pip-version-check -r requirements.txt
           python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
 
-      - name: Resolve AI-suite callback configuration
+      - name: Resolve AI-suite callback and audits bucket configuration
         shell: bash
         run: |
           set -euo pipefail
@@ -104,8 +122,43 @@ jobs:
               ;;
           esac
 
+          audit_bucket="${{ inputs.audit_bucket }}"
+          if [ -z "$audit_bucket" ]; then
+            audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
+          fi
+          if [ -z "$audit_bucket" ]; then
+            audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
+          fi
+          if [ -z "$audit_bucket" ]; then
+            echo "::error::R2_BUCKET_AUDITS was not supplied. SEO/AEO/GEO audit artefacts must use the dedicated audits bucket."
+            exit 1
+          fi
+
+          audit_public_base_url="${{ inputs.audit_public_base_url }}"
+          if [ -z "$audit_public_base_url" ]; then
+            audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
+          fi
+          if [ -z "$audit_public_base_url" ]; then
+            audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
+          fi
+          if [ -z "$audit_public_base_url" ]; then
+            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied. SEO/AEO/GEO audit artefacts must resolve from the dedicated audits public base URL."
+            exit 1
+          fi
+
+          if [ "${{ inputs.audit_bucket_env }}" != "R2_BUCKET_AUDITS" ]; then
+            echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS for SEO/AEO/GEO outputs."
+            exit 1
+          fi
+          if [ "${{ inputs.audit_public_base_env }}" != "R2_PUBLIC_BASE_URL_AUDITS" ]; then
+            echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS for SEO/AEO/GEO outputs."
+            exit 1
+          fi
+
           echo "::add-mask::$callback_token"
           echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
+          echo "R2_BUCKET_AUDITS=$audit_bucket" >> "$GITHUB_ENV"
+          echo "R2_PUBLIC_BASE_URL_AUDITS=$audit_public_base_url" >> "$GITHUB_ENV"
           {
             echo "RESOLVED_CALLBACK_TOKEN<<__AUDIT_TOKEN__"
             echo "$callback_token"
@@ -121,4 +174,6 @@ jobs:
             --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
             --callback-url "$RESOLVED_CALLBACK_URL" \
             --callback-token "$RESOLVED_CALLBACK_TOKEN" \
-            --analysis-url "${{ inputs.analysis_url }}"
+            --analysis-url "${{ inputs.analysis_url }}" \
+            --audit-bucket "$R2_BUCKET_AUDITS" \
+            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
