@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       report_prefix:
-        description: R2 prefix under brand-assets
+        description: R2 prefix under the dedicated audits bucket
         required: true
         type: string
       base_url:
@@ -20,11 +20,42 @@ on:
       exclude_prefixes:
         description: Comma-separated route prefixes to exclude
         required: false
-        default: /podcast,/blog,/blog/weekly
+        default: /podcast,/blog
         type: string
       callback_url:
-        description: AI Management Suite callback URL
+        description: AI Management Suite mobile UX callback URL
         required: false
+        default: ""
+        type: string
+      analysis_url:
+        description: Compatibility input from shared audit dispatcher; ignored by deterministic mobile UX report generation
+        required: false
+        default: ""
+        type: string
+      callback_token:
+        description: AI Management Suite callback token supplied by Koyeb dispatch
+        required: false
+        default: ""
+        type: string
+      audit_bucket:
+        description: Dedicated audits R2 bucket name
+        required: false
+        default: ""
+        type: string
+      audit_public_base_url:
+        description: Dedicated audits R2 public base URL
+        required: false
+        default: ""
+        type: string
+      audit_bucket_env:
+        description: Compatibility input; expected value R2_BUCKET_AUDITS
+        required: false
+        default: R2_BUCKET_AUDITS
+        type: string
+      audit_public_base_env:
+        description: Compatibility input; expected value R2_PUBLIC_BASE_URL_AUDITS
+        required: false
+        default: R2_PUBLIC_BASE_URL_AUDITS
         type: string
 
 permissions:
@@ -34,15 +65,15 @@ jobs:
   mobile-ux:
     environment: R2
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
       R2_REGION: ${{ secrets.R2_REGION }}
-      R2_BUCKET_BRAND_ASSETS: brand-assets
-      R2_PUBLIC_BASE_URL_BRAND_ASSETS: ${{ secrets.R2_PUBLIC_BASE_URL_BRAND_ASSETS }}
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
+      AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
+      AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - name: Check out repository
@@ -53,11 +84,93 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install dependencies
+      - name: Install core Python dependencies
         run: |
           python -m pip install --disable-pip-version-check -r requirements.txt
-          python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 playwright openpyxl
+          python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
+
+      - name: Install Playwright package and Chromium
+        id: playwright_install
+        continue-on-error: true
+        run: |
+          python -m pip install --disable-pip-version-check playwright
           python -m playwright install --with-deps chromium
+
+      - name: Resolve audit runtime configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          callback_url="${{ inputs.callback_url }}"
+          if [ -z "$callback_url" ]; then
+            callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
+          fi
+          if [ -z "$callback_url" ]; then
+            callback_url="https://app.jonathan-harris.online/audits/mobile-ux/callback"
+          fi
+          case "$callback_url" in
+            */audits/mobile-ux/callback) ;;
+            *)
+              echo "::error::callback_url must end with /audits/mobile-ux/callback; got $callback_url"
+              exit 1
+              ;;
+          esac
+
+          callback_token="${{ inputs.callback_token }}"
+          if [ -z "$callback_token" ]; then
+            callback_token="$AUDIT_CALLBACK_TOKEN"
+          fi
+          if [ -z "$callback_token" ]; then
+            callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
+          fi
+          if [ -z "$callback_token" ]; then
+            echo "::error::AUDIT callback token was not supplied. The AI Management Suite should dispatch callback_token from Koyeb, or the R2 environment must define AUDIT_CALLBACK_TOKEN/AI_SUITE_AUDIT_CALLBACK_TOKEN for manual runs."
+            exit 1
+          fi
+
+          audit_bucket="${{ inputs.audit_bucket }}"
+          if [ -z "$audit_bucket" ]; then
+            audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
+          fi
+          if [ -z "$audit_bucket" ]; then
+            audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
+          fi
+          if [ -z "$audit_bucket" ]; then
+            echo "::error::R2_BUCKET_AUDITS was not supplied. Mobile UX audit artefacts must use the dedicated audits bucket."
+            exit 1
+          fi
+
+          audit_public_base_url="${{ inputs.audit_public_base_url }}"
+          if [ -z "$audit_public_base_url" ]; then
+            audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
+          fi
+          if [ -z "$audit_public_base_url" ]; then
+            audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
+          fi
+          if [ -z "$audit_public_base_url" ]; then
+            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied. Mobile UX audit artefacts must resolve from the dedicated audits public base URL."
+            exit 1
+          fi
+
+          if [ "${{ inputs.audit_bucket_env }}" != "R2_BUCKET_AUDITS" ]; then
+            echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS for mobile-ux outputs."
+            exit 1
+          fi
+          if [ "${{ inputs.audit_public_base_env }}" != "R2_PUBLIC_BASE_URL_AUDITS" ]; then
+            echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS for mobile-ux outputs."
+            exit 1
+          fi
+
+          echo "::add-mask::$callback_token"
+          echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
+          echo "R2_BUCKET_AUDITS=$audit_bucket" >> "$GITHUB_ENV"
+          echo "R2_PUBLIC_BASE_URL_AUDITS=$audit_public_base_url" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_INSTALL_OUTCOME=${{ steps.playwright_install.outcome }}" >> "$GITHUB_ENV"
+          {
+            echo "RESOLVED_CALLBACK_TOKEN<<__AUDIT_TOKEN__"
+            echo "$callback_token"
+            echo "__AUDIT_TOKEN__"
+          } >> "$GITHUB_ENV"
 
       - name: Run rendered mobile UX audit
         run: |
@@ -66,5 +179,8 @@ jobs:
             --session-id "${{ inputs.session_id }}" \
             --report-prefix "${{ inputs.report_prefix }}" \
             --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
-            --callback-url "${{ inputs.callback_url }}" \
-            --callback-token "$AUDIT_CALLBACK_TOKEN"
+            --callback-url "$RESOLVED_CALLBACK_URL" \
+            --callback-token "$RESOLVED_CALLBACK_TOKEN" \
+            --analysis-url "${{ inputs.analysis_url }}" \
+            --audit-bucket "$R2_BUCKET_AUDITS" \
+            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
