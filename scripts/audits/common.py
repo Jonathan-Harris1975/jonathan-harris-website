@@ -333,7 +333,31 @@ def build_r2_client() -> Any:
   )
 
 
-def upload_file_to_r2(client: Any, bucket: str, prefix: str, file_path: Path) -> str:
+def resolve_r2_public_base_for_bucket(bucket: str, explicit_public_base: str | None = None) -> str:
+  if explicit_public_base and explicit_public_base.strip():
+    return explicit_public_base.rstrip("/")
+
+  bucket = str(bucket or "").strip()
+  audits_bucket = os.environ.get("R2_BUCKET_AUDITS", "").strip()
+  brand_assets_bucket = os.environ.get("R2_BUCKET_BRAND_ASSETS", "").strip()
+
+  if audits_bucket and bucket == audits_bucket:
+    public_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS", "").strip()
+    if public_base:
+      return public_base.rstrip("/")
+
+  if brand_assets_bucket and bucket == brand_assets_bucket:
+    public_base = os.environ.get("R2_PUBLIC_BASE_URL_BRAND_ASSETS", "").strip()
+    if public_base:
+      return public_base.rstrip("/")
+
+  public_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS", "").strip() or os.environ.get("R2_PUBLIC_BASE_URL_BRAND_ASSETS", "").strip()
+  if not public_base:
+    raise RuntimeError("No public R2 base URL is configured for the selected audit bucket")
+  return public_base.rstrip("/")
+
+
+def upload_file_to_r2(client: Any, bucket: str, prefix: str, file_path: Path, public_base_url: str | None = None) -> str:
   key = f"{prefix.rstrip('/')}/{file_path.name}"
   content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
   client.upload_file(
@@ -342,12 +366,13 @@ def upload_file_to_r2(client: Any, bucket: str, prefix: str, file_path: Path) ->
     key,
     ExtraArgs={"ContentType": content_type},
   )
-  public_base = os.environ["R2_PUBLIC_BASE_URL_BRAND_ASSETS"].rstrip("/")
+  public_base = resolve_r2_public_base_for_bucket(bucket, public_base_url)
   return f"{public_base}/{key}"
 
 
-def upload_directory_to_r2(client: Any, bucket: str, prefix: str, directory: Path) -> dict[str, str]:
+def upload_directory_to_r2(client: Any, bucket: str, prefix: str, directory: Path, public_base_url: str | None = None) -> dict[str, str]:
   uploaded: dict[str, str] = {}
+  public_base = resolve_r2_public_base_for_bucket(bucket, public_base_url)
   for file_path in sorted(directory.rglob("*")):
     if file_path.is_dir():
       continue
@@ -360,14 +385,13 @@ def upload_directory_to_r2(client: Any, bucket: str, prefix: str, directory: Pat
       key,
       ExtraArgs={"ContentType": content_type},
     )
-    public_base = os.environ["R2_PUBLIC_BASE_URL_BRAND_ASSETS"].rstrip("/")
     uploaded[relative] = f"{public_base}/{key}"
   return uploaded
 
 
-def upload_selected_files_to_r2(client: Any, bucket: str, prefix: str, files: dict[str, Path]) -> dict[str, str]:
+def upload_selected_files_to_r2(client: Any, bucket: str, prefix: str, files: dict[str, Path], public_base_url: str | None = None) -> dict[str, str]:
   uploaded: dict[str, str] = {}
-  public_base = os.environ["R2_PUBLIC_BASE_URL_BRAND_ASSETS"].rstrip("/")
+  public_base = resolve_r2_public_base_for_bucket(bucket, public_base_url)
   for relative_name, file_path in sorted(files.items()):
     key = f"{prefix.rstrip('/')}/{relative_name}"
     content_type = mimetypes.guess_type(file_path.name)[0] or "application/octet-stream"
