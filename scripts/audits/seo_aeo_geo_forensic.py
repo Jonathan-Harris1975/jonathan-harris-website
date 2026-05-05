@@ -124,8 +124,11 @@ def parse_args() -> argparse.Namespace:
   parser.add_argument("--analysis-url", default=None, help="Override the LLM analysis endpoint")
   parser.add_argument("--output-dir", default="artifacts/seo-aeo-geo")
   parser.add_argument("--exclude-prefixes", default="")
+  parser.add_argument("--audit-bucket", default=None, help="Dedicated audits R2 bucket name")
+  parser.add_argument("--audit-public-base-url", default=None, help="Dedicated audits R2 public base URL")
   args = parser.parse_args()
   resolve_runtime_callback_config(args)
+  resolve_runtime_audit_r2_config(args)
   return args
 
 
@@ -165,6 +168,28 @@ def resolve_runtime_callback_config(args: argparse.Namespace) -> argparse.Namesp
   if not getattr(args, "callback_token", None):
     args.callback_token = _first_env("AUDIT_CALLBACK_TOKEN", "AI_SUITE_AUDIT_CALLBACK_TOKEN")
   return args
+
+
+def resolve_runtime_audit_r2_config(args: argparse.Namespace) -> argparse.Namespace:
+  """Route SEO/AEO/GEO audit artefacts to the dedicated audits bucket only."""
+  if getattr(args, "audit_bucket", None):
+    os.environ["R2_BUCKET_AUDITS"] = str(args.audit_bucket).strip()
+  if getattr(args, "audit_public_base_url", None):
+    os.environ["R2_PUBLIC_BASE_URL_AUDITS"] = str(args.audit_public_base_url).strip().rstrip("/")
+  return args
+
+
+def require_audit_r2_config(callback_url: str | None = None) -> tuple[str, str]:
+  bucket = os.environ.get("R2_BUCKET_AUDITS", "").strip()
+  public_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS", "").strip().rstrip("/")
+  missing = []
+  if not bucket:
+    missing.append("R2_BUCKET_AUDITS")
+  if not public_base:
+    missing.append("R2_PUBLIC_BASE_URL_AUDITS")
+  if missing and callback_url:
+    raise RuntimeError(f"{' and '.join(missing)} must be configured before posting an SEO/AEO/GEO audit callback")
+  return bucket, public_base
 
 
 def callback_config_missing_reason(callback_url: str | None, callback_token: str | None) -> str | None:
@@ -3156,21 +3181,25 @@ def main() -> int:
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
 
-  # ── R2 upload — optional; skip gracefully if credentials are absent ──────────
+  # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
-  r2_bucket = os.environ.get("R2_BUCKET_BRAND_ASSETS")
-  if r2_bucket:
+  r2_bucket, r2_public_base = require_audit_r2_config(args.callback_url)
+  if r2_bucket and r2_public_base:
     try:
       r2_client = build_r2_client()
       artefact_files: dict[str, Path] = {
         "summary.json": summary_path,
         "coverage.json": coverage_path,
       }
-      uploaded = upload_selected_files_to_r2(r2_client, r2_bucket, args.report_prefix, artefact_files)
+      uploaded = upload_selected_files_to_r2(
+        r2_client, r2_bucket, args.report_prefix, artefact_files, r2_public_base
+      )
     except Exception as exc:
-      print(f"[r2] upload failed (non-fatal): {exc}", file=sys.stderr)
+      if args.callback_url:
+        raise
+      print(f"[r2] audit upload failed (non-fatal local run): {exc}", file=sys.stderr)
   else:
-    print("[r2] R2_BUCKET_BRAND_ASSETS not set — skipping R2 upload", file=sys.stderr)
+    print("[r2] R2_BUCKET_AUDITS/R2_PUBLIC_BASE_URL_AUDITS not set — skipping local R2 upload", file=sys.stderr)
   # ─────────────────────────────────────────────────────────────────────────────
 
   report_html = build_report(
@@ -3182,16 +3211,19 @@ def main() -> int:
   report_path = write_text(output_dir / "report.html", report_html)
   print(f"[report] written to {report_path}", file=sys.stderr)
 
-  # ── R2 upload report — optional ───────────────────────────────────────────────
-  if r2_bucket and uploaded:
+  # ── R2 upload report — dedicated audits bucket only ─────────────────────────
+  if r2_bucket:
     try:
       r2_client = build_r2_client()
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix,
         {"summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
+        r2_public_base,
       )
     except Exception as exc:
-      print(f"[r2] report upload failed (non-fatal): {exc}", file=sys.stderr)
+      if args.callback_url:
+        raise
+      print(f"[r2] audit report upload failed (non-fatal local run): {exc}", file=sys.stderr)
 
   # ── Callback — optional ───────────────────────────────────────────────────────
   callback_payload = {
@@ -3208,6 +3240,8 @@ def main() -> int:
     "issueCount": len(issues),
     "auditedUrlCount": len(pages),
     "artefacts": uploaded,
+    "auditBucket": r2_bucket,
+    "auditPublicBaseUrl": r2_public_base,
     "finishedAt": utc_now(),
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
   }
