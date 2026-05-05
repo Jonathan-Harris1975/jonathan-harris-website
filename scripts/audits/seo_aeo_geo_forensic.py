@@ -1694,11 +1694,11 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     for page in pages
   )
   source_ledger_rows = "".join(
-    f"<tr><td>{_esc(row.get('source', ''))}</td><td>{_esc(row.get('count', ''))}</td><td>{_esc(row.get('role', ''))}</td><td>{_esc(row.get('status', ''))}</td><td>{_esc(row.get('evidence', ''))}</td></tr>"
+    f"<tr><td>{_esc(row.get('source', ''))}</td><td>{_esc(row.get('count', ''))}</td><td>{_esc(row.get('role', ''))}</td><td>{_esc(row.get('status') or row.get('confidence') or row.get('state') or '')}</td><td>{_esc(row.get('evidence') or row.get('notes') or row.get('detail') or '')}</td></tr>"
     for row in source_ledger
   ) or "<tr><td colspan='5'>No source ledger was supplied by the analysis context.</td></tr>"
   source_mismatch_rows = "".join(
-    f"<tr><td>{_esc(row.get('id', row.get('issueId', '')))}</td><td>{_esc(row.get('severity', ''))}</td><td>{_esc(row.get('sources', ''))}</td><td>{_esc(row.get('evidence', ''))}</td><td>{_esc(row.get('impact', ''))}</td><td>{_esc(row.get('fix', ''))}</td></tr>"
+    f"<tr><td>{_esc(row.get('id') or row.get('issueId') or row.get('mismatch') or '')}</td><td>{_esc(row.get('severity') or row.get('confidence') or '')}</td><td>{_esc(row.get('sources') or row.get('affected') or row.get('sourcePair') or '')}</td><td>{_esc(row.get('evidence') or row.get('evidenceObserved') or row.get('mismatch') or '')}</td><td>{_esc(row.get('impact') or row.get('whyItMatters') or '')}</td><td>{_esc(row.get('fix') or row.get('requiredAction') or row.get('exactRemediation') or '')}</td></tr>"
     for row in source_mismatches
   ) or "<tr><td colspan='6'>No material source mismatch was supplied by the analysis context.</td></tr>"
   template_diagnostic_rows = "".join(
@@ -1752,11 +1752,12 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     display_seo_score = display_aeo_score = display_geo_score = display_entity_score = display_conv_score = "Not issued"
     display_seo_grade = display_aeo_grade = display_geo_grade = display_entity_grade = display_conv_grade = "Blocked"
 
-  # Issue and remediation tables
-  active_issues_html = render_llm_issues_table(llm_issues_list) if llm_issues_list else (
-    "<table class='tight'><thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th><th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th></tr></thead>"
-    f"<tbody>{issue_rows}</tbody></table>"
-  )
+  # Issue and remediation tables. Keep the ranked ledger compact and render the full
+  # evidence fields separately so PDF output is readable instead of a squeezed 13-column grid.
+  issue_items_for_render = llm_issues_list if llm_issues_list else issues
+  full_issue_items_for_render = (claude_analysis or {}).get("fullIssueRecords") or issue_items_for_render
+  active_issues_html = render_issue_summary_table(issue_items_for_render)
+  active_issue_records_html = render_issue_record_cards(full_issue_items_for_render)
   active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
   active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
   active_remediation_html = render_llm_remediation_table(llm_remediation)
@@ -1837,6 +1838,13 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     .sev-critical td{{background:#fef2f2;}}
     .sev-high td{{background:#fff7ed;}}
     .sev-medium td{{background:#fefce8;}}
+    .issue-summary th,.issue-summary td{{font-size:11px;vertical-align:top;}}
+    .issue-record{{border:1px solid #dbe4ef;border-radius:12px;padding:16px;margin:14px 0;background:#ffffff;page-break-inside:avoid;break-inside:avoid;}}
+    .issue-record h3{{margin:0 0 8px;font-size:16px;color:#102033;}}
+    .issue-meta{{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}}
+    .issue-chip{{display:inline-block;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;padding:3px 8px;font-size:11px;font-weight:700;color:#334155;}}
+    .issue-field{{font-size:13px;line-height:1.55;margin:7px 0;color:#1f2937;}}
+    .issue-field strong{{color:#0f172a;}}
     pre code{{display:block;white-space:pre-wrap;word-break:break-all;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
     ol,ul{{padding-left:20px;margin:8px 0;}}
     ol li,ul li{{margin:4px 0;font-size:14px;}}
@@ -1930,6 +1938,12 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     <h2>Ranked issue ledger</h2>
     {'<p class="llm-badge">✦ Issues below are LLM forensic findings with exact remediations</p>' if llm_issues_list else ''}
     {active_issues_html}
+  </section>
+
+  <section id="full-issue-records">
+    <h2>Full issue records</h2>
+    <p class="section-note">The compact ledger above is for prioritisation. These records preserve the full evidence, root cause, impact, owner, effort and implementation detail required for engineering action.</p>
+    {active_issue_records_html}
   </section>
 
   <section id="page-types">
@@ -2851,36 +2865,109 @@ def _esc(value: Any) -> str:
   return html.escape(str(value or ""))
 
 
-def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
-  if not llm_issues:
-    return "<p>No issues returned from LLM analysis.</p>"
+def _issue_value(item: dict[str, Any], *keys: str, default: Any = "") -> Any:
+  for key in keys:
+    value = item.get(key) if isinstance(item, dict) else None
+    if value not in (None, "", [], {}):
+      return value
+  return default
+
+
+def _compact_text(value: Any, limit: int = 170) -> str:
+  text = " ".join(str(value or "").split())
+  if len(text) <= limit:
+    return text
+  cut = text[:limit].rsplit(" ", 1)[0]
+  return f"{cut}..." if cut else text[:limit]
+
+
+def _issue_id(item: dict[str, Any]) -> str:
+  return str(_issue_value(item, "issueId", "id", default=""))
+
+
+def _issue_lens(item: dict[str, Any]) -> str:
+  return str(_issue_value(item, "auditLens", "lens", default=""))
+
+
+def _issue_affected(item: dict[str, Any]) -> str:
+  return str(_issue_value(item, "affected", "affectedPagesTemplatesFilesOrRoutes", "affectedPages", "targets", default=""))
+
+
+def _issue_evidence(item: dict[str, Any]) -> str:
+  return str(_issue_value(item, "evidenceObserved", "evidence", "observedEvidence", default=""))
+
+
+def _issue_remediation(item: dict[str, Any]) -> str:
+  return str(_issue_value(item, "exactRemediation", "remediation", "fix", default=""))
+
+
+def render_issue_summary_table(items: list[dict[str, Any]]) -> str:
+  if not items:
+    return "<p>No significant issues were confirmed from the available evidence.</p>"
   rows = ""
-  for item in llm_issues:
-    severity_class = {"Critical": "sev-critical", "High": "sev-high", "Medium": "sev-medium"}.get(item.get("severity", ""), "")
+  for item in items:
+    severity = str(_issue_value(item, "severity", default=""))
+    severity_class = {"Critical": "sev-critical", "High": "sev-high", "Medium": "sev-medium"}.get(severity, "")
     rows += (
       f"<tr class='{severity_class}'>"
-      f"<td>{_esc(item.get('issueId', ''))}</td>"
-      f"<td>{_esc(item.get('severity', ''))}</td>"
-      f"<td>{_esc(item.get('confidence', ''))}</td>"
-      f"<td>{_esc(item.get('lens', item.get('auditLens', '')))}</td>"
-      f"<td>{_esc(item.get('rootCauseLevel', ''))}</td>"
-      f"<td><code>{_esc(item.get('affected', item.get('affectedPagesTemplatesFilesOrRoutes', '')))}</code></td>"
-      f"<td>{_esc(item.get('evidenceObserved', ''))}</td>"
-      f"<td>{_esc(item.get('whyItMatters', ''))}</td>"
-      f"<td>{_esc(item.get('exactRemediation', ''))}</td>"
-      f"<td>{_esc(item.get('expectedGain', ''))}</td>"
-      f"<td>{_esc(item.get('estimatedEffort', ''))}</td>"
-      f"<td>{_esc(item.get('recommendedOwner', ''))}</td>"
-      f"<td>{_esc(item.get('verificationMethod', item.get('verification', '')))}</td>"
+      f"<td>{_esc(_issue_id(item))}</td>"
+      f"<td>{_esc(severity)}</td>"
+      f"<td>{_esc(_issue_value(item, 'confidence', default=''))}</td>"
+      f"<td>{_esc(_issue_lens(item))}</td>"
+      f"<td><code>{_esc(_compact_text(_issue_affected(item), 130))}</code></td>"
+      f"<td>{_esc(_compact_text(_issue_evidence(item), 220))}</td>"
+      f"<td>{_esc(_compact_text(_issue_remediation(item), 240))}</td>"
       f"</tr>"
     )
   return (
-    "<table class='tight'>"
-    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th><th>Root cause</th>"
-    "<th>Affected</th><th>Evidence</th><th>Why it matters</th><th>Exact remediation</th><th>Expected gain</th><th>Effort</th><th>Owner</th><th>Verification</th>"
-    "</tr></thead>"
+    "<table class='tight issue-summary'>"
+    "<thead><tr><th>ID</th><th>Severity</th><th>Confidence</th><th>Lens</th>"
+    "<th>Affected</th><th>Evidence observed</th><th>Exact remediation</th></tr></thead>"
     f"<tbody>{rows}</tbody></table>"
   )
+
+
+def render_issue_record_cards(items: list[dict[str, Any]]) -> str:
+  if not items:
+    return "<p>No full issue records were supplied by the analysis context.</p>"
+  cards: list[str] = []
+  for item in items:
+    issue_id = _issue_id(item) or "Unnumbered issue"
+    severity = str(_issue_value(item, "severity", default="Not classified"))
+    fields = [
+      ("Audit lens", _issue_lens(item)),
+      ("Root cause level", _issue_value(item, "rootCauseLevel", "rootCause", default="")),
+      ("Affected page(s), template(s), file(s), or route(s)", _issue_affected(item)),
+      ("Evidence observed", _issue_evidence(item)),
+      ("Why it matters", _issue_value(item, "whyItMatters", "impact", default="")),
+      ("Exact remediation", _issue_remediation(item)),
+      ("Expected gain", _issue_value(item, "expectedGain", default="")),
+      ("Estimated effort", _issue_value(item, "estimatedEffort", "effort", default="")),
+      ("Recommended owner", _issue_value(item, "recommendedOwner", "owner", default="")),
+      ("Verification method", _issue_value(item, "verificationMethod", "verification", default="")),
+    ]
+    body = "".join(
+      f"<div class='issue-field'><strong>{_esc(label)}:</strong> {_esc(value)}</div>"
+      for label, value in fields
+      if value not in (None, "", [], {})
+    )
+    chips = (
+      f"<span class='issue-chip'>{_esc(severity)}</span>"
+      f"<span class='issue-chip'>{_esc(_issue_value(item, 'confidence', default='Confidence not stated'))}</span>"
+      f"<span class='issue-chip'>{_esc(_issue_value(item, 'estimatedEffort', 'effort', default='Effort not stated'))}</span>"
+    )
+    cards.append(
+      f"<article class='issue-record'>"
+      f"<h3>{_esc(issue_id)} - {_esc(severity)}</h3>"
+      f"<div class='issue-meta'>{chips}</div>"
+      f"{body}"
+      f"</article>"
+    )
+  return "".join(cards)
+
+
+def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
+  return render_issue_summary_table(llm_issues)
 
 
 def render_llm_remediation_table(items: list[dict[str, Any]]) -> str:
