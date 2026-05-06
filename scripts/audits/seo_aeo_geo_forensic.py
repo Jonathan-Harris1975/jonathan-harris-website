@@ -250,6 +250,25 @@ def is_covered_state(state: str) -> bool:
   return is_analysed_state(state) or is_excluded_state(state)
 
 
+def is_podcast_compatibility_redirect(page: dict[str, Any]) -> bool:
+  path = normalise_route(page.get("path") or urlparse(page.get("url", "")).path)
+  title = str(page.get("meta", {}).get("title") or "").strip().lower()
+  return bool(re.match(r"^/podcast/TT-\d{4}-\d{2}-\d{2}$", path)) or title.startswith("redirecting")
+
+
+def is_redirect_or_non_page_family(page_type: str, coverage_state: str = "") -> bool:
+  family = str(page_type or "").lower()
+  return "buy-now" in family or is_excluded_state(coverage_state) or "redirect" in str(coverage_state or "").lower()
+
+
+def clean_template_observed_logic(page_type: str, observed: str, analysed_count: int = 0) -> str:
+  text = str(observed or "")
+  if "transcript" in str(page_type or "").lower() and text.lower().startswith("0 transcript page"):
+    total = analysed_count or 0
+    return f"{total}/{total} transcript page(s) lack verified above-the-fold summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body."
+  return text
+
+
 def clean_link_candidate(href: str, context_url: str, base_url: str) -> str | None:
   href = (href or "").strip()
   if not href or href.startswith("#"):
@@ -424,6 +443,7 @@ def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]
     topic_link_pages: list[str] = []
     repeated_intro_pages: list[str] = []
     raw_transcript_wall_pages: list[str] = []
+    transcript_structure_gap_pages: list[str] = []
 
     for page in analysed:
       soup = page.get("soup")
@@ -441,10 +461,20 @@ def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]
         topic_link_pages.append(page["url"])
       if _opening_paragraph_repeats(soup):
         repeated_intro_pages.append(page["url"])
-      if page_type == "podcast transcript" and page.get("wordCount", 0) > 1200:
-        h2_count = len(soup.select("h2")) if soup else 0
-        if h2_count < 3 or len(page.get("introText", "").split()) < 60:
-          raw_transcript_wall_pages.append(page["url"])
+      if page_type == "podcast transcript":
+        has_summary_led_structure = _soup_text_contains(
+          soup,
+          (
+            "key takeaway", "key takeaways", "what changed", "topic index",
+            "entity index", "timestamp", "section anchor", "topics covered",
+          ),
+        )
+        if not has_summary_led_structure:
+          transcript_structure_gap_pages.append(page["url"])
+        if page.get("wordCount", 0) > 1200:
+          h2_count = len(soup.select("h2")) if soup else 0
+          if h2_count < 3 or len(page.get("introText", "").split()) < 60:
+            raw_transcript_wall_pages.append(page["url"])
 
     no_questions = [page["url"] for page in analysed if not page.get("questionHeadings")]
     weak_intro = [page["url"] for page in analysed if len(page.get("introText", "").split()) < 35]
@@ -461,7 +491,7 @@ def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]
       )
     elif page_type == "podcast transcript":
       observed.append(
-        f"{len(raw_transcript_wall_pages)} transcript pages behave as long transcript-first pages without enough above-the-fold summary or sectioning evidence."
+        f"{len(transcript_structure_gap_pages)}/{len(analysed)} transcript page(s) lack verified above-the-fold summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body."
       )
     elif page_type == "blog article":
       observed.append(
@@ -494,8 +524,9 @@ def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]
       "topicOrBookLinkCount": len(topic_link_pages),
       "repeatedOpeningCount": len(repeated_intro_pages),
       "rawTranscriptWallCount": len(raw_transcript_wall_pages),
+      "transcriptStructureGapCount": len(transcript_structure_gap_pages),
       "sampleUrls": _sample([page["url"] for page in family_pages], 8),
-      "sampleWeakUrls": _sample(no_questions or weak_intro or raw_transcript_wall_pages or repeated_intro_pages, 8),
+      "sampleWeakUrls": _sample(no_questions or weak_intro or transcript_structure_gap_pages or raw_transcript_wall_pages or repeated_intro_pages, 8),
       "observedTemplateEvidence": observed,
     })
   return rows
@@ -627,7 +658,11 @@ def build_template_diagnostics(template_annex: list[dict[str, Any]], family_diag
       "sourceFile": item.get("sourceFile", ""),
       "area": item.get("pageType", ""),
       "pagesAffected": item.get("pagesAffected", 0),
-      "observedLogic": "; ".join(diag.get("observedTemplateEvidence", [])) or "; ".join(item.get("repeatedDefects", [])),
+      "observedLogic": clean_template_observed_logic(
+        item.get("pageType", ""),
+        "; ".join(diag.get("observedTemplateEvidence", [])) or "; ".join(item.get("repeatedDefects", [])),
+        int(diag.get("analysedUrls", 0) or item.get("pagesAffected", 0) or 0),
+      ),
       "metadataLogic": f"missing meta: {diag.get('missingMetaCount', 0)}; missing canonical: {diag.get('missingCanonicalCount', 0)}",
       "schemaLogic": f"schema types observed: {', '.join(sorted(diag.get('schemaTypesObserved', {}).keys())) or 'none detected'}",
       "answerPatternGap": f"no question headings: {diag.get('noQuestionHeadingCount', 0)}; weak openings: {diag.get('weakOpeningCount', 0)}",
@@ -1362,7 +1397,8 @@ def collect_issues(
     ))
 
   transcript_diag = diag_by_type.get("podcast transcript") or {}
-  if transcript_diag and transcript_diag.get("rawTranscriptWallCount", 0):
+  if transcript_diag and transcript_diag.get("analysedUrls", 0):
+    analysed_transcripts = transcript_diag.get("analysedUrls", 0)
     add(issue_record(
       "JH-AEO-002",
       "High",
@@ -1370,9 +1406,9 @@ def collect_issues(
       "AEO / GEO / Transcript",
       "template / content structure",
       transcript_diag.get("sourceFile", "live transcript routes"),
-      f"{transcript_diag.get('rawTranscriptWallCount')} transcript pages behave as long transcript-first pages. Sample: {', '.join(transcript_diag.get('sampleWeakUrls', [])[:5])}.",
-      "Long raw transcript walls are harder for answer engines and LLM retrievers to chunk, cite, and summarise without ambiguity.",
-      "Before the transcript body render an episode summary, what changed this week, key named entities, 5 bullet takeaways, topic index, timestamped sections, related books/topics, and Transcript/PodcastEpisode schema alignment.",
+      f"{analysed_transcripts}/{analysed_transcripts} transcript page(s) lack verified above-the-fold summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body.",
+      "Long transcript pages without summary-led chunking are harder for answer engines and LLM retrievers to cite accurately.",
+      "Before the transcript body, render episode summary, what changed this week, key named entities, five bullet takeaways, topic index, timestamped or sectioned anchors, related books/topics, and Transcript/PodcastEpisode schema alignment.",
       "Medium",
       "Editorial / Engineering",
     ))
@@ -1530,16 +1566,54 @@ def build_template_annex(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
       repeated_defects.append("Openings are too thin for strong answer-first extraction on some pages.")
     if not score_pages and any(is_excluded_state(page["coverageState"]) for page in checked_pages):
       repeated_strengths.append("Family was inventoried and explicitly excluded as redirect/canonical/non-page evidence where applicable.")
+    display_avg = "N/A" if not score_pages and any(is_excluded_state(page["coverageState"]) for page in checked_pages) else avg_score
     rows.append({
       "pageType": page_type,
       "pagesAffected": len(family_pages),
       "sourceFile": representative_family_source(page_type),
-      "averageScore": avg_score,
+      "averageScore": display_avg,
       "repeatedStrengths": repeated_strengths or ["No repeated strengths confirmed beyond baseline rendering and metadata."],
       "repeatedDefects": repeated_defects or ["No repeated family-level defect was strong enough to elevate into a template issue."],
       "fixPriority": "High" if avg_score and avg_score < 75 else ("Medium" if avg_score and avg_score < 85 else "Low"),
     })
   return rows
+
+def specific_gap_matrix_top_missing(page_type: str, score_pages: list[dict[str, Any]]) -> str:
+  family = str(page_type or "").lower()
+  if family == "homepage":
+    return "Homepage needs stronger question-led extraction for entity, books, podcast, and newsletter intents"
+  if family == "author / about":
+    return "Missing concise AI-author entity summary, credentials block, and podcast/book cross-links"
+  if family == "service / product":
+    return "Missing problem-answer structure, implementation examples, and trust proof"
+  if family == "comparison":
+    return "Missing direct comparison answer block and decision matrix"
+  if family == "archive / pagination / utility":
+    return "Missing archive purpose statement and crawlable route explanation"
+  if family == "site page":
+    return "Missing question-led summary and internal path to books/topics/podcast"
+  if family == "category / hub" or family == "book hub" or family == "podcast hub":
+    return "Hub pages need more extractable intent summaries and contextual next-step links"
+  if family == "topic hub":
+    return "Topic guides need more question-led headings and citation-ready answer blocks"
+  if family == "book page":
+    return "Question-led H2/H3 opportunities remain despite strong Book and FAQ schema"
+  if family == "blog archive":
+    return "Archive list freshness and crawlable article-card depth need stronger server-rendered evidence"
+  if family == "blog article":
+    return "Repeated standfirst and weak question-led extraction structure"
+  if family == "podcast episode":
+    return "Missing key takeaways, FAQPage JSON-LD, transcript preview anchors, and related topic/book CTAs"
+  if family == "podcast transcript":
+    return "Missing summary, entity index, timestamp/section anchors before transcript body"
+  if family == "lead generation":
+    return "Conversion pages need answer-led objections, trust cues, and clearer next-step copy"
+  if family == "knowledge base":
+    return "Glossary needs richer definitions, examples, and entity relationships"
+  if sum(1 for page in score_pages if not page.get("questionHeadings")) >= max(1, len(score_pages) // 2):
+    return "Missing route-family-specific question-led headings"
+  return "Needs stronger route-family-specific opening summaries"
+
 
 def build_gap_matrix(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   family_map: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -1562,7 +1636,7 @@ def build_gap_matrix(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
     avg_seo = mean(page["scores"]["technicalSeo"] + page["scores"]["onPageIntent"] for page in score_pages)
     avg_aeo = mean(page["scores"]["aeo"] for page in score_pages)
     avg_geo = mean(page["scores"]["geo"] for page in score_pages)
-    top_missing = "Question-led headings" if sum(1 for page in score_pages if not page["questionHeadings"]) >= max(1, len(score_pages) // 2) else "Stronger opening summaries"
+    top_missing = specific_gap_matrix_top_missing(page_type, score_pages)
     rows.append({
       "pageType": page_type,
       "seo": compliance_label(avg_seo / 35 * 100),
@@ -1593,19 +1667,26 @@ def build_page_type_findings(pages: list[dict[str, Any]]) -> list[dict[str, Any]
       coverage_state = "Fully analysed"
     else:
       coverage_state = "Excluded / redirected"
+    display_average = round(mean(scores), 1) if scores else "N/A"
+    display_lowest = min(scores) if scores else "N/A"
+    display_highest = max(scores) if scores else "N/A"
     findings.append({
       "pageType": page_type,
       "count": len(family_pages),
-      "averageScore": round(mean(scores), 1) if scores else 0,
-      "lowestScore": min(scores) if scores else 0,
-      "highestScore": max(scores) if scores else 0,
+      "averageScore": display_average,
+      "lowestScore": display_lowest,
+      "highestScore": display_highest,
       "exampleUrl": family_pages[0]["url"],
       "coverageState": coverage_state,
     })
   return findings
 
 def build_priority_pages(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  candidate_pages = [page for page in pages if is_analysed_state(page["coverageState"]) or page["coverageState"] == "Failed to fetch"]
+  candidate_pages = [
+    page for page in pages
+    if (is_analysed_state(page["coverageState"]) or page["coverageState"] == "Failed to fetch")
+    and not is_podcast_compatibility_redirect(page)
+  ]
   family_best: dict[str, dict[str, Any]] = {}
   family_worst: dict[str, dict[str, Any]] = {}
   for page in candidate_pages:
@@ -1614,11 +1695,34 @@ def build_priority_pages(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
       family_best[page_type] = page
     if page_type not in family_worst or page["total"] < family_worst[page_type]["total"]:
       family_worst[page_type] = page
+
   selected = {page["url"]: page for page in family_worst.values()}
-  for page in candidate_pages:
-    if page["pageType"] in IMPORTANT_PAGE_TYPES:
+  family_limits = {
+    "podcast episode": 6,
+    "podcast transcript": 6,
+    "blog article": 4,
+    "book page": 4,
+    "category / hub": 3,
+    "topic hub": 3,
+  }
+  family_counts: Counter[str] = Counter(page["pageType"] for page in selected.values())
+  for page in sorted(candidate_pages, key=lambda item: (item["total"], item["pageType"], item["url"])):
+    page_type = page["pageType"]
+    if page_type not in IMPORTANT_PAGE_TYPES:
+      continue
+    limit = family_limits.get(page_type, 2)
+    if page["url"] in selected or family_counts[page_type] < limit:
+      if page["url"] not in selected:
+        family_counts[page_type] += 1
       selected.setdefault(page["url"], page)
-  return sorted(selected.values(), key=lambda page: (page["total"], page["pageType"]))[:30]
+  return sorted(selected.values(), key=lambda page: (page["total"], page["pageType"], page["url"]))[:30]
+
+
+def build_redirect_compatibility_pages(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
+  return sorted(
+    [page for page in pages if is_podcast_compatibility_redirect(page)],
+    key=lambda page: page.get("url", ""),
+  )
 
 def make_url_entry(page: dict[str, Any]) -> dict[str, Any]:
   return {
@@ -1705,6 +1809,11 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   priority_rows = "".join(
     f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{page['status']}</td><td>{page['meta']['title'] or '(missing title)'}</td><td>{page['meta']['metaDescription'] and 'Present' or 'Missing'}</td><td>{page['meta']['canonical'] and 'Present' or 'Missing'}</td><td>{page['scores']['aeo']}/20</td><td>{page['scores']['geo']}/20</td><td>{page['total']}</td><td>{page['grade']}</td></tr>"
     for page in priority_pages
+  )
+  redirect_compatibility_pages = build_redirect_compatibility_pages(pages)
+  redirect_compatibility_rows = "".join(
+    f"<tr><td><code>{_esc(page['url'])}</code></td><td>{_esc(page.get('canonicalNormalised') or page['meta'].get('canonical') or '')}</td><td>{_esc(page['coverageState'])}</td><td>{_esc(page.get('exclusionReason') or 'Compatibility redirect / legacy podcast route')}</td></tr>"
+    for page in redirect_compatibility_pages[:80]
   )
   template_rows = "".join(
     f"<tr><td>{row['pageType']}</td><td>{row['pagesAffected']}</td><td><code>{row['sourceFile']}</code></td><td>{row['averageScore']}</td><td>{'; '.join(row['repeatedStrengths'])}</td><td>{'; '.join(row['repeatedDefects'])}</td><td>{row['fixPriority']}</td></tr>"
@@ -1870,7 +1979,11 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     .issue-chip{{display:inline-block;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;padding:3px 8px;font-size:11px;font-weight:700;color:#334155;}}
     .issue-field{{font-size:13px;line-height:1.55;margin:7px 0;color:#1f2937;}}
     .issue-field strong{{color:#0f172a;}}
-    pre code{{display:block;white-space:pre-wrap;word-break:break-all;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
+    .remediation-card{{border:1px solid #dbe4ef;border-radius:12px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;break-inside:avoid;}}
+    .remediation-card h3{{margin:0 0 8px;font-size:15px;color:#102033;}}
+    .remediation-card p{{font-size:13px;line-height:1.55;margin:6px 0;color:#1f2937;}}
+    .remediation-card code{{white-space:normal;word-break:break-word;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;}}
+    pre code{{display:block;white-space:pre-wrap;word-break:break-word;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
     ol,ul{{padding-left:20px;margin:8px 0;}}
     ol li,ul li{{margin:4px 0;font-size:14px;}}
   </style>
@@ -1978,8 +2091,11 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
 
   <section id="priority">
     <h2>Priority page annex</h2>
+    <p class="section-note">Compatibility redirects and intentionally excluded routes are kept out of this table so real content pages are not buried by redirect wrappers.</p>
     <table class="tight"><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th><th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead><tbody>{priority_rows}</tbody></table>
   </section>
+
+  {f'<section id="redirect-compatibility"><h2>Redirect / compatibility route annex</h2><p class="section-note">These routes are compatibility wrappers and should be verified for canonical/redirect intent, not scored as priority content pages.</p><table class="tight"><thead><tr><th>URL</th><th>Canonical target</th><th>Coverage state</th><th>Reason</th></tr></thead><tbody>{redirect_compatibility_rows}</tbody></table></section>' if redirect_compatibility_rows else ''}
 
   <section id="templates">
     <h2>Template / component / generator annex</h2>
@@ -2998,23 +3114,24 @@ def render_llm_issues_table(llm_issues: list[dict[str, Any]]) -> str:
 def render_llm_remediation_table(items: list[dict[str, Any]]) -> str:
   if not items:
     return ""
-  rows = "".join(
-    f"<tr>"
-    f"<td><code>{_esc(item.get('target', ''))}</code></td>"
-    f"<td>{_esc(item.get('issueId', ''))}</td>"
-    f"<td><pre><code>{_esc(item.get('currentPattern', ''))}</code></pre></td>"
-    f"<td><pre><code>{_esc(item.get('correctedPattern', ''))}</code></pre></td>"
-    f"<td>{_esc(item.get('rationale', ''))}</td>"
-    f"</tr>"
-    for item in items
-  )
-  return (
-    "<table class='tight'>"
-    "<thead><tr><th>Target file</th><th>Issue ID</th><th>Current pattern</th>"
-    "<th>Corrected pattern</th><th>Rationale</th></tr></thead>"
-    f"<tbody>{rows}</tbody></table>"
-  )
-
+  cards: list[str] = []
+  for item in items:
+    issue_id = _esc(item.get("issueId", "Unmapped issue"))
+    target = _esc(item.get("target", "Affected source path or route family"))
+    current = _esc(item.get("currentPattern", "See issue evidence."))
+    corrected = _esc(item.get("correctedPattern", "Apply the issue remediation exactly."))
+    rationale = _esc(item.get("rationale", "This change resolves the affected audit issue."))
+    verification = _esc(item.get("verificationMethod") or item.get("verification") or "Rerun the audit and confirm the issue-specific evidence changes in coverage.json and report.html.")
+    cards.append(
+      f"<article class='remediation-card'>"
+      f"<h3>{issue_id}: <code>{target}</code></h3>"
+      f"<p><strong>Current pattern:</strong> {current}</p>"
+      f"<p><strong>Corrected pattern:</strong> {corrected}</p>"
+      f"<p><strong>Rationale:</strong> {rationale}</p>"
+      f"<p><strong>Verification:</strong> {verification}</p>"
+      f"</article>"
+    )
+  return "".join(cards)
 
 def render_llm_page_type_table(items: list[dict[str, Any]]) -> str:
   if not items:
