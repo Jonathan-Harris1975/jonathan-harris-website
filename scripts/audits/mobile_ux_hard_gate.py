@@ -578,7 +578,8 @@ def representative_ebook_routes(routes: list[str], repo_root: Path, max_variants
   for route in candidates:
     file_path = repo_root / route.strip("/") / "index.html"
     text = read_text_preview(file_path, 12000)
-    signature = "|".join(sorted(set(re.findall(r"class=[\"']([^\"']*(?:ebook|book|cta|hero|compare)[^\"']*)[\"']", text, re.I))[:12]))
+    class_matches = re.findall(r"class=[\"']([^\"']*(?:ebook|book|cta|hero|compare)[^\"']*)[\"']", text, re.I)
+    signature = "|".join(sorted(set(class_matches))[:12])
     signature = signature or "ebook-detail-default"
     variants.setdefault(signature, route)
     if len(variants) >= max_variants:
