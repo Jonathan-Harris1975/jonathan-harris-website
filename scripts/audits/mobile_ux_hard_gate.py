@@ -67,6 +67,14 @@ CRITICAL_ROUTES = {"/", "/ebooks", "/newsletter", "/contact", "/compare", LIVE_4
 PASS_SCREENSHOT_ROUTES = {"/", "/ebooks", "/newsletter", "/contact", "/compare", LIVE_404_ROUTE}
 
 
+class HardGateCapabilityError(RuntimeError):
+  """Raised when rendered browser automation, screenshots, or mobile emulation cannot be proven."""
+
+  def __init__(self, message: str, blocks: list[dict[str, str]] | None = None):
+    super().__init__(message)
+    self.blocks = blocks or []
+
+
 def parse_args() -> argparse.Namespace:
   parser = argparse.ArgumentParser(description="Run the rendered mobile UX hard-gate audit")
   parser.add_argument("--base-url", required=True)
@@ -705,21 +713,113 @@ def checkpoint(stage: str, completed: list[str], blocked: list[Any] | None = Non
   }
 
 
-def build_capabilities(playwright_error: str | None = None, install_outcome: str | None = None) -> dict[str, Any]:
-  blocked = []
+def _dedupe_blocks(blocks: list[dict[str, str]]) -> list[dict[str, str]]:
+  seen = set()
+  deduped = []
+  for block in blocks:
+    capability = str(block.get("capability") or "mobileUxExecution")
+    reason = str(block.get("reason") or block.get("blocker") or "blocked")
+    key = (capability, reason)
+    if key in seen:
+      continue
+    seen.add(key)
+    deduped.append({**block, "capability": capability, "reason": reason})
+  return deduped
+
+
+def probe_rendered_mobile_runtime(sync_playwright: Any | None, probe_dir: Path) -> list[dict[str, str]]:
+  """Prove Chromium launch, screenshot capture, and mobile viewport emulation before scoring."""
+  if sync_playwright is None:
+    reason = "Playwright sync runtime is unavailable"
+    return [
+      {"capability": "renderedBrowserAutomation", "reason": reason},
+      {"capability": "screenshotCapture", "reason": reason},
+      {"capability": "mobileViewportEmulation", "reason": reason},
+    ]
+
+  ensure_dir(probe_dir)
+  browser = None
+  context = None
+  blocks: list[dict[str, str]] = []
+  try:
+    with sync_playwright() as playwright:
+      try:
+        browser = playwright.chromium.launch(headless=True)
+      except Exception as exc:
+        reason = f"Chromium launch failed: {exc}"
+        return [
+          {"capability": "renderedBrowserAutomation", "reason": reason},
+          {"capability": "screenshotCapture", "reason": reason},
+          {"capability": "mobileViewportEmulation", "reason": reason},
+        ]
+
+      try:
+        context = browser.new_context(
+          viewport={"width": 390, "height": 844},
+          is_mobile=True,
+          has_touch=True,
+          device_scale_factor=1,
+        )
+        page = context.new_page()
+        page.set_content(
+          "<html><head><meta name='viewport' content='width=device-width, initial-scale=1'></head>"
+          "<body><button style='width:44px;height:44px'>Probe</button></body></html>",
+          wait_until="domcontentloaded",
+        )
+        viewport_width = page.evaluate("() => window.innerWidth")
+        touch_points = page.evaluate("() => navigator.maxTouchPoints || 0")
+        if int(viewport_width) != 390 or int(touch_points) < 1:
+          blocks.append({
+            "capability": "mobileViewportEmulation",
+            "reason": f"probe returned innerWidth={viewport_width}, maxTouchPoints={touch_points}",
+          })
+        try:
+          page.screenshot(path=str(probe_dir / "capability-probe.png"), full_page=True)
+        except Exception as exc:
+          blocks.append({"capability": "screenshotCapture", "reason": f"probe screenshot failed: {exc}"})
+      except Exception as exc:
+        reason = f"rendered mobile probe failed: {exc}"
+        blocks.extend([
+          {"capability": "renderedBrowserAutomation", "reason": reason},
+          {"capability": "mobileViewportEmulation", "reason": reason},
+        ])
+      finally:
+        if context is not None:
+          context.close()
+        if browser is not None:
+          browser.close()
+  except Exception as exc:
+    reason = f"Playwright runtime probe failed: {exc}"
+    return [
+      {"capability": "renderedBrowserAutomation", "reason": reason},
+      {"capability": "screenshotCapture", "reason": reason},
+      {"capability": "mobileViewportEmulation", "reason": reason},
+    ]
+
+  return _dedupe_blocks(blocks)
+
+
+def build_capabilities(playwright_error: str | None = None, install_outcome: str | None = None, runtime_blocks: list[dict[str, str]] | None = None) -> dict[str, Any]:
+  blocked: list[dict[str, str]] = []
   if playwright_error:
     blocked.append({"capability": "renderedBrowserAutomation", "reason": playwright_error})
     blocked.append({"capability": "screenshotCapture", "reason": playwright_error})
     blocked.append({"capability": "mobileViewportEmulation", "reason": playwright_error})
   if install_outcome and install_outcome not in {"", "success", "skipped"}:
-    blocked.append({"capability": "playwrightChromiumInstall", "reason": install_outcome})
-  available = not any(item["capability"] in {"renderedBrowserAutomation", "screenshotCapture", "mobileViewportEmulation", "playwrightChromiumInstall"} for item in blocked)
+    reason = f"Playwright Chromium install outcome: {install_outcome}"
+    blocked.append({"capability": "renderedBrowserAutomation", "reason": reason})
+    blocked.append({"capability": "screenshotCapture", "reason": reason})
+    blocked.append({"capability": "mobileViewportEmulation", "reason": reason})
+    blocked.append({"capability": "playwrightChromiumInstall", "reason": reason})
+  blocked.extend(runtime_blocks or [])
+  blocked = _dedupe_blocks(blocked)
+  unavailable = {item["capability"] for item in blocked}
   return {
     "staticFileInspection": True,
     "fetchSourceInspection": True,
-    "renderedBrowserAutomation": available,
-    "screenshotCapture": available,
-    "mobileViewportEmulation": available,
+    "renderedBrowserAutomation": "renderedBrowserAutomation" not in unavailable,
+    "screenshotCapture": "screenshotCapture" not in unavailable,
+    "mobileViewportEmulation": "mobileViewportEmulation" not in unavailable,
     "blockedTests": blocked,
   }
 
@@ -908,6 +1008,17 @@ def should_capture_pass(route: str, width: int, template_family: str) -> bool:
   return route in PASS_SCREENSHOT_ROUTES or template_family in {"catalogue", "topics", "ebook-detail"}
 
 
+def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) -> dict[str, str | None]:
+  try:
+    page.screenshot(path=str(file_path), full_page=True)
+  except Exception as exc:
+    raise HardGateCapabilityError(
+      HARD_GATE_MESSAGE,
+      [{"capability": "screenshotCapture", "reason": f"required screenshot failed for {relative_path}: {exc}"}],
+    ) from exc
+  return screenshot_ref(relative_path)
+
+
 def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str, routes: list[str], screenshots_dir: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
   records: list[dict[str, Any]] = []
   executed: list[dict[str, str]] = []
@@ -936,8 +1047,7 @@ def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str,
               label = "fail" if failed else "pass"
               name = screenshot_name(route, width, label)
               file_path = screenshots_dir / name
-              page.screenshot(path=str(file_path), full_page=True)
-              record["screenshotRefs"].append(screenshot_ref(f"screenshots/{name}"))
+              record["screenshotRefs"].append(capture_required_screenshot(page, file_path, f"screenshots/{name}"))
             records.append(record)
             executed.append({"route": route, "viewport": str(width)})
           except Exception as exc:
@@ -946,8 +1056,7 @@ def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str,
             fail_path = screenshots_dir / fail_name
             refs = []
             try:
-              page.screenshot(path=str(fail_path), full_page=True)
-              refs.append(screenshot_ref(f"screenshots/{fail_name}"))
+              refs.append(capture_required_screenshot(page, fail_path, f"screenshots/{fail_name}"))
             except Exception:
               pass
             records.append({
@@ -1380,14 +1489,18 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
 def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
   now = utc_now()
   failure_artifacts = ensure_failure_artifacts(args, output_dir, message, preflight_data, extra)
+  hard_gate_blocked = message == HARD_GATE_MESSAGE
   summary = {
     "ok": False,
     "auditType": "mobile-ux",
     "sessionId": args.session_id,
     "status": "failed",
+    "blocked": True,
+    "hardGateBlocked": hard_gate_blocked,
     "reportPrefix": args.report_prefix,
     "message": message,
     "preflight": preflight_data,
+    "capabilities": preflight_data.get("capabilities") if isinstance(preflight_data, dict) else None,
     "coverage": failure_artifacts.get("coverage"),
     "finishedAt": now,
     **(extra or {}),
@@ -1407,6 +1520,10 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "evidenceUrl": uploaded.get("evidence.json"),
     "coverageUrl": uploaded.get("coverage.json"),
     "message": message,
+    "blocked": True,
+    "hardGateBlocked": hard_gate_blocked,
+    "blockedTests": failure_blocks_from_extra(extra),
+    "capabilities": preflight_data.get("capabilities") if isinstance(preflight_data, dict) else None,
     "screenshotCount": 0,
     "mobileFailureCount": 0,
     "artefacts": uploaded,
@@ -1428,7 +1545,11 @@ def main() -> int:
 
   sync_playwright, _playwright_timeout, playwright_error = try_load_playwright()
   install_outcome = os.environ.get("PLAYWRIGHT_INSTALL_OUTCOME", "").strip()
-  capabilities = build_capabilities(playwright_error, install_outcome)
+  initial_capabilities = build_capabilities(playwright_error, install_outcome)
+  runtime_probe_blocks = []
+  if initial_capabilities["renderedBrowserAutomation"] and initial_capabilities["screenshotCapture"] and initial_capabilities["mobileViewportEmulation"]:
+    runtime_probe_blocks = probe_rendered_mobile_runtime(sync_playwright, output_dir / "capability-probe")
+  capabilities = build_capabilities(playwright_error, install_outcome, runtime_probe_blocks)
 
   workbook_path = find_workbook(REPO_ROOT)
   workbook_info = load_workbook_info(workbook_path)
@@ -1461,10 +1582,22 @@ def main() -> int:
 
   try:
     records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir)
-  except Exception as exc:  # pragma: no cover - runtime environment gate
-    preflight_data["capabilities"]["blockedTests"].append({"capability": "renderedBrowserAutomation", "reason": str(exc)})
+  except HardGateCapabilityError as exc:  # pragma: no cover - runtime environment gate
+    blocks = exc.blocks or [{"capability": "renderedBrowserAutomation", "reason": str(exc)}]
+    preflight_data["capabilities"]["blockedTests"].extend(blocks)
+    preflight_data["capabilities"] = build_capabilities(None, "", preflight_data["capabilities"]["blockedTests"])
     write_json(output_dir / "preflight.json", preflight_data)
-    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"error": str(exc), "trace": traceback.format_exc()}) else 1
+    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
+  except Exception as exc:  # pragma: no cover - runtime environment gate
+    blocks = [
+      {"capability": "renderedBrowserAutomation", "reason": str(exc)},
+      {"capability": "screenshotCapture", "reason": str(exc)},
+      {"capability": "mobileViewportEmulation", "reason": str(exc)},
+    ]
+    preflight_data["capabilities"]["blockedTests"].extend(blocks)
+    preflight_data["capabilities"] = build_capabilities(None, "", preflight_data["capabilities"]["blockedTests"])
+    write_json(output_dir / "preflight.json", preflight_data)
+    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
 
   stage3_blocks = check_stage3_coverage(routes, records, route_blocks, runtime_blocks)
   coverage = coverage_document(routes, records, stage3_blocks, required_routes)

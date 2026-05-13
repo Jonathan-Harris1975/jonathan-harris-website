@@ -36,6 +36,33 @@ class MobileUxHardGateTests(unittest.TestCase):
     self.assertFalse(capabilities["mobileViewportEmulation"])
     self.assertGreaterEqual(len(capabilities["blockedTests"]), 3)
 
+
+
+  def test_runtime_probe_blocks_when_chromium_launch_fails(self):
+    class FailingChromium:
+      def launch(self, **_kwargs):
+        raise RuntimeError("browser executable missing")
+
+    class FailingPlaywright:
+      chromium = FailingChromium()
+      def __enter__(self):
+        return self
+      def __exit__(self, *_args):
+        return False
+
+    blocks = audit.probe_rendered_mobile_runtime(lambda: FailingPlaywright(), audit.Path(tempfile.mkdtemp()))
+    capabilities = {item["capability"] for item in blocks}
+    self.assertIn("renderedBrowserAutomation", capabilities)
+    self.assertIn("screenshotCapture", capabilities)
+    self.assertIn("mobileViewportEmulation", capabilities)
+
+  def test_build_capabilities_preserves_runtime_probe_blocks(self):
+    capabilities = audit.build_capabilities(None, "success", [{"capability": "screenshotCapture", "reason": "probe screenshot failed"}])
+    self.assertTrue(capabilities["renderedBrowserAutomation"])
+    self.assertFalse(capabilities["screenshotCapture"])
+    self.assertTrue(capabilities["mobileViewportEmulation"])
+    self.assertEqual(capabilities["blockedTests"][0]["capability"], "screenshotCapture")
+
   def test_audits_bucket_public_base_is_preferred_for_audits_bucket(self):
     old_bucket = os.environ.get("R2_BUCKET_AUDITS")
     old_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS")
