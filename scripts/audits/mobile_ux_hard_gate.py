@@ -728,6 +728,125 @@ def status_from_exception(exc: Exception) -> dict[str, str]:
   return {"reason": str(exc), "trace": traceback.format_exc(limit=4)}
 
 
+def read_json_if_present(path: Path, fallback: Any) -> Any:
+  try:
+    return json.loads(path.read_text(encoding="utf-8"))
+  except Exception:
+    return fallback
+
+
+def failure_blocks_from_extra(extra: dict[str, Any] | None) -> list[Any]:
+  if not isinstance(extra, dict):
+    return []
+  for key in ("stage3Blocks", "blockedTests", "runtimeBlocks"):
+    value = extra.get(key)
+    if isinstance(value, list):
+      return value
+    if value:
+      return [value]
+  if extra.get("error"):
+    return [{"capability": "mobileUxExecution", "reason": str(extra.get("error"))}]
+  return []
+
+
+def ensure_failure_artifacts(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+  now = utc_now()
+  blocks = failure_blocks_from_extra(extra)
+
+  coverage_path = output_dir / "coverage.json"
+  if coverage_path.exists():
+    coverage = read_json_if_present(coverage_path, {})
+  else:
+    coverage = {
+      "complete": False,
+      "auditType": "mobile-ux",
+      "sessionId": args.session_id,
+      "status": "failed",
+      "reportPrefix": args.report_prefix,
+      "message": message,
+      "stage3Blocks": blocks,
+      "skippedRequiredTasksCount": len(blocks),
+      "generatedAt": now,
+    }
+    write_json(coverage_path, coverage)
+
+  evidence_path = output_dir / "evidence.json"
+  if evidence_path.exists():
+    evidence = read_json_if_present(evidence_path, {})
+  else:
+    evidence = {
+      "preflight": preflight_data,
+      "coverage": coverage,
+      "records": [],
+      "failure": {
+        "message": message,
+        "blocks": blocks,
+        "extra": extra or {},
+        "generatedAt": now,
+      },
+    }
+    write_json(evidence_path, evidence)
+
+  return {"coverage": coverage, "evidence": evidence, "blocks": blocks}
+
+
+def failure_report_html(summary: dict[str, Any], failure_artifacts: dict[str, Any]) -> str:
+  blocks = failure_artifacts.get("blocks") or []
+  block_rows = "".join(
+    f"<tr><td>{escape(str(item.get('capability') or item.get('route') or item.get('stage') or 'mobile UX execution'))}</td>"
+    f"<td>{escape(str(item.get('reason') or item.get('blocker') or item))}</td></tr>"
+    if isinstance(item, dict)
+    else f"<tr><td>mobile UX execution</td><td>{escape(str(item))}</td></tr>"
+    for item in blocks
+  ) or "<tr><td>mobile UX execution</td><td>No detailed blocker payload was supplied.</td></tr>"
+
+  capability_rows = ""
+  capabilities = summary.get("preflight", {}).get("capabilities", {}) if isinstance(summary.get("preflight"), dict) else {}
+  if isinstance(capabilities, dict):
+    capability_rows = "".join(
+      f"<tr><td>{escape(str(key))}</td><td>{escape(str(value))}</td></tr>"
+      for key, value in capabilities.items()
+      if key != "blockedTests"
+    )
+
+  body = f"""
+  <section>
+    <h2>Audit status</h2>
+    <p><span class="badge fail">FAILED</span></p>
+    <p>{escape(str(summary.get('message') or 'Mobile UX audit did not complete.'))}</p>
+    <p class="section-note">This is a failure report, not a placeholder success report. No Lighthouse, Core Web Vitals, or browser-rendered scores are fabricated.</p>
+  </section>
+  <section>
+    <h2>Run details</h2>
+    <table class="tight"><tbody>
+      <tr><th>Audit type</th><td>{escape(str(summary.get('auditType')))}</td></tr>
+      <tr><th>Session ID</th><td>{escape(str(summary.get('sessionId')))}</td></tr>
+      <tr><th>Report prefix</th><td>{escape(str(summary.get('reportPrefix')))}</td></tr>
+      <tr><th>Finished at</th><td>{escape(str(summary.get('finishedAt')))}</td></tr>
+    </tbody></table>
+  </section>
+  <section>
+    <h2>Blocking evidence</h2>
+    <table class="tight"><thead><tr><th>Area</th><th>Evidence</th></tr></thead><tbody>{block_rows}</tbody></table>
+  </section>
+  <section>
+    <h2>Capability declaration</h2>
+    <table class="tight"><thead><tr><th>Capability</th><th>Status</th></tr></thead><tbody>{capability_rows}</tbody></table>
+  </section>
+  <section>
+    <h2>Artefacts written</h2>
+    <ul>
+      <li><code>summary.json</code></li>
+      <li><code>coverage.json</code></li>
+      <li><code>evidence.json</code></li>
+      <li><code>preflight.json</code> when preflight reached that stage</li>
+      <li><code>report.html</code></li>
+    </ul>
+  </section>
+  """
+  return html_report_shell("Mobile UX audit failure report", body)
+
+
 def route_target(base_url: str, route: str, session_id: str) -> str:
   if route == LIVE_404_ROUTE:
     return f"{base_url}/__mobile-ux-404-probe__{session_id}"
@@ -1260,6 +1379,7 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
 
 def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
   now = utc_now()
+  failure_artifacts = ensure_failure_artifacts(args, output_dir, message, preflight_data, extra)
   summary = {
     "ok": False,
     "auditType": "mobile-ux",
@@ -1268,17 +1388,20 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "reportPrefix": args.report_prefix,
     "message": message,
     "preflight": preflight_data,
+    "coverage": failure_artifacts.get("coverage"),
     "finishedAt": now,
     **(extra or {}),
   }
   write_json(output_dir / "summary.json", summary)
   write_text(output_dir / "halt.txt", message)
+  write_text(output_dir / "report.html", failure_report_html(summary, failure_artifacts))
   uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir)
   payload = {
     "auditType": "mobile-ux",
     "sessionId": args.session_id,
     "status": "failed",
     "reportPrefix": args.report_prefix,
+    "reportUrl": uploaded.get("report.html"),
     "summaryUrl": uploaded.get("summary.json"),
     "preflightUrl": uploaded.get("preflight.json"),
     "evidenceUrl": uploaded.get("evidence.json"),

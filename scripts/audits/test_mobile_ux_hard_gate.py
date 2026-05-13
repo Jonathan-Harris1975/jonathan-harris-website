@@ -1,5 +1,7 @@
 import argparse
+import json
 import os
+import tempfile
 import unittest
 
 from scripts.audits import mobile_ux_hard_gate as audit
@@ -54,6 +56,53 @@ class MobileUxHardGateTests(unittest.TestCase):
   def test_live_404_route_is_not_treated_as_repo_static_404(self):
     self.assertEqual(audit.detect_template_family(audit.LIVE_404_ROUTE), "live-404")
     self.assertIn("__mobile-ux-404-probe__", audit.route_target("https://example.com", audit.LIVE_404_ROUTE, "session-one"))
+
+  def test_failure_payload_writes_complete_diagnostic_artifacts(self):
+    old_env = {
+      name: os.environ.get(name)
+      for name in [
+        "R2_ENDPOINT",
+        "R2_ACCESS_KEY_ID",
+        "R2_SECRET_ACCESS_KEY",
+        "R2_BUCKET_AUDITS",
+        "R2_PUBLIC_BASE_URL_AUDITS",
+      ]
+    }
+    for name in old_env:
+      os.environ.pop(name, None)
+
+    try:
+      with tempfile.TemporaryDirectory() as tmp:
+        args = argparse.Namespace(
+          session_id="failure-artifact-test",
+          report_prefix="audits/mobile-ux/failure-artifact-test",
+          callback_url=None,
+          callback_token=None,
+        )
+        output_dir = audit.ensure_dir(audit.Path(tmp))
+        payload = audit.write_failure_payload(
+          args,
+          output_dir,
+          "rendered execution failed",
+          {"capabilities": audit.build_capabilities()},
+          {"error": "browser executable missing"},
+        )
+
+        expected = ["summary.json", "coverage.json", "evidence.json", "halt.txt", "report.html"]
+        for filename in expected:
+          self.assertTrue((output_dir / filename).exists(), filename)
+
+        coverage = json.loads((output_dir / "coverage.json").read_text(encoding="utf-8"))
+        self.assertFalse(coverage["complete"])
+        self.assertEqual(coverage["status"], "failed")
+        self.assertIn("reportUrl", payload)
+        self.assertIn("Mobile UX audit failure report", (output_dir / "report.html").read_text(encoding="utf-8"))
+    finally:
+      for name, value in old_env.items():
+        if value is None:
+          os.environ.pop(name, None)
+        else:
+          os.environ[name] = value
 
 
 if __name__ == "__main__":
