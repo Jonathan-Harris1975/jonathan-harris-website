@@ -46,6 +46,10 @@ HARD_GATE_MESSAGE = (
   "MOBILE UX HARD GATE FAILED - RENDERED BROWSER AUTOMATION AND SCREENSHOT CAPTURE ARE REQUIRED FOR THIS AUDIT. "
   "HALTING BEFORE SCORING OR VERDICT."
 )
+STORAGE_GATE_MESSAGE = (
+  "MOBILE UX AUDIT STORAGE GATE FAILED - AUDIT ARTEFACT STORAGE OR CALLBACK PUBLICATION FAILED. "
+  "HALTING BEFORE SCORING OR VERDICT."
+)
 STAGE_3_INCOMPLETE_MESSAGE = "STAGE 3 INCOMPLETE - REQUIRED MOBILE UX EXECUTION NOT FINISHED - HALTING BEFORE REPORT."
 LIVE_404_ROUTE = "/__mobile-ux-live-404__"
 VIEWPORTS = [320, 375, 390, 414, 768, 1024, 1280, 1440]
@@ -145,7 +149,7 @@ def try_load_playwright() -> tuple[Any | None, Any | None, str | None]:
     return None, None, str(exc)
 
 
-def r2_upload_configured() -> bool:
+def missing_r2_upload_config() -> list[str]:
   required = [
     "R2_ENDPOINT",
     "R2_ACCESS_KEY_ID",
@@ -153,7 +157,11 @@ def r2_upload_configured() -> bool:
     "R2_BUCKET_AUDITS",
     "R2_PUBLIC_BASE_URL_AUDITS",
   ]
-  return all(os.environ.get(name, "").strip() for name in required)
+  return [name for name in required if not os.environ.get(name, "").strip()]
+
+
+def r2_upload_configured() -> bool:
+  return not missing_r2_upload_config()
 
 
 def make_public_url(relative_path: str) -> str | None:
@@ -166,17 +174,23 @@ def make_public_url(relative_path: str) -> str | None:
   return f"{public_base}/{key}"
 
 
-def upload_artifacts_if_configured(report_prefix: str, output_dir: Path) -> dict[str, str]:
-  if not r2_upload_configured():
+def upload_artifacts_if_configured(report_prefix: str, output_dir: Path, *, require: bool = False) -> dict[str, str]:
+  missing = missing_r2_upload_config()
+  if missing:
+    if require:
+      raise RuntimeError(f"R2 audit upload configuration is incomplete: missing {', '.join(missing)}")
     return {}
   client = build_r2_client()
-  return upload_directory_to_r2(
+  uploaded = upload_directory_to_r2(
     client,
     os.environ["R2_BUCKET_AUDITS"],
     report_prefix,
     output_dir,
     os.environ["R2_PUBLIC_BASE_URL_AUDITS"],
   )
+  if require and not uploaded:
+    raise RuntimeError("R2 audit upload completed without publishing any artefacts")
+  return uploaded
 
 
 def screenshot_ref(relative_path: str) -> dict[str, str | None]:
@@ -1008,6 +1022,11 @@ def should_capture_pass(route: str, width: int, template_family: str) -> bool:
   return route in PASS_SCREENSHOT_ROUTES or template_family in {"catalogue", "topics", "ebook-detail"}
 
 
+def missing_required_completion_artefacts(uploaded: dict[str, str]) -> list[str]:
+  required = ["report.html", "summary.json", "coverage.json", "execution.json", "evidence.json", "preflight.json"]
+  return [name for name in required if not uploaded.get(name)]
+
+
 def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) -> dict[str, str | None]:
   try:
     page.screenshot(path=str(file_path), full_page=True)
@@ -1486,9 +1505,11 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
   }
 
 
-def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None) -> dict[str, Any]:
+def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None, *, allow_upload: bool = True) -> dict[str, Any]:
   now = utc_now()
   failure_artifacts = ensure_failure_artifacts(args, output_dir, message, preflight_data, extra)
+  hard_gate_blocked = message == HARD_GATE_MESSAGE
+  storage_upload_error = str((extra or {}).get("storageUploadError") or "").strip() or None
   hard_gate_blocked = message == HARD_GATE_MESSAGE
   summary = {
     "ok": False,
@@ -1499,16 +1520,26 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "hardGateBlocked": hard_gate_blocked,
     "reportPrefix": args.report_prefix,
     "message": message,
+    "storageUploadError": storage_upload_error,
     "preflight": preflight_data,
     "capabilities": preflight_data.get("capabilities") if isinstance(preflight_data, dict) else None,
     "coverage": failure_artifacts.get("coverage"),
+    "mobileQualityScore": None,
+    "releaseVerdict": None,
     "finishedAt": now,
     **(extra or {}),
   }
   write_json(output_dir / "summary.json", summary)
   write_text(output_dir / "halt.txt", message)
   write_text(output_dir / "report.html", failure_report_html(summary, failure_artifacts))
-  uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir)
+  uploaded: dict[str, str] = {}
+  if allow_upload:
+    try:
+      uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir)
+    except Exception as exc:  # pragma: no cover - depends on live R2 credentials
+      storage_upload_error = f"R2 upload failed: {exc}"
+      summary["storageUploadError"] = storage_upload_error
+      write_json(output_dir / "summary.json", summary)
   payload = {
     "auditType": "mobile-ux",
     "sessionId": args.session_id,
@@ -1520,6 +1551,7 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "evidenceUrl": uploaded.get("evidence.json"),
     "coverageUrl": uploaded.get("coverage.json"),
     "message": message,
+    "storageUploadError": storage_upload_error,
     "blocked": True,
     "hardGateBlocked": hard_gate_blocked,
     "blockedTests": failure_blocks_from_extra(extra),
@@ -1563,6 +1595,19 @@ def main() -> int:
     )
   ]
   write_json(output_dir / "preflight.json", preflight_data)
+
+  missing_r2 = missing_r2_upload_config()
+  if missing_r2:
+    block = {
+      "stage": "R2 audit storage preflight",
+      "blocker": f"missing {', '.join(missing_r2)}",
+      "reason": "The GitHub workflow must be able to publish report.html, summary.json, coverage.json, evidence.json, and screenshots to the audits bucket.",
+    }
+    preflight_data["storage"] = {"r2UploadConfigured": False, "missing": missing_r2}
+    preflight_data["checkpoints"].append(checkpoint("AUDIT STORAGE CHECKPOINT", [], [block], False))
+    write_json(output_dir / "preflight.json", preflight_data)
+    write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": [block], "skippedRequiredTasksCount": 1})
+    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"]}, allow_upload=False) else 1
 
   if not capabilities["renderedBrowserAutomation"] or not capabilities["screenshotCapture"] or not capabilities["mobileViewportEmulation"] or sync_playwright is None:
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": capabilities["blockedTests"], "skippedRequiredTasksCount": len(capabilities["blockedTests"])})
@@ -1617,11 +1662,20 @@ def main() -> int:
   html = report_html(summary, records, {}, issues, coverage, reconciliation)
   write_text(output_dir / "report.html", html)
 
-  uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir)
-  if uploaded:
+  try:
+    uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
+    missing = missing_required_completion_artefacts(uploaded)
+    if missing:
+      raise RuntimeError(f"R2 completion upload missing required artefact(s): {', '.join(missing)}")
     html = report_html(summary, records, uploaded, issues, coverage, reconciliation)
     write_text(output_dir / "report.html", html)
-    uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir)
+    uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
+    missing = missing_required_completion_artefacts(uploaded)
+    if missing:
+      raise RuntimeError(f"R2 completion upload missing required artefact(s) after linked-report rewrite: {', '.join(missing)}")
+  except Exception as exc:  # pragma: no cover - depends on live R2 credentials
+    block = {"stage": "R2 audit upload", "blocker": str(exc), "reason": "Completed Mobile UX audit cannot be published to the required audits bucket."}
+    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": str(exc)}, allow_upload=False) else 1
 
   callback_payload = {
     "auditType": "mobile-ux",
