@@ -43,6 +43,10 @@ SERIES_URL = f"{SITE}/podcast/"
 NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
 PAGE_HEADER_ROW = 5
 GENERIC_PODCAST_SLUGS = {"artificial-intelligence-weekly"}
+PODCAST_HEAD_VIEWPORT_META = '<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>'
+PODCAST_INTER_FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
 
 
 def load_partial(path: Path, label: str) -> str:
@@ -416,13 +420,12 @@ def build_episode_page(ep: dict) -> str:
 <html lang="en-GB">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+{PODCAST_HEAD_VIEWPORT_META}
 <title>{html_mod.escape(title)} | Turing&#39;s Torch</title>
 <meta content="{html_mod.escape(meta_description)}" name="description"/>
 <meta content="#0D1420" name="theme-color"/>
 <meta content="index,follow" name="robots"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>
+{PODCAST_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
 <script>document.documentElement.classList.add('js-enabled');</script><link href="/assets/css/site.css" rel="stylesheet"/>
 <meta content="article" property="og:type"/>
@@ -597,6 +600,13 @@ def validate_generated_pages(episodes: list[dict]) -> list[str]:
             continue
 
         page_html = page_path.read_text(encoding="utf-8")
+        if PODCAST_HEAD_VIEWPORT_META not in page_html:
+            failures.append(f"Governed viewport meta missing from episode page: {slug}")
+        if PODCAST_INTER_FONT_HEAD_BLOCK not in page_html:
+            failures.append(f"Canonical Inter font head block missing from episode page: {slug}")
+        elif page_html.find(PODCAST_INTER_FONT_HEAD_BLOCK) > page_html.find('<link as="style" href="/assets/css/site.css" rel="preload"/>'):
+            failures.append(f"Canonical Inter font head block appears after site.css preload on episode page: {slug}")
+
         audio_url = (ep.get("audio_url") or "").strip()
         if audio_url:
             if '<audio' not in page_html or 'controls' not in page_html:
