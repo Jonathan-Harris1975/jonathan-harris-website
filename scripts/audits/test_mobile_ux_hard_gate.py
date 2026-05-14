@@ -71,6 +71,29 @@ class MobileUxHardGateTests(unittest.TestCase):
     self.assertTrue(capabilities["mobileViewportEmulation"])
     self.assertEqual(capabilities["blockedTests"][0]["capability"], "screenshotCapture")
 
+  def test_missing_r2_upload_config_reports_required_audit_storage_envs(self):
+    names = [
+      "R2_ENDPOINT",
+      "R2_ACCESS_KEY_ID",
+      "R2_SECRET_ACCESS_KEY",
+      "R2_BUCKET_AUDITS",
+      "R2_PUBLIC_BASE_URL_AUDITS",
+    ]
+    old_env = {name: os.environ.get(name) for name in names}
+    try:
+      for name in names:
+        os.environ.pop(name, None)
+      self.assertEqual(audit.missing_r2_upload_config(), names)
+      self.assertFalse(audit.r2_upload_configured())
+      with self.assertRaisesRegex(RuntimeError, "R2 audit upload configuration is incomplete"):
+        audit.upload_artifacts_if_configured("audits/mobile-ux/unit", audit.Path(tempfile.mkdtemp()), require=True)
+    finally:
+      for name, value in old_env.items():
+        if value is None:
+          os.environ.pop(name, None)
+        else:
+          os.environ[name] = value
+
   def test_audits_bucket_public_base_is_preferred_for_audits_bucket(self):
     old_bucket = os.environ.get("R2_BUCKET_AUDITS")
     old_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS")

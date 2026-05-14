@@ -163,7 +163,7 @@ def try_load_playwright() -> tuple[Any | None, Any | None, str | None]:
     return None, None, str(exc)
 
 
-def r2_upload_configured() -> bool:
+def missing_r2_upload_config() -> list[str]:
   required = [
     "R2_ENDPOINT",
     "R2_ACCESS_KEY_ID",
@@ -171,7 +171,11 @@ def r2_upload_configured() -> bool:
     "R2_BUCKET_AUDITS",
     "R2_PUBLIC_BASE_URL_AUDITS",
   ]
-  return all(os.environ.get(name, "").strip() for name in required)
+  return [name for name in required if not os.environ.get(name, "").strip()]
+
+
+def r2_upload_configured() -> bool:
+  return not missing_r2_upload_config()
 
 
 def make_public_url(relative_path: str) -> str | None:
@@ -184,8 +188,11 @@ def make_public_url(relative_path: str) -> str | None:
   return f"{public_base}/{key}"
 
 
-def upload_artifacts_if_configured(report_prefix: str, output_dir: Path) -> dict[str, str]:
-  if not r2_upload_configured():
+def upload_artifacts_if_configured(report_prefix: str, output_dir: Path, *, require: bool = False) -> dict[str, str]:
+  missing = missing_r2_upload_config()
+  if missing:
+    if require:
+      raise RuntimeError(f"R2 audit upload configuration is incomplete: missing {', '.join(missing)}")
     return {}
   client = build_r2_client()
   return upload_directory_to_r2(
