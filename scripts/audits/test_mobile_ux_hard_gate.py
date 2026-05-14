@@ -38,6 +38,14 @@ class MobileUxHardGateTests(unittest.TestCase):
 
 
 
+
+  def test_browser_capability_hard_gate_takes_precedence_over_storage_gate(self):
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+    hard_gate_index = source.index('if not capabilities["renderedBrowserAutomation"]')
+    storage_gate_index = source.index("missing_r2 = missing_r2_upload_config()")
+    self.assertLess(hard_gate_index, storage_gate_index)
+    self.assertIn(audit.HARD_GATE_MESSAGE, audit.failure_report_html({"message": audit.HARD_GATE_MESSAGE}, {"blocks": []}))
+
   def test_runtime_probe_blocks_when_chromium_launch_fails(self):
     class FailingChromium:
       def launch(self, **_kwargs):
@@ -115,7 +123,7 @@ class MobileUxHardGateTests(unittest.TestCase):
           {"error": "browser executable missing"},
         )
 
-        expected = ["summary.json", "coverage.json", "evidence.json", "halt.txt", "report.html"]
+        expected = ["summary.json", "report.json", "coverage.json", "evidence.json", "halt.txt", "report.html"]
         for filename in expected:
           self.assertTrue((output_dir / filename).exists(), filename)
 
@@ -123,6 +131,9 @@ class MobileUxHardGateTests(unittest.TestCase):
         self.assertFalse(coverage["complete"])
         self.assertEqual(coverage["status"], "failed")
         self.assertIn("reportUrl", payload)
+        report_json = json.loads((output_dir / "report.json").read_text(encoding="utf-8"))
+        self.assertIsNone(report_json["mobileQualityScore"])
+        self.assertIsNone(report_json["releaseVerdict"])
         self.assertIn("Mobile UX audit failure report", (output_dir / "report.html").read_text(encoding="utf-8"))
     finally:
       for name, value in old_env.items():
@@ -130,6 +141,142 @@ class MobileUxHardGateTests(unittest.TestCase):
           os.environ.pop(name, None)
         else:
           os.environ[name] = value
+
+
+class MobileUxReportArtifactTests(unittest.TestCase):
+  def test_production_report_appendix_documents_are_generated_from_rendered_records(self):
+    record = {
+      "route": "/",
+      "url": "https://example.com/",
+      "templateFamily": "homepage",
+      "viewport": 390,
+      "checks": {
+        "viewportCorrectness": "PASS",
+        "overflow": "FAIL",
+        "hamburgerNavigation": "PASS",
+        "touchTargetUsability": "PASS",
+        "dynamicResizeReflow": "PASS",
+        "ctaContinuity": "PASS",
+        "typographyReadability": "PASS",
+        "formUsability": "N/A",
+        "imageResponsiveness": "PASS",
+        "tableComparisonHandling": "N/A",
+        "responsiveCoverage": "FAIL",
+      },
+      "screenshotRefs": [{"relativePath": "screenshots/home-390-fail.png", "publicUrl": "https://audits.example.test/audits/mobile-ux/run/screenshots/home-390-fail.png"}],
+      "defectSummary": "Horizontal overflow detected.",
+      "selectorComponentCodeAnchor": ".hero-grid",
+    }
+    summary = {
+      "sessionId": "run-one",
+      "reportPrefix": "audits/mobile-ux/run-one",
+      "mobileQualityScore": 90.0,
+      "mobileFailureCount": 1,
+      "screenshotCount": 1,
+      "focusedPagesAudited": 1,
+    }
+    issues = audit.build_issues([record])
+
+    manifest = audit.screenshot_manifest_document([record], summary)
+    scorecard = audit.mandatory_mobile_scorecard_document([record], summary)
+    focused = audit.focused_page_appendix_document(summary, [record], issues)
+    repository_issues = audit.repository_issue_appendix_document(summary, issues)
+    fixes = audit.responsive_fix_appendix_document(summary, issues)
+
+    self.assertEqual(manifest["totalScreenshots"], 1)
+    self.assertEqual(scorecard["rows"][0]["responsiveCoverage"], "FAIL")
+    self.assertEqual(focused["routes"][0]["route"], "/")
+    self.assertEqual(repository_issues["issueCount"], len(issues))
+    self.assertTrue(fixes["rows"])
+
+
+  def test_required_completion_artefact_gate_requires_report_json_and_appendices(self):
+    uploaded = {name: f"https://audits.example.test/{name}" for name in audit.MANDATORY_COMPLETION_ARTEFACTS}
+    self.assertEqual(audit.missing_required_completion_artefacts(uploaded), [])
+
+    uploaded.pop("report.json")
+    uploaded.pop("responsive-fix-appendix.json")
+    missing = audit.missing_required_completion_artefacts(uploaded)
+    self.assertIn("report.json", missing)
+    self.assertIn("responsive-fix-appendix.json", missing)
+    self.assertIn("screenshot-manifest.json", audit.MANDATORY_COMPLETION_ARTEFACTS)
+
+  def test_report_json_document_is_non_scoring_only_when_summary_is_non_scoring(self):
+    summary = {
+      "status": "failed",
+      "message": audit.HARD_GATE_MESSAGE,
+      "mobileQualityScore": None,
+      "releaseVerdict": None,
+      "screenshotCount": 0,
+      "mobileFailureCount": 0,
+    }
+    report_json = audit.report_json_document(summary, [], [], {"complete": False}, {"crossSourceMismatches": []})
+    self.assertIsNone(report_json["summary"]["mobileQualityScore"])
+    self.assertIsNone(report_json["summary"]["releaseVerdict"])
+    self.assertEqual(report_json["appendices"]["screenshotManifest"]["auditType"], "mobile-ux")
+
+  def test_report_html_contains_required_production_appendices_and_screenshot_manifest(self):
+    record = {
+      "route": "/",
+      "url": "https://example.com/",
+      "templateFamily": "homepage",
+      "viewport": 390,
+      "checks": {
+        "viewportCorrectness": "PASS",
+        "overflow": "PASS",
+        "hamburgerNavigation": "PASS",
+        "touchTargetUsability": "PASS",
+        "dynamicResizeReflow": "PASS",
+        "ctaContinuity": "PASS",
+        "typographyReadability": "PASS",
+        "formUsability": "N/A",
+        "imageResponsiveness": "PASS",
+        "tableComparisonHandling": "N/A",
+        "responsiveCoverage": "PASS",
+      },
+      "screenshotRefs": [{"relativePath": "screenshots/home-390-pass.png", "publicUrl": "https://audits.example.test/audits/mobile-ux/run/screenshots/home-390-pass.png"}],
+      "defectSummary": "",
+      "selectorComponentCodeAnchor": "",
+    }
+    preflight = {
+      "workbook": {"filename": "workbook.xlsm", "primarySheet": "Pages", "headerRow": 1, "urlCount": 1},
+      "liveHomepage": {"status": 200, "viewport": "width=device-width, initial-scale=1", "title": "Home"},
+      "repository": {"totalFiles": 1, "mediaQueryCount": 0, "containerQueryCount": 0, "fixedWidthMinWidthRisks": [], "responsiveRuleInventory": []},
+      "capabilities": {"staticFileInspection": True, "fetchSourceInspection": True, "renderedBrowserAutomation": True, "screenshotCapture": True, "mobileViewportEmulation": True, "blockedTests": []},
+    }
+    summary = {
+      "sessionId": "run-one",
+      "reportPrefix": "audits/mobile-ux/run-one",
+      "releaseVerdict": "PASS",
+      "renderedPages": 1,
+      "viewportRuns": 1,
+      "screenshotCount": 1,
+      "mobileFailureCount": 0,
+      "mobileQualityScore": 100,
+      "confidenceScore": 100,
+      "preflight": preflight,
+      "focusedPagesAudited": 1,
+      "exceptionsEscalated": 0,
+      "verificationMatrix": {"release readiness": "PASS"},
+      "weightedScorecard": [("UX", 14, 100, "Observed Live (mobile)")],
+      "reportControlBlock": {"skipped required tasks count": 0},
+    }
+    html = audit.report_html(
+      summary,
+      [record],
+      {"report.json": "https://audits.example.test/report.json", "screenshot-manifest.json": "https://audits.example.test/manifest.json"},
+      [],
+      {"complete": True, "skippedRequiredTasksCount": 0},
+      {"crossSourceMismatches": [], "crossSourceMismatchCount": 0},
+    )
+    self.assertIn("Blocked-tests list", html)
+    self.assertIn("Source inventory", html)
+    self.assertIn("Evidence labels and claim control", html)
+    self.assertIn("report.json", html)
+    self.assertIn("Screenshot manifest", html)
+    self.assertIn("Focused Page Appendix", html)
+    self.assertIn("Mandatory Mobile UX Scorecard", html)
+    self.assertIn("Responsive Fix Appendix", html)
 
 
 if __name__ == "__main__":

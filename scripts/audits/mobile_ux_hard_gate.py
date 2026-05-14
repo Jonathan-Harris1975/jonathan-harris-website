@@ -51,6 +51,20 @@ STORAGE_GATE_MESSAGE = (
   "HALTING BEFORE SCORING OR VERDICT."
 )
 STAGE_3_INCOMPLETE_MESSAGE = "STAGE 3 INCOMPLETE - REQUIRED MOBILE UX EXECUTION NOT FINISHED - HALTING BEFORE REPORT."
+MANDATORY_COMPLETION_ARTEFACTS = [
+  "report.html",
+  "report.json",
+  "summary.json",
+  "coverage.json",
+  "execution.json",
+  "evidence.json",
+  "preflight.json",
+  "screenshot-manifest.json",
+  "focused-page-appendix.json",
+  "repository-issue-appendix.json",
+  "mandatory-mobile-scorecard.json",
+  "responsive-fix-appendix.json",
+]
 LIVE_404_ROUTE = "/__mobile-ux-live-404__"
 VIEWPORTS = [320, 375, 390, 414, 768, 1024, 1280, 1440]
 NAV_TOGGLE = ".jh-hamburger"
@@ -149,7 +163,7 @@ def try_load_playwright() -> tuple[Any | None, Any | None, str | None]:
     return None, None, str(exc)
 
 
-def missing_r2_upload_config() -> list[str]:
+def r2_upload_configured() -> bool:
   required = [
     "R2_ENDPOINT",
     "R2_ACCESS_KEY_ID",
@@ -157,11 +171,7 @@ def missing_r2_upload_config() -> list[str]:
     "R2_BUCKET_AUDITS",
     "R2_PUBLIC_BASE_URL_AUDITS",
   ]
-  return [name for name in required if not os.environ.get(name, "").strip()]
-
-
-def r2_upload_configured() -> bool:
-  return not missing_r2_upload_config()
+  return all(os.environ.get(name, "").strip() for name in required)
 
 
 def make_public_url(relative_path: str) -> str | None:
@@ -174,23 +184,17 @@ def make_public_url(relative_path: str) -> str | None:
   return f"{public_base}/{key}"
 
 
-def upload_artifacts_if_configured(report_prefix: str, output_dir: Path, *, require: bool = False) -> dict[str, str]:
-  missing = missing_r2_upload_config()
-  if missing:
-    if require:
-      raise RuntimeError(f"R2 audit upload configuration is incomplete: missing {', '.join(missing)}")
+def upload_artifacts_if_configured(report_prefix: str, output_dir: Path) -> dict[str, str]:
+  if not r2_upload_configured():
     return {}
   client = build_r2_client()
-  uploaded = upload_directory_to_r2(
+  return upload_directory_to_r2(
     client,
     os.environ["R2_BUCKET_AUDITS"],
     report_prefix,
     output_dir,
     os.environ["R2_PUBLIC_BASE_URL_AUDITS"],
   )
-  if require and not uploaded:
-    raise RuntimeError("R2 audit upload completed without publishing any artefacts")
-  return uploaded
 
 
 def screenshot_ref(relative_path: str) -> dict[str, str | None]:
@@ -976,6 +980,11 @@ def run_single_record(page: Any, base_url: str, route: str, width: int, target: 
   checks["hamburgerNavigation"], details["hamburger"] = inspect_hamburger(page, width)
   checks["touchTargetUsability"], details["touchTargets"] = inspect_touch_targets(page)
   checks["dynamicResizeReflow"], details["dynamicResize"] = inspect_dynamic_resize(page, width)
+  checks["responsiveCoverage"] = "PASS" if checks.get("overflow") == "PASS" and checks.get("dynamicResizeReflow") == "PASS" else "FAIL"
+  details["responsiveCoverage"] = {
+    "derivedFrom": ["overflow", "dynamicResizeReflow"],
+    "status": checks["responsiveCoverage"],
+  }
   checks["ctaContinuity"], details["cta"] = inspect_cta(page, base_url)
   checks["typographyReadability"], details["readability"] = inspect_readability(page)
   checks["formUsability"], details["form"] = inspect_form_usability(page)
@@ -1023,8 +1032,7 @@ def should_capture_pass(route: str, width: int, template_family: str) -> bool:
 
 
 def missing_required_completion_artefacts(uploaded: dict[str, str]) -> list[str]:
-  required = ["report.html", "summary.json", "coverage.json", "execution.json", "evidence.json", "preflight.json"]
-  return [name for name in required if not uploaded.get(name)]
+  return [name for name in MANDATORY_COMPLETION_ARTEFACTS if not uploaded.get(name)]
 
 
 def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) -> dict[str, str | None]:
@@ -1086,6 +1094,7 @@ def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str,
               "checks": {
                 "viewportCorrectness": "FAIL",
                 "overflow": "FAIL",
+                "responsiveCoverage": "FAIL",
                 "hamburgerNavigation": "FAIL" if width < 1024 else "N/A",
                 "touchTargetUsability": "FAIL",
                 "dynamicResizeReflow": "FAIL",
@@ -1140,6 +1149,26 @@ def mobile_quality_score(records: list[dict[str, Any]], stage3_complete: bool) -
   return round((totals["PASS"] / denominator) * 100, 1)
 
 
+def remediation_for_check(check: str, record: dict[str, Any]) -> str:
+  anchor = record.get("selectorComponentCodeAnchor") or "the affected rendered component"
+  route = record.get("route") or "the affected route"
+  viewport = record.get("viewport") or "the failing viewport"
+  guidance = {
+    "viewportCorrectness": "Use the shared head/partial viewport declaration `width=device-width, initial-scale=1, viewport-fit=cover` and verify the live rendered page reports the expected viewport width.",
+    "overflow": f"Trace the overflowing element from `{anchor}` on `{route}` at {viewport}px. Replace fixed/min-width layout with max-width:100%, wrapping, grid minmax(), or an intentional overflow-x container for genuinely wide content.",
+    "hamburgerNavigation": "Verify `.jh-hamburger` and `#jh-mobile-nav` open, close, reopen, close on Escape/outside click, and reset on desktop breakpoint without body-scroll or overlay lock defects.",
+    "touchTargetUsability": "Increase crowded controls to a reliable 44px minimum target box with adequate gap, preserving CTA hierarchy and keyboard/focus affordances.",
+    "dynamicResizeReflow": "Fix responsive breakpoint/reflow handling so header, nav, cards, forms, grids, drawers, and sticky elements reset cleanly during mobile-tablet-desktop resize.",
+    "ctaContinuity": "Keep the primary CTA visible, tappable, and routed to the intended destination in the rendered mobile state without overlay, clipping, or dead-end interactions.",
+    "typographyReadability": "Adjust responsive type scale, line length, spacing, and wrapping so headings, body text, labels, buttons, and nav items do not clip, crush, or overlap.",
+    "formUsability": "Set visible input/control font size to at least 16px, keep labels and helper text associated, and preserve tappable submit flow at narrow widths.",
+    "imageResponsiveness": "Constrain images and artwork with responsive sizing/object-fit rules so they scale without distortion, clipping, overflow, or layout breakage.",
+    "tableComparisonHandling": "Use a deliberate table strategy: scroll container, stacked mobile cards, wrapping columns, or transformed comparison rows; do not allow inaccessible clipped wide content.",
+    "live404Verification": "Fix the rendered 404 route shell so header, footer, CTA path, viewport behaviour, and mobile layout all pass the same Stage 3 checks as normal pages.",
+  }
+  return guidance.get(check, "Fix the affected responsive component, then rerun the same route and viewport in the mobile hard-gate workflow.")
+
+
 def build_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
   issues = []
   for record in records:
@@ -1154,16 +1183,18 @@ def build_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
       elif check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability"}:
         severity = "P1"
       issue_id = f"MUX-{len(issues) + 1:03d}"
+      remediation = remediation_for_check(check, record)
       issues.append({
         "issueId": issue_id,
         "exactUrlOrFilePath": record["url"],
         "route": route,
         "viewport": record["viewport"],
+        "check": check,
         "defectDescription": f"{check} failed during rendered mobile execution.",
         "evidenceLabel": "Observed Live (mobile)",
         "severity": severity,
         "consequence": "Mobile users may hit layout, navigation, readability, or conversion friction.",
-        "exactRemediation": "Fix the affected responsive component, then rerun the same route and viewport in the mobile hard-gate workflow.",
+        "exactRemediation": remediation,
         "ownerClass": "Website frontend / static site implementation",
         "acceptanceCriteria": f"{check} returns PASS for {route} at {record['viewport']}px and any failure screenshot is superseded by a passing screenshot.",
         "verificationMethod": "Rerun POST /audits/mobile-ux/run and confirm execution.json plus report.html show PASS for the affected check.",
@@ -1171,6 +1202,190 @@ def build_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
         "screenshotRefs": record.get("screenshotRefs", []),
       })
   return issues
+
+
+def screenshot_manifest_document(records: list[dict[str, Any]], summary: dict[str, Any] | None = None) -> dict[str, Any]:
+  entries = []
+  seen = set()
+  for record in records:
+    failed = any(status == "FAIL" for status in record.get("checks", {}).values())
+    for ref in record.get("screenshotRefs", []):
+      relative = ref.get("relativePath")
+      if not relative or relative in seen:
+        continue
+      seen.add(relative)
+      entries.append({
+        "relativePath": relative,
+        "publicUrl": ref.get("publicUrl"),
+        "route": record.get("route"),
+        "url": record.get("url"),
+        "viewport": record.get("viewport"),
+        "templateFamily": record.get("templateFamily"),
+        "evidenceType": "rendered FAIL" if failed else "rendered PASS confirmation",
+      })
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId") if summary else None,
+    "reportPrefix": summary.get("reportPrefix") if summary else None,
+    "totalScreenshots": len(entries),
+    "screenshots": entries,
+    "policy": "Screenshots are required for every rendered FAIL and for key rendered PASS confirmations at mobile widths.",
+    "generatedAt": utc_now(),
+  }
+
+
+def responsive_coverage_status(record: dict[str, Any]) -> str:
+  checks = record.get("checks", {})
+  if checks.get("overflow") == "PASS" and checks.get("dynamicResizeReflow") == "PASS":
+    return "PASS"
+  return "FAIL"
+
+
+def mandatory_mobile_scorecard_document(records: list[dict[str, Any]], summary: dict[str, Any]) -> dict[str, Any]:
+  rows = []
+  for record in records:
+    checks = record.get("checks", {})
+    rows.append({
+      "url": record.get("url"),
+      "route": record.get("route"),
+      "templateFamily": record.get("templateFamily"),
+      "viewport": record.get("viewport"),
+      "viewportCorrectness": checks.get("viewportCorrectness"),
+      "responsiveCoverage": checks.get("responsiveCoverage") or responsive_coverage_status(record),
+      "overflow": checks.get("overflow"),
+      "touchTargetUsability": checks.get("touchTargetUsability"),
+      "hamburgerNavigation": checks.get("hamburgerNavigation"),
+      "dynamicResizeReflow": checks.get("dynamicResizeReflow"),
+      "ctaContinuity": checks.get("ctaContinuity"),
+      "typographyReadability": checks.get("typographyReadability"),
+      "imageResponsiveness": checks.get("imageResponsiveness"),
+      "formUsability": checks.get("formUsability"),
+      "tableComparisonHandling": checks.get("tableComparisonHandling"),
+      "screenshotRefs": record.get("screenshotRefs", []),
+      "defectSummary": record.get("defectSummary", ""),
+      "selectorComponentCodeAnchor": record.get("selectorComponentCodeAnchor"),
+    })
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "requiredViewports": VIEWPORTS,
+    "summaryTotals": pass_fail_totals(records),
+    "mobileQualityScore": summary.get("mobileQualityScore"),
+    "mobileFailCount": summary.get("mobileFailureCount"),
+    "mobileScreenshotCount": summary.get("screenshotCount"),
+    "rows": rows,
+    "generatedAt": utc_now(),
+  }
+
+
+def focused_page_appendix_document(summary: dict[str, Any], records: list[dict[str, Any]], issues: list[dict[str, Any]]) -> dict[str, Any]:
+  by_route = []
+  for route in sorted({record.get("route") for record in records}):
+    route_records = [record for record in records if record.get("route") == route]
+    route_issues = [issue for issue in issues if issue.get("route") == route]
+    screenshots = [ref for record in route_records for ref in record.get("screenshotRefs", [])]
+    by_route.append({
+      "route": route,
+      "url": route_records[0].get("url") if route_records else "",
+      "templateFamily": route_records[0].get("templateFamily") if route_records else detect_template_family(route or "/"),
+      "viewportRuns": len(route_records),
+      "viewports": sorted(record.get("viewport") for record in route_records),
+      "failures": sum(1 for record in route_records if any(status == "FAIL" for status in record.get("checks", {}).values())),
+      "issueIds": [issue.get("issueId") for issue in route_issues],
+      "screenshotRefs": screenshots,
+    })
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "focusedPagesAudited": summary.get("focusedPagesAudited"),
+    "routes": by_route,
+    "generatedAt": utc_now(),
+  }
+
+
+def repository_issue_appendix_document(summary: dict[str, Any], issues: list[dict[str, Any]]) -> dict[str, Any]:
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "issueCount": len(issues),
+    "issues": issues,
+    "generatedAt": utc_now(),
+  }
+
+
+def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[str, Any]]) -> dict[str, Any]:
+  rows = []
+  for issue in issues:
+    if issue.get("severity") not in {"P0", "P1"}:
+      continue
+    rows.append({
+      "issueId": issue.get("issueId"),
+      "severity": issue.get("severity"),
+      "filePathOrUrl": issue.get("exactUrlOrFilePath"),
+      "bestAvailableAnchor": issue.get("selectorComponentCodeAnchor"),
+      "currentEvidenceSnippet": issue.get("selectorComponentCodeAnchor") or "Rendered defect evidence is available in execution.json; exact source snippet was not deterministically mapped.",
+      "correctedReplacementCode": "Not auto-generated. Use the exactRemediation field as the implementation contract, then commit the smallest source-level CSS/HTML/JS change in the website repo.",
+      "exactRemediation": issue.get("exactRemediation"),
+      "effortEstimate": "S (<2 hrs)" if issue.get("severity") == "P1" else "M (2-8 hrs)",
+      "verificationRetestSteps": [
+        f"Rerun Mobile UX audit for {issue.get('route')} at {issue.get('viewport')}px.",
+        f"Confirm {issue.get('check') or 'the failed check'} returns PASS in mandatory-mobile-scorecard.json.",
+        "Confirm any old failure screenshot is superseded by a passing screenshot reference.",
+      ],
+    })
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "rows": rows,
+    "generatedAt": utc_now(),
+  }
+
+
+def report_json_document(
+  summary: dict[str, Any],
+  records: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage: dict[str, Any],
+  reconciliation: dict[str, Any],
+) -> dict[str, Any]:
+  return {
+    "auditType": "mobile-ux",
+    "schemaVersion": "mobile-ux-hard-gate-v4.5",
+    "status": summary.get("status"),
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "releaseVerdict": summary.get("releaseVerdict"),
+    "mobileQualityScore": summary.get("mobileQualityScore"),
+    "confidenceScore": summary.get("confidenceScore"),
+    "summary": summary,
+    "coverage": coverage,
+    "reconciliation": reconciliation,
+    "execution": {"records": records},
+    "issues": issues,
+    "appendices": {
+      "screenshotManifest": screenshot_manifest_document(records, summary),
+      "focusedPageAppendix": focused_page_appendix_document(summary, records, issues),
+      "repositoryIssueAppendix": repository_issue_appendix_document(summary, issues),
+      "mandatoryMobileScorecard": mandatory_mobile_scorecard_document(records, summary),
+      "responsiveFixAppendix": responsive_fix_appendix_document(summary, issues),
+    },
+    "evidencePolicy": {
+      "allowedLabels": [
+        "Observed Live",
+        "Observed Live (mobile)",
+        "Observed in Markup",
+        "Observed in Repository",
+        "Cross-Source Mismatch",
+        "Reasoned Inference",
+      ],
+      "scoringRule": "No score or release verdict is emitted unless Stage 3 rendered mobile execution is complete.",
+    },
+    "generatedAt": utc_now(),
+  }
 
 
 def coverage_document(routes: list[str], records: list[dict[str, Any]], stage3_blocks: list[dict[str, str]], required_routes: list[dict[str, str]]) -> dict[str, Any]:
@@ -1271,6 +1486,13 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     f"<tr><td>{escape(key)}</td><td>{escape(str(value))}</td></tr>"
     for key, value in summary["preflight"]["capabilities"].items()
   )
+  blocked_tests = summary["preflight"].get("capabilities", {}).get("blockedTests", [])
+  blocked_rows = "".join(
+    f"<tr><td>{escape(str(item.get('capability') or item.get('stage') or item.get('route') or 'mobile UX task'))}</td><td>{escape(str(item.get('reason') or item.get('blocker') or item))}</td></tr>"
+    if isinstance(item, dict)
+    else f"<tr><td>mobile UX task</td><td>{escape(str(item))}</td></tr>"
+    for item in blocked_tests
+  ) or "<tr><td colspan='2'>No blocked tests declared after capability probe.</td></tr>"
   mismatch_rows = "".join(
     f"<tr><td>{escape(item['mismatchId'])}</td><td>{escape(item['intendedState'])}</td><td>{escape(str(item['implementedState']))}</td><td>{escape(str(item['liveState']))}</td><td>{escape(item['remediationOwner'])}</td></tr>"
     for item in reconciliation["crossSourceMismatches"]
@@ -1280,6 +1502,43 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   verification_rows = "".join(f"<tr><td>{escape(name)}</td><td>{html_badge(status)}</td></tr>" for name, status in verification.items())
   report_control = summary["reportControlBlock"]
   control_rows = "".join(f"<tr><td>{escape(key)}</td><td>{escape(str(value))}</td></tr>" for key, value in report_control.items())
+
+  screenshot_manifest = screenshot_manifest_document(records, summary)
+  screenshot_rows = "".join(
+    f"<tr><td><code>{escape(str(item.get('relativePath')))}</code></td><td>{escape(str(item.get('route')))}</td>"
+    f"<td>{escape(str(item.get('viewport')))}px</td><td>{escape(str(item.get('evidenceType')))}</td>"
+    f"<td>{link_for_ref({'relativePath': item.get('relativePath'), 'publicUrl': item.get('publicUrl')})}</td></tr>"
+    for item in screenshot_manifest["screenshots"]
+  ) or "<tr><td colspan='5'>No screenshot references were recorded.</td></tr>"
+
+  mandatory_scorecard = mandatory_mobile_scorecard_document(records, summary)
+  scorecard_rows = "".join(
+    f"<tr><td><code>{escape(str(row.get('route')))}</code></td><td>{escape(str(row.get('viewport')))}px</td>"
+    f"<td>{html_badge(str(row.get('viewportCorrectness')))}</td><td>{html_badge(str(row.get('responsiveCoverage')))}</td>"
+    f"<td>{html_badge(str(row.get('overflow')))}</td><td>{html_badge(str(row.get('touchTargetUsability')))}</td>"
+    f"<td>{html_badge(str(row.get('hamburgerNavigation')))}</td><td>{html_badge(str(row.get('dynamicResizeReflow')))}</td>"
+    f"<td>{html_badge(str(row.get('ctaContinuity')))}</td><td>{html_badge(str(row.get('typographyReadability')))}</td>"
+    f"<td>{html_badge(str(row.get('imageResponsiveness')))}</td><td>{html_badge(str(row.get('formUsability')))}</td>"
+    f"<td>{html_badge(str(row.get('tableComparisonHandling')))}</td></tr>"
+    for row in mandatory_scorecard["rows"]
+  )
+
+  focused_appendix = focused_page_appendix_document(summary, records, issues)
+  focused_rows = "".join(
+    f"<tr><td><code>{escape(str(item.get('route')))}</code></td><td>{escape(str(item.get('templateFamily')))}</td>"
+    f"<td>{escape(str(item.get('viewportRuns')))}</td><td>{escape(str(item.get('failures')))}</td>"
+    f"<td>{escape(', '.join(str(issue) for issue in item.get('issueIds', [])))}</td></tr>"
+    for item in focused_appendix["routes"]
+  )
+
+  responsive_fixes = responsive_fix_appendix_document(summary, issues)
+  fix_rows = "".join(
+    f"<tr><td><code>{escape(str(item.get('issueId')))}</code></td><td>{escape(str(item.get('severity')))}</td>"
+    f"<td>{escape(str(item.get('bestAvailableAnchor')))}</td><td>{escape(str(item.get('currentEvidenceSnippet')))}</td>"
+    f"<td>{escape(str(item.get('exactRemediation')))}</td><td>{escape(str(item.get('effortEstimate')))}</td>"
+    f"<td>{html_list(item.get('verificationRetestSteps', []))}</td></tr>"
+    for item in responsive_fixes["rows"]
+  ) or "<tr><td colspan='7'>No P0/P1 responsive fixes required from this rendered run.</td></tr>"
 
   body = f"""
   <section id="cover">
@@ -1313,6 +1572,27 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   <section id="capabilities">
     <h2>Capability table</h2>
     <table><tbody>{capability_rows}</tbody></table>
+  </section>
+
+  <section id="blocked-tests">
+    <h2>Blocked-tests list</h2>
+    <table class="tight"><thead><tr><th>Task/capability</th><th>Reason</th></tr></thead><tbody>{blocked_rows}</tbody></table>
+  </section>
+
+  <section id="source-inventory">
+    <h2>Source inventory</h2>
+    <table class="tight"><tbody>
+      <tr><th>Workbook source</th><td>{escape(str(summary['preflight']['workbook'].get('filename')))}</td></tr>
+      <tr><th>Repository source</th><td>jonathan-harris-website-main attached repository</td></tr>
+      <tr><th>Live homepage source</th><td>{escape(str(summary['preflight']['liveHomepage'].get('status')))} from {escape(str(summary['preflight']['liveHomepage'].get('title')))}</td></tr>
+      <tr><th>Public partial/layout files inventoried</th><td>{escape(str(len(summary['preflight']['repository'].get('sharedPartialsLayoutHeadHeaderFooterNavigationFiles', []))))}</td></tr>
+      <tr><th>UI script files inventoried</th><td>{escape(str(len(summary['preflight']['repository'].get('uiScripts', []))))}</td></tr>
+    </tbody></table>
+  </section>
+
+  <section id="evidence-taxonomy">
+    <h2>Evidence labels and claim control</h2>
+    <p>Allowed labels: Observed Live, Observed Live (mobile), Observed in Markup, Observed in Repository, Cross-Source Mismatch, Reasoned Inference. Any mobile conclusion in this report is driven by Stage 3 rendered evidence first.</p>
   </section>
 
   <section id="source-of-truth">
@@ -1365,15 +1645,50 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     <table><tbody>{verification_rows}</tbody></table>
   </section>
 
+  <section id="screenshot-manifest">
+    <h2>Screenshot manifest</h2>
+    <p>Screenshot references are mandatory evidence for rendered FAIL records and key rendered PASS confirmations. These links must remain published with the report.</p>
+    <table class="tight"><thead><tr><th>Path</th><th>Route</th><th>Viewport</th><th>Evidence type</th><th>Link</th></tr></thead><tbody>{screenshot_rows}</tbody></table>
+  </section>
+
+  <section id="focused-page-appendix">
+    <h2>Focused Page Appendix</h2>
+    <table class="tight"><thead><tr><th>Route</th><th>Template family</th><th>Viewport runs</th><th>Failures</th><th>Issue IDs</th></tr></thead><tbody>{focused_rows}</tbody></table>
+  </section>
+
+  <section id="repository-issue-appendix">
+    <h2>Repository Issue Appendix</h2>
+    <p>Issues are anchored to rendered evidence first and best-available selector/component/code anchors second. No exact source line is invented where the rendered run cannot prove one.</p>
+    <table class="tight"><thead><tr><th>Issue</th><th>Severity</th><th>Evidence</th><th>Route</th><th>Defect</th><th>Remediation</th><th>Acceptance</th><th>Screenshots</th></tr></thead><tbody>{''.join(issue_rows) or '<tr><td colspan="8">No material repository issue recorded.</td></tr>'}</tbody></table>
+  </section>
+
+  <section id="mandatory-mobile-scorecard">
+    <h2>Mandatory Mobile UX Scorecard</h2>
+    <p>PASS / FAIL values are drawn from rendered Stage 3 execution records. Responsive coverage is derived from overflow and dynamic resize/reflow results.</p>
+    <table class="tight"><thead><tr><th>Route</th><th>Viewport</th><th>Viewport correctness</th><th>Responsive coverage</th><th>Overflow</th><th>Touch</th><th>Hamburger</th><th>Resize</th><th>CTA</th><th>Typography</th><th>Images</th><th>Forms</th><th>Tables</th></tr></thead><tbody>{scorecard_rows}</tbody></table>
+  </section>
+
+  <section id="responsive-fix-appendix">
+    <h2>Responsive Fix Appendix</h2>
+    <p>For P0/P1 issues, the audit records the best rendered anchor and exact remediation contract. It does not fabricate source snippets or replacement code where the browser run cannot deterministically map the defect to a stable source line.</p>
+    <table class="tight"><thead><tr><th>Issue</th><th>Severity</th><th>Best anchor</th><th>Current evidence</th><th>Remediation contract</th><th>Effort</th><th>Retest steps</th></tr></thead><tbody>{fix_rows}</tbody></table>
+  </section>
+
   <section id="artefacts">
     <h2>Machine-readable artefacts</h2>
     <ul>
+      <li><a href="{escape(artefacts.get('report.json', '#'))}">report.json</a></li>
       <li><a href="{escape(artefacts.get('summary.json', '#'))}">summary.json</a></li>
       <li><a href="{escape(artefacts.get('execution.json', '#'))}">execution.json</a></li>
       <li><a href="{escape(artefacts.get('evidence.json', '#'))}">evidence.json</a></li>
       <li><a href="{escape(artefacts.get('preflight.json', '#'))}">preflight.json</a></li>
       <li><a href="{escape(artefacts.get('coverage.json', '#'))}">coverage.json</a></li>
       <li><a href="{escape(artefacts.get('reconciliation.json', '#'))}">reconciliation.json</a></li>
+      <li><a href="{escape(artefacts.get('screenshot-manifest.json', '#'))}">screenshot-manifest.json</a></li>
+      <li><a href="{escape(artefacts.get('focused-page-appendix.json', '#'))}">focused-page-appendix.json</a></li>
+      <li><a href="{escape(artefacts.get('repository-issue-appendix.json', '#'))}">repository-issue-appendix.json</a></li>
+      <li><a href="{escape(artefacts.get('mandatory-mobile-scorecard.json', '#'))}">mandatory-mobile-scorecard.json</a></li>
+      <li><a href="{escape(artefacts.get('responsive-fix-appendix.json', '#'))}">responsive-fix-appendix.json</a></li>
     </ul>
   </section>
 
@@ -1510,7 +1825,6 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
   failure_artifacts = ensure_failure_artifacts(args, output_dir, message, preflight_data, extra)
   hard_gate_blocked = message == HARD_GATE_MESSAGE
   storage_upload_error = str((extra or {}).get("storageUploadError") or "").strip() or None
-  hard_gate_blocked = message == HARD_GATE_MESSAGE
   summary = {
     "ok": False,
     "auditType": "mobile-ux",
@@ -1530,6 +1844,18 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     **(extra or {}),
   }
   write_json(output_dir / "summary.json", summary)
+  write_json(output_dir / "report.json", {
+    "auditType": "mobile-ux",
+    "schemaVersion": "mobile-ux-hard-gate-v4.5",
+    "status": "failed",
+    "message": message,
+    "mobileQualityScore": None,
+    "releaseVerdict": None,
+    "summary": summary,
+    "coverage": failure_artifacts.get("coverage"),
+    "evidence": failure_artifacts.get("evidence"),
+    "generatedAt": now,
+  })
   write_text(output_dir / "halt.txt", message)
   write_text(output_dir / "report.html", failure_report_html(summary, failure_artifacts))
   uploaded: dict[str, str] = {}
@@ -1546,6 +1872,7 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "status": "failed",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html"),
+    "reportJsonUrl": uploaded.get("report.json"),
     "summaryUrl": uploaded.get("summary.json"),
     "preflightUrl": uploaded.get("preflight.json"),
     "evidenceUrl": uploaded.get("evidence.json"),
@@ -1596,22 +1923,22 @@ def main() -> int:
   ]
   write_json(output_dir / "preflight.json", preflight_data)
 
+  if not capabilities["renderedBrowserAutomation"] or not capabilities["screenshotCapture"] or not capabilities["mobileViewportEmulation"] or sync_playwright is None:
+    write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": capabilities["blockedTests"], "skippedRequiredTasksCount": len(capabilities["blockedTests"])})
+    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": capabilities["blockedTests"]}) else 1
+
   missing_r2 = missing_r2_upload_config()
   if missing_r2:
     block = {
       "stage": "R2 audit storage preflight",
       "blocker": f"missing {', '.join(missing_r2)}",
-      "reason": "The GitHub workflow must be able to publish report.html, summary.json, coverage.json, evidence.json, and screenshots to the audits bucket.",
+      "reason": "The GitHub workflow must publish report.html, report.json, summary.json, coverage.json, execution.json, evidence.json, screenshots, and appendices to the audits bucket.",
     }
     preflight_data["storage"] = {"r2UploadConfigured": False, "missing": missing_r2}
     preflight_data["checkpoints"].append(checkpoint("AUDIT STORAGE CHECKPOINT", [], [block], False))
     write_json(output_dir / "preflight.json", preflight_data)
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": [block], "skippedRequiredTasksCount": 1})
     return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"]}, allow_upload=False) else 1
-
-  if not capabilities["renderedBrowserAutomation"] or not capabilities["screenshotCapture"] or not capabilities["mobileViewportEmulation"] or sync_playwright is None:
-    write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": capabilities["blockedTests"], "skippedRequiredTasksCount": len(capabilities["blockedTests"])})
-    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": capabilities["blockedTests"]}) else 1
 
   routes, route_blocks, required_routes = detect_required_routes(REPO_ROOT, workbook_info, excludes)
   preflight_data["requiredMobileRoutes"] = required_routes
@@ -1659,6 +1986,12 @@ def main() -> int:
   write_json(output_dir / "reconciliation.json", reconciliation)
   summary = build_summary(args, preflight_data, routes, records, issues, coverage, reconciliation, started_at)
   write_json(output_dir / "summary.json", summary)
+  write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation))
+  write_json(output_dir / "screenshot-manifest.json", screenshot_manifest_document(records, summary))
+  write_json(output_dir / "focused-page-appendix.json", focused_page_appendix_document(summary, records, issues))
+  write_json(output_dir / "repository-issue-appendix.json", repository_issue_appendix_document(summary, issues))
+  write_json(output_dir / "mandatory-mobile-scorecard.json", mandatory_mobile_scorecard_document(records, summary))
+  write_json(output_dir / "responsive-fix-appendix.json", responsive_fix_appendix_document(summary, issues))
   html = report_html(summary, records, {}, issues, coverage, reconciliation)
   write_text(output_dir / "report.html", html)
 
@@ -1669,6 +2002,7 @@ def main() -> int:
       raise RuntimeError(f"R2 completion upload missing required artefact(s): {', '.join(missing)}")
     html = report_html(summary, records, uploaded, issues, coverage, reconciliation)
     write_text(output_dir / "report.html", html)
+    write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation))
     uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
     missing = missing_required_completion_artefacts(uploaded)
     if missing:
@@ -1683,12 +2017,18 @@ def main() -> int:
     "status": "completed",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html"),
+    "reportJsonUrl": uploaded.get("report.json"),
     "summaryUrl": uploaded.get("summary.json"),
     "executionUrl": uploaded.get("execution.json"),
     "evidenceUrl": uploaded.get("evidence.json"),
     "preflightUrl": uploaded.get("preflight.json"),
     "coverageUrl": uploaded.get("coverage.json"),
     "reconciliationUrl": uploaded.get("reconciliation.json"),
+    "screenshotManifestUrl": uploaded.get("screenshot-manifest.json"),
+    "focusedPageAppendixUrl": uploaded.get("focused-page-appendix.json"),
+    "repositoryIssueAppendixUrl": uploaded.get("repository-issue-appendix.json"),
+    "mandatoryMobileScorecardUrl": uploaded.get("mandatory-mobile-scorecard.json"),
+    "responsiveFixAppendixUrl": uploaded.get("responsive-fix-appendix.json"),
     "screenshotCount": summary["screenshotCount"],
     "mobileFailureCount": summary["mobileFailureCount"],
     "issueCount": summary["issueCount"],
