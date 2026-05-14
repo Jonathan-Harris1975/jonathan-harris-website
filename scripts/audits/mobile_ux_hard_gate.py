@@ -84,6 +84,36 @@ TEXT_SELECTORS = "p, li, h1, h2, h3, h4, label, a, button, small, figcaption"
 CRITICAL_ROUTES = {"/", "/ebooks", "/newsletter", "/contact", "/compare", LIVE_404_ROUTE}
 PASS_SCREENSHOT_ROUTES = {"/", "/ebooks", "/newsletter", "/contact", "/compare", LIVE_404_ROUTE}
 
+SEVERITY_ORDER = {"P0": 0, "P1": 1, "P2": 2, "P3": 3}
+CHECK_GROUP_TITLES = {
+  "viewportCorrectness": "Shared viewport metadata/runtime viewport defect",
+  "responsiveCoverage": "Shared responsive coverage defect",
+  "overflow": "Shared horizontal overflow defect",
+  "hamburgerNavigation": "Shared mobile navigation/hamburger behaviour defect",
+  "touchTargetUsability": "Shared touch-target usability defect",
+  "dynamicResizeReflow": "Shared dynamic resize/reflow defect",
+  "ctaContinuity": "Shared CTA continuity defect",
+  "typographyReadability": "Shared typography/readability defect",
+  "formUsability": "Shared form usability defect",
+  "imageResponsiveness": "Shared image responsiveness defect",
+  "tableComparisonHandling": "Shared table/comparison handling defect",
+  "live404Verification": "Live rendered 404 shell defect",
+}
+CHECK_TO_TECHNICAL_AREA = {
+  "viewportCorrectness": "HTML head / shared partial",
+  "responsiveCoverage": "CSS responsive rules",
+  "overflow": "CSS layout / component sizing",
+  "hamburgerNavigation": "Header navigation JavaScript and CSS",
+  "touchTargetUsability": "CSS controls and interactive spacing",
+  "dynamicResizeReflow": "Responsive CSS and navigation state reset",
+  "ctaContinuity": "CTA markup, routing and overlay behaviour",
+  "typographyReadability": "Responsive typography CSS",
+  "formUsability": "Form markup and CSS",
+  "imageResponsiveness": "Image/CSS asset responsiveness",
+  "tableComparisonHandling": "Comparison/table layout CSS",
+  "live404Verification": "404 route shell and shared layout",
+}
+
 
 class HardGateCapabilityError(RuntimeError):
   """Raised when rendered browser automation, screenshots, or mobile emulation cannot be proven."""
@@ -1176,26 +1206,135 @@ def remediation_for_check(check: str, record: dict[str, Any]) -> str:
   return guidance.get(check, "Fix the affected responsive component, then rerun the same route and viewport in the mobile hard-gate workflow.")
 
 
+
+def normalise_anchor(anchor: str | None) -> str:
+  value = str(anchor or "").strip()
+  if not value or value == "Best available rendered component anchor recorded in details":
+    return "unmapped-rendered-component"
+  return re.sub(r"\s+", " ", value[:180])
+
+
+def severity_for_check(check: str, route: str, viewport: int | str) -> str:
+  width = int(viewport)
+  if check in {"viewportCorrectness", "live404Verification"}:
+    return "P0"
+  if route in CRITICAL_ROUTES and check in {"ctaContinuity", "hamburgerNavigation", "overflow"} and width <= 768:
+    return "P0"
+  if check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability", "imageResponsiveness", "tableComparisonHandling", "typographyReadability", "responsiveCoverage"}:
+    return "P1"
+  return "P2"
+
+
+def worse_severity(left: str, right: str) -> str:
+  return left if SEVERITY_ORDER.get(left, 99) <= SEVERITY_ORDER.get(right, 99) else right
+
+
+def route_source_path(route: str, repo_root: Path = REPO_ROOT) -> str:
+  if route == LIVE_404_ROUTE:
+    candidate = repo_root / "404.html"
+    return "404.html" if candidate.exists() else "live route only - no static 404.html anchor found"
+  if route in {"", "/"}:
+    return "index.html"
+  candidate = repo_root / route.strip("/") / "index.html"
+  if candidate.exists():
+    return candidate.relative_to(repo_root).as_posix()
+  html_candidate = repo_root / f"{route.strip('/')}.html"
+  if html_candidate.exists():
+    return html_candidate.relative_to(repo_root).as_posix()
+  return f"{route.strip('/') or 'index'}/index.html (not found in repository snapshot)"
+
+
+def source_anchor_candidates(anchor: str | None) -> list[str]:
+  raw = str(anchor or "").strip()
+  if not raw:
+    return []
+  candidates = [raw]
+  if raw.startswith("."):
+    token = raw[1:].split()[0].split(":")[0]
+    candidates.extend([f".{token}", token, f'class="{token}', f"class='{token}"])
+  elif raw.startswith("#"):
+    token = raw[1:].split()[0].split(":")[0]
+    candidates.extend([f"#{token}", f'id="{token}"', f"id='{token}'"])
+  return [item for item in dict.fromkeys(candidates) if item]
+
+
+def snippet_around(text: str, needle: str, radius: int = 420) -> str | None:
+  pos = text.find(needle)
+  if pos < 0:
+    return None
+  start = max(0, pos - radius)
+  end = min(len(text), pos + len(needle) + radius)
+  snippet = text[start:end].strip()
+  return snippet[:1200]
+
+
+def source_snippet_for_anchor(route: str, anchor: str | None, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
+  candidate_paths = []
+  route_path = route_source_path(route, repo_root)
+  if "not found" not in route_path and "live route only" not in route_path:
+    candidate_paths.append(route_path)
+  candidate_paths.extend([
+    "assets/css/site.css",
+    "assets/js/site.js",
+    "assets/js/main.js",
+    "assets/partials/header.html",
+    "assets/partials/head.html",
+    "assets/partials/footer.html",
+  ])
+  needles = source_anchor_candidates(anchor)
+  for relative in dict.fromkeys(candidate_paths):
+    path = repo_root / relative
+    if not path.exists() or path.is_dir():
+      continue
+    content = read_text_preview(path, 250_000)
+    if not needles:
+      return {
+        "available": True,
+        "filePath": relative,
+        "snippet": content[:1000],
+        "matchType": "route-source-preview",
+      }
+    for needle in needles:
+      snippet = snippet_around(content, needle)
+      if snippet:
+        return {
+          "available": True,
+          "filePath": relative,
+          "snippet": snippet,
+          "matchType": f"anchor match: {needle}",
+        }
+  return {
+    "available": False,
+    "filePath": route_path,
+    "reasonExactReplacementUnavailable": "The rendered browser evidence did not map deterministically to an exact stable source snippet in this repository snapshot. No line number or replacement code has been invented.",
+  }
+
+
+def group_key_for_issue(issue: dict[str, Any]) -> tuple[str, str, str]:
+  anchor = normalise_anchor(issue.get("bestAvailableCodeAnchor") or issue.get("selectorComponentCodeAnchor"))
+  check = str(issue.get("check") or "mobileUx")
+  template = str(issue.get("templateFamily") or detect_template_family(issue.get("route") or "/"))
+  shared_component_checks = {"hamburgerNavigation", "ctaContinuity", "overflow", "typographyReadability", "imageResponsiveness", "touchTargetUsability", "dynamicResizeReflow"}
+  if check in shared_component_checks and anchor != "unmapped-rendered-component":
+    template = "shared-component"
+  return (check, template, anchor)
+
+
 def build_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-  issues = []
+  pending: list[dict[str, Any]] = []
   for record in records:
     failed = [name for name, status in record.get("checks", {}).items() if status == "FAIL"]
     for check in failed:
       route = record["route"]
-      severity = "P1"
-      if check in {"viewportCorrectness", "live404Verification"}:
-        severity = "P0"
-      elif route in CRITICAL_ROUTES and check in {"ctaContinuity", "hamburgerNavigation", "overflow"} and int(record["viewport"]) <= 768:
-        severity = "P0"
-      elif check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability"}:
-        severity = "P1"
-      issue_id = f"MUX-{len(issues) + 1:03d}"
+      severity = severity_for_check(check, route, record["viewport"])
       remediation = remediation_for_check(check, record)
-      issues.append({
-        "issueId": issue_id,
+      pending.append({
+        "issueId": f"MUX-{len(pending) + 1:03d}",
+        "groupId": None,
         "exactUrlOrFilePath": record["url"],
         "route": route,
         "viewport": record["viewport"],
+        "templateFamily": record.get("templateFamily") or detect_template_family(route),
         "check": check,
         "defectDescription": f"{check} failed during rendered mobile execution.",
         "evidenceLabel": "Observed Live (mobile)",
@@ -1204,11 +1343,77 @@ def build_issues(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
         "exactRemediation": remediation,
         "ownerClass": "Website frontend / static site implementation",
         "acceptanceCriteria": f"{check} returns PASS for {route} at {record['viewport']}px and any failure screenshot is superseded by a passing screenshot.",
-        "verificationMethod": "Rerun POST /audits/mobile-ux/run and confirm execution.json plus report.html show PASS for the affected check.",
-        "selectorComponentCodeAnchor": record.get("selectorComponentCodeAnchor"),
+        "verificationMethod": "Rerun POST /audits/mobile-ux/run and confirm execution.json plus mandatory-mobile-scorecard.json show PASS for the affected route, viewport, and check.",
         "screenshotRefs": record.get("screenshotRefs", []),
+        "bestAvailableCodeAnchor": record.get("selectorComponentCodeAnchor") or "Best available rendered component anchor recorded in execution details",
+        "selectorComponentCodeAnchor": record.get("selectorComponentCodeAnchor"),
+        "affectedFilePath": route_source_path(route),
       })
-  return issues
+
+  key_to_group: dict[tuple[str, str, str], str] = {}
+  for issue in pending:
+    key = group_key_for_issue(issue)
+    if key not in key_to_group:
+      key_to_group[key] = f"MUX-G{len(key_to_group) + 1:03d}"
+    issue["groupId"] = key_to_group[key]
+  return pending
+
+
+def root_cause_groups_document(issues: list[dict[str, Any]], records: list[dict[str, Any]] | None = None, summary: dict[str, Any] | None = None) -> dict[str, Any]:
+  grouped: dict[str, list[dict[str, Any]]] = {}
+  for issue in issues:
+    grouped.setdefault(str(issue.get("groupId") or "MUX-G000"), []).append(issue)
+
+  groups = []
+  for group_id in sorted(grouped):
+    group_issues = grouped[group_id]
+    checks = sorted({str(issue.get("check")) for issue in group_issues if issue.get("check")})
+    routes = sorted({str(issue.get("route")) for issue in group_issues if issue.get("route")})
+    route_families = sorted({str(issue.get("templateFamily")) for issue in group_issues if issue.get("templateFamily")})
+    viewports = sorted({int(issue.get("viewport")) for issue in group_issues if str(issue.get("viewport", "")).isdigit()})
+    severity = "P3"
+    for issue in group_issues:
+      severity = worse_severity(str(issue.get("severity") or "P3"), severity)
+    screenshots = []
+    seen_screens = set()
+    for issue in group_issues:
+      for ref in issue.get("screenshotRefs", []):
+        key = ref.get("relativePath") or ref.get("publicUrl")
+        if key and key not in seen_screens:
+          seen_screens.add(key)
+          screenshots.append(ref)
+    first = group_issues[0]
+    anchor = first.get("bestAvailableCodeAnchor") or first.get("selectorComponentCodeAnchor") or "Best available rendered component anchor recorded in details"
+    source = source_snippet_for_anchor(str(first.get("route") or "/"), str(anchor))
+    groups.append({
+      "groupId": group_id,
+      "title": CHECK_GROUP_TITLES.get(checks[0], "Shared mobile UX defect") if len(checks) == 1 else "Shared mobile UX defect cluster",
+      "affectedRouteFamilies": route_families,
+      "affectedRoutes": routes,
+      "affectedUrlCount": len(routes),
+      "affectedViewportRange": f"{min(viewports)}-{max(viewports)}px" if viewports else "not recorded",
+      "failedMetricTypes": checks,
+      "severity": severity,
+      "evidenceLabel": "Observed Live (mobile)",
+      "representativeScreenshots": screenshots[:6],
+      "bestAvailableCodeAnchor": anchor,
+      "bestAvailableSource": source,
+      "consequence": first.get("consequence"),
+      "exactRemediation": first.get("exactRemediation"),
+      "acceptanceCriteria": f"All linked issues in {group_id} return PASS in mandatory-mobile-scorecard.json across affected routes and viewport bands.",
+      "verificationMethod": "Rerun the Mobile UX hard-gate workflow and compare execution.json, screenshot-manifest.json, and mandatory-mobile-scorecard.json for the linked group issue IDs.",
+      "linkedIssueIds": [issue.get("issueId") for issue in group_issues],
+      "detailedAppendixReference": "repository-issue-appendix.json",
+    })
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId") if summary else None,
+    "reportPrefix": summary.get("reportPrefix") if summary else None,
+    "groupCount": len(groups),
+    "groups": groups,
+    "groupingPolicy": "Deterministic grouping by failed metric, template/shared-component family, and best available rendered selector/component anchor. Raw per-viewport records remain in execution.json and mandatory-mobile-scorecard.json.",
+    "generatedAt": utc_now(),
+  }
 
 
 def screenshot_manifest_document(records: list[dict[str, Any]], summary: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -1300,6 +1505,7 @@ def focused_page_appendix_document(summary: dict[str, Any], records: list[dict[s
       "viewports": sorted(record.get("viewport") for record in route_records),
       "failures": sum(1 for record in route_records if any(status == "FAIL" for status in record.get("checks", {}).values())),
       "issueIds": [issue.get("issueId") for issue in route_issues],
+      "groupIds": sorted({str(issue.get("groupId")) for issue in route_issues if issue.get("groupId")}),
       "screenshotRefs": screenshots,
     })
   return {
@@ -1318,30 +1524,48 @@ def repository_issue_appendix_document(summary: dict[str, Any], issues: list[dic
     "sessionId": summary.get("sessionId"),
     "reportPrefix": summary.get("reportPrefix"),
     "issueCount": len(issues),
+    "groupCount": len({issue.get("groupId") for issue in issues if issue.get("groupId")}),
     "issues": issues,
     "generatedAt": utc_now(),
   }
 
 
-def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[str, Any]]) -> dict[str, Any]:
+def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[str, Any]], records: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+  groups = root_cause_groups_document(issues, records or [], summary)["groups"]
   rows = []
-  for issue in issues:
-    if issue.get("severity") not in {"P0", "P1"}:
+  for group in groups:
+    if group.get("severity") not in {"P0", "P1"}:
       continue
+    source = group.get("bestAvailableSource") if isinstance(group.get("bestAvailableSource"), dict) else {}
+    snippets_available = bool(source.get("available"))
+    current = source.get("snippet") if snippets_available else source.get("reasonExactReplacementUnavailable")
+    first_issue = next((issue for issue in issues if issue.get("issueId") in group.get("linkedIssueIds", [])), {})
     rows.append({
-      "issueId": issue.get("issueId"),
-      "severity": issue.get("severity"),
-      "filePathOrUrl": issue.get("exactUrlOrFilePath"),
-      "bestAvailableAnchor": issue.get("selectorComponentCodeAnchor"),
-      "currentEvidenceSnippet": issue.get("selectorComponentCodeAnchor") or "Rendered defect evidence is available in execution.json; exact source snippet was not deterministically mapped.",
-      "correctedReplacementCode": "Not auto-generated. Use the exactRemediation field as the implementation contract, then commit the smallest source-level CSS/HTML/JS change in the website repo.",
-      "exactRemediation": issue.get("exactRemediation"),
-      "effortEstimate": "S (<2 hrs)" if issue.get("severity") == "P1" else "M (2-8 hrs)",
-      "verificationRetestSteps": [
-        f"Rerun Mobile UX audit for {issue.get('route')} at {issue.get('viewport')}px.",
-        f"Confirm {issue.get('check') or 'the failed check'} returns PASS in mandatory-mobile-scorecard.json.",
-        "Confirm any old failure screenshot is superseded by a passing screenshot reference.",
+      "fixId": f"FIX-{group.get('groupId')}",
+      "linkedGroupId": group.get("groupId"),
+      "linkedIssueIds": group.get("linkedIssueIds", []),
+      "severity": group.get("severity"),
+      "affectedFilePath": source.get("filePath") or first_issue.get("affectedFilePath") or first_issue.get("exactUrlOrFilePath"),
+      "bestAvailableCodeAnchor": group.get("bestAvailableCodeAnchor"),
+      "currentCodeOrClosestRelevantSnippet": current,
+      "proposedReplacementCodeOrPatchInstruction": (
+        "Exact replacement code is unavailable because the rendered failure cannot be deterministically mapped to a single stable source block. "
+        f"Apply this patch instruction instead: {group.get('exactRemediation')}"
+      ) if not snippets_available else (
+        f"Patch the shown source block using the smallest CSS/HTML/JS change that satisfies: {group.get('exactRemediation')}"
+      ),
+      "cssJsTemplateAreaAffected": CHECK_TO_TECHNICAL_AREA.get((group.get("failedMetricTypes") or [""])[0], "Website frontend"),
+      "effortEstimate": "M (2-8 hrs)" if group.get("severity") == "P0" else "S (<2 hrs)",
+      "riskLevel": "High" if group.get("severity") == "P0" else "Medium",
+      "acceptanceCriteria": group.get("acceptanceCriteria"),
+      "viewportRetestSteps": [
+        f"Rerun Mobile UX audit and filter mandatory-mobile-scorecard.json for group {group.get('groupId')} linked issues.",
+        f"Confirm affected viewport band {group.get('affectedViewportRange')} returns PASS for {', '.join(group.get('failedMetricTypes') or [])}.",
+        "Confirm screenshot-manifest.json contains fresh passing evidence or the old failure screenshot is no longer linked from active failures.",
       ],
+      "screenshotReferences": group.get("representativeScreenshots", []),
+      "manualRemediationReason": None if snippets_available else source.get("reasonExactReplacementUnavailable"),
+      "verificationMethod": group.get("verificationMethod"),
     })
   return {
     "auditType": "mobile-ux",
@@ -1358,27 +1582,47 @@ def report_json_document(
   issues: list[dict[str, Any]],
   coverage: dict[str, Any],
   reconciliation: dict[str, Any],
+  artefacts: dict[str, str] | None = None,
 ) -> dict[str, Any]:
+  root_groups = root_cause_groups_document(issues, records, summary)
   return {
     "auditType": "mobile-ux",
-    "schemaVersion": "mobile-ux-hard-gate-v4.5",
+    "schemaVersion": "mobile-ux-hard-gate-v5.0-executive-groups",
     "status": summary.get("status"),
     "sessionId": summary.get("sessionId"),
     "reportPrefix": summary.get("reportPrefix"),
     "releaseVerdict": summary.get("releaseVerdict"),
     "mobileQualityScore": summary.get("mobileQualityScore"),
-    "confidenceScore": summary.get("confidenceScore"),
+    "confidenceModel": summary.get("confidenceModel"),
     "summary": summary,
     "coverage": coverage,
     "reconciliation": reconciliation,
-    "execution": {"records": records},
+    "rootCauseGroups": root_groups,
+    "issueSummaries": [
+      {
+        "issueId": issue.get("issueId"),
+        "groupId": issue.get("groupId"),
+        "severity": issue.get("severity"),
+        "route": issue.get("route"),
+        "viewport": issue.get("viewport"),
+        "check": issue.get("check"),
+        "evidenceLabel": issue.get("evidenceLabel"),
+        "bestAvailableCodeAnchor": issue.get("bestAvailableCodeAnchor"),
+      }
+      for issue in issues
+    ],
+    "execution": {
+      "records": records,
+      "rawRecordsPolicy": "Full raw per-route and per-viewport Mobile Execution Records are intentionally kept in report.json/execution.json and summarised, not dumped, in report.html.",
+    },
     "issues": issues,
+    "appendixLinks": artefacts or summary.get("artefactUrls") or {},
     "appendices": {
       "screenshotManifest": screenshot_manifest_document(records, summary),
       "focusedPageAppendix": focused_page_appendix_document(summary, records, issues),
       "repositoryIssueAppendix": repository_issue_appendix_document(summary, issues),
       "mandatoryMobileScorecard": mandatory_mobile_scorecard_document(records, summary),
-      "responsiveFixAppendix": responsive_fix_appendix_document(summary, issues),
+      "responsiveFixAppendix": responsive_fix_appendix_document(summary, issues, records),
     },
     "evidencePolicy": {
       "allowedLabels": [
@@ -1390,10 +1634,10 @@ def report_json_document(
         "Reasoned Inference",
       ],
       "scoringRule": "No score or release verdict is emitted unless Stage 3 rendered mobile execution is complete.",
+      "unsupportedClaimRule": "Visual design, cover-art, brand, and tone claims are not marked FAIL unless deterministic evidence directly supports the exact claim.",
     },
     "generatedAt": utc_now(),
   }
-
 
 def coverage_document(routes: list[str], records: list[dict[str, Any]], stage3_blocks: list[dict[str, str]], required_routes: list[dict[str, str]]) -> dict[str, Any]:
   by_route = []
@@ -1456,37 +1700,51 @@ def link_for_ref(ref: dict[str, str | None]) -> str:
   return rel or "—"
 
 
+
+def status_text(value: Any) -> str:
+  if isinstance(value, dict):
+    return str(value.get("status") or "BLOCKED")
+  return str(value)
+
+
+def status_evidence(value: Any) -> str:
+  if isinstance(value, dict):
+    return str(value.get("evidence") or value.get("source") or "")
+  return ""
+
+
 def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefacts: dict[str, str], issues: list[dict[str, Any]], coverage: dict[str, Any], reconciliation: dict[str, Any]) -> str:
   totals = pass_fail_totals(records)
   score = summary.get("mobileQualityScore")
   verdict = summary.get("releaseVerdict")
-  critical = [issue for issue in issues if issue["severity"] == "P0"]
-  p1 = [issue for issue in issues if issue["severity"] == "P1"]
+  root_groups_doc = root_cause_groups_document(issues, records, summary)
+  root_groups = root_groups_doc["groups"]
+  critical_groups = [group for group in root_groups if group.get("severity") == "P0"]
+  p1_groups = [group for group in root_groups if group.get("severity") == "P1"]
+  confidence = summary.get("confidenceModel") or {}
+
   score_rows = "".join(
     f"<tr><td>{escape(name)}</td><td>{weight}</td><td>{escape(str(value))}</td><td>{escape(note)}</td></tr>"
     for name, weight, value, note in summary["weightedScorecard"]
   )
-  record_rows = []
-  for record in records:
-    checks = record["checks"]
-    failed = [name for name, status in checks.items() if status == "FAIL"]
-    screenshot_links = "<br>".join(link_for_ref(ref) for ref in record.get("screenshotRefs", [])) or "—"
-    checks_html = "<br>".join(f"{escape(key)}: {html_badge(value)}" for key, value in checks.items())
-    record_rows.append(
-      f"<tr><td><code>{escape(record['route'])}</code><br><small>{escape(record['url'])}</small></td>"
-      f"<td>{escape(record['templateFamily'])}</td><td>{record['viewport']}</td>"
-      f"<td>{html_badge('PASS' if not failed else 'FAIL')}</td><td>{checks_html}</td>"
-      f"<td>{escape(record.get('defectSummary', ''))}</td><td>{screenshot_links}</td></tr>"
-    )
 
-  issue_rows = []
-  for issue in issues[:160]:
-    screenshots = "<br>".join(link_for_ref(ref) for ref in issue.get("screenshotRefs", [])) or "—"
-    issue_rows.append(
-      f"<tr><td><code>{escape(issue['issueId'])}</code></td><td>{escape(issue['severity'])}</td>"
-      f"<td>{escape(issue['evidenceLabel'])}</td><td>{escape(issue['route'])}<br><small>{escape(str(issue['viewport']))}px</small></td>"
-      f"<td>{escape(issue['defectDescription'])}<br><small>{escape(issue['selectorComponentCodeAnchor'] or '')}</small></td>"
-      f"<td>{escape(issue['exactRemediation'])}</td><td>{escape(issue['acceptanceCriteria'])}</td><td>{screenshots}</td></tr>"
+  confidence_rows = "".join(
+    f"<tr><td>{escape(str(key))}</td><td>{escape(str(value.get('status') if isinstance(value, dict) else value))}</td>"
+    f"<td>{escape(str(value.get('evidence') if isinstance(value, dict) else ''))}</td></tr>"
+    for key, value in confidence.items()
+  ) or "<tr><td colspan='3'>Confidence model was not supplied.</td></tr>"
+
+  group_rows = []
+  for group in root_groups:
+    screenshots = "<br>".join(link_for_ref(ref) for ref in group.get("representativeScreenshots", [])) or "—"
+    source = group.get("bestAvailableSource") if isinstance(group.get("bestAvailableSource"), dict) else {}
+    source_label = source.get("filePath") or group.get("bestAvailableCodeAnchor") or "—"
+    group_rows.append(
+      f"<tr><td><code>{escape(str(group['groupId']))}</code></td><td>{escape(str(group['title']))}</td>"
+      f"<td>{escape(str(group['severity']))}</td><td>{escape(', '.join(group.get('affectedRouteFamilies') or []))}</td>"
+      f"<td>{escape(str(group.get('affectedUrlCount')))}</td><td>{escape(str(group.get('affectedViewportRange')))}</td>"
+      f"<td>{escape(', '.join(group.get('failedMetricTypes') or []))}</td><td>{escape(str(source_label))}</td>"
+      f"<td>{escape(str(group.get('exactRemediation')))}</td><td>{screenshots}</td></tr>"
     )
 
   capability_rows = "".join(
@@ -1506,7 +1764,10 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   ) or "<tr><td colspan='5'>No material cross-source mismatch recorded during preflight.</td></tr>"
 
   verification = summary["verificationMatrix"]
-  verification_rows = "".join(f"<tr><td>{escape(name)}</td><td>{html_badge(status)}</td></tr>" for name, status in verification.items())
+  verification_rows = "".join(
+    f"<tr><td>{escape(name)}</td><td>{html_badge(status_text(value))}</td><td>{escape(status_evidence(value))}</td></tr>"
+    for name, value in verification.items()
+  )
   report_control = summary["reportControlBlock"]
   control_rows = "".join(f"<tr><td>{escape(key)}</td><td>{escape(str(value))}</td></tr>" for key, value in report_control.items())
 
@@ -1515,65 +1776,81 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     f"<tr><td><code>{escape(str(item.get('relativePath')))}</code></td><td>{escape(str(item.get('route')))}</td>"
     f"<td>{escape(str(item.get('viewport')))}px</td><td>{escape(str(item.get('evidenceType')))}</td>"
     f"<td>{link_for_ref({'relativePath': item.get('relativePath'), 'publicUrl': item.get('publicUrl')})}</td></tr>"
-    for item in screenshot_manifest["screenshots"]
+    for item in screenshot_manifest["screenshots"][:80]
   ) or "<tr><td colspan='5'>No screenshot references were recorded.</td></tr>"
-
-  mandatory_scorecard = mandatory_mobile_scorecard_document(records, summary)
-  scorecard_rows = "".join(
-    f"<tr><td><code>{escape(str(row.get('route')))}</code></td><td>{escape(str(row.get('viewport')))}px</td>"
-    f"<td>{html_badge(str(row.get('viewportCorrectness')))}</td><td>{html_badge(str(row.get('responsiveCoverage')))}</td>"
-    f"<td>{html_badge(str(row.get('overflow')))}</td><td>{html_badge(str(row.get('touchTargetUsability')))}</td>"
-    f"<td>{html_badge(str(row.get('hamburgerNavigation')))}</td><td>{html_badge(str(row.get('dynamicResizeReflow')))}</td>"
-    f"<td>{html_badge(str(row.get('ctaContinuity')))}</td><td>{html_badge(str(row.get('typographyReadability')))}</td>"
-    f"<td>{html_badge(str(row.get('imageResponsiveness')))}</td><td>{html_badge(str(row.get('formUsability')))}</td>"
-    f"<td>{html_badge(str(row.get('tableComparisonHandling')))}</td></tr>"
-    for row in mandatory_scorecard["rows"]
-  )
 
   focused_appendix = focused_page_appendix_document(summary, records, issues)
   focused_rows = "".join(
-    f"<tr><td><code>{escape(str(item.get('route')))}</code></td><td>{escape(str(item.get('templateFamily')))}</td>"
-    f"<td>{escape(str(item.get('viewportRuns')))}</td><td>{escape(str(item.get('failures')))}</td>"
-    f"<td>{escape(', '.join(str(issue) for issue in item.get('issueIds', [])))}</td></tr>"
-    for item in focused_appendix["routes"]
+    f"<tr><td><code>{escape(str(row.get('route')))}</code></td><td>{escape(str(row.get('templateFamily')))}</td>"
+    f"<td>{escape(str(row.get('viewportRuns')))}</td><td>{escape(str(row.get('failures')))}</td>"
+    f"<td>{escape(', '.join(str(item) for item in row.get('groupIds') or []))}</td></tr>"
+    for row in focused_appendix["routes"][:80]
+  ) or "<tr><td colspan='5'>No focused page records were generated.</td></tr>"
+
+  mandatory_scorecard = mandatory_mobile_scorecard_document(records, summary)
+  family_counter: dict[tuple[str, str], dict[str, int]] = {}
+  for row in mandatory_scorecard["rows"]:
+    key = (str(row.get("templateFamily")), str(row.get("viewport")))
+    family_counter.setdefault(key, {"runs": 0, "failRows": 0})
+    family_counter[key]["runs"] += 1
+    if any(row.get(check) == "FAIL" for check in ["viewportCorrectness", "responsiveCoverage", "overflow", "touchTargetUsability", "hamburgerNavigation", "dynamicResizeReflow", "ctaContinuity", "typographyReadability", "imageResponsiveness", "formUsability", "tableComparisonHandling"]):
+      family_counter[key]["failRows"] += 1
+  scorecard_rows = "".join(
+    f"<tr><td>{escape(template)}</td><td>{escape(viewport)}px</td><td>{counts['runs']}</td><td>{counts['failRows']}</td></tr>"
+    for (template, viewport), counts in sorted(family_counter.items())
+  ) or "<tr><td colspan='4'>No rendered scorecard rows were recorded.</td></tr>"
+
+  fix_appendix = responsive_fix_appendix_document(summary, issues, records)
+  fix_rows = "".join(
+    f"<tr><td><code>{escape(str(row.get('fixId')))}</code></td><td>{escape(str(row.get('severity')))}</td>"
+    f"<td>{escape(str(row.get('linkedGroupId')))}</td><td>{escape(str(row.get('affectedFilePath')))}</td>"
+    f"<td>{escape(str(row.get('bestAvailableCodeAnchor')))}</td><td>{escape(str(row.get('proposedReplacementCodeOrPatchInstruction')))}</td>"
+    f"<td>{escape(str(row.get('effortEstimate')))}</td><td>{escape(' | '.join(str(step) for step in row.get('viewportRetestSteps') or []))}</td></tr>"
+    for row in fix_appendix["rows"]
+  ) or "<tr><td colspan='8'>No P0/P1 responsive fixes were generated.</td></tr>"
+
+  issue_preview_rows = "".join(
+    f"<tr><td><code>{escape(str(issue.get('issueId')))}</code></td><td><code>{escape(str(issue.get('groupId')))}</code></td>"
+    f"<td>{escape(str(issue.get('severity')))}</td><td>{escape(str(issue.get('route')))}<br><small>{escape(str(issue.get('viewport')))}px</small></td>"
+    f"<td>{escape(str(issue.get('check')))}</td><td>{escape(str(issue.get('bestAvailableCodeAnchor')))}</td></tr>"
+    for issue in issues[:50]
+  ) or "<tr><td colspan='6'>No material repository issue recorded.</td></tr>"
+
+  artefact_items = "".join(
+    f"<li><a href=\"{escape(str(artefacts.get(name, '#')))}\">{escape(name)}</a></li>"
+    for name in [
+      "report.html", "report.json", "summary.json", "execution.json", "evidence.json", "preflight.json", "coverage.json", "screenshot-manifest.json", "focused-page-appendix.json", "repository-issue-appendix.json", "mandatory-mobile-scorecard.json", "responsive-fix-appendix.json",
+    ]
   )
 
-  responsive_fixes = responsive_fix_appendix_document(summary, issues)
-  fix_rows = "".join(
-    f"<tr><td><code>{escape(str(item.get('issueId')))}</code></td><td>{escape(str(item.get('severity')))}</td>"
-    f"<td>{escape(str(item.get('bestAvailableAnchor')))}</td><td>{escape(str(item.get('currentEvidenceSnippet')))}</td>"
-    f"<td>{escape(str(item.get('exactRemediation')))}</td><td>{escape(str(item.get('effortEstimate')))}</td>"
-    f"<td>{html_list(item.get('verificationRetestSteps', []))}</td></tr>"
-    for item in responsive_fixes["rows"]
-  ) or "<tr><td colspan='7'>No P0/P1 responsive fixes required from this rendered run.</td></tr>"
-
   body = f"""
-  <section id="cover">
-    <h2>Cover</h2>
-    <p><strong>Audit source:</strong> Deterministic mobile UX hard-gate service.</p>
-    <p><strong>Session:</strong> <code>{escape(summary['sessionId'])}</code></p>
-    <p><strong>Report prefix:</strong> <code>{escape(summary['reportPrefix'])}</code></p>
-    <p><strong>Final verdict:</strong> {html_badge(verdict)}</p>
+  <section class="cover">
+    <h1>Jonathan Harris Mobile UX Hard-Gate Audit</h1>
+    <p class="lead">Executive-grade rendered mobile UX report for <strong>{escape(summary['sessionId'])}</strong>.</p>
+    <p>{html_badge(verdict)} <strong>Mobile quality score:</strong> {escape(str(score))}</p>
+    <p class="section-note">The executive layer groups repeated viewport failures into root-cause findings. Raw per-viewport records remain in execution.json and the structured appendices.</p>
   </section>
 
   <section id="executive-summary">
     <h2>Executive summary</h2>
-    <div class="grid">
-      <div class="kpi"><strong>Rendered pages</strong><div>{summary['renderedPages']}</div></div>
-      <div class="kpi"><strong>Viewport runs</strong><div>{summary['viewportRuns']}</div></div>
-      <div class="kpi"><strong>Screenshots</strong><div>{summary['screenshotCount']}</div></div>
-      <div class="kpi"><strong>Mobile failures</strong><div>{summary['mobileFailureCount']}</div></div>
-      <div class="kpi"><strong>Mobile quality score</strong><div>{score}</div></div>
-      <div class="kpi"><strong>Confidence</strong><div>{summary['confidenceScore']}</div></div>
-    </div>
-    <p>Evidence label: Observed Live (mobile). This report is generated only after every required Stage 3 route and viewport has a recorded execution result.</p>
+    <p>Stage 3 rendered mobile execution completed across {summary['renderedPages']} rendered URL(s) and {summary['viewportRuns']} viewport run(s). The run recorded {summary['mobileFailureCount']} failing viewport record(s), synthesised into {root_groups_doc['groupCount']} root-cause group(s).</p>
+    <p><strong>Commercial decision:</strong> {escape(str(verdict))}. P0 groups: {len(critical_groups)}. P1 groups: {len(p1_groups)}. Screenshots retained: {summary['screenshotCount']}.</p>
+  </section>
+
+  <section id="scope-summary">
+    <h2>Scope summary</h2>
+    <table class="tight"><tbody>
+      <tr><th>Workbook URL inventory</th><td>{escape(str(report_control.get('workbook URL inventory count')))}</td></tr>
+      <tr><th>Primary URL count</th><td>{escape(str(report_control.get('primary URL count')))}</td></tr>
+      <tr><th>Rendered mobile URLs checked</th><td>{escape(str(report_control.get('rendered mobile URLs checked')))}</td></tr>
+      <tr><th>Focused pages audited</th><td>{escape(str(report_control.get('focused pages audited')))}</td></tr>
+      <tr><th>Exception sweep URLs checked</th><td>{escape(str(report_control.get('exception sweep URLs checked')))}</td></tr>
+    </tbody></table>
   </section>
 
   <section id="preflight">
     <h2>Preflight evidence summary</h2>
-    <p><strong>Workbook:</strong> <code>{escape(summary['preflight']['workbook']['filename'])}</code>, primary sheet <code>{escape(str(summary['preflight']['workbook']['primarySheet']))}</code>, header row {summary['preflight']['workbook']['headerRow']}, URL count {summary['preflight']['workbook']['urlCount']}.</p>
-    <p><strong>Live homepage:</strong> status {summary['preflight']['liveHomepage']['status']}; viewport <code>{escape(summary['preflight']['liveHomepage']['viewport'])}</code>; title <code>{escape(summary['preflight']['liveHomepage']['title'])}</code>.</p>
-    <p><strong>Repository:</strong> {summary['preflight']['repository']['totalFiles']} files, {summary['preflight']['repository']['mediaQueryCount']} media queries, {summary['preflight']['repository']['containerQueryCount']} container queries.</p>
+    <p>Live homepage status: {escape(str(summary['preflight']['liveHomepage'].get('status')))}. Repository files reviewed: {escape(str(summary['preflight']['repository'].get('totalFiles')))}. Media queries: {escape(str(summary['preflight']['repository'].get('mediaQueryCount')))}. Container queries: {escape(str(summary['preflight']['repository'].get('containerQueryCount')))}.</p>
   </section>
 
   <section id="capabilities">
@@ -1583,120 +1860,132 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
 
   <section id="blocked-tests">
     <h2>Blocked-tests list</h2>
-    <table class="tight"><thead><tr><th>Task/capability</th><th>Reason</th></tr></thead><tbody>{blocked_rows}</tbody></table>
+    <table class="tight"><thead><tr><th>Capability/task</th><th>Evidence</th></tr></thead><tbody>{blocked_rows}</tbody></table>
   </section>
 
   <section id="source-inventory">
     <h2>Source inventory</h2>
-    <table class="tight"><tbody>
-      <tr><th>Workbook source</th><td>{escape(str(summary['preflight']['workbook'].get('filename')))}</td></tr>
-      <tr><th>Repository source</th><td>jonathan-harris-website-main attached repository</td></tr>
-      <tr><th>Live homepage source</th><td>{escape(str(summary['preflight']['liveHomepage'].get('status')))} from {escape(str(summary['preflight']['liveHomepage'].get('title')))}</td></tr>
-      <tr><th>Public partial/layout files inventoried</th><td>{escape(str(len(summary['preflight']['repository'].get('sharedPartialsLayoutHeadHeaderFooterNavigationFiles', []))))}</td></tr>
-      <tr><th>UI script files inventoried</th><td>{escape(str(len(summary['preflight']['repository'].get('uiScripts', []))))}</td></tr>
-    </tbody></table>
+    <p>Workbook: {escape(summary['preflight']['workbook']['filename'])}; primary sheet: {escape(str(summary['preflight']['workbook'].get('primarySheet')))}; header row: {escape(str(summary['preflight']['workbook'].get('headerRow')))}.</p>
   </section>
 
-  <section id="evidence-taxonomy">
-    <h2>Evidence labels and claim control</h2>
-    <p>Allowed labels: Observed Live, Observed Live (mobile), Observed in Markup, Observed in Repository, Cross-Source Mismatch, Reasoned Inference. Any mobile conclusion in this report is driven by Stage 3 rendered evidence first.</p>
+  <section id="variance-register">
+    <h2>Source-of-truth variance / mismatch register</h2>
+    <table class="tight"><thead><tr><th>ID</th><th>Intended state</th><th>Repository state</th><th>Live state</th><th>Owner</th></tr></thead><tbody>{mismatch_rows}</tbody></table>
   </section>
 
-  <section id="source-of-truth">
-    <h2>Source-of-truth variance and cross-source mismatch register</h2>
-    <table><thead><tr><th>ID</th><th>Intended state</th><th>Implemented state</th><th>Live state</th><th>Owner</th></tr></thead><tbody>{mismatch_rows}</tbody></table>
-  </section>
-
-  <section id="weighted-scorecard">
+  <section id="scorecard">
     <h2>Weighted scorecard</h2>
     <table><thead><tr><th>Dimension</th><th>Weight</th><th>Score</th><th>Evidence note</th></tr></thead><tbody>{score_rows}</tbody></table>
   </section>
 
-  <section id="blockers">
+  <section id="confidence">
+    <h2>Confidence model</h2>
+    <p>The model separates coverage, finding quality, scoring confidence, and release confidence so a blocked report cannot sit beside a cheerful unexplained 100.</p>
+    <table><thead><tr><th>Confidence field</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{confidence_rows}</tbody></table>
+  </section>
+
+  <section id="evidence-labels">
+    <h2>Evidence labels and claim control</h2>
+    <p>Allowed evidence labels: Observed Live, Observed Live (mobile), Observed in Markup, Observed in Repository, Cross-Source Mismatch, and Reasoned Inference.</p>
+    <p>Visual design, cover-art quality, brand quality, and content tone are not marked FAIL unless the rendered evidence directly supports that exact claim.</p>
+  </section>
+
+  <section id="release-verdict">
+    <h2>Release verdict</h2>
+    <p>{html_badge(verdict)}</p>
+    <p>{escape(str(summary.get('releaseRationale') or 'Release verdict is determined from completed rendered Stage 3 mobile evidence and severity bands.'))}</p>
+  </section>
+
+  <section id="critical-blockers">
     <h2>Critical blockers</h2>
-    <p>P0 issues: {len(critical)}. P1 issues: {len(p1)}.</p>
-    <table><thead><tr><th>Issue</th><th>Severity</th><th>Evidence</th><th>Route</th><th>Defect</th><th>Remediation</th><th>Acceptance</th><th>Screenshots</th></tr></thead><tbody>{''.join(issue_rows) or '<tr><td colspan="8">No rendered mobile issue recorded.</td></tr>'}</tbody></table>
+    <p>P0 root-cause groups: {len(critical_groups)}. P1 root-cause groups: {len(p1_groups)}.</p>
+    <table><thead><tr><th>Group</th><th>Title</th><th>Severity</th><th>Route families</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Anchor/source</th><th>Remediation</th><th>Screenshots</th></tr></thead><tbody>{''.join(group_rows) or '<tr><td colspan="10">No rendered mobile root-cause group recorded.</td></tr>'}</tbody></table>
+  </section>
+
+  <section id="root-cause-findings">
+    <h2>Root-cause grouped findings</h2>
+    <p>Grouping policy: {escape(root_groups_doc['groupingPolicy'])}</p>
+    <p>Linked issue rows remain in repository-issue-appendix.json; full execution rows remain in execution.json.</p>
   </section>
 
   <section id="systemic-findings">
     <h2>Systemic findings</h2>
     <p>Observed in Repository: fixed-width/min-width risk count {len(summary['preflight']['repository']['fixedWidthMinWidthRisks'])}; responsive rule inventory count {len(summary['preflight']['repository']['responsiveRuleInventory'])}.</p>
-    <p>Reasoned Inference: any repeated rendered failure across multiple routes should be treated as a shared template or shared CSS/JS defect until proved page-specific.</p>
+    <p>Reasoned Inference: repeated rendered failures across route families indicate shared CSS, shared partials, shared JavaScript, or template-family defects until proved page-specific.</p>
   </section>
 
   <section id="stage-3">
-    <h2>Stage 3 rendered mobile execution summary</h2>
-    <p>Required viewport set: {', '.join(str(width) for width in VIEWPORTS)}.</p>
-    <p>Totals: PASS {totals['PASS']}, FAIL {totals['FAIL']}, N/A {totals['N/A']}.</p>
-    <table class="tight"><thead><tr><th>Route</th><th>Template</th><th>Viewport</th><th>Status</th><th>Checks</th><th>Defect summary</th><th>Screenshots</th></tr></thead><tbody>{''.join(record_rows)}</tbody></table>
+    <h2>Stage 3 rendered Mobile UX execution summary</h2>
+    <p>Required viewport set: {', '.join(str(width) for width in VIEWPORTS)}. Totals: PASS {totals['PASS']}, FAIL {totals['FAIL']}, N/A {totals['N/A']}.</p>
+  </section>
+
+  <section id="mobile-execution-records">
+    <h2>Mobile Execution Records summary</h2>
+    <p>This section intentionally summarises the records. The full raw Mobile Execution Records are preserved in execution.json.</p>
+    <table class="tight"><thead><tr><th>Template family</th><th>Viewport</th><th>Runs</th><th>Failing rows</th></tr></thead><tbody>{scorecard_rows}</tbody></table>
   </section>
 
   <section id="focused-pages">
-    <h2>Focused page findings and exception sweep summary</h2>
+    <h2>Focused page findings</h2>
     <p>Focused pages audited: {summary['focusedPagesAudited']}. Exceptions escalated: {summary['exceptionsEscalated']}.</p>
-    <p>Observed Live (mobile): exception escalation is driven by rendered FAIL records, not static inspection alone.</p>
+    <table class="tight"><thead><tr><th>Route</th><th>Template family</th><th>Viewport runs</th><th>Failures</th><th>Group IDs</th></tr></thead><tbody>{focused_rows}</tbody></table>
   </section>
 
-  <section id="remediation">
-    <h2>Remediation programme and roadmap</h2>
-    <ol>
-      <li>Fix P0 viewport, live 404, hamburger, overflow, and mobile CTA continuity defects first.</li>
-      <li>Fix P1 touch-target, resize/reflow, form, image, typography, and table handling defects.</li>
-      <li>Rerun the same hard-gate workflow and compare execution.json, coverage.json, and screenshot evidence.</li>
-      <li>Only promote the site to release-ready once skipped required tasks remain 0 and P0/P1 failures are cleared.</li>
-    </ol>
+  <section id="exception-sweep">
+    <h2>Exception sweep summary</h2>
+    <p>Exception sweep URLs checked: {escape(str(report_control.get('exception sweep URLs checked')))}. Exceptions escalated: {summary['exceptionsEscalated']}.</p>
   </section>
 
   <section id="verification-matrix">
     <h2>Verification matrix</h2>
-    <table><tbody>{verification_rows}</tbody></table>
+    <table><thead><tr><th>Claim</th><th>Status</th><th>Evidence / appendix reference</th></tr></thead><tbody>{verification_rows}</tbody></table>
+  </section>
+
+  <section id="remediation">
+    <h2>Remediation programme</h2>
+    <ol>
+      <li>Fix P0 root-cause groups first, especially viewport correctness, live 404 shell, hamburger, overflow, and mobile CTA continuity defects.</li>
+      <li>Fix P1 groups by shared component or template family, not one viewport row at a time.</li>
+      <li>Rerun the same hard-gate workflow and compare execution.json, rootCauseGroups, screenshot-manifest.json, and mandatory-mobile-scorecard.json.</li>
+    </ol>
+  </section>
+
+  <section id="roadmap">
+    <h2>Roadmap</h2>
+    <p>Release path: P0 clear → P1 clear or formally accepted → refreshed screenshots → callback metadata verified in AIMS latest/job state → release readiness rechecked.</p>
   </section>
 
   <section id="screenshot-manifest">
-    <h2>Screenshot manifest</h2>
-    <p>Screenshot references are mandatory evidence for rendered FAIL records and key rendered PASS confirmations. These links must remain published with the report.</p>
+    <h2>Screenshot manifest section</h2>
+    <p>Screenshot references are mandatory evidence for rendered FAIL records and key rendered PASS confirmations. Showing first 80 here; full list is in screenshot-manifest.json.</p>
     <table class="tight"><thead><tr><th>Path</th><th>Route</th><th>Viewport</th><th>Evidence type</th><th>Link</th></tr></thead><tbody>{screenshot_rows}</tbody></table>
   </section>
 
   <section id="focused-page-appendix">
-    <h2>Focused Page Appendix</h2>
-    <table class="tight"><thead><tr><th>Route</th><th>Template family</th><th>Viewport runs</th><th>Failures</th><th>Issue IDs</th></tr></thead><tbody>{focused_rows}</tbody></table>
+    <h2>Focused Page Appendix section</h2>
+    <p>Full structured focused-page data is preserved in focused-page-appendix.json.</p>
   </section>
 
   <section id="repository-issue-appendix">
-    <h2>Repository Issue Appendix</h2>
-    <p>Issues are anchored to rendered evidence first and best-available selector/component/code anchors second. No exact source line is invented where the rendered run cannot prove one.</p>
-    <table class="tight"><thead><tr><th>Issue</th><th>Severity</th><th>Evidence</th><th>Route</th><th>Defect</th><th>Remediation</th><th>Acceptance</th><th>Screenshots</th></tr></thead><tbody>{''.join(issue_rows) or '<tr><td colspan="8">No material repository issue recorded.</td></tr>'}</tbody></table>
+    <h2>Repository Issue Appendix section</h2>
+    <p>Previewing first 50 issue rows to protect executive readability. Full issue schema and every raw duplicate viewport failure remain in repository-issue-appendix.json.</p>
+    <table class="tight"><thead><tr><th>Issue</th><th>Group</th><th>Severity</th><th>Route</th><th>Metric</th><th>Best anchor</th></tr></thead><tbody>{issue_preview_rows}</tbody></table>
   </section>
 
   <section id="mandatory-mobile-scorecard">
-    <h2>Mandatory Mobile UX Scorecard</h2>
-    <p>PASS / FAIL values are drawn from rendered Stage 3 execution records. Responsive coverage is derived from overflow and dynamic resize/reflow results.</p>
-    <table class="tight"><thead><tr><th>Route</th><th>Viewport</th><th>Viewport correctness</th><th>Responsive coverage</th><th>Overflow</th><th>Touch</th><th>Hamburger</th><th>Resize</th><th>CTA</th><th>Typography</th><th>Images</th><th>Forms</th><th>Tables</th></tr></thead><tbody>{scorecard_rows}</tbody></table>
+    <h2>Mandatory Mobile UX Scorecard section</h2>
+    <p>PASS / FAIL values are drawn from rendered Stage 3 execution records. Full rows are in mandatory-mobile-scorecard.json.</p>
   </section>
 
   <section id="responsive-fix-appendix">
-    <h2>Responsive Fix Appendix</h2>
-    <p>For P0/P1 issues, the audit records the best rendered anchor and exact remediation contract. It does not fabricate source snippets or replacement code where the browser run cannot deterministically map the defect to a stable source line.</p>
-    <table class="tight"><thead><tr><th>Issue</th><th>Severity</th><th>Best anchor</th><th>Current evidence</th><th>Remediation contract</th><th>Effort</th><th>Retest steps</th></tr></thead><tbody>{fix_rows}</tbody></table>
+    <h2>Responsive Fix Appendix section</h2>
+    <p>For verified P0/P1 groups, the audit records the best rendered anchor, closest source snippet where available, manual remediation contract, and viewport retest steps.</p>
+    <table class="tight"><thead><tr><th>Fix</th><th>Severity</th><th>Group</th><th>File/source</th><th>Anchor</th><th>Patch instruction</th><th>Effort</th><th>Retest</th></tr></thead><tbody>{fix_rows}</tbody></table>
   </section>
 
   <section id="artefacts">
-    <h2>Machine-readable artefacts</h2>
-    <ul>
-      <li><a href="{escape(artefacts.get('report.json', '#'))}">report.json</a></li>
-      <li><a href="{escape(artefacts.get('summary.json', '#'))}">summary.json</a></li>
-      <li><a href="{escape(artefacts.get('execution.json', '#'))}">execution.json</a></li>
-      <li><a href="{escape(artefacts.get('evidence.json', '#'))}">evidence.json</a></li>
-      <li><a href="{escape(artefacts.get('preflight.json', '#'))}">preflight.json</a></li>
-      <li><a href="{escape(artefacts.get('coverage.json', '#'))}">coverage.json</a></li>
-      <li><a href="{escape(artefacts.get('reconciliation.json', '#'))}">reconciliation.json</a></li>
-      <li><a href="{escape(artefacts.get('screenshot-manifest.json', '#'))}">screenshot-manifest.json</a></li>
-      <li><a href="{escape(artefacts.get('focused-page-appendix.json', '#'))}">focused-page-appendix.json</a></li>
-      <li><a href="{escape(artefacts.get('repository-issue-appendix.json', '#'))}">repository-issue-appendix.json</a></li>
-      <li><a href="{escape(artefacts.get('mandatory-mobile-scorecard.json', '#'))}">mandatory-mobile-scorecard.json</a></li>
-      <li><a href="{escape(artefacts.get('responsive-fix-appendix.json', '#'))}">responsive-fix-appendix.json</a></li>
-    </ul>
+    <h2>Links to all structured artefacts</h2>
+    <ul>{artefact_items}</ul>
   </section>
 
   <section id="control">
@@ -1707,38 +1996,86 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   <section id="final-verdict">
     <h2>Final verdict and definition of done</h2>
     <p><strong>Verdict:</strong> {html_badge(verdict)}</p>
-    <p>Definition of done: all required routes and viewports execute, skipped required tasks count is 0, screenshots exist for all rendered FAIL records and key rendered PASS examples, callback artefact URLs resolve under R2_PUBLIC_BASE_URL_AUDITS, and P0/P1 mobile issues are cleared.</p>
+    <p>Definition of done: all required routes and viewports execute, skipped required tasks count is 0, screenshots exist for all rendered FAIL records and key rendered PASS examples, callback artefact URLs resolve under R2_PUBLIC_BASE_URL_AUDITS, and P0/P1 mobile groups are cleared.</p>
   </section>
   """
   return html_report_shell("Jonathan Harris Mobile UX Hard-Gate Audit", body)
 
 
-def build_verification_matrix(records: list[dict[str, Any]], issues: list[dict[str, Any]]) -> dict[str, str]:
+def matrix_entry(status: str, evidence: str, appendix: str = "execution.json") -> dict[str, str]:
+  return {"status": status, "evidence": evidence, "appendixReference": appendix}
+
+
+def status_for_check(records: list[dict[str, Any]], check: str, *, route: str | None = None, applicable_only: bool = True) -> dict[str, str]:
+  scoped = [record for record in records if route is None or record.get("route") == route]
+  values = [record.get("checks", {}).get(check) for record in scoped]
+  if applicable_only:
+    values = [value for value in values if value in {"PASS", "FAIL"}]
+  if not values:
+    return matrix_entry("PASS", f"No applicable rendered {check} failure was recorded; not a substitute for a separate specialist audit.", "mandatory-mobile-scorecard.json")
+  if any(value == "FAIL" for value in values):
+    return matrix_entry("FAIL", f"Rendered Stage 3 recorded {check} failure(s).", "mandatory-mobile-scorecard.json")
+  return matrix_entry("PASS", f"Rendered Stage 3 recorded {check} PASS for applicable row(s).", "mandatory-mobile-scorecard.json")
+
+
+def build_verification_matrix(records: list[dict[str, Any]], issues: list[dict[str, Any]]) -> dict[str, dict[str, str]]:
   failed_checks = {check for record in records for check, status in record.get("checks", {}).items() if status == "FAIL"}
-  route_failures = {record["route"] for record in records if any(status == "FAIL" for status in record.get("checks", {}).values())}
+  any_p0_or_p1 = any(issue["severity"] in {"P0", "P1"} for issue in issues)
   return {
-    "homepage CTA clarity": "FAIL" if "/" in route_failures and "ctaContinuity" in failed_checks else "PASS",
-    "conversion-path continuity": "FAIL" if "ctaContinuity" in failed_checks else "PASS",
-    "buy-now route correctness": "PASS",
-    "navigation consistency": "FAIL" if "hamburgerNavigation" in failed_checks else "PASS",
-    "viewport correctness": "FAIL" if "viewportCorrectness" in failed_checks else "PASS",
-    "responsive coverage across layout states": "FAIL" if "dynamicResizeReflow" in failed_checks else "PASS",
-    "horizontal overflow status": "FAIL" if "overflow" in failed_checks else "PASS",
-    "touch-target status": "FAIL" if "touchTargetUsability" in failed_checks else "PASS",
-    "font scaling": "FAIL" if "typographyReadability" in failed_checks else "PASS",
-    "hamburger status": "FAIL" if "hamburgerNavigation" in failed_checks else "PASS",
-    "dynamic resize status": "FAIL" if "dynamicResizeReflow" in failed_checks else "PASS",
-    "CTA continuity on mobile": "FAIL" if "ctaContinuity" in failed_checks else "PASS",
-    "image responsiveness": "FAIL" if "imageResponsiveness" in failed_checks else "PASS",
-    "form usability where relevant": "FAIL" if "formUsability" in failed_checks else "PASS",
-    "table/comparison handling where relevant": "FAIL" if "tableComparisonHandling" in failed_checks else "PASS",
-    "visual design consistency": "FAIL" if any(issue["severity"] in {"P0", "P1"} for issue in issues) else "PASS",
-    "cover art quality": "FAIL" if "imageResponsiveness" in failed_checks else "PASS",
-    "metadata consistency": "PASS",
-    "schema correctness": "PASS",
-    "redirects": "PASS",
-    "live rendered 404 behaviour": "FAIL" if "live404Verification" in failed_checks else "PASS",
-    "release readiness": "FAIL" if any(issue["severity"] in {"P0", "P1"} for issue in issues) else "PASS",
+    "homepage CTA clarity": status_for_check(records, "ctaContinuity", route="/"),
+    "conversion-path continuity": status_for_check(records, "ctaContinuity"),
+    "buy-now route correctness": matrix_entry("PASS" if "ctaContinuity" not in failed_checks else "FAIL", "Verified only through rendered CTA continuity checks; no unsupported manual route claim is made.", "mandatory-mobile-scorecard.json"),
+    "navigation consistency": status_for_check(records, "hamburgerNavigation"),
+    "viewport correctness": status_for_check(records, "viewportCorrectness"),
+    "responsive coverage across layout states": status_for_check(records, "responsiveCoverage"),
+    "horizontal overflow status": status_for_check(records, "overflow"),
+    "touch-target status": status_for_check(records, "touchTargetUsability"),
+    "font scaling": status_for_check(records, "typographyReadability"),
+    "hamburger status": status_for_check(records, "hamburgerNavigation"),
+    "dynamic resize status": status_for_check(records, "dynamicResizeReflow"),
+    "CTA continuity on mobile": status_for_check(records, "ctaContinuity"),
+    "image responsiveness": status_for_check(records, "imageResponsiveness"),
+    "form usability where relevant": status_for_check(records, "formUsability"),
+    "table/comparison handling where relevant": status_for_check(records, "tableComparisonHandling"),
+    "visual design consistency": matrix_entry("PASS", "No subjective visual-design FAIL is asserted by this deterministic mobile audit. Only layout-impact evidence is scored elsewhere.", "screenshot-manifest.json"),
+    "cover art quality": matrix_entry("PASS" if "imageResponsiveness" not in failed_checks else "FAIL", "Evidence is limited to rendered image responsiveness/broken-image detection, not subjective cover-art quality.", "mandatory-mobile-scorecard.json"),
+    "metadata consistency": matrix_entry("PASS", "Preflight captured live homepage metadata and repository viewport inventory; detailed SEO scoring belongs to the SEO/AEO/GEO audit.", "preflight.json"),
+    "schema correctness": matrix_entry("PASS", "No schema-specific FAIL is asserted by this mobile-only audit; schema remains out of scope unless rendered mobile evidence exposes a defect.", "preflight.json"),
+    "redirects": matrix_entry("PASS", "No deterministic rendered redirect failure was recorded by the mobile CTA/live route checks.", "execution.json"),
+    "live rendered 404 behaviour": status_for_check(records, "live404Verification", route=LIVE_404_ROUTE),
+    "release readiness": matrix_entry("FAIL" if any_p0_or_p1 else "PASS", "Release readiness follows completed Stage 3 evidence and P0/P1 severity bands.", "report.json"),
+  }
+
+
+def confidence_model(records: list[dict[str, Any]], issues: list[dict[str, Any]], coverage: dict[str, Any], screenshot_count: int, verdict: str) -> dict[str, dict[str, Any]]:
+  stage3_complete = bool(coverage.get("complete"))
+  failure_count = record_failures(records)
+  failed_records_with_screenshot = sum(
+    1 for record in records
+    if any(status == "FAIL" for status in record.get("checks", {}).values()) and record.get("screenshotRefs")
+  )
+  screenshot_coverage = 100 if failure_count == 0 else round((failed_records_with_screenshot / failure_count) * 100, 1)
+  return {
+    "executionCoverageConfidence": {
+      "status": "HIGH" if stage3_complete else "BLOCKED",
+      "value": 100 if stage3_complete else 0,
+      "evidence": f"Stage 3 complete={stage3_complete}; skipped required tasks={coverage.get('skippedRequiredTasksCount')}; viewport records={len(records)}.",
+    },
+    "findingConfidence": {
+      "status": "HIGH" if stage3_complete and screenshot_coverage >= 95 else "MEDIUM" if stage3_complete else "BLOCKED",
+      "value": screenshot_coverage if stage3_complete else 0,
+      "evidence": f"{failed_records_with_screenshot}/{failure_count} failing rendered record(s) have screenshot evidence; issue count={len(issues)}.",
+    },
+    "scoringConfidence": {
+      "status": "HIGH" if stage3_complete else "BLOCKED",
+      "value": 100 if stage3_complete else 0,
+      "evidence": "Scoring uses only completed rendered Stage 3 records; static-only scoring is not allowed.",
+    },
+    "releaseConfidence": {
+      "status": "BLOCKED" if verdict == "BLOCKED" else "CONDITIONAL" if verdict == "CONDITIONAL PASS" else "HIGH",
+      "value": 0 if verdict == "BLOCKED" else 70 if verdict == "CONDITIONAL PASS" else 100,
+      "evidence": f"Release verdict is {verdict}; P0/P1 severity rules override numeric mobile scores.",
+    },
   }
 
 
@@ -1750,18 +2087,19 @@ def weighted_scorecard(score: float | None, issues: list[dict[str, Any]]) -> lis
   mobile_cap = min(score, 94 if p1 else 100)
   if p0:
     mobile_cap = min(mobile_cap, 74)
+  conversion_cap = min(score, 94 if p1 else 100)
   return [
-    ("Enterprise readiness and commercial launch risk", 12, "BLOCKED" if p0 else round(score, 1), "Observed Live (mobile)"),
-    ("Conversion journey readiness", 12, round(min(score, 94 if p1 else 100), 1), "CTA continuity and touch targets"),
+    ("Enterprise readiness and commercial launch risk", 12, "BLOCKED" if p0 else round(score, 1), "Observed Live (mobile); P0 overrides numeric score"),
+    ("Conversion journey readiness", 12, round(conversion_cap, 1), "CTA continuity and touch targets only"),
     ("UX, UI, accessibility, and mobile responsiveness", 14, round(mobile_cap, 1), "Rendered mobile evidence first"),
-    ("Visual design, brand coherence, and graphic quality", 8, round(score, 1), "Responsive layout and screenshot evidence"),
+    ("Visual design, brand coherence, and graphic quality", 8, "Evidence captured", "No subjective brand/cover-art FAIL without direct evidence"),
     ("Content quality, messaging, and tone fidelity", 8, "Not rescored by mobile hard-gate", "Outside deterministic mobile checks"),
     ("Technical SEO, metadata, and indexation readiness", 10, "Not rescored by mobile hard-gate", "Preflight metadata evidence only"),
-    ("Technical implementation quality", 10, round(score, 1), "Repository plus rendered behaviour"),
+    ("Technical implementation quality", 10, round(mobile_cap, 1), "Repository plus rendered behaviour"),
     ("Code quality, maintainability, and source-of-truth governance", 8, "Evidence captured", "Workbook/repository/live reconciliation"),
-    ("Routing, redirect, and destination integrity", 8, round(score, 1), "CTA and live 404 coverage"),
+    ("Routing, redirect, and destination integrity", 8, round(conversion_cap, 1), "CTA and live 404 coverage"),
     ("Performance, resilience, and asset efficiency", 5, "Not rescored by mobile hard-gate", "No synthetic performance budget in this workflow"),
-    ("Release, build, and deployment hygiene", 5, "PASS" if not p0 else "BLOCKED", "Workflow completed and callback posted"),
+    ("Release, build, and deployment hygiene", 5, "PASS" if not p0 else "BLOCKED", "Workflow completed and callback posted only after required artefact URLs exist"),
   ]
 
 
@@ -1773,6 +2111,10 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
   p1 = any(issue["severity"] == "P1" for issue in issues)
   verdict = "BLOCKED" if p0 else "CONDITIONAL PASS" if p1 else "PASS"
   verification = build_verification_matrix(records, issues)
+  confidence = confidence_model(records, issues, coverage, screenshot_count, verdict)
+  workbook_url_count = preflight_data["workbook"].get("urlCount")
+  rendered_mobile_urls_checked = len(routes)
+  exception_sweep_urls_checked = len(routes)
   report_control = {
     "audit source": "Mobile UX hard-gate deterministic service",
     "repository source": "jonathan-harris-website-main attached repository",
@@ -1780,12 +2122,15 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "capability constraints declared": json.dumps(preflight_data["capabilities"], ensure_ascii=False),
     "primary sheet": preflight_data["workbook"].get("primarySheet"),
     "header row": preflight_data["workbook"].get("headerRow"),
-    "primary URL count": preflight_data["workbook"].get("urlCount"),
-    "total URLs checked": len(routes),
+    "workbook URL inventory count": workbook_url_count,
+    "primary URL count": workbook_url_count,
+    "total URLs checked": rendered_mobile_urls_checked,
+    "rendered mobile URLs checked": rendered_mobile_urls_checked,
     "focused pages audited": len(routes),
+    "exception sweep URLs checked": exception_sweep_urls_checked,
     "exceptions escalated": failure_count,
     "material repository files reviewed": preflight_data["repository"].get("totalFiles"),
-    "cross-source mismatch count": reconciliation["crossSourceMismatchCount"],
+    "cross-source mismatches count": reconciliation["crossSourceMismatchCount"],
     "rendered mobile pages executed count": len(routes),
     "total viewport runs completed": len(records),
     "screenshot count": screenshot_count,
@@ -1796,9 +2141,14 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "container query count": preflight_data["repository"].get("containerQueryCount"),
     "mobile quality score": score,
     "stage checkpoints completed": "Stage 1, Stage 2, Stage 3, Stage 4, Stage 5",
-    "coverage summary": f"{len(records)} viewport records across {len(routes)} routes",
+    "coverage summary": f"{len(records)} viewport records across {len(routes)} rendered mobile URLs; focused pages={len(routes)}; exception sweep URLs={exception_sweep_urls_checked}",
     "skipped required tasks count": coverage["skippedRequiredTasksCount"],
   }
+  release_rationale = (
+    "BLOCKED because at least one verified P0 mobile issue exists." if p0
+    else "CONDITIONAL PASS because at least one verified P1 mobile issue remains." if p1
+    else "PASS because completed Stage 3 rendered evidence found no P0/P1 mobile blockers."
+  )
   return {
     "ok": True,
     "auditType": "mobile-ux",
@@ -1810,22 +2160,25 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "screenshotCount": screenshot_count,
     "mobileFailureCount": failure_count,
     "mobileQualityScore": score,
-    "confidenceScore": 100 if coverage["complete"] else 0,
+    "confidenceModel": confidence,
     "releaseVerdict": verdict,
+    "releaseRationale": release_rationale,
     "focusedPagesAudited": len(routes),
+    "exceptionSweepUrlsChecked": exception_sweep_urls_checked,
     "exceptionsEscalated": failure_count,
     "issueCount": len(issues),
+    "rootCauseGroupCount": len({issue.get("groupId") for issue in issues if issue.get("groupId")}),
     "preflight": preflight_data,
     "coverage": coverage,
     "reconciliation": reconciliation,
     "issues": issues,
+    "rootCauseGroups": root_cause_groups_document(issues, records),
     "verificationMatrix": verification,
     "weightedScorecard": weighted_scorecard(score, issues),
     "reportControlBlock": report_control,
     "startedAt": started_at,
     "finishedAt": utc_now(),
   }
-
 
 def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None, *, allow_upload: bool = True) -> dict[str, Any]:
   now = utc_now()
@@ -1998,7 +2351,7 @@ def main() -> int:
   write_json(output_dir / "focused-page-appendix.json", focused_page_appendix_document(summary, records, issues))
   write_json(output_dir / "repository-issue-appendix.json", repository_issue_appendix_document(summary, issues))
   write_json(output_dir / "mandatory-mobile-scorecard.json", mandatory_mobile_scorecard_document(records, summary))
-  write_json(output_dir / "responsive-fix-appendix.json", responsive_fix_appendix_document(summary, issues))
+  write_json(output_dir / "responsive-fix-appendix.json", responsive_fix_appendix_document(summary, issues, records))
   html = report_html(summary, records, {}, issues, coverage, reconciliation)
   write_text(output_dir / "report.html", html)
 
@@ -2007,9 +2360,11 @@ def main() -> int:
     missing = missing_required_completion_artefacts(uploaded)
     if missing:
       raise RuntimeError(f"R2 completion upload missing required artefact(s): {', '.join(missing)}")
+    summary["artefactUrls"] = {name: uploaded.get(name) for name in MANDATORY_COMPLETION_ARTEFACTS if uploaded.get(name)}
+    write_json(output_dir / "summary.json", summary)
     html = report_html(summary, records, uploaded, issues, coverage, reconciliation)
     write_text(output_dir / "report.html", html)
-    write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation))
+    write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation, uploaded))
     uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
     missing = missing_required_completion_artefacts(uploaded)
     if missing:
@@ -2039,6 +2394,8 @@ def main() -> int:
     "screenshotCount": summary["screenshotCount"],
     "mobileFailureCount": summary["mobileFailureCount"],
     "issueCount": summary["issueCount"],
+    "rootCauseGroupCount": summary.get("rootCauseGroupCount"),
+    "confidenceModel": summary.get("confidenceModel"),
     "artefacts": uploaded,
     "finishedAt": summary["finishedAt"],
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),

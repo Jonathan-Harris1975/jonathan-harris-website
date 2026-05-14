@@ -276,7 +276,7 @@ class MobileUxReportArtifactTests(unittest.TestCase):
       "screenshotCount": 1,
       "mobileFailureCount": 0,
       "mobileQualityScore": 100,
-      "confidenceScore": 100,
+      "confidenceModel": {"executionCoverageConfidence": {"status": "HIGH", "value": 100, "evidence": "fixture"}},
       "preflight": preflight,
       "focusedPagesAudited": 1,
       "exceptionsEscalated": 0,
@@ -304,3 +304,101 @@ class MobileUxReportArtifactTests(unittest.TestCase):
 
 if __name__ == "__main__":
   unittest.main()
+
+class MobileUxExecutiveGroupingTests(unittest.TestCase):
+  def _record(self, route, viewport, check="overflow", anchor=".shared-card-grid"):
+    checks = {
+      "viewportCorrectness": "PASS",
+      "overflow": "PASS",
+      "hamburgerNavigation": "PASS" if viewport < 1024 else "N/A",
+      "touchTargetUsability": "PASS",
+      "dynamicResizeReflow": "PASS",
+      "ctaContinuity": "PASS",
+      "typographyReadability": "PASS",
+      "formUsability": "N/A",
+      "imageResponsiveness": "PASS",
+      "tableComparisonHandling": "N/A",
+      "responsiveCoverage": "PASS",
+    }
+    checks[check] = "FAIL"
+    if check in {"overflow", "dynamicResizeReflow"}:
+      checks["responsiveCoverage"] = "FAIL"
+    return {
+      "route": route,
+      "url": f"https://example.com{route if route != '/' else '/'}",
+      "templateFamily": audit.detect_template_family(route),
+      "viewport": viewport,
+      "checks": checks,
+      "details": {check: {"selector": anchor}},
+      "screenshotRefs": [{"relativePath": f"screenshots/{route.strip('/') or 'home'}-{viewport}-fail.png", "publicUrl": f"https://audits.example.test/{route.strip('/') or 'home'}-{viewport}-fail.png"}],
+      "defectSummary": check,
+      "selectorComponentCodeAnchor": anchor,
+    }
+
+  def test_root_cause_grouping_collapses_repeated_viewport_noise(self):
+    records = [
+      self._record("/ebooks", 320),
+      self._record("/ebooks", 390),
+      self._record("/newsletter", 320),
+      self._record("/newsletter", 390),
+    ]
+    issues = audit.build_issues(records)
+    groups = audit.root_cause_groups_document(issues, records, {"sessionId": "group-test", "reportPrefix": "audits/mobile-ux/group-test"})
+
+    self.assertGreater(len(issues), groups["groupCount"])
+    self.assertTrue(all(issue.get("groupId") for issue in issues))
+    self.assertEqual(groups["groups"][0]["bestAvailableCodeAnchor"], ".shared-card-grid")
+    self.assertIn("repository-issue-appendix.json", groups["groups"][0]["detailedAppendixReference"])
+
+  def test_responsive_fix_appendix_uses_group_contracts_and_retest_steps(self):
+    records = [self._record("/ebooks", 320), self._record("/ebooks", 390)]
+    issues = audit.build_issues(records)
+    fixes = audit.responsive_fix_appendix_document({"sessionId": "fix-test", "reportPrefix": "audits/mobile-ux/fix-test"}, issues, records)
+
+    self.assertTrue(fixes["rows"])
+    first = fixes["rows"][0]
+    self.assertTrue(first["fixId"].startswith("FIX-MUX-G"))
+    self.assertIn("linkedGroupId", first)
+    self.assertIn("bestAvailableCodeAnchor", first)
+    self.assertIn("viewportRetestSteps", first)
+    self.assertTrue(first["screenshotReferences"])
+
+  def test_confidence_model_is_split_and_release_confidence_blocks_blocked_reports(self):
+    records = [self._record("/", 390)]
+    issues = audit.build_issues(records)
+    confidence = audit.confidence_model(records, issues, {"complete": True, "skippedRequiredTasksCount": 0}, 1, "BLOCKED")
+
+    self.assertIn("executionCoverageConfidence", confidence)
+    self.assertIn("findingConfidence", confidence)
+    self.assertIn("scoringConfidence", confidence)
+    self.assertEqual(confidence["releaseConfidence"]["status"], "BLOCKED")
+
+  def test_verification_matrix_does_not_invent_visual_brand_failure(self):
+    records = [self._record("/", 390, "overflow")]
+    issues = audit.build_issues(records)
+    matrix = audit.build_verification_matrix(records, issues)
+
+    self.assertEqual(matrix["horizontal overflow status"]["status"], "FAIL")
+    self.assertEqual(matrix["visual design consistency"]["status"], "PASS")
+    self.assertIn("No subjective visual-design FAIL", matrix["visual design consistency"]["evidence"])
+
+  def test_report_json_exposes_root_groups_and_raw_records_for_appendices(self):
+    records = [self._record("/ebooks", 320), self._record("/ebooks", 390)]
+    issues = audit.build_issues(records)
+    summary = {
+      "status": "completed",
+      "sessionId": "json-test",
+      "reportPrefix": "audits/mobile-ux/json-test",
+      "releaseVerdict": "CONDITIONAL PASS",
+      "mobileQualityScore": 90,
+      "confidenceModel": audit.confidence_model(records, issues, {"complete": True, "skippedRequiredTasksCount": 0}, 2, "CONDITIONAL PASS"),
+      "focusedPagesAudited": 1,
+      "mobileFailureCount": 2,
+      "screenshotCount": 2,
+    }
+    document = audit.report_json_document(summary, records, issues, {"complete": True, "skippedRequiredTasksCount": 0}, {"crossSourceMismatches": [], "crossSourceMismatchCount": 0}, {"report.json": "https://audits.example.test/report.json"})
+
+    self.assertIn("rootCauseGroups", document)
+    self.assertLess(document["rootCauseGroups"]["groupCount"], len(document["issues"]))
+    self.assertEqual(len(document["execution"]["records"]), len(records))
+    self.assertIn("report.json", document["appendixLinks"])
