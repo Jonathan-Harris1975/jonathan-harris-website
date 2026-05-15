@@ -7,6 +7,7 @@ import os
 import re
 import sys
 import traceback
+import time
 from collections import Counter
 from html import escape
 from pathlib import Path
@@ -67,6 +68,9 @@ MANDATORY_COMPLETION_ARTEFACTS = [
 ]
 LIVE_404_ROUTE = "/__mobile-ux-live-404__"
 VIEWPORTS = [320, 375, 390, 414, 768, 1024, 1280, 1440]
+DEFAULT_MAX_RUNTIME_SECONDS = int(os.environ.get("MOBILE_UX_MAX_RUNTIME_SECONDS", "2400"))
+MAX_WORKBOOK_FOCUS_ROUTES = int(os.environ.get("MOBILE_UX_MAX_WORKBOOK_FOCUS_ROUTES", "8"))
+MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY = int(os.environ.get("MOBILE_UX_MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY", "2"))
 NAV_TOGGLE = ".jh-hamburger"
 MOBILE_NAV = "#jh-mobile-nav"
 PRIMARY_CTA_SELECTORS = [
@@ -650,6 +654,47 @@ def representative_ebook_routes(routes: list[str], repo_root: Path, max_variants
   return list(variants.values()) or ([candidates[0]] if candidates else [])
 
 
+def workbook_mobile_risk_routes(workbook_info: WorkbookInfo, excludes: list[str]) -> list[str]:
+  """Return workbook routes that deserve exception-sweep tracking without making all of them rendered Stage 3 targets."""
+  risk_keywords = ("compare", "contact", "newsletter", "catalogue", "topic", "table", "form", "glossary")
+  routes: list[str] = []
+  seen = set()
+  for raw in workbook_info.urls:
+    route = normalise_route(raw, None)
+    if should_exclude(route, excludes):
+      continue
+    if not any(keyword in route.lower() for keyword in risk_keywords):
+      continue
+    if route in seen:
+      continue
+    seen.add(route)
+    routes.append(route)
+  return routes
+
+
+def select_workbook_focus_routes(workbook_routes: list[str], already_required: set[str], max_total: int = MAX_WORKBOOK_FOCUS_ROUTES, max_per_family: int = MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY) -> list[str]:
+  """Choose a deterministic, bounded rendered sample from the workbook exception sweep.
+
+  The workbook can contain dozens of catalogue/topic URLs. Rendering every one across
+  eight viewports leaves the workflow parked at request.json until the job times out.
+  Stage 3 still covers each route family through representatives; the full workbook
+  risk inventory remains visible as the exception sweep count.
+  """
+  selected: list[str] = []
+  family_counts: Counter[str] = Counter()
+  for route in workbook_routes:
+    if route in already_required:
+      continue
+    family = detect_template_family(route)
+    if family_counts[family] >= max_per_family:
+      continue
+    selected.append(route)
+    family_counts[family] += 1
+    if len(selected) >= max_total:
+      break
+  return selected
+
+
 def detect_required_routes(repo_root: Path, workbook_info: WorkbookInfo, excludes: list[str]) -> tuple[list[str], list[dict[str, str]], list[dict[str, str]]]:
   routes = repo_html_routes(repo_root, excludes)
   route_set = set(routes)
@@ -673,13 +718,10 @@ def detect_required_routes(repo_root: Path, workbook_info: WorkbookInfo, exclude
     if route:
       required.append({"route": route, "reason": reason})
 
-  risk_keywords = ("compare", "contact", "newsletter", "catalogue", "topic", "table", "form", "glossary")
-  for raw in workbook_info.urls:
-    route = normalise_route(raw, None)
-    if should_exclude(route, excludes):
-      continue
-    if any(keyword in route.lower() for keyword in risk_keywords):
-      required.append({"route": route, "reason": "workbook mobile-risk keyword"})
+  preselected = {normalise_route(item["route"]) if item["route"] != LIVE_404_ROUTE else LIVE_404_ROUTE for item in required}
+  workbook_risk_routes = workbook_mobile_risk_routes(workbook_info, excludes)
+  for route in select_workbook_focus_routes(workbook_risk_routes, preselected):
+    required.append({"route": route, "reason": "bounded workbook mobile-risk representative; full set tracked in exception sweep"})
 
   deduped_required: list[dict[str, str]] = []
   seen = set()
@@ -703,7 +745,6 @@ def detect_required_routes(repo_root: Path, workbook_info: WorkbookInfo, exclude
     else:
       blocked.append({"route": route, "reason": item["reason"], "blocker": "required route is absent from repository route inventory"})
   return executable, blocked, deduped_required
-
 
 def preflight(base_url: str, repo_root: Path, workbook_info: WorkbookInfo, capabilities: dict[str, Any]) -> dict[str, Any]:
   homepage = fetch_html(base_url)
@@ -1083,15 +1124,19 @@ def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) 
   return screenshot_ref(relative_path)
 
 
-def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str, routes: list[str], screenshots_dir: Path) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
+def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str, routes: list[str], screenshots_dir: Path, max_runtime_seconds: int = DEFAULT_MAX_RUNTIME_SECONDS) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
   records: list[dict[str, Any]] = []
   executed: list[dict[str, str]] = []
   runtime_blocks: list[dict[str, str]] = []
+  deadline = time.monotonic() + max(30, int(max_runtime_seconds or DEFAULT_MAX_RUNTIME_SECONDS))
   with sync_playwright() as playwright:
     browser = playwright.chromium.launch(headless=True)
     try:
       for route in routes:
         for width in VIEWPORTS:
+          if time.monotonic() >= deadline:
+            runtime_blocks.append({"stage": "Stage 3 rendered execution", "route": route, "viewport": str(width), "blocker": f"Stage 3 runtime budget exceeded after {max_runtime_seconds} seconds"})
+            return records, executed, runtime_blocks
           target = route_target(base_url, route, session_id)
           context = browser.new_context(
             viewport={"width": width, "height": 920},
@@ -1100,9 +1145,11 @@ def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str,
             device_scale_factor=1,
           )
           page = context.new_page()
+          page.set_default_timeout(8000)
+          page.set_default_navigation_timeout(15000)
           response_status: int | None = None
           try:
-            response = page.goto(target, wait_until="domcontentloaded", timeout=25000)
+            response = page.goto(target, wait_until="domcontentloaded", timeout=15000)
             response_status = response.status if response else None
             page.wait_for_timeout(350)
             record = run_single_record(page, base_url, route, width, target, response_status)
@@ -1114,6 +1161,7 @@ def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str,
               record["screenshotRefs"].append(capture_required_screenshot(page, file_path, f"screenshots/{name}"))
             records.append(record)
             executed.append({"route": route, "viewport": str(width)})
+            print(f"[mobile-ux] rendered {route} at {width}px; checks={record['checks']}", flush=True)
           except Exception as exc:
             runtime_blocks.append({"route": route, "viewport": str(width), "blocker": str(exc)})
             fail_name = screenshot_name(route, width, "runtime-blocked")
@@ -2114,7 +2162,7 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
   confidence = confidence_model(records, issues, coverage, screenshot_count, verdict)
   workbook_url_count = preflight_data["workbook"].get("urlCount")
   rendered_mobile_urls_checked = len(routes)
-  exception_sweep_urls_checked = len(routes)
+  exception_sweep_urls_checked = int((preflight_data.get("exceptionSweep") or {}).get("urlCount") or len(routes))
   report_control = {
     "audit source": "Mobile UX hard-gate deterministic service",
     "repository source": "jonathan-harris-website-main attached repository",
@@ -2141,7 +2189,7 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "container query count": preflight_data["repository"].get("containerQueryCount"),
     "mobile quality score": score,
     "stage checkpoints completed": "Stage 1, Stage 2, Stage 3, Stage 4, Stage 5",
-    "coverage summary": f"{len(records)} viewport records across {len(routes)} rendered mobile URLs; focused pages={len(routes)}; exception sweep URLs={exception_sweep_urls_checked}",
+    "coverage summary": f"{len(records)} viewport records across {len(routes)} rendered mobile URLs; focused pages={len(routes)}; exception sweep inventory URLs={exception_sweep_urls_checked}",
     "skipped required tasks count": coverage["skippedRequiredTasksCount"],
   }
   release_rationale = (
@@ -2300,7 +2348,14 @@ def main() -> int:
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": [block], "skippedRequiredTasksCount": 1})
     return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"]}, allow_upload=False) else 1
 
+  exception_sweep_routes = workbook_mobile_risk_routes(workbook_info, excludes)
   routes, route_blocks, required_routes = detect_required_routes(REPO_ROOT, workbook_info, excludes)
+  preflight_data["exceptionSweep"] = {
+    "mode": "bounded rendered representatives plus workbook route-family exception inventory",
+    "urlCount": len(exception_sweep_routes),
+    "routes": exception_sweep_routes,
+    "renderedRepresentativeCount": len([route for route in routes if route in set(exception_sweep_routes)]),
+  }
   preflight_data["requiredMobileRoutes"] = required_routes
   preflight_data["routeBlocksBeforeStage3"] = route_blocks
   preflight_data["checkpoints"].append(checkpoint("STAGE 2 CHECKPOINT", ["repository template families", "shared CSS/JS/navigation", "page-family mobile risk register"], route_blocks, not route_blocks))
@@ -2313,7 +2368,7 @@ def main() -> int:
     return 1 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": route_blocks}) else 1
 
   try:
-    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir)
+    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, args.max_runtime_seconds)
   except HardGateCapabilityError as exc:  # pragma: no cover - runtime environment gate
     blocks = exc.blocks or [{"capability": "renderedBrowserAutomation", "reason": str(exc)}]
     preflight_data["capabilities"]["blockedTests"].extend(blocks)

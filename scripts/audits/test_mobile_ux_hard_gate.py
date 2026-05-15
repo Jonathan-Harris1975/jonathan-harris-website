@@ -115,6 +115,38 @@ class MobileUxHardGateTests(unittest.TestCase):
     self.assertEqual(audit.detect_template_family(audit.LIVE_404_ROUTE), "live-404")
     self.assertIn("__mobile-ux-404-probe__", audit.route_target("https://example.com", audit.LIVE_404_ROUTE, "session-one"))
 
+
+  def test_workbook_exception_sweep_is_bounded_before_rendered_stage3(self):
+    class Workbook:
+      urls = [
+        "https://example.com/catalogue/agriculture",
+        "https://example.com/catalogue/finance",
+        "https://example.com/catalogue/retail",
+        "https://example.com/topics/ai-for-beginners",
+        "https://example.com/topics/generative-ai",
+        "https://example.com/topics/machine-learning",
+        "https://example.com/contact",
+        "https://example.com/newsletter",
+      ]
+
+    risk_routes = audit.workbook_mobile_risk_routes(Workbook(), [])
+    selected = audit.select_workbook_focus_routes(risk_routes, {"/contact", "/newsletter"}, max_total=3, max_per_family=1)
+
+    self.assertEqual(len(risk_routes), 8)
+    self.assertLessEqual(len(selected), 3)
+    self.assertEqual(len({audit.detect_template_family(route) for route in selected}), len(selected))
+    self.assertNotIn("/contact", selected)
+    self.assertNotIn("/newsletter", selected)
+
+  def test_rendered_step_has_timeout_and_internal_runtime_budget(self):
+    workflow = audit.Path(".github/workflows/mobile-ux-hard-gate.yml").read_text(encoding="utf-8")
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+
+    self.assertIn("timeout-minutes: 45", workflow)
+    self.assertIn("MOBILE_UX_MAX_RUNTIME_SECONDS", workflow)
+    self.assertIn("Stage 3 runtime budget exceeded", source)
+    self.assertIn("return records, executed, runtime_blocks", source)
+
   def test_failure_payload_writes_complete_diagnostic_artifacts(self):
     old_env = {
       name: os.environ.get(name)
