@@ -176,6 +176,9 @@ jobs:
         run: echo "PLAYWRIGHT_INSTALL_OUTCOME=${{ steps.playwright_install.outcome }}" >> "$GITHUB_ENV"
 
       - name: Run rendered mobile UX audit
+        timeout-minutes: 45
+        env:
+          MOBILE_UX_MAX_RUNTIME_SECONDS: "2400"
         run: |
           python scripts/audits/mobile_ux_hard_gate.py \
             --base-url "${{ inputs.base_url }}" \
