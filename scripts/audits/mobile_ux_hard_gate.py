@@ -140,6 +140,12 @@ def parse_args() -> argparse.Namespace:
   parser.add_argument("--exclude-prefixes", default=",".join(DEFAULT_EXCLUDES))
   parser.add_argument("--audit-bucket", default="")
   parser.add_argument("--audit-public-base-url", default="")
+  parser.add_argument(
+    "--max-runtime-seconds",
+    type=int,
+    default=DEFAULT_MAX_RUNTIME_SECONDS,
+    help="Maximum Stage 3 rendered execution runtime before returning a controlled incomplete result",
+  )
   args = parser.parse_args()
   resolve_runtime_callback_config(args)
   if args.audit_bucket:
@@ -2416,7 +2422,8 @@ def main() -> int:
     return 0 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": route_blocks}) else 1
 
   try:
-    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, args.max_runtime_seconds)
+    max_runtime_seconds = int(getattr(args, "max_runtime_seconds", DEFAULT_MAX_RUNTIME_SECONDS) or DEFAULT_MAX_RUNTIME_SECONDS)
+    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, max_runtime_seconds)
   except HardGateCapabilityError as exc:  # pragma: no cover - runtime environment gate
     blocks = exc.blocks or [{"capability": "renderedBrowserAutomation", "reason": str(exc)}]
     preflight_data["capabilities"]["blockedTests"].extend(blocks)
