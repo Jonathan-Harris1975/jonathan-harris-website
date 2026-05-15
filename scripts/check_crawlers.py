@@ -69,6 +69,12 @@ def get_expected_live_payloads() -> Dict[str, str]:
     }
 
 
+def is_r2_hosted_podcast_episode_path(path: Path) -> bool:
+    """Return True for podcast episode pages governed by the R2 podcast pipeline."""
+    parts = path.parts
+    return len(parts) >= 2 and parts[0] == "podcast" and parts[1] == "episodes"
+
+
 def run_repo_snapshot_checks() -> List[str]:
     errors: List[str] = []
     books = load_master()
@@ -137,7 +143,10 @@ def run_repo_snapshot_checks() -> List[str]:
 
     deployable_html_files = [
         path for path in ROOT.rglob("*.html")
-        if "node_modules" not in path.parts and "templates" not in path.parts and "assets" not in path.parts
+        if "node_modules" not in path.parts
+        and "templates" not in path.parts
+        and "assets" not in path.parts
+        and not is_r2_hosted_podcast_episode_path(path.relative_to(ROOT))
     ]
     unresolved_pattern = re.compile(r"{{[^{}]+}}")
     for path in deployable_html_files:

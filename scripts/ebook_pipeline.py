@@ -3009,6 +3009,12 @@ def html_declares_noindex(file_path: Path) -> bool:
 
 
 
+def is_r2_hosted_podcast_episode_path(relative_path: Path) -> bool:
+    """Return True for podcast episode pages governed by the R2 podcast pipeline."""
+    parts = relative_path.parts
+    return len(parts) >= 2 and parts[0] == "podcast" and parts[1] == "episodes"
+
+
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     governed_lastmod = normalise_lastmod(governed_generated_utc(books))
     generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
@@ -3026,6 +3032,8 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
             continue
         relative_path = file_path.relative_to(ROOT)
         if relative_path in excluded_paths:
+            continue
+        if is_r2_hosted_podcast_episode_path(relative_path):
             continue
         if relative_path.parts and relative_path.parts[0] == "scripts":
             continue
@@ -4052,7 +4060,11 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if entry.get("buy", {}).get("target") != book["buy_url"]:
             errors.append(f"Route manifest buy target mismatch for {book['slug']}.")
 
-    html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
+    html_files = [
+        p for p in ROOT.rglob("*.html")
+        if "node_modules" not in p.parts
+        and not is_r2_hosted_podcast_episode_path(p.relative_to(ROOT))
+    ]
     css_bundle = "\n".join(css_path.read_text(encoding="utf-8", errors="ignore") for css_path in (ROOT / "assets" / "css").glob("*.css"))
     if any(re.search(r"class=[\"']([^\"']*\bsr-only\b[^\"']*)[\"']", p.read_text(encoding="utf-8", errors="ignore"), re.I) for p in html_files):
         if not re.search(r"(^|[\s,{])\.sr-only\b", css_bundle, re.M):
@@ -4415,6 +4427,8 @@ def json_ld_validation_errors() -> List[str]:
     for path in sorted(ROOT.rglob("*.html")):
         relative = path.relative_to(ROOT)
         if "node_modules" in path.parts or "assets" in path.parts or "templates" in path.parts or "partials" in path.parts:
+            continue
+        if is_r2_hosted_podcast_episode_path(relative):
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
         blocks = re.findall(r'<script[^>]+type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', text, re.I | re.S)
