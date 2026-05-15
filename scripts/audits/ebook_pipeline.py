@@ -3128,6 +3128,10 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
         ROOT / "robots.txt": robots_payload,
         ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
+        # Cloudflare Pages has repeatedly failed the post-deploy live gate when
+        # these sitemap compatibility aliases exist only as _redirects rules.
+        # Publish physical mirrors as well so /Sitemap.xml and /site-map.xml
+        # resolve even when redirect processing is delayed or bypassed.
         ROOT / "Sitemap.xml": sitemap_payload,
         ROOT / "site-map.xml": sitemap_payload,
         ROOT / "llms.txt": llms_payload,
