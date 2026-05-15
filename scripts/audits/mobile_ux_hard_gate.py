@@ -71,6 +71,7 @@ VIEWPORTS = [320, 375, 390, 414, 768, 1024, 1280, 1440]
 DEFAULT_MAX_RUNTIME_SECONDS = int(os.environ.get("MOBILE_UX_MAX_RUNTIME_SECONDS", "2400"))
 MAX_WORKBOOK_FOCUS_ROUTES = int(os.environ.get("MOBILE_UX_MAX_WORKBOOK_FOCUS_ROUTES", "8"))
 MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY = int(os.environ.get("MOBILE_UX_MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY", "2"))
+CALLBACK_MARKER_FILENAME = ".mobile-ux-callback-posted.json"
 NAV_TOGGLE = ".jh-hamburger"
 MOBILE_NAV = "#jh-mobile-nav"
 PRIMARY_CTA_SELECTORS = [
@@ -236,6 +237,35 @@ def upload_artifacts_if_configured(report_prefix: str, output_dir: Path, *, requ
     output_dir,
     os.environ["R2_PUBLIC_BASE_URL_AUDITS"],
   )
+
+
+def callback_marker_path(output_dir: Path) -> Path:
+  return output_dir / CALLBACK_MARKER_FILENAME
+
+
+def write_callback_marker(output_dir: Path, payload: dict[str, Any], *, workflow_failure: bool = False) -> None:
+  marker_payload = {
+    "postedAt": utc_now(),
+    "auditType": payload.get("auditType", "mobile-ux"),
+    "sessionId": payload.get("sessionId"),
+    "status": payload.get("status"),
+    "message": payload.get("message"),
+    "reportPrefix": payload.get("reportPrefix"),
+    "workflowFailure": bool(workflow_failure),
+    "hasReportUrl": bool(payload.get("reportUrl")),
+    "hasReportJsonUrl": bool(payload.get("reportJsonUrl")),
+    "storageUploadError": payload.get("storageUploadError"),
+  }
+  write_json(callback_marker_path(output_dir), marker_payload)
+
+
+def post_mobile_callback(args: argparse.Namespace, output_dir: Path, payload: dict[str, Any], *, workflow_failure: bool = False) -> None:
+  if not getattr(args, "callback_url", None):
+    print(f"[mobile-ux] callback not configured; status={payload.get('status')}", flush=True)
+    return
+  post_callback(args.callback_url, args.callback_token, {k: v for k, v in payload.items() if v is not None})
+  write_callback_marker(output_dir, payload, workflow_failure=workflow_failure)
+  print(f"[mobile-ux] callback posted status={payload.get('status')} workflowFailure={bool(workflow_failure)}", flush=True)
 
 
 def screenshot_ref(relative_path: str) -> dict[str, str | None]:
@@ -2297,7 +2327,11 @@ def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: s
     "finishedAt": now,
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
   }
-  post_callback(args.callback_url, args.callback_token, {k: v for k, v in payload.items() if v is not None})
+  workflow_failure = bool((extra or {}).get("workflowFailure"))
+  print(f"[mobile-ux] controlled failure: {message}", flush=True)
+  for block in failure_blocks_from_extra(extra)[:8]:
+    print(f"[mobile-ux] blocker: {block}", flush=True)
+  post_mobile_callback(args, output_dir, payload, workflow_failure=workflow_failure)
   return payload
 
 
@@ -2309,6 +2343,7 @@ def main() -> int:
   excludes = [item.strip() for item in args.exclude_prefixes.split(",") if item.strip()]
   output_dir = ensure_dir(Path(args.output_dir))
   screenshots_dir = ensure_dir(output_dir / "screenshots")
+  print(f"[mobile-ux] starting session={args.session_id} prefix={args.report_prefix} outputDir={output_dir}", flush=True)
 
   sync_playwright, _playwright_timeout, playwright_error = try_load_playwright()
   install_outcome = os.environ.get("PLAYWRIGHT_INSTALL_OUTCOME", "").strip()
@@ -2317,6 +2352,14 @@ def main() -> int:
   if initial_capabilities["renderedBrowserAutomation"] and initial_capabilities["screenshotCapture"] and initial_capabilities["mobileViewportEmulation"]:
     runtime_probe_blocks = probe_rendered_mobile_runtime(sync_playwright, output_dir / "capability-probe")
   capabilities = build_capabilities(playwright_error, install_outcome, runtime_probe_blocks)
+  print(
+    "[mobile-ux] capabilities "
+    f"rendered={capabilities['renderedBrowserAutomation']} "
+    f"screenshots={capabilities['screenshotCapture']} "
+    f"mobileViewport={capabilities['mobileViewportEmulation']} "
+    f"blocked={len(capabilities['blockedTests'])}",
+    flush=True,
+  )
 
   workbook_path = find_workbook(REPO_ROOT)
   workbook_info = load_workbook_info(workbook_path)
@@ -2333,7 +2376,7 @@ def main() -> int:
 
   if not capabilities["renderedBrowserAutomation"] or not capabilities["screenshotCapture"] or not capabilities["mobileViewportEmulation"] or sync_playwright is None:
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": capabilities["blockedTests"], "skippedRequiredTasksCount": len(capabilities["blockedTests"])})
-    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": capabilities["blockedTests"]}) else 1
+    return 0 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": capabilities["blockedTests"]}) else 1
 
   missing_r2 = missing_r2_upload_config()
   if missing_r2:
@@ -2346,7 +2389,7 @@ def main() -> int:
     preflight_data["checkpoints"].append(checkpoint("AUDIT STORAGE CHECKPOINT", [], [block], False))
     write_json(output_dir / "preflight.json", preflight_data)
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": [block], "skippedRequiredTasksCount": 1})
-    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"]}, allow_upload=False) else 1
+    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"], "workflowFailure": True}, allow_upload=False) else 1
 
   exception_sweep_routes = workbook_mobile_risk_routes(workbook_info, excludes)
   routes, route_blocks, required_routes = detect_required_routes(REPO_ROOT, workbook_info, excludes)
@@ -2358,6 +2401,11 @@ def main() -> int:
   }
   preflight_data["requiredMobileRoutes"] = required_routes
   preflight_data["routeBlocksBeforeStage3"] = route_blocks
+  print(
+    f"[mobile-ux] routes rendered={len(routes)} viewportRunsPlanned={len(routes) * len(VIEWPORTS)} "
+    f"exceptionSweepInventory={len(exception_sweep_routes)} routeBlocks={len(route_blocks)}",
+    flush=True,
+  )
   preflight_data["checkpoints"].append(checkpoint("STAGE 2 CHECKPOINT", ["repository template families", "shared CSS/JS/navigation", "page-family mobile risk register"], route_blocks, not route_blocks))
   write_json(output_dir / "preflight.json", preflight_data)
 
@@ -2365,7 +2413,7 @@ def main() -> int:
     coverage = coverage_document(routes, [], route_blocks, required_routes)
     write_json(output_dir / "coverage.json", coverage)
     write_json(output_dir / "evidence.json", {"preflight": preflight_data, "coverage": coverage, "records": []})
-    return 1 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": route_blocks}) else 1
+    return 0 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": route_blocks}) else 1
 
   try:
     records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, args.max_runtime_seconds)
@@ -2374,7 +2422,7 @@ def main() -> int:
     preflight_data["capabilities"]["blockedTests"].extend(blocks)
     preflight_data["capabilities"] = build_capabilities(None, "", preflight_data["capabilities"]["blockedTests"])
     write_json(output_dir / "preflight.json", preflight_data)
-    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
+    return 0 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
   except Exception as exc:  # pragma: no cover - runtime environment gate
     blocks = [
       {"capability": "renderedBrowserAutomation", "reason": str(exc)},
@@ -2384,7 +2432,7 @@ def main() -> int:
     preflight_data["capabilities"]["blockedTests"].extend(blocks)
     preflight_data["capabilities"] = build_capabilities(None, "", preflight_data["capabilities"]["blockedTests"])
     write_json(output_dir / "preflight.json", preflight_data)
-    return 1 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
+    return 0 if write_failure_payload(args, output_dir, HARD_GATE_MESSAGE, preflight_data, {"blockedTests": blocks, "error": str(exc), "trace": traceback.format_exc()}) else 1
 
   stage3_blocks = check_stage3_coverage(routes, records, route_blocks, runtime_blocks)
   coverage = coverage_document(routes, records, stage3_blocks, required_routes)
@@ -2394,7 +2442,7 @@ def main() -> int:
   write_json(output_dir / "evidence.json", {"preflight": preflight_data, "execution": execution, "coverage": coverage})
 
   if stage3_blocks:
-    return 1 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": stage3_blocks}) else 1
+    return 0 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": stage3_blocks}) else 1
 
   issues = build_issues(records)
   reconciliation = reconciliation_document(preflight_data)
@@ -2426,7 +2474,7 @@ def main() -> int:
       raise RuntimeError(f"R2 completion upload missing required artefact(s) after linked-report rewrite: {', '.join(missing)}")
   except Exception as exc:  # pragma: no cover - depends on live R2 credentials
     block = {"stage": "R2 audit upload", "blocker": str(exc), "reason": "Completed Mobile UX audit cannot be published to the required audits bucket."}
-    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": str(exc)}, allow_upload=False) else 1
+    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": str(exc), "workflowFailure": True}, allow_upload=False) else 1
 
   callback_payload = {
     "auditType": "mobile-ux",
@@ -2455,7 +2503,7 @@ def main() -> int:
     "finishedAt": summary["finishedAt"],
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
   }
-  post_callback(args.callback_url, args.callback_token, {k: v for k, v in callback_payload.items() if v is not None})
+  post_mobile_callback(args, output_dir, callback_payload, workflow_failure=False)
   return 0
 
 

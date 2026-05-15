@@ -197,6 +197,35 @@ class MobileUxHardGateTests(unittest.TestCase):
         else:
           os.environ[name] = value
 
+  def test_callback_marker_is_written_after_structured_callback(self):
+    calls = []
+    original_post_callback = audit.post_callback
+    try:
+      audit.post_callback = lambda url, token, payload: calls.append((url, token, payload))
+      with tempfile.TemporaryDirectory() as tmp:
+        output_dir = audit.Path(tmp)
+        args = argparse.Namespace(callback_url="https://suite.example.test/audits/mobile-ux/callback", callback_token="token")
+        payload = {
+          "auditType": "mobile-ux",
+          "sessionId": "marker-test",
+          "status": "failed",
+          "message": "controlled",
+          "reportPrefix": "audits/mobile-ux/marker-test",
+        }
+        audit.post_mobile_callback(args, output_dir, payload, workflow_failure=False)
+        marker = json.loads((output_dir / audit.CALLBACK_MARKER_FILENAME).read_text(encoding="utf-8"))
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(marker["sessionId"], "marker-test")
+        self.assertFalse(marker["workflowFailure"])
+    finally:
+      audit.post_callback = original_post_callback
+
+  def test_mobile_workflow_suppresses_generic_fallback_when_marker_exists(self):
+    workflow = audit.Path(".github/workflows/mobile-ux-hard-gate.yml").read_text(encoding="utf-8")
+    self.assertIn(audit.CALLBACK_MARKER_FILENAME, workflow)
+    self.assertIn("suppressing generic fallback callback", workflow)
+    self.assertIn("python -u scripts/audits/mobile_ux_hard_gate.py", workflow)
+
 
 class MobileUxReportArtifactTests(unittest.TestCase):
   def test_production_report_appendix_documents_are_generated_from_rendered_records(self):
