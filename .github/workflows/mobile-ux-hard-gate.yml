@@ -191,7 +191,8 @@ jobs:
             --callback-token "$RESOLVED_CALLBACK_TOKEN" \
             --analysis-url "${{ inputs.analysis_url }}" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
-            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
+            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS" \
+            --max-runtime-seconds "$MOBILE_UX_MAX_RUNTIME_SECONDS"
           audit_status=$?
           set -e
 
