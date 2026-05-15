@@ -3136,6 +3136,12 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
         ROOT / "robots.txt": robots_payload,
         ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
+        # Cloudflare Pages has proved unreliable for these case/legacy aliases when
+        # they are represented only as _redirects entries. Publish physical mirrors
+        # as well so the post-deploy live gate validates the compatibility contract
+        # from the deployed asset set, not from an eventually-applied redirect layer.
+        ROOT / "Sitemap.xml": sitemap_payload,
+        ROOT / "site-map.xml": sitemap_payload,
         ROOT / "llms.txt": llms_payload,
     }
 
@@ -3360,8 +3366,6 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
         file_path.write_text(content, encoding="utf-8")
 
     for legacy_path in (
-        ROOT / "site-map.xml",
-        ROOT / "Sitemap.xml",
         ROOT / "sitemap (1).xml",
         CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
     ):
