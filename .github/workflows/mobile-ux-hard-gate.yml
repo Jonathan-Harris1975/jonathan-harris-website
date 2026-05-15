@@ -179,8 +179,10 @@ jobs:
         timeout-minutes: 45
         env:
           MOBILE_UX_MAX_RUNTIME_SECONDS: "2400"
+        shell: bash
         run: |
-          python scripts/audits/mobile_ux_hard_gate.py \
+          set +e
+          python -u scripts/audits/mobile_ux_hard_gate.py \
             --base-url "${{ inputs.base_url }}" \
             --session-id "${{ inputs.session_id }}" \
             --report-prefix "${{ inputs.report_prefix }}" \
@@ -190,11 +192,43 @@ jobs:
             --analysis-url "${{ inputs.analysis_url }}" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
             --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
+          audit_status=$?
+          set -e
+
+          marker="artifacts/mobile-ux/.mobile-ux-callback-posted.json"
+          if [ "$audit_status" -ne 0 ] && [ -f "$marker" ]; then
+            echo "Mobile UX audit produced a controlled callback marker:"
+            cat "$marker"
+            workflow_failure="$(python - <<'PY'
+          import json
+          from pathlib import Path
+          marker = Path("artifacts/mobile-ux/.mobile-ux-callback-posted.json")
+          try:
+            print("true" if json.loads(marker.read_text(encoding="utf-8")).get("workflowFailure") else "false")
+          except Exception:
+            print("true")
+          PY
+          )"
+            if [ "$workflow_failure" = "true" ]; then
+              echo "Mobile UX audit reported an infrastructure/publication failure; preserving failed job status without posting a generic fallback callback."
+              exit "$audit_status"
+            fi
+            echo "Mobile UX audit reported a controlled non-scoring audit outcome; treating workflow transport as successful."
+            exit 0
+          fi
+
+          exit "$audit_status"
 
       - name: Notify AI Suite if workflow failed before artefacts were published
         if: failure() && env.RESOLVED_CALLBACK_URL != ''
         shell: bash
         run: |
+          if [ -f artifacts/mobile-ux/.mobile-ux-callback-posted.json ]; then
+            echo "Mobile UX audit already posted a structured callback; suppressing generic fallback callback."
+            cat artifacts/mobile-ux/.mobile-ux-callback-posted.json
+            exit 0
+          fi
+
           python - <<'PY'
           import json
           import os
