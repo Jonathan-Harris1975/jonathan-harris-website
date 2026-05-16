@@ -2910,8 +2910,11 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
     cards = []
     for topic in sorted(topic_map, key=str.lower):
         slug = slugify(topic)
+        title_count = len(topic_map[topic])
+        title_plural = "s" if title_count != 1 else ""
         cards.append(
-            f'<article class="card topic-card"><h2><a href="/catalogue/{slug}/">{html.escape(topic)}</a></h2><p>{len(topic_map[topic])} title{'s' if len(topic_map[topic]) != 1 else ''}</p></article>'
+            f'<article class="card topic-card"><h2><a href="/catalogue/{slug}/">{html.escape(topic)}</a></h2>'
+            f'<p>{title_count} title{title_plural}</p></article>'
         )
     cards_html = "\n".join(cards)
     guide_cards_html = topic_guide_cards_markup()
