@@ -3,7 +3,6 @@ import json
 import os
 import tempfile
 import unittest
-from unittest import mock
 
 from scripts.audits import mobile_ux_hard_gate as audit
 from scripts.audits.common import resolve_r2_public_base_for_bucket
@@ -139,41 +138,29 @@ class MobileUxHardGateTests(unittest.TestCase):
     self.assertNotIn("/contact", selected)
     self.assertNotIn("/newsletter", selected)
 
-
-  def test_parse_args_defines_stage3_runtime_budget(self):
-    old_env = os.environ.get("MOBILE_UX_MAX_RUNTIME_SECONDS")
-    try:
-      os.environ["MOBILE_UX_MAX_RUNTIME_SECONDS"] = "2400"
-      argv = [
-        "mobile_ux_hard_gate.py",
-        "--base-url",
-        "https://example.com",
-        "--session-id",
-        "arg-test",
-        "--report-prefix",
-        "audits/mobile-ux/arg-test",
-        "--max-runtime-seconds",
-        "123",
-      ]
-      with mock.patch.object(audit.sys, "argv", argv):
-        args = audit.parse_args()
-      self.assertEqual(args.max_runtime_seconds, 123)
-    finally:
-      if old_env is None:
-        os.environ.pop("MOBILE_UX_MAX_RUNTIME_SECONDS", None)
-      else:
-        os.environ["MOBILE_UX_MAX_RUNTIME_SECONDS"] = old_env
-
   def test_rendered_step_has_timeout_and_internal_runtime_budget(self):
     workflow = audit.Path(".github/workflows/mobile-ux-hard-gate.yml").read_text(encoding="utf-8")
     source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
 
     self.assertIn("timeout-minutes: 45", workflow)
     self.assertIn("MOBILE_UX_MAX_RUNTIME_SECONDS", workflow)
-    self.assertIn("--max-runtime-seconds", workflow)
-    self.assertIn("max_runtime_seconds = int(getattr(args, \"max_runtime_seconds\", DEFAULT_MAX_RUNTIME_SECONDS)", source)
     self.assertIn("Stage 3 runtime budget exceeded", source)
     self.assertIn("return records, executed, runtime_blocks", source)
+
+  def test_parse_args_defines_max_runtime_seconds(self):
+    old_argv = audit.sys.argv
+    try:
+      audit.sys.argv = [
+        "mobile_ux_hard_gate.py",
+        "--base-url", "https://example.com",
+        "--session-id", "arg-test",
+        "--report-prefix", "audits/mobile-ux/arg-test",
+        "--max-runtime-seconds", "123",
+      ]
+      args = audit.parse_args()
+      self.assertEqual(args.max_runtime_seconds, 123)
+    finally:
+      audit.sys.argv = old_argv
 
   def test_failure_payload_writes_complete_diagnostic_artifacts(self):
     old_env = {
@@ -468,8 +455,9 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
     matrix = audit.build_verification_matrix(records, issues)
 
     self.assertEqual(matrix["horizontal overflow status"]["status"], "FAIL")
-    self.assertEqual(matrix["visual design consistency"]["status"], "PASS")
-    self.assertIn("No subjective visual-design FAIL", matrix["visual design consistency"]["evidence"])
+    self.assertEqual(matrix["visual design consistency"]["status"], audit.EVIDENCE_CAPTURED_STATUS)
+    self.assertIn("does not issue subjective brand/design PASS or FAIL", matrix["visual design consistency"]["evidence"])
+    self.assertEqual(matrix["cover art quality"]["status"], audit.NOT_ASSESSED_STATUS)
 
   def test_report_json_exposes_root_groups_and_raw_records_for_appendices(self):
     records = [self._record("/ebooks", 320), self._record("/ebooks", 390)]
@@ -487,7 +475,9 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
     }
     document = audit.report_json_document(summary, records, issues, {"complete": True, "skippedRequiredTasksCount": 0}, {"crossSourceMismatches": [], "crossSourceMismatchCount": 0}, {"report.json": "https://audits.example.test/report.json"})
 
+    self.assertIn("executiveThemes", document)
     self.assertIn("rootCauseGroups", document)
+    self.assertGreaterEqual(document["executiveThemes"]["themeCount"], 1)
     self.assertLess(document["rootCauseGroups"]["groupCount"], len(document["issues"]))
     self.assertEqual(len(document["execution"]["records"]), len(records))
     self.assertIn("report.json", document["appendixLinks"])

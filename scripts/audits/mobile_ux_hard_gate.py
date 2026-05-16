@@ -119,6 +119,54 @@ CHECK_TO_TECHNICAL_AREA = {
   "live404Verification": "404 route shell and shared layout",
 }
 
+EXECUTIVE_THEME_LIMIT = 12
+TECHNICAL_GROUP_PREVIEW_LIMIT = 24
+RESPONSIVE_FIX_PREVIEW_LIMIT = 24
+EXECUTIVE_THEME_DEFINITIONS = {
+  "navigation": {
+    "title": "Shared mobile navigation and menu reliability",
+    "checks": {"hamburgerNavigation", "dynamicResizeReflow"},
+    "programme": "Stabilise the shared header, hamburger button, mobile drawer, overlay, focus state, and resize reset behaviour across every route family.",
+  },
+  "conversion": {
+    "title": "Conversion journey and CTA continuity",
+    "checks": {"ctaContinuity", "touchTargetUsability", "formUsability"},
+    "programme": "Protect the primary conversion path by keeping CTAs visible, tappable, correctly routed, and usable in every mobile layout state.",
+  },
+  "layout": {
+    "title": "Responsive layout, overflow, and breakpoint control",
+    "checks": {"overflow", "responsiveCoverage", "viewportCorrectness"},
+    "programme": "Remove fixed-width and breakpoint defects by tightening shared CSS, grid constraints, max-width rules, and viewport metadata/runtime behaviour.",
+  },
+  "readability": {
+    "title": "Mobile readability and content density",
+    "checks": {"typographyReadability"},
+    "programme": "Rebalance responsive type scale, line length, spacing, and wrapping so the pages read cleanly at mobile and tablet widths.",
+  },
+  "media": {
+    "title": "Image, artwork, and visual asset responsiveness",
+    "checks": {"imageResponsiveness"},
+    "programme": "Constrain images, book covers, artwork, logos, and embedded media so they scale without clipping, distortion, or layout breakage.",
+  },
+  "tables": {
+    "title": "Tables, comparisons, and wide-content handling",
+    "checks": {"tableComparisonHandling"},
+    "programme": "Give comparison/table content a deliberate mobile pattern: scroll container, stacked cards, or wrapped rows rather than clipped wide content.",
+  },
+  "routing": {
+    "title": "Live route shell and error-state resilience",
+    "checks": {"live404Verification"},
+    "programme": "Make the rendered 404 shell and destination states behave like governed product pages, with working layout, navigation, and CTA recovery paths.",
+  },
+}
+CHECK_TO_EXECUTIVE_THEME = {
+  check: key
+  for key, definition in EXECUTIVE_THEME_DEFINITIONS.items()
+  for check in definition["checks"]
+}
+NOT_ASSESSED_STATUS = "NOT ASSESSED"
+EVIDENCE_CAPTURED_STATUS = "EVIDENCE CAPTURED"
+
 
 class HardGateCapabilityError(RuntimeError):
   """Raised when rendered browser automation, screenshots, or mobile emulation cannot be proven."""
@@ -1149,6 +1197,35 @@ def missing_required_completion_artefacts(uploaded: dict[str, str]) -> list[str]
   return [name for name in MANDATORY_COMPLETION_ARTEFACTS if not uploaded.get(name)]
 
 
+
+def validate_public_json_artifacts(uploaded: dict[str, str], names: list[str] | None = None, *, attempts: int = 6, delay_seconds: float = 1.5) -> dict[str, Any]:
+  json_names = names or [name for name in MANDATORY_COMPLETION_ARTEFACTS if name.endswith(".json")]
+  results = {}
+  try:
+    import requests  # type: ignore
+  except Exception as exc:  # pragma: no cover - requests is installed in workflow dependencies
+    raise RuntimeError(f"requests is required for public JSON artefact validation: {exc}") from exc
+
+  for name in json_names:
+    url = uploaded.get(name)
+    if not url:
+      raise RuntimeError(f"public JSON validation missing URL for {name}")
+    last_error = None
+    for attempt in range(1, attempts + 1):
+      try:
+        response = requests.get(url, timeout=20)
+        response.raise_for_status()
+        json.loads(response.text)
+        results[name] = {"url": url, "status": "PASS", "attempt": attempt}
+        break
+      except Exception as exc:  # pragma: no cover - depends on live R2 public endpoint
+        last_error = exc
+        if attempt < attempts:
+          time.sleep(delay_seconds)
+    else:
+      raise RuntimeError(f"public JSON artefact validation failed for {name}: {last_error}")
+  return {"status": "PASS", "checked": results, "generatedAt": utc_now()}
+
 def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) -> dict[str, str | None]:
   try:
     page.screenshot(path=str(file_path), full_page=True)
@@ -1352,19 +1429,27 @@ def snippet_around(text: str, needle: str, radius: int = 420) -> str | None:
   return snippet[:1200]
 
 
-def source_snippet_for_anchor(route: str, anchor: str | None, repo_root: Path = REPO_ROOT) -> dict[str, Any]:
-  candidate_paths = []
+def source_snippet_for_anchor(route: str, anchor: str | None, repo_root: Path = REPO_ROOT, check: str | None = None) -> dict[str, Any]:
   route_path = route_source_path(route, repo_root)
-  if "not found" not in route_path and "live route only" not in route_path:
-    candidate_paths.append(route_path)
-  candidate_paths.extend([
+  route_candidates = [] if "not found" in route_path or "live route only" in route_path else [route_path]
+  shared_candidates = [
+    "assets/partials/header.html",
     "assets/css/site.css",
     "assets/js/site.js",
     "assets/js/main.js",
-    "assets/partials/header.html",
     "assets/partials/head.html",
     "assets/partials/footer.html",
-  ])
+  ]
+  if check in {"hamburgerNavigation", "dynamicResizeReflow"}:
+    candidate_paths = ["assets/partials/header.html", "assets/js/site.js", "assets/css/site.css", *route_candidates]
+  elif check in {"overflow", "responsiveCoverage", "touchTargetUsability", "typographyReadability", "imageResponsiveness", "tableComparisonHandling", "formUsability"}:
+    candidate_paths = ["assets/css/site.css", *route_candidates, "assets/partials/header.html", "assets/js/site.js"]
+  elif check == "ctaContinuity":
+    candidate_paths = [*route_candidates, "assets/partials/header.html", "assets/css/site.css", "assets/js/site.js"]
+  elif check == "live404Verification":
+    candidate_paths = ["404.html", *route_candidates, "assets/css/site.css", "assets/partials/header.html"]
+  else:
+    candidate_paths = [*route_candidates, *shared_candidates]
   needles = source_anchor_candidates(anchor)
   for relative in dict.fromkeys(candidate_paths):
     path = repo_root / relative
@@ -1468,7 +1553,7 @@ def root_cause_groups_document(issues: list[dict[str, Any]], records: list[dict[
           screenshots.append(ref)
     first = group_issues[0]
     anchor = first.get("bestAvailableCodeAnchor") or first.get("selectorComponentCodeAnchor") or "Best available rendered component anchor recorded in details"
-    source = source_snippet_for_anchor(str(first.get("route") or "/"), str(anchor))
+    source = source_snippet_for_anchor(str(first.get("route") or "/"), str(anchor), check=checks[0] if checks else None)
     groups.append({
       "groupId": group_id,
       "title": CHECK_GROUP_TITLES.get(checks[0], "Shared mobile UX defect") if len(checks) == 1 else "Shared mobile UX defect cluster",
@@ -1498,6 +1583,89 @@ def root_cause_groups_document(issues: list[dict[str, Any]], records: list[dict[
     "groupingPolicy": "Deterministic grouping by failed metric, template/shared-component family, and best available rendered selector/component anchor. Raw per-viewport records remain in execution.json and mandatory-mobile-scorecard.json.",
     "generatedAt": utc_now(),
   }
+
+
+def executive_theme_key_for_group(group: dict[str, Any]) -> str:
+  checks = group.get("failedMetricTypes") or []
+  for check in checks:
+    key = CHECK_TO_EXECUTIVE_THEME.get(str(check))
+    if key:
+      return key
+  return "layout"
+
+
+def executive_themes_document(root_groups_doc: dict[str, Any], summary: dict[str, Any] | None = None) -> dict[str, Any]:
+  buckets: dict[str, list[dict[str, Any]]] = {}
+  for group in root_groups_doc.get("groups", []):
+    buckets.setdefault(executive_theme_key_for_group(group), []).append(group)
+
+  themes = []
+  for key, groups in buckets.items():
+    definition = EXECUTIVE_THEME_DEFINITIONS.get(key, EXECUTIVE_THEME_DEFINITIONS["layout"])
+    severities = [str(group.get("severity") or "P3") for group in groups]
+    severity = "P3"
+    for item in severities:
+      severity = worse_severity(item, severity)
+    route_families = sorted({family for group in groups for family in (group.get("affectedRouteFamilies") or [])})
+    routes = sorted({route for group in groups for route in (group.get("affectedRoutes") or [])})
+    viewports = []
+    for group in groups:
+      match = re.findall(r"\d+", str(group.get("affectedViewportRange") or ""))
+      viewports.extend(int(item) for item in match)
+    metrics = sorted({metric for group in groups for metric in (group.get("failedMetricTypes") or [])})
+    screenshots = []
+    seen = set()
+    for group in sorted(groups, key=lambda item: (SEVERITY_ORDER.get(str(item.get("severity") or "P3"), 9), -int(item.get("affectedUrlCount") or 0), str(item.get("groupId")))):
+      for ref in group.get("representativeScreenshots", []):
+        keyref = ref.get("relativePath") or ref.get("publicUrl")
+        if keyref and keyref not in seen:
+          seen.add(keyref)
+          screenshots.append(ref)
+    primary_groups = sorted(groups, key=lambda item: (SEVERITY_ORDER.get(str(item.get("severity") or "P3"), 9), -int(item.get("affectedUrlCount") or 0), str(item.get("groupId"))))[:8]
+    themes.append({
+      "themeId": f"MUX-T{len(themes) + 1:02d}",
+      "themeKey": key,
+      "title": definition["title"],
+      "severity": severity,
+      "affectedRouteFamilies": route_families,
+      "affectedUrlCount": len(routes),
+      "affectedViewportRange": f"{min(viewports)}-{max(viewports)}px" if viewports else "not recorded",
+      "failedMetricTypes": metrics,
+      "technicalGroupCount": len(groups),
+      "linkedGroupIds": [group.get("groupId") for group in groups],
+      "primaryGroupIds": [group.get("groupId") for group in primary_groups],
+      "representativeScreenshots": screenshots[:5],
+      "executiveConsequence": executive_consequence_for_theme(key, severity, len(routes)),
+      "remediationProgramme": definition["programme"],
+      "acceptanceCriteria": f"All linked technical groups for {definition['title']} return PASS across their affected routes and viewport ranges; no active P0/P1 issues remain for this theme.",
+      "verificationMethod": "Rerun Mobile UX hard-gate and compare execution.json, mandatory-mobile-scorecard.json, screenshot-manifest.json, and responsive-fix-appendix.json for the linked groups.",
+      "detailedAppendixReference": "repository-issue-appendix.json and responsive-fix-appendix.json",
+    })
+  themes.sort(key=lambda item: (SEVERITY_ORDER.get(item["severity"], 9), -int(item["affectedUrlCount"]), item["title"]))
+  return {
+    "auditType": "mobile-ux",
+    "sessionId": summary.get("sessionId") if summary else None,
+    "reportPrefix": summary.get("reportPrefix") if summary else None,
+    "themeCount": len(themes),
+    "themes": themes[:EXECUTIVE_THEME_LIMIT],
+    "allThemeCountBeforeLimit": len(themes),
+    "policy": "Executive themes aggregate deterministic technical root-cause groups into board-level remediation programmes. Technical groups and raw viewport records remain in JSON appendices.",
+    "generatedAt": utc_now(),
+  }
+
+
+def executive_consequence_for_theme(theme_key: str, severity: str, affected_url_count: int) -> str:
+  prefix = "Blocks credible mobile release" if severity == "P0" else "Creates material mobile remediation risk" if severity == "P1" else "Creates follow-up mobile quality risk"
+  detail = {
+    "navigation": "because users may be unable to open, close, or recover the core mobile menu reliably.",
+    "conversion": "because mobile users may lose the buy, newsletter, contact, or next-step path.",
+    "layout": "because layout overflow or breakpoint failure undermines trust and usability on rendered pages.",
+    "readability": "because content becomes harder to scan, understand, or act on at mobile widths.",
+    "media": "because visual assets and book imagery can damage perceived quality when clipped or distorted.",
+    "tables": "because wide comparison content can become inaccessible or clipped on mobile.",
+    "routing": "because error/recovery states can lose navigation or conversion continuity.",
+  }.get(theme_key, "because repeated rendered evidence shows shared mobile implementation risk.")
+  return f"{prefix} across {affected_url_count} affected rendered URL(s) {detail}"
 
 
 def screenshot_manifest_document(records: list[dict[str, Any]], summary: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -1616,6 +1784,13 @@ def repository_issue_appendix_document(summary: dict[str, Any], issues: list[dic
 
 def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[str, Any]], records: list[dict[str, Any]] | None = None) -> dict[str, Any]:
   groups = root_cause_groups_document(issues, records or [], summary)["groups"]
+  root_doc = {"groups": groups}
+  theme_doc = executive_themes_document(root_doc, summary)
+  group_to_theme = {
+    group_id: theme
+    for theme in theme_doc.get("themes", [])
+    for group_id in theme.get("linkedGroupIds", [])
+  }
   rows = []
   for group in groups:
     if group.get("severity") not in {"P0", "P1"}:
@@ -1624,8 +1799,12 @@ def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[
     snippets_available = bool(source.get("available"))
     current = source.get("snippet") if snippets_available else source.get("reasonExactReplacementUnavailable")
     first_issue = next((issue for issue in issues if issue.get("issueId") in group.get("linkedIssueIds", [])), {})
+    theme = group_to_theme.get(group.get("groupId"), {})
+    patch_instruction = group.get("exactRemediation") or "Fix the affected responsive component and verify the same route/viewport passes."
     rows.append({
       "fixId": f"FIX-{group.get('groupId')}",
+      "linkedThemeId": theme.get("themeId"),
+      "linkedThemeTitle": theme.get("title"),
       "linkedGroupId": group.get("groupId"),
       "linkedIssueIds": group.get("linkedIssueIds", []),
       "severity": group.get("severity"),
@@ -1634,28 +1813,31 @@ def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[
       "currentCodeOrClosestRelevantSnippet": current,
       "proposedReplacementCodeOrPatchInstruction": (
         "Exact replacement code is unavailable because the rendered failure cannot be deterministically mapped to a single stable source block. "
-        f"Apply this patch instruction instead: {group.get('exactRemediation')}"
+        f"Best available manual patch instruction: {patch_instruction}"
       ) if not snippets_available else (
-        f"Patch the shown source block using the smallest CSS/HTML/JS change that satisfies: {group.get('exactRemediation')}"
+        f"Patch the shown source block using the smallest CSS/HTML/JS change that satisfies this rendered acceptance contract: {patch_instruction}"
       ),
       "cssJsTemplateAreaAffected": CHECK_TO_TECHNICAL_AREA.get((group.get("failedMetricTypes") or [""])[0], "Website frontend"),
       "effortEstimate": "M (2-8 hrs)" if group.get("severity") == "P0" else "S (<2 hrs)",
       "riskLevel": "High" if group.get("severity") == "P0" else "Medium",
       "acceptanceCriteria": group.get("acceptanceCriteria"),
       "viewportRetestSteps": [
-        f"Rerun Mobile UX audit and filter mandatory-mobile-scorecard.json for group {group.get('groupId')} linked issues.",
-        f"Confirm affected viewport band {group.get('affectedViewportRange')} returns PASS for {', '.join(group.get('failedMetricTypes') or [])}.",
-        "Confirm screenshot-manifest.json contains fresh passing evidence or the old failure screenshot is no longer linked from active failures.",
+        f"Rerun Mobile UX audit and filter mandatory-mobile-scorecard.json for linked group {group.get('groupId')}.",
+        f"Retest affected viewport band {group.get('affectedViewportRange')} on affected route families: {', '.join(group.get('affectedRouteFamilies') or [])}.",
+        f"Confirm failed metric(s) {', '.join(group.get('failedMetricTypes') or [])} return PASS for every linked issue ID.",
+        "Confirm screenshot-manifest.json contains fresh passing evidence or the old failure screenshots are no longer linked from active failures.",
       ],
       "screenshotReferences": group.get("representativeScreenshots", []),
       "manualRemediationReason": None if snippets_available else source.get("reasonExactReplacementUnavailable"),
       "verificationMethod": group.get("verificationMethod"),
     })
+  rows.sort(key=lambda row: (SEVERITY_ORDER.get(str(row.get("severity") or "P3"), 9), str(row.get("linkedThemeTitle") or ""), str(row.get("linkedGroupId") or "")))
   return {
     "auditType": "mobile-ux",
     "sessionId": summary.get("sessionId"),
     "reportPrefix": summary.get("reportPrefix"),
     "rows": rows,
+    "rowPolicy": "Every verified P0/P1 technical root-cause group gets an actionable remediation contract. HTML previews are capped for readability; this JSON contains the complete list.",
     "generatedAt": utc_now(),
   }
 
@@ -1669,9 +1851,10 @@ def report_json_document(
   artefacts: dict[str, str] | None = None,
 ) -> dict[str, Any]:
   root_groups = root_cause_groups_document(issues, records, summary)
+  executive_themes = executive_themes_document(root_groups, summary)
   return {
     "auditType": "mobile-ux",
-    "schemaVersion": "mobile-ux-hard-gate-v5.0-executive-groups",
+    "schemaVersion": "mobile-ux-hard-gate-v5.1-executive-synthesis",
     "status": summary.get("status"),
     "sessionId": summary.get("sessionId"),
     "reportPrefix": summary.get("reportPrefix"),
@@ -1681,6 +1864,7 @@ def report_json_document(
     "summary": summary,
     "coverage": coverage,
     "reconciliation": reconciliation,
+    "executiveThemes": executive_themes,
     "rootCauseGroups": root_groups,
     "issueSummaries": [
       {
@@ -1766,7 +1950,7 @@ def reconciliation_document(preflight_data: dict[str, Any]) -> dict[str, Any]:
 
 
 def html_badge(status: str) -> str:
-  css = "pass" if status == "PASS" else "fail" if status == "FAIL" else "warn"
+  css = "pass" if status == "PASS" else "fail" if status in {"FAIL", "BLOCKED"} else "warn"
   return f"<span class='badge {css}'>{escape(status)}</span>"
 
 
@@ -1803,6 +1987,8 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   verdict = summary.get("releaseVerdict")
   root_groups_doc = root_cause_groups_document(issues, records, summary)
   root_groups = root_groups_doc["groups"]
+  executive_themes_doc = executive_themes_document(root_groups_doc, summary)
+  executive_themes = executive_themes_doc["themes"]
   critical_groups = [group for group in root_groups if group.get("severity") == "P0"]
   p1_groups = [group for group in root_groups if group.get("severity") == "P1"]
   confidence = summary.get("confidenceModel") or {}
@@ -1818,18 +2004,36 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     for key, value in confidence.items()
   ) or "<tr><td colspan='3'>Confidence model was not supplied.</td></tr>"
 
-  group_rows = []
-  for group in root_groups:
-    screenshots = "<br>".join(link_for_ref(ref) for ref in group.get("representativeScreenshots", [])) or "—"
+  theme_rows = []
+  for theme in executive_themes:
+    screenshots = "<br>".join(link_for_ref(ref) for ref in theme.get("representativeScreenshots", [])) or "—"
+    theme_rows.append(
+      f"<tr><td><code>{escape(str(theme['themeId']))}</code></td><td>{escape(str(theme['title']))}</td>"
+      f"<td>{escape(str(theme['severity']))}</td><td>{escape(str(theme.get('technicalGroupCount')))}</td>"
+      f"<td>{escape(str(theme.get('affectedUrlCount')))}</td><td>{escape(str(theme.get('affectedViewportRange')))}</td>"
+      f"<td>{escape(', '.join(theme.get('failedMetricTypes') or []))}</td>"
+      f"<td>{escape(str(theme.get('executiveConsequence')))}</td>"
+      f"<td>{escape(str(theme.get('remediationProgramme')))}</td>"
+      f"<td>{escape(', '.join(str(item) for item in theme.get('primaryGroupIds') or []))}</td>"
+      f"<td>{screenshots}</td></tr>"
+    )
+
+  technical_group_rows = []
+  sorted_groups = sorted(
+    root_groups,
+    key=lambda item: (SEVERITY_ORDER.get(str(item.get("severity") or "P3"), 9), -int(item.get("affectedUrlCount") or 0), str(item.get("groupId") or "")),
+  )
+  for group in sorted_groups[:TECHNICAL_GROUP_PREVIEW_LIMIT]:
     source = group.get("bestAvailableSource") if isinstance(group.get("bestAvailableSource"), dict) else {}
     source_label = source.get("filePath") or group.get("bestAvailableCodeAnchor") or "—"
-    group_rows.append(
+    technical_group_rows.append(
       f"<tr><td><code>{escape(str(group['groupId']))}</code></td><td>{escape(str(group['title']))}</td>"
       f"<td>{escape(str(group['severity']))}</td><td>{escape(', '.join(group.get('affectedRouteFamilies') or []))}</td>"
       f"<td>{escape(str(group.get('affectedUrlCount')))}</td><td>{escape(str(group.get('affectedViewportRange')))}</td>"
       f"<td>{escape(', '.join(group.get('failedMetricTypes') or []))}</td><td>{escape(str(source_label))}</td>"
-      f"<td>{escape(str(group.get('exactRemediation')))}</td><td>{screenshots}</td></tr>"
+      f"<td>{escape(str(group.get('exactRemediation')))}</td></tr>"
     )
+
 
   capability_rows = "".join(
     f"<tr><td>{escape(key)}</td><td>{escape(str(value))}</td></tr>"
@@ -1886,12 +2090,16 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
 
   fix_appendix = responsive_fix_appendix_document(summary, issues, records)
   fix_rows = "".join(
-    f"<tr><td><code>{escape(str(row.get('fixId')))}</code></td><td>{escape(str(row.get('severity')))}</td>"
-    f"<td>{escape(str(row.get('linkedGroupId')))}</td><td>{escape(str(row.get('affectedFilePath')))}</td>"
-    f"<td>{escape(str(row.get('bestAvailableCodeAnchor')))}</td><td>{escape(str(row.get('proposedReplacementCodeOrPatchInstruction')))}</td>"
-    f"<td>{escape(str(row.get('effortEstimate')))}</td><td>{escape(' | '.join(str(step) for step in row.get('viewportRetestSteps') or []))}</td></tr>"
-    for row in fix_appendix["rows"]
+    f"<tr><td><code>{escape(str(row.get('fixId')))}</code><br><small>{escape(str(row.get('linkedThemeId') or ''))}</small></td><td>{escape(str(row.get('severity')))}</td>"
+    f"<td>{escape(str(row.get('linkedGroupId')))}<br><small>{escape(str(row.get('linkedThemeTitle') or ''))}</small></td>"
+    f"<td>{escape(str(row.get('affectedFilePath')))}<br><small>{escape(str(row.get('cssJsTemplateAreaAffected') or ''))}</small></td>"
+    f"<td>{escape(str(row.get('bestAvailableCodeAnchor')))}</td><td>{escape(str(row.get('proposedReplacementCodeOrPatchInstruction')))}"
+    f"<br><small>{escape(str(row.get('manualRemediationReason') or 'Source snippet available where shown in JSON appendix.'))}</small></td>"
+    f"<td>{escape(str(row.get('effortEstimate')))}<br><small>Risk: {escape(str(row.get('riskLevel')))}</small></td>"
+    f"<td>{escape(' | '.join(str(step) for step in row.get('viewportRetestSteps') or []))}</td></tr>"
+    for row in fix_appendix["rows"][:RESPONSIVE_FIX_PREVIEW_LIMIT]
   ) or "<tr><td colspan='8'>No P0/P1 responsive fixes were generated.</td></tr>"
+
 
   issue_preview_rows = "".join(
     f"<tr><td><code>{escape(str(issue.get('issueId')))}</code></td><td><code>{escape(str(issue.get('groupId')))}</code></td>"
@@ -1917,8 +2125,8 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
 
   <section id="executive-summary">
     <h2>Executive summary</h2>
-    <p>Stage 3 rendered mobile execution completed across {summary['renderedPages']} rendered URL(s) and {summary['viewportRuns']} viewport run(s). The run recorded {summary['mobileFailureCount']} failing viewport record(s), synthesised into {root_groups_doc['groupCount']} root-cause group(s).</p>
-    <p><strong>Commercial decision:</strong> {escape(str(verdict))}. P0 groups: {len(critical_groups)}. P1 groups: {len(p1_groups)}. Screenshots retained: {summary['screenshotCount']}.</p>
+    <p>Stage 3 rendered mobile execution completed across {summary['renderedPages']} rendered URL(s) and {summary['viewportRuns']} viewport run(s). The run recorded {summary['mobileFailureCount']} failing viewport record(s), synthesised into {executive_themes_doc['themeCount']} executive theme(s) and {root_groups_doc['groupCount']} technical root-cause group(s).</p>
+    <p><strong>Commercial decision:</strong> {escape(str(verdict))}. P0 technical groups: {len(critical_groups)}. P1 technical groups: {len(p1_groups)}. Screenshots retained: {summary['screenshotCount']}.</p>
   </section>
 
   <section id="scope-summary">
@@ -1981,15 +2189,17 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   </section>
 
   <section id="critical-blockers">
-    <h2>Critical blockers</h2>
-    <p>P0 root-cause groups: {len(critical_groups)}. P1 root-cause groups: {len(p1_groups)}.</p>
-    <table><thead><tr><th>Group</th><th>Title</th><th>Severity</th><th>Route families</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Anchor/source</th><th>Remediation</th><th>Screenshots</th></tr></thead><tbody>{''.join(group_rows) or '<tr><td colspan="10">No rendered mobile root-cause group recorded.</td></tr>'}</tbody></table>
+    <h2>Executive blocker themes</h2>
+    <p>Executive synthesis: {executive_themes_doc['themeCount']} board-level remediation theme(s) above {root_groups_doc['groupCount']} technical root-cause group(s). P0 technical groups: {len(critical_groups)}. P1 technical groups: {len(p1_groups)}.</p>
+    <p class="section-note">This table is intentionally capped at systemic themes. Full technical root-cause groups and raw viewport evidence remain in JSON appendices.</p>
+    <table><thead><tr><th>Theme</th><th>Title</th><th>Severity</th><th>Technical groups</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Executive consequence</th><th>Remediation programme</th><th>Primary group IDs</th><th>Screenshots</th></tr></thead><tbody>{''.join(theme_rows) or '<tr><td colspan="11">No executive blocker theme recorded.</td></tr>'}</tbody></table>
   </section>
 
   <section id="root-cause-findings">
-    <h2>Root-cause grouped findings</h2>
+    <h2>Technical root-cause grouped findings</h2>
     <p>Grouping policy: {escape(root_groups_doc['groupingPolicy'])}</p>
-    <p>Linked issue rows remain in repository-issue-appendix.json; full execution rows remain in execution.json.</p>
+    <p>Previewing top {TECHNICAL_GROUP_PREVIEW_LIMIT} technical groups by severity and blast radius. Full linked issue rows remain in repository-issue-appendix.json; full execution rows remain in execution.json.</p>
+    <table class="tight"><thead><tr><th>Group</th><th>Title</th><th>Severity</th><th>Route families</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Anchor/source</th><th>Remediation</th></tr></thead><tbody>{''.join(technical_group_rows) or '<tr><td colspan="9">No rendered mobile root-cause group recorded.</td></tr>'}</tbody></table>
   </section>
 
   <section id="systemic-findings">
@@ -2063,8 +2273,8 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
 
   <section id="responsive-fix-appendix">
     <h2>Responsive Fix Appendix section</h2>
-    <p>For verified P0/P1 groups, the audit records the best rendered anchor, closest source snippet where available, manual remediation contract, and viewport retest steps.</p>
-    <table class="tight"><thead><tr><th>Fix</th><th>Severity</th><th>Group</th><th>File/source</th><th>Anchor</th><th>Patch instruction</th><th>Effort</th><th>Retest</th></tr></thead><tbody>{fix_rows}</tbody></table>
+    <p>For verified P0/P1 groups, the audit records the best rendered anchor, closest source snippet where available, manual remediation contract, and viewport retest steps. Previewing top {RESPONSIVE_FIX_PREVIEW_LIMIT}; the full contract is in responsive-fix-appendix.json.</p>
+    <table class="tight"><thead><tr><th>Fix/theme</th><th>Severity</th><th>Group</th><th>File/source</th><th>Anchor</th><th>Patch instruction and source-note</th><th>Effort/risk</th><th>Retest</th></tr></thead><tbody>{fix_rows}</tbody></table>
   </section>
 
   <section id="artefacts">
@@ -2096,7 +2306,7 @@ def status_for_check(records: list[dict[str, Any]], check: str, *, route: str | 
   if applicable_only:
     values = [value for value in values if value in {"PASS", "FAIL"}]
   if not values:
-    return matrix_entry("PASS", f"No applicable rendered {check} failure was recorded; not a substitute for a separate specialist audit.", "mandatory-mobile-scorecard.json")
+    return matrix_entry(NOT_ASSESSED_STATUS, f"No applicable rendered {check} PASS/FAIL evidence was recorded by this mobile hard-gate; no unsupported claim is made.", "mandatory-mobile-scorecard.json")
   if any(value == "FAIL" for value in values):
     return matrix_entry("FAIL", f"Rendered Stage 3 recorded {check} failure(s).", "mandatory-mobile-scorecard.json")
   return matrix_entry("PASS", f"Rendered Stage 3 recorded {check} PASS for applicable row(s).", "mandatory-mobile-scorecard.json")
@@ -2121,11 +2331,12 @@ def build_verification_matrix(records: list[dict[str, Any]], issues: list[dict[s
     "image responsiveness": status_for_check(records, "imageResponsiveness"),
     "form usability where relevant": status_for_check(records, "formUsability"),
     "table/comparison handling where relevant": status_for_check(records, "tableComparisonHandling"),
-    "visual design consistency": matrix_entry("PASS", "No subjective visual-design FAIL is asserted by this deterministic mobile audit. Only layout-impact evidence is scored elsewhere.", "screenshot-manifest.json"),
-    "cover art quality": matrix_entry("PASS" if "imageResponsiveness" not in failed_checks else "FAIL", "Evidence is limited to rendered image responsiveness/broken-image detection, not subjective cover-art quality.", "mandatory-mobile-scorecard.json"),
-    "metadata consistency": matrix_entry("PASS", "Preflight captured live homepage metadata and repository viewport inventory; detailed SEO scoring belongs to the SEO/AEO/GEO audit.", "preflight.json"),
-    "schema correctness": matrix_entry("PASS", "No schema-specific FAIL is asserted by this mobile-only audit; schema remains out of scope unless rendered mobile evidence exposes a defect.", "preflight.json"),
-    "redirects": matrix_entry("PASS", "No deterministic rendered redirect failure was recorded by the mobile CTA/live route checks.", "execution.json"),
+    "visual design consistency": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Screenshots capture rendered visual state, but this deterministic mobile audit does not issue subjective brand/design PASS or FAIL without a specific rendered layout defect.", "screenshot-manifest.json"),
+    "cover art quality": matrix_entry(NOT_ASSESSED_STATUS, "Subjective cover-art quality is outside this mobile hard-gate. Image responsiveness is assessed separately and must not be converted into a cover-art quality judgement.", "mandatory-mobile-scorecard.json"),
+    "cover art and image presentation responsiveness": status_for_check(records, "imageResponsiveness"),
+    "metadata consistency": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Preflight captured live homepage metadata and repository viewport inventory; detailed SEO scoring belongs to the SEO/AEO/GEO audit.", "preflight.json"),
+    "schema correctness": matrix_entry(NOT_ASSESSED_STATUS, "Schema correctness is outside this mobile-only audit unless rendered evidence exposes a deterministic mobile defect.", "preflight.json"),
+    "redirects": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Mobile rendered CTA/live-route checks captured route behaviour relevant to this audit, but a full redirect-chain audit is outside this report.", "execution.json"),
     "live rendered 404 behaviour": status_for_check(records, "live404Verification", route=LIVE_404_ROUTE),
     "release readiness": matrix_entry("FAIL" if any_p0_or_p1 else "PASS", "Release readiness follows completed Stage 3 evidence and P0/P1 severity bands.", "report.json"),
   }
@@ -2233,6 +2444,8 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     else "CONDITIONAL PASS because at least one verified P1 mobile issue remains." if p1
     else "PASS because completed Stage 3 rendered evidence found no P0/P1 mobile blockers."
   )
+  root_groups_doc = root_cause_groups_document(issues, records)
+  executive_themes_doc = executive_themes_document(root_groups_doc, {"sessionId": args.session_id, "reportPrefix": args.report_prefix})
   return {
     "ok": True,
     "auditType": "mobile-ux",
@@ -2251,12 +2464,14 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "exceptionSweepUrlsChecked": exception_sweep_urls_checked,
     "exceptionsEscalated": failure_count,
     "issueCount": len(issues),
-    "rootCauseGroupCount": len({issue.get("groupId") for issue in issues if issue.get("groupId")}),
+    "rootCauseGroupCount": root_groups_doc.get("groupCount"),
+    "executiveThemeCount": executive_themes_doc.get("themeCount"),
     "preflight": preflight_data,
     "coverage": coverage,
     "reconciliation": reconciliation,
     "issues": issues,
-    "rootCauseGroups": root_cause_groups_document(issues, records),
+    "executiveThemes": executive_themes_doc,
+    "rootCauseGroups": root_groups_doc,
     "verificationMatrix": verification,
     "weightedScorecard": weighted_scorecard(score, issues),
     "reportControlBlock": report_control,
@@ -2422,8 +2637,7 @@ def main() -> int:
     return 0 if write_failure_payload(args, output_dir, STAGE_3_INCOMPLETE_MESSAGE, preflight_data, {"stage3Blocks": route_blocks}) else 1
 
   try:
-    max_runtime_seconds = int(getattr(args, "max_runtime_seconds", DEFAULT_MAX_RUNTIME_SECONDS) or DEFAULT_MAX_RUNTIME_SECONDS)
-    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, max_runtime_seconds)
+    records, _executed, runtime_blocks = run_rendered_execution(sync_playwright, base_url, args.session_id, routes, screenshots_dir, args.max_runtime_seconds)
   except HardGateCapabilityError as exc:  # pragma: no cover - runtime environment gate
     blocks = exc.blocks or [{"capability": "renderedBrowserAutomation", "reason": str(exc)}]
     preflight_data["capabilities"]["blockedTests"].extend(blocks)
@@ -2479,6 +2693,10 @@ def main() -> int:
     missing = missing_required_completion_artefacts(uploaded)
     if missing:
       raise RuntimeError(f"R2 completion upload missing required artefact(s) after linked-report rewrite: {', '.join(missing)}")
+    summary["publicJsonValidation"] = validate_public_json_artifacts(uploaded)
+    write_json(output_dir / "summary.json", summary)
+    write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation, uploaded))
+    uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
   except Exception as exc:  # pragma: no cover - depends on live R2 credentials
     block = {"stage": "R2 audit upload", "blocker": str(exc), "reason": "Completed Mobile UX audit cannot be published to the required audits bucket."}
     return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": str(exc), "workflowFailure": True}, allow_upload=False) else 1
