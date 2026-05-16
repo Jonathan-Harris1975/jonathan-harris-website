@@ -418,3 +418,159 @@ html.js-enabled body:has(.hero:not([data-jh-header-show-immediately])) .jh-heade
 .page-transcripts .podcast-rss-hint,.podcast-transcripts .podcast-rss-hint{margin-top:16px;color:#4b5563}
 .page-transcripts .podcast-rss-hint .podcast-platform-btn,.podcast-transcripts .podcast-rss-hint .podcast-platform-btn{display:inline-flex;margin-top:6px}
 @media (max-width: 640px){.page-transcripts .transcript-list,.podcast-transcripts .transcript-list{max-height:20rem}}
+
+/* ============================================================
+   JH-MUX-2026: Mobile UX hard-gate stabilisation
+   Scope: shared mobile navigation, form-page overflow, CTA continuity,
+   readable mobile type, and responsive media constraints.
+   ============================================================ */
+.jh-header,
+.jh-header__inner,
+.jh-brand,
+.jh-topnav,
+.jh-mobile-nav,
+.wrap,
+.main,
+.grid,
+.card,
+.book-card,
+.page-form-shell .main,
+.page-form-shell .card,
+.embed-wrap,
+.fallback-form,
+.fallback-form__grid,
+.fallback-form__actions,
+.cta-row,
+.actions,
+.home-hero-actions,
+.featured-actions{
+  min-width:0;
+  box-sizing:border-box;
+}
+body.page-contact,
+body.page-newsletter,
+body.jh-page-404{
+  max-width:100%;
+  overflow-x:clip;
+}
+@supports not (overflow-x:clip){
+  body.page-contact,
+  body.page-newsletter,
+  body.jh-page-404{overflow-x:hidden;}
+}
+body.page-contact img,
+body.page-newsletter img,
+body.jh-page-404 img,
+body.page-home img,
+.embed-wrap iframe,
+.newsletter-embed-frame,
+.contact-embed-frame{
+  max-width:100%;
+  box-sizing:border-box;
+}
+.newsletter-embed-frame,
+.contact-embed-frame{
+  display:block;
+  width:100%;
+  min-width:0;
+  height:560px;
+  border:0;
+}
+.page-form-shell .main{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.page-form-shell .embed-wrap{
+  width:100%;
+  max-width:650px;
+}
+.jh-mobile-nav[hidden]{display:none!important;}
+.jh-mobile-nav:not([hidden]),
+.jh-mobile-nav.is-open{
+  display:flex;
+}
+.jh-mobile-nav a,
+.jh-mobile-nav__group-label{
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+@media (min-width:769px){
+  .jh-hamburger{display:none!important;}
+  .jh-mobile-nav,
+  .jh-mobile-nav.is-open{display:none!important;}
+  html.jh-nav-open,
+  body.jh-nav-open{overflow:auto;}
+}
+@media (max-width:768px){
+  .jh-header{overflow:visible;}
+  .jh-header__inner{flex-wrap:nowrap;}
+  .jh-brand{max-width:calc(100% - 78px);}
+  .jh-brand__text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  html.js-enabled .jh-topnav{display:none!important;}
+  .jh-hamburger{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px;
+    flex:0 0 auto;
+    min-height:44px!important;
+    min-width:44px!important;
+    max-width:44vw;
+    white-space:nowrap;
+  }
+  .jh-mobile-nav{
+    position:fixed;
+    top:var(--header-height,64px);
+    left:12px;
+    right:12px;
+    z-index:2600;
+    max-height:calc(100svh - var(--header-height,64px) - 24px);
+    overflow:auto;
+    border:1px solid rgba(147,197,253,0.24);
+    border-radius:18px;
+    box-shadow:0 20px 48px rgba(0,0,0,0.38);
+  }
+  .jh-mobile-nav a{width:100%;box-sizing:border-box;}
+  .cta-row,
+  .actions,
+  .home-hero-actions,
+  .featured-actions,
+  .fallback-form__actions{
+    width:100%;
+    align-items:stretch;
+  }
+  .cta-row .button,
+  .actions .button,
+  .home-hero-actions .button,
+  .featured-actions .button,
+  .fallback-form__actions .btn{
+    min-height:44px;
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+  .hero__title,
+  .hero h1,
+  .page-form-shell .hero h1{
+    font-size:clamp(1.85rem,8vw,2.45rem);
+    line-height:1.12;
+  }
+  .hero__lead,
+  .page-form-shell .hero p,
+  .page-form-shell .card p{
+    font-size:clamp(.98rem,4vw,1.08rem);
+    line-height:1.62;
+  }
+}
+@media (max-width:520px){
+  .cta-row .button,
+  .actions .button,
+  .home-hero-actions .button,
+  .featured-actions .button,
+  .fallback-form__actions .btn{
+    width:100%;
+  }
+  .page-form-shell .card{padding:24px 14px;}
+  .newsletter-embed-frame,
+  .contact-embed-frame{height:620px;}
+}
