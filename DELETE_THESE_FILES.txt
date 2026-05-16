@@ -1,0 +1,3 @@
+Delete this legacy duplicate crawler file from the website repo:
+
+sitemap (1).xml

@@ -1,0 +1,12 @@
+Validation run from repo root after applying this patch:
+
+python3 scripts/inject_partials.py --validate
+python3 scripts/sync_redirects.py --check
+python3 scripts/check_crawlers.py
+
+Result: all passed.
+
+Purpose:
+- Exclude R2-hosted podcast episode pages from repo-owned header/footer validation.
+- Keep crawler/sitemap governance aligned after removing podcast episode pages from the static website sitemap.
+- Remove legacy duplicate sitemap (1).xml.
