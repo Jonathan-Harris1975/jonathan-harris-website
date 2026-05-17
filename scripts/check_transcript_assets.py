@@ -34,6 +34,8 @@ TXT_FILE_RE = re.compile(r'\.txt$', re.IGNORECASE)
 _IN_CF_PAGES = os.environ.get('CF_PAGES') == '1'
 _SKIP_LIVE_ENV = os.environ.get('SKIP_TRANSCRIPT_LIVE_CHECK', '').strip() not in ('', '0', 'false', 'no')
 _AUTO_SKIP_LIVE = _IN_CF_PAGES or _SKIP_LIVE_ENV
+_VALIDATE_EXTERNAL_ENV = os.environ.get('VALIDATE_EXTERNAL_PODCAST_TRANSCRIPTS', '').strip().lower()
+_VALIDATE_EXTERNAL = _VALIDATE_EXTERNAL_ENV in ('1', 'true', 'yes', 'on')
 
 
 @dataclass
@@ -204,7 +206,19 @@ def main() -> int:
     parser.add_argument('--limit', type=int, default=LIMIT, help='Maximum number of RSS items to inspect.')
     parser.add_argument('--timeout', type=float, default=DEFAULT_TIMEOUT, help='HTTP timeout in seconds for live checks.')
     parser.add_argument('--skip-live', action='store_true', help='Only validate the static RSS/file contract; skip HTTP fetches.')
+    parser.add_argument(
+        '--validate-external',
+        action='store_true',
+        help='Opt in to validating externally governed podcast RSS/transcript assets.',
+    )
     args = parser.parse_args()
+
+    if not (args.validate_external or _VALIDATE_EXTERNAL):
+        print(
+            'Transcript asset validation skipped: podcast episodes/transcripts are externally governed. '
+            'Set VALIDATE_EXTERNAL_PODCAST_TRANSCRIPTS=1 or pass --validate-external to run this check.'
+        )
+        return 0
 
     try:
         items = fetch_rss_items(args.limit)
