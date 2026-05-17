@@ -574,3 +574,215 @@ body.page-home img,
   .newsletter-embed-frame,
   .contact-embed-frame{height:620px;}
 }
+
+/* JH-MUX-2026: release-blocker mobile remediation for nav, CTAs, media and overflow. */
+html,
+body{
+  max-width:100%;
+}
+body{
+  overflow-x:clip;
+}
+@supports not (overflow-x:clip){
+  body{overflow-x:hidden;}
+}
+img,
+svg,
+video,
+iframe,
+canvas,
+audio,
+embed,
+object{
+  max-width:100%;
+  height:auto;
+  box-sizing:border-box;
+}
+iframe{display:block;}
+.wrap,
+.main,
+.hero,
+.panel,
+.card,
+.featured-book,
+.jh-header,
+.jh-header__inner,
+.jh-mobile-nav,
+.site-footer,
+.newsletter-embed-frame,
+.contact-embed-frame{
+  max-width:100%;
+  box-sizing:border-box;
+}
+button,
+.button,
+.btn,
+a.button,
+.jh-topnav a,
+.jh-nav-dropdown__btn,
+.jh-mobile-nav a,
+.chip,
+input,
+select,
+textarea{
+  min-height:44px;
+  touch-action:manipulation;
+}
+.jh-topnav a,
+.jh-nav-dropdown__btn,
+.jh-mobile-nav a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.jh-mobile-nav{
+  background:rgba(13,20,32,.98);
+  color:#fff;
+  padding:14px;
+  gap:8px;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.jh-mobile-nav a,
+.jh-mobile-nav__group-label{
+  color:#e5e7eb;
+  border-radius:12px;
+  padding:11px 12px;
+  text-align:left;
+  justify-content:flex-start;
+}
+.jh-mobile-nav a:hover,
+.jh-mobile-nav a:focus-visible{
+  background:rgba(147,197,253,.12);
+  color:#fff;
+  text-decoration:none;
+}
+.jh-mobile-nav__group-links{
+  display:grid;
+  gap:6px;
+}
+.jh-mobile-nav__cta{
+  background:#4f46e5;
+  color:#fff!important;
+  font-weight:800;
+  text-align:center!important;
+  justify-content:center!important;
+}
+.jh-nav-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2500;
+  background:rgba(5,10,20,.58);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .18s ease;
+}
+.jh-nav-overlay.is-active{
+  opacity:1;
+  pointer-events:auto;
+}
+html.jh-nav-open,
+body.jh-nav-open{
+  overflow:hidden;
+}
+.cta-row,
+.actions,
+.home-hero-actions,
+.featured-actions,
+.fallback-form__actions,
+.jh-hub-actions,
+.jh-journey-actions{
+  min-width:0;
+}
+.cta-row .button,
+.actions .button,
+.home-hero-actions .button,
+.featured-actions .button,
+.fallback-form__actions .btn,
+.jh-hub-actions a,
+.jh-journey-actions a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.hero__title,
+.hero h1,
+.page-form-shell .hero h1,
+.card h2,
+.card h3,
+.panel h2{
+  overflow-wrap:anywhere;
+}
+.main p,
+.wrap p,
+.card p,
+article p,
+li{
+  overflow-wrap:break-word;
+}
+@media (max-width:768px){
+  .jh-header__inner{
+    width:100%;
+    padding-left:12px;
+    padding-right:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .jh-brand{
+    min-width:0;
+    flex:1 1 auto;
+  }
+  .jh-hamburger{
+    flex:0 0 auto;
+    min-height:48px!important;
+    min-width:48px!important;
+    max-width:46vw;
+    padding:9px 10px;
+  }
+  .jh-mobile-nav{
+    top:calc(var(--header-height,64px) + env(safe-area-inset-top,0px));
+    left:max(10px,env(safe-area-inset-left,0px));
+    right:max(10px,env(safe-area-inset-right,0px));
+    max-width:calc(100vw - 20px);
+    max-height:calc(100svh - var(--header-height,64px) - 22px);
+  }
+  .button,
+  .btn,
+  a.button,
+  .cta-row .button,
+  .actions .button,
+  .home-hero-actions .button,
+  .featured-actions .button,
+  .fallback-form__actions .btn,
+  .jh-hub-actions a,
+  .jh-journey-actions a{
+    width:100%;
+    white-space:normal;
+  }
+  .hero,
+  .main,
+  .site-footer{
+    padding-left:14px;
+    padding-right:14px;
+  }
+  .wrap{padding-left:0;padding-right:0;}
+  .card,
+  .panel,
+  .fallback-form-wrap{
+    padding-left:14px;
+    padding-right:14px;
+  }
+}
+@media (max-width:380px){
+  .jh-hamburger__label{display:none;}
+  .jh-hamburger{max-width:48px;}
+  .jh-brand__text{font-size:.98rem;}
+}
+@media (min-width:769px){
+  .jh-nav-overlay,
+  .jh-nav-overlay.is-active{display:none!important;}
+  html.jh-nav-open,
+  body.jh-nav-open{overflow:auto;}
+}
