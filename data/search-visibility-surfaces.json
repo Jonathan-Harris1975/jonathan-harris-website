@@ -1,0 +1,31 @@
+{
+  "generated_utc": "2026-04-18T20:49:01Z",
+  "lane": "Lane 1 autonomous evidence",
+  "seo": {
+    "sitemap_includes_dynamic_routes": true,
+    "transcript_urls": 20,
+    "podcast_episode_urls": 20,
+    "blog_post_urls": 1
+  },
+  "geo": {
+    "llms_scope": "full-estate",
+    "discovery_families": [
+      "blog-hub",
+      "blog-post",
+      "comparison",
+      "glossary",
+      "newsletter",
+      "person",
+      "podcast-episode",
+      "podcast-hub",
+      "podcast-transcript",
+      "site-home",
+      "topic-index",
+      "transcript-archive"
+    ]
+  },
+  "aeo": {
+    "answer_led_podcast_templates": true,
+    "transcript_archive_exposed": true
+  }
+}
