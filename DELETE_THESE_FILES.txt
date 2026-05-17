@@ -1,3 +1,44 @@
-Delete this legacy duplicate crawler file from the website repo:
+Delete these legacy/generated files from the website repo:
 
-sitemap (1).xml
+# Podcast episode and compatibility pages are not repo-owned.
+# The podcast page uses the embedded player; episode/transcript assets live in the podcast/R2 estate.
+podcast/TT-2025-12-12/index.html
+podcast/TT-2025-12-19/index.html
+podcast/TT-2026-01-02/index.html
+podcast/TT-2026-01-09/index.html
+podcast/TT-2026-01-16/index.html
+podcast/TT-2026-01-23/index.html
+podcast/TT-2026-01-30/index.html
+podcast/TT-2026-02-06/index.html
+podcast/TT-2026-02-13/index.html
+podcast/TT-2026-02-20/index.html
+podcast/TT-2026-03-06/index.html
+podcast/TT-2026-03-13/index.html
+podcast/TT-2026-03-20/index.html
+podcast/TT-2026-03-27/index.html
+podcast/TT-2026-04-03/index.html
+podcast/TT-2026-04-10/index.html
+podcast/TT-2026-04-17/index.html
+podcast/TT-2026-04-24/index.html
+podcast/TT-2026-05-01/index.html
+podcast/TT-2026-05-08/index.html
+podcast/episodes/ai-accountability-costs-and-local-control/index.html
+podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-01-02/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-01-09/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-01-16/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-01-23/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-01-30/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-02-06/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-02-13/index.html
+podcast/episodes/artificial-intelligence-weekly-2026-02-20/index.html
+podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/index.html
+podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-03-06/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-03-13/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-03-20/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-03-27/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-04-24/index.html
+podcast/episodes/turings-torch-ai-weekly-2026-05-01/index.html
+podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/index.html
+podcast/episodes/workflow-automation-ai-governance-and-ai-costs/index.html

@@ -11,9 +11,9 @@ if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then
   export EBOOK_WORKBOOK_PATH="$DEFAULT_WORKBOOK"
 fi
 
-python3 scripts/sync_podcast_episodes.py
-python3 scripts/generate_podcast_episodes.py
-python3 scripts/sync_podcast_transcripts.py
+# Podcast episodes, RSS-derived episode lists, and transcript assets are governed
+# outside this static website repository. The podcast page uses the embedded
+# player for previous episodes, so Pages builds must not collect podcast data.
 if command -v node >/dev/null 2>&1; then
   node scripts/generate-blog-from-rss.mjs || echo "WARN: Blog RSS snapshot sync skipped; continuing with the committed fallback."
 fi
