@@ -9,14 +9,13 @@ Excludes:
   - hidden directories
   - 404.html
   - podcast compatibility redirects
-  - volatile generated leaf content that should not require workbook registration:
-      * blog/posts/
-      * podcast/episodes/
+  - generated dynamic leaves only when they are present in data/dynamic-route-manifest.json
 
 Called from validate_release.py with a workbook path.
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -40,19 +39,29 @@ EXCLUDED_FILENAMES = {"404.html"}
 
 COMPAT_REDIRECT_PREFIX = "podcast/TT-"
 
-EXCLUDED_ROUTE_PREFIXES = (
-    "blog/posts/",
-    "podcast/episodes/",
-)
+DYNAMIC_ROUTE_MANIFEST = ROOT / "data" / "dynamic-route-manifest.json"
+
+
+def dynamic_manifest_paths() -> set[str]:
+    try:
+        payload = json.loads(DYNAMIC_ROUTE_MANIFEST.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    routes = payload.get("routes") if isinstance(payload, dict) else []
+    governed: set[str] = set()
+    for route in routes if isinstance(routes, list) else []:
+        if not isinstance(route, dict):
+            continue
+        repo_path = str(route.get("repo_path") or "").strip()
+        if repo_path.endswith(".html"):
+            governed.add(repo_path)
+    return governed
 
 
 def should_exclude_route(rel: Path) -> bool:
     rel_str = rel.as_posix()
 
     if rel_str.startswith(COMPAT_REDIRECT_PREFIX) and rel.name == "index.html":
-        return True
-
-    if any(rel_str.startswith(prefix) for prefix in EXCLUDED_ROUTE_PREFIXES):
         return True
 
     return False
@@ -98,13 +107,14 @@ def governed_paths(workbook_path: Path) -> set[str]:
 
 def run_checks(workbook_path: Path) -> list[str]:
     governed = governed_paths(workbook_path)
+    governed.update(dynamic_manifest_paths())
     errors: list[str] = []
 
     for html_path in routed_html_files(ROOT):
         rel = html_path.relative_to(ROOT).as_posix()
         if rel not in governed:
             errors.append(
-                f"Ungoverned route: {rel} exists in the repo but is absent from the workbook Pages sheet."
+                f"Ungoverned route: {rel} exists in the repo but is absent from the workbook Pages sheet and data/dynamic-route-manifest.json."
             )
 
     return errors

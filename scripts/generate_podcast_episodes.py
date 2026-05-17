@@ -81,6 +81,55 @@ def clean_description(raw: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+
+
+def brand_safe_podcast_copy(raw: str) -> str:
+    """Keep generated episode pages aligned with British, anti-hype copy rules."""
+    text = clean_description(raw)
+    if not text:
+        return ""
+    replacements = [
+        (r"\bdelve into\b", "examine"),
+        (r"\bdelves into\b", "examines"),
+        (r"\bdelving into\b", "examining"),
+        (r"\blandscape\b", "field"),
+        (r"\blandscapes\b", "fields"),
+        (r"\bgroundbreaking\b", "notable"),
+        (r"\brevolutionize\b", "change"),
+        (r"\brevolutionizes\b", "changes"),
+        (r"\brevolutionized\b", "changed"),
+        (r"\brevolutionizing\b", "changing"),
+        (r"\bpersonalized\b", "personalised"),
+        (r"\bpersonalization\b", "personalisation"),
+        (r"\boptimized\b", "optimised"),
+        (r"\boptimizing\b", "optimising"),
+        (r"\boptimization\b", "optimisation"),
+        (r"\bbehavior\b", "behaviour"),
+        (r"\bcolor\b", "colour"),
+    ]
+    for pattern, repl in replacements:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+    return clean_description(text)
+
+
+def spoken_sentence_chunks(text: str, max_words: int = 26) -> str:
+    sentences = re.split(r"(?<=[.!?])\s+", clean_description(text))
+    chunks: list[str] = []
+    for sentence in sentences:
+        words = sentence.split()
+        if len(words) <= max_words:
+            chunks.append(sentence)
+            continue
+        current: list[str] = []
+        for word in words:
+            current.append(word)
+            if len(current) >= max_words and re.search(r"[,;:]$", word):
+                chunks.append(" ".join(current).rstrip(",;:") + ".")
+                current = []
+        if current:
+            chunks.append(" ".join(current))
+    return " ".join(chunks)
+
 def format_date_iso(pub_date: str) -> str:
     if not pub_date:
         return ""
@@ -148,8 +197,14 @@ def ensure_unique_episode_slugs(episodes: list[dict]) -> list[dict]:
 
 
 def persist_episode_data(episodes: list[dict]) -> None:
+    normalised: list[dict] = []
+    for item in episodes:
+        ep = dict(item)
+        if ep.get("summary"):
+            ep["summary"] = brand_safe_podcast_copy(ep.get("summary", ""))
+        normalised.append(ep)
     EPISODES_DATA.parent.mkdir(parents=True, exist_ok=True)
-    EPISODES_DATA.write_text(json.dumps(episodes, indent=2, ensure_ascii=False), encoding="utf-8")
+    EPISODES_DATA.write_text(json.dumps(normalised, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 
@@ -183,7 +238,7 @@ def fetch_rss_episodes(limit: int = 20) -> list[dict]:
         pub_date = (item.findtext("pubDate", "") or "").strip()
         link = (item.findtext("link", "") or "").strip()
         guid = (item.findtext("guid", "") or "").strip()
-        description = clean_description((item.findtext("description", "") or "").strip())
+        description = brand_safe_podcast_copy((item.findtext("description", "") or "").strip())
         session_id = guid if guid and not is_absolute_http_url(guid) else ""
         slug = slugify(title)
 
@@ -236,7 +291,7 @@ def merge_episode(rss_ep: dict, existing_lookup: dict[str, dict]) -> dict:
     merged["page_url"] = first_non_empty(rss_ep.get("page_url"), existing.get("page_url"), f"{SITE}/podcast/episodes/{rss_ep['slug']}/")
     merged["audio_url"] = first_non_empty(rss_ep.get("audio_url"), existing.get("audio_url"))
     merged["external_url"] = first_non_empty(existing.get("external_url"), rss_ep.get("external_url"))
-    merged["summary"] = first_non_empty(existing.get("summary"), rss_ep.get("summary"))
+    merged["summary"] = brand_safe_podcast_copy(first_non_empty(existing.get("summary"), rss_ep.get("summary")))
     merged["transcript_url"] = first_non_empty(rss_ep.get("transcript_url"), existing.get("transcript_url"))
     merged["transcript_text"] = first_non_empty(existing.get("transcript_text"), rss_ep.get("transcript_text"))
     merged["key_takeaways"] = existing.get("key_takeaways") or rss_ep.get("key_takeaways") or []
@@ -263,7 +318,7 @@ def fallback_episode_summary(title: str) -> str:
 
 
 def normalise_episode_summary(ep: dict) -> str:
-    return first_non_empty(ep.get("summary"), fallback_episode_summary(ep.get("title", "")))
+    return spoken_sentence_chunks(brand_safe_podcast_copy(first_non_empty(ep.get("summary"), fallback_episode_summary(ep.get("title", "")))))
 
 
 def direct_answer_for_episode(ep: dict) -> str:

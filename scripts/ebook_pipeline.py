@@ -32,6 +32,8 @@ MASTER_PATH = DATA_DIR / "ebooks-master.json"
 WORKBOOK_NORMALISATIONS_PATH = ROOT / "config" / "workbook-normalisations.json"
 CRAWLER_CHECKSUMS_PATH = ROOT / "config" / "crawler-checksums.json"
 CRAWLER_SNAPSHOTS_DIR = ROOT / "config" / "crawler-snapshots"
+DYNAMIC_ROUTE_MANIFEST_PATH = DATA_DIR / "dynamic-route-manifest.json"
+SEARCH_VISIBILITY_SURFACES_PATH = DATA_DIR / "search-visibility-surfaces.json"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -3013,15 +3015,261 @@ def html_declares_noindex(file_path: Path) -> bool:
 
 
 def is_r2_hosted_podcast_episode_path(relative_path: Path) -> bool:
-    """Return True for podcast episode pages governed by the R2 podcast pipeline."""
+    """Return True for legacy podcast compatibility redirects only.
+
+    Canonical generated podcast leaves under podcast/episodes/ are now governed
+    by the dynamic route manifest, workbook registration, sitemap, and audit
+    coverage. The only exempt family is the /podcast/TT-* compatibility shim.
+    """
     parts = relative_path.parts
-    return len(parts) >= 2 and parts[0] == "podcast" and parts[1] == "episodes"
+    return len(parts) >= 2 and parts[0] == "podcast" and parts[1].startswith("TT-")
+
+
+def _first_text(*values: Any) -> str:
+    for value in values:
+        if value is None:
+            continue
+        text = clean_paragraph(value)
+        if text:
+            return text
+    return ""
+
+
+
+
+def brand_safe_discovery_text(value: Any) -> str:
+    """Normalise discovery copy for British, no-hype GEO/AEO surfaces."""
+    text = clean_paragraph(value)
+    if not text:
+        return ""
+    replacements = [
+        (r"\bdelve into\b", "examine"),
+        (r"\bdelves into\b", "examines"),
+        (r"\bdelving into\b", "examining"),
+        (r"\blandscape\b", "field"),
+        (r"\blandscapes\b", "fields"),
+        (r"\bgroundbreaking\b", "notable"),
+        (r"\brevolutionize\b", "change"),
+        (r"\brevolutionizes\b", "changes"),
+        (r"\brevolutionized\b", "changed"),
+        (r"\brevolutionizing\b", "changing"),
+        (r"\bpersonalized\b", "personalised"),
+        (r"\bpersonalization\b", "personalisation"),
+        (r"\boptimized\b", "optimised"),
+        (r"\boptimizing\b", "optimising"),
+        (r"\boptimization\b", "optimisation"),
+        (r"\bcenter\b", "centre"),
+        (r"\bcentered\b", "centred"),
+        (r"\bbehavior\b", "behaviour"),
+    ]
+    for pattern, repl in replacements:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+    return clean_paragraph(text)
+
+def _load_json_file(path: Path, default: Any) -> Any:
+    try:
+        if not path.exists():
+            return default
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return default
+
+
+def _normalise_manifest_lastmod(value: Any, fallback: str) -> str:
+    text = _first_text(value)
+    if not text:
+        return normalise_lastmod(fallback)
+    date_match = re.search(r"\d{4}-\d{2}-\d{2}", text)
+    if date_match:
+        return normalise_lastmod(date_match.group(0))
+    return normalise_lastmod(fallback)
+
+
+def _site_path_from_url(url: str) -> str:
+    parsed = urlparse(url or "")
+    path = parsed.path or "/"
+    if not path.startswith("/"):
+        path = "/" + path
+    return path
+
+
+def _site_url_from_path(path: str) -> str:
+    clean = path if path.startswith("/") else f"/{path}"
+    return f"{SITE_URL}{clean}"
+
+
+def _first_party_site_url(value: Any) -> str:
+    text = _first_text(value)
+    if not text:
+        return ""
+    if text.startswith("/"):
+        return _site_url_from_path(text)
+    try:
+        parsed = urlparse(text)
+    except Exception:
+        return ""
+    if parsed.scheme in {"http", "https"} and parsed.netloc == urlparse(SITE_URL).netloc:
+        return text
+    return ""
+
+
+def _manifest_route(*, family: str, title: str, path: str, lastmod: str, source: str, repo_path: str = "", summary: str = "", entity: str = "") -> Dict[str, str]:
+    clean_path = path if path.startswith("/") else f"/{path}"
+    return {
+        "family": family,
+        "title": clean_paragraph(title),
+        "path": clean_path,
+        "loc": _site_url_from_path(clean_path),
+        "lastmod": lastmod,
+        "source": source,
+        "repo_path": repo_path,
+        "summary": brand_safe_discovery_text(summary),
+        "entity": brand_safe_discovery_text(entity),
+    }
+
+
+def load_blog_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
+    payload = _load_json_file(ROOT / "blog" / "posts.json", {})
+    items = payload.get("items") if isinstance(payload, dict) else []
+    routes: List[Dict[str, str]] = []
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        slug = _first_text(item.get("slug"))
+        path = _first_text(item.get("path"), f"/blog/posts/{slug}/" if slug else "")
+        if not slug or not path:
+            continue
+        routes.append(_manifest_route(
+            family="blog-post",
+            title=_first_text(item.get("title"), slug),
+            path=path,
+            lastmod=_normalise_manifest_lastmod(item.get("published_at") or item.get("datePublished") or item.get("pubDate"), generated_lastmod),
+            source="blog/posts.json",
+            summary=_first_text(item.get("summary"), item.get("excerpt")),
+            entity="weekly AI briefing",
+        ))
+    return routes
+
+
+def load_podcast_episode_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
+    items = _load_json_file(DATA_DIR / "podcast-episodes.json", [])
+    routes: List[Dict[str, str]] = []
+    for item in items if isinstance(items, list) else []:
+        if not isinstance(item, dict):
+            continue
+        slug = _first_text(item.get("slug"))
+        title = _first_text(item.get("title"), slug)
+        date = _normalise_manifest_lastmod(item.get("date"), generated_lastmod)
+        if slug:
+            repo_path = f"podcast/episodes/{slug}/index.html"
+            routes.append(_manifest_route(
+                family="podcast-episode",
+                title=title,
+                path=f"/podcast/episodes/{slug}/",
+                lastmod=date,
+                source="data/podcast-episodes.json",
+                repo_path=repo_path if (ROOT / repo_path).exists() else "",
+                summary=_first_text(item.get("summary")),
+                entity="Turing's Torch AI Weekly episode",
+            ))
+        transcript_url = _first_party_site_url(item.get("transcript_url"))
+        session_id = _first_text(item.get("session_id"))
+        if transcript_url or session_id:
+            transcript_path = _site_path_from_url(transcript_url) if transcript_url else f"/transcripts/{session_id}.html"
+            if transcript_path.startswith("/transcripts/"):
+                routes.append(_manifest_route(
+                    family="podcast-transcript",
+                    title=f"Transcript: {title}",
+                    path=transcript_path,
+                    lastmod=date,
+                    source="data/podcast-episodes.json",
+                    summary=_first_text(item.get("summary")),
+                    entity="podcast transcript",
+                ))
+    return routes
+
+
+def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]:
+    candidates = [
+        ("site-home", "Jonathan Harris AI ecosystem", "/", "index.html", "Homepage for books, podcast, blog, topics and newsletter.", "person and site"),
+        ("person", "Jonathan Harris biography", "/bio/", "bio/index.html", "Author profile and ecosystem authority page.", "person"),
+        ("blog-hub", "AI blog hub", "/blog/", "blog/index.html", "Weekly AI analysis and editorial archive.", "blog"),
+        ("podcast-hub", "Turing's Torch AI Weekly", "/podcast/", "podcast/index.html", "Podcast hub for AI weekly episodes.", "podcast series"),
+        ("transcript-archive", "Podcast transcript archive", "/transcripts/", "transcripts/index.html", "Searchable transcript archive for podcast episodes.", "transcripts"),
+        ("topic-index", "AI topic guides", "/topics/", "topics/index.html", "Topic-led entry points into the Jonathan Harris AI library.", "topic index"),
+        ("glossary", "AI glossary", "/glossary/", "glossary/index.html", "Plain-English AI glossary for answer engines and readers.", "glossary"),
+        ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
+        ("newsletter", "AI Edge newsletter", "/newsletter/", "newsletter/index.html", "Newsletter sign-up page for daily AI briefings.", "newsletter"),
+    ]
+    routes: List[Dict[str, str]] = []
+    for family, title, path, repo_path, summary, entity in candidates:
+        if repo_path and not (ROOT / repo_path).exists():
+            continue
+        routes.append(_manifest_route(
+            family=family,
+            title=title,
+            path=path,
+            lastmod=normalise_lastmod(generated_lastmod),
+            source="repo-html",
+            repo_path=repo_path,
+            summary=summary,
+            entity=entity,
+        ))
+    return routes
+
+
+def build_dynamic_route_entries(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
+    generated_lastmod = normalise_lastmod(governed_generated_utc(books))
+    routes = [
+        *load_static_discovery_routes(generated_lastmod),
+        *load_blog_dynamic_routes(generated_lastmod),
+        *load_podcast_episode_dynamic_routes(generated_lastmod),
+    ]
+    unique: Dict[str, Dict[str, str]] = {}
+    for route in routes:
+        loc = route.get("loc")
+        if loc:
+            unique[loc] = route
+    return sorted(unique.values(), key=lambda item: (item.get("family", ""), item.get("path", "")))
+
+
+def build_dynamic_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
+    routes = build_dynamic_route_entries(books)
+    families = Counter(route.get("family", "unknown") for route in routes)
+    return {
+        "generated_utc": governed_generated_utc(books),
+        "base_url": SITE_URL,
+        "purpose": "Governed dynamic route ledger for blog, podcast, transcript, and LLM discovery surfaces.",
+        "route_count": len(routes),
+        "families": dict(sorted(families.items())),
+        "routes": routes,
+    }
+
+
+def build_search_visibility_surfaces(books: List[Dict[str, Any]]) -> Dict[str, Any]:
+    routes = build_dynamic_route_entries(books)
+    return {
+        "generated_utc": governed_generated_utc(books),
+        "lane": "Lane 1 autonomous evidence",
+        "seo": {
+            "sitemap_includes_dynamic_routes": True,
+            "transcript_urls": sum(1 for route in routes if route.get("family") == "podcast-transcript"),
+            "podcast_episode_urls": sum(1 for route in routes if route.get("family") == "podcast-episode"),
+            "blog_post_urls": sum(1 for route in routes if route.get("family") == "blog-post"),
+        },
+        "geo": {
+            "llms_scope": "full-estate",
+            "discovery_families": sorted({route.get("family", "unknown") for route in routes}),
+        },
+        "aeo": {
+            "answer_led_podcast_templates": True,
+            "transcript_archive_exposed": any(route.get("family") == "transcript-archive" for route in routes),
+        },
+    }
 
 
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     governed_lastmod = normalise_lastmod(governed_generated_utc(books))
-    generated_paths = {Path("ebooks/index.html"), Path("topics/index.html")}
-    generated_paths.update(Path("catalogue") / slugify(book["topic"]) / "index.html" for book in books)
     book_paths = {Path("ebooks") / book["slug"] / "index.html": book for book in books}
     excluded_paths = {
         Path("404.html"),
@@ -3029,16 +3277,17 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         Path("assets/partials/footer.html"),
     }
 
-    routes: List[Dict[str, str]] = []
+    by_loc: Dict[str, Dict[str, str]] = {}
     for file_path in sorted(ROOT.rglob("*.html")):
         if "node_modules" in file_path.parts:
             continue
         relative_path = file_path.relative_to(ROOT)
+        rel_parts = relative_path.parts
         if relative_path in excluded_paths:
             continue
         if is_r2_hosted_podcast_episode_path(relative_path):
             continue
-        if relative_path.parts and relative_path.parts[0] == "scripts":
+        if rel_parts and rel_parts[0] in {"scripts", "functions"}:
             continue
         if html_declares_noindex(file_path):
             continue
@@ -3048,13 +3297,24 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         else:
             lastmod = governed_lastmod
 
-        routes.append({
+        loc = path_to_public_url(relative_path)
+        by_loc[loc] = {
             "path": f"/{relative_path.as_posix()}",
-            "loc": path_to_public_url(relative_path),
+            "loc": loc,
             "lastmod": lastmod,
-        })
-    return routes
+        }
 
+    for route in build_dynamic_route_entries(books):
+        loc = route.get("loc")
+        if not loc or loc in by_loc:
+            continue
+        by_loc[loc] = {
+            "path": route.get("path", _site_path_from_url(loc)),
+            "loc": loc,
+            "lastmod": route.get("lastmod", governed_lastmod),
+        }
+
+    return [by_loc[loc] for loc in sorted(by_loc)]
 
 
 def build_sitemap_xml(books: List[Dict[str, Any]]) -> str:
@@ -3099,18 +3359,54 @@ def build_robots_txt() -> str:
 
 
 def build_llms_txt(books: List[Dict[str, Any]]) -> str:
+    dynamic_routes = build_dynamic_route_entries(books)
+    routes_by_family: Dict[str, List[Dict[str, str]]] = defaultdict(list)
+    for route in dynamic_routes:
+        routes_by_family[route.get("family", "unknown")].append(route)
+
     lines = [
-        "# Jonathan Harris ebook library",
+        "# Jonathan Harris AI ecosystem",
         f"# Canonical publication target: {EXTERNAL_CRAWLER_FILES['llms']}",
-        "# Canonical ebook routes only",
-        f"Homepage: {SITE_URL}/ebooks/",
+        "# Scope: full estate, including books, topics, blog, podcast episodes and transcript discovery surfaces.",
+        f"Homepage: {SITE_URL}/",
+        f"Author: {SITE_URL}/bio/",
+        f"Books: {SITE_URL}/ebooks/",
+        f"Blog: {SITE_URL}/blog/",
+        f"Podcast: {SITE_URL}/podcast/",
+        f"Transcripts: {SITE_URL}/transcripts/",
+        f"Topics: {SITE_URL}/topics/",
+        f"Glossary: {SITE_URL}/glossary/",
         "",
-        "## Canonical books",
+        "## Core discovery surfaces",
     ]
+    for route in routes_by_family.get("site-home", []) + routes_by_family.get("person", []) + routes_by_family.get("topic-index", []) + routes_by_family.get("glossary", []) + routes_by_family.get("comparison", []):
+        lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
+
+    lines.extend(["", "## Canonical books"])
     for book in books:
-        lines.append(f"- {book['title']}: {book['canonical_url']}")
+        lines.append(f"- {book['title']}: {book['canonical_url']} — {brand_safe_discovery_text(book['short'])}")
+
+    blog_routes = routes_by_family.get("blog-post", [])
+    if blog_routes:
+        lines.extend(["", "## Blog and weekly AI analysis"])
+        for route in blog_routes[:20]:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
+
+    podcast_routes = routes_by_family.get("podcast-episode", [])
+    if podcast_routes:
+        lines.extend(["", "## Podcast episodes"])
+        for route in podcast_routes[:40]:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
+
+    transcript_routes = routes_by_family.get("podcast-transcript", [])
+    if transcript_routes:
+        lines.extend(["", "## Podcast transcripts"])
+        for route in transcript_routes[:40]:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
+
     lines.append("")
     return "\n".join(lines)
+
 
 def build_crawler_snapshot_payloads(books: List[Dict[str, Any]]) -> Dict[str, str]:
     return {
@@ -3192,6 +3488,7 @@ def build_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
         },
         "malformed_slug_fixes": MALFORMED_SLUG_FIXES,
         "ebooks": manifest_books,
+        "dynamic_routes": build_dynamic_route_entries(books),
     }
 
 
@@ -3345,8 +3642,14 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
             for book in books
         ],
         "topic_authority_pages": [f"/catalogue/{slugify(topic)}/" for topic in sorted({book['topic'] for book in books})],
+        "site_sections": [route for route in build_dynamic_route_entries(books) if route.get("family") in {"site-home", "person", "blog-hub", "podcast-hub", "transcript-archive", "topic-index", "glossary", "comparison", "newsletter"}],
+        "blog_posts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "blog-post"],
+        "podcast_episodes": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-episode"],
+        "transcripts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-transcript"],
     }
     write_json(ROOT / "llm-index.json", llm_index)
+    write_json(DYNAMIC_ROUTE_MANIFEST_PATH, build_dynamic_route_manifest(books))
+    write_json(SEARCH_VISIBILITY_SURFACES_PATH, build_search_visibility_surfaces(books))
 
     write_json(EBOOKS_DIR / "url-manifest.json", build_route_manifest(books))
     (EBOOKS_DIR / "index.html").write_text(render_ebooks_index(books), encoding="utf-8")
