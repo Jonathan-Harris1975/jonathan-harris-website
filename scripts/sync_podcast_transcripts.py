@@ -1,125 +1,17 @@
-"""
-sync_podcast_transcripts.py
-Build-time script: fetches the podcast RSS feed and rewrites the dedicated
-transcript archive in transcripts/index.html with the latest transcript-capable
-episode links. The main podcast landing page links to the archive instead of
-embedding the full searchable list.
-"""
+#!/usr/bin/env python3
+"""Compatibility no-op for retired transcript RSS list generation.
 
+Transcript objects are served from the transcript/R2 estate. The static website
+repo keeps the transcript archive route, but it must not collect episode data
+from the podcast RSS feed during builds.
+"""
 from __future__ import annotations
 
-import html
-import os
-import re
-import sys
-import urllib.request
-import xml.etree.ElementTree as ET
-from email.utils import parsedate_to_datetime
-from pathlib import Path
 
-RSS_URL = os.environ.get(
-    "PODCAST_RSS_URL",
-    "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml",
-)
-HTML_FILES = [Path("transcripts/index.html")]
-LIMIT = 36
-NS = {"podcast": "https://podcastindex.org/namespace/1.0"}
-
-
-def is_absolute_http_url(value: str | None) -> bool:
-    return bool(value and re.match(r"^https?://", value.strip(), flags=re.IGNORECASE))
-
-
-def slugify_for_search(value: str) -> str:
-    return re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (value or "").lower())).strip()
-
-
-def extract_transcript_url(item: ET.Element) -> str:
-    tx = item.find("podcast:transcript", NS)
-    if tx is None:
-        return ""
-    for candidate in (tx.get("url"), tx.get("href"), tx.text):
-        if is_absolute_http_url(candidate):
-            return str(candidate).strip()
-    return ""
-
-
-def format_date(pub_date_str: str) -> str:
-    if not pub_date_str:
-        return ""
-    try:
-        dt = parsedate_to_datetime(pub_date_str)
-        return dt.strftime("%d %B %Y").lstrip("0")
-    except Exception:
-        return pub_date_str
-
-
-def fetch_transcripts() -> list[dict]:
-    request = urllib.request.Request(RSS_URL, headers={"User-Agent": "PodcastTranscriptSync/1.0"})
-    with urllib.request.urlopen(request, timeout=15) as response:
-        tree = ET.parse(response)
-
-    items: list[dict] = []
-    for item in tree.findall(".//item")[:LIMIT]:
-        title = (item.findtext("title", "") or "").strip()
-        if not title:
-            continue
-        pub_date = (item.findtext("pubDate", "") or "").strip()
-        url = extract_transcript_url(item)
-        if not is_absolute_http_url(url):
-            continue
-        items.append({
-            "title": title,
-            "title_search": slugify_for_search(title),
-            "url": url,
-            "date": format_date(pub_date),
-        })
-    return items
-
-
-def build_list_html(items: list[dict]) -> str:
-    rows = []
-    for item in items:
-        title = html.escape(item["title"])
-        title_search = html.escape(item["title_search"])
-        url = html.escape(item["url"])
-        date = html.escape(item.get("date", ""))
-        meta = f"Published {date} · transcript archive entry" if date else "Transcript archive entry"
-        rows.append(
-            f'<li data-title="{title_search}">' 
-            f'<a href="{url}" rel="noopener noreferrer" target="_blank">{title}</a>'
-            f'<span class="transcript-meta">{meta}</span>'
-            '</li>'
-        )
-    return "\n".join(rows)
-
-
-def inject(items: list[dict]) -> None:
-    for html_file in HTML_FILES:
-        src = html_file.read_text(encoding="utf-8")
-        pattern = r'(<ul[^>]*id="transcriptList"[^>]*>).*?(</ul>)'
-        replacement = r"\1\n" + build_list_html(items) + "\n" + r"\2"
-        new_src, count = re.subn(pattern, replacement, src, count=1, flags=re.DOTALL)
-        if count == 0:
-            print(f"WARNING: transcriptList not found in {html_file.as_posix()} — file left unchanged.", file=sys.stderr)
-            continue
-        html_file.write_text(new_src, encoding="utf-8")
-        print(f"Injected {len(items)} transcript entries into {html_file.as_posix()}.")
-
-
-def main() -> None:
-    try:
-        items = fetch_transcripts()
-    except Exception as exc:
-        print(f"WARNING: RSS fetch failed — {exc}. transcript lists left unchanged.", file=sys.stderr)
-        sys.exit(0)
-
-    if not items:
-        print("WARNING: no transcript-capable podcast items found — transcript lists left unchanged.", file=sys.stderr)
-        sys.exit(0)
-
-    inject(items)
+def main() -> int:
+    print("Transcript RSS sync skipped: transcript assets are externally governed.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
