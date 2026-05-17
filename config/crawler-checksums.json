@@ -7,11 +7,11 @@
     },
     "sitemap.xml": {
       "url": "https://jonathan-harris.online/sitemap.xml",
-      "sha256": "ac13e5530e10c6a1067ce5d93c8d07c40d4f07c46e17a37901db947243d8f5e2"
+      "sha256": "81f8b6b45c88664b54e6e2e94b41fb32674469833d3f6275913d1fa7a98faec4"
     },
     "llms.txt": {
       "url": "https://jonathan-harris.online/llms.txt",
-      "sha256": "139957884c8d97b70059b43a7cb7a9a7b0ce9706016e0db0227fc5bb7aa5320c"
+      "sha256": "b78cd04f23dde17843c4e7f42dfdb66b53d80ed13b796cc5dbca0638fed70b88"
     }
   }
 }
