@@ -2,61 +2,63 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 19,
+    "iso_week": 20,
     "year": 2026
   },
   "book": {
-    "id": 20,
-    "key": "20-ebook",
-    "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
-    "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
-    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
+    "id": 21,
+    "key": "21-ebook",
+    "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
+    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "tags": [
-      "Construction",
+      "Future of Work",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Construction",
+    "filter": "Future of Work",
     "keywords": [
-      "Construction",
-      "Artificial Intelligence in Construction: Building a Sustainable Future",
+      "Future of Work",
+      "The Artificial Intelligence Job Shift: Navigating the Future of Work",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/v98RD",
-    "buy_target_url": "https://mybook.to/v98RD",
-    "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
-    "asin": "B0DMQMGLP4",
-    "pages": 319,
+    "buy_url": "https://mybook.to/aijobshift",
+    "buy_target_url": "https://mybook.to/aijobshift",
+    "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+    "asin": "B0DMQHQTQH",
+    "pages": 315,
     "datePublished": "2024-11-11",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-    "buy_route": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
-    "topic_url": "/catalogue/construction/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+    "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+    "topic_url": "/catalogue/future-of-work/",
     "related_slugs": [
-      "smart-buildings-ai-powered-efficiency-and-sustainability",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "artificial-intelligence-in-construction-building-a-sustainable-future"
     ],
     "title_tokens": [
-      "build",
-      "construction",
       "future",
-      "sustain"
+      "job",
+      "navigat",
+      "shift",
+      "work"
     ],
     "topic_tokens": [
-      "construction"
+      "future",
+      "work"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now",
-    "midroll_15": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future. A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice. Read more at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-    "midroll_30": "This week's sponsor is Artificial Intelligence in Construction: Building a Sustainable Future. A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice. It focuses on Construction. It runs 319 pages. Topics include Construction, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/buy-now."
+    "headline": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
+    "midroll_15": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work. A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement. Read more at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
+    "midroll_30": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work. A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement. It focuses on Future of Work. It runs 315 pages. Topics include Future of Work, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now."
   }
 }
