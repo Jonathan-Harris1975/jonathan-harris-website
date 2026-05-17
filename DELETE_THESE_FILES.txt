@@ -1,0 +1,6 @@
+Delete these legacy repo-owned podcast artefacts if they still exist in your branch.
+The podcast page is embed-led, and previous episodes/transcripts are governed by the external podcast/R2 estate.
+
+podcast/TT-*/index.html
+podcast/episodes/**/index.html
+podcast/episodes/
