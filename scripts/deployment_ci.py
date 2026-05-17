@@ -48,11 +48,6 @@ def run_step(label: str, command: list[str]) -> None:
     subprocess.run(command, cwd=ROOT, check=True)
 
 
-def env_truthy(name: str) -> bool:
-    value = os.environ.get(name, "").strip().lower()
-    return value in {"1", "true", "yes", "on"}
-
-
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Run the ebook deployment maintenance pipeline as a build-time CI gate."
@@ -114,14 +109,11 @@ def main() -> int:
     run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
     run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
     run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
-    if env_truthy("VALIDATE_EXTERNAL_PODCAST_TRANSCRIPTS"):
-        run_step("Validate external podcast transcript asset URLs", [sys.executable, "scripts/check_transcript_assets.py"])
-    else:
-        print("\n==> Validate external podcast transcript asset URLs")
-        print("Skipped: podcast/transcript artefacts are externally governed. Set VALIDATE_EXTERNAL_PODCAST_TRANSCRIPTS=1 for an explicit live contract check.")
+    run_step("Validate transcript asset URLs", [sys.executable, "scripts/check_transcript_assets.py"])
     run_step("Inject featured book into homepage (source-of-truth sync)", [sys.executable, "scripts/inject_featured_book.py"])
     run_step("Inject shared partials (header + footer)", [sys.executable, "scripts/inject_partials.py"])
     run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
+    run_step("Run Phase 4A schema-markup gate", [sys.executable, "scripts/audits/schema_markup_gate.py", "--root", "."])
 
     validate_command = [sys.executable, "scripts/validate_release.py"]
     if workbook_path:
