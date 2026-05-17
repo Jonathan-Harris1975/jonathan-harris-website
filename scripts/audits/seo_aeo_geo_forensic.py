@@ -19,7 +19,6 @@ REPO_ROOT = CURRENT_FILE.parents[2]
 if str(REPO_ROOT) not in sys.path:
   sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.audits.search_visibility_baseline import build_search_visibility_baseline_report
 from scripts.audits.common import (
   DEFAULT_EXCLUDES,
   REPO_ROOT,
@@ -2636,8 +2635,8 @@ posts carry full metadata and schema, and whether blog content is structured for
 
 PODCAST ENFORCEMENT:
 Separately analyse: podcast hub, episode pages, transcript archive, transcript leaf pages.
-Flag: absence of server-rendered episode cards on the hub, thin episode pages, unchunked transcript
-bodies, broken compatibility redirect chains, exemption of podcast/episodes/ from release governance.
+Flag only when supported by evidence: absence of server-rendered episode cards on the hub, thin episode pages, unchunked transcript
+bodies, broken compatibility redirect chains, or canonical podcast/blog dynamic families absent from the generated dynamic route manifest.
 Assess whether episode and transcript pages behave as answer hubs or as thin landing pages.
 
 GEO ENFORCEMENT:
@@ -2646,21 +2645,21 @@ Assess whether topic guides, glossary, comparisons, blog posts, and transcript p
 discovery assets that are being wasted by omission from llms files.
 
 EBOOK ENFORCEMENT:
-The hard 64-character H3 trim in scripts/ebook_pipeline.py is a confirmed defect affecting all ebook
-detail pages. Treat this as a High issue with exact code remediation required.
+If the supplied repo evidence shows hard heading truncation or passage-extraction loss in scripts/ebook_pipeline.py,
+flag it with exact affected code. Do not carry forward historic H3 findings when the current evidence does not support them.
 
 GOVERNANCE ENFORCEMENT:
-The exclusion of blog/posts/ and podcast/episodes/ from scripts/check_ungoverned_routes.py is a
-confirmed Critical governance blind spot. Exact remediation must name the file, the exclusion list variable,
-and the corrected logic.
+If scripts/check_ungoverned_routes.py still blanket-excludes canonical blog/posts/ or podcast/episodes/ routes,
+flag it as a Critical governance blind spot. If those route families are governed by data/dynamic-route-manifest.json,
+record the manifest as a positive control rather than a defect.
 
 ISSUE NUMBERING: Use JH-SEO-NNN, JH-AEO-NNN, JH-GEO-NNN, JH-TECH-NNN prefixes.
 Start numbering at 001. Order issues Critical -> High -> Medium -> Low within each prefix group.
 
 SCORE CALIBRATION:
 - Static governed pages (topic guides, book pages, bio, homepage): expected range B to B+
-- Dynamic families with governance gaps (podcast, blog): expected range D to C
-- Podcast hub (no server-rendered episode list, exempted from governance): expected D
+- Dynamic families with confirmed governance gaps (podcast, blog): expected range D to C
+- Dynamic families governed by a generated manifest and sitemap entries: expected range C+ to B, subject to page quality evidence
 - Broken redirect target: F
 - Adjust all scores relative to the evidence in the supplied data, not to generic benchmarks.
 
@@ -2896,7 +2895,6 @@ def call_analysis_endpoint(
   source_mismatches: list[dict[str, Any]] | None = None,
   family_diagnostics: list[dict[str, Any]] | None = None,
   template_diagnostics: list[dict[str, Any]] | None = None,
-  search_visibility_baseline: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
   """POST audit data to the AI-suite endpoint and poll async jobs until complete."""
   import requests as _requests
@@ -2936,7 +2934,6 @@ def call_analysis_endpoint(
     "familyDiagnostics": family_diagnostics or [],
     "templateDiagnostics": template_diagnostics or [],
     "dynamicRouteLedger": live_dynamic_urls[:50],
-    "searchVisibilityBaseline": search_visibility_baseline or {},
   }
 
   post_timeout = int(os.environ.get("AUDIT_ANALYSIS_POST_TIMEOUT_SECONDS", "45"))
@@ -3194,7 +3191,6 @@ def main() -> int:
   coverage_rows = family_coverage(pages)
   validate_full_coverage(coverage_rows)
   repo_signals = build_repo_signals(REPO_ROOT, base_url)
-  search_visibility_baseline = build_search_visibility_baseline_report(REPO_ROOT, base_url)
   family_diagnostics = build_family_diagnostics(pages)
   issues = collect_issues(pages, discovered, repo_signals=repo_signals, family_diagnostics=family_diagnostics)
   template_annex = build_template_annex(pages)
@@ -3233,7 +3229,6 @@ def main() -> int:
         source_mismatches=source_mismatches,
         family_diagnostics=family_diagnostics,
         template_diagnostics=template_diagnostics,
-        search_visibility_baseline=search_visibility_baseline,
       )
       if claude_analysis:
         analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
@@ -3292,7 +3287,6 @@ def main() -> int:
     "repoSignals": repo_signals,
     "familyDiagnostics": family_diagnostics,
     "templateDiagnostics": template_diagnostics,
-    "searchVisibilityBaseline": search_visibility_baseline,
     "pageFamilyCoverage": coverage_rows,
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
@@ -3303,9 +3297,6 @@ def main() -> int:
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
-  search_visibility_baseline_path = write_json(
-    output_dir / "search-visibility-baseline.json", search_visibility_baseline
-  )
 
   # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
@@ -3316,7 +3307,6 @@ def main() -> int:
       artefact_files: dict[str, Path] = {
         "summary.json": summary_path,
         "coverage.json": coverage_path,
-        "search-visibility-baseline.json": search_visibility_baseline_path,
       }
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix, artefact_files, r2_public_base
@@ -3344,12 +3334,7 @@ def main() -> int:
       r2_client = build_r2_client()
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix,
-        {
-          "summary.json": summary_path,
-          "coverage.json": coverage_path,
-          "search-visibility-baseline.json": search_visibility_baseline_path,
-          "report.html": report_path,
-        },
+        {"summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
         r2_public_base,
       )
     except Exception as exc:
@@ -3369,7 +3354,6 @@ def main() -> int:
     "reportUrl": uploaded.get("report.html", str(report_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "coverageUrl": uploaded.get("coverage.json", str(coverage_path)),
-    "searchVisibilityBaselineUrl": uploaded.get("search-visibility-baseline.json", str(search_visibility_baseline_path)),
     "issueCount": len(issues),
     "auditedUrlCount": len(pages),
     "artefacts": uploaded,
