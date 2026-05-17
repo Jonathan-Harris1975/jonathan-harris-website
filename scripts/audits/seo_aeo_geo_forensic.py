@@ -19,6 +19,7 @@ REPO_ROOT = CURRENT_FILE.parents[2]
 if str(REPO_ROOT) not in sys.path:
   sys.path.insert(0, str(REPO_ROOT))
 
+from scripts.audits.search_visibility_baseline import build_search_visibility_baseline_report
 from scripts.audits.common import (
   DEFAULT_EXCLUDES,
   REPO_ROOT,
@@ -2895,6 +2896,7 @@ def call_analysis_endpoint(
   source_mismatches: list[dict[str, Any]] | None = None,
   family_diagnostics: list[dict[str, Any]] | None = None,
   template_diagnostics: list[dict[str, Any]] | None = None,
+  search_visibility_baseline: dict[str, Any] | None = None,
 ) -> dict[str, Any] | None:
   """POST audit data to the AI-suite endpoint and poll async jobs until complete."""
   import requests as _requests
@@ -2934,6 +2936,7 @@ def call_analysis_endpoint(
     "familyDiagnostics": family_diagnostics or [],
     "templateDiagnostics": template_diagnostics or [],
     "dynamicRouteLedger": live_dynamic_urls[:50],
+    "searchVisibilityBaseline": search_visibility_baseline or {},
   }
 
   post_timeout = int(os.environ.get("AUDIT_ANALYSIS_POST_TIMEOUT_SECONDS", "45"))
@@ -3191,6 +3194,7 @@ def main() -> int:
   coverage_rows = family_coverage(pages)
   validate_full_coverage(coverage_rows)
   repo_signals = build_repo_signals(REPO_ROOT, base_url)
+  search_visibility_baseline = build_search_visibility_baseline_report(REPO_ROOT, base_url)
   family_diagnostics = build_family_diagnostics(pages)
   issues = collect_issues(pages, discovered, repo_signals=repo_signals, family_diagnostics=family_diagnostics)
   template_annex = build_template_annex(pages)
@@ -3229,6 +3233,7 @@ def main() -> int:
         source_mismatches=source_mismatches,
         family_diagnostics=family_diagnostics,
         template_diagnostics=template_diagnostics,
+        search_visibility_baseline=search_visibility_baseline,
       )
       if claude_analysis:
         analysis_attempts.append({"path": "AI Management Suite /analysis", "status": "success", "detail": analysis_url})
@@ -3287,6 +3292,7 @@ def main() -> int:
     "repoSignals": repo_signals,
     "familyDiagnostics": family_diagnostics,
     "templateDiagnostics": template_diagnostics,
+    "searchVisibilityBaseline": search_visibility_baseline,
     "pageFamilyCoverage": coverage_rows,
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
@@ -3297,6 +3303,9 @@ def main() -> int:
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
+  search_visibility_baseline_path = write_json(
+    output_dir / "search-visibility-baseline.json", search_visibility_baseline
+  )
 
   # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
@@ -3307,6 +3316,7 @@ def main() -> int:
       artefact_files: dict[str, Path] = {
         "summary.json": summary_path,
         "coverage.json": coverage_path,
+        "search-visibility-baseline.json": search_visibility_baseline_path,
       }
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix, artefact_files, r2_public_base
@@ -3334,7 +3344,12 @@ def main() -> int:
       r2_client = build_r2_client()
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix,
-        {"summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
+        {
+          "summary.json": summary_path,
+          "coverage.json": coverage_path,
+          "search-visibility-baseline.json": search_visibility_baseline_path,
+          "report.html": report_path,
+        },
         r2_public_base,
       )
     except Exception as exc:
@@ -3354,6 +3369,7 @@ def main() -> int:
     "reportUrl": uploaded.get("report.html", str(report_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "coverageUrl": uploaded.get("coverage.json", str(coverage_path)),
+    "searchVisibilityBaselineUrl": uploaded.get("search-visibility-baseline.json", str(search_visibility_baseline_path)),
     "issueCount": len(issues),
     "auditedUrlCount": len(pages),
     "artefacts": uploaded,
