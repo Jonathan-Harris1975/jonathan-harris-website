@@ -8,20 +8,31 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / 'assets' / 'partials'
 LEGACY_SCRIPT_PATH = ROOT / 'assets' / 'js' / 'consent-managed-scripts.min.js'
+GTM_ID = 'GTM-PC4K9KRK'
 
-CANONICAL_HEAD_BLOCK = '''<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
+GTM_HEAD_BLOCK = f'''<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','{GTM_ID}');</script>
+<!-- End Google Tag Manager -->'''
+
+GTM_BODY_BLOCK = f'''<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={GTM_ID}"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->'''
+
+RUNTIME_HEAD_BLOCK = '''<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
-<!-- CookieYes -->
-<script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" async></script>
 <script defer data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>'''
 
 GOOGLE_PATTERNS = [
-    re.compile(r'\s*<!--\s*Google Tag Manager\s*-->.*?googletagmanager\.com/gtm\.js.*?</script>\s*<!--\s*End Google Tag Manager[^>]*-->', re.I | re.S),
-    re.compile(r'\s*<!--\s*Google Tag Manager \(noscript\)\s*-->.*?googletagmanager\.com/ns\.html\?id=.*?</noscript>\s*<!--\s*End Google Tag Manager \(noscript\)[^>]*-->', re.I | re.S),
+    re.compile(r'\s*<!--\s*Google Tag Manager\s*-->.*?googletagmanager\.com/gtm\.js.*?</script>\s*<!--\s*End Google Tag Manager\s*-->', re.I | re.S),
+    re.compile(r'\s*<!--\s*Google Tag Manager \(noscript\)\s*-->.*?googletagmanager\.com/ns\.html\?id=.*?</noscript>\s*<!--\s*End Google Tag Manager \(noscript\)\s*-->', re.I | re.S),
     re.compile(r'\s*<!--\s*Google tag \(gtag\.js\)\s*-->\s*<script[^>]*src="https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"[^>]*></script>\s*<script>.*?gtag\(["\']config["\']\s*,\s*["\'][^"\']+["\']\);.*?</script>', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"[^>]*></script>', re.I | re.S),
-    re.compile(r'\s*<script>.*?googletagmanager\.com/gtm\.js.*?</script>', re.I | re.S),
+    re.compile(r'\s*<script>\s*\(function\(w,d,s,l,i\).*?googletagmanager\.com/gtm\.js.*?</script>', re.I | re.S),
     re.compile(r'\s*<script>.*?\bgtag\s*\(.*?</script>', re.I | re.S),
     re.compile(r'\s*<noscript>\s*<iframe[^>]+googletagmanager\.com/ns\.html\?id=[^>]+></iframe>\s*</noscript>', re.I | re.S),
 ]
@@ -33,6 +44,7 @@ CLEANUP_PATTERNS = [
     re.compile(r'\s*<!--\s*CookieYes\s*-->\s*', re.I),
     re.compile(r'\s*<!--\s*Metricool Tracking with error handling\s*-->\s*', re.I),
     re.compile(r'\s*<script[^>]*id="cookieyes"[^>]*src="https://cdn-cookieyes\.com/client_data/c981d18033783598d2216add/script\.js"[^>]*></script>\s*', re.I | re.S),
+    re.compile(r'\s*<script[^>]*src="https://cdn-cookieyes\.com/client_data/c981d18033783598d2216add/script\.js"[^>]*id="cookieyes"[^>]*></script>\s*', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="/assets/js/consent-managed-scripts(?:\.min)?\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script[^>]*src="/assets/js/script-governance\.min\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script\b[^>]*>(?:(?!</script>).)*tracker\.metricool\.com/resources/be\.js(?:(?!</script>).)*</script>\s*', re.I | re.S),
@@ -67,18 +79,32 @@ def inject_blocks(text: str) -> tuple[str, list[str]]:
     errors: list[str] = []
     updated = clean_existing_blocks(text)
 
+    if not re.search(r'<head\b[^>]*>', updated, re.I):
+        errors.append('missing <head>')
+    else:
+        updated = re.sub(r'(<head\b[^>]*>\s*)', lambda match: match.group(1) + GTM_HEAD_BLOCK + '\n', updated, count=1, flags=re.I)
+
+    if not re.search(r'<body\b[^>]*>', updated, re.I):
+        errors.append('missing <body>')
+    else:
+        updated = re.sub(r'(<body\b[^>]*>\s*)', lambda match: match.group(1) + GTM_BODY_BLOCK + '\n', updated, count=1, flags=re.I)
+
     if '</head>' not in updated:
         errors.append('missing </head>')
     else:
-        updated = updated.replace('</head>', f'{CANONICAL_HEAD_BLOCK}\n</head>', 1)
+        updated = updated.replace('</head>', f'{RUNTIME_HEAD_BLOCK}\n</head>', 1)
 
     return re.sub(r'\n{3,}', '\n\n', updated), errors
 
 
 def validate_page(text: str) -> list[str]:
     errors: list[str] = []
-    if 'https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js' not in text:
-        errors.append('missing CookieYes script')
+    if GTM_ID not in text or 'https://www.googletagmanager.com/gtm.js' not in text:
+        errors.append('missing Google Tag Manager head snippet')
+    if f'https://www.googletagmanager.com/ns.html?id={GTM_ID}' not in text:
+        errors.append('missing Google Tag Manager noscript snippet')
+    if 'https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js' in text:
+        errors.append('contains deprecated CookieYes direct loader')
 
     has_governed_loader = '/assets/js/script-governance.min.js' in text
     has_governed_loader_ignore = 'data-cookieyes="ignore"' in text and 'data-cookieconsent="ignore"' in text
@@ -90,7 +116,7 @@ def validate_page(text: str) -> list[str]:
     has_botsailor_inline = 'https://botsailor.com/script/webchat-link.js?code=1744067063128291' in text
 
     if has_governed_loader and not has_governed_loader_ignore:
-        errors.append('governed loader missing CookieYes ignore attributes')
+        errors.append('governed loader missing consent-ignore attributes')
 
     if not (has_governed_loader or has_metricool_inline):
         errors.append('missing Metricool loader script')
@@ -99,8 +125,8 @@ def validate_page(text: str) -> list[str]:
     if not (has_governed_loader or has_botsailor_inline):
         errors.append('missing BotSailor script')
 
-    if re.search(r'googletagmanager\.com|\bgtag\(|GTM-TFM7Q3RB|G-NLC3RN7H86', text, re.I):
-        errors.append('contains forbidden Google analytics/tag manager code')
+    if re.search(r'GTM-TFM7Q3RB|G-NLC3RN7H86|\bgtag\(', text, re.I):
+        errors.append('contains stale Google analytics/tag code')
     return errors
 
 

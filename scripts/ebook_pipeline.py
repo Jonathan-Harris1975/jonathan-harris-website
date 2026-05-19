@@ -2439,6 +2439,13 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8"/>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
@@ -2487,13 +2494,15 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 <script type="application/ld+json">{json_script(build_book_schema(book))}</script>
 <script type="application/ld+json">{json_script(faq_schema)}</script>
-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
 <script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebook-detail">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 {header}
 <div aria-hidden="false" class="page-loader" id="pageLoader">
   <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
@@ -2688,6 +2697,13 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8"/>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
@@ -2730,13 +2746,15 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
 <script type="application/ld+json">{json_script(item_list)}</script>
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
-<link href="https://cdn-cookieyes.com" rel="dns-prefetch"/>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
 <link href="https://botsailor.com" rel="dns-prefetch"/>
-<script async="" id="cookieyes" src="https://cdn-cookieyes.com/client_data/c981d18033783598d2216add/script.js" type="text/javascript"></script>
 <script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebooks-catalogue">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 {header}
 <div aria-hidden="false" class="page-loader is-active" id="pageLoader">
   <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
@@ -2816,6 +2834,13 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8"/>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
@@ -2923,6 +2948,13 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+<!-- End Google Tag Manager -->
 <meta charset="utf-8"/>
 <link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
