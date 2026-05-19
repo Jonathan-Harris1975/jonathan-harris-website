@@ -786,3 +786,14 @@ li{
   html.jh-nav-open,
   body.jh-nav-open{overflow:auto;}
 }
+
+/* JH-NAV-2026: keep the opened hamburger panel clickable above the overlay. */
+.jh-mobile-nav:not([hidden]),
+.jh-mobile-nav.is-open{
+  pointer-events:auto;
+  z-index:2700;
+}
+.jh-mobile-nav a{
+  position:relative;
+  z-index:1;
+}
