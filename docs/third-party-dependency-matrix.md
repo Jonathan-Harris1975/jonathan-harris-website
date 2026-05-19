@@ -6,7 +6,8 @@ This site depends on a small set of external services that sit outside the repos
 
 | Vendor | Role | Pages / surfaces | Failure mode | Fallback / mitigation |
 | --- | --- | --- | --- | --- |
-| CookieYes | Consent banner plus governed runtime loader | Homepage, catalogue, ebook pages, newsletter, contact, podcast, bio, compare, glossary, utility pages | CookieYes or CSP drift can block these loaders if the governed runtime contract is broken | Core content stays server-rendered and readable without consent-managed scripts |
+| CookieYes | Consent management, now routed through the Google Tag Manager setup rather than a direct page-level CookieYes loader | Homepage, catalogue, ebook pages, newsletter, contact, podcast, bio, compare, glossary, utility pages | Consent or CSP drift can block analytics consent signalling | Core content stays server-rendered and readable without consent-managed scripts |
+| Google Tag Manager | Site-wide tag container for the updated Google/CookieYes interface | All public HTML pages | Analytics and consent-managed tags fail to initialise if GTM or CSP is blocked | No content, routing, or form dependency |
 | Metricool | Analytics script loaded by the governed runtime loader | Core marketing pages | Measurement loss only | No content, routing, or form dependency |
 | BotSailor | Chat widget loaded by the governed runtime loader | Core marketing pages | Chat entry point disappears | Navigation, CTAs, and page content remain available without chat |
 | Jotform | Hosted forms and embeds | Newsletter and contact pages | Embedded form may fail or be blocked | Hosted Jotform fallback links remain published on-page |
