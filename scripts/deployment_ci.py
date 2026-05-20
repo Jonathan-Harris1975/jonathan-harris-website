@@ -113,6 +113,8 @@ def main() -> int:
     run_step("Inject featured book into homepage (source-of-truth sync)", [sys.executable, "scripts/inject_featured_book.py"])
     run_step("Inject shared partials (header + footer)", [sys.executable, "scripts/inject_partials.py"])
     run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
+    run_step("Apply third-party script governance", [sys.executable, "scripts/govern_page_scripts.py"])
+    run_step("Validate third-party script governance", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
     run_step("Run Phase 4A schema-markup gate", [sys.executable, "scripts/audits/schema_markup_gate.py", "--root", "."])
 
     validate_command = [sys.executable, "scripts/validate_release.py"]
