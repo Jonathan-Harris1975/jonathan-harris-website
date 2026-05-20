@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://jonathan-harris.online/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/api/docs/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -11,6 +15,10 @@
   <url>
     <loc>https://jonathan-harris.online/blog/</loc>
     <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/</loc>
+    <lastmod>2026-04-13</lastmod>
   </url>
   <url>
     <loc>https://jonathan-harris.online/blog/weekly/</loc>
@@ -121,6 +129,10 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
+    <loc>https://jonathan-harris.online/ebooks/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
     <loc>https://jonathan-harris.online/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -221,10 +233,6 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
-    <loc>https://jonathan-harris.online/ebooks/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -273,10 +281,6 @@
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
-    <loc>https://jonathan-harris.online/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
     <loc>https://jonathan-harris.online/newsletter/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
@@ -290,6 +294,10 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/terms-of-use/</loc>
+    <lastmod>2026-04-18</lastmod>
+  </url>
+  <url>
+    <loc>https://jonathan-harris.online/topics/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>
@@ -322,10 +330,6 @@
   </url>
   <url>
     <loc>https://jonathan-harris.online/topics/generative-ai/</loc>
-    <lastmod>2026-04-18</lastmod>
-  </url>
-  <url>
-    <loc>https://jonathan-harris.online/topics/</loc>
     <lastmod>2026-04-18</lastmod>
   </url>
   <url>

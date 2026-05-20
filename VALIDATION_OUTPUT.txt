@@ -1,7 +1,7 @@
 Validation run: 2026-04-18T20:49:01Z
 Book count: 36
 Topic count: 24
-Workbook title parity: 85/86 passed, 1 mismatched
+Workbook title parity: 87/87 passed, 0 mismatched
 Workbook content parity: 330 exact field matches, 30 approved transformations, 0 mismatches across 360 governed field checks
 
 Topics:
@@ -30,6 +30,9 @@ Topics:
 - Sports: 1
 - Transportation: 6
 
-Status: FAILED (2 issue(s))
-- blog/weekly/index.html meta description exceeds 155 characters (170).
-- Workbook Pages title mismatch for blog/weekly/index.html: workbook 'Weekly AI Briefing Route | Jonathan Harris' != repo 'Weekly AI Briefings | Jonathan Harris'.
+Status: PASSED
+- Route registry complete
+- Route manifest and host redirect coverage checks passed
+- Topic discovery pages exist for every book
+- Metadata and FAQ checks passed
+- Generated crawler snapshots and redirect governance checks passed

@@ -1289,5 +1289,121 @@
     "/catalogue/science/",
     "/catalogue/sports/",
     "/catalogue/transportation/"
-  ]
+  ],
+  "site_sections": [
+    {
+      "family": "blog-hub",
+      "title": "AI blog hub",
+      "path": "/blog/",
+      "loc": "https://jonathan-harris.online/blog/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "blog/index.html",
+      "summary": "Weekly AI analysis and editorial archive.",
+      "entity": "blog"
+    },
+    {
+      "family": "comparison",
+      "title": "AI book comparison guide",
+      "path": "/compare/",
+      "loc": "https://jonathan-harris.online/compare/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "compare/index.html",
+      "summary": "Comparison page for choosing relevant AI books.",
+      "entity": "comparison"
+    },
+    {
+      "family": "glossary",
+      "title": "AI glossary",
+      "path": "/glossary/",
+      "loc": "https://jonathan-harris.online/glossary/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "glossary/index.html",
+      "summary": "Plain-English AI glossary for answer engines and readers.",
+      "entity": "glossary"
+    },
+    {
+      "family": "newsletter",
+      "title": "AI Edge newsletter",
+      "path": "/newsletter/",
+      "loc": "https://jonathan-harris.online/newsletter/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "newsletter/index.html",
+      "summary": "Newsletter sign-up page for daily AI briefings.",
+      "entity": "newsletter"
+    },
+    {
+      "family": "person",
+      "title": "Jonathan Harris biography",
+      "path": "/bio/",
+      "loc": "https://jonathan-harris.online/bio/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "bio/index.html",
+      "summary": "Author profile and ecosystem authority page.",
+      "entity": "person"
+    },
+    {
+      "family": "podcast-hub",
+      "title": "Turing's Torch AI Weekly",
+      "path": "/podcast/",
+      "loc": "https://jonathan-harris.online/podcast/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "podcast/index.html",
+      "summary": "Podcast hub for AI weekly episodes.",
+      "entity": "podcast series"
+    },
+    {
+      "family": "site-home",
+      "title": "Jonathan Harris AI ecosystem",
+      "path": "/",
+      "loc": "https://jonathan-harris.online/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "index.html",
+      "summary": "Homepage for books, podcast, blog, topics and newsletter.",
+      "entity": "person and site"
+    },
+    {
+      "family": "topic-index",
+      "title": "AI topic guides",
+      "path": "/topics/",
+      "loc": "https://jonathan-harris.online/topics/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "topics/index.html",
+      "summary": "Topic-led entry points into the Jonathan Harris AI library.",
+      "entity": "topic index"
+    },
+    {
+      "family": "transcript-archive",
+      "title": "Podcast transcript archive",
+      "path": "/transcripts/",
+      "loc": "https://jonathan-harris.online/transcripts/",
+      "lastmod": "2026-04-18",
+      "source": "repo-html",
+      "repo_path": "transcripts/index.html",
+      "summary": "Searchable transcript archive for podcast episodes.",
+      "entity": "transcripts"
+    }
+  ],
+  "blog_posts": [
+    {
+      "family": "blog-post",
+      "title": "AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress",
+      "path": "/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
+      "loc": "https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
+      "lastmod": "2026-04-13",
+      "source": "blog/posts.json",
+      "repo_path": "",
+      "summary": "This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.",
+      "entity": "weekly AI briefing"
+    }
+  ],
+  "podcast_episodes": [],
+  "transcripts": []
 }
