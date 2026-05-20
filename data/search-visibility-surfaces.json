@@ -3,8 +3,8 @@
   "lane": "Lane 1 autonomous evidence",
   "seo": {
     "sitemap_includes_dynamic_routes": true,
-    "transcript_urls": 20,
-    "podcast_episode_urls": 20,
+    "transcript_urls": 0,
+    "podcast_episode_urls": 0,
     "blog_post_urls": 1
   },
   "geo": {
@@ -16,9 +16,7 @@
       "glossary",
       "newsletter",
       "person",
-      "podcast-episode",
       "podcast-hub",
-      "podcast-transcript",
       "site-home",
       "topic-index",
       "transcript-archive"
