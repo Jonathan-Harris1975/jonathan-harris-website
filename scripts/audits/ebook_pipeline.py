@@ -4069,7 +4069,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Retired /book/ link found in HTML: {file_path.relative_to(ROOT)}")
         if re.search(r'href="[^"]*/detail(?:\.html)?"', text):
             errors.append(f"Retired /detail link found in HTML: {file_path.relative_to(ROOT)}")
-        if "style=" in text:
+        if has_disallowed_inline_style(text):
             errors.append(f"Inline style attribute found in HTML: {file_path.relative_to(ROOT)}")
 
     static_metadata_pages = [
@@ -4518,6 +4518,18 @@ def ebook_title_length_warnings(books: List[Dict[str, Any]]) -> List[str]:
         if 90 < len(actual_title) <= 120:
             warnings.append(f"{book['slug']} page title is {len(actual_title)} characters; warning threshold is 90.")
     return warnings
+
+
+
+def has_disallowed_inline_style(text: str) -> bool:
+    """Return True when HTML contains inline style outside the approved GTM noscript iframe."""
+    cleaned = re.sub(
+        r'<iframe\b(?=[^>]*https://www\.googletagmanager\.com/ns\.html\?id=GTM-PC4K9KRK)(?=[^>]*style=["\']display:none;visibility:hidden["\'])[^>]*></iframe>',
+        '<iframe data-approved-gtm-noscript></iframe>',
+        text,
+        flags=re.I | re.S,
+    )
+    return bool(re.search(r'\sstyle\s*=', cleaned, re.I))
 
 def run_validate_command(workbook_path: Path | None = None) -> int:
     effective_workbook = workbook_path or detect_governed_workbook_path()
