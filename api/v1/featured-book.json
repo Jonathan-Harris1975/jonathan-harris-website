@@ -2,40 +2,40 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 20,
+    "iso_week": 21,
     "year": 2026
   },
   "book": {
-    "id": 21,
-    "key": "21-ebook",
-    "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
-    "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
-    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
+    "id": 22,
+    "key": "22-ebook",
+    "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+    "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "tags": [
-      "Future of Work",
+      "Government",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Future of Work",
+    "filter": "Government",
     "keywords": [
-      "Future of Work",
-      "The Artificial Intelligence Job Shift: Navigating the Future of Work",
+      "Government",
+      "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/aijobshift",
-    "buy_target_url": "https://mybook.to/aijobshift",
-    "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
-    "asin": "B0DMQHQTQH",
-    "pages": 315,
-    "datePublished": "2024-11-11",
+    "buy_url": "https://mybook.to/3TwcUA",
+    "buy_target_url": "https://mybook.to/3TwcUA",
+    "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
+    "asin": "B0DM74CRSD",
+    "pages": 328,
+    "datePublished": "2024-11-05",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-    "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
-    "topic_url": "/catalogue/future-of-work/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+    "buy_route": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+    "topic_url": "/catalogue/government/",
     "related_slugs": [
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
@@ -43,22 +43,23 @@
       "artificial-intelligence-in-construction-building-a-sustainable-future"
     ],
     "title_tokens": [
+      "enh",
       "future",
-      "job",
-      "navigat",
-      "shift",
-      "work"
+      "govern",
+      "inform",
+      "leverag",
+      "safeguard",
+      "service"
     ],
     "topic_tokens": [
-      "future",
-      "work"
+      "govern"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
-    "midroll_15": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work. A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement. Read more at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-    "midroll_30": "This week's sponsor is The Artificial Intelligence Job Shift: Navigating the Future of Work. A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement. It focuses on Future of Work. It runs 315 pages. Topics include Future of Work, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now."
+    "headline": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
+    "midroll_15": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information. A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions. Read more at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
+    "midroll_30": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information. A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions. It focuses on Government. It runs 328 pages. Topics include Government, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now."
   }
 }
