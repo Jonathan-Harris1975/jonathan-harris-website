@@ -65,6 +65,7 @@ MANDATORY_COMPLETION_ARTEFACTS = [
   "repository-issue-appendix.json",
   "mandatory-mobile-scorecard.json",
   "responsive-fix-appendix.json",
+  "accessibility-appendix.json",
 ]
 LIVE_404_ROUTE = "/__mobile-ux-live-404__"
 VIEWPORTS = [320, 375, 390, 414, 768, 1024, 1280, 1440]
@@ -103,6 +104,7 @@ CHECK_GROUP_TITLES = {
   "imageResponsiveness": "Shared image responsiveness defect",
   "tableComparisonHandling": "Shared table/comparison handling defect",
   "live404Verification": "Live rendered 404 shell defect",
+  "accessibilityCompliance": "Accessibility and WCAG AA usability defect",
 }
 CHECK_TO_TECHNICAL_AREA = {
   "viewportCorrectness": "HTML head / shared partial",
@@ -117,6 +119,7 @@ CHECK_TO_TECHNICAL_AREA = {
   "imageResponsiveness": "Image/CSS asset responsiveness",
   "tableComparisonHandling": "Comparison/table layout CSS",
   "live404Verification": "404 route shell and shared layout",
+  "accessibilityCompliance": "Accessible names, alt text, labels, headings, keyboard/focus contract",
 }
 
 EXECUTIVE_THEME_LIMIT = 12
@@ -132,6 +135,11 @@ EXECUTIVE_THEME_DEFINITIONS = {
     "title": "Conversion journey and CTA continuity",
     "checks": {"ctaContinuity", "touchTargetUsability", "formUsability"},
     "programme": "Protect the primary conversion path by keeping CTAs visible, tappable, correctly routed, and usable in every mobile layout state.",
+  },
+  "accessibility": {
+    "title": "Accessibility and inclusive mobile operation",
+    "checks": {"accessibilityCompliance"},
+    "programme": "Remove WCAG AA blockers such as missing accessible names, weak form labelling, missing alt text, heading jumps, generic link text, and keyboard/focus ambiguity.",
   },
   "layout": {
     "title": "Responsive layout, overflow, and breakpoint control",
@@ -500,6 +508,83 @@ def inspect_form_usability(page: Any) -> tuple[str, list[dict[str, Any]] | str]:
     """
   )
   return ("PASS" if not issues else "FAIL", issues)
+
+
+def inspect_accessibility(page: Any) -> tuple[str, dict[str, Any]]:
+  details = page.evaluate(
+    r"""
+    () => {
+      const visible = (el) => {
+        const style = window.getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+      };
+      const text = (el) => (el.textContent || '').replace(/\s+/g, ' ').trim();
+      const accessibleName = (el) => (
+        el.getAttribute('aria-label') ||
+        el.getAttribute('title') ||
+        el.getAttribute('alt') ||
+        text(el)
+      ).replace(/\s+/g, ' ').trim();
+
+      const issues = [];
+      const lang = document.documentElement.getAttribute('lang') || '';
+      if (!lang) issues.push({ type: 'language', wcag: '3.1.1', selector: 'html', message: 'Page language attribute is missing.' });
+      if (!document.title || document.title.trim().length < 8) issues.push({ type: 'title', wcag: '2.4.2', selector: 'title', message: 'Page title is missing or too thin.' });
+
+      for (const img of Array.from(document.images).slice(0, 80)) {
+        if (!visible(img)) continue;
+        if (img.getAttribute('aria-hidden') === 'true' || img.getAttribute('role') === 'presentation') continue;
+        if (!img.hasAttribute('alt')) {
+          issues.push({ type: 'image-alt', wcag: '1.1.1', selector: img.id ? `#${img.id}` : 'img', message: 'Visible image is missing alt text.' });
+        }
+      }
+
+      for (const el of Array.from(document.querySelectorAll('button, a[href], [role="button"], input, textarea, select')).slice(0, 120)) {
+        if (!visible(el)) continue;
+        const name = accessibleName(el);
+        const selector = el.id ? `#${el.id}` : el.className ? `${el.tagName.toLowerCase()}.${String(el.className).trim().replace(/\s+/g, '.')}` : el.tagName.toLowerCase();
+        if (!name) issues.push({ type: 'accessible-name', wcag: '4.1.2', selector, message: 'Interactive element has no accessible name.' });
+        if (el.tagName.toLowerCase() === 'a' && /^(click here|read more|learn more|more)$/i.test(name)) {
+          issues.push({ type: 'link-purpose', wcag: '2.4.4', selector, message: `Generic link text: ${name}` });
+        }
+      }
+
+      for (const field of Array.from(document.querySelectorAll('input:not([type="hidden"]), textarea, select')).slice(0, 80)) {
+        if (!visible(field)) continue;
+        const id = field.id || '';
+        const labelled = Boolean(
+          field.getAttribute('aria-label') ||
+          field.getAttribute('aria-labelledby') ||
+          (id && document.querySelector(`label[for="${CSS.escape(id)}"]`)) ||
+          field.closest('label')
+        );
+        if (!labelled) issues.push({ type: 'form-label', wcag: '3.3.2', selector: id ? `#${id}` : field.tagName.toLowerCase(), message: 'Visible form field has no associated label.' });
+      }
+
+      let previous = 0;
+      for (const heading of Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).slice(0, 80)) {
+        if (!visible(heading)) continue;
+        const level = Number(heading.tagName.slice(1));
+        if (previous && level > previous + 1) {
+          issues.push({ type: 'heading-order', wcag: '1.3.1', selector: heading.tagName.toLowerCase(), message: `Heading level jumps from h${previous} to h${level}.` });
+        }
+        previous = level;
+      }
+
+      const focusStyle = window.getComputedStyle(document.body);
+      return {
+        standard: 'WCAG 2.2 AA evidence sweep',
+        legalMapping: ['WCAG 2.1/2.2 AA', 'ADA', 'EAA', 'Section 508', 'AODA'],
+        issueCount: issues.length,
+        issues: issues.slice(0, 30),
+        note: 'Rendered deterministic sweep; manual screen-reader verification is still represented as report guidance, not fabricated as a pass/fail claim.',
+        bodyOutlineStyle: focusStyle.outlineStyle || '',
+      };
+    }
+    """
+  )
+  return ("PASS" if not details.get("issues") else "FAIL", details)
 
 
 def inspect_images(page: Any) -> tuple[str, list[dict[str, Any]] | str]:
@@ -1150,6 +1235,7 @@ def run_single_record(page: Any, base_url: str, route: str, width: int, target: 
   checks["ctaContinuity"], details["cta"] = inspect_cta(page, base_url)
   checks["typographyReadability"], details["readability"] = inspect_readability(page)
   checks["formUsability"], details["form"] = inspect_form_usability(page)
+  checks["accessibilityCompliance"], details["accessibility"] = inspect_accessibility(page)
   checks["imageResponsiveness"], details["images"] = inspect_images(page)
   table_status, pattern, table_details = inspect_tables(page)
   checks["tableComparisonHandling"] = table_status
@@ -1172,7 +1258,7 @@ def run_single_record(page: Any, base_url: str, route: str, width: int, target: 
 
 
 def best_anchor(details: dict[str, Any]) -> str:
-  for key in ("hamburger", "cta", "overflow", "tables"):
+  for key in ("hamburger", "cta", "accessibility", "form", "overflow", "tables"):
     value = details.get(key)
     if isinstance(value, dict):
       if value.get("selector"):
@@ -1360,6 +1446,7 @@ def remediation_for_check(check: str, record: dict[str, Any]) -> str:
     "ctaContinuity": "Keep the primary CTA visible, tappable, and routed to the intended destination in the rendered mobile state without overlay, clipping, or dead-end interactions.",
     "typographyReadability": "Adjust responsive type scale, line length, spacing, and wrapping so headings, body text, labels, buttons, and nav items do not clip, crush, or overlap.",
     "formUsability": "Set visible input/control font size to at least 16px, keep labels and helper text associated, and preserve tappable submit flow at narrow widths.",
+    "accessibilityCompliance": "Resolve WCAG AA mobile accessibility defects: add accessible names, meaningful alt text, associated form labels, logical heading order, meaningful link text, and visible keyboard/focus affordances.",
     "imageResponsiveness": "Constrain images and artwork with responsive sizing/object-fit rules so they scale without distortion, clipping, overflow, or layout breakage.",
     "tableComparisonHandling": "Use a deliberate table strategy: scroll container, stacked mobile cards, wrapping columns, or transformed comparison rows; do not allow inaccessible clipped wide content.",
     "live404Verification": "Fix the rendered 404 route shell so header, footer, CTA path, viewport behaviour, and mobile layout all pass the same Stage 3 checks as normal pages.",
@@ -1381,7 +1468,9 @@ def severity_for_check(check: str, route: str, viewport: int | str) -> str:
     return "P0"
   if route in CRITICAL_ROUTES and check in {"ctaContinuity", "hamburgerNavigation", "overflow"} and width <= 768:
     return "P0"
-  if check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability", "imageResponsiveness", "tableComparisonHandling", "typographyReadability", "responsiveCoverage"}:
+  if check == "accessibilityCompliance" and route in CRITICAL_ROUTES and width <= 768:
+    return "P1"
+  if check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability", "accessibilityCompliance", "imageResponsiveness", "tableComparisonHandling", "typographyReadability", "responsiveCoverage"}:
     return "P1"
   return "P2"
 
@@ -1442,8 +1531,8 @@ def source_snippet_for_anchor(route: str, anchor: str | None, repo_root: Path = 
   ]
   if check in {"hamburgerNavigation", "dynamicResizeReflow"}:
     candidate_paths = ["assets/partials/header.html", "assets/js/site.js", "assets/css/site.css", *route_candidates]
-  elif check in {"overflow", "responsiveCoverage", "touchTargetUsability", "typographyReadability", "imageResponsiveness", "tableComparisonHandling", "formUsability"}:
-    candidate_paths = ["assets/css/site.css", *route_candidates, "assets/partials/header.html", "assets/js/site.js"]
+  elif check in {"overflow", "responsiveCoverage", "touchTargetUsability", "typographyReadability", "imageResponsiveness", "tableComparisonHandling", "formUsability", "accessibilityCompliance"}:
+    candidate_paths = [*route_candidates, "assets/partials/header.html", "assets/partials/footer.html", "assets/css/site.css", "assets/js/site.js"]
   elif check == "ctaContinuity":
     candidate_paths = [*route_candidates, "assets/partials/header.html", "assets/css/site.css", "assets/js/site.js"]
   elif check == "live404Verification":
@@ -1483,7 +1572,7 @@ def group_key_for_issue(issue: dict[str, Any]) -> tuple[str, str, str]:
   anchor = normalise_anchor(issue.get("bestAvailableCodeAnchor") or issue.get("selectorComponentCodeAnchor"))
   check = str(issue.get("check") or "mobileUx")
   template = str(issue.get("templateFamily") or detect_template_family(issue.get("route") or "/"))
-  shared_component_checks = {"hamburgerNavigation", "ctaContinuity", "overflow", "typographyReadability", "imageResponsiveness", "touchTargetUsability", "dynamicResizeReflow"}
+  shared_component_checks = {"hamburgerNavigation", "ctaContinuity", "overflow", "typographyReadability", "imageResponsiveness", "touchTargetUsability", "dynamicResizeReflow", "accessibilityCompliance"}
   if check in shared_component_checks and anchor != "unmapped-rendered-component":
     template = "shared-component"
   return (check, template, anchor)
@@ -1724,6 +1813,7 @@ def mandatory_mobile_scorecard_document(records: list[dict[str, Any]], summary: 
       "typographyReadability": checks.get("typographyReadability"),
       "imageResponsiveness": checks.get("imageResponsiveness"),
       "formUsability": checks.get("formUsability"),
+      "accessibilityCompliance": checks.get("accessibilityCompliance"),
       "tableComparisonHandling": checks.get("tableComparisonHandling"),
       "screenshotRefs": record.get("screenshotRefs", []),
       "defectSummary": record.get("defectSummary", ""),
@@ -1842,6 +1932,46 @@ def responsive_fix_appendix_document(summary: dict[str, Any], issues: list[dict[
   }
 
 
+def accessibility_appendix_document(summary: dict[str, Any], records: list[dict[str, Any]], issues: list[dict[str, Any]]) -> dict[str, Any]:
+  rows = []
+  for record in records:
+    accessibility = (record.get("details") or {}).get("accessibility")
+    if not isinstance(accessibility, dict):
+      continue
+    rows.append({
+      "route": record.get("route"),
+      "url": record.get("url"),
+      "viewport": record.get("viewport"),
+      "status": (record.get("checks") or {}).get("accessibilityCompliance"),
+      "issueCount": accessibility.get("issueCount", 0),
+      "issues": accessibility.get("issues", []),
+      "standard": accessibility.get("standard", "WCAG 2.2 AA evidence sweep"),
+      "legalMapping": accessibility.get("legalMapping", []),
+    })
+  issue_refs = [issue for issue in issues if issue.get("check") == "accessibilityCompliance"]
+  return {
+    "auditType": "mobile-ux",
+    "phase": "5C",
+    "skill": "accessibility-audit",
+    "standard": "WCAG 2.2 AA with WCAG 2.1 AA compatibility mapping",
+    "legalStandards": ["WCAG 2.1/2.2 AA", "ADA", "EAA", "Section 508", "AODA"],
+    "automationMode": "rendered evidence/report-first; safe remediation remains PR-gated",
+    "sessionId": summary.get("sessionId"),
+    "reportPrefix": summary.get("reportPrefix"),
+    "routeViewportRows": rows,
+    "failingRows": [row for row in rows if row.get("status") == "FAIL"],
+    "issueRefs": issue_refs,
+    "hardBlockers": [
+      "interactive element without accessible name",
+      "visible image without alt decision",
+      "visible form field without associated label",
+      "generic link text on primary journey",
+      "heading-order jumps that harm structure",
+    ],
+    "generatedAt": utc_now(),
+  }
+
+
 def report_json_document(
   summary: dict[str, Any],
   records: list[dict[str, Any]],
@@ -1891,6 +2021,7 @@ def report_json_document(
       "repositoryIssueAppendix": repository_issue_appendix_document(summary, issues),
       "mandatoryMobileScorecard": mandatory_mobile_scorecard_document(records, summary),
       "responsiveFixAppendix": responsive_fix_appendix_document(summary, issues, records),
+      "accessibilityAppendix": accessibility_appendix_document(summary, records, issues),
     },
     "evidencePolicy": {
       "allowedLabels": [
@@ -2003,6 +2134,14 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     f"<td>{escape(str(value.get('evidence') if isinstance(value, dict) else ''))}</td></tr>"
     for key, value in confidence.items()
   ) or "<tr><td colspan='3'>Confidence model was not supplied.</td></tr>"
+
+  accessibility_doc = accessibility_appendix_document(summary, records, issues)
+  accessibility_rows = "".join(
+    f"<tr><td>{escape(str(row.get('route')))}</td><td>{escape(str(row.get('viewport')))}px</td>"
+    f"<td>{html_badge(str(row.get('status') or 'N/A'))}</td><td>{escape(str(row.get('issueCount') or 0))}</td>"
+    f"<td>{escape('; '.join(str(issue.get('message')) for issue in (row.get('issues') or [])[:3]))}</td></tr>"
+    for row in accessibility_doc.get('routeViewportRows', [])[:40]
+  ) or "<tr><td colspan='5'>No accessibility rows recorded.</td></tr>"
 
   theme_rows = []
   for theme in executive_themes:
@@ -2174,6 +2313,12 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     <h2>Confidence model</h2>
     <p>The model separates coverage, finding quality, scoring confidence, and release confidence so a blocked report cannot sit beside a cheerful unexplained 100.</p>
     <table><thead><tr><th>Confidence field</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{confidence_rows}</tbody></table>
+  </section>
+
+  <section id="accessibility-phase-5c">
+    <h2>Phase 5C accessibility evidence</h2>
+    <p>Accessibility is now checked inside the rendered Mobile UX hard gate against WCAG 2.2 AA with WCAG 2.1 AA compatibility mapping for ADA, EAA, Section 508 and AODA. This is deterministic evidence/report-first; safe remediation remains PR-gated.</p>
+    <table class="tight"><thead><tr><th>Route</th><th>Viewport</th><th>Status</th><th>Issues</th><th>Example evidence</th></tr></thead><tbody>{accessibility_rows}</tbody></table>
   </section>
 
   <section id="evidence-labels">
@@ -2676,6 +2821,7 @@ def main() -> int:
   write_json(output_dir / "repository-issue-appendix.json", repository_issue_appendix_document(summary, issues))
   write_json(output_dir / "mandatory-mobile-scorecard.json", mandatory_mobile_scorecard_document(records, summary))
   write_json(output_dir / "responsive-fix-appendix.json", responsive_fix_appendix_document(summary, issues, records))
+  write_json(output_dir / "accessibility-appendix.json", accessibility_appendix_document(summary, records, issues))
   html = report_html(summary, records, {}, issues, coverage, reconciliation)
   write_text(output_dir / "report.html", html)
 
@@ -2719,6 +2865,7 @@ def main() -> int:
     "repositoryIssueAppendixUrl": uploaded.get("repository-issue-appendix.json"),
     "mandatoryMobileScorecardUrl": uploaded.get("mandatory-mobile-scorecard.json"),
     "responsiveFixAppendixUrl": uploaded.get("responsive-fix-appendix.json"),
+    "accessibilityAppendixUrl": uploaded.get("accessibility-appendix.json"),
     "screenshotCount": summary["screenshotCount"],
     "mobileFailureCount": summary["mobileFailureCount"],
     "issueCount": summary["issueCount"],
