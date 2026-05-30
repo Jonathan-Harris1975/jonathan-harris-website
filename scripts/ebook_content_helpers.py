@@ -42,10 +42,11 @@ def topic_intro(topic: str) -> str:
 
 
 def default_short(topic: str, pages: int | None) -> str:
+    topic_name = (topic or "").strip() or "artificial intelligence"
     prefix = f"A {pages}-page guide" if pages else "A practical guide"
-    if (topic or "").strip().lower() == "artificial intelligence":
-        return f"{prefix} to artificial intelligence itself, written in plain English with practical examples and grounded analysis."
-    return f"{prefix} to AI in {topic.lower()}, written in plain English with practical examples and grounded analysis."
+    if topic_name.lower() == "artificial intelligence":
+        return f"{prefix} to artificial intelligence itself, written in plain English with the big claims tested against what the systems can actually do."
+    return f"{prefix} to AI in {topic_name.lower()}, focused on specific use cases, awkward limits, and the decisions people still have to make."
 
 
 def normalise_topic_copy(value: str, topic: str) -> str:
