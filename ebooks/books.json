@@ -3,8 +3,8 @@
     "id": 1,
     "key": "1-ebook",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
-    "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car.",
+    "short_description": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car.",
     "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "tags": [
@@ -48,14 +48,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure.",
+    "summary": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure."
   },
   {
     "id": 2,
     "key": "2-ebook",
     "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
-    "short": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table.",
+    "short_description": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "tags": [
@@ -97,14 +99,16 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ]
+    ],
+    "description": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning.",
+    "summary": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning."
   },
   {
     "id": 3,
     "key": "3-ebook",
     "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
-    "short": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
+    "short": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality.",
+    "short_description": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality.",
     "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "tags": [
@@ -147,14 +151,16 @@
     ],
     "topic_tokens": [
       "energy"
-    ]
+    ],
+    "description": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration.",
+    "summary": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration."
   },
   {
     "id": 4,
     "key": "4-ebook",
     "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
-    "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality.",
+    "short_description": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "tags": [
@@ -196,14 +202,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be.",
+    "summary": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be."
   },
   {
     "id": 5,
     "key": "5-ebook",
     "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
-    "short": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong.",
+    "short_description": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "tags": [
@@ -245,14 +253,16 @@
     ],
     "topic_tokens": [
       "law"
-    ]
+    ],
+    "description": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability.",
+    "summary": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability."
   },
   {
     "id": 6,
     "key": "6-ebook",
     "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
-    "short": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+    "short": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
+    "short_description": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "tags": [
@@ -296,14 +306,16 @@
     "topic_tokens": [
       "cyb",
       "secur"
-    ]
+    ],
+    "description": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise.",
+    "summary": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise."
   },
   {
     "id": 7,
     "key": "7-ebook",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence.",
+    "short_description": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "tags": [
@@ -338,14 +350,16 @@
       "consci",
       "revolution"
     ],
-    "topic_tokens": []
+    "topic_tokens": [],
+    "description": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify.",
+    "summary": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify."
   },
   {
     "id": 8,
     "key": "8-ebook",
     "title": "AI in Aviation: Transforming Safety and Sustainability",
-    "short": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
+    "short": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually.",
+    "short_description": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually.",
     "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "main_image": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "tags": [
@@ -385,14 +399,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option.",
+    "summary": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option."
   },
   {
     "id": 9,
     "key": "9-ebook",
     "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
-    "short": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
+    "short": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch.",
+    "short_description": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch.",
     "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "tags": [
@@ -432,14 +448,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure.",
+    "summary": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure."
   },
   {
     "id": 10,
     "key": "10-ebook",
     "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
-    "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise.",
+    "short_description": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "tags": [
@@ -478,14 +496,16 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ]
+    ],
+    "description": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress.",
+    "summary": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress."
   },
   {
     "id": 11,
     "key": "11-ebook",
     "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
-    "short": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine.",
+    "short_description": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine.",
     "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "main_image": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "tags": [
@@ -526,14 +546,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches.",
+    "summary": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches."
   },
   {
     "id": 12,
     "key": "12-ebook",
     "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
-    "short": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
+    "short": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal.",
+    "short_description": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "tags": [
@@ -576,14 +598,16 @@
     ],
     "topic_tokens": [
       "retail"
-    ]
+    ],
+    "description": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy.",
+    "summary": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy."
   },
   {
     "id": 13,
     "key": "13-ebook",
     "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
-    "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor.",
+    "short_description": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "tags": [
@@ -626,14 +650,16 @@
     ],
     "topic_tokens": [
       "manufactur"
-    ]
+    ],
+    "description": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off.",
+    "summary": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off."
   },
   {
     "id": 14,
     "key": "14-ebook",
     "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
-    "short": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
+    "short": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard.",
+    "short_description": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "tags": [
@@ -672,14 +698,16 @@
     ],
     "topic_tokens": [
       "industry"
-    ]
+    ],
+    "description": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence.",
+    "summary": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence."
   },
   {
     "id": 15,
     "key": "15-ebook",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
-    "short": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
+    "short": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine.",
+    "short_description": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine.",
     "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "main_image": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "tags": [
@@ -718,14 +746,16 @@
     ],
     "topic_tokens": [
       "ethic"
-    ]
+    ],
+    "description": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing.",
+    "summary": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing."
   },
   {
     "id": 16,
     "key": "16-ebook",
     "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
-    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos.",
+    "short_description": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos.",
     "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "main_image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "tags": [
@@ -766,14 +796,16 @@
     ],
     "topic_tokens": [
       "agriculture"
-    ]
+    ],
+    "description": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots.",
+    "summary": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots."
   },
   {
     "id": 17,
     "key": "17-ebook",
     "title": "AI in Education: Reimagining Learning for Every Student",
-    "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork.",
+    "short_description": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork.",
     "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "main_image": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "tags": [
@@ -814,14 +846,16 @@
     ],
     "topic_tokens": [
       "educ"
-    ]
+    ],
+    "description": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn.",
+    "summary": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn."
   },
   {
     "id": 18,
     "key": "18-ebook",
     "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+    "short": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead.",
+    "short_description": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "tags": [
@@ -862,14 +896,16 @@
     ],
     "topic_tokens": [
       "fin"
-    ]
+    ],
+    "description": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off.",
+    "summary": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off."
   },
   {
     "id": 19,
     "key": "19-ebook",
     "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
-    "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
+    "short_description": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
     "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "tags": [
@@ -909,14 +945,16 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ]
+    ],
+    "description": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement.",
+    "summary": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement."
   },
   {
     "id": 20,
     "key": "20-ebook",
     "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides.",
+    "short_description": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "tags": [
@@ -956,14 +994,16 @@
     ],
     "topic_tokens": [
       "construction"
-    ]
+    ],
+    "description": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites.",
+    "summary": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites."
   },
   {
     "id": 21,
     "key": "21-ebook",
     "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+    "short": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work.",
+    "short_description": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "tags": [
@@ -1005,14 +1045,16 @@
     "topic_tokens": [
       "future",
       "work"
-    ]
+    ],
+    "description": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits.",
+    "summary": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits."
   },
   {
     "id": 22,
     "key": "22-ebook",
     "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch.",
+    "short_description": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch.",
     "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "main_image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "tags": [
@@ -1055,14 +1097,16 @@
     ],
     "topic_tokens": [
       "govern"
-    ]
+    ],
+    "description": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional.",
+    "summary": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional."
   },
   {
     "id": 23,
     "key": "23-ebook",
     "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
-    "short": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight.",
+    "short_description": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight.",
     "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "tags": [
@@ -1103,14 +1147,16 @@
     ],
     "topic_tokens": [
       "construction"
-    ]
+    ],
+    "description": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight.",
+    "summary": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight."
   },
   {
     "id": 24,
     "key": "24-ebook",
     "title": "Digital Defense: The Role of AI in Modern Warfare",
-    "short": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+    "short": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
+    "short_description": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
     "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "tags": [
@@ -1151,14 +1197,16 @@
     ],
     "topic_tokens": [
       "def"
-    ]
+    ],
+    "description": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached.",
+    "summary": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached."
   },
   {
     "id": 25,
     "key": "25-ebook",
     "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
-    "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face.",
+    "short_description": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "tags": [
@@ -1200,14 +1248,16 @@
     ],
     "topic_tokens": [
       "environ"
-    ]
+    ],
+    "description": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure.",
+    "summary": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure."
   },
   {
     "id": 26,
     "key": "26-ebook",
     "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-    "short": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
+    "short_description": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
     "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "main_image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "tags": [
@@ -1247,14 +1297,16 @@
     ],
     "topic_tokens": [
       "environ"
-    ]
+    ],
+    "description": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny.",
+    "summary": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny."
   },
   {
     "id": 27,
     "key": "27-ebook",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-    "short": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
+    "short": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption.",
+    "short_description": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption.",
     "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "main_image": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "tags": [
@@ -1296,14 +1348,16 @@
     ],
     "topic_tokens": [
       "transport"
-    ]
+    ],
+    "description": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first.",
+    "summary": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first."
   },
   {
     "id": 28,
     "key": "28-ebook",
     "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
-    "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch.",
+    "short_description": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "tags": [
@@ -1344,14 +1398,16 @@
     ],
     "topic_tokens": [
       "sport"
-    ]
+    ],
+    "description": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves.",
+    "summary": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves."
   },
   {
     "id": 29,
     "key": "29-ebook",
     "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-    "short": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
+    "short_description": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
     "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "main_image": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "tags": [
@@ -1393,14 +1449,16 @@
     ],
     "topic_tokens": [
       "creativ"
-    ]
+    ],
+    "description": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you.",
+    "summary": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you."
   },
   {
     "id": 30,
     "key": "30-ebook",
     "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
-    "short": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
+    "short": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune.",
+    "short_description": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune.",
     "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "tags": [
@@ -1441,14 +1499,16 @@
     ],
     "topic_tokens": [
       "creativ"
-    ]
+    ],
+    "description": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background.",
+    "summary": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background."
   },
   {
     "id": 31,
     "key": "31-ebook",
     "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
+    "short_description": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
     "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "main_image": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "tags": [
@@ -1489,14 +1549,16 @@
     ],
     "topic_tokens": [
       "history"
-    ]
+    ],
+    "description": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence.",
+    "summary": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence."
   },
   {
     "id": 32,
     "key": "32-ebook",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
+    "short_description": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
     "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "main_image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "tags": [
@@ -1541,14 +1603,16 @@
     ],
     "topic_tokens": [
       "ethic"
-    ]
+    ],
+    "description": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug.",
+    "summary": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug."
   },
   {
     "id": 33,
     "key": "33-ebook",
     "title": "Beyond Earth: How AI is Transforming Space Exploration",
-    "short": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
+    "short": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork.",
+    "short_description": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork.",
     "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "main_image": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "tags": [
@@ -1589,14 +1653,16 @@
     ],
     "topic_tokens": [
       "sci"
-    ]
+    ],
+    "description": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue.",
+    "summary": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue."
   },
   {
     "id": 34,
     "key": "34-ebook",
     "title": "From Reporters to Robots: How AI is Reshaping Journalism",
-    "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge.",
+    "short_description": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge.",
     "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "tags": [
@@ -1636,14 +1702,16 @@
     ],
     "topic_tokens": [
       "media"
-    ]
+    ],
+    "description": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away.",
+    "summary": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away."
   },
   {
     "id": 35,
     "key": "35-ebook",
     "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "short": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
+    "short_description": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
     "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "tags": [
@@ -1686,14 +1754,16 @@
     ],
     "topic_tokens": [
       "media"
-    ]
+    ],
+    "description": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see.",
+    "summary": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see."
   },
   {
     "id": 36,
     "key": "36-ebook",
     "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "short": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
+    "short": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
+    "short_description": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
     "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "main_image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "tags": [
@@ -1735,6 +1805,8 @@
     ],
     "topic_tokens": [
       "gam"
-    ]
+    ],
+    "description": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play.",
+    "summary": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play."
   }
 ]
