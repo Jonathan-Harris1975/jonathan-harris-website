@@ -1299,6 +1299,676 @@ CATALOGUE_CTA_VARIANTS: Dict[str, str] = {'Agriculture': 'Open the full breakdow
  'Sports': 'Read the deeper summary, then inspect the Amazon page for the current edition and price.',
  'Transportation': 'Check the complete book page, then use Amazon for the latest buying details.'}
 
+BOOK_SPECIFIC_SHORT_OVERRIDES: Dict[str, str] = {'ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology': 'A practical look '
+                                                                               'at AI in race '
+                                                                               'strategy, '
+                                                                               'simulation, '
+                                                                               'telemetry, and '
+                                                                               'split-second '
+                                                                               'decisions, without '
+                                                                               'pretending the '
+                                                                               'software drives '
+                                                                               'the car.',
+ 'artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation': 'A '
+                                                                                                     'grounded '
+                                                                                                     'guide '
+                                                                                                     'to '
+                                                                                                     'diagnostic '
+                                                                                                     'tools, '
+                                                                                                     'clinic '
+                                                                                                     'workflow, '
+                                                                                                     'animal '
+                                                                                                     'health '
+                                                                                                     'data, '
+                                                                                                     'and '
+                                                                                                     'the '
+                                                                                                     'judgement '
+                                                                                                     'vets '
+                                                                                                     'still '
+                                                                                                     'bring '
+                                                                                                     'to '
+                                                                                                     'the '
+                                                                                                     'table.',
+ 'ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation': 'A clear guide '
+                                                                                  'to demand '
+                                                                                  'forecasting, '
+                                                                                  'grid balancing, '
+                                                                                  'renewables, and '
+                                                                                  'the awkward bit '
+                                                                                  'where energy '
+                                                                                  'theory meets '
+                                                                                  'field reality.',
+ 'artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability': 'A practical '
+                                                                                  'look at '
+                                                                                  'routing, demand '
+                                                                                  'forecasting, '
+                                                                                  'warehouse '
+                                                                                  'automation, and '
+                                                                                  'the points '
+                                                                                  'where '
+                                                                                  'supply-chain '
+                                                                                  'theory meets '
+                                                                                  'loading-bay '
+                                                                                  'reality.',
+ 'artificial-intelligence-and-the-law-case-studies-and-future-trends': 'A plain-English look at '
+                                                                       'legal research, contracts, '
+                                                                       'evidence, compliance, and '
+                                                                       'the expensive consequences '
+                                                                       'of getting automated law '
+                                                                       'wrong.',
+ 'artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention': 'A '
+                                                                                           'no-hype '
+                                                                                           'guide '
+                                                                                           'to '
+                                                                                           'threat '
+                                                                                           'detection, '
+                                                                                           'breach '
+                                                                                           'prevention, '
+                                                                                           'alert '
+                                                                                           'noise, '
+                                                                                           'and '
+                                                                                           'the '
+                                                                                           'security '
+                                                                                           'decisions '
+                                                                                           'humans '
+                                                                                           'still '
+                                                                                           'have '
+                                                                                           'to '
+                                                                                           'own.',
+ 'the-artificial-intelligence-revolution-from-algorithms-to-consciousness': 'A grounded tour of AI '
+                                                                            'history, core ideas, '
+                                                                            'big claims, and the '
+                                                                            'awkward gap between '
+                                                                            'impressive demos and '
+                                                                            'actual intelligence.',
+ 'ai-in-aviation-transforming-safety-and-sustainability': 'A practical guide to predictive '
+                                                          'maintenance, air traffic tools, fuel '
+                                                          'efficiency, and the safety checks '
+                                                          'aviation cannot afford to treat '
+                                                          'casually.',
+ 'ai-in-maritime-revolutionizing-shipping-for-sustainability': 'A clear look at autonomous '
+                                                               'vessels, route planning, port '
+                                                               'logistics, emissions tracking, and '
+                                                               'the rough water beneath the '
+                                                               'sustainability pitch.',
+ 'artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare': 'A plain-English guide '
+                                                                          'to drug discovery, '
+                                                                          'clinical trials, '
+                                                                          'treatment '
+                                                                          'personalisation, and '
+                                                                          'the regulatory grind '
+                                                                          'behind the lab promise.',
+ 'the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry': 'A '
+                                                                                                'grounded '
+                                                                                                'look '
+                                                                                                'at '
+                                                                                                'autonomous '
+                                                                                                'vehicles, '
+                                                                                                'predictive '
+                                                                                                'maintenance, '
+                                                                                                'smart '
+                                                                                                'manufacturing, '
+                                                                                                'and '
+                                                                                                'the '
+                                                                                                'liability '
+                                                                                                'questions '
+                                                                                                'parked '
+                                                                                                'behind '
+                                                                                                'the '
+                                                                                                'showroom '
+                                                                                                'shine.',
+ 'artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future': 'A '
+                                                                                                        'practical '
+                                                                                                        'guide '
+                                                                                                        'to '
+                                                                                                        'recommendations, '
+                                                                                                        'inventory, '
+                                                                                                        'pricing, '
+                                                                                                        'supply '
+                                                                                                        'chains, '
+                                                                                                        'and '
+                                                                                                        'the '
+                                                                                                        'point '
+                                                                                                        'where '
+                                                                                                        'personalisation '
+                                                                                                        'starts '
+                                                                                                        'feeling '
+                                                                                                        'too '
+                                                                                                        'personal.',
+ 'artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery': 'A '
+                                                                                                                'clear '
+                                                                                                                'guide '
+                                                                                                                'to '
+                                                                                                                'predictive '
+                                                                                                                'maintenance, '
+                                                                                                                'production '
+                                                                                                                'planning, '
+                                                                                                                'quality '
+                                                                                                                'control, '
+                                                                                                                'and '
+                                                                                                                'what '
+                                                                                                                'survives '
+                                                                                                                'contact '
+                                                                                                                'with '
+                                                                                                                'the '
+                                                                                                                'plant '
+                                                                                                                'floor.',
+ 'artificial-intelligence-in-industry-a-comprehensive-guide': 'A broad but grounded guide to '
+                                                              'automation, analytics, risk, and '
+                                                              'the industrial decisions that still '
+                                                              'need more than a dashboard.',
+ 'the-dumbening-how-ai-is-reshaping-our-minds': 'A sceptical look at automation, attention, '
+                                                'memory, creativity, and the cost of outsourcing '
+                                                'too much thinking to the machine.',
+ 'ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future': 'A practical guide to crop '
+                                                                       'monitoring, precision '
+                                                                       'farming, weather risk, '
+                                                                       'labour pressure, and the '
+                                                                       'field conditions that ruin '
+                                                                       'tidy demos.',
+ 'ai-in-education-reimagining-learning-for-every-student': 'A clear look at personalised learning, '
+                                                           'assessment, classroom support, and '
+                                                           'where education technology helps '
+                                                           'rather than just generating paperwork.',
+ 'artificial-intelligence-in-banking-revolutionizing-finance-and-data-security': 'A grounded guide '
+                                                                                 'to fraud '
+                                                                                 'detection, '
+                                                                                 'credit scoring, '
+                                                                                 'compliance, '
+                                                                                 'customer data, '
+                                                                                 'and the risks '
+                                                                                 'that keep '
+                                                                                 'banking AI on a '
+                                                                                 'short lead.',
+ 'digital-diagnosis-how-ai-is-revolutionizing-healthcare': 'A practical look at diagnostics, '
+                                                           'triage, imaging, clinical workflow, '
+                                                           'and the point where healthcare AI '
+                                                           'still needs human judgement.',
+ 'artificial-intelligence-in-construction-building-a-sustainable-future': 'A plain-English guide '
+                                                                          'to planning, safety, '
+                                                                          'budgets, materials, and '
+                                                                          'why construction AI has '
+                                                                          'to work on sites, not '
+                                                                          'just slides.',
+ 'the-artificial-intelligence-job-shift-navigating-the-future-of-work': 'A no-hype look at '
+                                                                        'automation, reskilling, '
+                                                                        'job redesign, management '
+                                                                        'pressure, and what '
+                                                                        'changes when AI moves '
+                                                                        'into ordinary work.',
+ 'the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information': 'A '
+                                                                                         'plain-English '
+                                                                                         'look at '
+                                                                                         'AI in '
+                                                                                         'public '
+                                                                                         'services: '
+                                                                                         'what it '
+                                                                                         'can '
+                                                                                         'improve, '
+                                                                                         'where '
+                                                                                         'the '
+                                                                                         'risks '
+                                                                                         'sit, and '
+                                                                                         'which '
+                                                                                         'questions '
+                                                                                         'teams '
+                                                                                         'should '
+                                                                                         'ask '
+                                                                                         'before '
+                                                                                         'buying '
+                                                                                         'the '
+                                                                                         'pitch.',
+ 'smart-buildings-ai-powered-efficiency-and-sustainability': 'A grounded guide to energy '
+                                                             'management, sensors, maintenance, '
+                                                             'occupant comfort, and the building '
+                                                             'systems that still need human '
+                                                             'oversight.',
+ 'digital-defense-the-role-of-ai-in-modern-warfare': 'A sober guide to drones, intelligence, cyber '
+                                                     'operations, autonomy, and the command risks '
+                                                     'that military AI cannot wish away.',
+ 'artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology': 'A '
+                                                                                                                 'practical '
+                                                                                                                 'guide '
+                                                                                                                 'to '
+                                                                                                                 'habitat '
+                                                                                                                 'monitoring, '
+                                                                                                                 'species '
+                                                                                                                 'identification, '
+                                                                                                                 'anti-poaching '
+                                                                                                                 'tools, '
+                                                                                                                 'and '
+                                                                                                                 'the '
+                                                                                                                 'field '
+                                                                                                                 'data '
+                                                                                                                 'problems '
+                                                                                                                 'conservation '
+                                                                                                                 'teams '
+                                                                                                                 'face.',
+ 'climate-intelligence-harnessing-ai-for-a-greener-future': 'A clear guide to emissions tracking, '
+                                                            'climate modelling, renewable '
+                                                            'planning, and the difference between '
+                                                            'useful measurement and green gloss.',
+ 'ai-revolution-in-railways-modernizing-travel-for-a-smarter-future': 'A grounded look at '
+                                                                      'predictive maintenance, '
+                                                                      'signalling, scheduling, '
+                                                                      'safety, and why railway AI '
+                                                                      'has to survive real service '
+                                                                      'disruption.',
+ 'artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement': 'A practical '
+                                                                                     'look at '
+                                                                                     'performance '
+                                                                                     'data, injury '
+                                                                                     'prevention, '
+                                                                                     'scouting, '
+                                                                                     'fan '
+                                                                                     'engagement, '
+                                                                                     'and the '
+                                                                                     'judgement '
+                                                                                     'that still '
+                                                                                     'decides what '
+                                                                                     'happens on '
+                                                                                     'the pitch.',
+ 'lights-camera-algorithm-ai-s-role-in-modern-filmmaking': 'A plain-English guide to scripts, '
+                                                           'editing, visual effects, production '
+                                                           'budgets, and where AI helps filmmaking '
+                                                           'without replacing taste.',
+ 'the-ai-music-revolution-creativity-controversy-and-collaboration': 'A grounded look at '
+                                                                     'composition, production, '
+                                                                     'rights, collaboration, and '
+                                                                     'the row that starts when '
+                                                                     'software learns the tune.',
+ 'the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead': 'A clear guide to the people, '
+                                                                   'breakthroughs, false starts, '
+                                                                   'and stubborn questions that '
+                                                                   'shaped artificial '
+                                                                   'intelligence.',
+ 'the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming': 'A sceptical guide to '
+                                                                             'personalisation, '
+                                                                             'gambling design, '
+                                                                             'addiction risk, '
+                                                                             'regulation, and why '
+                                                                             'the house rarely '
+                                                                             'needs extra help.',
+ 'beyond-earth-how-ai-is-transforming-space-exploration': 'A practical look at rovers, mission '
+                                                          'planning, data analysis, autonomy, and '
+                                                          'why space AI has no room for cheerful '
+                                                          'guesswork.',
+ 'from-reporters-to-robots-how-ai-is-reshaping-journalism': 'A grounded guide to automated '
+                                                            'reporting, fact-checking, newsroom '
+                                                            'pressure, platform incentives, and '
+                                                            'the trust problem journalism cannot '
+                                                            'dodge.',
+ 'the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media': 'A clear '
+                                                                                      'look at '
+                                                                                      'recommendations, '
+                                                                                      'moderation, '
+                                                                                      'privacy, '
+                                                                                      'platform '
+                                                                                      'incentives, '
+                                                                                      'and why '
+                                                                                      'your feed '
+                                                                                      'knows more '
+                                                                                      'than feels '
+                                                                                      'comfortable.',
+ 'game-ai-unleashed-from-finite-state-machines-to-machine-learning': 'A practical guide to NPC '
+                                                                     'behaviour, procedural '
+                                                                     'systems, player experience, '
+                                                                     'and the design choices '
+                                                                     'hiding behind clever game '
+                                                                     'AI.'}
+
+BOOK_SPECIFIC_DESCRIPTION_OVERRIDES: Dict[str, str] = {'ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology': 'AI is used in '
+                                                                               'Formula 1 for race '
+                                                                               'strategy, '
+                                                                               'simulation, '
+                                                                               'telemetry, '
+                                                                               'predictive '
+                                                                               'analytics, and '
+                                                                               'decisions made '
+                                                                               'under ridiculous '
+                                                                               'time pressure.',
+ 'artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation': 'AI '
+                                                                                                     'is '
+                                                                                                     'being '
+                                                                                                     'used '
+                                                                                                     'in '
+                                                                                                     'veterinary '
+                                                                                                     'medicine '
+                                                                                                     'for '
+                                                                                                     'diagnostic '
+                                                                                                     'support, '
+                                                                                                     'predictive '
+                                                                                                     'health '
+                                                                                                     'monitoring, '
+                                                                                                     'clinic '
+                                                                                                     'workflow, '
+                                                                                                     'and '
+                                                                                                     'treatment '
+                                                                                                     'planning.',
+ 'ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation': 'Artificial '
+                                                                                  'intelligence is '
+                                                                                  'already being '
+                                                                                  'used in smart '
+                                                                                  'grids for '
+                                                                                  'demand '
+                                                                                  'forecasting, '
+                                                                                  'grid balancing, '
+                                                                                  'fault '
+                                                                                  'detection, and '
+                                                                                  'renewable '
+                                                                                  'integration.',
+ 'artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability': 'AI is used in '
+                                                                                  'logistics for '
+                                                                                  'route planning, '
+                                                                                  'demand '
+                                                                                  'forecasting, '
+                                                                                  'warehouse '
+                                                                                  'automation, '
+                                                                                  'stock movement, '
+                                                                                  'and the daily '
+                                                                                  'grind of '
+                                                                                  'getting things '
+                                                                                  'where they need '
+                                                                                  'to be.',
+ 'artificial-intelligence-and-the-law-case-studies-and-future-trends': 'AI is changing legal work '
+                                                                       'through research tools, '
+                                                                       'contract analysis, case '
+                                                                       'review, compliance checks, '
+                                                                       'and uncomfortable '
+                                                                       'questions about '
+                                                                       'accountability.',
+ 'artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention': 'AI is '
+                                                                                           'used '
+                                                                                           'in '
+                                                                                           'cyber '
+                                                                                           'security '
+                                                                                           'for '
+                                                                                           'threat '
+                                                                                           'detection, '
+                                                                                           'breach '
+                                                                                           'prevention, '
+                                                                                           'anomaly '
+                                                                                           'spotting, '
+                                                                                           'response '
+                                                                                           'support, '
+                                                                                           'and '
+                                                                                           'filtering '
+                                                                                           'signal '
+                                                                                           'from '
+                                                                                           'noise.',
+ 'the-artificial-intelligence-revolution-from-algorithms-to-consciousness': 'This book traces '
+                                                                            'artificial '
+                                                                            'intelligence from '
+                                                                            'early algorithms to '
+                                                                            'modern systems, with '
+                                                                            'the big claims tested '
+                                                                            'against what the '
+                                                                            'technology can '
+                                                                            'actually justify.',
+ 'ai-in-aviation-transforming-safety-and-sustainability': 'AI is used in aviation for predictive '
+                                                          'maintenance, air traffic support, fuel '
+                                                          'planning, safety monitoring, and the '
+                                                          'decisions where failure is not a '
+                                                          'charming option.',
+ 'ai-in-maritime-revolutionizing-shipping-for-sustainability': 'AI is used in maritime shipping '
+                                                               'for route planning, autonomous '
+                                                               'vessels, port operations, '
+                                                               'emissions tracking, and fleet '
+                                                               'decisions under real-world '
+                                                               'pressure.',
+ 'artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare': 'AI is used in '
+                                                                          'pharmaceuticals for '
+                                                                          'drug discovery, trial '
+                                                                          'design, patient '
+                                                                          'matching, treatment '
+                                                                          'personalisation, and '
+                                                                          'the regulatory work '
+                                                                          'behind medical '
+                                                                          'progress.',
+ 'the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry': 'AI '
+                                                                                                'is '
+                                                                                                'reshaping '
+                                                                                                'the '
+                                                                                                'automotive '
+                                                                                                'industry '
+                                                                                                'through '
+                                                                                                'autonomous '
+                                                                                                'driving, '
+                                                                                                'predictive '
+                                                                                                'maintenance, '
+                                                                                                'smart '
+                                                                                                'manufacturing, '
+                                                                                                'mobility '
+                                                                                                'services, '
+                                                                                                'and '
+                                                                                                'liability '
+                                                                                                'headaches.',
+ 'artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future': 'AI '
+                                                                                                        'is '
+                                                                                                        'used '
+                                                                                                        'in '
+                                                                                                        'retail '
+                                                                                                        'for '
+                                                                                                        'recommendations, '
+                                                                                                        'stock '
+                                                                                                        'planning, '
+                                                                                                        'pricing, '
+                                                                                                        'supply '
+                                                                                                        'chains, '
+                                                                                                        'customer '
+                                                                                                        'service, '
+                                                                                                        'and '
+                                                                                                        'the '
+                                                                                                        'line '
+                                                                                                        'between '
+                                                                                                        'useful '
+                                                                                                        'and '
+                                                                                                        'creepy.',
+ 'artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery': 'AI '
+                                                                                                                'is '
+                                                                                                                'used '
+                                                                                                                'in '
+                                                                                                                'manufacturing '
+                                                                                                                'for '
+                                                                                                                'predictive '
+                                                                                                                'maintenance, '
+                                                                                                                'production '
+                                                                                                                'planning, '
+                                                                                                                'quality '
+                                                                                                                'control, '
+                                                                                                                'service '
+                                                                                                                'delivery, '
+                                                                                                                'and '
+                                                                                                                'the '
+                                                                                                                'operational '
+                                                                                                                'details '
+                                                                                                                'that '
+                                                                                                                'decide '
+                                                                                                                'whether '
+                                                                                                                'it '
+                                                                                                                'pays '
+                                                                                                                'off.',
+ 'artificial-intelligence-in-industry-a-comprehensive-guide': 'AI is used across industry for '
+                                                              'automation, analytics, safety, '
+                                                              'process control, and decisions that '
+                                                              'still need evidence rather than '
+                                                              'glossy confidence.',
+ 'the-dumbening-how-ai-is-reshaping-our-minds': 'This book examines how AI and automation affect '
+                                                'attention, memory, creativity, judgement, and the '
+                                                'parts of thinking we should be wary of '
+                                                'outsourcing.',
+ 'ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future': 'AI is used in agriculture '
+                                                                       'for crop monitoring, '
+                                                                       'precision farming, weather '
+                                                                       'risk, yield forecasting, '
+                                                                       'and decisions made with '
+                                                                       'mud on the boots.',
+ 'ai-in-education-reimagining-learning-for-every-student': 'AI is used in education for '
+                                                           'personalised learning, assessment '
+                                                           'support, classroom tools, admin '
+                                                           'relief, and the question of what '
+                                                           'actually helps students learn.',
+ 'artificial-intelligence-in-banking-revolutionizing-finance-and-data-security': 'AI is used in '
+                                                                                 'banking for '
+                                                                                 'fraud detection, '
+                                                                                 'credit '
+                                                                                 'decisions, risk '
+                                                                                 'monitoring, '
+                                                                                 'compliance, '
+                                                                                 'customer '
+                                                                                 'service, and the '
+                                                                                 'data problems '
+                                                                                 'finance cannot '
+                                                                                 'shrug off.',
+ 'digital-diagnosis-how-ai-is-revolutionizing-healthcare': 'AI is used in healthcare for '
+                                                           'diagnostics, triage, medical imaging, '
+                                                           'workflow support, and clinical '
+                                                           'decisions that still demand human '
+                                                           'judgement.',
+ 'artificial-intelligence-in-construction-building-a-sustainable-future': 'AI is used in '
+                                                                          'construction for '
+                                                                          'planning, safety '
+                                                                          'monitoring, materials, '
+                                                                          'scheduling, '
+                                                                          'sustainability, and the '
+                                                                          'messy realities of '
+                                                                          'actual building sites.',
+ 'the-artificial-intelligence-job-shift-navigating-the-future-of-work': 'AI is changing work '
+                                                                        'through automation, '
+                                                                        'reskilling pressure, job '
+                                                                        'redesign, management '
+                                                                        'decisions, and the '
+                                                                        'awkward question of who '
+                                                                        'benefits.',
+ 'the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information': 'AI is '
+                                                                                         'used in '
+                                                                                         'government '
+                                                                                         'for '
+                                                                                         'public '
+                                                                                         'services, '
+                                                                                         'admin '
+                                                                                         'support, '
+                                                                                         'security, '
+                                                                                         'forecasting, '
+                                                                                         'and '
+                                                                                         'decisions '
+                                                                                         'where '
+                                                                                         'accountability '
+                                                                                         'cannot '
+                                                                                         'be '
+                                                                                         'treated '
+                                                                                         'as '
+                                                                                         'optional.',
+ 'smart-buildings-ai-powered-efficiency-and-sustainability': 'AI is used in smart buildings for '
+                                                             'energy management, maintenance, '
+                                                             'sensors, comfort systems, and '
+                                                             'infrastructure decisions that still '
+                                                             'need oversight.',
+ 'digital-defense-the-role-of-ai-in-modern-warfare': 'AI is used in modern warfare for drones, '
+                                                     'intelligence, cyber operations, targeting '
+                                                     'support, and command decisions with '
+                                                     'consequences attached.',
+ 'artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology': 'AI '
+                                                                                                                 'is '
+                                                                                                                 'used '
+                                                                                                                 'in '
+                                                                                                                 'wildlife '
+                                                                                                                 'conservation '
+                                                                                                                 'for '
+                                                                                                                 'habitat '
+                                                                                                                 'monitoring, '
+                                                                                                                 'species '
+                                                                                                                 'identification, '
+                                                                                                                 'anti-poaching '
+                                                                                                                 'work, '
+                                                                                                                 'field '
+                                                                                                                 'data, '
+                                                                                                                 'and '
+                                                                                                                 'biodiversity '
+                                                                                                                 'protection '
+                                                                                                                 'under '
+                                                                                                                 'pressure.',
+ 'climate-intelligence-harnessing-ai-for-a-greener-future': 'AI is used in climate work for '
+                                                            'emissions tracking, climate '
+                                                            'modelling, renewable planning, '
+                                                            'forecasting, and measurement that has '
+                                                            'to survive scrutiny.',
+ 'ai-revolution-in-railways-modernizing-travel-for-a-smarter-future': 'AI is used in railways for '
+                                                                      'predictive maintenance, '
+                                                                      'signalling, scheduling, '
+                                                                      'safety monitoring, and the '
+                                                                      'service realities '
+                                                                      'passengers notice first.',
+ 'artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement': 'AI is used '
+                                                                                     'in sport for '
+                                                                                     'performance '
+                                                                                     'analysis, '
+                                                                                     'injury '
+                                                                                     'prevention, '
+                                                                                     'scouting, '
+                                                                                     'fan '
+                                                                                     'engagement, '
+                                                                                     'and '
+                                                                                     'decisions '
+                                                                                     'where '
+                                                                                     'numbers '
+                                                                                     'still meet '
+                                                                                     'nerves.',
+ 'lights-camera-algorithm-ai-s-role-in-modern-filmmaking': 'AI is used in filmmaking for script '
+                                                           'analysis, editing, visual effects, '
+                                                           'production planning, and the craft '
+                                                           'decisions algorithms cannot make for '
+                                                           'you.',
+ 'the-ai-music-revolution-creativity-controversy-and-collaboration': 'AI is used in music for '
+                                                                     'composition, production, '
+                                                                     'mastering, collaboration, '
+                                                                     'and rights questions that '
+                                                                     'refuse to stay politely in '
+                                                                     'the background.',
+ 'the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead': 'This book follows the people, '
+                                                                   'breakthroughs, false starts, '
+                                                                   'and hard questions behind '
+                                                                   'artificial intelligence.',
+ 'the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming': 'AI is used in '
+                                                                             'gambling for '
+                                                                             'personalisation, '
+                                                                             'prediction, '
+                                                                             'behavioural nudges, '
+                                                                             'risk detection, and '
+                                                                             'ethical problems '
+                                                                             'that deserve more '
+                                                                             'than a shrug.',
+ 'beyond-earth-how-ai-is-transforming-space-exploration': 'AI is used in space exploration for '
+                                                          'rovers, mission planning, data '
+                                                          'analysis, autonomy, and decisions made '
+                                                          'far beyond easy rescue.',
+ 'from-reporters-to-robots-how-ai-is-reshaping-journalism': 'AI is used in journalism for '
+                                                            'automated reporting, fact-checking, '
+                                                            'newsroom support, personalisation, '
+                                                            'and the trust problem no tool can '
+                                                            'hand-wave away.',
+ 'the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media': 'AI shapes '
+                                                                                      'social '
+                                                                                      'media '
+                                                                                      'through '
+                                                                                      'recommendations, '
+                                                                                      'moderation, '
+                                                                                      'ad '
+                                                                                      'targeting, '
+                                                                                      'privacy '
+                                                                                      'trade-offs, '
+                                                                                      'and '
+                                                                                      'platform '
+                                                                                      'incentives '
+                                                                                      'most users '
+                                                                                      'never see.',
+ 'game-ai-unleashed-from-finite-state-machines-to-machine-learning': 'AI is used in games for NPC '
+                                                                     'behaviour, procedural '
+                                                                     'design, player experience, '
+                                                                     'adaptive systems, and the '
+                                                                     'craft behind believable '
+                                                                     'play.'}
+
 SUMMARY_VARIANT_OPENERS: List[str] = [
     "Instead, it stays with the real sticking points in",
     "It keeps its eye on the pressure points inside",
@@ -1562,8 +2232,8 @@ def category_answer_first_copy(topic: str, books: List[Dict[str, Any]]) -> str:
     intro = topic_intro(topic_name)
     featured = books[0]
     if len(books) == 1:
-        return f"{intro} This page is the cleanest starting point in this part of the catalogue because it centres on {featured['title']}, which gives you one grounded route into the main use cases, trade-offs, and implementation questions."
-    return f"{intro} This category brings together {len(books)} books, so you can move from the broad question into the title that best matches your use case instead of wandering around the shelves like a lost intern."
+        return f"{intro} Start with {featured['title']} if you want one grounded route into the main use cases, trade-offs, and implementation questions."
+    return f"{intro} This category brings together {len(books)} books, so you can move from the broad question to the title that best matches your use case."
 
 
 def category_scope_copy(topic: str, books: List[Dict[str, Any]]) -> str:
@@ -1708,31 +2378,49 @@ def topics_index_support_links() -> str:
     )
 
 
+def strip_terminal_stop(value: str) -> str:
+    return clean_paragraph(value).rstrip(".!?")
+
+
+def audience_core_for_practice(value: str) -> str:
+    cleaned = strip_terminal_stop(value)
+    patterns = [
+        r"^A practical overview of .+? for ",
+        r"^A clear, no-hype briefing on .+? for ",
+        r"^Readers who want ",
+    ]
+    if re.match(patterns[0], cleaned, flags=re.I):
+        return re.sub(patterns[0], "", cleaned, flags=re.I)
+    if re.match(patterns[1], cleaned, flags=re.I):
+        return re.sub(patterns[1], "", cleaned, flags=re.I)
+    if re.match(patterns[2], cleaned, flags=re.I):
+        return "readers who want " + re.sub(patterns[2], "", cleaned, flags=re.I)
+    return cleaned[:1].lower() + cleaned[1:] if cleaned else "readers who want a grounded overview"
+
+
 def book_unique_evidence_passage(book: Dict[str, Any]) -> str:
     topic_lc = clean_paragraph(book.get("topic", "")).lower() or "the field"
-    learn_line = clean_paragraph(book["what_youll_learn"][0] if book.get("what_youll_learn") else "")
+    learn_line = strip_terminal_stop(book["what_youll_learn"][0] if book.get("what_youll_learn") else "")
     family = topic_family(book.get("topic", ""))
     tradeoff = {
         "regulated": f"the awkward point where speed, evidence, and accountability stop pretending to be friends in {topic_lc}",
-        "operations": f"the point where promised efficiency in {topic_lc} meets maintenance logs, handovers, and failure modes",
-        "security": f"the trade-off between stronger signal in {topic_lc} and a fresh layer of operational noise",
-        "creative": f"the clash between convenience in {topic_lc} and the control, ownership, and trust questions it drags in behind it",
-        "foundation": f"the distance between broad AI claims in {topic_lc} and what the systems can actually justify",
-        "environment": f"the gap between environmental promise in {topic_lc} and what can be measured without flattering the numbers",
-        "sports": f"the tension between data-led gains in {topic_lc} and the human judgement that still decides outcomes",
-    }.get(family, f"the gap between impressive claims in {topic_lc} and what the work actually demands")
-    audience = clean_paragraph(book.get("audience", "")).rstrip(".")
-    if audience:
-        audience_sentence = audience[0].lower() + audience[1:] if len(audience) > 1 else audience.lower()
-        audience_sentence = f"It is written for {audience_sentence},"
-    else:
-        audience_sentence = "It is written as a grounded briefing,"
+        "operations": "promised efficiency has to survive contact with maintenance logs, handovers, outages, and real operating constraints",
+        "security": f"stronger detection in {topic_lc} has to avoid burying teams under a fresh layer of operational noise",
+        "creative": f"convenience in {topic_lc} starts dragging ownership, trust, and control questions in behind it",
+        "foundation": f"broad claims in {topic_lc} meet what the systems can actually justify",
+        "environment": f"environmental promise in {topic_lc} has to be measured without flattering the numbers",
+        "sports": f"data-led gains in {topic_lc} meet the human judgement that still decides outcomes",
+    }.get(family, f"impressive claims in {topic_lc} meet what the work actually demands")
+    audience = audience_core_for_practice(book.get("audience", ""))
     if learn_line:
-        learn_sentence = learn_line[0].lower() + learn_line[1:]
-        learning_sentence = f"and it tackles questions such as {learn_sentence}"
+        learning_sentence = f"It tackles {learn_line[:1].lower() + learn_line[1:]}"
     else:
-        learning_sentence = "and it keeps the focus on the decisions that matter once AI leaves the demo stage"
-    return f"In practice, {book['title']} is most useful when the real issue is {tradeoff}. {audience_sentence} {learning_sentence}, which makes it more useful than a generic explainer when someone has to decide what happens next in an actual workflow, classroom, policy setting, or team."
+        learning_sentence = "It keeps the focus on the decisions that matter once AI leaves the demo stage"
+    return (
+        f"This book is useful when {tradeoff}. "
+        f"It is written for {audience}. "
+        f"{learning_sentence}."
+    )
 
 
 def book_semantic_journey_links(book: Dict[str, Any]) -> str:
@@ -2022,6 +2710,15 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
         what_youll_learn = unique_list(content.get("what_youll_learn") or default_learning_points(topic))
         why_it_matters = clean_paragraph(content.get("why_it_matters")) or default_why_it_matters(topic)
         short = strip_pages_from_summary(content.get("short"), pages) or default_short(topic, pages)
+        short = BOOK_SPECIFIC_SHORT_OVERRIDES.get(slug, short)
+        description_override = BOOK_SPECIFIC_DESCRIPTION_OVERRIDES.get(slug)
+        if description_override:
+            previous_description = description
+            description = description_override
+            if previous_description and summary.startswith(previous_description):
+                summary = description + summary[len(previous_description):]
+            elif description not in summary:
+                summary = description
         canonical_url = ensure_trailing_slash(workbook.get("book_url") or f"{SITE_URL}/ebooks/{slug}/")
         topic_slug = slugify(topic)
         topic_url = f"/catalogue/{topic_slug}/"
@@ -2990,23 +3687,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>Explore AI topics</h1>
-    <p>Use this hub as the truthful cluster map for the site: topic guides for the educational layer, catalogue pages for the book shelves, and cleaner routes into glossary, comparisons, podcast, and newsletter coverage.</p>
+    <p>Use this page to find the right route into the site: topic guides when you want the plain-English explanation, catalogue pages when you want the books, and glossary or comparison pages when the language starts getting slippery.</p>
   </div>
 </header>
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
     <section class="card ebook-index-intro">
       <h2>How to use this page</h2>
-      <p>Start with a topic guide if you want the plain-English explanation first. Use the catalogue grid if you already know the lane you care about and want the relevant books without playing hide-and-seek with broken routes. Charming hobby, broken discovery paths. Terrible publishing strategy.</p>
+      <p>Start with a topic guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject you care about and want the relevant books without playing hide-and-seek.</p>
     </section>
     <section class="card ebook-index-intro">
       <h2>Topic guides</h2>
-      <p>These pages carry the educational layer of the estate and are meant to explain the subject before the catalogue starts making commercial suggestions.</p>
+      <p>These pages explain the subject before you choose a book, so you are not buying your way through a fog bank.</p>
     </section>
     <section class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
     <section class="card ebook-index-intro u-mt40">
       <h2>Browse by catalogue</h2>
-      <p>These category pages group the books by subject and now work as real landing pages rather than one-book shelves wearing a fake moustache.</p>
+      <p>These category pages group the books by subject, so you can move from a broad theme to the title that actually fits.</p>
     </section>
     <section class="grid topic-grid" aria-label="Catalogue pages">{cards_html}</section>
     <section class="related-books card">
