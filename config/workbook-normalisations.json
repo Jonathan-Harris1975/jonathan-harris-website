@@ -1,138 +1,546 @@
 {
-  "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": {
-    "short": {
-      "raw": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
-      "approved": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions."
+  "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": {
+    "description": {
+      "raw": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing.",
+      "approved": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure."
     },
+    "short": {
+      "raw": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car."
+    },
+    "summary": {
+      "raw": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths."
+    }
+  },
+  "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation": {
+    "description": {
+      "raw": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments.",
+      "approved": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning."
+    },
+    "short": {
+      "raw": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table."
+    },
+    "summary": {
+      "raw": "Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation": {
+    "description": {
+      "raw": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity.",
+      "approved": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
+      "approved": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality."
+    },
+    "summary": {
+      "raw": "Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": {
+    "description": {
+      "raw": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs.",
+      "approved": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality."
+    },
+    "summary": {
+      "raw": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors."
+    }
+  },
+  "artificial-intelligence-and-the-law-case-studies-and-future-trends": {
+    "description": {
+      "raw": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions.",
+      "approved": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability."
+    },
+    "short": {
+      "raw": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong."
+    },
+    "summary": {
+      "raw": "Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention": {
+    "description": {
+      "raw": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
+      "approved": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+      "approved": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own."
+    },
+    "summary": {
+      "raw": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": {
     "audience": {
       "raw": "Readers who want a grounded, non-technical view of AI in artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre.",
       "approved": "Readers who want a grounded, non-technical view of artificial intelligence itself, including AI-curious readers, strategists, students, and anyone trying to separate substance from theatre."
     },
-    "who_for": {
-      "raw": "Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
-      "approved": "Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy."
+    "description": {
+      "raw": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications.",
+      "approved": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence."
     },
     "summary": {
       "raw": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. This book follows the workflows, trade-offs, and decision points shaping artificial intelligence itself, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment."
+      "approved": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment."
+    },
+    "who_for": {
+      "raw": "Best for people weighing real adoption choices in artificial intelligence itself. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy.",
+      "approved": "Best for people weighing real adoption choices across artificial intelligence. It is written for AI-curious readers, strategists, students, and anyone trying to separate substance from theatre who want practical context rather than brochure copy."
+    }
+  },
+  "ai-in-aviation-transforming-safety-and-sustainability": {
+    "description": {
+      "raw": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight.",
+      "approved": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option."
+    },
+    "short": {
+      "raw": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually."
+    },
+    "summary": {
+      "raw": "Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "ai-in-maritime-revolutionizing-shipping-for-sustainability": {
+    "description": {
+      "raw": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable.",
+      "approved": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
+      "approved": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch."
+    },
+    "summary": {
+      "raw": "A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": {
+    "description": {
+      "raw": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments.",
+      "approved": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise."
+    },
+    "summary": {
+      "raw": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation."
+    }
+  },
+  "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry": {
+    "description": {
+      "raw": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility.",
+      "approved": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches."
+    },
+    "short": {
+      "raw": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine."
+    },
+    "summary": {
+      "raw": "A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future": {
+    "description": {
+      "raw": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience.",
+      "approved": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
+      "approved": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal."
+    },
+    "summary": {
+      "raw": "A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": {
+    "description": {
+      "raw": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry.",
+      "approved": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor."
+    },
+    "summary": {
+      "raw": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite."
+    }
+  },
+  "artificial-intelligence-in-industry-a-comprehensive-guide": {
+    "description": {
+      "raw": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations.",
+      "approved": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence."
+    },
+    "short": {
+      "raw": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard."
+    },
+    "summary": {
+      "raw": "A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "the-dumbening-how-ai-is-reshaping-our-minds": {
+    "description": {
+      "raw": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making.",
+      "approved": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing."
+    },
+    "short": {
+      "raw": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
+      "approved": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine."
+    },
+    "summary": {
+      "raw": "Examines AI's impact on cognition, exploring how automation and digital reliance may alter human thinking, creativity, and decision-making. The focus stays on how AI shapes attention and thinking in day-to-day life: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing. The focus stays on how AI shapes attention and thinking in day-to-day life: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": {
+    "description": {
+      "raw": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability.",
+      "approved": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos."
+    },
+    "summary": {
+      "raw": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter."
+    }
+  },
+  "ai-in-education-reimagining-learning-for-every-student": {
+    "description": {
+      "raw": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible.",
+      "approved": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn."
+    },
+    "short": {
+      "raw": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork."
+    },
+    "summary": {
+      "raw": "Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security": {
+    "description": {
+      "raw": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance.",
+      "approved": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+      "approved": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead."
+    },
+    "summary": {
+      "raw": "A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "digital-diagnosis-how-ai-is-revolutionizing-healthcare": {
+    "description": {
+      "raw": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
+      "approved": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement."
+    },
+    "summary": {
+      "raw": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement."
+    }
+  },
+  "artificial-intelligence-in-construction-building-a-sustainable-future": {
+    "description": {
+      "raw": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs.",
+      "approved": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites."
+    },
+    "short": {
+      "raw": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides."
+    },
+    "summary": {
+      "raw": "Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "the-artificial-intelligence-job-shift-navigating-the-future-of-work": {
+    "description": {
+      "raw": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities.",
+      "approved": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+      "approved": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work."
+    },
+    "summary": {
+      "raw": "Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": {
+    "description": {
+      "raw": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity.",
+      "approved": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch."
+    },
+    "summary": {
+      "raw": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional. It follows the working pressures that define government, especially where services meet scrutiny and budget."
+    }
+  },
+  "smart-buildings-ai-powered-efficiency-and-sustainability": {
+    "description": {
+      "raw": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon.",
+      "approved": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight."
+    },
+    "short": {
+      "raw": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight."
+    },
+    "summary": {
+      "raw": "A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "digital-defense-the-role-of-ai-in-modern-warfare": {
+    "description": {
+      "raw": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
+      "approved": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+      "approved": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away."
+    },
+    "summary": {
+      "raw": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": {
+    "description": {
+      "raw": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity.",
+      "approved": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face."
+    },
+    "summary": {
+      "raw": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits."
+    }
+  },
+  "climate-intelligence-harnessing-ai-for-a-greener-future": {
+    "description": {
+      "raw": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling.",
+      "approved": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny."
+    },
+    "short": {
+      "raw": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss."
+    },
+    "summary": {
+      "raw": "Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
     }
   },
   "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": {
-    "short": {
-      "raw": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
-      "approved": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement."
-    },
-    "summary": {
-      "raw": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of AI Revolution in Railways: the tooling, the judgement calls, and the parts that still need a human spine.",
-      "approved": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of railways: the tooling, the judgement calls, and the parts that still need a human spine."
-    },
     "audience": {
       "raw": "A practical overview of AI in AI Revolution in Railways for operators, planners, analysts, product teams, and readers tracking mobility systems.",
       "approved": "A practical overview of AI in railways for operators, planners, analysts, product teams, and readers tracking mobility systems."
     },
-    "who_for": {
-      "raw": "Suits readers who want to understand how AI changes AI Revolution in Railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
-      "approved": "Suits readers who want to understand how AI changes railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans."
+    "description": {
+      "raw": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety.",
+      "approved": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in AI Revolution in Railways, built around real applications, limits, and better judgement.",
+      "approved": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption."
+    },
+    "summary": {
+      "raw": "Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of AI Revolution in Railways: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first. The focus stays on how AI changes the day-to-day reality of railways: the tooling, the judgement calls, and the parts that still need a human spine."
     },
     "what_this_book_covers": {
       "raw": "It shows where AI fits inside AI Revolution in Railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.",
       "approved": "It shows where AI fits inside railways, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed."
+    },
+    "who_for": {
+      "raw": "Suits readers who want to understand how AI changes AI Revolution in Railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans.",
+      "approved": "Suits readers who want to understand how AI changes railways in practice, especially operators, planners, analysts, product teams, and readers tracking mobility systems looking for grounded examples and fewer slogans."
     },
     "why_it_matters": {
       "raw": "AI is not arriving in AI Revolution in Railways as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans.",
       "approved": "AI is not arriving in railways as a parlour trick. It changes how organisations handle safety, throughput, reliability, and emissions, so the boring details matter more than the slogans."
     }
   },
-  "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": {
+  "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": {
+    "description": {
+      "raw": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences.",
+      "approved": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves."
+    },
     "short": {
-      "raw": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
-      "approved": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice."
+      "raw": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch."
     },
     "summary": {
-      "raw": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in ai in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
-      "approved": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+      "raw": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
+      "approved": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves. It follows the working pressures that define Sports, especially where performance data meets human nerves."
+    }
+  },
+  "lights-camera-algorithm-ai-s-role-in-modern-filmmaking": {
+    "description": {
+      "raw": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production.",
+      "approved": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you."
     },
+    "short": {
+      "raw": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste."
+    },
+    "summary": {
+      "raw": "Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "the-ai-music-revolution-creativity-controversy-and-collaboration": {
+    "description": {
+      "raw": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration.",
+      "approved": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
+      "approved": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune."
+    },
+    "summary": {
+      "raw": "Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine."
+    }
+  },
+  "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": {
+    "description": {
+      "raw": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society.",
+      "approved": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence."
+    },
+    "summary": {
+      "raw": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
+      "approved": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost."
+    }
+  },
+  "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming": {
     "audience": {
       "raw": "A clear, no-hype briefing on AI in ai in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences.",
       "approved": "A clear, no-hype briefing on AI in gambling for policy readers, educators, sceptics, and anyone thinking about AI's social consequences."
     },
-    "who_for": {
-      "raw": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in ai in gambling, without wading through technical theatre.",
-      "approved": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in gambling, without wading through technical theatre."
+    "description": {
+      "raw": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation.",
+      "approved": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug."
+    },
+    "short": {
+      "raw": "A grounded look at AI in ai in gambling, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help."
+    },
+    "summary": {
+      "raw": "Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in ai in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug. It looks at where AI is already earning its keep in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
     },
     "what_this_book_covers": {
       "raw": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in ai in gambling.",
       "approved": "It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in gambling."
+    },
+    "who_for": {
+      "raw": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in ai in gambling, without wading through technical theatre.",
+      "approved": "Written for policy readers, educators, sceptics, and anyone thinking about AI's social consequences who need a clearer read on what AI can and cannot do in gambling, without wading through technical theatre."
     },
     "why_it_matters": {
       "raw": "Ai in gambling is one of those areas where AI can help, but only if the claims survive contact with autonomy, fairness, consent, and social trust. That is where this book keeps its attention.",
       "approved": "AI in gambling is one of those areas where AI can help, but only if the claims survive contact with autonomy, fairness, consent, and social trust. That is where this book keeps its attention."
     }
   },
-  "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": {
+  "beyond-earth-how-ai-is-transforming-space-exploration": {
+    "description": {
+      "raw": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning.",
+      "approved": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
+      "approved": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork."
+    },
     "summary": {
-      "raw": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This book follows the workflows, trade-offs, and decision points shaping Formula 1, so readers can separate useful systems from glossy nonsense.",
-      "approved": "A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths."
-    }
-  },
-  "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability": {
-    "summary": {
-      "raw": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This book follows the workflows, trade-offs, and decision points shaping Logistics, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors."
-    }
-  },
-  "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": {
-    "summary": {
-      "raw": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. This book follows the workflows, trade-offs, and decision points shaping Pharmaceuticals, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation."
-    }
-  },
-  "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": {
-    "summary": {
-      "raw": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. This book follows the workflows, trade-offs, and decision points shaping Manufacturing, so readers can separate useful systems from glossy nonsense.",
-      "approved": "A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite."
-    }
-  },
-  "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": {
-    "summary": {
-      "raw": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This book follows the workflows, trade-offs, and decision points shaping Agriculture, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter."
-    }
-  },
-  "digital-diagnosis-how-ai-is-revolutionizing-healthcare": {
-    "summary": {
-      "raw": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. This book follows the workflows, trade-offs, and decision points shaping healthcare, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement."
-    }
-  },
-  "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": {
-    "summary": {
-      "raw": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. This book follows the workflows, trade-offs, and decision points shaping government, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. It follows the working pressures that define government, especially where services meet scrutiny and budget."
-    }
-  },
-  "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology": {
-    "summary": {
-      "raw": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. This book follows the workflows, trade-offs, and decision points shaping Wildlife Conservation, so readers can separate useful systems from glossy nonsense.",
-      "approved": "A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits."
-    }
-  },
-  "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement": {
-    "summary": {
-      "raw": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. This book follows the workflows, trade-offs, and decision points shaping Sports, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. It follows the working pressures that define Sports, especially where performance data meets human nerves."
-    }
-  },
-  "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead": {
-    "summary": {
-      "raw": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. This book follows the workflows, trade-offs, and decision points shaping the history of artificial intelligence, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost."
+      "raw": "Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine."
     }
   },
   "from-reporters-to-robots-how-ai-is-reshaping-journalism": {
+    "description": {
+      "raw": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust.",
+      "approved": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away."
+    },
+    "short": {
+      "raw": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
+      "approved": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge."
+    },
     "summary": {
       "raw": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. This book follows the workflows, trade-offs, and decision points shaping journalism, so readers can separate useful systems from glossy nonsense.",
-      "approved": "Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure."
+      "approved": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure."
+    }
+  },
+  "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media": {
+    "description": {
+      "raw": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy.",
+      "approved": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see."
+    },
+    "short": {
+      "raw": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
+      "approved": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable."
+    },
+    "summary": {
+      "raw": "Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.",
+      "approved": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like."
+    }
+  },
+  "game-ai-unleashed-from-finite-state-machines-to-machine-learning": {
+    "description": {
+      "raw": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion.",
+      "approved": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play."
+    },
+    "short": {
+      "raw": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
+      "approved": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI."
+    },
+    "summary": {
+      "raw": "Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine.",
+      "approved": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine."
     }
   }
 }
