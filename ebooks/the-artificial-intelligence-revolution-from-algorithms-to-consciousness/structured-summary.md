@@ -2,7 +2,7 @@
 
 ## Summary
 
-Chronicles AI's evolution from basic algorithms to potential consciousness, exploring its technological, ethical, and societal implications. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment.
+This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify. It keeps the focus on the stubborn realities inside artificial intelligence itself, especially where theory collides with deployment.
 
 ## What this book covers
 
