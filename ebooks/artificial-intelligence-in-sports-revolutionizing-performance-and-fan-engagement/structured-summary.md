@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence enhances sports with performance analytics, injury prevention, and immersive fan experiences. It follows the working pressures that define Sports, especially where performance data meets human nerves.
+AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves. It follows the working pressures that define Sports, especially where performance data meets human nerves.
 
 ## What this book covers
 
