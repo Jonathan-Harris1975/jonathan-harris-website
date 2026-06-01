@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence personalizes education with adaptive learning, automated grading, and virtual tutors, making education accessible. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn. It looks at where AI is already earning its keep in Education, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
