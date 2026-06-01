@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in banking — from fraud detection and personalised services to secure data management and regulatory compliance. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off. The focus stays on how AI changes the day-to-day reality of Banking: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
