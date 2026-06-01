@@ -2,7 +2,7 @@
 
 ## Summary
 
-Examines AI's role in gambling, from personalized gaming to addiction risks, addressing ethical concerns and regulation. It looks at where AI is already earning its keep in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug. It looks at where AI is already earning its keep in gambling, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
