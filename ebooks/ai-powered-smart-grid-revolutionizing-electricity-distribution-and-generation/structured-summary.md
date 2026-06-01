@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence optimizes smart grids, enhancing energy efficiency, predicting demand, and integrating renewables for sustainable electricity. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine.
+Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration. The focus stays on how AI changes the day-to-day reality of Smart Grid: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
