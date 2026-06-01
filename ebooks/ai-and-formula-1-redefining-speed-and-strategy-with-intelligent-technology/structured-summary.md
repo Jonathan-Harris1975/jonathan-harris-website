@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in Formula 1 — real-time strategy optimisation, predictive analytics, and how intelligent technology is transforming racing. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths.
+AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure. This one stays close to the hard realities inside Formula 1, especially where milliseconds beat marketing myths.
 
 ## What this book covers
 
