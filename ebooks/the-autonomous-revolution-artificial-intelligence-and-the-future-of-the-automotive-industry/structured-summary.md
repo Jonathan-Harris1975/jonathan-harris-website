@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in the automotive industry — autonomous vehicles, predictive maintenance, smart manufacturing, and how artificial intelligence is reshaping personal mobility. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
