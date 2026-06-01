@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence modernizes railways with predictive maintenance, autonomous trains, and optimized scheduling, enhancing safety. The focus stays on how AI changes the day-to-day reality of railways: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first. The focus stays on how AI changes the day-to-day reality of railways: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
