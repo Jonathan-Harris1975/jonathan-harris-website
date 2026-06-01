@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in smart buildings — automated energy management, predictive maintenance, occupant comfort systems, and how intelligent infrastructure reduces costs and carbon. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight. It looks at where AI is already earning its keep in smart buildings, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
