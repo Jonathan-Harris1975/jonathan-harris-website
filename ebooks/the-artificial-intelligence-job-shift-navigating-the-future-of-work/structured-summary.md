@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's impact on employment, offering strategies to navigate job automation, reskilling, and emerging career opportunities. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits. The focus stays on how AI changes the day-to-day reality of the future of work: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
