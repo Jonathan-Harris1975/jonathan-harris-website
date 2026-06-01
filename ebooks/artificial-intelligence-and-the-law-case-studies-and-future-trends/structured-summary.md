@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's impact on legal practice through case studies, ethical dilemmas, and future trends in automated contracts and judicial decisions. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability. It looks at where AI is already earning its keep in law, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
