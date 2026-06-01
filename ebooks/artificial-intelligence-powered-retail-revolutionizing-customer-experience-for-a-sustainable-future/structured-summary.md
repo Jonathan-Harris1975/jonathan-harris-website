@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in retail — personalisation, inventory optimisation, sustainable supply chains, and how intelligent systems are transforming the customer experience. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy. The focus stays on how AI changes the day-to-day reality of Retail: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
