@@ -563,7 +563,7 @@
     "pages": 269,
     "asin": "B0DN4GZZQ4",
     "datePublished": "2024-11-14",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
@@ -615,10 +615,10 @@
       }
     ],
     "related_slugs": [
+      "deepfakes-ai-scams-and-synthetic-reality",
       "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "artificial-intelligence-in-industry-a-comprehensive-guide",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
     ],
     "title_tokens": [
       "breach",
@@ -2114,7 +2114,7 @@
     "pages": 315,
     "asin": "B0DMQHQTQH",
     "datePublished": "2024-11-11",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in the future of work for managers, workers, founders, and readers tracking labour-market change.",
@@ -2166,10 +2166,10 @@
       }
     ],
     "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "ai-literacy-for-the-modern-workplace",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "artificial-intelligence-in-construction-building-a-sustainable-future"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
     ],
     "title_tokens": [
       "future",
@@ -2429,7 +2429,7 @@
     "pages": 296,
     "asin": "B0DM8256SL",
     "datePublished": "2024-11-06",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",
@@ -2483,8 +2483,8 @@
     "related_slugs": [
       "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-literacy-for-the-modern-workplace",
+      "ai-agents-for-everyday-work"
     ],
     "title_tokens": [
       "defense",
@@ -2950,7 +2950,7 @@
     "pages": 336,
     "asin": "B0DY672VRB",
     "datePublished": "2025-02-22",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "author": "Jonathan Harris",
     "tone": "Plain-English, practical, sceptical, no-hype",
     "audience": "A clear, no-hype briefing on AI in filmmaking for creators, producers, editors, and readers tracking how tools reshape creative work.",
@@ -3005,7 +3005,7 @@
       "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "digital-defense-the-role-of-ai-in-modern-warfare",
       "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+      "ai-literacy-for-the-modern-workplace"
     ],
     "title_tokens": [
       "algorithm",
@@ -3751,6 +3751,450 @@
     ],
     "topic_tokens": [
       "gam"
+    ]
+  },
+  {
+    "id": 37,
+    "key": "37-ebook",
+    "slug": "artificial-intelligence-for-small-business",
+    "title": "Artificial Intelligence for Small Business",
+    "short": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "short_description": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "description": "Small businesses are being told they need artificial intelligence, usually by people selling it. This book cuts through the fog. Artificial Intelligence for Small Business explains where AI can genuinely help with marketing, admin, customer service, planning, research and everyday operations, without pretending it will run the whole business while you drink tea and admire your own efficiency. Written in plain English for owners, freelancers, local services, consultants, creators and small teams, it focuses on practical workflows rather than technical theory. You will learn how to spot useful tasks, avoid gimmicks, improve customer communication, speed up routine work and keep control of quality. The book also covers privacy, brand voice, accuracy, cost, staff confidence and the awkward truth that some jobs still need a human being with context. It is calm, practical and sceptical in the right places. Useful AI for small business is not about chasing every shiny tool. It is about choosing a few sensible workflows and using them well.",
+    "summary": "This book helps small business readers decide where artificial intelligence can genuinely save time and where it simply adds noise. It focuses on practical workflows across marketing, admin, customer service, research and planning, while keeping privacy, cost, brand voice and human judgement firmly in view.",
+    "topic": "Business",
+    "topic_slug": "business",
+    "topic_url": "/catalogue/business/",
+    "filter": "Business",
+    "tags": [
+      "Business",
+      "Small Business",
+      "Artificial Intelligence",
+      "AI Trends",
+      "Productivity"
+    ],
+    "keywords": [
+      "AI for small business",
+      "artificial intelligence for small business",
+      "AI marketing",
+      "AI admin",
+      "customer service AI",
+      "small business productivity",
+      "AI automation",
+      "ChatGPT for business",
+      "plain English AI"
+    ],
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "image": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "buy_url": "https://mybook.to/DcdDU",
+    "buy_route": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "book_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-for-small-business/buy-now",
+    "pages": 233,
+    "asin": "B0H3FVY6BZ",
+    "datePublished": "2026-06-14",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "author": "Jonathan Harris",
+    "tone": "Plain-English, practical, sceptical, no-hype",
+    "audience": "Small business owners, sole traders, freelancers, consultants, indie authors, local service providers, creators and small teams who want practical AI use without technical waffle.",
+    "identifier": "JH-AI-EBOOK-37",
+    "what_this_book_covers": "Marketing support, admin, customer service, research, planning, content workflows, automation boundaries, privacy, quality control and cost discipline.",
+    "who_for": "Small business owners, sole traders, freelancers, consultants, creators and small teams who want practical AI workflows without technical theatre.",
+    "what_youll_learn": [
+      "Where AI can save time in a small business without taking over the business",
+      "How to choose sensible workflows for marketing, admin and customer service",
+      "What to check before using AI with customer data or brand copy",
+      "How to keep quality, privacy and human judgement in the loop"
+    ],
+    "why_it_matters": "Small businesses do not have spare time or money for shiny tools that make ordinary work messier. This book helps readers decide where AI is useful, where it is noisy, and what to ignore.",
+    "showcase_heading": "How AI is reshaping business",
+    "distinct_angle": "Artificial Intelligence for Small Business keeps the focus on practical judgement in business rather than drifting into brochure-speak.",
+    "notes": "",
+    "faq": [
+      {
+        "@type": "Question",
+        "name": "What does this book explain about AI in business?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Where AI can save time in a small business without taking over the business"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who gets the most value from this business guide?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Small business owners, sole traders, freelancers, consultants, indie authors, local service providers, creators and small teams who want practical AI use without technical waffle."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How detailed is the coverage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It runs to 233 pages and focuses on Marketing support, admin, customer service, research, planning, content workflows, automation boundaries, privacy, quality control and cost discipline."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I get the eBook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Available as an eBook via Amazon using the buy link on this page."
+        }
+      }
+    ],
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information"
+    ],
+    "title_tokens": [
+      "busi",
+      "small"
+    ],
+    "topic_tokens": [
+      "busi"
+    ]
+  },
+  {
+    "id": 38,
+    "key": "38-ebook",
+    "slug": "ai-agents-for-everyday-work",
+    "title": "AI Agents for Everyday Work",
+    "short": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "short_description": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "description": "AI agents are one of the most talked-about ideas in artificial intelligence, and one of the easiest to misunderstand. This book explains them without the corporate fog. AI Agents for Everyday Work shows how digital helpers can plan tasks, use tools, draft work, organise information and support routine workflows. It also explains why they are not magic employees, why supervision matters and why a confident automated assistant can still make a glorious hash of things. Written for managers, freelancers, office workers, creators, small teams and curious professionals, the book focuses on practical everyday use: email, research, planning, admin, customer follow-up, content, meeting notes and workflow automation. It covers prompt design, task boundaries, human review, privacy, escalation, failure points and sensible adoption. The message is simple: AI agents can be useful if you keep them on a lead. The aim is not to surrender work to software, but to build controlled support systems that save time without quietly moving responsibility to a machine that cannot carry it.",
+    "summary": "This book explains AI agents as controlled digital helpers rather than magic employees. It shows how agent-style workflows can support email, research, planning, meetings, admin and follow-up work while keeping boundaries, review, privacy and escalation rules clear.",
+    "topic": "Future of Work",
+    "topic_slug": "future-of-work",
+    "topic_url": "/catalogue/future-of-work/",
+    "filter": "Future of Work",
+    "tags": [
+      "Future of Work",
+      "AI Agents",
+      "Automation",
+      "Productivity",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "keywords": [
+      "AI agents",
+      "agentic AI",
+      "digital assistants",
+      "AI automation",
+      "AI at work",
+      "AI productivity",
+      "workflow automation",
+      "everyday AI",
+      "AI helpers"
+    ],
+    "cover": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "image": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "buy_url": "https://mybook.to/xFRG",
+    "buy_route": "/ebooks/ai-agents-for-everyday-work/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/buy-now",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/",
+    "book_url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/",
+    "legacy_alias_url": "https://jonathan-harris.online/book/ai-agents-for-everyday-work/buy-now",
+    "pages": 211,
+    "asin": "B0H3GHYN9Z",
+    "datePublished": "2026-06-15",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "author": "Jonathan Harris",
+    "tone": "Plain-English, practical, sceptical, no-hype",
+    "audience": "Managers, freelancers, office workers, consultants, creators, administrators, small teams and non-technical professionals trying to understand AI agents in practical terms.",
+    "identifier": "JH-AI-EBOOK-38",
+    "what_this_book_covers": "Digital helpers, task planning, tool use, workflow automation, research, email, meetings, human review, escalation rules, privacy and control.",
+    "who_for": "Managers, freelancers, office workers, consultants, creators, administrators and small teams who need a clear view of AI agents before handing them real work.",
+    "what_youll_learn": [
+      "What AI agents are in plain English",
+      "Which everyday tasks suit agent-style automation",
+      "How to set boundaries, review outputs and prevent quiet drift",
+      "What should stay with a human being even when the tool sounds confident"
+    ],
+    "why_it_matters": "AI agents can be useful helpers, but they can also make mistakes with impressive confidence. The practical skill is not blind automation; it is controlled delegation.",
+    "showcase_heading": "How AI is reshaping future of work",
+    "distinct_angle": "AI Agents for Everyday Work keeps the applause to a minimum and asks what the systems actually do, what they break, and what they are being oversold to solve in future of work.",
+    "notes": "",
+    "faq": [
+      {
+        "@type": "Question",
+        "name": "What does this book explain about AI in future of work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "What AI agents are in plain English"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who gets the most value from this future of work guide?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Managers, freelancers, office workers, consultants, creators, administrators, small teams and non-technical professionals trying to understand AI agents in practical terms."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How detailed is the coverage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It runs to 211 pages and focuses on Digital helpers, task planning, tool use, workflow automation, research, email, meetings, human review, escalation rules, privacy and control."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I get the eBook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Available as an eBook via Amazon using the buy link on this page."
+        }
+      }
+    ],
+    "related_slugs": [
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "ai-literacy-for-the-modern-workplace",
+      "artificial-intelligence-for-small-business",
+      "deepfakes-ai-scams-and-synthetic-reality"
+    ],
+    "title_tokens": [
+      "agent",
+      "everyday",
+      "work"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
+    ]
+  },
+  {
+    "id": 39,
+    "key": "39-ebook",
+    "slug": "deepfakes-ai-scams-and-synthetic-reality",
+    "title": "Deepfakes, AI Scams and Synthetic Reality",
+    "short": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "short_description": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "description": "Deepfakes, fake voices, synthetic images and AI-written scams are changing how people judge what is real online. This plain-English guide explains the problem without resorting to panic theatre. Deepfakes, AI Scams and Synthetic Reality shows how artificial intelligence can be used to imitate people, manipulate media, scale fraud, fake authority and erode trust. It also explains what readers can do about it. Written for general readers, small business owners, professionals, managers, families, creators and community leaders, the book covers practical warning signs, verification habits, safer communication rules, business procedures, social media judgement and the emotional tricks behind scams. It avoids invented statistics and horror imagery. The aim is simple: help readers become harder to fool. The answer is not to distrust everything. That way lies madness and terrible group chats. The answer is to slow down, verify better, protect identity, set rules for money and sensitive requests, and understand how synthetic media changes the trust game.",
+    "summary": "This book gives readers a calm practical framework for dealing with deepfakes, voice cloning, synthetic media and AI-enabled fraud. It focuses on verification habits, safer communication rules and everyday judgement so people and organisations become harder to fool without sliding into paranoia.",
+    "topic": "Cyber Security",
+    "topic_slug": "cyber-security",
+    "topic_url": "/catalogue/cyber-security/",
+    "filter": "Cyber Security",
+    "tags": [
+      "Cyber Security",
+      "Deepfakes",
+      "Online Safety",
+      "Fraud",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "keywords": [
+      "deepfakes",
+      "AI scams",
+      "synthetic media",
+      "voice cloning",
+      "AI fraud",
+      "online safety",
+      "digital trust",
+      "fake images",
+      "AI misinformation",
+      "identity fraud"
+    ],
+    "cover": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "main_image": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "image": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "buy_url": "https://mybook.to/epS9MUd",
+    "buy_route": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "canonical_url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+    "book_url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+    "legacy_alias_url": "https://jonathan-harris.online/book/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "pages": 211,
+    "asin": "B0H3G45CJ5",
+    "datePublished": "2026-06-21",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "author": "Jonathan Harris",
+    "tone": "Plain-English, practical, sceptical, no-hype",
+    "audience": "General readers, small business owners, managers, professionals, families, educators, creators and anyone concerned about online trust, fraud and synthetic media.",
+    "identifier": "JH-AI-EBOOK-39",
+    "what_this_book_covers": "Deepfakes, synthetic voices, phishing, impersonation, romance scams, business fraud, verification habits, platform trust, evidence problems and response planning.",
+    "who_for": "General readers, families, professionals, managers, creators and small organisations who want to understand synthetic media, AI-enabled fraud and practical online safety.",
+    "what_youll_learn": [
+      "How AI changes scams, impersonation and trust online",
+      "Which warning signs are still useful and which ones are weakening",
+      "How to verify messages, voices, images and urgent requests",
+      "How individuals and teams can build simple safety habits without paranoia"
+    ],
+    "why_it_matters": "Trust online is becoming easier to fake and harder to check. Readers need calm practical judgement, not panic, folklore or a drawer full of conspiracy tinfoil.",
+    "showcase_heading": "How AI is reshaping cyber security",
+    "distinct_angle": "Deepfakes, AI Scams and Synthetic Reality keeps the focus on signal, defence, and the cost of getting the call wrong in cyber security.",
+    "notes": "",
+    "faq": [
+      {
+        "@type": "Question",
+        "name": "What does this book explain about AI in cyber security?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "How AI changes scams, impersonation and trust online"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who gets the most value from this cyber security guide?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "General readers, small business owners, managers, professionals, families, educators, creators and anyone concerned about online trust, fraud and synthetic media."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How detailed is the coverage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It runs to 211 pages and focuses on Deepfakes, synthetic voices, phishing, impersonation, romance scams, business fraud, verification habits, platform trust, evidence problems and response planning."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I get the eBook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Available as an eBook via Amazon using the buy link on this page."
+        }
+      }
+    ],
+    "related_slugs": [
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "ai-agents-for-everyday-work",
+      "ai-in-aviation-transforming-safety-and-sustainability",
+      "digital-defense-the-role-of-ai-in-modern-warfare"
+    ],
+    "title_tokens": [
+      "deepfake",
+      "real",
+      "scam",
+      "synthetic"
+    ],
+    "topic_tokens": [
+      "cyb",
+      "secur"
+    ]
+  },
+  {
+    "id": 40,
+    "key": "40-ebook",
+    "slug": "ai-literacy-for-the-modern-workplace",
+    "title": "AI Literacy for the Modern Workplace",
+    "short": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "short_description": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "description": "Many workplaces are telling people to use artificial intelligence before explaining what good use looks like. AI Literacy for the Modern Workplace fixes that gap. Written in plain English for managers, team leaders, HR, operations staff, knowledge workers and non-technical professionals, it explains the practical literacy people need to use AI sensibly at work. This is not a coding book and not a glossy innovation brochure. It covers what AI can and cannot do, how to write better prompts, how to check outputs, where human judgement matters, what data should be protected, how teams should set rules and how managers can encourage useful adoption without creating chaos. The book also deals with awkward questions: job anxiety, over-reliance, bias, accuracy, accountability, policy and the difference between productivity and simply producing more stuff. The aim is straightforward: help teams become confident, careful and useful AI users, not passengers in someone else’s software experiment.",
+    "summary": "This book turns workplace AI literacy into a practical management and team skill. It covers prompts, output checking, privacy, policy, risk, accountability and adoption habits so non-technical professionals can use artificial intelligence with confidence rather than theatre.",
+    "topic": "Future of Work",
+    "topic_slug": "future-of-work",
+    "topic_url": "/catalogue/future-of-work/",
+    "filter": "Future of Work",
+    "tags": [
+      "Future of Work",
+      "AI Literacy",
+      "Workplace AI",
+      "Management",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "keywords": [
+      "AI literacy",
+      "workplace AI",
+      "AI at work",
+      "AI for managers",
+      "non-technical AI",
+      "AI training",
+      "AI policy",
+      "AI skills",
+      "responsible AI use",
+      "team AI adoption"
+    ],
+    "cover": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "image": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "buy_url": "https://mybook.to/LNC6kpd",
+    "buy_route": "/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/",
+    "book_url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/",
+    "legacy_alias_url": "https://jonathan-harris.online/book/ai-literacy-for-the-modern-workplace/buy-now",
+    "pages": 226,
+    "asin": "B0GX39ZKZ6",
+    "datePublished": "2026-06-22",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "author": "Jonathan Harris",
+    "tone": "Plain-English, practical, sceptical, no-hype",
+    "audience": "Managers, team leaders, HR professionals, operations staff, knowledge workers, administrators and non-technical professionals who need practical AI confidence at work.",
+    "identifier": "JH-AI-EBOOK-40",
+    "what_this_book_covers": "AI basics, workplace use cases, prompt habits, policy, privacy, procurement, team training, output review, risk, confidence and everyday decision-making.",
+    "who_for": "Managers, team leaders, non-technical professionals, HR teams, operations staff and workplace decision-makers who need practical AI judgement.",
+    "what_youll_learn": [
+      "What workplace AI literacy actually means",
+      "How managers and teams can judge AI outputs sensibly",
+      "What policies and habits reduce avoidable risk",
+      "How to make AI useful without turning the office into a jargon aquarium"
+    ],
+    "why_it_matters": "Workplace AI literacy is becoming a basic management skill. Teams need enough understanding to use tools well, challenge bad claims and avoid accidental nonsense at scale.",
+    "showcase_heading": "How AI is reshaping future of work",
+    "distinct_angle": "AI Literacy for the Modern Workplace keeps the applause to a minimum and asks what the systems actually do, what they break, and what they are being oversold to solve in future of work.",
+    "notes": "",
+    "faq": [
+      {
+        "@type": "Question",
+        "name": "What does this book explain about AI in future of work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "What workplace AI literacy actually means"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who gets the most value from this future of work guide?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Managers, team leaders, HR professionals, operations staff, knowledge workers, administrators and non-technical professionals who need practical AI confidence at work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How detailed is the coverage?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "It runs to 226 pages and focuses on AI basics, workplace use cases, prompt habits, policy, privacy, procurement, team training, output review, risk, confidence and everyday decision-making."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where can I get the eBook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Available as an eBook via Amazon using the buy link on this page."
+        }
+      }
+    ],
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "digital-defense-the-role-of-ai-in-modern-warfare",
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking"
+    ],
+    "title_tokens": [
+      "literacy",
+      "modern",
+      "workplace"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
     ]
   }
 ]
