@@ -1,0 +1,39 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does this book explain about AI in future of work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "What workplace AI literacy actually means"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who gets the most value from this future of work guide?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Managers, team leaders, HR professionals, operations staff, knowledge workers, administrators and non-technical professionals who need practical AI confidence at work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How detailed is the coverage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It runs to 226 pages and focuses on AI basics, workplace use cases, prompt habits, policy, privacy, procurement, team training, output review, risk, confidence and everyday decision-making."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I get the eBook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Available as an eBook via Amazon using the buy link on this page."
+      }
+    }
+  ]
+}
