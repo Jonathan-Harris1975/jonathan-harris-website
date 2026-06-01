@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence accelerates drug discovery, optimizes clinical trials, and personalizes treatments. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation.
+AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress. It stays with the decisions, constraints, and side-effects shaping Pharmaceuticals, especially where lab promise meets regulation.
 
 ## What this book covers
 
