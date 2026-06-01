@@ -2,7 +2,7 @@
 
 ## Summary
 
-Chronicles AI's evolution in gaming, from simple state machines to advanced machine learning, enhancing gameplay and immersion. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play. The focus stays on how AI changes the day-to-day reality of game development: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
