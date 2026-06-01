@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise. The focus stays on how AI changes the day-to-day reality of Cyber Security: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 

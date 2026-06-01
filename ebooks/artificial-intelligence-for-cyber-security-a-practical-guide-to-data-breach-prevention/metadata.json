@@ -1,8 +1,8 @@
 {
   "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
   "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
-  "description": "A guide to using artificial intelligence for cybersecurity, using machine learning to detect threats, prevent breaches, and enhance data protection.",
-  "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+  "description": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise.",
+  "short_description": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
   "topic": "Cyber Security",
   "tags": [
     "Cyber Security",
@@ -16,7 +16,7 @@
   "pages": 269,
   "asin": "B0DN4GZZQ4",
   "datePublished": "2024-11-14",
-  "dateModified": "2026-04-18T20:49:01Z",
+  "dateModified": "2026-06-01T08:36:42Z",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "A practical overview of AI in Cyber Security for security teams, risk managers, founders, and readers tracking digital defence.",
