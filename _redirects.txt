@@ -111,6 +111,14 @@ https://www.jonathan-harris.online/*  https://jonathan-harris.online/:splat  301
 /book/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now   /ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now   301
 /ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now   https://mybook.to/e7GozY6   302
 /book/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now   /ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now   301
+/ebooks/artificial-intelligence-for-small-business/buy-now   https://mybook.to/DcdDU   302
+/book/artificial-intelligence-for-small-business/buy-now   /ebooks/artificial-intelligence-for-small-business/buy-now   301
+/ebooks/ai-agents-for-everyday-work/buy-now   https://mybook.to/xFRG   302
+/book/ai-agents-for-everyday-work/buy-now   /ebooks/ai-agents-for-everyday-work/buy-now   301
+/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now   https://mybook.to/epS9MUd   302
+/book/deepfakes-ai-scams-and-synthetic-reality/buy-now   /ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now   301
+/ebooks/ai-literacy-for-the-modern-workplace/buy-now   https://mybook.to/LNC6kpd   302
+/book/ai-literacy-for-the-modern-workplace/buy-now   /ebooks/ai-literacy-for-the-modern-workplace/buy-now   301
 
 # 7) CANONICAL: old /book URLs permanently redirect to /ebooks
 /book    /ebooks/        301

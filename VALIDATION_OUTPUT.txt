@@ -1,22 +1,23 @@
-Validation run: 2026-04-18T20:49:01Z
-Book count: 36
-Topic count: 24
-Workbook title parity: 87/87 passed, 0 mismatched
-Workbook content parity: 330 exact field matches, 30 approved transformations, 0 mismatches across 360 governed field checks
+Validation run: 2026-06-01T08:37:12Z
+Book count: 40
+Topic count: 25
+Workbook title parity: 92/92 passed, 0 mismatched
+Workbook content parity: 246 exact field matches, 154 approved transformations, 0 mismatches across 400 governed field checks
 
 Topics:
 - Agriculture: 1
 - Artificial Intelligence: 1
+- Business: 1
 - Construction: 2
 - Creativity: 2
-- Cyber Security: 1
+- Cyber Security: 2
 - Defence: 1
 - Education: 1
 - Energy: 1
 - Environment: 2
 - Ethics: 2
 - Finance: 1
-- Future of Work: 1
+- Future of Work: 3
 - Gaming: 1
 - Government: 1
 - Healthcare: 3

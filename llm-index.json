@@ -1,11 +1,11 @@
 {
-  "generated_utc": "2026-04-18T20:49:01Z",
+  "generated_utc": "2026-06-01T08:37:12Z",
   "books": [
     {
       "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
       "slug": "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "url": "/ebooks/ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology/",
-      "summary": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -42,7 +42,7 @@
       "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
       "slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation",
       "url": "/ebooks/artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation/",
-      "summary": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -77,7 +77,7 @@
       "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
       "slug": "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation",
       "url": "/ebooks/ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation/",
-      "summary": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
+      "summary": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality.",
       "topic": "Energy",
       "tags": [
         "Energy",
@@ -112,7 +112,7 @@
       "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
       "slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
       "url": "/ebooks/artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability/",
-      "summary": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -147,7 +147,7 @@
       "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
       "slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends",
       "url": "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
-      "summary": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong.",
       "topic": "Law",
       "tags": [
         "Law",
@@ -182,7 +182,7 @@
       "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
       "slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
       "url": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
-      "summary": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+      "summary": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
       "topic": "Cyber Security",
       "tags": [
         "Cyber Security",
@@ -205,19 +205,19 @@
       "asin": "B0DN4GZZQ4",
       "pages": 269,
       "datePublished": "2024-11-14",
-      "dateModified": "2026-04-18T20:49:01Z",
+      "dateModified": "2026-06-01T08:36:42Z",
       "related_slugs": [
+        "deepfakes-ai-scams-and-synthetic-reality",
         "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
         "artificial-intelligence-in-industry-a-comprehensive-guide",
-        "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-        "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+        "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
       ]
     },
     {
       "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
       "slug": "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
       "url": "/ebooks/the-artificial-intelligence-revolution-from-algorithms-to-consciousness/",
-      "summary": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence.",
       "topic": "Artificial Intelligence",
       "tags": [
         "Artificial Intelligence",
@@ -250,7 +250,7 @@
       "title": "AI in Aviation: Transforming Safety and Sustainability",
       "slug": "ai-in-aviation-transforming-safety-and-sustainability",
       "url": "/ebooks/ai-in-aviation-transforming-safety-and-sustainability/",
-      "summary": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -285,7 +285,7 @@
       "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
       "slug": "ai-in-maritime-revolutionizing-shipping-for-sustainability",
       "url": "/ebooks/ai-in-maritime-revolutionizing-shipping-for-sustainability/",
-      "summary": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
+      "summary": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -320,7 +320,7 @@
       "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
       "slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
       "url": "/ebooks/artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare/",
-      "summary": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -355,7 +355,7 @@
       "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
       "slug": "the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry",
       "url": "/ebooks/the-autonomous-revolution-artificial-intelligence-and-the-future-of-the-automotive-industry/",
-      "summary": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -390,7 +390,7 @@
       "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
       "slug": "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
       "url": "/ebooks/artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future/",
-      "summary": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
+      "summary": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal.",
       "topic": "Retail",
       "tags": [
         "Retail",
@@ -425,7 +425,7 @@
       "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
       "slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
       "url": "/ebooks/artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery/",
-      "summary": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor.",
       "topic": "Manufacturing",
       "tags": [
         "Manufacturing",
@@ -460,7 +460,7 @@
       "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
       "slug": "artificial-intelligence-in-industry-a-comprehensive-guide",
       "url": "/ebooks/artificial-intelligence-in-industry-a-comprehensive-guide/",
-      "summary": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard.",
       "topic": "Industry",
       "tags": [
         "Industry",
@@ -495,7 +495,7 @@
       "title": "The Dumbening: How AI is Reshaping Our Minds",
       "slug": "the-dumbening-how-ai-is-reshaping-our-minds",
       "url": "/ebooks/the-dumbening-how-ai-is-reshaping-our-minds/",
-      "summary": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
+      "summary": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine.",
       "topic": "Ethics",
       "tags": [
         "Ethics",
@@ -530,7 +530,7 @@
       "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
       "slug": "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
       "url": "/ebooks/ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future/",
-      "summary": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos.",
       "topic": "Agriculture",
       "tags": [
         "Agriculture",
@@ -565,7 +565,7 @@
       "title": "AI in Education: Reimagining Learning for Every Student",
       "slug": "ai-in-education-reimagining-learning-for-every-student",
       "url": "/ebooks/ai-in-education-reimagining-learning-for-every-student/",
-      "summary": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork.",
       "topic": "Education",
       "tags": [
         "Education",
@@ -600,7 +600,7 @@
       "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
       "slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "url": "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
-      "summary": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+      "summary": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead.",
       "topic": "Finance",
       "tags": [
         "Finance",
@@ -635,7 +635,7 @@
       "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
       "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
       "url": "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
-      "summary": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
       "topic": "Healthcare",
       "tags": [
         "Healthcare",
@@ -670,7 +670,7 @@
       "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
       "slug": "artificial-intelligence-in-construction-building-a-sustainable-future",
       "url": "/ebooks/artificial-intelligence-in-construction-building-a-sustainable-future/",
-      "summary": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides.",
       "topic": "Construction",
       "tags": [
         "Construction",
@@ -705,7 +705,7 @@
       "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
       "slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
       "url": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
-      "summary": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+      "summary": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work.",
       "topic": "Future of Work",
       "tags": [
         "Future of Work",
@@ -728,19 +728,19 @@
       "asin": "B0DMQHQTQH",
       "pages": 315,
       "datePublished": "2024-11-11",
-      "dateModified": "2026-04-18T20:49:01Z",
+      "dateModified": "2026-06-01T08:36:42Z",
       "related_slugs": [
+        "ai-agents-for-everyday-work",
+        "ai-literacy-for-the-modern-workplace",
         "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-        "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-        "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-        "artificial-intelligence-in-construction-building-a-sustainable-future"
+        "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
       ]
     },
     {
       "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
       "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
       "url": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-      "summary": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch.",
       "topic": "Government",
       "tags": [
         "Government",
@@ -775,7 +775,7 @@
       "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
       "slug": "smart-buildings-ai-powered-efficiency-and-sustainability",
       "url": "/ebooks/smart-buildings-ai-powered-efficiency-and-sustainability/",
-      "summary": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight.",
       "topic": "Construction",
       "tags": [
         "Construction",
@@ -810,7 +810,7 @@
       "title": "Digital Defense: The Role of AI in Modern Warfare",
       "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
       "url": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-      "summary": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+      "summary": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
       "topic": "Defence",
       "tags": [
         "Defence",
@@ -833,19 +833,19 @@
       "asin": "B0DM8256SL",
       "pages": 296,
       "datePublished": "2024-11-06",
-      "dateModified": "2026-04-18T20:49:01Z",
+      "dateModified": "2026-06-01T08:36:42Z",
       "related_slugs": [
         "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
         "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-        "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-        "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+        "ai-literacy-for-the-modern-workplace",
+        "ai-agents-for-everyday-work"
       ]
     },
     {
       "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
       "slug": "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
       "url": "/ebooks/artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology/",
-      "summary": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face.",
       "topic": "Environment",
       "tags": [
         "Environment",
@@ -880,7 +880,7 @@
       "title": "Climate Intelligence: Harnessing AI for a Greener Future",
       "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
       "url": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-      "summary": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
       "topic": "Environment",
       "tags": [
         "Environment",
@@ -915,7 +915,7 @@
       "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
       "slug": "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
       "url": "/ebooks/ai-revolution-in-railways-modernizing-travel-for-a-smarter-future/",
-      "summary": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
+      "summary": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption.",
       "topic": "Transportation",
       "tags": [
         "Transportation",
@@ -950,7 +950,7 @@
       "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
       "slug": "artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement",
       "url": "/ebooks/artificial-intelligence-in-sports-revolutionizing-performance-and-fan-engagement/",
-      "summary": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch.",
       "topic": "Sports",
       "tags": [
         "Sports",
@@ -985,7 +985,7 @@
       "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "url": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
-      "summary": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
       "topic": "Creativity",
       "tags": [
         "Creativity",
@@ -1008,19 +1008,19 @@
       "asin": "B0DY672VRB",
       "pages": 336,
       "datePublished": "2025-02-22",
-      "dateModified": "2026-04-18T20:49:01Z",
+      "dateModified": "2026-06-01T08:36:42Z",
       "related_slugs": [
         "the-ai-music-revolution-creativity-controversy-and-collaboration",
         "digital-defense-the-role-of-ai-in-modern-warfare",
         "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-        "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+        "ai-literacy-for-the-modern-workplace"
       ]
     },
     {
       "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
       "slug": "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "url": "/ebooks/the-ai-music-revolution-creativity-controversy-and-collaboration/",
-      "summary": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
+      "summary": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune.",
       "topic": "Creativity",
       "tags": [
         "Creativity",
@@ -1055,7 +1055,7 @@
       "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
       "url": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
-      "summary": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
       "topic": "History",
       "tags": [
         "History",
@@ -1090,7 +1090,7 @@
       "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
       "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
       "url": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
-      "summary": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
       "topic": "Ethics",
       "tags": [
         "Ethics",
@@ -1127,7 +1127,7 @@
       "title": "Beyond Earth: How AI is Transforming Space Exploration",
       "slug": "beyond-earth-how-ai-is-transforming-space-exploration",
       "url": "/ebooks/beyond-earth-how-ai-is-transforming-space-exploration/",
-      "summary": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
+      "summary": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork.",
       "topic": "Science",
       "tags": [
         "Science",
@@ -1162,7 +1162,7 @@
       "title": "From Reporters to Robots: How AI is Reshaping Journalism",
       "slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism",
       "url": "/ebooks/from-reporters-to-robots-how-ai-is-reshaping-journalism/",
-      "summary": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
+      "summary": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge.",
       "topic": "Media",
       "tags": [
         "Media",
@@ -1197,7 +1197,7 @@
       "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
       "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
       "url": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-      "summary": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
+      "summary": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
       "topic": "Media",
       "tags": [
         "Media",
@@ -1232,7 +1232,7 @@
       "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
       "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
       "url": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-      "summary": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
+      "summary": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
       "topic": "Gaming",
       "tags": [
         "Gaming",
@@ -1262,11 +1262,185 @@
         "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
         "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
       ]
+    },
+    {
+      "title": "Artificial Intelligence for Small Business",
+      "slug": "artificial-intelligence-for-small-business",
+      "url": "/ebooks/artificial-intelligence-for-small-business/",
+      "summary": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+      "topic": "Business",
+      "tags": [
+        "Business",
+        "Small Business",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Productivity"
+      ],
+      "keywords": [
+        "ai for small business",
+        "artificial intelligence for small business",
+        "ai marketing",
+        "ai admin",
+        "customer service ai",
+        "small business productivity",
+        "ai automation",
+        "chatgpt for business",
+        "plain english ai"
+      ],
+      "buy_url": "https://mybook.to/DcdDU",
+      "buy_target_url": "https://mybook.to/DcdDU",
+      "buy_route": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+      "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+      "cover": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+      "identifier": "JH-AI-EBOOK-37",
+      "entity_id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/#book",
+      "asin": "B0H3FVY6BZ",
+      "pages": 233,
+      "datePublished": "2026-06-14",
+      "dateModified": "2026-06-01T08:37:12Z",
+      "related_slugs": [
+        "ai-agents-for-everyday-work",
+        "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+        "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+        "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information"
+      ]
+    },
+    {
+      "title": "AI Agents for Everyday Work",
+      "slug": "ai-agents-for-everyday-work",
+      "url": "/ebooks/ai-agents-for-everyday-work/",
+      "summary": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+      "topic": "Future of Work",
+      "tags": [
+        "Future of Work",
+        "AI Agents",
+        "Automation",
+        "Productivity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": [
+        "ai agents",
+        "agentic ai",
+        "digital assistants",
+        "ai automation",
+        "ai at work",
+        "ai productivity",
+        "workflow automation",
+        "everyday ai",
+        "ai helpers"
+      ],
+      "buy_url": "https://mybook.to/xFRG",
+      "buy_target_url": "https://mybook.to/xFRG",
+      "buy_route": "/ebooks/ai-agents-for-everyday-work/buy-now",
+      "buy_route_full": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/buy-now",
+      "cover": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+      "identifier": "JH-AI-EBOOK-38",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/#book",
+      "asin": "B0H3GHYN9Z",
+      "pages": 211,
+      "datePublished": "2026-06-15",
+      "dateModified": "2026-06-01T08:37:12Z",
+      "related_slugs": [
+        "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+        "ai-literacy-for-the-modern-workplace",
+        "artificial-intelligence-for-small-business",
+        "deepfakes-ai-scams-and-synthetic-reality"
+      ]
+    },
+    {
+      "title": "Deepfakes, AI Scams and Synthetic Reality",
+      "slug": "deepfakes-ai-scams-and-synthetic-reality",
+      "url": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+      "summary": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+      "topic": "Cyber Security",
+      "tags": [
+        "Cyber Security",
+        "Deepfakes",
+        "Online Safety",
+        "Fraud",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": [
+        "deepfakes",
+        "ai scams",
+        "synthetic media",
+        "voice cloning",
+        "ai fraud",
+        "online safety",
+        "digital trust",
+        "fake images",
+        "ai misinformation",
+        "identity fraud"
+      ],
+      "buy_url": "https://mybook.to/epS9MUd",
+      "buy_target_url": "https://mybook.to/epS9MUd",
+      "buy_route": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+      "buy_route_full": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+      "cover": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+      "identifier": "JH-AI-EBOOK-39",
+      "entity_id": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/#book",
+      "asin": "B0H3G45CJ5",
+      "pages": 211,
+      "datePublished": "2026-06-21",
+      "dateModified": "2026-06-01T08:37:12Z",
+      "related_slugs": [
+        "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+        "ai-agents-for-everyday-work",
+        "ai-in-aviation-transforming-safety-and-sustainability",
+        "digital-defense-the-role-of-ai-in-modern-warfare"
+      ]
+    },
+    {
+      "title": "AI Literacy for the Modern Workplace",
+      "slug": "ai-literacy-for-the-modern-workplace",
+      "url": "/ebooks/ai-literacy-for-the-modern-workplace/",
+      "summary": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+      "topic": "Future of Work",
+      "tags": [
+        "Future of Work",
+        "AI Literacy",
+        "Workplace AI",
+        "Management",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "keywords": [
+        "ai literacy",
+        "workplace ai",
+        "ai at work",
+        "ai for managers",
+        "non-technical ai",
+        "ai training",
+        "ai policy",
+        "ai skills",
+        "responsible ai use",
+        "team ai adoption"
+      ],
+      "buy_url": "https://mybook.to/LNC6kpd",
+      "buy_target_url": "https://mybook.to/LNC6kpd",
+      "buy_route": "/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+      "buy_route_full": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+      "cover": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+      "identifier": "JH-AI-EBOOK-40",
+      "entity_id": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/#book",
+      "asin": "B0GX39ZKZ6",
+      "pages": 226,
+      "datePublished": "2026-06-22",
+      "dateModified": "2026-06-01T08:37:12Z",
+      "related_slugs": [
+        "ai-agents-for-everyday-work",
+        "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+        "digital-defense-the-role-of-ai-in-modern-warfare",
+        "lights-camera-algorithm-ai-s-role-in-modern-filmmaking"
+      ]
     }
   ],
   "topic_authority_pages": [
     "/catalogue/agriculture/",
     "/catalogue/artificial-intelligence/",
+    "/catalogue/business/",
     "/catalogue/construction/",
     "/catalogue/creativity/",
     "/catalogue/cyber-security/",
@@ -1296,7 +1470,7 @@
       "title": "AI blog hub",
       "path": "/blog/",
       "loc": "https://jonathan-harris.online/blog/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "blog/index.html",
       "summary": "Weekly AI analysis and editorial archive.",
@@ -1307,7 +1481,7 @@
       "title": "AI book comparison guide",
       "path": "/compare/",
       "loc": "https://jonathan-harris.online/compare/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "compare/index.html",
       "summary": "Comparison page for choosing relevant AI books.",
@@ -1318,7 +1492,7 @@
       "title": "AI glossary",
       "path": "/glossary/",
       "loc": "https://jonathan-harris.online/glossary/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "glossary/index.html",
       "summary": "Plain-English AI glossary for answer engines and readers.",
@@ -1329,7 +1503,7 @@
       "title": "AI Edge newsletter",
       "path": "/newsletter/",
       "loc": "https://jonathan-harris.online/newsletter/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "newsletter/index.html",
       "summary": "Newsletter sign-up page for daily AI briefings.",
@@ -1340,7 +1514,7 @@
       "title": "Jonathan Harris biography",
       "path": "/bio/",
       "loc": "https://jonathan-harris.online/bio/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "bio/index.html",
       "summary": "Author profile and ecosystem authority page.",
@@ -1351,7 +1525,7 @@
       "title": "Turing's Torch AI Weekly",
       "path": "/podcast/",
       "loc": "https://jonathan-harris.online/podcast/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "podcast/index.html",
       "summary": "Podcast hub for AI weekly episodes.",
@@ -1362,7 +1536,7 @@
       "title": "Jonathan Harris AI ecosystem",
       "path": "/",
       "loc": "https://jonathan-harris.online/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "index.html",
       "summary": "Homepage for books, podcast, blog, topics and newsletter.",
@@ -1373,7 +1547,7 @@
       "title": "AI topic guides",
       "path": "/topics/",
       "loc": "https://jonathan-harris.online/topics/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "topics/index.html",
       "summary": "Topic-led entry points into the Jonathan Harris AI library.",
@@ -1384,7 +1558,7 @@
       "title": "Podcast transcript archive",
       "path": "/transcripts/",
       "loc": "https://jonathan-harris.online/transcripts/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "transcripts/index.html",
       "summary": "Searchable transcript archive for podcast episodes.",
