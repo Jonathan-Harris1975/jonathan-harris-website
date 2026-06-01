@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence optimizes construction with project planning, safety monitoring, and sustainable design, reducing costs. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites. It looks at where AI is already earning its keep in Construction, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
