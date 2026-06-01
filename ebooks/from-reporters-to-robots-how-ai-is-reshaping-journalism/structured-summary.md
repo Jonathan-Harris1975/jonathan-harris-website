@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms journalism with automated reporting, fact-checking, and personalized news, raising questions about bias and trust. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure.
+AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away. It keeps its eye on the pressure points inside journalism, especially where deadlines meet verification pressure.
 
 ## What this book covers
 
