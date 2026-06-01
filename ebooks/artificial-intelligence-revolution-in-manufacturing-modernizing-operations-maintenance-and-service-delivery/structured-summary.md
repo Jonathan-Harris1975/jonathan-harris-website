@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in manufacturing — predictive maintenance, automated production, optimised supply chains, and how intelligent operations are reshaping modern industry. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite.
+AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off. It keeps the focus on the stubborn realities inside Manufacturing, especially where uptime, scrap, and margins bite.
 
 ## What this book covers
 
