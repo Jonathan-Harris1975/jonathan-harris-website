@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's role in social media, from content personalization to moderation, and its impact on user experience and privacy. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see. It looks at where AI is already earning its keep in social media, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
