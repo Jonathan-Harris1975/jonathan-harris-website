@@ -2,7 +2,7 @@
 
 ## Summary
 
-A comprehensive guide to artificial intelligence applications across industries, covering automation, analytics, and ethical considerations. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence. It looks at where AI is already earning its keep in Industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
