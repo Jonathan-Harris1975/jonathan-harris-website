@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence streamlines logistics with route optimization, demand forecasting, and automated warehousing, reducing costs. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors.
+AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be. This one stays close to the hard realities inside Logistics, especially where routing models hit warehouse floors.
 
 ## What this book covers
 
