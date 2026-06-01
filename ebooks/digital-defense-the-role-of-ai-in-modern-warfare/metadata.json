@@ -1,8 +1,8 @@
 {
   "title": "Digital Defense: The Role of AI in Modern Warfare",
   "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
-  "description": "Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy.",
-  "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+  "description": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached.",
+  "short_description": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
   "topic": "Defence",
   "tags": [
     "Defence",
@@ -16,7 +16,7 @@
   "pages": 296,
   "asin": "B0DM8256SL",
   "datePublished": "2024-11-06",
-  "dateModified": "2026-04-18T20:49:01Z",
+  "dateModified": "2026-06-01T08:36:42Z",
   "author": "Jonathan Harris",
   "tone": "Plain-English, practical, sceptical, no-hype",
   "audience": "A practical overview of AI in modern warfare for defence analysts, procurement teams, policy readers, and anyone tracking military technology.",

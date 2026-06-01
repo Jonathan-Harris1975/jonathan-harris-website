@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms warfare with autonomous drones, predictive intelligence, and cybersecurity, reshaping military strategy. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached. The focus stays on how AI changes the day-to-day reality of modern warfare: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
