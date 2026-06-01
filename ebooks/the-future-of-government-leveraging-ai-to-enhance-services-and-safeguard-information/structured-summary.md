@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence enhances government services with efficient administration, predictive analytics, and robust cybersecurity. It follows the working pressures that define government, especially where services meet scrutiny and budget.
+AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional. It follows the working pressures that define government, especially where services meet scrutiny and budget.
 
 ## What this book covers
 
