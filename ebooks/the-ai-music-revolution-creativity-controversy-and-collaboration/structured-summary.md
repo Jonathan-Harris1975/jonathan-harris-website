@@ -2,7 +2,7 @@
 
 ## Summary
 
-Explores AI's role in music creation, from composition to production, addressing creativity, ethics, and collaboration. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background. The focus stays on how AI changes the day-to-day reality of music: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
