@@ -1,0 +1,39 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does this book explain about AI in business?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Where AI can save time in a small business without taking over the business"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who gets the most value from this business guide?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Small business owners, sole traders, freelancers, consultants, indie authors, local service providers, creators and small teams who want practical AI use without technical waffle."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How detailed is the coverage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It runs to 233 pages and focuses on Marketing support, admin, customer service, research, planning, content workflows, automation boundaries, privacy, quality control and cost discipline."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where can I get the eBook?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Available as an eBook via Amazon using the buy link on this page."
+      }
+    }
+  ]
+}
