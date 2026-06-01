@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms agriculture with precision farming, crop monitoring, and predictive analytics, enhancing yields and sustainability. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter.
+AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots. This one stays close to the hard realities inside Agriculture, especially where weather, margins, and soil matter.
 
 ## What this book covers
 
