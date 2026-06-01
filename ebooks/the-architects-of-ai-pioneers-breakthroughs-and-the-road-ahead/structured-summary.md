@@ -2,7 +2,7 @@
 
 ## Summary
 
-Chronicles AI's pioneers and breakthroughs, exploring the technology's history and future potential in shaping society. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost.
+This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence. It tracks the places where theory collides with operating reality in the history of artificial intelligence, especially where breakthroughs meet the human cost.
 
 ## What this book covers
 
