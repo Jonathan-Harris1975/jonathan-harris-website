@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence advances space exploration with autonomous rovers, data analysis, and mission planning. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue. The focus stays on how AI changes the day-to-day reality of space exploration: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
