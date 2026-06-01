@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-04-18T20:49:01Z",
+  "generated_utc": "2026-06-01T08:37:12Z",
   "person": {
     "id": "https://jonathan-harris.online/#person",
     "name": "Jonathan Harris"
@@ -441,6 +441,65 @@
         "AI Trends"
       ],
       "identifier": "JH-AI-EBOOK-25"
+    },
+    {
+      "title": "Artificial Intelligence for Small Business",
+      "slug": "artificial-intelligence-for-small-business",
+      "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+      "topic": "Business",
+      "tags": [
+        "Business",
+        "Small Business",
+        "Artificial Intelligence",
+        "AI Trends",
+        "Productivity"
+      ],
+      "identifier": "JH-AI-EBOOK-37"
+    },
+    {
+      "title": "AI Agents for Everyday Work",
+      "slug": "ai-agents-for-everyday-work",
+      "url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/",
+      "topic": "Future of Work",
+      "tags": [
+        "Future of Work",
+        "AI Agents",
+        "Automation",
+        "Productivity",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-38"
+    },
+    {
+      "title": "Deepfakes, AI Scams and Synthetic Reality",
+      "slug": "deepfakes-ai-scams-and-synthetic-reality",
+      "url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+      "topic": "Cyber Security",
+      "tags": [
+        "Cyber Security",
+        "Deepfakes",
+        "Online Safety",
+        "Fraud",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-39"
+    },
+    {
+      "title": "AI Literacy for the Modern Workplace",
+      "slug": "ai-literacy-for-the-modern-workplace",
+      "url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/",
+      "topic": "Future of Work",
+      "tags": [
+        "Future of Work",
+        "AI Literacy",
+        "Workplace AI",
+        "Management",
+        "Artificial Intelligence",
+        "AI Trends"
+      ],
+      "identifier": "JH-AI-EBOOK-40"
     }
   ]
 }
