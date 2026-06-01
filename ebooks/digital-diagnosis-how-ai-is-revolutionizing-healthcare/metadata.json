@@ -1,8 +1,8 @@
 {
   "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
   "slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-  "description": "Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes.",
-  "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+  "description": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement.",
+  "short_description": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
   "topic": "Healthcare",
   "tags": [
     "Healthcare",

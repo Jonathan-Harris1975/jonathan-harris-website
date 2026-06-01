@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms healthcare with diagnostic tools, predictive analytics, and personalized treatments, improving patient outcomes. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement.
+AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement. It keeps to the practical judgement calls running through healthcare, especially where clinical use meets human judgement.
 
 ## What this book covers
 
