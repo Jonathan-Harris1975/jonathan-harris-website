@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence enhances aviation safety with predictive maintenance, air traffic optimization, and fuel-efficient flight. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option. It looks at where AI is already earning its keep in Aviation, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
