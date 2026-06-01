@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in wildlife conservation — habitat monitoring, anti-poaching technology, species identification, and how data-driven tools are protecting biodiversity. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits.
+AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure. It tracks the places where theory collides with operating reality in Wildlife Conservation, especially where field data meets habitat limits.
 
 ## What this book covers
 
