@@ -3,8 +3,8 @@
     "id": 1,
     "key": "1-ebook",
     "title": "AI and Formula 1: Redefining Speed and Strategy with Intelligent Technology",
-    "short": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Formula 1, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car.",
+    "short_description": "A practical look at AI in race strategy, simulation, telemetry, and split-second decisions, without pretending the software drives the car.",
     "cover": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-formula-speed-webp",
     "tags": [
@@ -54,8 +54,8 @@
     "id": 2,
     "key": "2-ebook",
     "title": "Artificial Intelligence in Veterinary Medicine: Transforming Animal Healthcare Through Innovation",
-    "short": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Veterinary Medicine, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table.",
+    "short_description": "A grounded guide to diagnostic tools, clinic workflow, animal health data, and the judgement vets still bring to the table.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-veterinary-medicine-webp",
     "tags": [
@@ -103,8 +103,8 @@
     "id": 3,
     "key": "3-ebook",
     "title": "AI-Powered Smart Grid: Revolutionizing Electricity Distribution and Generation",
-    "short": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Smart Grid, built around real applications, limits, and better judgement.",
+    "short": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality.",
+    "short_description": "A clear guide to demand forecasting, grid balancing, renewables, and the awkward bit where energy theory meets field reality.",
     "cover": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-grid-electricity-webp",
     "tags": [
@@ -153,8 +153,8 @@
     "id": 4,
     "key": "4-ebook",
     "title": "Artificial Intelligence in Logistics: Transforming Supply Chains for Efficiency and Sustainability",
-    "short": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Logistics, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality.",
+    "short_description": "A practical look at routing, demand forecasting, warehouse automation, and the points where supply-chain theory meets loading-bay reality.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-logistics-webp",
     "tags": [
@@ -202,8 +202,8 @@
     "id": 5,
     "key": "5-ebook",
     "title": "Artificial Intelligence and the Law: Case Studies, Challenges, and Future Trends",
-    "short": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in law, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong.",
+    "short_description": "A plain-English look at legal research, contracts, evidence, compliance, and the expensive consequences of getting automated law wrong.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-law-webp",
     "tags": [
@@ -251,8 +251,8 @@
     "id": 6,
     "key": "6-ebook",
     "title": "Artificial Intelligence for Cyber Security: A Practical Guide to Data Breach Prevention",
-    "short": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Cyber Security, built around real applications, limits, and better judgement.",
+    "short": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
+    "short_description": "A no-hype guide to threat detection, breach prevention, alert noise, and the security decisions humans still have to own.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-cyber-practical-webp",
     "tags": [
@@ -273,16 +273,16 @@
     "asin": "B0DN4GZZQ4",
     "pages": 269,
     "datePublished": "2024-11-14",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
     "buy_route": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
     "topic_url": "/catalogue/cyber-security/",
     "related_slugs": [
+      "deepfakes-ai-scams-and-synthetic-reality",
       "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "artificial-intelligence-in-industry-a-comprehensive-guide",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
     ],
     "title_tokens": [
       "breach",
@@ -302,8 +302,8 @@
     "id": 7,
     "key": "7-ebook",
     "title": "The Artificial Intelligence Revolution: From Algorithms to Consciousness",
-    "short": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to artificial intelligence itself, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence.",
+    "short_description": "A grounded tour of AI history, core ideas, big claims, and the awkward gap between impressive demos and actual intelligence.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-algorithms-webp",
     "tags": [
@@ -344,8 +344,8 @@
     "id": 8,
     "key": "8-ebook",
     "title": "AI in Aviation: Transforming Safety and Sustainability",
-    "short": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Aviation, covering what works, what wobbles, and what matters in practice.",
+    "short": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually.",
+    "short_description": "A practical guide to predictive maintenance, air traffic tools, fuel efficiency, and the safety checks aviation cannot afford to treat casually.",
     "cover": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "main_image": "https://images.jonathan-harris.online/ai-aviation-safety-webp",
     "tags": [
@@ -391,8 +391,8 @@
     "id": 9,
     "key": "9-ebook",
     "title": "AI in Maritime: Revolutionizing Shipping for Sustainability",
-    "short": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Maritime, built around real applications, limits, and better judgement.",
+    "short": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch.",
+    "short_description": "A clear look at autonomous vessels, route planning, port logistics, emissions tracking, and the rough water beneath the sustainability pitch.",
     "cover": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-maritime-shipping-webp",
     "tags": [
@@ -438,8 +438,8 @@
     "id": 10,
     "key": "10-ebook",
     "title": "Artificial Intelligence in Pharmaceuticals: Revolutionizing Healthcare",
-    "short": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Pharmaceuticals, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise.",
+    "short_description": "A plain-English guide to drug discovery, clinical trials, treatment personalisation, and the regulatory grind behind the lab promise.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-pharmaceuticals-revolutionizing-healthcare-webp",
     "tags": [
@@ -484,8 +484,8 @@
     "id": 11,
     "key": "11-ebook",
     "title": "The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry",
-    "short": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in the automotive industry, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine.",
+    "short_description": "A grounded look at autonomous vehicles, predictive maintenance, smart manufacturing, and the liability questions parked behind the showroom shine.",
     "cover": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "main_image": "https://images.jonathan-harris.online/autonomous-revolution-artificial-intelligence-webp",
     "tags": [
@@ -532,8 +532,8 @@
     "id": 12,
     "key": "12-ebook",
     "title": "Artificial Intelligence Powered Retail: Revolutionizing Customer Experience for a Sustainable Future",
-    "short": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Retail, built around real applications, limits, and better judgement.",
+    "short": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal.",
+    "short_description": "A practical guide to recommendations, inventory, pricing, supply chains, and the point where personalisation starts feeling too personal.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-retail-customer-webp",
     "tags": [
@@ -582,8 +582,8 @@
     "id": 13,
     "key": "13-ebook",
     "title": "Artificial Intelligence Revolution in Manufacturing: Modernizing Operations, Maintenance, and Service Delivery",
-    "short": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Manufacturing, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor.",
+    "short_description": "A clear guide to predictive maintenance, production planning, quality control, and what survives contact with the plant floor.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-revolution-manufacturing-webp",
     "tags": [
@@ -632,8 +632,8 @@
     "id": 14,
     "key": "14-ebook",
     "title": "Artificial Intelligence in Industry: A Comprehensive Guide",
-    "short": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Industry, covering what works, what wobbles, and what matters in practice.",
+    "short": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard.",
+    "short_description": "A broad but grounded guide to automation, analytics, risk, and the industrial decisions that still need more than a dashboard.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-industry-comprehensive-webp",
     "tags": [
@@ -678,8 +678,8 @@
     "id": 15,
     "key": "15-ebook",
     "title": "The Dumbening: How AI is Reshaping Our Minds",
-    "short": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to how AI shapes attention and thinking, built around real applications, limits, and better judgement.",
+    "short": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine.",
+    "short_description": "A sceptical look at automation, attention, memory, creativity, and the cost of outsourcing too much thinking to the machine.",
     "cover": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "main_image": "https://images.jonathan-harris.online/ai-dumbening-reshaping-our-webp",
     "tags": [
@@ -724,8 +724,8 @@
     "id": 16,
     "key": "16-ebook",
     "title": "AI in Agriculture: Revolutionizing Farming for a Sustainable Future",
-    "short": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Agriculture, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos.",
+    "short_description": "A practical guide to crop monitoring, precision farming, weather risk, labour pressure, and the field conditions that ruin tidy demos.",
     "cover": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "main_image": "https://images.jonathan-harris.online/ai-agriculture-farming-sustainable-webp",
     "tags": [
@@ -772,8 +772,8 @@
     "id": 17,
     "key": "17-ebook",
     "title": "AI in Education: Reimagining Learning for Every Student",
-    "short": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Education, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork.",
+    "short_description": "A clear look at personalised learning, assessment, classroom support, and where education technology helps rather than just generating paperwork.",
     "cover": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "main_image": "https://images.jonathan-harris.online/ai-education-reimagining-learning-webp",
     "tags": [
@@ -820,8 +820,8 @@
     "id": 18,
     "key": "18-ebook",
     "title": "Artificial Intelligence in Banking: Revolutionizing Finance and Data Security",
-    "short": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in Banking, built around real applications, limits, and better judgement.",
+    "short": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead.",
+    "short_description": "A grounded guide to fraud detection, credit scoring, compliance, customer data, and the risks that keep banking AI on a short lead.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-banking-finance-webp",
     "tags": [
@@ -868,8 +868,8 @@
     "id": 19,
     "key": "19-ebook",
     "title": "Digital Diagnosis: How AI is Revolutionizing Healthcare",
-    "short": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in healthcare, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
+    "short_description": "A practical look at diagnostics, triage, imaging, clinical workflow, and the point where healthcare AI still needs human judgement.",
     "cover": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-diagnosis-healthcare-webp",
     "tags": [
@@ -915,8 +915,8 @@
     "id": 20,
     "key": "20-ebook",
     "title": "Artificial Intelligence in Construction: Building a Sustainable Future",
-    "short": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in Construction, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides.",
+    "short_description": "A plain-English guide to planning, safety, budgets, materials, and why construction AI has to work on sites, not just slides.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-construction-building-webp",
     "tags": [
@@ -962,8 +962,8 @@
     "id": 21,
     "key": "21-ebook",
     "title": "The Artificial Intelligence Job Shift: Navigating the Future of Work",
-    "short": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in the future of work, built around real applications, limits, and better judgement.",
+    "short": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work.",
+    "short_description": "A no-hype look at automation, reskilling, job redesign, management pressure, and what changes when AI moves into ordinary work.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-job-shift-webp",
     "tags": [
@@ -984,16 +984,16 @@
     "asin": "B0DMQHQTQH",
     "pages": 315,
     "datePublished": "2024-11-11",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
     "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
     "topic_url": "/catalogue/future-of-work/",
     "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "ai-literacy-for-the-modern-workplace",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "artificial-intelligence-in-construction-building-a-sustainable-future"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
     ],
     "title_tokens": [
       "future",
@@ -1011,8 +1011,8 @@
     "id": 22,
     "key": "22-ebook",
     "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch.",
+    "short_description": "A plain-English look at AI in public services: what it can improve, where the risks sit, and which questions teams should ask before buying the pitch.",
     "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "main_image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
     "tags": [
@@ -1061,8 +1061,8 @@
     "id": 23,
     "key": "23-ebook",
     "title": "Smart Buildings: AI-Powered Efficiency and Sustainability",
-    "short": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in smart buildings, covering what works, what wobbles, and what matters in practice.",
+    "short": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight.",
+    "short_description": "A grounded guide to energy management, sensors, maintenance, occupant comfort, and the building systems that still need human oversight.",
     "cover": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "main_image": "https://images.jonathan-harris.online/ai-smart-buildings-webp",
     "tags": [
@@ -1109,8 +1109,8 @@
     "id": 24,
     "key": "24-ebook",
     "title": "Digital Defense: The Role of AI in Modern Warfare",
-    "short": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in modern warfare, built around real applications, limits, and better judgement.",
+    "short": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
+    "short_description": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
     "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "main_image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "tags": [
@@ -1131,7 +1131,7 @@
     "asin": "B0DM8256SL",
     "pages": 296,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
     "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
@@ -1139,8 +1139,8 @@
     "related_slugs": [
       "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-literacy-for-the-modern-workplace",
+      "ai-agents-for-everyday-work"
     ],
     "title_tokens": [
       "defense",
@@ -1157,8 +1157,8 @@
     "id": 25,
     "key": "25-ebook",
     "title": "Artificial Intelligence for Wildlife Conservation: Revolutionizing Biodiversity Protection through Technology",
-    "short": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Wildlife Conservation, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face.",
+    "short_description": "A practical guide to habitat monitoring, species identification, anti-poaching tools, and the field data problems conservation teams face.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-wildlife-conservation-webp",
     "tags": [
@@ -1206,8 +1206,8 @@
     "id": 26,
     "key": "26-ebook",
     "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-    "short": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in climate and environmental strategy, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
+    "short_description": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
     "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "main_image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "tags": [
@@ -1253,8 +1253,8 @@
     "id": 27,
     "key": "27-ebook",
     "title": "AI Revolution in Railways: Modernizing Travel for a Smarter Future",
-    "short": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in railways, built around real applications, limits, and better judgement.",
+    "short": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption.",
+    "short_description": "A grounded look at predictive maintenance, signalling, scheduling, safety, and why railway AI has to survive real service disruption.",
     "cover": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "main_image": "https://images.jonathan-harris.online/ai-revolution-railways-modernizing-webp",
     "tags": [
@@ -1302,8 +1302,8 @@
     "id": 28,
     "key": "28-ebook",
     "title": "Artificial Intelligence in Sports: Revolutionizing Performance and Fan Engagement",
-    "short": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in Sports, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch.",
+    "short_description": "A practical look at performance data, injury prevention, scouting, fan engagement, and the judgement that still decides what happens on the pitch.",
     "cover": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "main_image": "https://images.jonathan-harris.online/artificial-intelligence-sports-performance-webp",
     "tags": [
@@ -1350,8 +1350,8 @@
     "id": 29,
     "key": "29-ebook",
     "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
-    "short": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in filmmaking, covering what works, what wobbles, and what matters in practice.",
+    "short": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
+    "short_description": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
     "cover": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "main_image": "https://images.jonathan-harris.online/lights-camera-algorithm-ais-webp",
     "tags": [
@@ -1372,7 +1372,7 @@
     "asin": "B0DY672VRB",
     "pages": 336,
     "datePublished": "2025-02-22",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
     "buy_route": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
@@ -1381,7 +1381,7 @@
       "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "digital-defense-the-role-of-ai-in-modern-warfare",
       "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+      "ai-literacy-for-the-modern-workplace"
     ],
     "title_tokens": [
       "algorithm",
@@ -1399,8 +1399,8 @@
     "id": 30,
     "key": "30-ebook",
     "title": "The AI Music Revolution: Creativity, Controversy, and Collaboration",
-    "short": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in music, built around real applications, limits, and better judgement.",
+    "short": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune.",
+    "short_description": "A grounded look at composition, production, rights, collaboration, and the row that starts when software learns the tune.",
     "cover": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "main_image": "https://images.jonathan-harris.online/ai-music-revolution-creativity-webp",
     "tags": [
@@ -1447,8 +1447,8 @@
     "id": 31,
     "key": "31-ebook",
     "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "short": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in the history of artificial intelligence, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
+    "short_description": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
     "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "main_image": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "tags": [
@@ -1495,8 +1495,8 @@
     "id": 32,
     "key": "32-ebook",
     "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
-    "short": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in gambling, covering what works, what wobbles, and what matters in practice.",
+    "short": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
+    "short_description": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
     "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "main_image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "tags": [
@@ -1547,8 +1547,8 @@
     "id": 33,
     "key": "33-ebook",
     "title": "Beyond Earth: How AI is Transforming Space Exploration",
-    "short": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in space exploration, built around real applications, limits, and better judgement.",
+    "short": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork.",
+    "short_description": "A practical look at rovers, mission planning, data analysis, autonomy, and why space AI has no room for cheerful guesswork.",
     "cover": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "main_image": "https://images.jonathan-harris.online/ai-earth-space-exploration-webp",
     "tags": [
@@ -1595,8 +1595,8 @@
     "id": 34,
     "key": "34-ebook",
     "title": "From Reporters to Robots: How AI is Reshaping Journalism",
-    "short": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in journalism, focused on practical use, trade-offs, and sharper questions.",
+    "short": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge.",
+    "short_description": "A grounded guide to automated reporting, fact-checking, newsroom pressure, platform incentives, and the trust problem journalism cannot dodge.",
     "cover": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "main_image": "https://images.jonathan-harris.online/ai-reporters-robots-reshaping-webp",
     "tags": [
@@ -1642,8 +1642,8 @@
     "id": 35,
     "key": "35-ebook",
     "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "short": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
-    "short_description": "A grounded look at AI in social media, covering what works, what wobbles, and what matters in practice.",
+    "short": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
+    "short_description": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
     "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "main_image": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
     "tags": [
@@ -1692,8 +1692,8 @@
     "id": 36,
     "key": "36-ebook",
     "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "short": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
-    "short_description": "A no-hype introduction to AI in game development, built around real applications, limits, and better judgement.",
+    "short": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
+    "short_description": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
     "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "main_image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "tags": [
@@ -1735,6 +1735,226 @@
     ],
     "topic_tokens": [
       "gam"
+    ]
+  },
+  {
+    "id": 37,
+    "key": "37-ebook",
+    "title": "Artificial Intelligence for Small Business",
+    "short": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "short_description": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "tags": [
+      "Business",
+      "Small Business",
+      "Artificial Intelligence",
+      "AI Trends",
+      "Productivity"
+    ],
+    "filter": "Business",
+    "keywords": [
+      "AI for small business",
+      "artificial intelligence for small business",
+      "AI marketing",
+      "AI admin",
+      "customer service AI",
+      "small business productivity",
+      "AI automation",
+      "ChatGPT for business",
+      "plain English AI"
+    ],
+    "buy_url": "https://mybook.to/DcdDU",
+    "buy_target_url": "https://mybook.to/DcdDU",
+    "slug": "artificial-intelligence-for-small-business",
+    "asin": "B0H3FVY6BZ",
+    "pages": 233,
+    "datePublished": "2026-06-14",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "buy_route": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "topic_url": "/catalogue/business/",
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information"
+    ],
+    "title_tokens": [
+      "busi",
+      "small"
+    ],
+    "topic_tokens": [
+      "busi"
+    ]
+  },
+  {
+    "id": 38,
+    "key": "38-ebook",
+    "title": "AI Agents for Everyday Work",
+    "short": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "short_description": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "cover": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "tags": [
+      "Future of Work",
+      "AI Agents",
+      "Automation",
+      "Productivity",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Future of Work",
+    "keywords": [
+      "AI agents",
+      "agentic AI",
+      "digital assistants",
+      "AI automation",
+      "AI at work",
+      "AI productivity",
+      "workflow automation",
+      "everyday AI",
+      "AI helpers"
+    ],
+    "buy_url": "https://mybook.to/xFRG",
+    "buy_target_url": "https://mybook.to/xFRG",
+    "slug": "ai-agents-for-everyday-work",
+    "asin": "B0H3GHYN9Z",
+    "pages": 211,
+    "datePublished": "2026-06-15",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/",
+    "buy_route": "/ebooks/ai-agents-for-everyday-work/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/buy-now",
+    "topic_url": "/catalogue/future-of-work/",
+    "related_slugs": [
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "ai-literacy-for-the-modern-workplace",
+      "artificial-intelligence-for-small-business",
+      "deepfakes-ai-scams-and-synthetic-reality"
+    ],
+    "title_tokens": [
+      "agent",
+      "everyday",
+      "work"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
+    ]
+  },
+  {
+    "id": 39,
+    "key": "39-ebook",
+    "title": "Deepfakes, AI Scams and Synthetic Reality",
+    "short": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "short_description": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "cover": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "main_image": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "tags": [
+      "Cyber Security",
+      "Deepfakes",
+      "Online Safety",
+      "Fraud",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Cyber Security",
+    "keywords": [
+      "deepfakes",
+      "AI scams",
+      "synthetic media",
+      "voice cloning",
+      "AI fraud",
+      "online safety",
+      "digital trust",
+      "fake images",
+      "AI misinformation",
+      "identity fraud"
+    ],
+    "buy_url": "https://mybook.to/epS9MUd",
+    "buy_target_url": "https://mybook.to/epS9MUd",
+    "slug": "deepfakes-ai-scams-and-synthetic-reality",
+    "asin": "B0H3G45CJ5",
+    "pages": 211,
+    "datePublished": "2026-06-21",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+    "buy_route": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "topic_url": "/catalogue/cyber-security/",
+    "related_slugs": [
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "ai-agents-for-everyday-work",
+      "ai-in-aviation-transforming-safety-and-sustainability",
+      "digital-defense-the-role-of-ai-in-modern-warfare"
+    ],
+    "title_tokens": [
+      "deepfake",
+      "real",
+      "scam",
+      "synthetic"
+    ],
+    "topic_tokens": [
+      "cyb",
+      "secur"
+    ]
+  },
+  {
+    "id": 40,
+    "key": "40-ebook",
+    "title": "AI Literacy for the Modern Workplace",
+    "short": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "short_description": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "cover": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "tags": [
+      "Future of Work",
+      "AI Literacy",
+      "Workplace AI",
+      "Management",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Future of Work",
+    "keywords": [
+      "AI literacy",
+      "workplace AI",
+      "AI at work",
+      "AI for managers",
+      "non-technical AI",
+      "AI training",
+      "AI policy",
+      "AI skills",
+      "responsible AI use",
+      "team AI adoption"
+    ],
+    "buy_url": "https://mybook.to/LNC6kpd",
+    "buy_target_url": "https://mybook.to/LNC6kpd",
+    "slug": "ai-literacy-for-the-modern-workplace",
+    "asin": "B0GX39ZKZ6",
+    "pages": 226,
+    "datePublished": "2026-06-22",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/",
+    "buy_route": "/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "topic_url": "/catalogue/future-of-work/",
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "digital-defense-the-role-of-ai-in-modern-warfare",
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking"
+    ],
+    "title_tokens": [
+      "literacy",
+      "modern",
+      "workplace"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
     ]
   }
 ]

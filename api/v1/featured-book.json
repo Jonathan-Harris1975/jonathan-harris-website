@@ -2,64 +2,62 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 21,
+    "iso_week": 23,
     "year": 2026
   },
   "book": {
-    "id": 22,
-    "key": "22-ebook",
-    "title": "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "short": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
-    "short_description": "A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions.",
-    "cover": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-government-enhance-services-webp",
+    "id": 24,
+    "key": "24-ebook",
+    "title": "Digital Defense: The Role of AI in Modern Warfare",
+    "short": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
+    "short_description": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
+    "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
     "tags": [
-      "Government",
+      "Defence",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Government",
+    "filter": "Defence",
     "keywords": [
-      "Government",
-      "The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
+      "Defence",
+      "Digital Defense: The Role of AI in Modern Warfare",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/3TwcUA",
-    "buy_target_url": "https://mybook.to/3TwcUA",
-    "slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information",
-    "asin": "B0DM74CRSD",
-    "pages": 328,
-    "datePublished": "2024-11-05",
-    "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-    "buy_route": "/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
-    "topic_url": "/catalogue/government/",
+    "buy_url": "https://mybook.to/digitaldefense",
+    "buy_target_url": "https://mybook.to/digitaldefense",
+    "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
+    "asin": "B0DM8256SL",
+    "pages": 296,
+    "datePublished": "2024-11-06",
+    "dateModified": "2026-06-01T08:36:42Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
+    "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+    "topic_url": "/catalogue/defence/",
     "related_slugs": [
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "artificial-intelligence-in-construction-building-a-sustainable-future"
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
+      "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
+      "ai-literacy-for-the-modern-workplace",
+      "ai-agents-for-everyday-work"
     ],
     "title_tokens": [
-      "enh",
-      "future",
-      "govern",
-      "inform",
-      "leverag",
-      "safeguard",
-      "service"
+      "defense",
+      "digital",
+      "modern",
+      "role",
+      "warfare"
     ],
     "topic_tokens": [
-      "govern"
+      "def"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now",
-    "midroll_15": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information. A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions. Read more at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/",
-    "midroll_30": "This week's sponsor is The Future of Government: Leveraging AI to Enhance Services and Safeguard Information. A plain-English guide to AI in government, focused on practical use, trade-offs, and sharper questions. It focuses on Government. It runs 328 pages. Topics include Government, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information/buy-now."
+    "headline": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/ or buy on Amazon at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
+    "midroll_15": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare. A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away. Read more at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
+    "midroll_30": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare. A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away. It focuses on Defence. It runs 296 pages. Topics include Defence, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/ or go straight to Amazon at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now."
   }
 }
