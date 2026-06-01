@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence transforms veterinary care with diagnostic tools, predictive health monitoring, and personalized treatments. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning. It looks at where AI is already earning its keep in Veterinary Medicine, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
