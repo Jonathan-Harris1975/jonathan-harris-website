@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence combats climate change with emissions tracking, renewable energy optimization, and predictive environmental modelling. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny. It looks at where AI is already earning its keep in climate and environmental strategy, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
