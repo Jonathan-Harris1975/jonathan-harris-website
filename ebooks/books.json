@@ -48,9 +48,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure.",
-    "summary": "AI is used in Formula 1 for race strategy, simulation, telemetry, predictive analytics, and decisions made under ridiculous time pressure."
+    ]
   },
   {
     "id": 2,
@@ -99,9 +97,7 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ],
-    "description": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning.",
-    "summary": "AI is being used in veterinary medicine for diagnostic support, predictive health monitoring, clinic workflow, and treatment planning."
+    ]
   },
   {
     "id": 3,
@@ -151,9 +147,7 @@
     ],
     "topic_tokens": [
       "energy"
-    ],
-    "description": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration.",
-    "summary": "Artificial intelligence is already being used in smart grids for demand forecasting, grid balancing, fault detection, and renewable integration."
+    ]
   },
   {
     "id": 4,
@@ -202,9 +196,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be.",
-    "summary": "AI is used in logistics for route planning, demand forecasting, warehouse automation, stock movement, and the daily grind of getting things where they need to be."
+    ]
   },
   {
     "id": 5,
@@ -253,9 +245,7 @@
     ],
     "topic_tokens": [
       "law"
-    ],
-    "description": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability.",
-    "summary": "AI is changing legal work through research tools, contract analysis, case review, compliance checks, and uncomfortable questions about accountability."
+    ]
   },
   {
     "id": 6,
@@ -283,16 +273,16 @@
     "asin": "B0DN4GZZQ4",
     "pages": 269,
     "datePublished": "2024-11-14",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/",
     "buy_route": "/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention/buy-now",
     "topic_url": "/catalogue/cyber-security/",
     "related_slugs": [
+      "deepfakes-ai-scams-and-synthetic-reality",
       "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
       "artificial-intelligence-in-industry-a-comprehensive-guide",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
     ],
     "title_tokens": [
       "breach",
@@ -306,9 +296,7 @@
     "topic_tokens": [
       "cyb",
       "secur"
-    ],
-    "description": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise.",
-    "summary": "AI is used in cyber security for threat detection, breach prevention, anomaly spotting, response support, and filtering signal from noise."
+    ]
   },
   {
     "id": 7,
@@ -350,9 +338,7 @@
       "consci",
       "revolution"
     ],
-    "topic_tokens": [],
-    "description": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify.",
-    "summary": "This book traces artificial intelligence from early algorithms to modern systems, with the big claims tested against what the technology can actually justify."
+    "topic_tokens": []
   },
   {
     "id": 8,
@@ -399,9 +385,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option.",
-    "summary": "AI is used in aviation for predictive maintenance, air traffic support, fuel planning, safety monitoring, and the decisions where failure is not a charming option."
+    ]
   },
   {
     "id": 9,
@@ -448,9 +432,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure.",
-    "summary": "AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure."
+    ]
   },
   {
     "id": 10,
@@ -496,9 +478,7 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ],
-    "description": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress.",
-    "summary": "AI is used in pharmaceuticals for drug discovery, trial design, patient matching, treatment personalisation, and the regulatory work behind medical progress."
+    ]
   },
   {
     "id": 11,
@@ -546,9 +526,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches.",
-    "summary": "AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches."
+    ]
   },
   {
     "id": 12,
@@ -598,9 +576,7 @@
     ],
     "topic_tokens": [
       "retail"
-    ],
-    "description": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy.",
-    "summary": "AI is used in retail for recommendations, stock planning, pricing, supply chains, customer service, and the line between useful and creepy."
+    ]
   },
   {
     "id": 13,
@@ -650,9 +626,7 @@
     ],
     "topic_tokens": [
       "manufactur"
-    ],
-    "description": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off.",
-    "summary": "AI is used in manufacturing for predictive maintenance, production planning, quality control, service delivery, and the operational details that decide whether it pays off."
+    ]
   },
   {
     "id": 14,
@@ -698,9 +672,7 @@
     ],
     "topic_tokens": [
       "industry"
-    ],
-    "description": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence.",
-    "summary": "AI is used across industry for automation, analytics, safety, process control, and decisions that still need evidence rather than glossy confidence."
+    ]
   },
   {
     "id": 15,
@@ -746,9 +718,7 @@
     ],
     "topic_tokens": [
       "ethic"
-    ],
-    "description": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing.",
-    "summary": "This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing."
+    ]
   },
   {
     "id": 16,
@@ -796,9 +766,7 @@
     ],
     "topic_tokens": [
       "agriculture"
-    ],
-    "description": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots.",
-    "summary": "AI is used in agriculture for crop monitoring, precision farming, weather risk, yield forecasting, and decisions made with mud on the boots."
+    ]
   },
   {
     "id": 17,
@@ -846,9 +814,7 @@
     ],
     "topic_tokens": [
       "educ"
-    ],
-    "description": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn.",
-    "summary": "AI is used in education for personalised learning, assessment support, classroom tools, admin relief, and the question of what actually helps students learn."
+    ]
   },
   {
     "id": 18,
@@ -896,9 +862,7 @@
     ],
     "topic_tokens": [
       "fin"
-    ],
-    "description": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off.",
-    "summary": "AI is used in banking for fraud detection, credit decisions, risk monitoring, compliance, customer service, and the data problems finance cannot shrug off."
+    ]
   },
   {
     "id": 19,
@@ -945,9 +909,7 @@
     ],
     "topic_tokens": [
       "healthcare"
-    ],
-    "description": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement.",
-    "summary": "AI is used in healthcare for diagnostics, triage, medical imaging, workflow support, and clinical decisions that still demand human judgement."
+    ]
   },
   {
     "id": 20,
@@ -994,9 +956,7 @@
     ],
     "topic_tokens": [
       "construction"
-    ],
-    "description": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites.",
-    "summary": "AI is used in construction for planning, safety monitoring, materials, scheduling, sustainability, and the messy realities of actual building sites."
+    ]
   },
   {
     "id": 21,
@@ -1024,16 +984,16 @@
     "asin": "B0DMQHQTQH",
     "pages": 315,
     "datePublished": "2024-11-11",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/",
     "buy_route": "/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/the-artificial-intelligence-job-shift-navigating-the-future-of-work/buy-now",
     "topic_url": "/catalogue/future-of-work/",
     "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "ai-literacy-for-the-modern-workplace",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
-      "artificial-intelligence-in-construction-building-a-sustainable-future"
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future"
     ],
     "title_tokens": [
       "future",
@@ -1045,9 +1005,7 @@
     "topic_tokens": [
       "future",
       "work"
-    ],
-    "description": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits.",
-    "summary": "AI is changing work through automation, reskilling pressure, job redesign, management decisions, and the awkward question of who benefits."
+    ]
   },
   {
     "id": 22,
@@ -1097,9 +1055,7 @@
     ],
     "topic_tokens": [
       "govern"
-    ],
-    "description": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional.",
-    "summary": "AI is used in government for public services, admin support, security, forecasting, and decisions where accountability cannot be treated as optional."
+    ]
   },
   {
     "id": 23,
@@ -1147,9 +1103,7 @@
     ],
     "topic_tokens": [
       "construction"
-    ],
-    "description": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight.",
-    "summary": "AI is used in smart buildings for energy management, maintenance, sensors, comfort systems, and infrastructure decisions that still need oversight."
+    ]
   },
   {
     "id": 24,
@@ -1177,7 +1131,7 @@
     "asin": "B0DM8256SL",
     "pages": 296,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
     "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
@@ -1185,8 +1139,8 @@
     "related_slugs": [
       "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-literacy-for-the-modern-workplace",
+      "ai-agents-for-everyday-work"
     ],
     "title_tokens": [
       "defense",
@@ -1197,9 +1151,7 @@
     ],
     "topic_tokens": [
       "def"
-    ],
-    "description": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached.",
-    "summary": "AI is used in modern warfare for drones, intelligence, cyber operations, targeting support, and command decisions with consequences attached."
+    ]
   },
   {
     "id": 25,
@@ -1248,9 +1200,7 @@
     ],
     "topic_tokens": [
       "environ"
-    ],
-    "description": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure.",
-    "summary": "AI is used in wildlife conservation for habitat monitoring, species identification, anti-poaching work, field data, and biodiversity protection under pressure."
+    ]
   },
   {
     "id": 26,
@@ -1297,9 +1247,7 @@
     ],
     "topic_tokens": [
       "environ"
-    ],
-    "description": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny.",
-    "summary": "AI is used in climate work for emissions tracking, climate modelling, renewable planning, forecasting, and measurement that has to survive scrutiny."
+    ]
   },
   {
     "id": 27,
@@ -1348,9 +1296,7 @@
     ],
     "topic_tokens": [
       "transport"
-    ],
-    "description": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first.",
-    "summary": "AI is used in railways for predictive maintenance, signalling, scheduling, safety monitoring, and the service realities passengers notice first."
+    ]
   },
   {
     "id": 28,
@@ -1398,9 +1344,7 @@
     ],
     "topic_tokens": [
       "sport"
-    ],
-    "description": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves.",
-    "summary": "AI is used in sport for performance analysis, injury prevention, scouting, fan engagement, and decisions where numbers still meet nerves."
+    ]
   },
   {
     "id": 29,
@@ -1428,7 +1372,7 @@
     "asin": "B0DY672VRB",
     "pages": 336,
     "datePublished": "2025-02-22",
-    "dateModified": "2026-04-18T20:49:01Z",
+    "dateModified": "2026-06-01T08:36:42Z",
     "canonical_url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
     "buy_route": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
     "buy_route_full": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/buy-now",
@@ -1437,7 +1381,7 @@
       "the-ai-music-revolution-creativity-controversy-and-collaboration",
       "digital-defense-the-role-of-ai-in-modern-warfare",
       "the-artificial-intelligence-revolution-from-algorithms-to-consciousness",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+      "ai-literacy-for-the-modern-workplace"
     ],
     "title_tokens": [
       "algorithm",
@@ -1449,9 +1393,7 @@
     ],
     "topic_tokens": [
       "creativ"
-    ],
-    "description": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you.",
-    "summary": "AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you."
+    ]
   },
   {
     "id": 30,
@@ -1499,9 +1441,7 @@
     ],
     "topic_tokens": [
       "creativ"
-    ],
-    "description": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background.",
-    "summary": "AI is used in music for composition, production, mastering, collaboration, and rights questions that refuse to stay politely in the background."
+    ]
   },
   {
     "id": 31,
@@ -1549,9 +1489,7 @@
     ],
     "topic_tokens": [
       "history"
-    ],
-    "description": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence.",
-    "summary": "This book follows the people, breakthroughs, false starts, and hard questions behind artificial intelligence."
+    ]
   },
   {
     "id": 32,
@@ -1603,9 +1541,7 @@
     ],
     "topic_tokens": [
       "ethic"
-    ],
-    "description": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug.",
-    "summary": "AI is used in gambling for personalisation, prediction, behavioural nudges, risk detection, and ethical problems that deserve more than a shrug."
+    ]
   },
   {
     "id": 33,
@@ -1653,9 +1589,7 @@
     ],
     "topic_tokens": [
       "sci"
-    ],
-    "description": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue.",
-    "summary": "AI is used in space exploration for rovers, mission planning, data analysis, autonomy, and decisions made far beyond easy rescue."
+    ]
   },
   {
     "id": 34,
@@ -1702,9 +1636,7 @@
     ],
     "topic_tokens": [
       "media"
-    ],
-    "description": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away.",
-    "summary": "AI is used in journalism for automated reporting, fact-checking, newsroom support, personalisation, and the trust problem no tool can hand-wave away."
+    ]
   },
   {
     "id": 35,
@@ -1754,9 +1686,7 @@
     ],
     "topic_tokens": [
       "media"
-    ],
-    "description": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see.",
-    "summary": "AI shapes social media through recommendations, moderation, ad targeting, privacy trade-offs, and platform incentives most users never see."
+    ]
   },
   {
     "id": 36,
@@ -1805,8 +1735,226 @@
     ],
     "topic_tokens": [
       "gam"
+    ]
+  },
+  {
+    "id": 37,
+    "key": "37-ebook",
+    "title": "Artificial Intelligence for Small Business",
+    "short": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "short_description": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "tags": [
+      "Business",
+      "Small Business",
+      "Artificial Intelligence",
+      "AI Trends",
+      "Productivity"
     ],
-    "description": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play.",
-    "summary": "AI is used in games for NPC behaviour, procedural design, player experience, adaptive systems, and the craft behind believable play."
+    "filter": "Business",
+    "keywords": [
+      "AI for small business",
+      "artificial intelligence for small business",
+      "AI marketing",
+      "AI admin",
+      "customer service AI",
+      "small business productivity",
+      "AI automation",
+      "ChatGPT for business",
+      "plain English AI"
+    ],
+    "buy_url": "https://mybook.to/DcdDU",
+    "buy_target_url": "https://mybook.to/DcdDU",
+    "slug": "artificial-intelligence-for-small-business",
+    "asin": "B0H3FVY6BZ",
+    "pages": 233,
+    "datePublished": "2026-06-14",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "buy_route": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "topic_url": "/catalogue/business/",
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information"
+    ],
+    "title_tokens": [
+      "busi",
+      "small"
+    ],
+    "topic_tokens": [
+      "busi"
+    ]
+  },
+  {
+    "id": 38,
+    "key": "38-ebook",
+    "title": "AI Agents for Everyday Work",
+    "short": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "short_description": "A practical guide to AI agents as controlled digital helpers for everyday work, covering tasks, boundaries, review, privacy and human judgement.",
+    "cover": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-agents-everyday-work-webp",
+    "tags": [
+      "Future of Work",
+      "AI Agents",
+      "Automation",
+      "Productivity",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Future of Work",
+    "keywords": [
+      "AI agents",
+      "agentic AI",
+      "digital assistants",
+      "AI automation",
+      "AI at work",
+      "AI productivity",
+      "workflow automation",
+      "everyday AI",
+      "AI helpers"
+    ],
+    "buy_url": "https://mybook.to/xFRG",
+    "buy_target_url": "https://mybook.to/xFRG",
+    "slug": "ai-agents-for-everyday-work",
+    "asin": "B0H3GHYN9Z",
+    "pages": 211,
+    "datePublished": "2026-06-15",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/",
+    "buy_route": "/ebooks/ai-agents-for-everyday-work/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/buy-now",
+    "topic_url": "/catalogue/future-of-work/",
+    "related_slugs": [
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "ai-literacy-for-the-modern-workplace",
+      "artificial-intelligence-for-small-business",
+      "deepfakes-ai-scams-and-synthetic-reality"
+    ],
+    "title_tokens": [
+      "agent",
+      "everyday",
+      "work"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
+    ]
+  },
+  {
+    "id": 39,
+    "key": "39-ebook",
+    "title": "Deepfakes, AI Scams and Synthetic Reality",
+    "short": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "short_description": "A calm guide to deepfakes, AI scams, voice cloning and synthetic media, with practical verification habits for people and small organisations.",
+    "cover": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "main_image": "https://images.jonathan-harris.online/deepfakes-ai-scams-synthetic-reality-webp",
+    "tags": [
+      "Cyber Security",
+      "Deepfakes",
+      "Online Safety",
+      "Fraud",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Cyber Security",
+    "keywords": [
+      "deepfakes",
+      "AI scams",
+      "synthetic media",
+      "voice cloning",
+      "AI fraud",
+      "online safety",
+      "digital trust",
+      "fake images",
+      "AI misinformation",
+      "identity fraud"
+    ],
+    "buy_url": "https://mybook.to/epS9MUd",
+    "buy_target_url": "https://mybook.to/epS9MUd",
+    "slug": "deepfakes-ai-scams-and-synthetic-reality",
+    "asin": "B0H3G45CJ5",
+    "pages": 211,
+    "datePublished": "2026-06-21",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+    "buy_route": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+    "topic_url": "/catalogue/cyber-security/",
+    "related_slugs": [
+      "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention",
+      "ai-agents-for-everyday-work",
+      "ai-in-aviation-transforming-safety-and-sustainability",
+      "digital-defense-the-role-of-ai-in-modern-warfare"
+    ],
+    "title_tokens": [
+      "deepfake",
+      "real",
+      "scam",
+      "synthetic"
+    ],
+    "topic_tokens": [
+      "cyb",
+      "secur"
+    ]
+  },
+  {
+    "id": 40,
+    "key": "40-ebook",
+    "title": "AI Literacy for the Modern Workplace",
+    "short": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "short_description": "A practical workplace guide to AI literacy for managers, teams and non-technical professionals, covering prompts, policy, risk and judgement.",
+    "cover": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-literacy-modern-workplace-webp",
+    "tags": [
+      "Future of Work",
+      "AI Literacy",
+      "Workplace AI",
+      "Management",
+      "Artificial Intelligence",
+      "AI Trends"
+    ],
+    "filter": "Future of Work",
+    "keywords": [
+      "AI literacy",
+      "workplace AI",
+      "AI at work",
+      "AI for managers",
+      "non-technical AI",
+      "AI training",
+      "AI policy",
+      "AI skills",
+      "responsible AI use",
+      "team AI adoption"
+    ],
+    "buy_url": "https://mybook.to/LNC6kpd",
+    "buy_target_url": "https://mybook.to/LNC6kpd",
+    "slug": "ai-literacy-for-the-modern-workplace",
+    "asin": "B0GX39ZKZ6",
+    "pages": 226,
+    "datePublished": "2026-06-22",
+    "dateModified": "2026-06-01T08:37:12Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/",
+    "buy_route": "/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+    "topic_url": "/catalogue/future-of-work/",
+    "related_slugs": [
+      "ai-agents-for-everyday-work",
+      "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+      "digital-defense-the-role-of-ai-in-modern-warfare",
+      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking"
+    ],
+    "title_tokens": [
+      "literacy",
+      "modern",
+      "workplace"
+    ],
+    "topic_tokens": [
+      "future",
+      "work"
+    ]
   }
 ]

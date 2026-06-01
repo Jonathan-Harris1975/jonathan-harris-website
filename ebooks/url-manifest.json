@@ -1,7 +1,7 @@
 {
-  "generated_utc": "2026-04-18T20:49:01Z",
+  "generated_utc": "2026-06-01T08:37:12Z",
   "base_url": "https://jonathan-harris.online",
-  "ebook_count": 36,
+  "ebook_count": 40,
   "external_crawler_files": {
     "robots": "https://jonathan-harris.online/robots.txt",
     "sitemap": "https://jonathan-harris.online/sitemap.xml",
@@ -965,6 +965,110 @@
         "books.jonathan-harris.online",
         "ebooks.jonathan-harris.online"
       ]
+    },
+    {
+      "slug": "artificial-intelligence-for-small-business",
+      "title": "Artificial Intelligence for Small Business",
+      "canonical": {
+        "path": "/ebooks/artificial-intelligence-for-small-business/",
+        "url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/"
+      },
+      "buy": {
+        "path": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+        "target": "https://mybook.to/DcdDU"
+      },
+      "topic_page": "/catalogue/business/",
+      "legacy_routes": [
+        "/book/artificial-intelligence-for-small-business/",
+        "/book/artificial-intelligence-for-small-business/buy-now",
+        "/ebooks/artificial-intelligence-for-small-business/detail",
+        "/ebooks/artificial-intelligence-for-small-business/detail.html",
+        "/ebooks/artificial-intelligence-for-small-business/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/artificial-intelligence-for-small-business/buy-now",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "ai-agents-for-everyday-work",
+      "title": "AI Agents for Everyday Work",
+      "canonical": {
+        "path": "/ebooks/ai-agents-for-everyday-work/",
+        "url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-agents-for-everyday-work/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-agents-for-everyday-work/buy-now",
+        "target": "https://mybook.to/xFRG"
+      },
+      "topic_page": "/catalogue/future-of-work/",
+      "legacy_routes": [
+        "/book/ai-agents-for-everyday-work/",
+        "/book/ai-agents-for-everyday-work/buy-now",
+        "/ebooks/ai-agents-for-everyday-work/detail",
+        "/ebooks/ai-agents-for-everyday-work/detail.html",
+        "/ebooks/ai-agents-for-everyday-work/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-agents-for-everyday-work/buy-now",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "deepfakes-ai-scams-and-synthetic-reality",
+      "title": "Deepfakes, AI Scams and Synthetic Reality",
+      "canonical": {
+        "path": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/",
+        "url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/"
+      },
+      "buy": {
+        "path": "/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+        "target": "https://mybook.to/epS9MUd"
+      },
+      "topic_page": "/catalogue/cyber-security/",
+      "legacy_routes": [
+        "/book/deepfakes-ai-scams-and-synthetic-reality/",
+        "/book/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+        "/ebooks/deepfakes-ai-scams-and-synthetic-reality/detail",
+        "/ebooks/deepfakes-ai-scams-and-synthetic-reality/detail.html",
+        "/ebooks/deepfakes-ai-scams-and-synthetic-reality/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/deepfakes-ai-scams-and-synthetic-reality/buy-now",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
+    },
+    {
+      "slug": "ai-literacy-for-the-modern-workplace",
+      "title": "AI Literacy for the Modern Workplace",
+      "canonical": {
+        "path": "/ebooks/ai-literacy-for-the-modern-workplace/",
+        "url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/"
+      },
+      "buy": {
+        "path": "/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+        "full_url": "https://jonathan-harris.online/ebooks/ai-literacy-for-the-modern-workplace/buy-now",
+        "target": "https://mybook.to/LNC6kpd"
+      },
+      "topic_page": "/catalogue/future-of-work/",
+      "legacy_routes": [
+        "/book/ai-literacy-for-the-modern-workplace/",
+        "/book/ai-literacy-for-the-modern-workplace/buy-now",
+        "/ebooks/ai-literacy-for-the-modern-workplace/detail",
+        "/ebooks/ai-literacy-for-the-modern-workplace/detail.html",
+        "/ebooks/ai-literacy-for-the-modern-workplace/details.html"
+      ],
+      "legacy_alias_url": "https://jonathan-harris.online/book/ai-literacy-for-the-modern-workplace/buy-now",
+      "domain_redirect_families": [
+        "books.jonathan-harris.online",
+        "ebooks.jonathan-harris.online"
+      ]
     }
   ],
   "dynamic_routes": [
@@ -973,7 +1077,7 @@
       "title": "AI blog hub",
       "path": "/blog/",
       "loc": "https://jonathan-harris.online/blog/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "blog/index.html",
       "summary": "Weekly AI analysis and editorial archive.",
@@ -995,7 +1099,7 @@
       "title": "AI book comparison guide",
       "path": "/compare/",
       "loc": "https://jonathan-harris.online/compare/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "compare/index.html",
       "summary": "Comparison page for choosing relevant AI books.",
@@ -1006,7 +1110,7 @@
       "title": "AI glossary",
       "path": "/glossary/",
       "loc": "https://jonathan-harris.online/glossary/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "glossary/index.html",
       "summary": "Plain-English AI glossary for answer engines and readers.",
@@ -1017,7 +1121,7 @@
       "title": "AI Edge newsletter",
       "path": "/newsletter/",
       "loc": "https://jonathan-harris.online/newsletter/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "newsletter/index.html",
       "summary": "Newsletter sign-up page for daily AI briefings.",
@@ -1028,7 +1132,7 @@
       "title": "Jonathan Harris biography",
       "path": "/bio/",
       "loc": "https://jonathan-harris.online/bio/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "bio/index.html",
       "summary": "Author profile and ecosystem authority page.",
@@ -1039,7 +1143,7 @@
       "title": "Turing's Torch AI Weekly",
       "path": "/podcast/",
       "loc": "https://jonathan-harris.online/podcast/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "podcast/index.html",
       "summary": "Podcast hub for AI weekly episodes.",
@@ -1050,7 +1154,7 @@
       "title": "Jonathan Harris AI ecosystem",
       "path": "/",
       "loc": "https://jonathan-harris.online/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "index.html",
       "summary": "Homepage for books, podcast, blog, topics and newsletter.",
@@ -1061,7 +1165,7 @@
       "title": "AI topic guides",
       "path": "/topics/",
       "loc": "https://jonathan-harris.online/topics/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "topics/index.html",
       "summary": "Topic-led entry points into the Jonathan Harris AI library.",
@@ -1072,7 +1176,7 @@
       "title": "Podcast transcript archive",
       "path": "/transcripts/",
       "loc": "https://jonathan-harris.online/transcripts/",
-      "lastmod": "2026-04-18",
+      "lastmod": "2026-06-01",
       "source": "repo-html",
       "repo_path": "transcripts/index.html",
       "summary": "Searchable transcript archive for podcast episodes.",
