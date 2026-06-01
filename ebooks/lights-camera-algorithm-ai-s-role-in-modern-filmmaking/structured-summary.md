@@ -2,7 +2,7 @@
 
 ## Summary
 
-Artificial intelligence revolutionizes filmmaking with script analysis, visual effects, and personalized content, streamlining production. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+AI is used in filmmaking for script analysis, editing, visual effects, production planning, and the craft decisions algorithms cannot make for you. It looks at where AI is already earning its keep in filmmaking, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
 
 ## What this book covers
 
