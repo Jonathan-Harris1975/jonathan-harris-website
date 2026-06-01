@@ -2,7 +2,7 @@
 
 ## Summary
 
-A guide to AI in maritime shipping — autonomous vessels, route optimisation, emissions tracking, and how intelligent technology is making global shipping more sustainable. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine.
+AI is used in maritime shipping for route planning, autonomous vessels, port operations, emissions tracking, and fleet decisions under real-world pressure. The focus stays on how AI changes the day-to-day reality of Maritime: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
