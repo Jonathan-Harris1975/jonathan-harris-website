@@ -1,0 +1,38 @@
+{
+  "schema_version": "2026-06-11.website-hive-skills.v1",
+  "repo": "website",
+  "purpose": "Read-only access configuration for the shared HIVE skill pool stored in Cloudflare R2.",
+  "access_mode": "read_only",
+  "allow_direct_execution": false,
+  "allow_llm_direct_access": false,
+  "r2": {
+    "bucket_name": "hive-skills",
+    "public_base_url": "https://pub-da50a6512f164566955a3076a1c795ef.r2.dev",
+    "binding": "HIVE_SKILLS_BUCKET"
+  },
+  "default_manifest": "manifests/website-skills-manifest.json",
+  "recommended_public_reads": [
+    "manifests/website-skills-manifest.json",
+    "index/search-documents.json",
+    "index/capability-map.json",
+    "index/repo-map.json",
+    "index/reference-prefix-map.json",
+    "index/r2-object-layout.json"
+  ],
+  "same_origin_proxy": {
+    "enabled": true,
+    "endpoint": "/api/hive-skills/",
+    "examples": [
+      "/api/hive-skills/manifests/website-skills-manifest.json",
+      "/api/hive-skills/index/search-documents.json",
+      "/api/hive-skills/skills/S201_web-perf.json"
+    ]
+  },
+  "security_notes": [
+    "The website may read approved JSON descriptors and indexes only.",
+    "The website must not execute skills directly.",
+    "Reasoning, model routing, Vectorize search, repo writes, deployment actions and R2 writes belong behind HIVE or backend services.",
+    "Do not expose OpenRouter, Cloudflare write tokens, GitHub tokens, Koyeb tokens or Vectorize tokens to browser code."
+  ],
+  "updated_at_utc": "2026-06-11T00:00:00Z"
+}
