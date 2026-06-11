@@ -25,3 +25,13 @@ compatibility_date = "2024-09-23"
 [[r2_buckets]]
   binding     = "BLOG_IMAGES_BUCKET"    # functions/blog/images/[[slug]].js
   bucket_name = "blog-images"
+
+[[r2_buckets]]
+  binding     = "HIVE_SKILLS_BUCKET"   # Read-only shared HIVE skills pool for website metadata/API proxy
+  bucket_name = "hive-skills"
+
+[vars]
+  R2_PUBLIC_BASE_URL_HIVE_SKILLS = "https://pub-da50a6512f164566955a3076a1c795ef.r2.dev"
+  R2_BUCKET_HIVE_SKILLS = "hive-skills"
+  HIVE_SKILLS_DEFAULT_MANIFEST = "manifests/website-skills-manifest.json"
+  HIVE_SKILLS_ACCESS_MODE = "read_only"
