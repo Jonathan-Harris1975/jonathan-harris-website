@@ -48,6 +48,23 @@ functions/api/hive-skills/[[path]].js
 docs/hive-shared-skills.md
 ```
 
+
+## Local `.agents` folder policy
+
+The website no longer needs a local `.agents` folder for skill descriptors.
+
+Shared skills are now controlled centrally through the HIVE R2 skill pool. The website should only keep lightweight read-only configuration and the same-origin proxy. This prevents duplicated skill definitions drifting away from the central registry.
+
+Recommended deletion from the website repo after applying this patch:
+
+```text
+.agents/
+scripts/setup-batch-1-skills.sh
+api/hive-skills/
+```
+
+`functions/api/hive-skills/[[path]].js` should be kept because that is the Cloudflare Pages Function endpoint.
+
 ## Safety rule
 
 The website can know what skills exist. HIVE decides what a skill is allowed to do.
