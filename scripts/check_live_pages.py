@@ -6,6 +6,7 @@ import html
 import json
 import re
 import sys
+import time
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,6 +22,8 @@ if str(REPO_ROOT) not in sys.path:
 from scripts.ebook_pipeline import ROOT, SITE_URL, clean_paragraph, load_master  # noqa: E402
 
 DEFAULT_TIMEOUT = 15.0
+DEFAULT_RETRIES = 2
+DEFAULT_RETRY_DELAY_SECONDS = 2.0
 DEFAULT_USER_AGENT = "JonathanHarrisPageSmoke/1.0 (+https://jonathan-harris.online)"
 PAGE_HEADER_ROW = 5
 SCRIPT_RE = re.compile(r"<script\b.*?</script>", re.I | re.S)
@@ -69,32 +72,46 @@ class FetchResult:
 
 
 def fetch_url(url: str, *, timeout: float) -> FetchResult:
-    req = request.Request(
-        url,
-        headers={
-            "User-Agent": DEFAULT_USER_AGENT,
-            "Cache-Control": "no-cache",
-            "Pragma": "no-cache",
-            "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
-        },
-        method="GET",
-    )
-    try:
-        with request.urlopen(req, timeout=timeout) as response:
-            return FetchResult(
-                body=response.read().decode("utf-8", errors="replace"),
-                status_code=getattr(response, "status", None) or response.getcode(),
-                final_url=response.geturl(),
-            )
-    except error.HTTPError as exc:
-        return FetchResult(
-            body=exc.read().decode("utf-8", errors="replace"),
-            status_code=exc.code,
-            final_url=getattr(exc, "url", url),
-            error=f"HTTP {exc.code} for {url}",
+    """Fetch a live URL for CI smoke checks without letting transient network errors crash the gate."""
+    last_error: str | None = None
+
+    for attempt in range(1, DEFAULT_RETRIES + 2):
+        req = request.Request(
+            url,
+            headers={
+                "User-Agent": DEFAULT_USER_AGENT,
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache",
+                "Accept": "text/html,application/xhtml+xml,application/json;q=0.9,*/*;q=0.8",
+            },
+            method="GET",
         )
-    except error.URLError as exc:
-        return FetchResult(body="", status_code=None, final_url=None, error=f"Request failed for {url}: {exc.reason}")
+
+        try:
+            with request.urlopen(req, timeout=timeout) as response:
+                return FetchResult(
+                    body=response.read().decode("utf-8", errors="replace"),
+                    status_code=getattr(response, "status", None) or response.getcode(),
+                    final_url=response.geturl(),
+                )
+        except error.HTTPError as exc:
+            return FetchResult(
+                body=exc.read().decode("utf-8", errors="replace"),
+                status_code=exc.code,
+                final_url=getattr(exc, "url", url),
+                error=f"HTTP {exc.code} for {url}",
+            )
+        except TimeoutError:
+            last_error = f"Request timed out for {url} after {timeout:g}s"
+        except error.URLError as exc:
+            last_error = f"Request failed for {url}: {exc.reason}"
+        except OSError as exc:
+            last_error = f"Request failed for {url}: {exc}"
+
+        if attempt <= DEFAULT_RETRIES:
+            time.sleep(DEFAULT_RETRY_DELAY_SECONDS)
+
+    return FetchResult(body="", status_code=None, final_url=None, error=last_error or f"Request failed for {url}")
 
 
 def normalise_visible_text(raw_html: str) -> str:
