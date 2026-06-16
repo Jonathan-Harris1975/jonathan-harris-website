@@ -2,62 +2,61 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 23,
+    "iso_week": 25,
     "year": 2026
   },
   "book": {
-    "id": 24,
-    "key": "24-ebook",
-    "title": "Digital Defense: The Role of AI in Modern Warfare",
-    "short": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
-    "short_description": "A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away.",
-    "cover": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-digital-defense-modern-webp",
+    "id": 26,
+    "key": "26-ebook",
+    "title": "Climate Intelligence: Harnessing AI for a Greener Future",
+    "short": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
+    "short_description": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
+    "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
     "tags": [
-      "Defence",
+      "Environment",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Defence",
+    "filter": "Environment",
     "keywords": [
-      "Defence",
-      "Digital Defense: The Role of AI in Modern Warfare",
+      "Environment",
+      "Climate Intelligence: Harnessing AI for a Greener Future",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/digitaldefense",
-    "buy_target_url": "https://mybook.to/digitaldefense",
-    "slug": "digital-defense-the-role-of-ai-in-modern-warfare",
-    "asin": "B0DM8256SL",
-    "pages": 296,
+    "buy_url": "https://mybook.to/aKj8Fh",
+    "buy_target_url": "https://mybook.to/aKj8Fh",
+    "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
+    "asin": "B0DM72JZ44",
+    "pages": 338,
     "datePublished": "2024-11-06",
-    "dateModified": "2026-06-01T08:36:42Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-    "buy_route": "/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
-    "topic_url": "/catalogue/defence/",
+    "dateModified": "2026-04-18T20:49:01Z",
+    "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
+    "buy_route": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+    "topic_url": "/catalogue/environment/",
     "related_slugs": [
-      "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-      "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
-      "ai-literacy-for-the-modern-workplace",
-      "ai-agents-for-everyday-work"
+      "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
+      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends"
     ],
     "title_tokens": [
-      "defense",
-      "digital",
-      "modern",
-      "role",
-      "warfare"
+      "climate",
+      "future",
+      "green",
+      "harness"
     ],
     "topic_tokens": [
-      "def"
+      "environ"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/ or buy on Amazon at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now",
-    "midroll_15": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare. A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away. Read more at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/",
-    "midroll_30": "This week's sponsor is Digital Defense: The Role of AI in Modern Warfare. A sober guide to drones, intelligence, cyber operations, autonomy, and the command risks that military AI cannot wish away. It focuses on Defence. It runs 296 pages. Topics include Defence, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/ or go straight to Amazon at https://jonathan-harris.online/ebooks/digital-defense-the-role-of-ai-in-modern-warfare/buy-now."
+    "headline": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
+    "midroll_15": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future. A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss. Read more at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
+    "midroll_30": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future. A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss. It focuses on Environment. It runs 338 pages. Topics include Environment, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now."
   }
 }
