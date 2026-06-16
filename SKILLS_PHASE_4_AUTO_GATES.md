@@ -1,3 +1,7 @@
+> **Document status:** Historical implementation record  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Skills.sh Phase 4 Autonomous Gates
 
 Phase 4 applies the remaining safe Lane 2 skills using automated fail-closed gates.

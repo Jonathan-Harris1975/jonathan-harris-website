@@ -1,3 +1,7 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Lane 1 autonomous skills setup
 
 This repository has been prepared for the full Lane 1 skills set from the Skills.sh ecosystem plan.

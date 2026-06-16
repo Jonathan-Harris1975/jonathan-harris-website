@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "status": "healthy",
+  "service": "WEBSITE",
+  "version": "2026.06.16",
+  "deployment": "cloudflare-pages"
+}

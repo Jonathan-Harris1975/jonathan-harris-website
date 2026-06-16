@@ -1,4 +1,14 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Website Audit Workflow Fix v12
+
+## 2026.06.16
+
+- Added a static production health contract at `/health.json`.
+- Added health validation to the governed build pipeline.
+- Added production-readiness CI and refreshed operational documentation.
 
 ## Fixed
 - Added `callback_token` as an optional workflow input for Koyeb-triggered audit runs.

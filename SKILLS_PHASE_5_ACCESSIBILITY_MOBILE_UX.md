@@ -1,3 +1,7 @@
+> **Document status:** Historical implementation record  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Phase 5C Accessibility + Mobile UX
 
 The Mobile UX hard-gate audit now includes accessibility evidence alongside rendered viewport, screenshot, navigation, CTA, typography and overflow checks.

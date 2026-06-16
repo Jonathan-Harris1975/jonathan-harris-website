@@ -1,3 +1,7 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Skills.sh Batch 1 — Search visibility baseline
 
 Batch 1 configures the report-only Lane 1 search visibility baseline for the Jonathan Harris ecosystem.

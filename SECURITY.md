@@ -1,21 +1,10 @@
-# Security Policy
+# Website security policy
 
-## Supported Versions
+**Status:** Production-controlled  
+**Last reviewed:** 16 June 2026
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+The site is static, but its build and publishing chain includes third-party scripts, forms, analytics, remote images, Cloudflare Pages Functions and deployment webhooks. Security controls therefore focus on content integrity, strict build validation, CSP and browser headers, dependency governance, secret isolation and post-deploy verification.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+Do not commit API keys, webhook secrets or Cloudflare credentials. Keep deployment credentials in GitHub or Cloudflare encrypted settings. Any CSP expansion must be tied to a documented vendor in `docs/third-party-dependency-matrix.md`.
 
-## Reporting a Vulnerability
-
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Report suspected content injection, redirect abuse, exposed credentials or compromised deployment behaviour privately to the repository owner.
