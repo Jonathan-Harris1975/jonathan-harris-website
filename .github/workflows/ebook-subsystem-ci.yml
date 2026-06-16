@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
@@ -31,6 +31,9 @@ jobs:
           find . -type d -name '__pycache__' -prune -exec rm -rf {} +
           find . -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete
 
+      - name: Run post-deploy notification unit tests
+        run: python -m unittest scripts.test_post_deploy_notify
+
       - name: Run build pipeline
         run: bash build.sh
 
@@ -40,10 +43,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
@@ -67,6 +70,12 @@ jobs:
       - name: Verify live redirect chains
         run: python scripts/maintenance/check_redirect_chains.py
 
-      - name: Notify post-deploy success webhook
+      - name: Notify post-deploy integrations
         if: success()
+        timeout-minutes: 5
+        env:
+          POST_DEPLOY_WEBHOOK_URL: ${{ secrets.POST_DEPLOY_WEBHOOK_URL }}
+          CLOUDFLARE_PURGE_ENDPOINT_URL: ${{ secrets.CLOUDFLARE_PURGE_ENDPOINT_URL }}
+          CLOUDFLARE_PURGE_SHARED_SECRET: ${{ secrets.CLOUDFLARE_PURGE_SHARED_SECRET }}
+          CLOUDFLARE_PURGE_HOSTS: ${{ vars.CLOUDFLARE_PURGE_HOSTS }}
         run: python scripts/post_deploy_notify.py
