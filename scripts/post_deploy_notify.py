@@ -22,7 +22,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-DEFAULT_WEBHOOK_URL = "https://hooks.jonathan-harris.online/b9gwu0nlgc751d"
+DEFAULT_WEBHOOK_URL = ""
 DEFAULT_TIMEOUT_SECONDS = 15.0
 DEFAULT_MAX_ATTEMPTS = 5
 DEFAULT_INITIAL_BACKOFF_SECONDS = 1.0
@@ -74,9 +74,9 @@ def parse_args() -> argparse.Namespace:
         "--webhook-url",
         default=getenv_or_default(POST_DEPLOY_WEBHOOK_URL_ENV, DEFAULT_WEBHOOK_URL),
         help=(
-            "Legacy post-deploy webhook destination. "
-            f"Defaults to {POST_DEPLOY_WEBHOOK_URL_ENV} when set, otherwise the production hook. "
-            "Pass an empty string to skip the legacy webhook."
+            "Optional legacy post-deploy webhook destination. "
+            f"Defaults to {POST_DEPLOY_WEBHOOK_URL_ENV} when set; otherwise delivery is skipped. "
+            "No webhook endpoint is embedded in the repository."
         ),
     )
     parser.add_argument(
