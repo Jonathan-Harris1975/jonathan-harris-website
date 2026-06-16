@@ -1,0 +1,30 @@
+name: Production readiness
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - run: python scripts/check_health_contract.py
+      - run: bash build.sh
+      - name: Reject committed secrets
+        run: |
+          ! grep -RIE --exclude-dir=.git --exclude='*.xlsm' --exclude='*.xlsx' \
+            '(api[_-]?key|secret[_-]?access[_-]?key|bearer[_-]?token)\s*[:=]\s*[A-Za-z0-9_./+-]{20,}' .
