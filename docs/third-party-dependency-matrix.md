@@ -1,3 +1,7 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Third-party dependency matrix
 
 This site depends on a small set of external services that sit outside the repository boundary. This document is the governed reference for what they do, which pages rely on them, and what happens when they wobble.

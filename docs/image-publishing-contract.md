@@ -1,3 +1,7 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # Image publishing contract
 
 The live site intentionally serves logo and ebook cover assets from `https://images.jonathan-harris.online`. The repository does not version those binaries locally, so the URL contract has to stay tight.

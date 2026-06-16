@@ -1,3 +1,7 @@
+> **Document status:** Production reference  
+> **Last reviewed:** 16 June 2026  
+> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+
 # HIVE shared skills access for the website
 
 The website has read-only access to the shared HIVE skill pool stored in Cloudflare R2.
