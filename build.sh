@@ -4,7 +4,13 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_ROOT"
 
-python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
+if ! python3 - <<'PYDEP'
+import openpyxl
+raise SystemExit(0 if openpyxl.__version__ == "3.1.5" else 1)
+PYDEP
+then
+  python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
+fi
 
 DEFAULT_WORKBOOK="$REPO_ROOT/jonathan-harris-site-url-inventory-remediated-release-ready.xlsm"
 if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then

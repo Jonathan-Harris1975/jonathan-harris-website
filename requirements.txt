@@ -1,2 +1,2 @@
-# Pinned during March 2026 enterprise remediation pass
-openpyxl>=3.1.0,<4.0.0
+# Pinned production build dependency
+openpyxl==3.1.5

@@ -41,3 +41,7 @@ The governed workbook defaults to `jonathan-harris-site-url-inventory-remediated
 5. Allow the post-deploy workflow to verify live crawlers, pages, APIs and redirect chains.
 
 See [`SECURITY.md`](SECURITY.md), [`docs/OPERATIONS.md`](docs/OPERATIONS.md), [`docs/CRAWLER-GOVERNANCE.md`](docs/CRAWLER-GOVERNANCE.md) and [`docs/image-publishing-contract.md`](docs/image-publishing-contract.md).
+
+## Deterministic production build
+
+The Cloudflare Pages build uses `bash build.sh`. The only Python dependency is pinned in `requirements.txt`; the build reuses the exact installed version when available and installs it otherwise. This keeps local, CI and Pages builds aligned without unnecessary network work.
