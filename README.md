@@ -21,7 +21,7 @@ This repository is the governed static source for `https://jonathan-harris.onlin
 - **Output directory:** `.`
 - **Health:** `GET /health.json`
 
-The build validates the static health contract, ebook generation, route integrity, redirect synchronisation, crawler assets, images and release rules.
+The build validates the static health contract, ebook generation, route integrity, redirect synchronisation, shared header/footer injection, visible-header and bounded-spacing layout rules, crawler assets, images and release rules.
 
 ## Local release verification
 
@@ -40,7 +40,7 @@ The governed workbook defaults to `jonathan-harris-site-url-inventory-remediated
 4. Merge to `main` or `master` for Cloudflare Pages deployment.
 5. Allow the post-deploy workflow to verify live crawlers, pages, APIs and redirect chains.
 
-See [`SECURITY.md`](SECURITY.md), [`docs/OPERATIONS.md`](docs/OPERATIONS.md), [`docs/CRAWLER-GOVERNANCE.md`](docs/CRAWLER-GOVERNANCE.md) and [`docs/image-publishing-contract.md`](docs/image-publishing-contract.md).
+See [`SECURITY.md`](SECURITY.md), [`docs/OPERATIONS.md`](docs/OPERATIONS.md), [`docs/CRAWLER-GOVERNANCE.md`](docs/CRAWLER-GOVERNANCE.md), [`docs/SHARED-CHROME-LAYOUT.md`](docs/SHARED-CHROME-LAYOUT.md) and [`docs/image-publishing-contract.md`](docs/image-publishing-contract.md).
 
 ## Deterministic production build
 

@@ -2,6 +2,16 @@
 > **Last reviewed:** 16 June 2026  
 > **Operational authority:** Current repository README, SECURITY policy and operations guide.
 
+# Shared Page Chrome Repair v14
+
+## 2026.06.18
+
+- Restored the canonical desktop-navigation class across generated eBook pages.
+- Made the shared sticky header visible and interactive from initial page load.
+- Removed obsolete fixed-header compensation that created large empty bands above hero and main content.
+- Added a build gate for canonical header/footer presence, visibility precedence and bounded top spacing.
+- Documented the shared page-chrome contract and troubleshooting procedure.
+
 # Website CI Notification Fix v13
 
 ## 2026.06.16
