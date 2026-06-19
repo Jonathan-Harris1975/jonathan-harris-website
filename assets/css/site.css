@@ -1170,3 +1170,57 @@ iframe,embed,object{max-width:100%;}
     width:100%;
   }
 }
+
+/* JH-SHARED-CHROME-VISIBILITY-CONTRACT
+   The shared header is sticky and always visible. Historical hero-reveal rules
+   remain above for compatibility, but must never hide the primary navigation or
+   reserve fixed-header compensation space. */
+.jh-header,
+.jh-header.jh-header--hero-mode,
+.jh-header.jh-header--hero-mode:not(.is-visible),
+html.js-enabled .jh-header:not(.is-visible){
+  opacity:1!important;
+  pointer-events:auto!important;
+  transform:none!important;
+  visibility:visible!important;
+}
+.jh-header{
+  position:sticky!important;
+  top:0!important;
+}
+.site-footer{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+body.page-home .hero--home,
+body.page-bio .hero,
+body.page-newsletter .hero--newsletter,
+body.page-topics .hero,
+body.page-compare .hero,
+body.page-contact .hero,
+body.page-glossary .hero{
+  padding-top:52px!important;
+}
+body:not(.home):not(.jh-no-hero-page) main.wrap:first-of-type,
+body:not(.home):not(.jh-no-hero-page)>main:not([class]){
+  padding-top:36px!important;
+}
+body.page-topics #main{
+  margin-top:0!important;
+}
+@media (max-width:768px){
+  body.page-home .hero--home,
+  body.page-bio .hero,
+  body.page-newsletter .hero--newsletter,
+  body.page-topics .hero,
+  body.page-compare .hero,
+  body.page-contact .hero,
+  body.page-glossary .hero{
+    padding-top:38px!important;
+  }
+  body:not(.home):not(.jh-no-hero-page) main.wrap:first-of-type,
+  body:not(.home):not(.jh-no-hero-page)>main:not([class]){
+    padding-top:24px!important;
+  }
+}
