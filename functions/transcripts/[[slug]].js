@@ -3,7 +3,7 @@ const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.onli
 
 function slugPartsFromParams(params) { const v = Array.isArray(params.slug) ? params.slug : [params.slug]; return v.filter(Boolean); }
 function escapeHtml(v="") { return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
-function cleanText(v="") { return String(v||"").replace(/<!\[CDATA\[|\]\]>/g,"").replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&amp;/gi,"&").replace(/&quot;/gi,'"').replace(/&#39;|&#x27;/gi,"'").replace(/\s+/g," ").trim(); }
+function cleanText(v="") { return String(v||"").replace(/<!\[CDATA\[|\]\]>/g,"").replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&quot;/gi,'"').replace(/&#39;|&#x27;/gi,"'").replace(/&amp;/gi,"&").replace(/\s+/g," ").trim(); }
 function firstNonEmpty(...values) { for (const value of values) { const text=cleanText(value); if(text) return text; } return ""; }
 function slugify(v="") { return cleanText(v).toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,100); }
 function tagValue(xml,name){const escaped=name.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"),m=String(xml).match(new RegExp(`<${escaped}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${escaped}>`,`i`));return cleanText(m?.[1]||"")}
