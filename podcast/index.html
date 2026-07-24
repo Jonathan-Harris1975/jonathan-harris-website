@@ -122,6 +122,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="card answer-first" aria-labelledby="podcast-answer-first">
   <h2 id="podcast-answer-first">What is Turing’s Torch: AI Weekly?</h2>
   <p>Turing’s Torch: AI Weekly is Jonathan Harris’s no-hype artificial intelligence podcast. Each episode turns the week’s AI news into clear context for readers, business owners, creators, and anyone who wants the practical version rather than the circus version.</p>
+<p class="podcast-hero-latest"><strong>Latest:</strong> <span data-latest-episode-title>loading current episode…</span> <a data-latest-episode-link href="/podcast/">Listen now</a>.</p>
 </section>
 <section class="grid">
 <article class="card podcast-card">
@@ -148,11 +149,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <section class="card podcast-card u-s21" aria-label="Podcast player">
-<h2>Podcast Player</h2>
-<p class="muted">Listen to recent episodes here.</p>
+<h2>Latest episode</h2>
+<p class="podcast-latest-title"><strong data-latest-episode-title>Loading the latest Turing’s Torch episode…</strong></p>
+<p class="muted" data-latest-episode-teaser>The current title and one-line briefing are pulled from the live podcast RSS feed.</p>
+<div class="actions podcast-latest-actions">
+<a class="button" data-latest-episode-link href="/podcast/">Listen now</a>
+<a class="button secondary" data-latest-transcript href="/transcripts/" hidden>Read transcript</a>
+</div>
+<audio class="podcast-native-audio" data-latest-audio controls preload="none" hidden></audio>
+<div class="responsive-media podcast-video" data-latest-video hidden></div>
+<p class="muted">The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.</p>
+<div class="responsive-media podcast-spotify-fallback">
+<iframe title="Turing's Torch on Spotify" src="https://open.spotify.com/embed/show/4NluRPjuAIGK59vVf7GcoF" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+</div>
+<details class="podcast-archive-widget"><summary>Browse the extended episode player</summary>
 <!-- Elfsight Podcast Player | Podcast Player -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>
+</details>
 </section>
 
 <section class="card podcast-card u-s21" aria-label="Transcript archive">
@@ -171,7 +185,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <a class="footer-brand" href="/">Jonathan Harris</a>
 <p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and a daily weekday newsletter built for readers who prefer signal over noise.</p>
 <div aria-label="Core site areas" class="footer-badges">
-<a href="/ebooks/">36 eBooks</a>
+<a href="/ebooks/">40 eBooks</a>
 <a href="/podcast/">Weekly podcast</a>
 <a href="/newsletter/">Daily AI newsletter</a>
 </div>
@@ -238,6 +252,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="footer-meta">© 2026 Jonathan Harris. All rights reserved.</div>
 </div>
 </footer>
+<script defer="" src="/assets/js/podcast-latest.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
