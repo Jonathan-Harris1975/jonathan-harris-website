@@ -265,13 +265,23 @@ function toBlogManifest(xmlText, request) {
 }
 
 async function fetchBlogFeedManifest(request, feedUrl = DEFAULT_BLOG_RSS_URL) {
-  const response = await fetch(feedUrl, {
+  const sourceUrl = new URL(feedUrl);
+  // The weekly publisher updates this R2-backed object immediately before it
+  // requests a website rebuild. Use a minute-bucket cache buster so Pages never
+  // hydrates the manifest from an older CDN edge object while still avoiding a
+  // unique origin request for every visitor.
+  sourceUrl.searchParams.set("_jh_feed_bust", String(Math.floor(Date.now() / 60000)));
+
+  const response = await fetch(sourceUrl.toString(), {
+    cache: "no-store",
     headers: {
       Accept: "application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8",
+      "Cache-Control": "no-cache, no-store, max-age=0",
+      Pragma: "no-cache",
     },
     cf: {
-      cacheTtl: 300,
-      cacheEverything: true,
+      cacheTtl: 0,
+      cacheEverything: false,
     },
   });
 
