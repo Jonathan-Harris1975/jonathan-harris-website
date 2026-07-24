@@ -79,6 +79,19 @@ function normaliseUrl(value = "", request) {
   }
 }
 
+function youtubeVideoId(value = "") {
+  const text = String(value || "");
+  const patterns = [
+    /(?:youtube\.com\/watch\?[^\s"'<>]*v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{6,})/i,
+    /<yt:videoId[^>]*>([^<]+)<\/yt:videoId>/i,
+  ];
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) return match[1].trim();
+  }
+  return "";
+}
+
 function parseEpisodesFromFeed(xml = "", request) {
   const itemMatches = String(xml || "").match(/<item>[\s\S]*?<\/item>/gi) || [];
   return itemMatches.map((item) => {
@@ -102,6 +115,7 @@ function parseEpisodesFromFeed(xml = "", request) {
       transcriptUrl,
       audioUrl,
       imageUrl,
+      youtubeVideoId: youtubeVideoId(item),
       slug: slugify(link ? new URL(link).pathname.split("/").filter(Boolean).pop() : title),
     };
   });
@@ -138,16 +152,33 @@ function deriveTakeaways(episode) {
     `What changed: ${summary}`,
     "Why it matters: the episode separates useful deployment signals from vendor fireworks and vague future talk.",
     "What to watch: cost, governance, data quality, security, labour impact and whether the claim survives real-world use.",
+    "Who should care: teams making adoption, purchasing, policy or workflow decisions can use the episode as a reality check.",
     "Where to go next: use the transcript, topic guides and related books to follow the practical thread.",
-  ].slice(0, 4);
+  ].slice(0, 5);
 }
 
 async function fetchFeed(context) {
   const configured = context.env?.PODCAST_RSS_FEED_URL || context.env?.R2_PUBLIC_BASE_URL_PODCAST_RSS || DEFAULT_PODCAST_FEED_URL;
   const feedUrl = String(configured || "").endsWith(".xml") ? configured : `${String(configured || "").replace(/\/$/, "")}/turing-torch.xml`;
-  const response = await fetch(feedUrl, { headers: { Accept: "application/rss+xml, application/xml, text/xml" } });
-  if (!response.ok) throw new Error(`Podcast feed fetch failed: ${response.status}`);
-  return { feedUrl, xml: await response.text() };
+  const attempts = Math.max(1, Number(context.env?.PODCAST_RSS_RETRY_ATTEMPTS || 4));
+  let lastError = null;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    try {
+      const response = await fetch(feedUrl, { headers: { Accept: "application/rss+xml, application/xml, text/xml" }, signal: controller.signal });
+      if (!response.ok) throw new Error(`Podcast feed fetch failed: ${response.status}`);
+      const xml = await response.text();
+      if (!/<item/i.test(xml)) throw new Error("Podcast feed returned no items");
+      return { feedUrl, xml };
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, 400 * (2 ** (attempt - 1))));
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+  throw lastError || new Error("Podcast feed fetch failed");
 }
 
 function matchEpisode(episodes, slug, request) {
@@ -261,8 +292,17 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 <a class="button secondary" href="/ebooks/">Related Jonathan Harris books</a>
 <a class="button secondary" href="/newsletter/">Join the newsletter</a>
 </nav>
+${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : ""}
+<h2>Share this episode</h2>
+<nav class="share-links" aria-label="Share episode">
+<a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(canonical)}&text=${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer">Share on X</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonical)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonical)}" target="_blank" rel="noopener noreferrer">Facebook</a>
+<button type="button" data-copy-url="${escapeHtml(canonical)}">Copy link</button>
+</nav>
 </div></section>
 </main>
+<script defer src="/assets/js/share.min.js"></script>
 <script defer src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>`;
