@@ -40,7 +40,7 @@ function stripTags(xml = "") {
 }
 
 function tagValue(xml = "", tagName = "") {
-  const escaped = tagName.replace(/[.*+?^${}()|[\]\\/-:]/g, "\\$&");
+  const escaped = tagName.replace(/[.*+?^${}()|[\]\\/\-:]/g, "\\$&");
   const re = new RegExp(`<${escaped}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${escaped}>`, "i");
   return stripTags(xml.match(re)?.[1] || "");
 }
