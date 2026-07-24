@@ -1578,6 +1578,139 @@
       "entity": "weekly AI briefing"
     }
   ],
-  "podcast_episodes": [],
+  "podcast_episodes": [
+    {
+      "family": "podcast-episode",
+      "title": "Ai Accountability Costs And Local Control",
+      "path": "/podcast/episodes/ai-accountability-costs-and-local-control/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/ai-accountability-costs-and-local-control/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Ai Safety In Finance Robot Integration Multilingual Models",
+      "path": "/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Artificial Intelligence Weekly",
+      "path": "/podcast/episodes/artificial-intelligence-weekly/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/artificial-intelligence-weekly/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Navigating Ais Future Balancing Innovation And Human Needs",
+      "path": "/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Navigating The Future Ai Climate Change And The Path Ahead",
+      "path": "/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Openais Four Day Week Ai Governance And Memory Problems",
+      "path": "/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Ai Weekly 2026 03 06",
+      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-06/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-06/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Ai Weekly 2026 03 13",
+      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-13/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-13/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Ai Weekly 2026 03 20",
+      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-20/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-20/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Ai Weekly 2026 03 27",
+      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-27/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Ai Weekly 2026 04 24",
+      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-04-24/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-04-24/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    },
+    {
+      "family": "podcast-episode",
+      "title": "Turings Torch Unpacking Ais Promise And Pitfalls",
+      "path": "/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
+      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
+      "lastmod": "2026-06-01",
+      "source": "data/podcast-route-registry.json",
+      "repo_path": "",
+      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+      "entity": "Turing's Torch AI Weekly episode"
+    }
+  ],
   "transcripts": []
 }

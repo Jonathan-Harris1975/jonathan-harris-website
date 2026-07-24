@@ -21,7 +21,11 @@ fi
 # outside this static website repository. The podcast page uses the embedded
 # player for previous episodes, so Pages builds must not collect podcast data.
 if command -v node >/dev/null 2>&1; then
-  node scripts/generate-blog-from-rss.mjs || echo "WARN: Blog RSS snapshot sync skipped; continuing with the committed fallback."
+  node scripts/generate-blog-from-rss.mjs || echo "WARN: Blog RSS snapshot sync exhausted retries; validating the committed fallback next."
+fi
+python3 scripts/check_blog_freshness.py
+if [[ -n "${AMAZON_BOOK_SIGNALS_SOURCE:-}" ]]; then
+  python3 scripts/refresh_amazon_book_signals.py
 fi
 
 python3 scripts/check_health_contract.py
