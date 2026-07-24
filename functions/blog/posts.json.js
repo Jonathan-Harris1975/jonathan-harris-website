@@ -14,7 +14,7 @@ export async function onRequest(context) {
         status: 200,
         headers: {
           "Content-Type": "application/json; charset=utf-8",
-          "Cache-Control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+          "Cache-Control": "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
           "X-Blog-Manifest-Source": "rss",
         },
       });
@@ -35,7 +35,7 @@ export async function onRequest(context) {
     status: 200,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
-      "Cache-Control": "public, max-age=300, s-maxage=300, stale-while-revalidate=86400",
+      "Cache-Control": "public, max-age=60, s-maxage=60, stale-while-revalidate=300",
       "X-Blog-Manifest-Source": "snapshot",
     },
   });
