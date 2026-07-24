@@ -34,6 +34,7 @@ CRAWLER_CHECKSUMS_PATH = ROOT / "config" / "crawler-checksums.json"
 CRAWLER_SNAPSHOTS_DIR = ROOT / "config" / "crawler-snapshots"
 DYNAMIC_ROUTE_MANIFEST_PATH = DATA_DIR / "dynamic-route-manifest.json"
 SEARCH_VISIBILITY_SURFACES_PATH = DATA_DIR / "search-visibility-surfaces.json"
+AMAZON_BOOK_SIGNALS_PATH = DATA_DIR / "amazon-book-signals.json"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -821,9 +822,132 @@ def build_website_schema() -> Dict[str, Any]:
 
 
 
+_AMAZON_SIGNALS_CACHE: Dict[str, Any] | None = None
+
+
+def load_amazon_book_signals() -> Dict[str, Any]:
+    global _AMAZON_SIGNALS_CACHE
+    if _AMAZON_SIGNALS_CACHE is not None:
+        return _AMAZON_SIGNALS_CACHE
+    try:
+        payload = json.loads(AMAZON_BOOK_SIGNALS_PATH.read_text(encoding="utf-8"))
+        books = payload.get("books", {}) if isinstance(payload, dict) else {}
+        _AMAZON_SIGNALS_CACHE = books if isinstance(books, dict) else {}
+    except Exception:
+        _AMAZON_SIGNALS_CACHE = {}
+    return _AMAZON_SIGNALS_CACHE
+
+
+def amazon_signal_for(book: Dict[str, Any]) -> Dict[str, Any]:
+    signals = load_amazon_book_signals()
+    asin = clean_paragraph(book.get("asin", "")).upper()
+    slug = clean_paragraph(book.get("slug", ""))
+    candidate = signals.get(asin) or signals.get(slug) or {}
+    if not isinstance(candidate, dict):
+        return {}
+    if not clean_paragraph(candidate.get("source_url", "")) or not clean_paragraph(candidate.get("checked_at", "")):
+        return {}
+    return candidate
+
+
+def render_book_market_signal(book: Dict[str, Any]) -> str:
+    signal = amazon_signal_for(book)
+    if not signal:
+        return '<p class="book-market-signal muted">Current Kindle price and ratings are checked on Amazon at the buy step.</p>'
+    parts: List[str] = []
+    rating = signal.get("rating")
+    count = signal.get("rating_count")
+    price = clean_paragraph(signal.get("kindle_price", ""))
+    if rating is not None and count is not None:
+        parts.append(f'<strong>★ {float(rating):.1f}</strong> ({int(count):,} ratings)')
+    if price:
+        parts.append(f'<strong>{html.escape(price)}</strong> on Kindle')
+    if not parts:
+        return '<p class="book-market-signal muted">Current Kindle price and ratings are checked on Amazon at the buy step.</p>'
+    checked = clean_paragraph(signal.get("checked_at", ""))[:10]
+    joined = " · ".join(parts)
+    return f'<p class="book-market-signal">{joined} <span class="muted">Last verified {html.escape(checked)}; Amazon pricing may vary.</span></p>'
+
+
+def render_inline_newsletter_form(
+    source: str,
+    *,
+    next_path: str = "/downloads/ai-glossary-cheat-sheet/",
+    cta: str = "Join and get the free glossary cheat sheet",
+) -> str:
+    return f'''<div class="inline-newsletter" data-newsletter-shell>
+  <h3>Keep the useful bits</h3>
+  <p>Get the weekday AI briefing plus the free plain-English AI glossary cheat sheet.</p>
+  <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
+    <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com"/></label>
+    <input type="hidden" name="source" value="{html.escape(source)}"/>
+    <input type="hidden" name="next" value="{html.escape(next_path)}"/>
+    <span class="newsletter-honeypot" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"/></label></span>
+    <button class="button" type="submit">{html.escape(cta)}</button>
+    <p class="subtle" data-newsletter-status hidden aria-live="polite"></p>
+  </form>
+  <p class="newsletter-fallback-copy"><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Hosted sign-up fallback</a></p>
+</div>'''
+
+
+def render_book_bundle_links(book: Dict[str, Any]) -> str:
+    try:
+        payload = json.loads((DATA_DIR / "ebook-bundles.json").read_text(encoding="utf-8"))
+        bundles = payload.get("bundles", []) if isinstance(payload, dict) else []
+    except Exception:
+        bundles = []
+    links = []
+    for bundle in bundles if isinstance(bundles, list) else []:
+        if not isinstance(bundle, dict) or book.get("slug") not in bundle.get("books", []):
+            continue
+        slug = clean_paragraph(bundle.get("slug", ""))
+        title = clean_paragraph(bundle.get("title", ""))
+        if slug and title:
+            links.append(f'<a class="button secondary" href="/bundles/{html.escape(slug)}/">Reading path: {html.escape(title)}</a>')
+    return "".join(links)
+
+
+def book_preview_path(book: Dict[str, Any]) -> str:
+    return f"/ebooks/{book['slug']}/sample/"
+
+
+def render_book_sample_page(book: Dict[str, Any]) -> str:
+    canonical = f"{SITE_URL}{book_preview_path(book)}"
+    title = html.escape(book["title"])
+    learn = "".join(f"<li>{html.escape(item)}</li>" for item in book.get("what_youll_learn", [])[:4])
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": f"Free preview: {book['title']}",
+        "url": canonical,
+        "description": f"A governed preview companion for {book['title']}.",
+        "isPartOf": {
+            "@type": "Book",
+            "name": book["title"],
+            "url": book["canonical_url"],
+        },
+        "author": {"@type": "Person", "name": book["author"], "url": f"{SITE_URL}/bio/"},
+        "inLanguage": "en-GB",
+    }
+    header = render_header()
+    footer = render_footer()
+    return f'''<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Free preview: {title} | Jonathan Harris</title><meta name="robots" content="noindex,follow"/><link rel="canonical" href="{canonical}"/>
+<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+{SHARED_INTER_FONT_HEAD_BLOCK}
+<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" href="/assets/css/ebook-template.css"/></head>
+<body class="ebook-detail">{header}<main class="main" id="main"><div class="wrap ebook-shell"><section class="card ebook-section">
+<p class="eyebrow">Free book preview</p><h1>{title}</h1><p>This is a governed preview built from the book’s published description and learning points. It is not presented as a chapter when no chapter sample is available in the website source.</p><p>{html.escape(book['summary'])}</p>
+<h2>What does this preview cover?</h2><p>{html.escape(book['what_this_book_covers'])}</p>
+<h2>What questions does the full book tackle?</h2><ul>{learn}</ul><p>{html.escape(book['why_it_matters'])}</p>
+<div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Back to book page</a></div>
+</section></div></main>{footer}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+
+
 def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
     about_terms = [{"@type": "Thing", "name": name} for name in book_about_terms(book)]
-    return {
+    schema = {
         "@context": "https://schema.org",
         "@type": "Book",
         "@id": f"{book['canonical_url']}#book",
@@ -845,6 +969,16 @@ def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
         ],
         "about": about_terms,
     }
+    signal = amazon_signal_for(book)
+    if signal.get("rating") is not None and signal.get("rating_count") is not None:
+        schema["aggregateRating"] = {
+            "@type": "AggregateRating",
+            "ratingValue": float(signal["rating"]),
+            "ratingCount": int(signal["rating_count"]),
+            "bestRating": 5,
+            "worstRating": 1,
+        }
+    return schema
 
 
 def build_breadcrumb_schema(book: Dict[str, Any]) -> Dict[str, Any]:
@@ -3048,15 +3182,29 @@ def audience_bullets(book: Dict[str, Any]) -> List[str]:
 
 
 def chapter_signal_cards(book: Dict[str, Any]) -> str:
-    cards = []
-    for item in book.get("what_youll_learn", [])[:3]:
-        heading = re.sub(r"[\.:].*", "", item).strip()
-        heading = heading[:64].rstrip(" ,.;:") or "Chapter signal"
-        cards.append(
-            f'<article class="ebook-signal-card"><h3>{html.escape(heading)}</h3><p>{html.escape(item)}</p></article>'
-        )
-    return "\n".join(cards)
-
+    """Use genuinely distinct source fields, and chapter data when supplied."""
+    chapters = book.get("chapters")
+    cards: List[str] = []
+    if isinstance(chapters, list) and chapters:
+        for chapter in chapters[:3]:
+            if isinstance(chapter, dict):
+                heading = clean_paragraph(chapter.get("title", "Chapter signal"))
+                text = clean_paragraph(chapter.get("fact") or chapter.get("summary") or "")
+            else:
+                heading, text = "Chapter signal", clean_paragraph(chapter)
+            if text:
+                cards.append(f'<article class="ebook-signal-card"><h3>{html.escape(heading)}</h3><p>{html.escape(text)}</p></article>')
+    if not cards:
+        distinct = [
+            ("Use cases and workflow", clean_paragraph(book.get("what_this_book_covers", ""))),
+            ("Why the stakes matter", clean_paragraph(book.get("why_it_matters", ""))),
+            ("The book's distinct angle", clean_paragraph(book.get("distinct_angle", ""))),
+        ]
+        cards = [
+            f'<article class="ebook-signal-card"><h3>{html.escape(heading)}</h3><p>{html.escape(text)}</p></article>'
+            for heading, text in distinct if text
+        ]
+    return "\n".join(cards[:3])
 
 
 def problem_framing(book: Dict[str, Any]) -> str:
@@ -3210,7 +3358,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>{title}</h1>
-    <p>{html.escape(hero_summary)} <span class="muted">See latest price on Amazon.</span></p>
+    <p>{html.escape(hero_summary)}</p>
   </div>
 </header>
 <main aria-label="Book content" class="main" id="main" role="main">
@@ -3232,8 +3380,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
         <div class="ebook-actions">
           <a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
+          <a class="button secondary" href="{book_preview_path(book)}">Free preview</a>
           <a class="button secondary" href="/ebooks/">Browse related books</a>
         </div>
+        {render_book_market_signal(book)}
         <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
       </article>
       <article class="card ebook-showcase__content">
@@ -3253,7 +3403,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <section class="card ebook-section">
-      <h2>Who this book is for</h2>
+      <h2>Who is this book for?</h2>
       <ul class="ebook-audience-list">
         {audience_items}
       </ul>
@@ -3268,7 +3418,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <section class="card ebook-section">
-      <h2>What you’ll learn</h2>
+      <h2>What will you learn?</h2>
       <ul class="ebook-learn-list">
         {learn_items}
       </ul>
@@ -3290,12 +3440,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <section class="card ebook-section ebook-section--accent">
-      <h2>Problem framing: where this topic gets messy</h2>
+      <h2>Why does this topic get messy?</h2>
       {escape_paragraphs(problem_framing(book))}
     </section>
 
     <section class="card ebook-section">
-      <h2>Practical outcomes</h2>
+      <h2>What practical decisions will this help with?</h2>
       <p>{html.escape(practical_outcomes_intro(book))}</p>
       <ul class="ebook-learn-list">
         {signal_items}
@@ -3303,7 +3453,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <section class="card ebook-section">
-      <h2>Chapter-level signals</h2>
+      <h2>What evidence lenses does the book use?</h2>
       <div class="ebook-signal-grid">
         {chapter_signal_cards(book)}
       </div>
@@ -3315,12 +3465,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {escape_paragraphs(book['why_it_matters'])}
     </section>
 
+    <section class="card ebook-section ebook-preview-capture" id="free-preview">
+      <h2>Want a free preview before you buy?</h2>
+      <p>Join the weekday AI briefing and continue straight to a preview built from this book’s governed summary, scope and learning points.</p>
+      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=book_preview_path(book), cta="Unlock the free preview")}
+    </section>
+
     <section class="related-books card">
       <h2>Related books</h2>
       <ul>
         {render_related_links(book, all_books)}
       </ul>
       <p class="jh-related-callout">Related titles are chosen from the catalogue based on topic and tag overlap, so the next step stays relevant instead of wandering off into the weeds.</p>
+      <div class="ebook-inline-actions">{render_book_bundle_links(book)}</div>
     </section>
 
     <section class="faq card" aria-label="Frequently asked questions">
@@ -3336,11 +3493,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="jh-journey-actions">
         {book_semantic_journey_links(book)}
       </div>
+      {render_inline_newsletter_form(f"ebook-footer:{book['slug']}")}
     </section>
   </div>
 </main>
 <script defer="" src="/assets/js/related-books.min.js"></script>
 {footer}
+<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
+<script defer="" src="/assets/js/newsletter-exit.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -3356,6 +3516,7 @@ def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
   <h2>{html.escape(book['title'])}</h2>
   <div class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
   <p>{html.escape(book['short'])}</p>
+  {render_book_market_signal(book)}
   <div class="tags">{tags}</div>
   <div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
   <details class="more">
@@ -3468,7 +3629,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <main class="main" id="main" role="main" aria-label="eBook catalogue">
   <div class="wrap">
     <section class="card ebook-index-intro">
-      <h2>Find the right title without the faff</h2>
+      <h2>Which AI eBook should you start with?</h2>
       <p>Search the catalogue, filter by topic, and jump straight into a book page with the full description, FAQ, and buy link in one place.</p>
       <div class="jh-topic-links">
         {render_topic_hub_links(books)}
@@ -3500,11 +3661,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="/newsletter/">Join the newsletter</a>
         <a href="/topics/">Explore topic guides</a>
       </div>
+      {render_inline_newsletter_form("ebooks-index")}
     </section>
   </div>
 </main>
 {footer}
 <script defer="" src="/assets/js/books.min.js"></script>
+<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -3595,6 +3758,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <p>{html.escape(category_scope_copy(topic, books))}</p>
     </section>
     <section class="card ebook-index-intro">
+      {render_inline_newsletter_form(f"topic:{topic_slug}")}
+    </section>
+    <section class="card ebook-index-intro">
       <h2>Best place to start</h2>
       <p>{category_best_start_copy(topic, books)}</p>
     </section>
@@ -3620,6 +3786,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </main>
 {footer}
+<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -3918,6 +4085,96 @@ def load_podcast_episode_dynamic_routes(generated_lastmod: str) -> List[Dict[str
     return routes
 
 
+def load_podcast_route_registry(generated_lastmod: str) -> List[Dict[str, str]]:
+    payload = _load_json_file(DATA_DIR / "podcast-route-registry.json", {})
+    raw_routes = payload.get("routes") if isinstance(payload, dict) else []
+    routes: List[Dict[str, str]] = []
+    for raw in raw_routes if isinstance(raw_routes, list) else []:
+        path = _first_text(raw)
+        match = re.fullmatch(r"/podcast/episodes/([^/]+)/?", path)
+        if not match:
+            continue
+        slug = match.group(1)
+        routes.append(_manifest_route(
+            family="podcast-episode",
+            title=slug.replace("-", " ").title(),
+            path=f"/podcast/episodes/{slug}/",
+            lastmod=normalise_lastmod(generated_lastmod),
+            source="data/podcast-route-registry.json",
+            summary="Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
+            entity="Turing's Torch AI Weekly episode",
+        ))
+    return routes
+
+
+def load_bundle_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
+    path = DATA_DIR / "ebook-bundles.json"
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return []
+    bundles = payload.get("bundles", []) if isinstance(payload, dict) else []
+    routes = [_manifest_route(
+        family="bundle-index",
+        title="Curated AI eBook reading paths",
+        path="/bundles/",
+        lastmod=normalise_lastmod(generated_lastmod),
+        source="generated-html",
+        repo_path="bundles/index.html",
+        summary="Curated three-book AI reading paths from the Jonathan Harris catalogue.",
+        entity="book collection",
+    )]
+    for bundle in bundles if isinstance(bundles, list) else []:
+        if not isinstance(bundle, dict):
+            continue
+        slug = clean_paragraph(bundle.get("slug", ""))
+        title = clean_paragraph(bundle.get("title", ""))
+        if not slug or not title:
+            continue
+        routes.append(_manifest_route(
+            family="book-bundle",
+            title=title,
+            path=f"/bundles/{slug}/",
+            lastmod=normalise_lastmod(generated_lastmod),
+            source="generated-html",
+            repo_path=f"bundles/{slug}/index.html",
+            summary=clean_paragraph(bundle.get("summary", "")),
+            entity="book collection",
+        ))
+    return routes
+
+
+def load_book_preview_dynamic_routes(books: List[Dict[str, Any]], generated_lastmod: str) -> List[Dict[str, str]]:
+    """Register generated, noindex book previews for release governance.
+
+    These pages are conversion assets rather than search landing pages. They belong in
+    the dynamic route manifest so the live-repo route gate knows who owns them, but
+    ``build_public_route_registry`` deliberately keeps the family out of sitemap.xml.
+    """
+    routes: List[Dict[str, str]] = []
+    for book in books:
+        slug = clean_paragraph(book.get("slug", ""))
+        title = clean_paragraph(book.get("title", ""))
+        if not slug or not title:
+            continue
+        repo_path = f"ebooks/{slug}/sample/index.html"
+        if not (ROOT / repo_path).exists():
+            continue
+        routes.append(_manifest_route(
+            family="book-preview",
+            title=f"Free preview: {title}",
+            path=f"/ebooks/{slug}/sample/",
+            lastmod=normalise_lastmod(book.get("dateModified") or book.get("datePublished") or generated_lastmod),
+            source="generated-html",
+            repo_path=repo_path,
+            summary="Email-gated preview companion for the published eBook page.",
+            entity="book preview",
+        ))
+    return routes
+
+
 def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]:
     candidates = [
         ("site-home", "Jonathan Harris AI ecosystem", "/", "index.html", "Homepage for books, podcast, blog, topics and newsletter.", "person and site"),
@@ -3929,6 +4186,7 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
         ("glossary", "AI glossary", "/glossary/", "glossary/index.html", "Plain-English AI glossary for answer engines and readers.", "glossary"),
         ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
         ("newsletter", "AI Edge newsletter", "/newsletter/", "newsletter/index.html", "Newsletter sign-up page for daily AI briefings.", "newsletter"),
+        ("lead-magnet", "AI glossary cheat sheet", "/downloads/ai-glossary-cheat-sheet/", "downloads/ai-glossary-cheat-sheet/index.html", "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.", "lead magnet"),
     ]
     routes: List[Dict[str, str]] = []
     for family, title, path, repo_path, summary, entity in candidates:
@@ -3951,8 +4209,11 @@ def build_dynamic_route_entries(books: List[Dict[str, Any]]) -> List[Dict[str, s
     generated_lastmod = normalise_lastmod(governed_generated_utc(books))
     routes = [
         *load_static_discovery_routes(generated_lastmod),
+        *load_bundle_dynamic_routes(generated_lastmod),
+        *load_book_preview_dynamic_routes(books, generated_lastmod),
         *load_blog_dynamic_routes(generated_lastmod),
         *load_podcast_episode_dynamic_routes(generated_lastmod),
+        *load_podcast_route_registry(generated_lastmod),
     ]
     unique: Dict[str, Dict[str, str]] = {}
     for route in routes:
@@ -3968,7 +4229,7 @@ def build_dynamic_route_manifest(books: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "generated_utc": governed_generated_utc(books),
         "base_url": SITE_URL,
-        "purpose": "Governed dynamic route ledger for blog, podcast, transcript, and LLM discovery surfaces.",
+        "purpose": "Governed route ledger for generated conversion pages plus blog, podcast, transcript, and LLM discovery surfaces.",
         "route_count": len(routes),
         "families": dict(sorted(families.items())),
         "routes": routes,
@@ -4034,6 +4295,10 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         }
 
     for route in build_dynamic_route_entries(books):
+        if route.get("family") == "book-preview":
+            # Preview companions intentionally declare noindex,follow. Keep them in
+            # release governance without leaking them into the public sitemap.
+            continue
         loc = route.get("loc")
         if not loc or loc in by_loc:
             continue
@@ -4114,6 +4379,12 @@ def build_llms_txt(books: List[Dict[str, Any]]) -> str:
     lines.extend(["", "## Canonical books"])
     for book in books:
         lines.append(f"- {book['title']}: {book['canonical_url']} — {brand_safe_discovery_text(book['short'])}")
+
+    bundle_routes = routes_by_family.get("book-bundle", [])
+    if bundle_routes:
+        lines.extend(["", "## Curated eBook reading paths"])
+        for route in bundle_routes:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
 
     blog_routes = routes_by_family.get("blog-post", [])
     if blog_routes:
@@ -4418,6 +4689,9 @@ def build_book_files(books: List[Dict[str, Any]]) -> None:
     for book in books:
         book_dir = EBOOKS_DIR / book["slug"]
         book_dir.mkdir(parents=True, exist_ok=True)
+        sample_dir = book_dir / "sample"
+        sample_dir.mkdir(parents=True, exist_ok=True)
+        (sample_dir / "index.html").write_text(render_book_sample_page(book), encoding="utf-8")
         metadata = {
             "title": book["title"],
             "slug": book["slug"],

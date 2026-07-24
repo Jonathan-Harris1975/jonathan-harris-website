@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BOOKS_JSON = ROOT / "api" / "v1" / "books.json"
 INDEX_HTML = ROOT / "index.html"
+AMAZON_SIGNALS_JSON = ROOT / "data" / "amazon-book-signals.json"
 
 
 def iso_week(now: datetime) -> int:
@@ -36,6 +37,32 @@ def select_featured(books: list[dict], now: datetime | None = None) -> dict:
     week = iso_week(now)
     return books[week % len(books)]
 
+
+
+def market_signal_markup(book: dict) -> str:
+    try:
+        payload = json.loads(AMAZON_SIGNALS_JSON.read_text(encoding="utf-8"))
+        records = payload.get("books", {}) if isinstance(payload, dict) else {}
+        signal = records.get(book.get("asin")) or records.get(book.get("slug")) or {}
+    except Exception:
+        signal = {}
+    if not isinstance(signal, dict) or not signal.get("source_url") or not signal.get("checked_at"):
+        return "Current Kindle price and ratings are checked on Amazon at the buy step."
+    parts = []
+    try:
+        rating = float(signal.get("rating"))
+        count = int(signal.get("rating_count"))
+        if 1 <= rating <= 5 and count >= 0:
+            parts.append(f"★ {rating:.1f} ({count:,} ratings)")
+    except (TypeError, ValueError):
+        pass
+    price = str(signal.get("kindle_price") or "").strip()
+    if price:
+        parts.append(f"{price} on Kindle")
+    if not parts:
+        return "Current Kindle price and ratings are checked on Amazon at the buy step."
+    checked = str(signal.get("checked_at") or "")[:10]
+    return " · ".join(parts) + (f" · last verified {checked}; Amazon pricing may vary." if checked else " · Amazon pricing may vary.")
 
 def inject(book: dict) -> None:
     slug = book["slug"]
@@ -77,6 +104,13 @@ def inject(book: dict) -> None:
         r'(<p class="featured-desc" id="featuredEbookDesc">)[^<]*(</p>)',
         rf'\g<1>{short}\g<2>', src
     )
+    # verified market signal, only when a trusted source record exists
+    market = market_signal_markup(book)
+    src = re.sub(
+        r'(<p class="book-market-signal muted" id="featuredEbookMarketSignal">)[^<]*(</p>)',
+        rf'\g<1>{market}\g<2>', src
+    )
+
     # featuredEbookLink href
     src = re.sub(
         r'(<a class="button" href=")[^"]+(" id="featuredEbookLink">)',

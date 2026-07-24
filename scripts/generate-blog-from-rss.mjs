@@ -21,6 +21,37 @@ const repoRoot = path.resolve(__dirname, "..");
 const DEFAULT_FEED_URL = "https://blog-rss.jonathan-harris.online/feed.xml";
 const SITE_ORIGIN = "https://jonathan-harris.online";
 const BLOG_RSS_FEED_URL = String(process.env.BLOG_RSS_FEED_URL || DEFAULT_FEED_URL).trim();
+const BLOG_RSS_RETRY_ATTEMPTS = Math.max(1, Number(process.env.BLOG_RSS_RETRY_ATTEMPTS || 4));
+const BLOG_RSS_RETRY_BASE_MS = Math.max(100, Number(process.env.BLOG_RSS_RETRY_BASE_MS || 750));
+const BLOG_RSS_TIMEOUT_MS = Math.max(1000, Number(process.env.BLOG_RSS_TIMEOUT_MS || 15000));
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchTextWithRetry(url) {
+  let lastError = null;
+  for (let attempt = 1; attempt <= BLOG_RSS_RETRY_ATTEMPTS; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), BLOG_RSS_TIMEOUT_MS);
+    try {
+      const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const text = await response.text();
+      if (!/<(?:item|entry)\b/i.test(text)) throw new Error('feed contains no item or entry nodes');
+      return text;
+    } catch (error) {
+      lastError = error;
+      if (attempt >= BLOG_RSS_RETRY_ATTEMPTS) break;
+      const delay = BLOG_RSS_RETRY_BASE_MS * (2 ** (attempt - 1));
+      console.warn(`Blog RSS attempt ${attempt}/${BLOG_RSS_RETRY_ATTEMPTS} failed (${error?.message || error}); retrying in ${delay}ms.`);
+      await sleep(delay);
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+  throw new Error(`Blog RSS sync failed after ${BLOG_RSS_RETRY_ATTEMPTS} attempts: ${lastError?.message || lastError || 'unknown error'}`);
+}
 
 function escapeRegex(value) {
   return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -264,13 +295,11 @@ async function main() {
     throw new Error('BLOG_RSS_FEED_URL is missing.');
   }
 
-  const response = await fetch(BLOG_RSS_FEED_URL, { cache: 'no-store' });
-  if (!response.ok) {
-    throw new Error(`Blog RSS fetch failed: HTTP ${response.status}`);
-  }
-
-  const xmlText = await response.text();
+  const xmlText = await fetchTextWithRetry(BLOG_RSS_FEED_URL);
   const snapshot = buildManifest(xmlText);
+  if (!snapshot.items.length) {
+    throw new Error('Blog RSS parsed successfully but produced zero publishable posts.');
+  }
   const outPath = path.join(repoRoot, 'blog', 'posts.json');
   fs.writeFileSync(outPath, JSON.stringify(snapshot, null, 2) + '\n', 'utf8');
   syncStaticSeeds(snapshot);

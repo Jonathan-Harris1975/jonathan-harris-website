@@ -106,6 +106,7 @@ def main() -> int:
         print("Proceeding without workbook only because --allow-missing-workbook was supplied.")
 
     run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
+    run_step("Generate curated ebook reading paths", [sys.executable, "scripts/generate_ebook_bundles.py"])
     run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
     run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
     run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
