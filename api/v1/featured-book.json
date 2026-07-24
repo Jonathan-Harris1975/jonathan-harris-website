@@ -2,61 +2,62 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 25,
+    "iso_week": 30,
     "year": 2026
   },
   "book": {
-    "id": 26,
-    "key": "26-ebook",
-    "title": "Climate Intelligence: Harnessing AI for a Greener Future",
-    "short": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
-    "short_description": "A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss.",
-    "cover": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-climate-intelligence-greener-webp",
+    "id": 31,
+    "key": "31-ebook",
+    "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
+    "short": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
+    "short_description": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
+    "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
+    "main_image": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
     "tags": [
-      "Environment",
+      "History",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Environment",
+    "filter": "History",
     "keywords": [
-      "Environment",
-      "Climate Intelligence: Harnessing AI for a Greener Future",
+      "History",
+      "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/aKj8Fh",
-    "buy_target_url": "https://mybook.to/aKj8Fh",
-    "slug": "climate-intelligence-harnessing-ai-for-a-greener-future",
-    "asin": "B0DM72JZ44",
-    "pages": 338,
-    "datePublished": "2024-11-06",
+    "buy_url": "https://mybook.to/qFAI",
+    "buy_target_url": "https://mybook.to/qFAI",
+    "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
+    "asin": "B0DY5MRT6K",
+    "pages": 302,
+    "datePublished": "2025-02-22",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-    "buy_route": "/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
-    "topic_url": "/catalogue/environment/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+    "buy_route": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+    "topic_url": "/catalogue/history/",
     "related_slugs": [
-      "artificial-intelligence-for-wildlife-conservation-revolutionizing-biodiversity-protection-through-technology",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
       "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends"
+      "ai-in-aviation-transforming-safety-and-sustainability",
+      "ai-in-education-reimagining-learning-for-every-student"
     ],
     "title_tokens": [
-      "climate",
-      "future",
-      "green",
-      "harness"
+      "ahead",
+      "architect",
+      "breakthrough",
+      "pione",
+      "road"
     ],
     "topic_tokens": [
-      "environ"
+      "history"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/ or buy on Amazon at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now",
-    "midroll_15": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future. A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss. Read more at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/",
-    "midroll_30": "This week's sponsor is Climate Intelligence: Harnessing AI for a Greener Future. A clear guide to emissions tracking, climate modelling, renewable planning, and the difference between useful measurement and green gloss. It focuses on Environment. It runs 338 pages. Topics include Environment, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/ or go straight to Amazon at https://jonathan-harris.online/ebooks/climate-intelligence-harnessing-ai-for-a-greener-future/buy-now."
+    "headline": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
+    "midroll_15": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead. A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence. Read more at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
+    "midroll_30": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead. A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence. It focuses on History. It runs 302 pages. Topics include History, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now."
   }
 }
