@@ -1,3 +1,0 @@
-No files need to be deleted for this HIVE shared skill pool website update.
-
-Keep any existing deletion notes from earlier website cleanup work separate from this patch.
