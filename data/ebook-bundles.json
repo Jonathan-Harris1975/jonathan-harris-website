@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "bundles": [
+    {
+      "slug": "ai-at-work",
+      "title": "AI at Work: Three-Book Reading Path",
+      "summary": "A three-book route through the job shift, practical AI agents, and AI literacy for modern workplaces.",
+      "books": [
+        "the-artificial-intelligence-job-shift-navigating-the-future-of-work",
+        "ai-agents-for-everyday-work",
+        "ai-literacy-for-the-modern-workplace"
+      ]
+    },
+    {
+      "slug": "ai-health-and-care",
+      "title": "AI in Health and Care: Three-Book Reading Path",
+      "summary": "A practical reading path across healthcare diagnosis, pharmaceuticals, and veterinary medicine.",
+      "books": [
+        "digital-diagnosis-how-ai-is-revolutionizing-healthcare",
+        "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare",
+        "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation"
+      ]
+    },
+    {
+      "slug": "ai-mobility-and-logistics",
+      "title": "AI in Mobility and Logistics: Three-Book Reading Path",
+      "summary": "Three perspectives on AI in aviation, logistics, and high-speed transport decision-making.",
+      "books": [
+        "ai-in-aviation-transforming-safety-and-sustainability",
+        "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability",
+        "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
+      ]
+    },
+    {
+      "slug": "ai-in-regulated-industries",
+      "title": "AI in Regulated Industries: Law, Finance and Healthcare",
+      "summary": "A three-book route through AI where evidence, oversight, risk and accountability matter most.",
+      "books": [
+        "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+        "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security",
+        "digital-diagnosis-how-ai-is-revolutionizing-healthcare"
+      ]
+    }
+  ]
+}

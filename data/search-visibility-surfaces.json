@@ -4,7 +4,7 @@
   "seo": {
     "sitemap_includes_dynamic_routes": true,
     "transcript_urls": 0,
-    "podcast_episode_urls": 0,
+    "podcast_episode_urls": 12,
     "blog_post_urls": 1
   },
   "geo": {
@@ -12,10 +12,15 @@
     "discovery_families": [
       "blog-hub",
       "blog-post",
+      "book-bundle",
+      "book-preview",
+      "bundle-index",
       "comparison",
       "glossary",
+      "lead-magnet",
       "newsletter",
       "person",
+      "podcast-episode",
       "podcast-hub",
       "site-home",
       "topic-index",
