@@ -1,34 +1,34 @@
-# The Autonomous Revolution: Artificial Intelligence and the Future of the Automotive Industry
+# The Dumbening: How AI is Reshaping Our Minds
 
 ## Summary
 
-AI is reshaping the automotive industry through autonomous driving, predictive maintenance, smart manufacturing, mobility services, and liability headaches. It looks at where AI is already earning its keep in the automotive industry, where the claims run ahead of the evidence, and what sensible adoption actually looks like.
+This book examines how AI and automation affect attention, memory, creativity, judgement, and the parts of thinking we should be wary of outsourcing. The focus stays on how AI shapes attention and thinking in day-to-day life: the tooling, the judgement calls, and the parts that still need a human spine.
 
 ## What this book covers
 
-It maps the practical applications, the operational pinch points, the decision workflows, and the reliability questions that appear when AI moves from demo to deployment in the automotive industry.
+It shows how AI affects attention and thinking, what has to change underneath for it to work, where the risks hide, and which outcomes are realistic rather than merely well-marketed.
 
 ## Who this book is for
 
-Written for operators, planners, analysts, product teams, and readers tracking mobility systems who need a clearer read on what AI can and cannot do in the automotive industry, without wading through technical theatre.
+Suits readers who want to understand how AI shapes attention and thinking in practice, especially policy readers, educators, sceptics, and anyone thinking about AI's social consequences looking for grounded examples and fewer slogans.
 
 ## What you’ll learn
 
-- Where AI is already being used in transportation today — and where sensors meet traffic and liability.
-- The serious implementation view covers road risk, autonomy, and liability.
-- Key themes including routing, prediction, safety, operations.
+- Where AI is already being used in ethics today — and where convenience starts taxing attention.
+- The reality check comes from attention, habits, and drift.
+- Key themes including ethics, artificial intelligence, ai trends.
 - The limits, risks, and awkward questions worth asking before you sign off on the sales pitch.
 
 ## Why it matters
 
-The automotive industry is one of those areas where AI can help, but only if the claims survive contact with safety, throughput, reliability, and emissions. That is where this book keeps its attention.
+AI is not just arriving as a parlour trick. It changes attention, judgement, autonomy, and social trust, so the boring details matter more than the slogans.
 
 ## Topics and tags
 
-- Topic: Transportation
-- Tags: Transportation, Artificial Intelligence, AI Trends
-- Length: 324 pages
+- Topic: Ethics
+- Tags: Ethics, Artificial Intelligence, AI Trends
+- Length: 277 pages
 
 ## Buy
 
-- https://mybook.to/DS4Ag
+- https://mybook.to/YcRiCRp
