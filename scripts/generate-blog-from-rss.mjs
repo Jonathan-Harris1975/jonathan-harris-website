@@ -35,7 +35,18 @@ async function fetchTextWithRetry(url) {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), BLOG_RSS_TIMEOUT_MS);
     try {
-      const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+      const requestUrl = new URL(url);
+      requestUrl.searchParams.set('_jh_build_bust', `${Date.now()}-${attempt}`);
+      const response = await fetch(requestUrl, {
+        cache: 'no-store',
+        redirect: 'follow',
+        signal: controller.signal,
+        headers: {
+          Accept: 'application/rss+xml, application/xml, text/xml;q=0.9, */*;q=0.8',
+          'Cache-Control': 'no-cache, no-store, max-age=0',
+          Pragma: 'no-cache',
+        },
+      });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
       if (!/<(?:item|entry)\b/i.test(text)) throw new Error('feed contains no item or entry nodes');

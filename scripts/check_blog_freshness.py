@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Fail governed builds when the published blog snapshot has gone stale."""
+"""Validate the age of the latest published blog briefing.
+
+The production website build uses this check in warning-only mode so an
+editorial pipeline incident cannot take the whole static site offline. A
+separate scheduled GitHub Actions monitor runs the same check strictly and
+raises the operational alert when the feed is stale.
+"""
 from __future__ import annotations
 
 import argparse
@@ -28,25 +34,38 @@ def parse_date(value: object) -> dt.datetime | None:
     return parsed.astimezone(dt.timezone.utc)
 
 
+def _truthy(value: object) -> bool:
+    return str(value or "").strip().lower() in {"1", "true", "yes", "on"}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--max-age-days", type=float, default=float(os.environ.get("BLOG_MAX_AGE_DAYS", "8")))
+    parser.add_argument(
+        "--warn-only",
+        action="store_true",
+        default=_truthy(os.environ.get("BLOG_FRESHNESS_WARN_ONLY")),
+        help="Report stale/missing blog data without failing the caller.",
+    )
     args = parser.parse_args()
 
-    if os.environ.get("ALLOW_STALE_BLOG_SNAPSHOT", "").strip().lower() in {"1", "true", "yes"}:
+    if _truthy(os.environ.get("ALLOW_STALE_BLOG_SNAPSHOT")):
         print("Blog freshness gate bypassed for local/offline diagnostics.")
         return 0
+
+    def fail(message: str) -> int:
+        prefix = "Blog freshness warning" if args.warn_only else "Blog freshness gate failed"
+        print(f"{prefix}: {message}")
+        return 0 if args.warn_only else 1
 
     try:
         payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
     except Exception as exc:
-        print(f"Blog freshness gate failed: cannot read {MANIFEST.relative_to(ROOT)}: {exc}")
-        return 1
+        return fail(f"cannot read {MANIFEST.relative_to(ROOT)}: {exc}")
 
     items = payload.get("items") if isinstance(payload, dict) else None
     if not isinstance(items, list) or not items:
-        print("Blog freshness gate failed: blog/posts.json contains no published items.")
-        return 1
+        return fail("blog/posts.json contains no published items.")
 
     dates: list[dt.datetime] = []
     for item in items:
@@ -58,17 +77,15 @@ def main() -> int:
                 dates.append(parsed)
                 break
     if not dates:
-        print("Blog freshness gate failed: no parseable publication date exists in blog/posts.json.")
-        return 1
+        return fail("no parseable publication date exists in blog/posts.json.")
 
     newest = max(dates)
     age_days = max(0.0, (dt.datetime.now(dt.timezone.utc) - newest).total_seconds() / 86400.0)
     if age_days > args.max_age_days:
-        print(
-            "Blog freshness gate failed: newest published briefing is "
+        return fail(
+            "newest published briefing is "
             f"{age_days:.1f} days old ({newest.date().isoformat()}); maximum is {args.max_age_days:g} days."
         )
-        return 1
 
     print(f"Blog freshness gate passed: newest briefing is {age_days:.1f} days old.")
     return 0
