@@ -1,69 +1,18 @@
-> **Document status:** Production reference  
-> **Last reviewed:** 16 June 2026  
-> **Operational authority:** Current repository README, SECURITY policy and operations guide.
+# Search Console stale `/book/*` remediation
 
-# Search Console stale URL remediation plan
+**Last reviewed:** 25 July 2026
 
-## Scope
-This runbook covers the two stale URL families still surfacing in search even though live redirects are already governed in `_redirects`:
+The repository preserves historical equity by permanently redirecting legacy `/book/<slug>/` and `/book/<slug>/buy-now` routes to the exact `/ebooks/<slug>/` equivalents. Build regression tests verify the route family and reject redirect chains in repository rules.
 
-- Locale-prefixed aliases under `/en-gb/` and `/en-au/`.
-- Legacy detail aliases under `/book/`.
+After a production release:
 
-The live redirect contract must remain:
+1. Test representative old book and buy-now URLs against the live hostname and confirm one permanent redirect to the exact canonical destination.
+2. Inspect affected legacy URLs in Google Search Console and request recrawl of the canonical replacements where useful.
+3. Submit the current authoritative `/sitemap.xml`.
+4. Monitor legacy URL impressions/index status. Do not report them as removed until the live index actually changes.
 
-- `/en-gb/* -> https://jonathan-harris.online/:splat` (301)
-- `/en-au/* -> https://jonathan-harris.online/:splat` (301)
-- `/book/* -> /ebooks/:splat` (301)
+Compatibility redirects are intentional. Do not delete them merely to make the redirect file smaller.
 
-## Canonical destinations to verify before filing requests
-Confirm that the destination pages already publish self-referential canonical links:
+## Other stale locale aliases
 
-- Home: `https://jonathan-harris.online/`
-- Topics hub: `https://jonathan-harris.online/topics/`
-- Catalogue topic pages: `https://jonathan-harris.online/catalogue/<topic-slug>/`
-- Canonical ebook pages: `https://jonathan-harris.online/ebooks/<slug>/`
-
-Repository validation already checks canonical coverage for the governed HTML family and redirect-family completeness.
-
-## Search Console actions
-### 1. Removals
-Use **Search Console > Indexing > Removals** to submit temporary Removals for the stale families that are still appearing in branded search:
-
-- `https://jonathan-harris.online/en-gb/`
-- `https://jonathan-harris.online/en-au/`
-- `https://jonathan-harris.online/book/`
-
-Apply the temporary Removals request to the URL prefix for each stale family.
-
-### 2. Request indexing
-Use **URL Inspection** on the canonical destinations and choose **Request indexing** after the live redirect and canonical checks pass.
-
-Priority order:
-
-1. `/`
-2. `/topics/`
-3. high-impression `/catalogue/*` pages
-4. high-impression `/ebooks/*` pages
-
-### 3. Sitemap resubmission
-Resubmit the governed sitemap after deployment:
-
-- `https://jonathan-harris.online/sitemap.xml`
-
-## Evidence to capture
-Keep screenshots or exported notes for:
-
-- the Removals requests submitted for `/en-gb/`, `/en-au/`, and `/book/`
-- the URL Inspection result for each canonical destination sampled
-- the sitemap resubmission timestamp
-- the follow-up branded search recheck window
-
-## Follow-up recheck window
-Recheck branded search results after the recrawl window and again after the temporary Removals request starts to age out.
-
-Success looks like this:
-
-- `/en-gb/` and `/en-au/` stop surfacing in branded search.
-- `/book/` results collapse onto `/ebooks/` canonicals.
-- live redirects and canonical destinations remain unchanged.
+Historical locale-prefixed variants such as `/en-gb/` and `/en-au/` should be treated the same way: verify their current permanent redirect/canonical destination before asking Google to refresh them. Where an obsolete URL still appears, use **URL Inspection → Request indexing** on the canonical replacement after the redirect is live. Search Console **Removals** can temporarily hide a harmful/stale result when genuinely needed, but it does not replace the redirect/canonical fix and should not be presented as permanent de-indexing.

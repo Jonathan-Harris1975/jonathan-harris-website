@@ -1,10 +1,10 @@
 > **Document status:** Production reference  
-> **Last reviewed:** 16 June 2026  
+> **Last reviewed:** 25 July 2026  
 > **Operational authority:** Current repository README, SECURITY policy and operations guide.
 
 # Image publishing contract
 
-The live site intentionally serves logo and ebook cover assets from `https://images.jonathan-harris.online`. The repository does not version those binaries locally, so the URL contract has to stay tight.
+The live site intentionally serves logo and ebook cover assets from `https://images.jonathan-harris.online`. The repository does not version those binaries locally, so the URL and responsive-delivery contract has to stay tight.
 
 ## Governed image classes
 
@@ -18,7 +18,9 @@ The live site intentionally serves logo and ebook cover assets from `https://ima
 ## Rules
 
 1. Cover URLs must be absolute HTTPS URLs on `images.jonathan-harris.online`.
-2. Canonical ebook pages, catalogue cards, and the homepage featured slot must use the governed remote cover URL directly as `src`.
-3. Do not emit generated `/cdn-cgi/image/...` `srcset` markup for remote cover URLs. Remote covers should stay on the governed source URL unless the delivery contract is changed deliberately.
-4. Run `python3 scripts/check_image_assets.py` for repo-local contract validation.
-5. Run `python3 scripts/check_image_assets.py --live` in a networked environment before or after release to confirm that the published logo and cover URLs still resolve.
+2. Canonical ebook pages, catalogue cards and the homepage featured slot keep the governed remote cover URL as the fallback `src` and metadata image.
+3. Responsive delivery uses Cloudflare Pages' same-origin image resizing contract only: `/cdn-cgi/image/width=<width>,quality=85,fit=scale-down,format=auto/<governed absolute image URL>`.
+4. Ebook covers emit 400w, 800w and 1200w candidates where the intrinsic source width permits them, plus a context-appropriate `sizes` value. Do not invent a second transform host or route arbitrary third-party images through this contract.
+5. Preserve intrinsic `width` and `height` on cover markup to protect layout stability.
+6. Run `python3 scripts/check_image_assets.py` for repo-local contract validation.
+7. Run `python3 scripts/check_image_assets.py --live` in a networked environment before or after release to confirm that the published logo, originals and responsive variants still resolve.
