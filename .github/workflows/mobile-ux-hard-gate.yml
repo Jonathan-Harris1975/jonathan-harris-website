@@ -274,3 +274,8 @@ jobs:
           except Exception as exc:
             print(f"::warning::Fallback callback failed: {exc}")
           PY
+
+      - name: Clean local temporary Mobile UX audit files
+        if: always()
+        shell: bash
+        run: rm -rf artifacts/mobile-ux

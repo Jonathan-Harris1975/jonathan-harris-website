@@ -1,5 +1,5 @@
-name: SEO AEO GEO forensic audit
-run-name: SEO AEO GEO - ${{ inputs.session_id }}
+name: Digital Growth and Monetisation audit
+run-name: Digital Growth - ${{ inputs.session_id }}
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       report_prefix:
-        description: R2 prefix under the dedicated audits bucket
+        description: Temporary R2 prefix under the dedicated audits bucket
         required: true
         type: string
       base_url:
@@ -25,7 +25,7 @@ on:
       callback_url:
         description: AI Management Suite callback URL
         required: false
-        default: https://app.jonathan-harris.online/audits/seo-aeo-geo/callback
+        default: https://app.jonathan-harris.online/audits/digital-growth/callback
         type: string
       analysis_url:
         description: Optional AI Management Suite analysis URL override
@@ -48,12 +48,12 @@ on:
         default: ""
         type: string
       audit_bucket_env:
-        description: Compatibility input; expected value R2_BUCKET_AUDITS
+        description: Compatibility input; must be R2_BUCKET_AUDITS
         required: false
         default: R2_BUCKET_AUDITS
         type: string
       audit_public_base_env:
-        description: Compatibility input; expected value R2_PUBLIC_BASE_URL_AUDITS
+        description: Compatibility input; must be R2_PUBLIC_BASE_URL_AUDITS
         required: false
         default: R2_PUBLIC_BASE_URL_AUDITS
         type: string
@@ -62,10 +62,10 @@ permissions:
   contents: read
 
 jobs:
-  seo-aeo-geo:
+  digital-growth:
     environment: R2
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
@@ -89,71 +89,35 @@ jobs:
           python -m pip install --disable-pip-version-check -r requirements.txt
           python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
 
-      - name: Resolve AI-suite callback and audits bucket configuration
+      - name: Resolve callback and dedicated audits bucket
         shell: bash
         run: |
           set -euo pipefail
           callback_url="${{ inputs.callback_url }}"
-          if [ -z "$callback_url" ]; then
-            callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
-          fi
-          if [ -z "$callback_url" ]; then
-            callback_url="https://app.jonathan-harris.online/audits/seo-aeo-geo/callback"
-          fi
-
-          callback_token="${{ inputs.callback_token }}"
-          if [ -z "$callback_token" ]; then
-            callback_token="$AUDIT_CALLBACK_TOKEN"
-          fi
-          if [ -z "$callback_token" ]; then
-            callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
-          fi
-
-          if [ -z "$callback_token" ]; then
-            echo "::error::AUDIT callback token was not supplied. The AI Management Suite should dispatch callback_token from Koyeb, or the R2 environment must define AUDIT_CALLBACK_TOKEN/AI_SUITE_AUDIT_CALLBACK_TOKEN for manual runs."
-            exit 1
-          fi
-
+          [ -n "$callback_url" ] || callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
+          [ -n "$callback_url" ] || callback_url="https://app.jonathan-harris.online/audits/digital-growth/callback"
           case "$callback_url" in
-            */audits/seo-aeo-geo/callback) ;;
-            *)
-              echo "::error::callback_url must end with /audits/seo-aeo-geo/callback; got $callback_url"
-              exit 1
-              ;;
+            */audits/digital-growth/callback) ;;
+            *) echo "::error::callback_url must end with /audits/digital-growth/callback; got $callback_url"; exit 1 ;;
           esac
 
+          callback_token="${{ inputs.callback_token }}"
+          [ -n "$callback_token" ] || callback_token="$AUDIT_CALLBACK_TOKEN"
+          [ -n "$callback_token" ] || callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
+          [ -n "$callback_token" ] || { echo "::error::Audit callback token is required"; exit 1; }
+
           audit_bucket="${{ inputs.audit_bucket }}"
-          if [ -z "$audit_bucket" ]; then
-            audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
-          fi
-          if [ -z "$audit_bucket" ]; then
-            audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
-          fi
-          if [ -z "$audit_bucket" ]; then
-            echo "::error::R2_BUCKET_AUDITS was not supplied. SEO/AEO/GEO audit artefacts must use the dedicated audits bucket."
-            exit 1
-          fi
+          [ -n "$audit_bucket" ] || audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
+          [ -n "$audit_bucket" ] || audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
+          [ -n "$audit_bucket" ] || { echo "::error::R2_BUCKET_AUDITS is required"; exit 1; }
 
           audit_public_base_url="${{ inputs.audit_public_base_url }}"
-          if [ -z "$audit_public_base_url" ]; then
-            audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
-          fi
-          if [ -z "$audit_public_base_url" ]; then
-            audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
-          fi
-          if [ -z "$audit_public_base_url" ]; then
-            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied. SEO/AEO/GEO audit artefacts must resolve from the dedicated audits public base URL."
-            exit 1
-          fi
+          [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
+          [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
+          [ -n "$audit_public_base_url" ] || { echo "::error::R2_PUBLIC_BASE_URL_AUDITS is required"; exit 1; }
 
-          if [ "${{ inputs.audit_bucket_env }}" != "R2_BUCKET_AUDITS" ]; then
-            echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS for SEO/AEO/GEO outputs."
-            exit 1
-          fi
-          if [ "${{ inputs.audit_public_base_env }}" != "R2_PUBLIC_BASE_URL_AUDITS" ]; then
-            echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS for SEO/AEO/GEO outputs."
-            exit 1
-          fi
+          [ "${{ inputs.audit_bucket_env }}" = "R2_BUCKET_AUDITS" ] || { echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS"; exit 1; }
+          [ "${{ inputs.audit_public_base_env }}" = "R2_PUBLIC_BASE_URL_AUDITS" ] || { echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS"; exit 1; }
 
           echo "::add-mask::$callback_token"
           echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
@@ -165,9 +129,9 @@ jobs:
             echo "__AUDIT_TOKEN__"
           } >> "$GITHUB_ENV"
 
-      - name: Run forensic SEO AEO GEO audit
+      - name: Run Digital Growth audit
         run: |
-          python scripts/audits/seo_aeo_geo_forensic.py \
+          python scripts/audits/digital_growth_audit.py \
             --base-url "${{ inputs.base_url }}" \
             --session-id "${{ inputs.session_id }}" \
             --report-prefix "${{ inputs.report_prefix }}" \
@@ -178,7 +142,7 @@ jobs:
             --audit-bucket "$R2_BUCKET_AUDITS" \
             --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
 
-      - name: Notify AIMS if SEO workflow failed before stage callback
+      - name: Notify AIMS if workflow failed before stage callback
         if: failure() && env.RESOLVED_CALLBACK_URL != ''
         shell: bash
         run: |
@@ -189,12 +153,12 @@ jobs:
           if not callback_url:
             raise SystemExit(0)
           payload = {
-            "auditType": "seo-aeo-geo",
+            "auditType": "digital-growth",
             "sessionId": "${{ inputs.session_id }}",
             "status": "failed",
             "reportPrefix": "${{ inputs.report_prefix }}",
-            "message": "SEO/AEO/GEO GitHub workflow failed before a complete temporary stage callback.",
-            "error": "GitHub Actions failure before SEO/AEO/GEO stage publication completed",
+            "message": "Digital Growth GitHub workflow failed before temporary stage artefacts were published.",
+            "error": "GitHub Actions failure before Digital Growth stage publication completed",
             "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
           }
           headers = {"Content-Type":"application/json", "Authorization":f"Bearer {token}", "X-Audit-Callback-Token":token}
@@ -203,7 +167,7 @@ jobs:
             print(f"Fallback callback posted: HTTP {response.status}")
           PY
 
-      - name: Clean local temporary SEO audit files
+      - name: Clean local temporary Digital Growth files
         if: always()
         shell: bash
-        run: rm -rf artifacts/seo-aeo-geo
+        run: rm -rf artifacts/digital-growth
