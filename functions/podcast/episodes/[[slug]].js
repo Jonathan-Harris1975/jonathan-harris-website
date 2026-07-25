@@ -213,7 +213,28 @@ function fallbackEpisodeFromSlug(slug, request) {
   };
 }
 
-function renderEpisodePage(episode, request, feedUrl) {
+async function relatedBooksMarkup(context, episode) {
+  try {
+    const url = new URL("/api/v1/books.json", context.request.url);
+    const req = new Request(url.toString(), { headers: { Accept: "application/json" } });
+    const response = context.env?.ASSETS?.fetch ? await context.env.ASSETS.fetch(req) : await fetch(req);
+    if (!response.ok) return "";
+    const payload = await response.json();
+    const books = Array.isArray(payload) ? payload : (Array.isArray(payload?.books) ? payload.books : []);
+    const stop = new Set(["this","that","with","from","into","about","artificial","intelligence","weekly","episode","turing","torch","jonathan","harris","what","where","which","when","your","have","will","their"]);
+    const tokens = new Set(cleanText(`${episode.title || ""} ${episode.description || ""}`).toLowerCase().split(/[^a-z0-9]+/).filter(x => x.length > 3 && !stop.has(x)));
+    const ranked = books.map(book => {
+      const hay = cleanText(`${book.title || ""} ${book.topic || ""} ${(book.tags || []).join(" ")} ${book.short || ""}`).toLowerCase();
+      let score = 0; for (const token of tokens) if (hay.includes(token)) score += 1;
+      return { book, score };
+    }).filter(x => x.score > 0).sort((a,b) => b.score - a.score || String(a.book.title).localeCompare(String(b.book.title))).slice(0,3);
+    if (!ranked.length) return "";
+    const cards = ranked.map(({book}) => `<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title)}</a><span>${escapeHtml(book.short || `A related book on ${book.topic || "this topic"}.`)}</span></li>`).join("");
+    return `<section class="podcast-related-books" aria-labelledby="related-books-heading"><h2 id="related-books-heading">Related books</h2><p>Chosen deterministically from the governed catalogue by overlap with this episode's title and summary.</p><ul class="link-list">${cards}</ul></section>`;
+  } catch { return ""; }
+}
+
+function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
   const title = episode.title || "Turing's Torch AI Weekly";
   const summary = clampWords(episode.description || "Jonathan Harris cuts through the week's artificial intelligence stories with practical judgement, scepticism and a working-person tolerance for less nonsense.", 60);
   const canonical = episode.link || new URL(request.url).toString();
@@ -242,7 +263,7 @@ function renderEpisodePage(episode, request, feedUrl) {
     image: imageUrl,
     associatedMedia: episode.audioUrl ? { "@type": "AudioObject", contentUrl: episode.audioUrl, encodingFormat: "audio/mpeg" } : undefined,
     partOfSeries: { "@type": "PodcastSeries", name: "Turing's Torch: AI Weekly", url: new URL("/podcast/", request.url).toString() },
-    author: { "@type": "Person", name: "Jonathan Harris", url: new URL("/bio/", request.url).toString() },
+    author: { "@id": new URL("/#person", request.url).toString() },
     about: entities.map((name) => ({ "@type": "Thing", name })),
   };
   const cleanJsonLd = (obj) => Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== undefined && value !== ""));
@@ -264,7 +285,7 @@ ${episode.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta nam
 <script type="application/ld+json">${escapeJsonForScript(cleanJsonLd(podcastEpisode))}</script>
 <script type="application/ld+json">${escapeJsonForScript(faq)}</script>
 </head>
-<body class="page-podcast page-podcast-episode">
+<body class="page-podcast page-podcast-episode" data-page-type="podcast_episode" data-episode-slug="${escapeHtml(episode.slug || slugify(title))}">
 <main id="main" class="main" role="main">
 <section class="hero hero--podcast-episode">
 <div class="wrap">
@@ -276,6 +297,7 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the transcript</a>
 <a class="button secondary" href="${escapeHtml(feedUrl || DEFAULT_PODCAST_FEED_URL)}" rel="noopener noreferrer">Subscribe via RSS</a>
 </div>
+${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placement="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
 </div>
 </section>
 <section class="section"><div class="wrap card">
@@ -289,9 +311,10 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 <nav class="actions" aria-label="Episode links">
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Transcript preview</a>
 <a class="button secondary" href="/topics/">Related AI topic guides</a>
-<a class="button secondary" href="/ebooks/">Related Jonathan Harris books</a>
+<a class="button secondary" href="/book-finder/">Find a related Jonathan Harris book</a>
 <a class="button secondary" href="/newsletter/">Join the newsletter</a>
 </nav>
+${relatedBooks}
 ${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : ""}
 <h2>Share this episode</h2>
 <nav class="share-links" aria-label="Share episode">
@@ -302,6 +325,7 @@ ${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-me
 </nav>
 </div></section>
 </main>
+<script defer src="/assets/js/funnel-events.min.js"></script>
 <script defer src="/assets/js/share.min.js"></script>
 <script defer src="/assets/js/site-ui.min.js"></script>
 </body>
@@ -321,8 +345,9 @@ export async function onRequest(context) {
   } catch {}
 
   if (!episode) episode = fallbackEpisodeFromSlug(slug, context.request);
+  const relatedBooks = await relatedBooksMarkup(context, episode);
 
-  return new Response(renderEpisodePage(episode, context.request, feedUrl), {
+  return new Response(renderEpisodePage(episode, context.request, feedUrl, relatedBooks), {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
