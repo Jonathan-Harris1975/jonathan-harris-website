@@ -1,0 +1,7 @@
+{
+  "site_css_baseline_bytes": 131205,
+  "site_css_max_bytes": 135168,
+  "tolerance": "3% rounded up to the next 1 KiB",
+  "established": "2026-07-25",
+  "note": "Budget follows the measured post-growth stylesheet baseline; it is a regression ceiling, not an invented performance target."
+}
