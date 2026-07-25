@@ -48,11 +48,22 @@ async function fetchFeedEpisodes(context) {
   throw last||new Error('podcast feed unavailable');
 }
 
-function buildAeoPrelude(episode, request) {
+async function relatedBookMarkup(context, episode) {
+  if(!episode)return"";
+  try{
+    const url=new URL('/api/v1/books.json',context.request.url),req=new Request(url.toString(),{headers:{Accept:'application/json'}}),response=context.env?.ASSETS?.fetch?await context.env.ASSETS.fetch(req):await fetch(req);if(!response.ok)return"";
+    const payload=await response.json(),books=Array.isArray(payload)?payload:(Array.isArray(payload?.books)?payload.books:[]),stop=new Set(['this','that','with','from','into','about','artificial','intelligence','weekly','episode','turing','torch','jonathan','harris','what','where','which','when','your','have','will','their']),tokens=new Set(cleanText(`${episode.title||''} ${episode.summary||''}`).toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>3&&!stop.has(x)));
+    const ranked=books.map(book=>{const hay=cleanText(`${book.title||''} ${book.topic||''} ${(book.tags||[]).join(' ')} ${book.short||''}`).toLowerCase();let score=0;for(const token of tokens)if(hay.includes(token))score++;return{book,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||String(a.book.title).localeCompare(String(b.book.title))).slice(0,3);
+    if(!ranked.length)return"";
+    return `<h2>Related books</h2><p>Chosen deterministically from the governed catalogue by overlap with this episode's title and summary.</p><ul>${ranked.map(({book})=>`<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title)}</a> - ${escapeHtml(book.short||book.topic||'Related reading')}</li>`).join('')}</ul>`;
+  }catch{return""}
+}
+
+function buildAeoPrelude(episode, request, relatedBooks="") {
   if(!episode)return"";
   const title=firstNonEmpty(episode.title,"Turing's Torch AI Weekly transcript"), summary=clamp(firstNonEmpty(episode.summary,`Jonathan Harris examines ${title} in plain English, focusing on what changed, what is useful, and where the evidence or incentives deserve a closer look.`),72), takeaways=Array.isArray(episode.key_takeaways)&&episode.key_takeaways.length?episode.key_takeaways.map(cleanText).filter(Boolean).slice(0,5):defaultTakeaways(episode), topics=Array.from(new Set([...(Array.isArray(episode.topics)?episode.topics:[]),...detectTopics(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,8), entities=Array.from(new Set([...(Array.isArray(episode.entities)?episode.entities:[]),...detectEntities(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,12), episodePath=episode.slug?`/podcast/episodes/${episode.slug}/`:"/podcast/", canonicalEpisodeUrl=new URL(episodePath,request.url).toString(), transcriptUrl=normaliseManifestUrl(episode.transcript_url,request)||request.url;
-  const episodeSchema={"@context":"https://schema.org","@type":"PodcastEpisode","name":title,"url":canonicalEpisodeUrl,"datePublished":firstNonEmpty(episode.date)||undefined,"description":summary,"transcript":transcriptUrl,"partOfSeries":{"@type":"PodcastSeries","name":"Turing's Torch: AI Weekly","url":new URL('/podcast/',request.url).toString()},"author":{"@type":"Person","name":"Jonathan Harris","url":new URL('/bio/',request.url).toString()},"about":[...topics,...entities].map(name=>({"@type":"Thing","name":name}))};
-  const transcriptSchema={"@context":"https://schema.org","@type":["CreativeWork","Transcript"],"additionalType":"https://schema.org/Transcript","name":`Transcript: ${title}`,"url":transcriptUrl,"isPartOf":{"@type":"PodcastEpisode","url":canonicalEpisodeUrl,"name":title},"author":{"@type":"Person","name":"Jonathan Harris","url":new URL('/bio/',request.url).toString()},"description":summary,"inLanguage":"en-GB"};
+  const episodeSchema={"@context":"https://schema.org","@type":"PodcastEpisode","name":title,"url":canonicalEpisodeUrl,"datePublished":firstNonEmpty(episode.date)||undefined,"description":summary,"transcript":transcriptUrl,"partOfSeries":{"@type":"PodcastSeries","name":"Turing's Torch: AI Weekly","url":new URL('/podcast/',request.url).toString()},"author":{"@id":new URL('/#person',request.url).toString()},"about":[...topics,...entities].map(name=>({"@type":"Thing","name":name}))};
+  const transcriptSchema={"@context":"https://schema.org","@type":["CreativeWork","Transcript"],"additionalType":"https://schema.org/Transcript","name":`Transcript: ${title}`,"url":transcriptUrl,"isPartOf":{"@type":"PodcastEpisode","url":canonicalEpisodeUrl,"name":title},"author":{"@id":new URL('/#person',request.url).toString()},"description":summary,"inLanguage":"en-GB"};
   const serialise=o=>JSON.stringify(o,(k,v)=>v===undefined?undefined:v).replace(/<\/script/gi,"<\\/script");
   return `
 <section class="transcript-aeo-summary" aria-label="Transcript summary and answer-engine index">
@@ -64,17 +75,17 @@ function buildAeoPrelude(episode, request) {
   <h2 id="key-takeaways">Five key takeaways</h2><ul>${takeaways.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
   <h2 id="named-entities">Key named entities</h2><ul>${entities.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
   <h2 id="topic-index">Topic index</h2><ul>${topics.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
-  <h2>Related reading and listening</h2><nav class="actions" aria-label="Related transcript links"><a class="button secondary" href="${escapeHtml(episodePath)}">Episode page</a><a class="button secondary" href="/topics/">AI topic guides</a><a class="button secondary" href="/ebooks/">Related books</a><a class="button secondary" href="/glossary/">AI glossary</a></nav>
+  <h2>Related reading and listening</h2><nav class="actions" aria-label="Related transcript links"><a class="button secondary" href="${escapeHtml(episodePath)}">Episode page</a><a class="button secondary" href="/topics/">AI topic guides</a><a class="button secondary" href="/book-finder/">Book finder</a><a class="button secondary" href="/glossary/">AI glossary</a></nav>${relatedBooks}
 </section>
 <script type="application/ld+json">${serialise(episodeSchema)}</script>
 <script type="application/ld+json">${serialise(transcriptSchema)}</script>`;
 }
-function enhanceTranscriptHtml(html,prelude){if(!prelude||html.includes('transcript-aeo-summary'))return html;const insertion=`${prelude}\n<div id="transcript-body" tabindex="-1"></div>`;if(/<main\b[^>]*>/i.test(html))return html.replace(/<main\b[^>]*>/i,m=>`${m}\n${insertion}`);if(/<body\b[^>]*>/i.test(html))return html.replace(/<body\b[^>]*>/i,m=>`${m}\n<main id="main">\n${insertion}`).replace(/<\/body>/i,'</main>\n</body>');return `${insertion}\n${html}`}
+function enhanceTranscriptHtml(html,prelude){if(!prelude)return html;let out=html;if(!out.includes('transcript-aeo-summary')){const insertion=`${prelude}\n<div id="transcript-body" tabindex="-1"></div>`;if(/<main\b[^>]*>/i.test(out))out=out.replace(/<main\b[^>]*>/i,m=>`${m}\n${insertion}`);else if(/<body\b[^>]*>/i.test(out))out=out.replace(/<body\b[^>]*>/i,m=>`${m}\n<main id="main">\n${insertion}`).replace(/<\/body>/i,'</main>\n</body>');else out=`${insertion}\n${out}`}if(!out.includes('/assets/js/funnel-events.min.js'))out=out.replace(/<\/body>/i,'<script defer src="/assets/js/funnel-events.min.js"></script></body>');return out}
 
 export async function onRequest(context) {
   const {params,env,request}=context, rawKey=slugPartsFromParams(params).join('/'); if(!rawKey)return context.next();
   let object=await env.TRANSCRIPTS_BUCKET.get(rawKey); if(!object&&!rawKey.match(/\.(html|htm|txt|json|xml)$/i))object=await env.TRANSCRIPTS_BUCKET.get(`${rawKey}.html`); if(!object)return context.next();
   const headers=new Headers(), contentType=object.httpMetadata?.contentType??"text/html; charset=utf-8"; headers.set('Content-Type',contentType);headers.set('Cache-Control','public, max-age=3600, stale-while-revalidate=86400');headers.set('X-Transcript-AEO-Enhancement','enabled');if(object.etag)headers.set('ETag',object.etag);if(request.headers.get('If-None-Match')===object.etag)return new Response(null,{status:304,headers});if(!contentType.includes('text/html'))return new Response(object.body,{status:200,headers});
   let episodes=await fetchEpisodeManifest(context), episode=findEpisodeForTranscript(episodes,rawKey,request); if(!episode){try{episodes=await fetchFeedEpisodes(context);episode=findEpisodeForTranscript(episodes,rawKey,request)}catch{}}
-  const html=await object.text(), enhanced=enhanceTranscriptHtml(html,buildAeoPrelude(episode,request)); return new Response(enhanced,{status:200,headers});
+  const relatedBooks=await relatedBookMarkup(context,episode),html=await object.text(), enhanced=enhanceTranscriptHtml(html,buildAeoPrelude(episode,request,relatedBooks)); return new Response(enhanced,{status:200,headers});
 }
