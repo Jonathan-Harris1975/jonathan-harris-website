@@ -107,6 +107,7 @@ def main() -> int:
 
     run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
     run_step("Generate curated ebook reading paths", [sys.executable, "scripts/generate_ebook_bundles.py"])
+    run_step("Generate growth, evidence and conversion assets", [sys.executable, "scripts/generate_growth_assets.py"])
     run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
     run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
     run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
@@ -115,8 +116,10 @@ def main() -> int:
     run_step("Inject shared partials (header + footer)", [sys.executable, "scripts/inject_partials.py"])
     run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
     run_step("Validate shared chrome visibility and spacing", [sys.executable, "scripts/check_shared_chrome_layout.py"])
+    run_step("Check CSS size budget", [sys.executable, "scripts/check_css_budget.py", "--check"])
     run_step("Apply third-party script governance", [sys.executable, "scripts/govern_page_scripts.py"])
     run_step("Validate third-party script governance", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
+    run_step("Run growth regression contracts", [sys.executable, "scripts/test_growth_contracts.py"])
     run_step("Run Phase 4A schema-markup gate", [sys.executable, "scripts/audits/schema_markup_gate.py", "--root", "."])
 
     validate_command = [sys.executable, "scripts/validate_release.py"]

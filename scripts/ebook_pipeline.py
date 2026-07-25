@@ -101,7 +101,7 @@ CRAWLER_SNAPSHOT_FILENAMES = {
 }
 
 TEMPLATE_REQUIRED_FRAGMENTS = [
-    '<body class="ebook-detail">',
+    '<body class="ebook-detail"',
     '<nav aria-label="Breadcrumb" class="breadcrumbs">',
     '<section class="card ebook-section quick-facts">',
     '<section class="ebook-showcase">',
@@ -644,8 +644,15 @@ def broken_phrase_errors(books: List[Dict[str, Any]]) -> List[str]:
 
 def title_contract_errors(relative_path: str, repo_title: str, workbook_title: str) -> List[str]:
     errors: List[str] = []
-    if repo_title != workbook_title:
-        errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
+    if repo_title == workbook_title:
+        return errors
+    # Public catalogue totals are generated from the ebook master, so a stale
+    # workbook Pages-sheet number must not overrule the governed BOOK_COUNT.
+    def normalise_count(value: str) -> str:
+        return re.sub(r"\b\d+(?=\s+Plain-English AI Books\b)", "{BOOK_COUNT}", value, flags=re.I)
+    if relative_path in {"bio/index.html", "index.html"} and normalise_count(repo_title) == normalise_count(workbook_title):
+        return errors
+    errors.append(f"Workbook Pages title mismatch for {relative_path}: workbook '{workbook_title}' != repo '{repo_title}'.")
     return errors
 
 
@@ -792,7 +799,7 @@ def build_person_schema() -> Dict[str, Any]:
         "@type": "Person",
         "@id": f"{SITE_URL}/#person",
         "name": SITE_NAME,
-        "url": f"{SITE_URL}/",
+        "url": f"{SITE_URL}/bio/",
         "jobTitle": ["AI Author", "Podcast Host"],
         "description": "Jonathan Harris is an artificial intelligence author and host of the Turing’s Torch AI Weekly podcast. He writes plain-English books explaining how AI works across industries including healthcare, finance, law, manufacturing, and education.",
         "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Generative AI", "AI Ethics", "Applied AI", "LLMs"],
@@ -873,11 +880,11 @@ def render_inline_newsletter_form(
     source: str,
     *,
     next_path: str = "/downloads/ai-glossary-cheat-sheet/",
-    cta: str = "Join and get the free glossary cheat sheet",
+    cta: str = "Send me the briefing + glossary",
 ) -> str:
-    return f'''<div class="inline-newsletter" data-newsletter-shell>
-  <h3>Keep the useful bits</h3>
-  <p>Get the weekday AI briefing plus the free plain-English AI glossary cheat sheet.</p>
+    return f'''<div class="inline-newsletter" data-newsletter-shell data-newsletter-source="{html.escape(source)}">
+  <h3>Get the free AI glossary and tomorrow’s 3-minute AI briefing</h3>
+  <p>One useful weekday briefing, plus the plain-English AI glossary. No second lead magnet hiding behind the curtain.</p>
   <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
     <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com"/></label>
     <input type="hidden" name="source" value="{html.escape(source)}"/>
@@ -926,7 +933,7 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
             "name": book["title"],
             "url": book["canonical_url"],
         },
-        "author": {"@type": "Person", "name": book["author"], "url": f"{SITE_URL}/bio/"},
+        "author": {"@id": f"{SITE_URL}/#person"},
         "inLanguage": "en-GB",
     }
     header = render_header()
@@ -955,14 +962,14 @@ def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
         "url": book["canonical_url"],
         "description": book["description"],
         "image": [book["cover"]],
-        "author": {"@type": "Person", "name": book["author"], "url": f"{SITE_URL}/bio/"},
+        "author": {"@id": f"{SITE_URL}/#person"},
         "bookFormat": "EBook",
         "datePublished": book["datePublished"],
         "dateModified": book.get("dateModified") or infer_build_timestamp(),
         "inLanguage": "en-GB",
         "numberOfPages": book["pages"],
         "sameAs": [book["buy_url"]] if book.get("buy_url") else [],
-        "publisher": {"@type": "Person", "name": book["author"]},
+        "publisher": {"@id": f"{SITE_URL}/#person"},
         "identifier": [
             {"@type": "PropertyValue", "propertyID": "ASIN", "value": book["asin"]},
             {"@type": "PropertyValue", "propertyID": "Jonathan Harris internal identifier", "value": book["identifier"]},
@@ -2432,6 +2439,27 @@ def category_faq_markup(topic: str, books: List[Dict[str, Any]]) -> str:
     return "\n".join(parts)
 
 
+def category_reading_path(books: List[Dict[str, Any]]) -> tuple[str, str] | None:
+    """Return the first governed reading path that genuinely contains a category title."""
+    try:
+        payload = read_json(DATA_DIR / "ebook-bundles.json", default={}) or {}
+        bundles = payload.get("bundles", []) if isinstance(payload, dict) else []
+    except Exception:
+        bundles = []
+    category_slugs = {clean_paragraph(book.get("slug")) for book in books}
+    for bundle in bundles if isinstance(bundles, list) else []:
+        if not isinstance(bundle, dict):
+            continue
+        members = {clean_paragraph(slug) for slug in bundle.get("books", [])}
+        if not category_slugs.intersection(members):
+            continue
+        slug = clean_paragraph(bundle.get("slug"))
+        title = clean_paragraph(bundle.get("title"))
+        if slug and title:
+            return slug, title
+    return None
+
+
 def category_internal_links(topic: str, books: List[Dict[str, Any]]) -> str:
     topic_name = clean_paragraph(topic)
     family = topic_family(topic_name)
@@ -2472,10 +2500,20 @@ def category_internal_links(topic: str, books: List[Dict[str, Any]]) -> str:
                 guide["summary"],
             )
         )
+    reading_path = category_reading_path(books)
+    if reading_path:
+        path_slug, path_title = reading_path
+        links.append(
+            (
+                f"/bundles/{path_slug}/",
+                f"Reading path: {path_title}",
+                "A curated multi-book route for this topic; titles are purchased separately on Amazon.",
+            )
+        )
     links.append(
         (
-            "/podcast/",
-            f"Listen to the podcast for wider {topic_name.lower()} context",
+            f"/podcast/?topic={slugify(topic_name)}",
+            f"Listen next: Turing’s Torch on {topic_name.lower()}",
             "Editorial context and broader AI commentary beyond the catalogue pages.",
         )
     )
@@ -2488,7 +2526,7 @@ def category_internal_links(topic: str, books: List[Dict[str, Any]]) -> str:
     )
     return "\n".join(
         f'<li><a href="{html.escape(href)}">{html.escape(label)}</a><span>{html.escape(description)}</span></li>'
-        for href, label, description in links[:5]
+        for href, label, description in links[:6]
     )
 
 
@@ -2928,6 +2966,13 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             record["dateModified"] = clean_paragraph(existing.get("dateModified")) or build_timestamp
         else:
             record["dateModified"] = build_timestamp
+        published = clean_paragraph(record.get("datePublished"))
+        modified = clean_paragraph(record.get("dateModified"))
+        # Structured-data chronology is a hard invariant. If the governed source has
+        # no trustworthy later modification date, publication date is the minimum
+        # valid fallback rather than an invented timestamp.
+        if published and modified and modified[:10] < published[:10]:
+            record["dateModified"] = published
     return records
 
 
@@ -3343,7 +3388,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="https://botsailor.com" rel="dns-prefetch"/>
 <script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
-<body class="ebook-detail">
+<body class="ebook-detail" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-page-type="ebook">
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -3379,10 +3424,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <article class="card ebook-showcase__media">
         {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
         <div class="ebook-actions">
-          <a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
-          <a class="button secondary" href="{book_preview_path(book)}">Free preview</a>
+          <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Buy on Amazon</a>
+          <a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Free preview</a>
           <a class="button secondary" href="/ebooks/">Browse related books</a>
         </div>
+        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))} · Free preview available · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
         {render_book_market_signal(book)}
         <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
       </article>
@@ -3480,6 +3526,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="ebook-inline-actions">{render_book_bundle_links(book)}</div>
     </section>
 
+    <section class="card ebook-section ebook-listen-next" aria-labelledby="listen-next-heading">
+      <h2 id="listen-next-heading">Listen next</h2>
+      <p>Use the podcast route for current analysis related to {html.escape(book['topic'].lower())}; episode facts stay governed by the podcast feed rather than copied into this book page.</p>
+      <a class="button secondary" href="/podcast/?topic={html.escape(book['topic_slug'])}">Turing’s Torch on {html.escape(book['topic'])}</a>
+    </section>
+
     <section class="faq card" aria-label="Frequently asked questions">
       <h2>FAQ</h2>
       <div class="ebook-faq-list">
@@ -3511,7 +3563,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
     tags = "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in book.get("tags", [])[:4])
     return f'''
-<article class="card ebook-card" aria-label="{html.escape(book['title'])}">
+<article class="card ebook-card" aria-label="{html.escape(book['title'])}" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}">
   {render_cover_image(book, class_name="cover")}
   <h2>{html.escape(book['title'])}</h2>
   <div class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
@@ -3519,13 +3571,13 @@ def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
   {render_book_market_signal(book)}
   <div class="tags">{tags}</div>
   <div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
+  <div class="actions ebook-card-actions">
+    <a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/" data-ebook-action="view" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="catalogue_card">View book</a>
+    <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="catalogue_card">Buy on Amazon</a>
+  </div>
   <details class="more">
     <summary aria-expanded="false">More details</summary>
     <div class="meta">{html.escape(cta_copy)}</div>
-    <div class="actions">
-      <a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Full description</a>
-      <a class="button" href="{html.escape(book['buy_route'])}">View on Amazon</a>
-    </div>
   </details>
 </article>'''.strip()
 
@@ -4187,6 +4239,9 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
         ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
         ("newsletter", "AI Edge newsletter", "/newsletter/", "newsletter/index.html", "Newsletter sign-up page for daily AI briefings.", "newsletter"),
         ("lead-magnet", "AI glossary cheat sheet", "/downloads/ai-glossary-cheat-sheet/", "downloads/ai-glossary-cheat-sheet/index.html", "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.", "lead magnet"),
+        ("book-finder", "Find the right AI book", "/book-finder/", "book-finder/index.html", "A deterministic book finder based on reader problem and topic.", "book finder"),
+        ("evidence-index", "AI evidence guides", "/evidence/", "evidence/index.html", "Source-backed AI evidence guides designed for useful retrieval and citation.", "evidence index"),
+        ("resource-index", "Practical AI checklists", "/resources/", "resources/index.html", "Practical AI checklists and decision resources.", "resource index"),
     ]
     routes: List[Dict[str, str]] = []
     for family, title, path, repo_path, summary, entity in candidates:
@@ -4205,12 +4260,41 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
     return routes
 
 
+def load_growth_asset_routes(generated_lastmod: str) -> List[Dict[str, str]]:
+    routes: List[Dict[str, str]] = []
+    for family, data_file, folder in (("evidence-guide", DATA_DIR / "evidence-content.json", "evidence"), ("practical-resource", DATA_DIR / "resource-content.json", "resources")):
+        payload = _load_json_file(data_file, {})
+        items = payload.get("items", []) if isinstance(payload, dict) else []
+        for item in items if isinstance(items, list) else []:
+            if not isinstance(item, dict):
+                continue
+            slug = _first_text(item.get("slug"))
+            title = _first_text(item.get("title"), slug)
+            if not slug:
+                continue
+            repo_path = f"{folder}/{slug}/index.html"
+            if not (ROOT / repo_path).exists():
+                continue
+            routes.append(_manifest_route(
+                family=family,
+                title=title,
+                path=f"/{folder}/{slug}/",
+                lastmod=_normalise_manifest_lastmod(item.get("last_reviewed"), generated_lastmod),
+                source=data_file.relative_to(ROOT).as_posix(),
+                repo_path=repo_path,
+                summary=_first_text(item.get("summary")),
+                entity="AI evidence guide" if family == "evidence-guide" else "AI checklist",
+            ))
+    return routes
+
+
 def build_dynamic_route_entries(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     generated_lastmod = normalise_lastmod(governed_generated_utc(books))
     routes = [
         *load_static_discovery_routes(generated_lastmod),
         *load_bundle_dynamic_routes(generated_lastmod),
         *load_book_preview_dynamic_routes(books, generated_lastmod),
+        *load_growth_asset_routes(generated_lastmod),
         *load_blog_dynamic_routes(generated_lastmod),
         *load_podcast_episode_dynamic_routes(generated_lastmod),
         *load_podcast_route_registry(generated_lastmod),
@@ -4380,6 +4464,12 @@ def build_llms_txt(books: List[Dict[str, Any]]) -> str:
     for book in books:
         lines.append(f"- {book['title']}: {book['canonical_url']} — {brand_safe_discovery_text(book['short'])}")
 
+    evidence_routes = routes_by_family.get("evidence-guide", []) + routes_by_family.get("practical-resource", [])
+    if evidence_routes:
+        lines.extend(["", "## Evidence guides and practical resources"])
+        for route in evidence_routes:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
+
     bundle_routes = routes_by_family.get("book-bundle", [])
     if bundle_routes:
         lines.extend(["", "## Curated eBook reading paths"])
@@ -4435,12 +4525,6 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
         ROOT / "robots.txt": robots_payload,
         ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
-        # Cloudflare Pages has proved unreliable for these case/legacy aliases when
-        # they are represented only as _redirects entries. Publish physical mirrors
-        # as well so the post-deploy live gate validates the compatibility contract
-        # from the deployed asset set, not from an eventually-applied redirect layer.
-        ROOT / "Sitemap.xml": sitemap_payload,
-        ROOT / "site-map.xml": sitemap_payload,
         ROOT / "llms.txt": llms_payload,
     }
 
@@ -4570,6 +4654,12 @@ def build_ebooks_domain_redirects() -> str:
 
 
 def build_derivatives(books: List[Dict[str, Any]]) -> None:
+    # Compatibility sitemap names are redirects/functions, never duplicate physical
+    # canonical XML bodies. Remove stale production artefacts before regeneration.
+    for alias in ("Sitemap.xml", "site-map.xml", "sitemap (1).xml"):
+        alias_path = ROOT / alias
+        if alias_path.exists():
+            alias_path.unlink()
     public_records = [book_to_public_record(book) for book in books]
     write_json(EBOOKS_DIR / "books.json", public_records)
     write_json(ROOT / "assets" / "js" / "books.json", public_records)
@@ -5032,6 +5122,35 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     errors.extend(content_role_validation_errors(books))
     errors.extend(broken_phrase_errors(books))
     errors.extend(related_book_contract_errors(books))
+    for book in books:
+        published = clean_paragraph(book.get("datePublished"))
+        modified = clean_paragraph(book.get("dateModified"))
+        if published and modified and modified[:10] < published[:10]:
+            errors.append(f"{book['slug']} has dateModified earlier than datePublished.")
+
+    # Catalogue route/category contracts prevent copy-clone regressions such as
+    # Retail being generated with Sports canonical/H1/newsletter metadata.
+    category_signatures: Dict[str, str] = {}
+    for topic in sorted({clean_paragraph(book.get("topic")) for book in books if clean_paragraph(book.get("topic"))}):
+        slug = slugify(topic)
+        page = CATALOGUE_DIR / slug / "index.html"
+        if not page.exists():
+            errors.append(f"Catalogue page missing for {topic}: catalogue/{slug}/index.html")
+            continue
+        text = page.read_text(encoding="utf-8", errors="ignore")
+        expected_url = f"{SITE_URL}/catalogue/{slug}/"
+        for marker, label in ((f'<link href="{expected_url}" rel="canonical"/>', "canonical"), (f'<h1>{html.escape(topic)} AI Books</h1>', "H1"), (f'name="source" value="topic:{slug}"', "newsletter source")):
+            if marker not in text:
+                errors.append(f"catalogue/{slug}/ {label} does not align with route/category metadata.")
+        sig = re.sub(r"\s+", " ", re.sub(r"<footer.*", "", text, flags=re.I | re.S)).strip()
+        digest = hashlib.sha256(sig.encode("utf-8")).hexdigest()
+        if digest in category_signatures and category_signatures[digest] != slug:
+            errors.append(f"Cross-category duplicate detected: {slug} duplicates {category_signatures[digest]}.")
+        category_signatures[digest] = slug
+
+    physical_sitemaps = [name for name in ("sitemap.xml", "Sitemap.xml", "site-map.xml", "sitemap (1).xml") if (ROOT / name).exists()]
+    if physical_sitemaps != ["sitemap.xml"]:
+        errors.append(f"Production root must contain one physical sitemap.xml; found {physical_sitemaps}.")
 
     legacy_data_files = [ROOT / "data" / "ebook-content-source.json", ROOT / "data" / "ebook-source-overrides.json"]
     for legacy_path in legacy_data_files:
@@ -5050,6 +5169,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         for book in books:
             if f'/ebooks/{book["slug"]}/' not in index_html:
                 errors.append(f"ebooks/index.html does not link to /ebooks/{book['slug']}/.")
+        if index_html.count('data-placement="catalogue_card"') < len(books) * 2 or index_html.count('>View book</a>') < len(books) or index_html.count('>Buy on Amazon</a>') < len(books):
+            errors.append("Catalogue cards must expose View book and Buy on Amazon outside <details> for every title.")
 
     seen_serp_titles: Dict[str, str] = {}
     duplicate_serp_titles: Dict[str, List[str]] = defaultdict(list)
@@ -5067,6 +5188,12 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"{book['slug']} should emit exactly one FAQPage JSON-LD block.")
         if text.count('"@type":"Book"') != 1:
             errors.append(f"{book['slug']} should emit exactly one Book JSON-LD block.")
+        person_ref = f'"author":{{"@id":"{SITE_URL}/#person"}}'
+        publisher_ref = f'"publisher":{{"@id":"{SITE_URL}/#person"}}'
+        if person_ref not in text or publisher_ref not in text:
+            errors.append(f"{book['slug']} Book JSON-LD must reference the canonical #person author/publisher node.")
+        if "Before you buy" not in text or 'href="#deeper-overview">See exactly what this book covers' not in text:
+            errors.append(f"{book['slug']} is missing the buying-confidence strip.")
         title_match = re.search(r"<title>(.*?)</title>", text, re.I | re.S)
         if not title_match:
             errors.append(f"{book['slug']} page head title is missing.")
@@ -5112,6 +5239,26 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
                 errors.append(f"{book['slug']} metadata.json canonical_url does not match the master record.")
             if metadata.get("buy_url") != book["buy_url"]:
                 errors.append(f"{book['slug']} metadata.json buy_url does not match the master record.")
+            meta_published = clean_paragraph(metadata.get("datePublished"))
+            meta_modified = clean_paragraph(metadata.get("dateModified"))
+            if meta_published and meta_modified and meta_modified[:10] < meta_published[:10]:
+                errors.append(f"{book['slug']} metadata.json has dateModified earlier than datePublished.")
+            book_schema = None
+            for script_body in re.findall(r'<script[^>]+type="application/ld\+json"[^>]*>(.*?)</script>', text, flags=re.I | re.S):
+                try:
+                    candidate = json.loads(html.unescape(script_body))
+                except (TypeError, ValueError, json.JSONDecodeError):
+                    continue
+                if isinstance(candidate, dict) and candidate.get("@type") == "Book":
+                    book_schema = candidate
+                    break
+            if isinstance(book_schema, dict):
+                schema_published = clean_paragraph(book_schema.get("datePublished"))
+                schema_modified = clean_paragraph(book_schema.get("dateModified"))
+                if schema_published and schema_modified and schema_modified[:10] < schema_published[:10]:
+                    errors.append(f"{book['slug']} generated Book JSON-LD has dateModified earlier than datePublished.")
+            else:
+                errors.append(f"{book['slug']} generated Book JSON-LD could not be parsed for chronology validation.")
             if faq_schema.get("mainEntity") != book.get("faq"):
                 errors.append(f"{book['slug']} faq-schema.json does not match the master record.")
 
@@ -5430,11 +5577,9 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         for cover_match in re.finditer(r'<img\b[^>]*class="([^"]*\bcover\b[^"]*)"[^>]*>', page_text, re.I):
             tag = cover_match.group(0)
             src = extract_img_src(tag)
-            if is_remote_image_src(src):
-                if 'srcset="' in tag:
-                    errors.append(f"Remote cover should not emit generated srcset markup in {page_path.relative_to(ROOT)}.")
-                    break
-                continue
+            if is_remote_image_src(src) and not src.startswith("https://images.jonathan-harris.online/"):
+                errors.append(f"Unapproved remote cover host in {page_path.relative_to(ROOT)}.")
+                break
             if 'srcset="' not in tag or 'sizes="' not in tag:
                 errors.append(f"Responsive cover markup missing from {page_path.relative_to(ROOT)}.")
                 break
@@ -5449,14 +5594,12 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     else:
         featured_tag = featured_cover_match.group(0)
         featured_src = extract_img_src(featured_tag)
-        if is_remote_image_src(featured_src):
-            if 'srcset="' in featured_tag:
-                errors.append("Homepage featured cover should not emit generated srcset markup for a remote image.")
-        else:
-            if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
-                errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
-            elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
-                errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
+        if is_remote_image_src(featured_src) and not featured_src.startswith("https://images.jonathan-harris.online/"):
+            errors.append("Homepage featured cover uses an unapproved remote image host.")
+        if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
+            errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
+        elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
+            errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
 
     for book in books:
         page_path = EBOOKS_DIR / book["slug"] / "index.html"
@@ -5469,9 +5612,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             continue
         cover_tag = cover_match.group(0)
         cover_src = extract_img_src(cover_tag)
-        if is_remote_image_src(cover_src):
-            if 'srcset="' in cover_tag:
-                errors.append(f"Remote book cover should not emit generated srcset markup in {page_path.relative_to(ROOT)}.")
+        if is_remote_image_src(cover_src) and not cover_src.startswith("https://images.jonathan-harris.online/"):
+            errors.append(f"Unapproved remote book cover host in {page_path.relative_to(ROOT)}.")
             continue
         if 'srcset="' not in cover_tag or 'sizes="' not in cover_tag:
             errors.append(f"Responsive book cover markup missing from {page_path.relative_to(ROOT)}.")

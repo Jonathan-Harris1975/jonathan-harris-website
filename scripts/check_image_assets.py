@@ -87,8 +87,9 @@ def static_checks() -> list[str]:
         homepage_tag = homepage_tag_match.group(0)
         homepage_src = extract_img_src(homepage_tag)
         errors.extend(validate_remote_image_url("homepage featured cover", homepage_src))
-        if SRCSET_RE.search(homepage_tag):
-            errors.append("Homepage featured cover must not emit generated srcset markup for a remote image.")
+        srcset_match = SRCSET_RE.search(homepage_tag)
+        if not srcset_match or not all(f"width={width}" in srcset_match.group(1) for width in (400, 800, 1200)):
+            errors.append("Homepage featured cover must emit 400w, 800w and 1200w Cloudflare variants.")
 
     for book in books:
         cover = clean_paragraph(book.get("cover", ""))
@@ -106,8 +107,9 @@ def static_checks() -> list[str]:
         page_src = extract_img_src(cover_tag)
         if page_src != cover:
             errors.append(f"{book['slug']} cover check: page src does not match the governed cover URL.")
-        if SRCSET_RE.search(cover_tag):
-            errors.append(f"{book['slug']} cover check: remote cover must not emit generated srcset markup.")
+        srcset_match = SRCSET_RE.search(cover_tag)
+        if not srcset_match or not all(f"width={width}" in srcset_match.group(1) for width in (400, 800, 1200)):
+            errors.append(f"{book['slug']} cover check: expected 400w, 800w and 1200w Cloudflare variants.")
 
     return errors
 

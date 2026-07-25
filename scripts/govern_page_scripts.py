@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / 'assets' / 'partials'
 LEGACY_SCRIPT_PATH = ROOT / 'assets' / 'js' / 'consent-managed-scripts.min.js'
 GTM_ID = 'GTM-PC4K9KRK'
+FUNNEL_SCRIPT = '<script defer src="/assets/js/funnel-events.min.js"></script>'
 
 GTM_HEAD_BLOCK = f'''<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
@@ -47,6 +48,7 @@ CLEANUP_PATTERNS = [
     re.compile(r'\s*<script[^>]*src="https://cdn-cookieyes\.com/client_data/c981d18033783598d2216add/script\.js"[^>]*id="cookieyes"[^>]*></script>\s*', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="/assets/js/consent-managed-scripts(?:\.min)?\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script[^>]*src="/assets/js/script-governance\.min\.js"[^>]*></script>\s*', re.I),
+    re.compile(r'\s*<script[^>]*src="/assets/js/funnel-events\.min\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<script\b[^>]*>(?:(?!</script>).)*tracker\.metricool\.com/resources/be\.js(?:(?!</script>).)*</script>\s*', re.I | re.S),
     re.compile(r'\s*<script[^>]*src="https://tracker\.metricool\.com/resources/be\.js"[^>]*></script>\s*', re.I),
     re.compile(r'\s*<!--\s*Chatbot(?:[^>]*)?-->\s*', re.I),
@@ -94,6 +96,11 @@ def inject_blocks(text: str) -> tuple[str, list[str]]:
     else:
         updated = updated.replace('</head>', f'{RUNTIME_HEAD_BLOCK}\n</head>', 1)
 
+    if '</body>' not in updated:
+        errors.append('missing </body>')
+    else:
+        updated = updated.replace('</body>', f'{FUNNEL_SCRIPT}\n</body>', 1)
+
     return re.sub(r'\n{3,}', '\n\n', updated), errors
 
 
@@ -127,6 +134,8 @@ def validate_page(text: str) -> list[str]:
 
     if re.search(r'GTM-TFM7Q3RB|G-NLC3RN7H86|\bgtag\(', text, re.I):
         errors.append('contains stale Google analytics/tag code')
+    if text.count('/assets/js/funnel-events.min.js') != 1:
+        errors.append('must contain exactly one first-party funnel event loader')
     return errors
 
 

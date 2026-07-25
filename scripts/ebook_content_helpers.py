@@ -109,7 +109,9 @@ def build_same_source_srcset(src: str, intrinsic_width: int | None) -> str:
         return ""
     if cleaned.lower().endswith(".svg"):
         return ""
-    if cleaned.startswith(("http://", "https://")):
+    if cleaned.startswith("http://"):
+        return ""
+    if cleaned.startswith("https://") and not cleaned.startswith("https://images.jonathan-harris.online/"):
         return ""
     widths = [width for width in RESPONSIVE_IMAGE_WIDTHS if intrinsic_width is None or width <= intrinsic_width]
     if not widths:

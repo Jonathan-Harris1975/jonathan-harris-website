@@ -16,6 +16,12 @@ import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.ebook_content_helpers import build_same_source_srcset, cover_sizes
+
 ROOT = Path(__file__).resolve().parents[1]
 BOOKS_JSON = ROOT / "api" / "v1" / "books.json"
 INDEX_HTML = ROOT / "index.html"
@@ -84,11 +90,19 @@ def inject(book: dict) -> None:
         r'(<a aria-label="View featured book" href=")[^"]+(" id="featuredEbookPage")',
         rf'\g<1>{url_rel}\g<2>', src
     )
-    # featuredEbookCover alt + src
-    src = re.sub(
-        r'(<img alt=")[^"]+(" class="featured-cover-img"[^>]+src=")[^"]+(")',
-        rf'\g<1>{title} cover\g<2>{cover}\g<3>', src
-    )
+    # featuredEbookCover: governed original src plus approved Cloudflare responsive variants.
+    srcset = build_same_source_srcset(cover, None)
+    sizes = cover_sizes("featured-cover-img")
+    def replace_featured_img(match: re.Match[str]) -> str:
+        tag = match.group(0)
+        tag = re.sub(r'alt="[^"]*"', f'alt="{title} cover"', tag, count=1)
+        tag = re.sub(r'src="[^"]*"', f'src="{cover}"', tag, count=1)
+        tag = re.sub(r'\s+srcset="[^"]*"', '', tag)
+        tag = re.sub(r'\s+sizes="[^"]*"', '', tag)
+        if srcset:
+            tag = tag[:-2] + f' srcset="{srcset}" sizes="{sizes}"/>' if tag.endswith('/>') else tag[:-1] + f' srcset="{srcset}" sizes="{sizes}">'
+        return tag
+    src = re.sub(r'<img\b[^>]*class="featured-cover-img"[^>]*>', replace_featured_img, src, count=1)
     # featuredEbookMeta
     src = re.sub(
         r'(<span class="featured-meta" id="featuredEbookMeta">)[^<]*(</span>)',

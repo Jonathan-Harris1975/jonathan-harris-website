@@ -1,0 +1,143 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+import csv, html, json, re, tempfile, sys
+from pathlib import Path
+from bs4 import BeautifulSoup
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.ebook_pipeline import ROOT, SITE_URL, load_master, slugify
+from scripts.generate_growth_assets import apply_book_count
+from scripts.reconcile_kdp import reconcile
+
+ERRORS=[]
+def check(condition:bool,message:str):
+    if not condition: ERRORS.append(message)
+
+def text(path:Path)->str: return path.read_text(encoding='utf-8',errors='ignore')
+
+def main()->int:
+    books=load_master(); count=len(books)
+    check(count>0,'governed ebook master is empty')
+
+    # Dynamic count architecture + fixture behaviour.
+    fixture='Browse 36 AI Books. His 36 books sit across the 36-book library.'
+    changed=apply_book_count(fixture,41)
+    check('41' in changed and '36-book' not in changed and '36 books' not in changed,'BOOK_COUNT helper did not update a synthetic fixture')
+    for rel in ['index.html','bio/index.html','glossary/index.html']:
+        body=text(ROOT/rel)
+        check(not re.search(r'\b36(?:-book|\s+(?:plain-English\s+)?(?:AI\s+)?(?:books|ebooks|eBooks))\b',body,re.I),f'{rel} contains stale 36-book catalogue residue')
+    check(str(count) in text(ROOT/'index.html'),'homepage does not expose generated book count')
+
+    # Retail/category route invariants.
+    retail=text(ROOT/'catalogue'/'retail'/'index.html')
+    check(f'{SITE_URL}/catalogue/retail/' in retail,'Retail canonical URL is wrong')
+    check('<h1>Retail AI Books</h1>' in retail,'Retail H1 is wrong')
+    check('name="source" value="topic:retail"' in retail,'Retail newsletter source is wrong')
+    check('Sports AI Books' not in retail,'Retail page still contains Sports title/H1 clone')
+
+    # One physical sitemap + all reading paths.
+    physical=[n for n in ['sitemap.xml','Sitemap.xml','site-map.xml','sitemap (1).xml'] if (ROOT/n).exists()]
+    check(physical==['sitemap.xml'],f'physical sitemap set is {physical}, expected only sitemap.xml')
+    sitemap=text(ROOT/'sitemap.xml') if (ROOT/'sitemap.xml').exists() else ''
+    bundles=json.loads(text(ROOT/'data'/'ebook-bundles.json')).get('bundles',[])
+    for bundle in bundles:
+        check(f'/bundles/{bundle["slug"]}/' in sitemap,f'reading path {bundle["slug"]} missing from sitemap')
+    check('/bundles/ai-at-work/' in text(ROOT/'index.html'),'homepage does not route to reading paths')
+    check('/bundles/ai-in-regulated-industries/' in text(ROOT/'compare'/'index.html'),'comparison hub does not expose reading paths')
+    check('/bundles/ai-health-and-care/' in text(ROOT/'topics'/'ai-in-healthcare'/'index.html'),'healthcare topic hub does not expose its relevant reading path')
+
+    # Legacy redirects are permanent, exact and chain-free in repository rules.
+    redirects=text(ROOT/'_redirects')
+    check(re.search(r'^/book/\*\s+/ebooks/:splat\s+301\s*$',redirects,re.M) is not None,'broad /book/* redirect missing')
+    for alias in ['/Sitemap.xml','/site-map.xml']:
+        check(re.search(rf'^{re.escape(alias)}\s+/sitemap\.xml\s+301\s*$',redirects,re.M) is not None,f'{alias} does not redirect directly to /sitemap.xml')
+    for book in books[:3]+books[-3:]:
+        slug=book['slug']
+        check(re.search(rf'^/book/{re.escape(slug)}/buy-now\s+/ebooks/{re.escape(slug)}/buy-now\s+301\s*$',redirects,re.M) is not None,f'exact legacy buy-now redirect missing for {slug}')
+
+    # Chronology at source + generated levels; canonical Person references.
+    for book in books:
+        pub=str(book.get('datePublished',''))[:10]; mod=str(book.get('dateModified',''))[:10]
+        check(not(pub and mod and mod<pub),f'{book["slug"]} source chronology invalid')
+        page_path=ROOT/'ebooks'/book['slug']/'index.html'; page=text(page_path)
+        soup=BeautifulSoup(page,'html.parser')
+        book_schema=None
+        for script in soup.find_all('script',attrs={'type':'application/ld+json'}):
+            try: obj=json.loads(script.string or script.get_text())
+            except Exception: continue
+            if isinstance(obj,dict) and obj.get('@type')=='Book': book_schema=obj; break
+        check(isinstance(book_schema,dict),f'{book["slug"]} Book JSON-LD missing/unparseable')
+        if isinstance(book_schema,dict):
+            sp=str(book_schema.get('datePublished',''))[:10]; sm=str(book_schema.get('dateModified',''))[:10]
+            check(not(sp and sm and sm<sp),f'{book["slug"]} generated Book chronology invalid')
+            check(book_schema.get('author')=={'@id':f'{SITE_URL}/#person'},f'{book["slug"]} author does not reference canonical #person')
+            check(book_schema.get('publisher')=={'@id':f'{SITE_URL}/#person'},f'{book["slug"]} publisher does not reference canonical #person')
+        check('Before you buy' in page and 'See exactly what this book covers' in page,f'{book["slug"]} confidence strip missing')
+        check('/podcast/?topic=' in page and 'Listen next' in page,f'{book["slug"]} contextual podcast route missing')
+        img=soup.select_one('img.ebook-showcase__cover')
+        check(bool(img and all(f'{w}w' in (img.get('srcset') or '') for w in (400,800,1200))),f'{book["slug"]} responsive cover variants missing')
+
+    # Catalogue commercial actions must remain outside details.
+    catalogue=BeautifulSoup(text(ROOT/'ebooks'/'index.html'),'html.parser')
+    cards=catalogue.select('.ebook-card[data-book-slug]')
+    check(len(cards)==count,f'catalogue card count {len(cards)} does not match master {count}')
+    for card in cards:
+        slug=card.get('data-book-slug','?')
+        view=card.find('a',string=lambda s:isinstance(s,str) and s.strip()=='View book')
+        buy=card.find('a',string=lambda s:isinstance(s,str) and s.strip()=='Buy on Amazon')
+        check(view is not None and buy is not None,f'{slug} visible commercial actions missing')
+        check(view is not None and view.find_parent('details') is None,f'{slug} View book is hidden in details')
+        check(buy is not None and buy.find_parent('details') is None,f'{slug} Buy on Amazon is hidden in details')
+
+    # Homepage featured cover responsive contract.
+    home=BeautifulSoup(text(ROOT/'index.html'),'html.parser')
+    featured=home.select_one('img.featured-cover-img')
+    check(bool(featured and all(f'{w}w' in (featured.get('srcset') or '') for w in (400,800,1200))),'homepage featured cover lacks 400/800/1200 srcset')
+
+    # Funnel event contract and PII boundary.
+    funnel=text(ROOT/'assets/js/funnel-events.min.js')
+    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','bundle_view','bundle_book_click']
+    for event in required: check(f"'{event}'" in funnel,f'funnel event {event} missing')
+    check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
+    newsletter=text(ROOT/'assets/js/newsletter-signup.min.js')
+    check('newsletter_success' in newsletter and 'newsletter_submit' in newsletter,'newsletter success/submit instrumentation missing')
+
+    # Podcast crawlable integration seam and deferred third parties.
+    podcast=text(ROOT/'podcast'/'index.html')
+    check('Latest three episodes' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks server-populated latest-three seam')
+    check('data-spotify-load' in podcast and '<iframe title="Turing\'s Torch on Spotify"' not in podcast,'Spotify embed is not click-to-load')
+    check('data-elfsight-load' in podcast and 'src="https://elfsightcdn.com/platform.js"' not in podcast,'Elfsight script is not deferred behind interaction')
+    check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
+
+    # Evidence/resource estate and source provenance.
+    evidence=json.loads(text(ROOT/'data'/'evidence-content.json')).get('items',[])
+    resources=json.loads(text(ROOT/'data'/'resource-content.json')).get('items',[])
+    check(len(evidence)==7,'expected seven commercial evidence clusters')
+    check(len(resources)==6,'expected six linkable HTML resources')
+    for item in evidence:
+        check((ROOT/'evidence'/item['slug']/'index.html').exists(),f'evidence page missing: {item["slug"]}')
+        for qa in item.get('questions',[]):
+            wc=len(re.findall(r"\b[\w’'-]+\b",qa.get('a','')))
+            check(40<=wc<=90,f'evidence answer {item["slug"]}: {qa.get("q")} is {wc} words; expected citation-sized 40-90')
+        check(all(s.get('organisation') and s.get('title') and s.get('publication_date') and str(s.get('url','')).startswith('https://') for s in item.get('sources',[])),f'evidence provenance incomplete: {item["slug"]}')
+    for item in resources:
+        check((ROOT/'resources'/item['slug']/'index.html').exists(),f'resource page missing: {item["slug"]}')
+
+    # KDP reconciliation does actual arithmetic without invented sales.
+    with tempfile.TemporaryDirectory() as td:
+        td=Path(td); f=td/'f.csv'; s=td/'s.csv'; o=td/'o.csv'
+        f.write_text('date,book_slug,qualified_sessions,book_views,amazon_clicks\n2026-07-24,test-book,100,50,10\n',encoding='utf-8')
+        s.write_text('date,book_slug,sales\n2026-07-24,test-book,2\n',encoding='utf-8')
+        reconcile(f,s,o); rows=list(csv.DictReader(o.open(encoding='utf-8')))
+        check(rows and rows[0]['book_reach']=='0.500000' and rows[0]['amazon_click_rate']=='0.200000' and rows[0]['outbound_to_sale_conversion']=='0.200000','KDP reconciliation maths is wrong')
+
+    if ERRORS:
+        print('Growth contract failures:')
+        for error in ERRORS: print(f' - {error}')
+        return 1
+    print(f'Growth contracts passed: {count} books, 7 evidence guides, 6 resources, funnel + conversion + crawler invariants.')
+    return 0
+if __name__=='__main__': raise SystemExit(main())

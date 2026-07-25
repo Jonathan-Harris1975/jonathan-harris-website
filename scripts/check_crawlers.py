@@ -139,14 +139,6 @@ def run_repo_snapshot_checks() -> List[str]:
                 f"Crawler check failed: delete legacy duplicate crawler file {path.relative_to(ROOT)} so sitemap.xml remains the only canonical sitemap source"
             )
 
-    sitemap_payload = published_files.get(ROOT / "sitemap.xml")
-    for alias_path in (ROOT / "Sitemap.xml", ROOT / "site-map.xml"):
-        if not alias_path.exists():
-            errors.append(f"Crawler check failed: missing static sitemap compatibility mirror {alias_path.relative_to(ROOT)}")
-            continue
-        if sitemap_payload is not None and alias_path.read_text(encoding="utf-8") != sitemap_payload:
-            errors.append(f"Crawler check failed: static sitemap compatibility mirror drift in {alias_path.relative_to(ROOT)}")
-
     deployable_html_files = [
         path for path in ROOT.rglob("*.html")
         if "node_modules" not in path.parts
@@ -314,7 +306,7 @@ def run_live_checks(*, timeout: float = DEFAULT_TIMEOUT, verify_content: bool = 
 
 
 def print_repo_snapshot_summary() -> None:
-    print("Crawler file check passed: robots.txt, canonical sitemap.xml, static sitemap compatibility mirrors, redirect aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
+    print("Crawler file check passed: robots.txt, canonical sitemap.xml, redirect aliases, and llms.txt are governed in-repo. Use --live to verify publication from the primary domain.")
     for name, url in EXTERNAL_CRAWLER_FILES.items():
         print(f"- {name}: {url}")
 
