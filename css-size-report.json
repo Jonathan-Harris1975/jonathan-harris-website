@@ -1,10 +1,10 @@
 [
   {
     "file": "assets/css/affiliate-inline.css",
-    "original_bytes": 2856,
+    "original_bytes": 2612,
     "minified_bytes": 2612,
-    "reduction_bytes": 244,
-    "reduction_pct": 8.54
+    "reduction_bytes": 0,
+    "reduction_pct": 0.0
   },
   {
     "file": "assets/css/compare-inline.css",
@@ -29,16 +29,16 @@
   },
   {
     "file": "assets/css/legal-inline.css",
-    "original_bytes": 2504,
+    "original_bytes": 2503,
     "minified_bytes": 2503,
-    "reduction_bytes": 1,
-    "reduction_pct": 0.04
+    "reduction_bytes": 0,
+    "reduction_pct": 0.0
   },
   {
     "file": "assets/css/site.css",
-    "original_bytes": 81045,
-    "minified_bytes": 80967,
-    "reduction_bytes": 78,
-    "reduction_pct": 0.1
+    "original_bytes": 131157,
+    "minified_bytes": 121530,
+    "reduction_bytes": 9627,
+    "reduction_pct": 7.34
   }
 ]

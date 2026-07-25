@@ -1,0 +1,5 @@
+Files removed by this update. Delete these paths from the target repository before build/deploy:
+
+Sitemap.xml
+site-map.xml
+sitemap (1).xml

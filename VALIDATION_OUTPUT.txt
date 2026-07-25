@@ -1,4 +1,4 @@
-Validation run: 2026-06-01T08:37:12Z
+Validation run: 2026-06-22T00:00:00Z
 Book count: 40
 Topic count: 25
 Workbook title parity: 92/92 passed, 0 mismatched
