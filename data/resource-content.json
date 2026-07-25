@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "last_reviewed": "2026-07-25",
+  "items": [
+    {
+      "slug": "uk-workplace-ai-literacy-checklist",
+      "title": "UK Workplace AI Literacy Checklist",
+      "summary": "A practical checklist for managers introducing AI at work, with role-specific literacy, data handling, output checking and escalation controls.",
+      "sections": [
+        [
+          "Know what is being used",
+          [
+            "List the AI tools staff are allowed to use.",
+            "Record the business tasks each tool supports.",
+            "Identify which teams, contractors and service providers use them."
+          ]
+        ],
+        [
+          "Teach the failure modes",
+          [
+            "Explain hallucination, uncertainty and misleading confidence.",
+            "Show staff what information must be checked against an authoritative source.",
+            "Use examples from the organisation’s real tasks rather than generic demos."
+          ]
+        ],
+        [
+          "Set data boundaries",
+          [
+            "Define what personal, confidential or client data may enter each tool.",
+            "Document retention, training and supplier data-use terms.",
+            "Give staff a safe route when they are unsure whether data can be used."
+          ]
+        ],
+        [
+          "Make human oversight real",
+          [
+            "Name the decisions that require human approval.",
+            "Ensure reviewers have time and authority to challenge outputs.",
+            "Record incidents and feed lessons back into guidance."
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "European Commission, AI Office",
+          "title": "AI Literacy - Questions & Answers",
+          "publication_date": "2025-11-19",
+          "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+        },
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        }
+      ],
+      "related": [
+        "/evidence/workplace-ai-literacy/",
+        "/ebooks/ai-literacy-for-the-modern-workplace/",
+        "/bundles/ai-at-work/"
+      ]
+    },
+    {
+      "slug": "deepfake-verification-checklist",
+      "title": "Deepfake Verification Checklist",
+      "summary": "A step-by-step verification checklist for suspicious video, audio and images, designed to reduce reliance on visual guessing or a single detector score.",
+      "sections": [
+        [
+          "Preserve the evidence",
+          [
+            "Save the original URL and publication context.",
+            "Keep the original file where law and policy allow.",
+            "Note when and where the item was first encountered."
+          ]
+        ],
+        [
+          "Check provenance",
+          [
+            "Find the earliest credible source rather than the loudest repost.",
+            "Look for trustworthy provenance metadata or platform disclosure.",
+            "Compare with official channels for the person or organisation depicted."
+          ]
+        ],
+        [
+          "Corroborate independently",
+          [
+            "Use reverse image or frame search where useful.",
+            "Look for independent reporting of the same event or claim.",
+            "Treat automated detector scores as supporting evidence, not a final verdict."
+          ]
+        ],
+        [
+          "Escalate high-stakes cases",
+          [
+            "Pause payments, publication or disciplinary action while verification is unresolved.",
+            "Use specialist forensic support when consequences are serious.",
+            "Document what was checked and what remains uncertain."
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "Ofcom",
+          "title": "A deep dive into deepfakes that demean, defraud and disinform",
+          "publication_date": "2024-07-23",
+          "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfakes-demean-defraud-disinform"
+        },
+        {
+          "organisation": "Ofcom",
+          "title": "Deepfake Defences 2 - The Attribution Toolkit",
+          "publication_date": "2025-07-11",
+          "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfake-defences-2--the-attribution-toolkit"
+        },
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "Deepfake detection technology",
+          "publication_date": "2026-03-26",
+          "url": "https://www.gov.uk/government/publications/deepfake-detection-technology"
+        }
+      ],
+      "related": [
+        "/evidence/deepfake-detection-and-synthetic-media/",
+        "/ebooks/deepfakes-ai-scams-and-synthetic-reality/"
+      ]
+    },
+    {
+      "slug": "ai-procurement-questions-small-businesses",
+      "title": "AI Procurement Questions for Small Businesses",
+      "summary": "Questions for buying AI tools without discovering the real data, security and lock-in terms after the trial has already spread through the business.",
+      "sections": [
+        [
+          "Purpose and evidence",
+          [
+            "What exact task does the tool improve?",
+            "What evidence shows the benefit for a business like ours?",
+            "What manual or conventional software option are we comparing it with?"
+          ]
+        ],
+        [
+          "Data and privacy",
+          [
+            "What data leaves our systems?",
+            "Is our content used to train or improve models?",
+            "Where is data stored and how can it be deleted or exported?"
+          ]
+        ],
+        [
+          "Security and control",
+          [
+            "Which models and subcontractors sit underneath the service?",
+            "How are permissions and administrator actions controlled?",
+            "How are security incidents and material product changes communicated?"
+          ]
+        ],
+        [
+          "Commercial reality",
+          [
+            "What happens to price after the trial?",
+            "Can we leave without losing our data or workflow history?",
+            "Who owns generated output and who carries responsibility for errors?"
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        },
+        {
+          "organisation": "Office for National Statistics",
+          "title": "Business insights and impact on the UK economy: 8 January 2026",
+          "publication_date": "2026-01-08",
+          "url": "https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/bulletins/businessinsightsandimpactontheukeconomy/8january2026"
+        }
+      ],
+      "related": [
+        "/evidence/ai-for-small-business/",
+        "/ebooks/artificial-intelligence-for-small-business/"
+      ]
+    },
+    {
+      "slug": "responsible-ai-checklist-managers",
+      "title": "Responsible AI Checklist for Managers",
+      "summary": "A practical manager checklist for ownership, data, human review, monitoring and incident handling around AI systems.",
+      "sections": [
+        [
+          "Name the owner",
+          [
+            "Assign a named owner for each material AI use.",
+            "Record purpose, affected users and the decision it influences.",
+            "Set a date for review rather than approving a tool forever."
+          ]
+        ],
+        [
+          "Bound the system",
+          [
+            "Specify approved data sources and prohibited inputs.",
+            "Limit permissions to what the task requires.",
+            "Define which outputs are advice and which can trigger action."
+          ]
+        ],
+        [
+          "Check people and impact",
+          [
+            "Identify who may be disadvantaged by errors or bias.",
+            "Give users a way to challenge consequential outcomes.",
+            "Make human review meaningful rather than ceremonial."
+          ]
+        ],
+        [
+          "Monitor and stop",
+          [
+            "Track failures and complaints as well as success metrics.",
+            "Reassess after supplier or model changes.",
+            "Keep a practical kill switch or fallback process for material failures."
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "European Commission, AI Office",
+          "title": "AI Literacy - Questions & Answers",
+          "publication_date": "2025-11-19",
+          "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+        },
+        {
+          "organisation": "Information Commissioner’s Office",
+          "title": "Guidance on AI and data protection",
+          "publication_date": "2025-06-19",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        }
+      ],
+      "related": [
+        "/evidence/ai-governance-and-law/",
+        "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
+      ]
+    },
+    {
+      "slug": "ai-agent-risk-checklist",
+      "title": "AI Agent Risk Checklist",
+      "summary": "A pre-deployment checklist for AI agents that can call tools or take actions, focused on permissions, observability, reversibility and escalation.",
+      "sections": [
+        [
+          "Define the job",
+          [
+            "Write the goal and stopping condition in plain language.",
+            "List the tools and data the agent genuinely needs.",
+            "Prefer deterministic automation where the task is already deterministic."
+          ]
+        ],
+        [
+          "Restrict authority",
+          [
+            "Apply least-privilege permissions.",
+            "Require confirmation for irreversible, financial or external actions.",
+            "Separate test and production credentials."
+          ]
+        ],
+        [
+          "Observe behaviour",
+          [
+            "Log tool calls, actions and important intermediate decisions.",
+            "Test malformed inputs, unavailable tools and conflicting instructions.",
+            "Measure failure recovery, not just successful demo runs."
+          ]
+        ],
+        [
+          "Plan recovery",
+          [
+            "Make actions reversible where practical.",
+            "Define a human escalation route and kill switch.",
+            "Re-test after model, prompt, tool or permission changes."
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        }
+      ],
+      "related": [
+        "/evidence/ai-agents-for-ordinary-work/",
+        "/ebooks/ai-agents-for-everyday-work/",
+        "/bundles/ai-at-work/"
+      ]
+    },
+    {
+      "slug": "ai-regulated-industries-evidence-map",
+      "title": "AI in Regulated Industries Evidence Map",
+      "summary": "A compact map of primary sources for healthcare, finance, data protection, security and AI literacy, with questions to ask before relying on a vendor claim.",
+      "sections": [
+        [
+          "Healthcare",
+          [
+            "Check regulator status for the exact product and intended use.",
+            "Separate device authorisation from evidence of benefit in your setting.",
+            "Review monitoring, workflow and human-oversight evidence."
+          ]
+        ],
+        [
+          "Financial services",
+          [
+            "Check FCA and Bank of England material for sector-specific expectations and adoption evidence.",
+            "Map third-party model and cloud dependencies.",
+            "Distinguish assisted decisions from full autonomy."
+          ]
+        ],
+        [
+          "Data protection and security",
+          [
+            "Map personal-data purpose, lawful basis, minimisation and rights.",
+            "Use security guidance across development, deployment and operation.",
+            "Treat supplier changes as a trigger for review."
+          ]
+        ],
+        [
+          "Governance evidence",
+          [
+            "Keep source dates and links beside important claims.",
+            "Record limitations as well as benefits.",
+            "Prefer regulator, government, standards and peer-reviewed sources over vendor summaries."
+          ]
+        ]
+      ],
+      "sources": [
+        {
+          "organisation": "US Food and Drug Administration",
+          "title": "FDA Issues Comprehensive Draft Guidance for Developers of Artificial Intelligence-Enabled Medical Devices",
+          "publication_date": "2025-01-06",
+          "url": "https://www.fda.gov/news-events/press-announcements/fda-issues-comprehensive-draft-guidance-developers-artificial-intelligence-enabled-medical-devices"
+        },
+        {
+          "organisation": "Bank of England and Financial Conduct Authority",
+          "title": "Artificial intelligence in UK financial services - 2024",
+          "publication_date": "2024-11-21",
+          "url": "https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024"
+        },
+        {
+          "organisation": "Information Commissioner’s Office",
+          "title": "Guidance on AI and data protection",
+          "publication_date": "2025-06-19",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        },
+        {
+          "organisation": "European Commission, AI Office",
+          "title": "AI Literacy - Questions & Answers",
+          "publication_date": "2025-11-19",
+          "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+        }
+      ],
+      "related": [
+        "/evidence/ai-in-healthcare/",
+        "/evidence/ai-in-finance/",
+        "/evidence/ai-governance-and-law/",
+        "/bundles/ai-in-regulated-industries/"
+      ]
+    }
+  ]
+}

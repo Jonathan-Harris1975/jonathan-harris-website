@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-06-01T08:37:12Z",
+  "generated_utc": "2026-06-22T00:00:00Z",
   "lane": "Lane 1 autonomous evidence",
   "seo": {
     "sitemap_includes_dynamic_routes": true,
@@ -13,15 +13,20 @@
       "blog-hub",
       "blog-post",
       "book-bundle",
+      "book-finder",
       "book-preview",
       "bundle-index",
       "comparison",
+      "evidence-guide",
+      "evidence-index",
       "glossary",
       "lead-magnet",
       "newsletter",
       "person",
       "podcast-episode",
       "podcast-hub",
+      "practical-resource",
+      "resource-index",
       "site-home",
       "topic-index",
       "transcript-archive"

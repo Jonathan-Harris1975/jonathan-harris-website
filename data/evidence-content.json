@@ -1,0 +1,487 @@
+{
+  "version": 1,
+  "last_reviewed": "2026-07-25",
+  "items": [
+    {
+      "slug": "workplace-ai-literacy",
+      "title": "Workplace AI literacy: what staff and managers actually need to know",
+      "summary": "A source-backed guide to practical AI literacy at work: understanding capabilities, checking outputs, handling data, knowing when human judgement matters and documenting how staff are prepared for the systems they use.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "What is workplace AI literacy?",
+          "a": "Workplace AI literacy is the practical ability to use AI systems with enough understanding to make informed decisions, recognise limitations and avoid predictable harm. It is not a coding qualification. For most teams it means knowing what tools are being used, what data enters them, where outputs can fail, when checking is required and who remains accountable for the final decision."
+        },
+        {
+          "q": "What should an AI literacy programme cover?",
+          "a": "A useful programme starts with the organisation’s real tools and risks rather than a generic lecture on artificial intelligence. Staff should understand basic capabilities, hallucinations and uncertainty, data handling, security, copyright and privacy boundaries, appropriate human oversight, escalation routes and task-specific checking. The depth should vary by role, because a developer, manager and occasional chatbot user do not face the same decisions."
+        },
+        {
+          "q": "Why does AI literacy matter now?",
+          "a": "AI is moving from occasional experiments into ordinary workplace software, while legal and governance expectations are becoming more explicit. The European Commission says Article 4 of the EU AI Act requires sufficient AI literacy for people dealing with AI systems on behalf of providers and deployers. UK research also identifies limited AI skills and expertise as a recurring barrier to adoption."
+        },
+        {
+          "q": "What is the non-obvious risk?",
+          "a": "The quiet risk is overconfidence after basic training. A short course can make people feel fluent without making them good at judging a specific system under pressure. Literacy therefore needs to be connected to actual workflows, permissions, review thresholds and incident reporting. The goal is not to make staff enthusiastic about AI; it is to make their use of it more deliberate and accountable."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "The European Commission says Article 4 AI literacy measures have applied since 2 February 2025, with supervision and enforcement rules applying from August 2026.",
+          "source": {
+            "organisation": "European Commission, AI Office",
+            "title": "AI Literacy - Questions & Answers",
+            "publication_date": "2025-11-19",
+            "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+          }
+        },
+        {
+          "claim": "UK AI Adoption Research found limited AI skills and expertise among the most common factors preventing business adoption.",
+          "source": {
+            "organisation": "Department for Science, Innovation and Technology",
+            "title": "AI Adoption Research",
+            "publication_date": "2026-02-13",
+            "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+          }
+        }
+      ],
+      "limitations": "EU AI Act duties are not a universal UK training rule. Applicability depends on the organisation, market and system. Training alone also cannot compensate for poor system design, missing access controls or weak management oversight.",
+      "counterpoint": "More training is not automatically better. A small team using one low-risk drafting tool may need concise task guidance and escalation rules, while a high-risk deployment needs deeper, role-specific competence.",
+      "related": [
+        "/resources/uk-workplace-ai-literacy-checklist/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=future-of-work",
+        "/ebooks/ai-literacy-for-the-modern-workplace/",
+        "/bundles/ai-at-work/"
+      ],
+      "sources": [
+        {
+          "organisation": "European Commission, AI Office",
+          "title": "AI Literacy - Questions & Answers",
+          "publication_date": "2025-11-19",
+          "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+        },
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        }
+      ]
+    },
+    {
+      "slug": "ai-agents-for-ordinary-work",
+      "title": "AI agents for ordinary work: useful automation without handing over the keys",
+      "summary": "Evidence and practical guidance on agentic AI for everyday work, including adoption, task selection, permissions, monitoring, failure modes and the difference between useful delegation and uncontrolled automation.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "What is an AI agent at work?",
+          "a": "An AI agent is software that can pursue a goal through multiple steps, often choosing actions, calling tools and using intermediate results rather than waiting for a fresh instruction each time. In ordinary work that can mean researching, drafting, updating records or coordinating routine tasks. The important distinction is not the label “agent”; it is how much authority the system has to act."
+        },
+        {
+          "q": "Where are agents genuinely useful?",
+          "a": "Agents are strongest when the work has a clear objective, bounded tools, reversible actions and an obvious way to check the result. Examples include gathering information from approved sources, preparing a first draft, triaging requests or moving data between controlled systems. They are much less attractive when the task depends on ambiguous judgement, sensitive permissions or consequences that are difficult to reverse."
+        },
+        {
+          "q": "How widely are businesses using agentic AI?",
+          "a": "The UK government’s AI Adoption Research found agentic AI was the least adopted of the technologies it studied. Among businesses already using AI, 7% reported agentic AI use, while around a third of businesses using or planning AI described significant barriers to implementing agents. That gap is a useful antidote to the impression that autonomous workplace agents are already routine."
+        },
+        {
+          "q": "What should managers check before an agent acts?",
+          "a": "Start with authority, not cleverness. Define which systems the agent may access, which actions require confirmation, what data it may expose, how failures are logged and how a human can stop or reverse the process. Then test mundane edge cases. A reliable agent is less about impressive demos and more about constrained permissions, observable behaviour and boring recovery paths that work."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "Among surveyed UK businesses already using AI, 7% reported using agentic AI; 32% of businesses using or planning AI described significant barriers to implementing it.",
+          "source": {
+            "organisation": "Department for Science, Innovation and Technology",
+            "title": "AI Adoption Research",
+            "publication_date": "2026-02-13",
+            "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+          }
+        }
+      ],
+      "limitations": "Government survey categories rely partly on respondents understanding the term “agentic AI”, and the same research found that understanding was often weak. Adoption percentages should therefore be treated as directional rather than a perfect census.",
+      "counterpoint": "A conventional workflow or rules engine can be better than an agent when the process is stable. Adding autonomy to a deterministic task can create more failure modes without adding useful judgement.",
+      "related": [
+        "/resources/ai-agent-risk-checklist/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=future-of-work",
+        "/ebooks/ai-agents-for-everyday-work/",
+        "/bundles/ai-at-work/"
+      ],
+      "sources": [
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        }
+      ]
+    },
+    {
+      "slug": "ai-for-small-business",
+      "title": "AI for small business: where the evidence supports practical adoption",
+      "summary": "A practical evidence guide for small businesses deciding where AI can save time, where the commercial case is still uncertain and how to buy tools without turning an experiment into a data or security problem.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "How common is AI use in UK businesses?",
+          "a": "AI use is growing, but adoption is not universal. The Office for National Statistics reported that about 25% of businesses were using some form of AI technology in late December 2025, rising to 44% among firms with at least 250 employees. That size gap matters for small businesses: the market is moving, but “everyone is already doing it” is still sales-pitch mathematics."
+        },
+        {
+          "q": "Where can AI help a small business first?",
+          "a": "The best starting points are usually repetitive, text-heavy or information-heavy tasks where staff already know what a good result looks like: drafting routine communications, summarising internal material, extracting information, preparing marketing variants or assisting customer-service triage. Begin with one measurable pain point, keep sensitive data out until controls are clear, and compare the new process with the old one."
+        },
+        {
+          "q": "Does AI adoption automatically increase revenue?",
+          "a": "No. UK AI Adoption Research found strong self-reported productivity effects among adopters, but revenue effects were much less common. In that survey, 77% of AI-using businesses reported no revenue change yet and 12% reported an increase. That is a useful commercial reality check: saving time can be valuable, but it does not automatically turn into sales or profit."
+        },
+        {
+          "q": "What should a small business ask a supplier?",
+          "a": "Ask what data the product receives, whether customer material is used for model training, where data is stored, which subcontractors or models sit underneath the service, how access is controlled, what happens when the system is wrong and how you can export or delete your information. Then ask for the price after the trial period. Procurement is where shiny demos meet invoices and liability."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "About 25% of UK businesses reported using some form of AI in late December 2025; the figure was 44% for businesses with 250 or more employees.",
+          "source": {
+            "organisation": "Office for National Statistics",
+            "title": "Business insights and impact on the UK economy: 8 January 2026",
+            "publication_date": "2026-01-08",
+            "url": "https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/bulletins/businessinsightsandimpactontheukeconomy/8january2026"
+          }
+        },
+        {
+          "claim": "Among businesses using AI in the DSIT study, 77% reported no revenue change yet and 12% reported an increase.",
+          "source": {
+            "organisation": "Department for Science, Innovation and Technology",
+            "title": "AI Adoption Research",
+            "publication_date": "2026-02-13",
+            "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+          }
+        }
+      ],
+      "limitations": "Different surveys use different definitions, samples and time windows, so adoption figures should not be blended into one trend line. Self-reported productivity and revenue effects are not the same as independently measured causal impact.",
+      "counterpoint": "The most profitable AI decision can be not to automate. If a task is rare, poorly defined or cheap to perform manually, integration and checking costs can exceed the saving.",
+      "related": [
+        "/resources/ai-procurement-questions-small-businesses/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=business",
+        "/ebooks/artificial-intelligence-for-small-business/"
+      ],
+      "sources": [
+        {
+          "organisation": "Office for National Statistics",
+          "title": "Business insights and impact on the UK economy: 8 January 2026",
+          "publication_date": "2026-01-08",
+          "url": "https://www.ons.gov.uk/businessindustryandtrade/business/businessservices/bulletins/businessinsightsandimpactontheukeconomy/8january2026"
+        },
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "AI Adoption Research",
+          "publication_date": "2026-02-13",
+          "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        }
+      ]
+    },
+    {
+      "slug": "deepfake-detection-and-synthetic-media",
+      "title": "Deepfake detection and synthetic media: verification beats guessing",
+      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between “looks real” and “is verified”.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "Can people reliably spot a deepfake by eye?",
+          "a": "Not reliably. Ofcom research found only a small minority of UK adults were confident in their ability to identify deepfakes, while substantial numbers reported encountering them. Visual oddities can still be clues, but modern synthetic media can survive casual inspection. Verification should therefore focus on source, provenance, independent confirmation and context rather than a hunt for strange fingers or blinking."
+        },
+        {
+          "q": "What is the best way to verify suspected synthetic media?",
+          "a": "Start by preserving the original link or file, then identify the earliest credible source and compare the claim with independent reporting or official channels. Check whether reliable provenance metadata exists, examine frames or audio only as supporting evidence, and use reverse search where practical. For high-stakes content, treat automated detector scores as one signal rather than a verdict and document what was checked."
+        },
+        {
+          "q": "Do AI labels and watermarks solve the problem?",
+          "a": "They help, but they are not a universal truth layer. Ofcom’s attribution work examines watermarking, provenance metadata, AI labels and contextual annotations, each with different strengths and weaknesses. Labels can improve disclosure when platforms and generators cooperate, yet content may be re-encoded, stripped of metadata or created outside compliant systems. Absence of a label is not proof that media is authentic."
+        },
+        {
+          "q": "Why is deepfake detection still difficult?",
+          "a": "Detection is an adversarial problem: generation improves, content gets compressed or edited, and detectors can be trained on yesterday’s artefacts. The UK government described the deepfake detection market as still nascent in March 2026. That makes process more durable than product worship. Organisations need escalation rules and corroboration methods that still work when a particular detector becomes unreliable."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "Ofcom reported that 43% of people aged 16+ said they had seen at least one deepfake online in the previous six months, while 9% said they were confident identifying one.",
+          "source": {
+            "organisation": "Ofcom",
+            "title": "A deep dive into deepfakes that demean, defraud and disinform",
+            "publication_date": "2024-07-23",
+            "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfakes-demean-defraud-disinform"
+          }
+        },
+        {
+          "claim": "Ofcom reported in July 2025 that 85% of adults supported AI labels on content, while 34% said they had seen such a label.",
+          "source": {
+            "organisation": "Ofcom",
+            "title": "Deepfake Defences 2 - The Attribution Toolkit",
+            "publication_date": "2025-07-11",
+            "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfake-defences-2--the-attribution-toolkit"
+          }
+        }
+      ],
+      "limitations": "Encounter surveys measure what people believe was a deepfake, not a forensic confirmation of every item. Detector performance also varies by medium, model, compression and manipulation type.",
+      "counterpoint": "A “deepfake detector” can create false confidence. In high-stakes cases, provenance and corroboration may be more useful than a single probability score, especially when the media has been repeatedly edited or reposted.",
+      "related": [
+        "/resources/deepfake-verification-checklist/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=cyber-security",
+        "/ebooks/deepfakes-ai-scams-and-synthetic-reality/"
+      ],
+      "sources": [
+        {
+          "organisation": "Ofcom",
+          "title": "A deep dive into deepfakes that demean, defraud and disinform",
+          "publication_date": "2024-07-23",
+          "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfakes-demean-defraud-disinform"
+        },
+        {
+          "organisation": "Ofcom",
+          "title": "Deepfake Defences 2 - The Attribution Toolkit",
+          "publication_date": "2025-07-11",
+          "url": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/deepfake-defences-2--the-attribution-toolkit"
+        },
+        {
+          "organisation": "Department for Science, Innovation and Technology",
+          "title": "Deepfake detection technology",
+          "publication_date": "2026-03-26",
+          "url": "https://www.gov.uk/government/publications/deepfake-detection-technology"
+        }
+      ]
+    },
+    {
+      "slug": "ai-in-healthcare",
+      "title": "AI in healthcare: evidence, workflow and the limits of automation",
+      "summary": "A practical evidence guide to AI in healthcare, separating authorised products and useful workflow support from broad claims that algorithms can replace clinical judgement.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "Where is AI already used in healthcare?",
+          "a": "AI is already used across medical imaging, decision support, monitoring, workflow prioritisation, documentation and other clinical or operational tasks. The US FDA said in January 2025 that it had authorised more than 1,000 AI-enabled medical devices through established premarket pathways. That is evidence of real deployment, but authorisation of a device is not evidence that every use improves outcomes in every setting."
+        },
+        {
+          "q": "What should healthcare organisations evaluate before adoption?",
+          "a": "Evaluate the intended population, data used to develop and validate the system, clinical workflow, failure modes, human oversight, performance across relevant groups, monitoring after deployment and what happens when the system or upstream data changes. A technically strong model can still be a poor clinical product if it adds alerts, shifts responsibility ambiguously or performs differently in the local patient population."
+        },
+        {
+          "q": "Can AI replace clinical judgement?",
+          "a": "Some systems can automate tightly defined tasks, but broad clinical judgement combines evidence, context, patient preference, uncertainty and responsibility. The better question is where automation can reduce burden or improve consistency while keeping accountable human review at the points that matter. “Human in the loop” is not magic either: the human needs time, information and authority to challenge an output rather than merely rubber-stamp it."
+        },
+        {
+          "q": "What is the non-obvious implementation risk?",
+          "a": "Workflow failure can matter as much as model failure. A system that is accurate in a test set can still cause harm if staff misunderstand its scope, if alerts arrive at the wrong time, if data drift goes unnoticed or if responsibility becomes blurred. Healthcare AI evaluation therefore needs operational evidence alongside accuracy metrics, including how the tool changes real decisions and workload."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "The FDA said in January 2025 that it had authorised more than 1,000 AI-enabled medical devices through established premarket pathways.",
+          "source": {
+            "organisation": "US Food and Drug Administration",
+            "title": "FDA Issues Comprehensive Draft Guidance for Developers of Artificial Intelligence-Enabled Medical Devices",
+            "publication_date": "2025-01-06",
+            "url": "https://www.fda.gov/news-events/press-announcements/fda-issues-comprehensive-draft-guidance-developers-artificial-intelligence-enabled-medical-devices"
+          }
+        }
+      ],
+      "limitations": "US FDA authorisation data does not describe UK regulatory status or prove clinical benefit in a specific NHS or private-care setting. Device counts also depend on the regulator’s categorisation and change over time.",
+      "counterpoint": "More predictive accuracy can still make a service worse if the tool creates alert fatigue, slows decisions or shifts work to already overloaded staff. Adoption is a systems problem, not just a model benchmark.",
+      "related": [
+        "/resources/ai-regulated-industries-evidence-map/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=healthcare",
+        "/ebooks/digital-diagnosis-how-ai-is-revolutionizing-healthcare/",
+        "/bundles/ai-health-and-care/"
+      ],
+      "sources": [
+        {
+          "organisation": "US Food and Drug Administration",
+          "title": "FDA Issues Comprehensive Draft Guidance for Developers of Artificial Intelligence-Enabled Medical Devices",
+          "publication_date": "2025-01-06",
+          "url": "https://www.fda.gov/news-events/press-announcements/fda-issues-comprehensive-draft-guidance-developers-artificial-intelligence-enabled-medical-devices"
+        },
+        {
+          "organisation": "Information Commissioner’s Office",
+          "title": "Guidance on AI and data protection",
+          "publication_date": "2025-06-19",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
+        }
+      ]
+    },
+    {
+      "slug": "ai-in-finance",
+      "title": "AI in finance: adoption is high, autonomy is not",
+      "summary": "A source-backed guide to AI in financial services, covering adoption, third-party dependence, accountability, automation, agentic finance and the difference between widespread use and fully autonomous decisions.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "How widely is AI used in UK financial services?",
+          "a": "The Bank of England and Financial Conduct Authority reported that 75% of responding firms were already using AI in their 2024 survey, with another 10% planning to use it within three years. Adoption is therefore substantial, but it covers a wide range of use cases from analytics and fraud detection to customer service. “Uses AI” does not mean the firm runs autonomous financial decisions."
+        },
+        {
+          "q": "How autonomous are financial AI systems?",
+          "a": "The same Bank and FCA survey found that 55% of AI use cases had some automated decision-making, while only 2% were fully autonomous. That distinction matters because public discussion often collapses assistance, partial automation and autonomy into one bucket. The governance problem changes sharply when a system moves from advising a human to executing a consequential decision without routine human approval."
+        },
+        {
+          "q": "Why do third-party AI providers matter in finance?",
+          "a": "Financial firms increasingly depend on external technology. The 2024 Bank and FCA survey reported that one third of AI use cases were third-party implementations, with concentration among major cloud, model and data providers. That creates a different risk shape: firms may understand their business decision well while having less visibility into an underlying model, data dependency or provider change."
+        },
+        {
+          "q": "Are consumers ready for agentic finance?",
+          "a": "Interest exists, but appetite is not the same as safe deployment. In July 2026 the FCA said research for its Mills Review indicated about a fifth of people were likely to use AI that can act autonomously within pre-set goals for personal finance. That creates opportunities for easier comparison and administration, alongside sharper questions about permissions, fraud, suitability, redress and who is responsible when an agent acts badly."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "The 2024 Bank of England/FCA survey found 75% of responding financial firms already used AI, 33% of AI use cases were third-party implementations, and only 2% of use cases were fully autonomous.",
+          "source": {
+            "organisation": "Bank of England and Financial Conduct Authority",
+            "title": "Artificial intelligence in UK financial services - 2024",
+            "publication_date": "2024-11-21",
+            "url": "https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024"
+          }
+        },
+        {
+          "claim": "The FCA reported in July 2026 that about one fifth of people were likely to use agentic AI for personal finance within pre-set goals.",
+          "source": {
+            "organisation": "Financial Conduct Authority",
+            "title": "FCA publishes landmark review into impact of AI on retail financial services",
+            "publication_date": "2026-07-06",
+            "url": "https://www.fca.org.uk/news/press-releases/fca-publishes-landmark-review-impact-ai-retail-financial-services"
+          }
+        }
+      ],
+      "limitations": "The Bank/FCA adoption figures describe survey respondents, not every UK financial firm, and firms self-classified aspects such as materiality. Consumer stated likelihood of using agentic finance does not predict actual uptake or outcomes.",
+      "counterpoint": "High adoption does not imply finance has solved AI governance. The more useful evidence may be the modest level of full autonomy and the continuing importance of accountable people, controls and third-party oversight.",
+      "related": [
+        "/resources/ai-regulated-industries-evidence-map/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=finance",
+        "/ebooks/artificial-intelligence-in-banking-revolutionizing-finance-and-data-security/",
+        "/bundles/ai-in-regulated-industries/"
+      ],
+      "sources": [
+        {
+          "organisation": "Bank of England and Financial Conduct Authority",
+          "title": "Artificial intelligence in UK financial services - 2024",
+          "publication_date": "2024-11-21",
+          "url": "https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024"
+        },
+        {
+          "organisation": "Financial Conduct Authority",
+          "title": "FCA publishes landmark review into impact of AI on retail financial services",
+          "publication_date": "2026-07-06",
+          "url": "https://www.fca.org.uk/news/press-releases/fca-publishes-landmark-review-impact-ai-retail-financial-services"
+        }
+      ]
+    },
+    {
+      "slug": "ai-governance-and-law",
+      "title": "AI governance and law: build controls around real uses, not slogans",
+      "summary": "A practical evidence guide to AI governance, legal duties and organisational controls, including literacy, accountability, data protection, security and why a policy document is not the same thing as working governance.",
+      "last_reviewed": "2026-07-25",
+      "questions": [
+        {
+          "q": "What does practical AI governance look like?",
+          "a": "Practical AI governance connects each real system to an owner, purpose, data boundary, risk level, approval process, monitoring plan and route for stopping or escalating use. It should be visible in procurement, access control, staff guidance and incident handling, not just a policy PDF. The aim is to make responsibility legible when an AI system influences work, customers or regulated decisions."
+        },
+        {
+          "q": "Which legal issues should organisations consider?",
+          "a": "The answer depends on jurisdiction and use case, but recurring areas include data protection, discrimination, consumer protection, intellectual property, sector regulation, employment duties, record keeping and contractual responsibility. The EU AI Act adds system-specific obligations for activities within its scope, while UK organisations must still apply existing law and regulator guidance. A single “AI policy” cannot replace that legal mapping."
+        },
+        {
+          "q": "Why are AI literacy and governance connected?",
+          "a": "Governance fails if the people operating a system cannot recognise when its output is unreliable or outside scope. The European Commission’s AI literacy guidance explicitly links understanding to the context, risk and purpose of systems. That does not mean every employee needs technical depth. It means controls have to be understandable enough for the people expected to apply them during ordinary work."
+        },
+        {
+          "q": "What is the most common governance trap?",
+          "a": "The trap is governing the vendor description instead of the actual use. A low-risk writing assistant can become high-risk when staff paste sensitive data into it, and a powerful system can be tightly constrained to a harmless task. Inventory the use case, data, permissions and decision impact. Then revisit it when the tool changes, because cloud AI products can evolve without asking your policy document for permission."
+        }
+      ],
+      "stats": [
+        {
+          "claim": "The European Commission says AI literacy measures under Article 4 should reflect technical knowledge, context, purpose and system risk, and that high-risk deployers retain specific staff-training obligations for human oversight.",
+          "source": {
+            "organisation": "European Commission, AI Office",
+            "title": "AI Literacy - Questions & Answers",
+            "publication_date": "2025-11-19",
+            "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+          }
+        },
+        {
+          "claim": "The Bank of England/FCA 2024 survey found 84% of responding firms had an individual accountable for their AI approach, while 34% reported a complete understanding of the AI they used.",
+          "source": {
+            "organisation": "Bank of England and Financial Conduct Authority",
+            "title": "Artificial intelligence in UK financial services - 2024",
+            "publication_date": "2024-11-21",
+            "url": "https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024"
+          }
+        }
+      ],
+      "limitations": "There is no single AI governance framework that automatically proves compliance across jurisdictions or sectors. Obligations change with the system, data, affected people and legal context, and this guide is an evidence map rather than legal advice.",
+      "counterpoint": "A bigger governance committee can make control worse if ownership becomes diffuse. For many organisations, a smaller set of named decision owners, clear thresholds and auditable records beats a grand board that meets quarterly and owns nothing between meetings.",
+      "related": [
+        "/resources/responsible-ai-checklist-managers/",
+        "/resources/ai-regulated-industries-evidence-map/",
+        "/glossary/",
+        "/compare/",
+        "/podcast/?topic=law",
+        "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/",
+        "/bundles/ai-in-regulated-industries/"
+      ],
+      "sources": [
+        {
+          "organisation": "European Commission, AI Office",
+          "title": "AI Literacy - Questions & Answers",
+          "publication_date": "2025-11-19",
+          "url": "https://digital-strategy.ec.europa.eu/en/faqs/ai-literacy-questions-answers"
+        },
+        {
+          "organisation": "Bank of England and Financial Conduct Authority",
+          "title": "Artificial intelligence in UK financial services - 2024",
+          "publication_date": "2024-11-21",
+          "url": "https://www.bankofengland.co.uk/report/2024/artificial-intelligence-in-uk-financial-services-2024"
+        },
+        {
+          "organisation": "Information Commissioner’s Office",
+          "title": "Guidance on AI and data protection",
+          "publication_date": "2025-06-19",
+          "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
+        },
+        {
+          "organisation": "UK Government",
+          "title": "Code of Practice for the Cyber Security of AI",
+          "publication_date": "2025-01-31",
+          "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
+        }
+      ]
+    }
+  ]
+}
