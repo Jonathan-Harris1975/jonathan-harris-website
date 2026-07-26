@@ -15,10 +15,10 @@
   },
   {
     "file": "assets/css/ebook-template.css",
-    "original_bytes": 3950,
-    "minified_bytes": 3884,
-    "reduction_bytes": 66,
-    "reduction_pct": 1.67
+    "original_bytes": 5738,
+    "minified_bytes": 5638,
+    "reduction_bytes": 100,
+    "reduction_pct": 1.74
   },
   {
     "file": "assets/css/glossary-inline.css",
@@ -36,9 +36,9 @@
   },
   {
     "file": "assets/css/site.css",
-    "original_bytes": 131157,
-    "minified_bytes": 121530,
-    "reduction_bytes": 9627,
-    "reduction_pct": 7.34
+    "original_bytes": 134194,
+    "minified_bytes": 124368,
+    "reduction_bytes": 9826,
+    "reduction_pct": 7.32
   }
 ]
