@@ -176,7 +176,7 @@ function blogGrowthMarkup(request, source = "") {
   const encodedUrl = encodeURIComponent(canonical);
   return `<section class="card blog-growth-panel" data-jh-blog-growth="1">
 <h2>Keep the useful bits</h2>
-<p>Get the weekday AI briefing and the free plain-English AI glossary cheat sheet without leaving this article.</p>
+<p>Get the practical AI briefing and the free plain-English AI glossary cheat sheet without leaving this article.</p>
 <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
 <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com"></label>
 <input type="hidden" name="source" value="blog-post"><input type="hidden" name="next" value="/downloads/ai-glossary-cheat-sheet/"><span class="newsletter-honeypot" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"></label></span>
