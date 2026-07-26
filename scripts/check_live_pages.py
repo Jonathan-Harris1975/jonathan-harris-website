@@ -450,6 +450,77 @@ def run_api_contract_check(*, timeout: float) -> PageResult:
     )
 
 
+
+def run_growth_surface_checks(*, timeout: float) -> list[PageResult]:
+    """Fail a release when the high-value live surfaces drift from growth contracts."""
+    results: list[PageResult] = []
+    book_count = len(load_master())
+
+    def result(label: str, path: str, failures: list[str], ok_message: str) -> None:
+        live_url = f"{SITE_URL}{path}"
+        fetched = fetch_url(live_url, timeout=timeout)
+        if fetched.error or fetched.status_code != 200:
+            results.append(PageResult(label, False, fetched.error or f"Unexpected HTTP {fetched.status_code}", live_url, [], status_code=fetched.status_code))
+            return
+        raw = fetched.body
+        visible = normalise_visible_text(raw)
+        found = [failure for failure in failures if failure]
+        # Callers pass sentinel expressions evaluated against their fetched body
+        # through the helper-specific closures below, so this branch is unused.
+        results.append(PageResult(label, not found, ok_message if not found else "Live growth contract failed", live_url, found, status_code=fetched.status_code))
+
+    # Homepage: generated catalogue count and current evidence routing.
+    home_url = f"{SITE_URL}/"
+    home = fetch_url(home_url, timeout=timeout)
+    if home.error or home.status_code != 200:
+        results.append(PageResult("Homepage growth contract", False, home.error or f"Unexpected HTTP {home.status_code}", home_url, [], status_code=home.status_code))
+    else:
+        visible = normalise_visible_text(home.body)
+        failures = []
+        if re.search(r"\b36(?:-book|\s+(?:plain-English\s+)?(?:AI\s+)?(?:books|ebooks))\b", visible, re.I):
+            failures.append("stale 36-book catalogue copy remains live")
+        if str(book_count) not in visible:
+            failures.append(f"generated catalogue count {book_count} is not visible")
+        if "/evidence/eu-ai-act-article-50-transparency/" not in home.body:
+            failures.append("Article 50 evidence route is not surfaced on the homepage")
+        results.append(PageResult("Homepage growth contract", not failures, "Homepage catalogue/evidence contract is current" if not failures else "Homepage growth contract failed", home_url, failures, status_code=home.status_code))
+
+    # AI Edge: one collection system and no cadence/read-time promise.
+    news_url = f"{SITE_URL}/newsletter/"
+    news = fetch_url(news_url, timeout=timeout)
+    if news.error or news.status_code != 200:
+        results.append(PageResult("AI Edge signup contract", False, news.error or f"Unexpected HTTP {news.status_code}", news_url, [], status_code=news.status_code))
+    else:
+        visible = normalise_visible_text(news.body)
+        failures = []
+        if "form.jotform.com/260277027608054" not in news.body:
+            failures.append("governed AI Edge Jotform is missing")
+        if "/api/newsletter/subscribe" in news.body or "newsletter-native-form" in news.body or "data-newsletter-form" in news.body:
+            failures.append("a second/native newsletter collection path is still exposed")
+        forbidden = re.search(r"(?:three[- ]minute|3[- ]minute|weekday|daily\s+(?:AI\s+)?(?:newsletter|briefing))", visible, re.I)
+        if forbidden:
+            failures.append(f"newsletter time/cadence wording remains live: {forbidden.group(0)}")
+        results.append(PageResult("AI Edge signup contract", not failures, "AI Edge uses one Jotform path with no time promise" if not failures else "AI Edge signup contract failed", news_url, failures, status_code=news.status_code))
+
+    # Podcast: current episodes must be crawlable before any third-party enhancement.
+    pod_url = f"{SITE_URL}/podcast/"
+    pod = fetch_url(pod_url, timeout=timeout)
+    if pod.error or pod.status_code != 200:
+        results.append(PageResult("Podcast crawlable contract", False, pod.error or f"Unexpected HTTP {pod.status_code}", pod_url, [], status_code=pod.status_code))
+    else:
+        failures = []
+        if "data-episode-slug=" not in pod.body:
+            failures.append("no server-visible current episode card was returned")
+        if re.search(r"Latest episode details are temporarily unavailable|loading current episode|Loading the latest Turing", pod.body, re.I):
+            failures.append("podcast placeholder copy is still being served")
+        if "elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" not in pod.body or "https://elfsightcdn.com/platform.js" not in pod.body:
+            failures.append("Elfsight six-episode player is missing")
+        if re.search(r'<details[^>]*class=["\'][^"\']*podcast-archive-widget', pod.body, re.I):
+            failures.append("Elfsight player is still hidden inside a disclosure")
+        results.append(PageResult("Podcast crawlable contract", not failures, "Podcast returns current crawlable episodes plus the visible six-episode player" if not failures else "Podcast crawlable contract failed", pod_url, failures, status_code=pod.status_code))
+
+    return results
+
 def run_checks(*, timeout: float, workbook_path: Path | None = None) -> list[PageResult]:
     if workbook_path:
         results = run_workbook_page_checks(workbook_path=workbook_path, timeout=timeout)
@@ -458,6 +529,7 @@ def run_checks(*, timeout: float, workbook_path: Path | None = None) -> list[Pag
         results = run_selected_page_checks(timeout=timeout)
         results.extend(run_not_found_contract_checks(timeout=timeout))
     results.append(run_api_contract_check(timeout=timeout))
+    results.extend(run_growth_surface_checks(timeout=timeout))
     return results
 
 

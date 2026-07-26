@@ -121,11 +121,11 @@ def sync_book_counts(count: int) -> None:
         facts = {}
     if not isinstance(facts, dict):
         facts = {}
+    facts.pop("newsletter_cadence", None)
     facts.update({
         "book_count": count,
         "newsletter_name": "AI Edge",
-        "newsletter_cadence": "weekday",
-        "newsletter_descriptor": "three-minute weekday AI briefing",
+        "newsletter_descriptor": "practical AI briefing",
         "podcast_name": "Turing's Torch: AI Weekly",
         "book_count_source": "data/ebooks-master.json",
     })
@@ -169,10 +169,10 @@ def homepage(count: int) -> None:
 <div class="wrap">
 <img alt="Jonathan Harris" class="logo-plain logo-plain--hero" fetchpriority="high" height="96" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="96"/>
 <h1 class="hero__title" id="hero-heading">Practical AI books and analysis, without the hype</h1>
-<p class="hero__lead">Explore {count} plain-English AI books, Turing’s Torch weekly analysis and AI Edge, the three-minute weekday briefing.</p>
+<p class="hero__lead">Explore {count} plain-English AI books, Turing’s Torch analysis and AI Edge, the practical AI briefing.</p>
 <div class="cta-row"><a class="button" href="/book-finder/">Find the right AI book</a><a class="button secondary" href="#home-newsletter-hero">Get the free AI glossary</a></div>
 <p class="home-podcast-text-link"><a href="/podcast/">Listen to the latest Turing’s Torch →</a></p>
-<div class="home-trust-strip" aria-label="Publishing scale"><span>{count} books</span><span>Weekly podcast</span><span>Weekday briefing</span><span>Plain-English AI</span></div>
+<div class="home-trust-strip" aria-label="Publishing scale"><span>{count} books</span><span>Weekly podcast</span><span>Practical AI briefing</span><span>Plain-English AI</span></div>
 <div class="home-intent" aria-labelledby="home-intent-heading"><h2 id="home-intent-heading">Start with your problem</h2><nav aria-label="Choose an AI route"><a href="/bundles/ai-at-work/">Work &amp; careers</a><a href="/catalogue/business/">Business</a><a href="/bundles/ai-health-and-care/">Healthcare</a><a href="/bundles/ai-in-regulated-industries/">Law &amp; regulation</a><a href="/catalogue/finance/">Finance</a><a href="/topics/ai-for-beginners/">AI fundamentals</a><a href="/blog/">Current AI news</a></nav></div>
 <div id="home-newsletter-hero">{render_inline_newsletter_form("homepage:hero")}</div>
 </div>
@@ -180,18 +180,18 @@ def homepage(count: int) -> None:
 <!-- GROWTH:HERO END -->'''
     router = '''<!-- GROWTH:ROUTER START -->
 <section class="main home-commercial-router" aria-labelledby="home-commercial-heading"><div class="wrap">
-<section class="card answer-first"><h2 id="home-commercial-heading">What is the quickest route to the useful bit?</h2><p>Use the <a href="/book-finder/">book finder</a> when you have a problem to solve, the <a href="/evidence/">evidence guides</a> when you need sources, or a reading path when one book will not cover the whole decision. The podcast and newsletter handle the moving story.</p></section>
+<section class="card answer-first"><h2 id="home-commercial-heading">What is the quickest route to the useful bit?</h2><p>Use the <a href="/book-finder/">book finder</a> when you have a problem to solve, the <a href="/evidence/">evidence guides</a> when you need sources, or a reading path when one book will not cover the whole decision. The podcast and AI Edge handle the moving story.</p></section>
 <section class="card home-latest-podcast" aria-labelledby="home-latest-podcast-heading"><h2 id="home-latest-podcast-heading">Latest Turing’s Torch</h2><div data-podcast-latest-server><p>Current episode details come from the governed podcast RSS feed. <a href="/podcast/">Open the podcast</a> or <a href="/transcripts/">browse transcripts</a>.</p></div></section>
 <section class="card" aria-labelledby="home-reading-paths-heading"><h2 id="home-reading-paths-heading">Reading paths</h2><p>Curated routes through books that belong together. The books are bought separately on Amazon.</p><div class="jh-journey-actions"><a href="/bundles/ai-at-work/">AI at Work</a><a href="/bundles/ai-health-and-care/">AI Health &amp; Care</a><a href="/bundles/ai-mobility-and-logistics/">AI Mobility &amp; Logistics</a><a href="/bundles/ai-in-regulated-industries/">AI in Regulated Industries</a></div></section>
-<section class="card" aria-labelledby="home-evidence-heading"><h2 id="home-evidence-heading">Evidence, not vibes</h2><p>Source-backed guides on workplace AI literacy, agents, small business, deepfakes, healthcare, finance and governance.</p><div class="jh-journey-actions"><a href="/evidence/">Browse evidence guides</a><a href="/resources/">Use practical checklists</a></div></section>
+<section class="card" aria-labelledby="home-evidence-heading"><h2 id="home-evidence-heading">Evidence, not vibes</h2><p>Source-backed guides on workplace AI literacy, agents, small business, deepfakes, healthcare, finance and governance.</p><div class="jh-journey-actions"><a href="/evidence/eu-ai-act-article-50-transparency/">Current evidence: EU AI Act Article 50</a><a href="/resources/eu-ai-act-article-50-readiness-checklist/">Article 50 readiness checklist</a><a href="/evidence/">Browse all evidence guides</a><a href="/resources/">Use practical checklists</a></div></section>
 </div></section>
 <!-- GROWTH:ROUTER END -->'''
     featured_block = f'''<section class="section--featured"><div class="wrap"><h2 class="section-label--centered">Featured this week</h2><article class="card featured-ebook"><a aria-label="View featured book" href="{html.escape(featured_url)}" id="featuredEbookPage"><img alt="{html.escape(featured['title'], quote=True)} cover" class="featured-cover-img" decoding="async" height="3508" id="featuredEbookCover" loading="lazy" src="{html.escape(cover, quote=True)}" width="2480"{srcset_attrs}/></a><div class="featured-copy"><span class="featured-meta" id="featuredEbookMeta">{html.escape(featured.get('topic',''))} · {featured.get('pages') or ''} pages</span><h3 class="featured-title" id="featuredEbookTitle">{html.escape(featured['title'])}</h3><p class="featured-desc" id="featuredEbookDesc">{html.escape(featured.get('short',''))}</p><p class="book-market-signal muted" id="featuredEbookMarketSignal">Current Kindle price and ratings are checked on Amazon at the buy step.</p><div class="featured-actions"><a class="button" href="{html.escape(featured_url)}" id="featuredEbookLink">View book</a><a class="button secondary" href="{html.escape(featured_buy)}" id="featuredEbookBuy">Buy on Amazon</a></div></div></article><p class="featured-footer-note">Updated weekly · <a href="/ebooks/">See all {count} books →</a></p></div></section>'''
-    explore = f'''<section class="section--explore"><div class="wrap"><h2 class="section-label--centered">Explore</h2><div class="grid grid--explore"><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📚</span><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">🎙️</span><h3 class="card__title">Turing’s Torch Podcast</h3><p class="card__desc">Weekly AI analysis with practical context and zero patience for buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📬</span><h3 class="card__title">AI Edge</h3><p class="card__desc">A three-minute weekday briefing plus the free plain-English AI glossary.</p><a class="button" href="/newsletter/">Get the glossary</a></article></div></div></section>'''
+    explore = f'''<section class="section--explore"><div class="wrap"><h2 class="section-label--centered">Explore</h2><div class="grid grid--explore"><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📚</span><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">🎙️</span><h3 class="card__title">Turing’s Torch Podcast</h3><p class="card__desc">Weekly AI analysis with practical context and zero patience for buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📬</span><h3 class="card__title">AI Edge</h3><p class="card__desc">A practical AI briefing plus the free plain-English AI glossary.</p><a class="button" href="/newsletter/">Get the glossary</a></article></div></div></section>'''
     about = f'''<section class="section--about"><div class="wrap wrap--narrow"><h2 class="about__title">About Jonathan Harris</h2><p class="about__copy">Jonathan Harris is a UK artificial intelligence author and host of Turing’s Torch AI Weekly. His {count} books explain how AI works across industries without dressing the answer in conference-stage fog.</p><a class="button button--bio" href="/bio/">Read the full bio</a></div></section>'''
     topics = f'''<section class="section--topics"><div class="wrap"><h2 class="section-label--centered">Learn about AI</h2><nav class="chips chips--topics" aria-label="AI topics">{topic_html}</nav></div></section>'''
     description = "Plain-English AI books, Turing’s Torch podcast, AI Edge, evidence guides and practical resources from UK author Jonathan Harris."
-    page = f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>Jonathan Harris — AI Author &amp; Podcast Host</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{SITE_URL}/"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="organisation" type="application/ld+json">{json.dumps(organisation_schema, ensure_ascii=False)}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body class="home page-home" data-page-type="home">{render_header()}<main id="main" role="main">{hero}{router}{featured_block}{explore}{about}{topics}</main>{render_footer()}<script defer src="/assets/js/newsletter-signup.min.js"></script><script defer src="/assets/js/featured-book.min.js"></script><script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+    page = f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>Jonathan Harris — AI Author &amp; Podcast Host</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{SITE_URL}/"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="organisation" type="application/ld+json">{json.dumps(organisation_schema, ensure_ascii=False)}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body class="home page-home" data-page-type="home">{render_header()}<main id="main" role="main">{hero}{router}{featured_block}{explore}{about}{topics}</main>{render_footer()}<script defer src="/assets/js/featured-book.min.js"></script><script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
     (ROOT / "index.html").write_text(page, encoding="utf-8")
 
 def benefit_newsletter_copy() -> None:
@@ -201,31 +201,32 @@ def benefit_newsletter_copy() -> None:
     p = ROOT / "newsletter" / "index.html"
     p.parent.mkdir(parents=True, exist_ok=True)
     title = "AI Edge | Jonathan Harris"
-    description = "Join AI Edge, Jonathan Harris's three-minute weekday AI briefing, and download the free plain-English AI glossary cheat sheet."
+    description = "Join AI Edge, Jonathan Harris's practical AI briefing, and download the free plain-English AI glossary cheat sheet."
     jotform_url = "https://form.jotform.com/260277027608054"
     glossary_pdf = "/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf"
     body = f'''<header class="hero hero--newsletter hero--has-fixed-nav" role="region" aria-label="AI Edge newsletter header">
 <div class="wrap"><img src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" class="logo-morph" loading="eager" fetchpriority="high" width="120" height="120"/>
-<h1>AI Edge</h1><p>A three-minute weekday AI briefing: what changed, what matters, and what is mostly theatre.</p></div></header>
+<h1>AI Edge</h1><p>Practical AI analysis: what changed, what matters, and what is mostly theatre.</p></div></header>
 <main class="main" id="main" role="main" aria-label="AI Edge newsletter sign-up content"><div class="wrap newsletter-page-shell">
-<section class="card newsletter-signup-card newsletter-signup-card--primary" role="region" aria-labelledby="ai-edge-signup-heading">
+<section class="card newsletter-signup-card newsletter-signup-card--primary" role="region" aria-labelledby="ai-edge-signup-heading" data-newsletter-shell data-newsletter-source="newsletter:primary">
 <h2 id="ai-edge-signup-heading">Join AI Edge and get the free AI glossary</h2>
 <p>The hosted form now collects your name and email address. Subscribe here, then keep the glossary as a quick-reference PDF.</p>
-<div class="newsletter-jotform-wrap"><iframe id="JotFormIFrame-260277027608054" title="AI Edge newsletter sign-up" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" frameborder="0" class="newsletter-jotform-frame" scrolling="no"></iframe></div>
+<div class="newsletter-jotform-wrap"><iframe id="JotFormIFrame-260277027608054" title="AI Edge newsletter sign-up" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" data-jotform-base-src="{jotform_url}" frameborder="0" class="newsletter-jotform-frame" scrolling="no"></iframe></div>
 <p class="newsletter-form-fallback">Form blocked by your browser? <a href="{jotform_url}" target="_blank" rel="noopener">Open the AI Edge sign-up form directly</a>.</p>
 <div class="newsletter-glossary-cta"><p><strong>Already subscribed?</strong> The glossary is available as a direct download too.</p><a class="button secondary" href="{glossary_pdf}" download>Download the AI glossary PDF</a></div>
 </section>
 <section class="card newsletter-card-spaced" aria-labelledby="ai-edge-value-heading"><h2 id="ai-edge-value-heading">What lands in your inbox?</h2>
-<p><strong>AI Edge</strong> is one short weekday briefing for readers who want the signal without the launch-day confetti. It focuses on developments that can affect work, business, policy, security and ordinary users.</p>
+<p><strong>AI Edge</strong> is a practical briefing for readers who want the signal without the launch-day confetti. It focuses on developments that can affect work, business, policy, security and ordinary users.</p>
 <ul class="checklist"><li>The development worth knowing.</li><li>A plain-English explanation of why it matters, or why it does not.</li><li>A practical verdict on what deserves attention next.</li></ul></section>
 <section class="card newsletter-card-spaced" aria-labelledby="ai-edge-preview-heading"><h2 id="ai-edge-preview-heading">Preview the AI Edge format</h2>
 <p class="muted">This is a format preview, not a fabricated past issue.</p>
 <div class="newsletter-issue-preview"><p><strong>1. What changed</strong><br/>The important announcement in two or three sentences, stripped of launch copy.</p><p><strong>2. Why it matters</strong><br/>The practical consequences for work, business, policy, security or everyday use.</p><p><strong>3. The raised-eyebrow test</strong><br/>What still needs evidence, what is being oversold, and what to watch next.</p></div>
 <p><a class="button secondary" href="/blog/">Read the current editorial analysis</a></p></section>
 <section class="faq card" aria-label="AI Edge questions"><h2>Quick answers</h2><div class="ebook-faq-list">
-<details class="ebook-faq-item" open><summary>How often does AI Edge arrive?</summary><div><p>Every weekday morning. It is designed to take roughly three minutes to read.</p></div></details>
+<details class="ebook-faq-item" open><summary>What is AI Edge?</summary><div><p>A practical AI briefing focused on useful developments, consequences and evidence rather than launch copy.</p></div></details>
 <details class="ebook-faq-item"><summary>Who is it for?</summary><div><p>Business readers, AI-curious professionals, creators and anyone who wants practical commentary rather than recycled launch copy.</p></div></details>
-<details class="ebook-faq-item"><summary>What do new subscribers get?</summary><div><p>The next scheduled AI Edge edition plus immediate access to the plain-English AI glossary cheat sheet.</p></div></details></div></section>
+<details class="ebook-faq-item"><summary>What do subscribers get?</summary><div><p>AI Edge plus immediate access to the plain-English AI glossary cheat sheet.</p></div></details></div></section>
+<section class="card newsletter-card-spaced" aria-labelledby="ai-edge-current-evidence"><h2 id="ai-edge-current-evidence">Current evidence worth keeping</h2><p>For source-backed detail, start with the <a href="/evidence/eu-ai-act-article-50-transparency/">EU AI Act Article 50 transparency guide</a> and its <a href="/resources/eu-ai-act-article-50-readiness-checklist/">readiness checklist</a>.</p></section>
 <section class="card newsletter-book-bridge"><h2>Want the longer version?</h2><p>The <a href="/ebooks/">40-book catalogue</a> goes deeper by topic, with practical guides across healthcare, law, finance, education, manufacturing and more.</p><div class="jh-journey-actions"><a href="/book-finder/">Find the right book</a><a href="/podcast/">Listen to Turing's Torch</a></div></section>
 </div></main>'''
     schema = {
@@ -238,6 +239,59 @@ def benefit_newsletter_copy() -> None:
 
 
 
+
+def load_podcast_fallback(limit: int = 3) -> list[dict[str, str]]:
+    path = DATA / "podcast-episodes.json"
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
+    except (OSError, json.JSONDecodeError):
+        payload = []
+    records: list[dict[str, str]] = []
+    for item in payload if isinstance(payload, list) else []:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "").strip()
+        slug = str(item.get("slug") or "").strip()
+        if not title or not slug:
+            continue
+        records.append({k: str(item.get(k) or "").strip() for k in ("title", "slug", "summary", "date", "episode_url", "transcript_url")})
+    return records[:limit]
+
+
+def render_static_podcast_cards(records: list[dict[str, str]]) -> str:
+    if not records:
+        return '<p>Browse the platform links above or <a href="/transcripts/">the transcript archive</a> while the current RSS snapshot refreshes.</p>'
+    cards: list[str] = []
+    for item in records:
+        title = html.escape(item["title"])
+        slug = html.escape(item["slug"], quote=True)
+        episode_url = html.escape(item.get("episode_url") or f'/podcast/episodes/{slug}/', quote=True)
+        summary = html.escape(item.get("summary") or "Practical AI analysis from Turing’s Torch.")
+        date = html.escape(item.get("date") or "")
+        transcript = item.get("transcript_url") or ""
+        transcript_link = f'<a class="button secondary" href="{html.escape(transcript, quote=True)}" data-placement="podcast_latest">Read transcript</a>' if transcript else ""
+        eyebrow = f'<p class="eyebrow">{date}</p>' if date else ""
+        cards.append(f'<article class="card podcast-latest-card" data-episode-slug="{slug}">{eyebrow}<h3>{title}</h3><p>{summary}</p><div class="actions"><a class="button" href="{episode_url}" data-placement="podcast_latest">Listen</a>{transcript_link}</div></article>')
+    return '<div class="grid podcast-latest-grid">' + ''.join(cards) + '</div>'
+
+
+def remove_legacy_newsletter_collection() -> None:
+    """Collapse all public newsletter collection to the governed Jotform page."""
+    pattern = re.compile(r'<div class="inline-newsletter" data-newsletter-shell data-newsletter-source="([^"]+)">[\s\S]*?</div>', re.I)
+    script_patterns = [
+        re.compile(r'\s*<script[^>]+src="/assets/js/newsletter-signup\.min\.js"[^>]*></script>', re.I),
+        re.compile(r'\s*<script[^>]+src="/assets/js/newsletter-exit\.min\.js"[^>]*></script>', re.I),
+    ]
+    for path in ROOT.rglob("*.html"):
+        if "node_modules" in path.parts:
+            continue
+        body = path.read_text(encoding="utf-8", errors="ignore")
+        changed = pattern.sub(lambda m: render_inline_newsletter_form(html.unescape(m.group(1))), body)
+        for script_pattern in script_patterns:
+            changed = script_pattern.sub("", changed)
+        if changed != body:
+            path.write_text(changed, encoding="utf-8")
+
 def podcast_page() -> None:
     """Keep the landing useful to no-JS requesters while RSS remains the episode authority."""
     p = ROOT / "podcast" / "index.html"
@@ -248,7 +302,7 @@ def podcast_page() -> None:
 <section class="card podcast-card u-s21" aria-labelledby="podcast-topic-filter-heading">
 <h2 id="podcast-topic-filter-heading">Browse episodes by topic</h2>
 <p class="muted">Use the same podcast feed, filtered around the subject you are already interested in.</p>
-<div class="jh-journey-actions"><a href="/podcast/?topic=finance">Finance</a><a href="/podcast/?topic=work">Work</a><a href="/podcast/?topic=governance">Governance</a><a href="/podcast/?topic=healthcare">Healthcare</a><a href="/podcast/?topic=agents">AI agents</a><a href="/podcast/?topic=deepfake">Deepfakes &amp; trust</a></div>
+<div class="jh-journey-actions"><a href="/evidence/eu-ai-act-article-50-transparency/">EU AI Act Article 50</a><a href="/podcast/?topic=finance">Finance</a><a href="/podcast/?topic=work">Work</a><a href="/podcast/?topic=governance">Governance</a><a href="/podcast/?topic=healthcare">Healthcare</a><a href="/podcast/?topic=agents">AI agents</a><a href="/podcast/?topic=deepfake">Deepfakes &amp; trust</a></div>
 </section>
 <!-- GROWTH:PODCAST-TOPICS END -->'''
     if "<!-- GROWTH:PODCAST-TOPICS START -->" in t:
@@ -256,11 +310,13 @@ def podcast_page() -> None:
     elif '<section class="card podcast-card u-s21" aria-label="Podcast player">' in t:
         t = t.replace('<section class="card podcast-card u-s21" aria-label="Podcast player">', topic_filters + "\n\n" + '<section class="card podcast-card u-s21" aria-label="Podcast player">', 1)
 
-    latest = '''<!-- GROWTH:PODCAST-LATEST START -->
+    static_records = load_podcast_fallback(3)
+    latest_cards = render_static_podcast_cards(static_records)
+    latest = f'''<!-- GROWTH:PODCAST-LATEST START -->
 <section class="card podcast-card u-s21" aria-labelledby="latest-three-episodes-heading">
 <h2 id="latest-three-episodes-heading">Latest three episodes</h2>
-<p class="muted">Episode facts stay governed by the podcast RSS pipeline. This block is populated from that feed by the same-origin Pages Function before the HTML response is returned.</p>
-<div data-podcast-latest-server><p>Latest episode details are temporarily unavailable. Use the platform links above or <a href="/transcripts/">browse the transcript archive</a>.</p></div>
+<p class="muted">Current episode links come from the governed podcast RSS feed and remain available in the page HTML when enhanced players are unavailable.</p>
+<div data-podcast-latest-server>{latest_cards}</div>
 </section>
 <!-- GROWTH:PODCAST-LATEST END -->'''
     if "<!-- GROWTH:PODCAST-LATEST START -->" in t:
@@ -307,6 +363,14 @@ def podcast_page() -> None:
             t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Listen to the latest six episodes here.</p>\n' + elfsight_widget, 1)
     # The loader sits immediately before the widget and appears exactly once.
     t = t.replace(elfsight_widget, elfsight_script + '\n' + elfsight_widget, 1)
+    # Elfsight is the visible six-episode player, not a disclosure/facade.
+    t = re.sub(
+        r'<details class="podcast-archive-widget">\s*<summary>.*?</summary>\s*(<!-- Elfsight Podcast Player \| Podcast Player -->\s*<script src="https://elfsightcdn\.com/platform\.js" async></script>\s*<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>)\s*</details>',
+        r'\1',
+        t, flags=re.S | re.I,
+    )
+    t = t.replace('<h2>Latest episode</h2>', '<h2>Podcast Player</h2>', 1)
+    t = t.replace('The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.', 'Use the six-episode player below, or choose Spotify, Apple Podcasts or RSS above.', 1)
     platform_hosts = {
         'open.spotify.com': 'spotify',
         'podcasts.apple.com': 'apple',
@@ -403,7 +467,7 @@ def topic_reading_paths() -> None:
 
 
 def base_page(title: str, description: str, canonical: str, body: str, page_type: str) -> str:
-    return f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>{html.escape(title)} | Jonathan Harris</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{canonical}"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body data-page-type="{page_type}">{render_header()}<main class="main" id="main"><div class="wrap">{body}</div></main>{render_footer()}<script defer src="/assets/js/newsletter-signup.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+    return f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>{html.escape(title)} | Jonathan Harris</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{canonical}"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body data-page-type="{page_type}">{render_header()}<main class="main" id="main"><div class="wrap">{body}</div></main>{render_footer()}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
 
 
 def render_book_finder_module(source: str, *, heading: str = "Not sure which book fits?") -> str:
@@ -485,7 +549,7 @@ def generate_resources() -> None:
             sections += f'<section class="card"><h2>{html.escape(heading)}</h2><ul class="checklist">'+''.join(f'<li>{html.escape(x)}</li>' for x in bullets)+'</ul></section>'
         sources=''.join(f'<li><strong>{html.escape(src["organisation"])}</strong> · {html.escape(src["title"])} · {html.escape(src["publication_date"])} · <a href="{html.escape(src["url"])}" rel="noopener">Primary source</a></li>' for src in item['sources'])
         related=''.join(f'<a href="{html.escape(url)}">{html.escape(url.strip("/").replace("-"," ").replace("/"," · ").title())}</a>' for url in item['related'])
-        body=f'<header class="hero"><h1>{html.escape(item["title"])}</h1><p>{html.escape(item["summary"])}</p></header>{sections}<section class="card"><h2>Evidence behind this checklist</h2><ul>{sources}</ul><p><a href="/methodology/">How evidence is selected and checked</a></p></section><section class="jh-journey-panel"><h2>Related reading</h2><div class="jh-journey-actions">{related}</div></section>{render_book_finder_module(f"resource-{slug}")}{render_inline_newsletter_form(f"resource:{slug}")}'
+        body=f'<header class="hero"><h1>{html.escape(item["title"])}</h1><p>{html.escape(item["summary"])}</p><p class="muted">Last reviewed {html.escape(item.get("last_reviewed", ""))} · <a href="/methodology/">Editorial methodology</a></p></header>{sections}<section class="card"><h2>Evidence behind this checklist</h2><ul>{sources}</ul><p><a href="/methodology/">How evidence is selected and checked</a></p></section><section class="jh-journey-panel"><h2>Related reading</h2><div class="jh-journey-actions">{related}</div></section>{render_book_finder_module(f"resource-{slug}")}{render_inline_newsletter_form(f"resource:{slug}")}'
         d=out/slug; d.mkdir(parents=True,exist_ok=True); (d/'index.html').write_text(base_page(item['title'],item['summary'],f'{SITE_URL}/resources/{slug}/',body,'resource'),encoding='utf-8')
         cards.append(f'<article class="card"><h2><a href="/resources/{html.escape(slug)}/">{html.escape(item["title"])}</a></h2><p>{html.escape(item["summary"])}</p></article>')
     body='<header class="hero"><h1>Practical AI checklists</h1><p>Useful HTML first: checklists for workplace literacy, deepfake verification, procurement, responsible management, agent risk and regulated-industry evidence.</p><p><a href="/methodology/">Read the editorial and evidence methodology</a></p></header><section class="grid">'+''.join(cards)+'</section>'+render_book_finder_module('resources-index')
@@ -499,15 +563,41 @@ def generate_book_finder() -> None:
 
 
 def normalise_ai_edge_naming() -> None:
-    """Keep the newsletter product name and cadence description consistent site-wide."""
+    """Enforce AI Edge naming without cadence or read-time promises."""
     replacements = {
-        "AI Edge - a daily weekday newsletter": "AI Edge, the three-minute weekday AI briefing",
-        "AI Edge — a daily weekday newsletter": "AI Edge, the three-minute weekday AI briefing",
-        "AI Edge – a daily weekday newsletter": "AI Edge, the three-minute weekday AI briefing",
-        "AI Edge - a daily AI newsletter": "AI Edge, the three-minute weekday AI briefing",
-        "AI Edge — a daily AI newsletter": "AI Edge, the three-minute weekday AI briefing",
+        "AI Edge - a daily weekday newsletter": "AI Edge, the practical AI briefing",
+        "AI Edge — a daily weekday newsletter": "AI Edge, the practical AI briefing",
+        "AI Edge – a daily weekday newsletter": "AI Edge, the practical AI briefing",
+        "AI Edge - a daily AI newsletter": "AI Edge, the practical AI briefing",
+        "AI Edge — a daily AI newsletter": "AI Edge, the practical AI briefing",
+        "AI Edge, the three-minute weekday briefing": "AI Edge, the practical AI briefing",
+        "AI Edge, the three-minute weekday AI briefing": "AI Edge, the practical AI briefing",
+        "three-minute weekday AI briefing": "practical AI briefing",
+        "three-minute weekday briefing": "practical AI briefing",
+        "3-minute AI briefing": "practical AI briefing",
+        "3-minute briefing": "practical AI briefing",
+        "tomorrow’s 3-minute AI briefing": "AI Edge briefing",
+        "One useful weekday briefing": "One useful AI briefing",
+        "A useful weekday AI briefing": "A useful AI briefing",
+        "weekday AI briefing": "practical AI briefing",
+        "weekday briefing": "practical AI briefing",
+        "Weekday briefing": "Practical AI briefing",
+        "daily AI newsletter": "AI Edge briefing",
+        "daily weekday newsletter": "AI Edge briefing",
+        "Publisher of AI Edge, a daily weekday artificial intelligence newsletter": "Publisher of AI Edge, a practical artificial intelligence briefing",
+        "daily weekday AI newsletter for business leaders and professionals": "AI Edge briefing for business leaders and professionals",
+        'aria-label="Daily newsletter"': 'aria-label="AI Edge"',
+        "This is a <strong>daily weekday</strong> newsletter.": "AI Edge is a practical briefing.",
+        "Subscribe to the Daily Newsletter": "Join AI Edge",
+        '"The newsletter is daily weekday — one sharp briefing, no waffle. It is the quickest way I have found to keep up with AI without losing an afternoon."': '"AI Edge is one sharp briefing, no waffle. It is a useful way to keep up with AI without losing an afternoon."',
+        "AI Edge daily newsletter": "AI Edge practical briefing",
+        "AI Edge when you want the tighter weekday line": "AI Edge when you want the tighter briefing",
+        "Get daily AI updates": "Explore AI Edge",
     }
-    for page in ROOT.rglob("*.html"):
+    text_suffixes = {".html", ".json", ".txt", ".md", ".js"}
+    for page in ROOT.rglob("*"):
+        if not page.is_file() or page.suffix.lower() not in text_suffixes:
+            continue
         if any(part.startswith(".") for part in page.relative_to(ROOT).parts):
             continue
         text = page.read_text(encoding="utf-8", errors="ignore")
@@ -552,6 +642,7 @@ def main() -> int:
     generate_glossary_download_page(); generate_methodology(); generate_high_value_pages()
     generate_evidence(); generate_resources(); generate_book_finder()
     add_static_newsletter_placements()
+    remove_legacy_newsletter_collection()
     comparison_reading_paths()
     topic_reading_paths()
     normalise_ai_edge_naming()

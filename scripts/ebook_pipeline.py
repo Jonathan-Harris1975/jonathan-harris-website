@@ -10,7 +10,7 @@ import hashlib
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Tuple
-from urllib.parse import urlparse
+from urllib.parse import urlencode, urlparse
 
 import openpyxl
 
@@ -407,6 +407,30 @@ def normalise_lastmod(value: Any) -> str:
 
 def file_lastmod(path: Path) -> str:
     return dt.datetime.fromtimestamp(path.stat().st_mtime, tz=dt.timezone.utc).date().isoformat()
+
+
+def html_significant_lastmod(path: Path) -> str:
+    """Return an explicit significant-content date, never a build/copy timestamp.
+
+    Sitemap lastmod is omitted when a page does not carry a governed review or
+    modification date. This avoids telling crawlers that every page changed
+    merely because Cloudflare rebuilt the site.
+    """
+    try:
+        source = path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return ""
+    patterns = (
+        r'<meta[^>]+name=["\']dateModified["\'][^>]+content=["\'](\d{4}-\d{2}-\d{2})',
+        r'<meta[^>]+content=["\'](\d{4}-\d{2}-\d{2})["\'][^>]+name=["\']dateModified["\']',
+        r'["\']dateModified["\']\s*:\s*["\'](\d{4}-\d{2}-\d{2})',
+        r'Last reviewed\s+(\d{4}-\d{2}-\d{2})',
+    )
+    for pattern in patterns:
+        match = re.search(pattern, source, flags=re.I)
+        if match:
+            return match.group(1)
+    return ""
 
 
 def sha256_text(value: str) -> str:
@@ -894,24 +918,25 @@ def render_book_market_signal(book: Dict[str, Any]) -> str:
 
 def render_inline_newsletter_form(
     source: str,
-    *,
     next_path: str = "/downloads/ai-glossary-cheat-sheet/",
-    cta: str = "Send me the briefing + glossary",
-    heading: str = "Get the free AI glossary and tomorrow’s 3-minute AI briefing",
-    description: str = "One useful weekday briefing, plus the plain-English AI glossary. No second lead magnet hiding behind the curtain.",
+    cta: str = "Join AI Edge",
+    heading: str = "Get the free AI glossary with AI Edge",
+    description: str = "Practical AI analysis, plus the plain-English AI glossary. No duplicate form, no second signup route.",
 ) -> str:
+    """Render a lightweight tracked route into the single governed Jotform signup.
+
+    AI Edge collection is intentionally centralised on /newsletter/. Source and
+    placement travel in the query string and are forwarded into Jotform there.
+    ``next_path`` is retained for call-site compatibility but no longer creates
+    competing post-submit behaviour on product/content pages.
+    """
+    query = urlencode({"source": source, "placement": "inline"})
+    href = f"/newsletter/?{query}"
     return f'''<div class="inline-newsletter" data-newsletter-shell data-newsletter-source="{html.escape(source)}">
   <h3>{html.escape(heading)}</h3>
   <p>{html.escape(description)}</p>
-  <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
-    <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com"/></label>
-    <input type="hidden" name="source" value="{html.escape(source)}"/>
-    <input type="hidden" name="next" value="{html.escape(next_path)}"/>
-    <span class="newsletter-honeypot" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"/></label></span>
-    <button class="button" type="submit">{html.escape(cta)}</button>
-    <p class="subtle" data-newsletter-status hidden aria-live="polite"></p>
-  </form>
-  <p class="newsletter-fallback-copy"><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Use the hosted AI Edge sign-up instead</a></p>
+  <a class="button" href="{html.escape(href, quote=True)}" data-newsletter-cta data-placement="{html.escape(source)}">{html.escape(cta)}</a>
+  <p class="newsletter-fallback-copy"><a href="/downloads/ai-glossary-cheat-sheet/">Already subscribed? Get the AI glossary</a></p>
 </div>'''
 
 
@@ -929,7 +954,7 @@ def newsletter_offer_for_book(book: Dict[str, Any]) -> Dict[str, str]:
     return {
         "next_path": next_path,
         "heading": heading,
-        "description": "A useful weekday AI briefing, then a practical resource matched to what you are reading now.",
+        "description": "Practical AI analysis plus a useful resource matched to what you are reading now.",
     }
 
 
@@ -3766,8 +3791,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="ebook-sticky-buy" aria-label="Quick purchase"><span>{title}</span><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_mobile_sticky">Check Kindle price</a></div>
 <script defer="" src="/assets/js/related-books.min.js"></script>
 {footer}
-<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
-<script defer="" src="/assets/js/newsletter-exit.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -3942,7 +3965,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </main>
 {footer}
 <script defer="" src="/assets/js/books.min.js"></script>
-<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -4066,7 +4088,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
 </main>
 {footer}
-<script defer="" src="/assets/js/newsletter-signup.min.js"></script>
 <script defer="" src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>
@@ -4461,7 +4482,7 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
         ("topic-index", "AI topic guides", "/topics/", "topics/index.html", "Topic-led entry points into the Jonathan Harris AI library.", "topic index"),
         ("glossary", "AI glossary", "/glossary/", "glossary/index.html", "Plain-English AI glossary for answer engines and readers.", "glossary"),
         ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
-        ("newsletter", "AI Edge", "/newsletter/", "newsletter/index.html", "Sign-up page for AI Edge, the three-minute weekday AI briefing.", "newsletter"),
+        ("newsletter", "AI Edge", "/newsletter/", "newsletter/index.html", "Sign-up page for AI Edge, the practical AI briefing.", "newsletter"),
         ("lead-magnet", "AI glossary cheat sheet", "/downloads/ai-glossary-cheat-sheet/", "downloads/ai-glossary-cheat-sheet/index.html", "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.", "lead magnet"),
         ("book-finder", "Find the right AI book", "/book-finder/", "book-finder/index.html", "A deterministic book finder based on reader problem and topic.", "book finder"),
         ("evidence-index", "AI evidence guides", "/evidence/", "evidence/index.html", "Source-backed AI evidence guides designed for useful retrieval and citation.", "evidence index"),
@@ -4479,7 +4500,7 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
             family=family,
             title=title,
             path=path,
-            lastmod=normalise_lastmod(generated_lastmod),
+            lastmod="",
             source="repo-html",
             repo_path=repo_path,
             summary=summary,
@@ -4597,7 +4618,7 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         if relative_path in book_paths:
             lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or governed_lastmod)
         else:
-            lastmod = normalise_lastmod(file_lastmod(file_path))
+            lastmod = html_significant_lastmod(file_path)
 
         loc = path_to_public_url(relative_path)
         by_loc[loc] = {
@@ -4608,12 +4629,19 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
 
     for route in build_dynamic_route_entries(books):
         loc = route.get("loc")
-        if not loc or loc in by_loc:
+        if not loc:
+            continue
+        route_lastmod = clean_paragraph(route.get("lastmod", ""))
+        if loc in by_loc:
+            # A governed route date (book update, evidence review, blog/podcast
+            # publication) is stronger than an HTML filesystem timestamp.
+            if route_lastmod:
+                by_loc[loc]["lastmod"] = route_lastmod
             continue
         by_loc[loc] = {
             "path": route.get("path", _site_path_from_url(loc)),
             "loc": loc,
-            "lastmod": route.get("lastmod", governed_lastmod),
+            "lastmod": route_lastmod,
         }
 
     return [by_loc[loc] for loc in sorted(by_loc)]
@@ -4622,10 +4650,12 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
 def build_sitemap_xml(books: List[Dict[str, Any]]) -> str:
     urls = []
     for route in build_public_route_registry(books):
+        lastmod = clean_paragraph(route.get("lastmod", ""))
+        lastmod_xml = f"    <lastmod>{html.escape(lastmod)}</lastmod>\n" if lastmod else ""
         urls.append(
             "  <url>\n"
             f"    <loc>{html.escape(route['loc'])}</loc>\n"
-            f"    <lastmod>{html.escape(route['lastmod'])}</lastmod>\n"
+            f"{lastmod_xml}"
             "  </url>"
         )
     return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n" + "\n".join(urls) + "\n</urlset>\n"
@@ -5406,7 +5436,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             continue
         text = page.read_text(encoding="utf-8", errors="ignore")
         expected_url = f"{SITE_URL}/catalogue/{slug}/"
-        for marker, label in ((f'<link href="{expected_url}" rel="canonical"/>', "canonical"), (f'<h1>{html.escape(topic)} AI Books</h1>', "H1"), (f'name="source" value="topic:{slug}"', "newsletter source")):
+        for marker, label in ((f'<link href="{expected_url}" rel="canonical"/>', "canonical"), (f'<h1>{html.escape(topic)} AI Books</h1>', "H1"), (f'/newsletter/?source=topic%3A{slug}&amp;placement=inline', "newsletter source")):
             if marker not in text:
                 errors.append(f"catalogue/{slug}/ {label} does not align with route/category metadata.")
         sig = re.sub(r"\s+", " ", re.sub(r"<footer.*", "", text, flags=re.I | re.S)).strip()

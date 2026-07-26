@@ -30,17 +30,25 @@ def main()->int:
         body=text(ROOT/rel)
         check(not re.search(r'\b36(?:-book|\s+(?:plain-English\s+)?(?:AI\s+)?(?:books|ebooks|eBooks))\b',body,re.I),f'{rel} contains stale 36-book catalogue residue')
     check(str(count) in text(ROOT/'index.html'),'homepage does not expose generated book count')
+    home_source=text(ROOT/'index.html')
+    check('/book-finder/' in home_source,'homepage does not expose the book finder')
+    check('/evidence/eu-ai-act-article-50-transparency/' in home_source,'homepage does not surface the current Article 50 evidence guide')
     stale_newsletter_phrases=('AI Edge - a daily weekday newsletter','AI Edge — a daily weekday newsletter','AI Edge – a daily weekday newsletter','Get the AI Edge','AI Edge Newsletter','Weekly AI updates')
+    newsletter_time_re=re.compile(r'(?:three[- ]minute|3[- ]minute|weekday|daily\s+(?:AI\s+)?(?:newsletter|briefing))',re.I)
     for page_path in ROOT.rglob('*.html'):
         page_text=text(page_path)
         for phrase in stale_newsletter_phrases:
             check(phrase not in page_text,f'{page_path.relative_to(ROOT)} contains stale AI Edge naming: {phrase}')
+        if 'AI Edge' in page_text or '/newsletter/' in page_text:
+            match=newsletter_time_re.search(page_text)
+            check(match is None,f'{page_path.relative_to(ROOT)} contains newsletter time/cadence wording: {match.group(0) if match else ""}')
+        check('/api/newsletter/subscribe' not in page_text and 'newsletter-native-form' not in page_text and 'data-newsletter-form' not in page_text,f'{page_path.relative_to(ROOT)} exposes a retired second newsletter collection path')
 
     # Retail/category route invariants.
     retail=text(ROOT/'catalogue'/'retail'/'index.html')
     check(f'{SITE_URL}/catalogue/retail/' in retail,'Retail canonical URL is wrong')
     check('<h1>Retail AI Books</h1>' in retail,'Retail H1 is wrong')
-    check('name="source" value="topic:retail"' in retail,'Retail newsletter source is wrong')
+    check('/newsletter/?source=topic%3Aretail' in retail and 'data-newsletter-cta' in retail,'Retail newsletter routing/source is wrong')
     check('Sports AI Books' not in retail,'Retail page still contains Sports title/H1 clone')
 
     # One physical sitemap + all reading paths.
@@ -53,6 +61,13 @@ def main()->int:
     check('/bundles/ai-at-work/' in text(ROOT/'index.html'),'homepage does not route to reading paths')
     check('/bundles/ai-in-regulated-industries/' in text(ROOT/'compare'/'index.html'),'comparison hub does not expose reading paths')
     check('/bundles/ai-health-and-care/' in text(ROOT/'topics'/'ai-in-healthcare'/'index.html'),'healthcare topic hub does not expose its relevant reading path')
+    # Sitemap dates describe significant page changes, not the build timestamp.
+    home_url=f'{SITE_URL}/'
+    home_match=re.search(rf'<url>\s*<loc>{re.escape(home_url)}</loc>(.*?)</url>',sitemap,re.S)
+    check(bool(home_match) and '<lastmod>' not in home_match.group(1),'homepage sitemap entry carries a synthetic build lastmod')
+    article50_url=f'{SITE_URL}/evidence/eu-ai-act-article-50-transparency/'
+    article50_match=re.search(rf'<url>\s*<loc>{re.escape(article50_url)}</loc>(.*?)</url>',sitemap,re.S)
+    check(bool(article50_match) and '<lastmod>2026-07-26</lastmod>' in article50_match.group(1),'Article 50 evidence sitemap entry is missing its governed review date')
 
     # A sample route may exist only when a genuine manuscript chapter was extracted.
     # Partial extraction is allowed so one legacy manuscript cannot block the whole site.
@@ -130,22 +145,31 @@ def main()->int:
 
     # Funnel event contract and PII boundary.
     funnel=text(ROOT/'assets/js/funnel-events.min.js')
-    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','podcast_platform_click','bundle_view','bundle_book_click']
+    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_cta_click','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','podcast_platform_click','bundle_view','bundle_book_click']
     for event in required: check(f"'{event}'" in funnel,f'funnel event {event} missing')
     check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
-    newsletter=text(ROOT/'assets/js/newsletter-signup.min.js')
-    check('newsletter_success' in newsletter and 'newsletter_submit' in newsletter,'newsletter success/submit instrumentation missing')
+    newsletter_legacy=text(ROOT/'assets/js/newsletter-signup.min.js')
+    check('/api/newsletter/subscribe' not in newsletter_legacy and 'fetch(' not in newsletter_legacy,'legacy newsletter JS can still collect subscriptions')
+    newsletter_jotform=text(ROOT/'assets/js/newsletter-jotform.min.js')
+    check('newsletter_success' in newsletter_jotform and 'newsletter_submit' in newsletter_jotform and 'ebook_preview_signup' in newsletter_jotform and 'utm_campaign' in newsletter_jotform,'Jotform newsletter instrumentation/source forwarding is incomplete')
+    retired_endpoint=text(ROOT/'functions'/'api'/'newsletter'/'subscribe.js')
+    check('status: 410' in retired_endpoint and 'MAILCHIMP' not in retired_endpoint and 'NEWSLETTER_SUBSCRIBE_ENDPOINT' not in retired_endpoint,'retired newsletter API still exposes a competing provider path')
     newsletter_page=text(ROOT/'newsletter'/'index.html')
     check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/260277027608054' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
+    check('/api/newsletter/subscribe' not in newsletter_page and 'data-newsletter-form' not in newsletter_page,'AI Edge page exposes more than the governed Jotform collection path')
+    check(newsletter_time_re.search(newsletter_page) is None,'AI Edge page contains a timing/cadence promise')
     check('/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf' in newsletter_page,'AI Edge page is missing the direct glossary download')
     media_page=text(ROOT/'media'/'index.html')
     check('https://images.jonathan-harris.online/headshot' in media_page and 'Open the press headshot' in media_page,'media page is missing the governed press headshot asset')
 
     # Podcast crawlable integration seam and deferred third parties.
     podcast=text(ROOT/'podcast'/'index.html')
-    check('Latest three episodes' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks server-populated latest-three seam')
+    check('Latest three episodes' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks server/static latest-three seam')
+    check('Latest episode details are temporarily unavailable' not in podcast and 'loading current episode' not in podcast.lower(),'podcast landing ships an unresolved episode placeholder')
     check('data-spotify-load' in podcast and '<iframe title="Turing\'s Torch on Spotify"' not in podcast,'Spotify embed is not click-to-load')
     check('src="https://elfsightcdn.com/platform.js"' in podcast and 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' in podcast and 'data-elfsight-load' not in podcast,'Elfsight six-episode player embed is missing or still deferred')
+    check('podcast-archive-widget' not in podcast,'Elfsight player is still hidden inside a disclosure')
+    check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')
     check('data-podcast-platform="spotify"' in podcast and 'data-podcast-platform="apple"' in podcast and 'data-podcast-platform="rss"' in podcast,'podcast platform click markers are missing')
     check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
 
