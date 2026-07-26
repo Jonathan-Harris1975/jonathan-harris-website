@@ -1272,3 +1272,41 @@ button,.button,.btn,a.button,input[type="submit"],input[type="button"]{min-heigh
 .hero--commercial .cta-row{justify-content:center;margin-top:22px}.home-podcast-text-link{margin-top:14px!important}.home-trust-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin:22px auto 0;max-width:900px;font-weight:800;color:#e5e7eb}.home-trust-strip span{display:inline-flex;align-items:center}.home-trust-strip span+span::before{content:'·';margin-right:18px;color:#93c5fd}.home-intent{max-width:920px;margin:26px auto 0;padding:18px;border:1px solid rgba(147,197,253,.22);border-radius:18px;background:rgba(255,255,255,.04)}.home-intent h2{margin:0 0 12px;color:#fff;font-size:1.2rem}.home-intent nav{display:flex;flex-wrap:wrap;justify-content:center;gap:9px}.home-intent a{display:inline-flex;align-items:center;min-height:44px;padding:0 13px;border:1px solid rgba(147,197,253,.28);border-radius:999px;color:#dbeafe;background:rgba(15,23,42,.45);font-weight:700}.home-commercial-router>.wrap{display:grid;gap:18px}.home-commercial-router .card{min-height:0}.book-confidence{margin-top:14px;padding:12px 14px;border:1px solid rgba(79,70,229,.18);border-radius:14px;background:#eef2ff;color:#312e81;line-height:1.6}.book-confidence a{font-weight:800}.growth-newsletter-placement{margin:22px 0}.evidence-source-list,.resource-checklist,.link-list{display:grid;gap:10px;padding-left:1.2rem}.evidence-source-list li,.resource-checklist li,.link-list li{line-height:1.6}.source-card{margin-top:14px;padding:14px;border-left:4px solid var(--accent);background:#f8fafc}.podcast-latest-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.podcast-latest-card{padding:16px;border:1px solid var(--border);border-radius:16px;background:#fff}.podcast-latest-card h3{margin-top:0}.podcast-spotify-fallback[data-spotify-facade]{display:grid;place-items:center;gap:8px;min-height:130px;padding:20px;border:1px dashed rgba(79,70,229,.28);border-radius:16px;background:#f8fafc}.podcast-spotify-fallback iframe{width:100%;min-height:352px;border:0}.podcast-related-books{margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}.ebook-listen-next{margin-top:18px}.home-latest-podcast .podcast-latest-card{text-align:left}.home-latest-podcast .actions{justify-content:flex-start}
 @media (max-width:760px){.home-trust-strip{display:grid;grid-template-columns:1fr 1fr;text-align:center}.home-trust-strip span{justify-content:center}.home-trust-strip span+span::before{display:none}.home-intent nav{display:grid;grid-template-columns:1fr 1fr}.home-intent a{justify-content:center;text-align:center}.podcast-latest-grid{grid-template-columns:1fr}}
 @media (max-width:440px){.home-trust-strip,.home-intent nav{grid-template-columns:1fr}}
+
+/* JH-ACCESSIBLE-COLOUR-CONTRACT
+   Dark footer text must never inherit the generic muted grey used on white cards. */
+.site-footer{background:#0d1420;color:#e5e7eb}
+.site-footer .footer-copy{color:#e2e8f0!important}
+.site-footer .footer-panel h2,.site-footer .footer-brand{color:#ffffff!important}
+.site-footer .footer-panel__label,.site-footer .footer-meta{color:#cbd5e1!important}
+.site-footer .footer-links a,.site-footer .footer-badges a{color:#dbeafe!important}
+.site-footer .footer-links a:hover,.site-footer .footer-badges a:hover,.site-footer .footer-brand:hover{color:#ffffff!important}
+.newsletter-page-shell{display:grid;gap:20px;max-width:960px;margin:0 auto}
+.newsletter-signup-card--primary{margin-top:0}
+.newsletter-jotform-wrap{width:100%;min-height:500px;margin-top:16px;border:1px solid rgba(79,70,229,.18);border-radius:16px;overflow:hidden;background:#fff}
+.newsletter-jotform-frame{display:block;width:100%;min-width:100%;height:560px;border:0;background:#fff}
+.newsletter-form-fallback{font-size:.92rem;color:#4b5563}
+.newsletter-glossary-cta{margin-top:18px;padding:16px;border-radius:14px;background:#eff6ff;border:1px solid #bfdbfe;color:#1f2937}
+.newsletter-glossary-cta p{margin-top:0}
+.newsletter-issue-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:16px 0}
+.newsletter-issue-preview p{margin:0;padding:14px;border:1px solid #e5e7eb;border-radius:12px;background:#f8fafc;color:#374151}
+@media(max-width:720px){.newsletter-jotform-frame{height:620px}.newsletter-issue-preview{grid-template-columns:1fr}}
+
+/* JH-GROWTH-COMMERCE-2026-07 */
+.table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.evidence-claim-table{width:100%;border-collapse:collapse;min-width:680px}
+.evidence-claim-table th,.evidence-claim-table td{padding:12px 14px;border-bottom:1px solid #e5e7eb;text-align:left;vertical-align:top}
+.evidence-claim-table th{background:#f8fafc;color:#111827}
+.book-finder-bridge{border-color:rgba(79,70,229,.2)}
+.ebook-mid-buy{display:flex;gap:16px;justify-content:space-between;align-items:center;margin:18px 0;padding:16px 18px;border:1px solid #bfdbfe;border-radius:16px;background:#eff6ff;color:#1f2937}
+.ebook-mid-buy p{margin:0}
+.ebook-sticky-buy{display:none}
+.related-book-reason{display:block;margin-top:4px;color:#4b5563;line-height:1.45}
+@media(max-width:760px){
+  .ebook-mid-buy{display:grid;grid-template-columns:1fr}
+  .ebook-mid-buy .button{width:100%;text-align:center}
+  body.ebook-detail{padding-bottom:78px}
+  .ebook-sticky-buy{position:fixed;z-index:999;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:#0d1420;color:#fff;border-top:1px solid rgba(147,197,253,.3);box-shadow:0 -8px 24px rgba(13,20,32,.18)}
+  .ebook-sticky-buy span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.86rem;font-weight:700}
+  .ebook-sticky-buy .button{flex:0 0 auto;margin:0;min-height:44px;padding:10px 13px}
+}
