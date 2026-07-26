@@ -37,6 +37,9 @@ jobs:
       - name: Run manuscript extraction regression tests
         run: python -m unittest scripts.test_sync_manuscript_samples
 
+      - name: Run ebook sample schema regression tests
+        run: python -m unittest scripts.test_ebook_sample_schema
+
       - name: Run build pipeline
         run: bash build.sh
 
