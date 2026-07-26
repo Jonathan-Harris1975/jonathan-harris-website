@@ -8,6 +8,17 @@ function isEmail(value = "") {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
 }
 
+function journeyTagFor(source = "") {
+  const s = String(source || "").toLowerCase();
+  if (/workplace|future-of-work|ai-at-work|literacy/.test(s)) return "AI Edge Journey - Workplace";
+  if (/finance|law|govern|regulated|healthcare|pharma/.test(s)) return "AI Edge Journey - Regulated";
+  if (/agent/.test(s)) return "AI Edge Journey - Agents";
+  if (/podcast|transcript/.test(s)) return "AI Edge Journey - Podcast";
+  if (/small-business|business|procurement/.test(s)) return "AI Edge Journey - Small Business";
+  if (/deepfake|cyber|media|trust/.test(s)) return "AI Edge Journey - Trust";
+  return "AI Edge Journey - General";
+}
+
 function safeNext(value, request) {
   const fallback = "/downloads/ai-glossary-cheat-sheet/";
   if (!value) return fallback;
@@ -57,6 +68,7 @@ async function subscribeViaMailchimp(email, source, env) {
       tags: [
         "JH Site Lead",
         source.startsWith("ebook:") || source.startsWith("ebook-footer:") ? "Book Preview Lead" : "Website Newsletter Lead",
+        journeyTagFor(source),
         ...(source ? [source.slice(0, 50)] : []),
       ],
     }),
