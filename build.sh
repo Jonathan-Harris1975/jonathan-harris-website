@@ -7,7 +7,16 @@ cd "$REPO_ROOT"
 if ! python3 - <<'PYDEP'
 import openpyxl
 import pypdf
-raise SystemExit(0 if openpyxl.__version__ == "3.1.5" and pypdf.__version__ == "5.9.0" else 1)
+import bs4
+raise SystemExit(
+    0
+    if (
+        openpyxl.__version__ == "3.1.5"
+        and pypdf.__version__ == "5.9.0"
+        and bs4.__version__ == "4.14.3"
+    )
+    else 1
+)
 PYDEP
 then
   python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
