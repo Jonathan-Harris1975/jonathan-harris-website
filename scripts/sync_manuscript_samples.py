@@ -37,6 +37,9 @@ NAMED_SECTION_RE = re.compile(r"(?im)^\s*((?:introduction|preface|foreword))\s*$
 NEXT_CHAPTER_RE = re.compile(
     r"(?im)^\s*chapter\s+(?:2|two|ii)\b[^\n]{0,140}\s*$"
 )
+FIRST_CHAPTER_RE = re.compile(
+    r"(?i)^chapter\s+(?:1|one|i)\b"
+)
 PDF_MAGIC = b"%PDF-"
 
 FRONT_MATTER_TITLES = {
@@ -201,7 +204,19 @@ def _lookahead_body_words(page_texts: list[str], start_page: int, pages: int = 3
     return total
 
 
-def find_first_chapter(page_texts: list[str]) -> tuple[int, str, int | None]:
+def _numbered_heading_value(heading: str) -> int | None:
+    """Return the leading chapter-style number for a fallback numbered heading."""
+    match = re.match(r"^\s*(\d{1,2}|[IVXLCDMivxlcdm]{1,8})(?:[.)]|\s|$)", heading)
+    if not match:
+        return None
+    token = match.group(1).upper()
+    if token.isdigit():
+        return int(token)
+    roman_values = {"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10}
+    return roman_values.get(token)
+
+
+def find_first_chapter(page_texts: list[str]) -> tuple[int, str, int | None, str]:
     candidates: list[tuple[int, str, str]] = []
     for index, raw in enumerate(page_texts):
         text = normalise_text(raw)
@@ -230,29 +245,77 @@ def find_first_chapter(page_texts: list[str]) -> tuple[int, str, int | None]:
     if not candidates:
         raise ValueError("Could not locate a substantive chapter heading in extracted PDF text")
 
-    start_page, heading, _kind = candidates[0]
+    # Prefer a real Chapter 1 over front matter or generic numbered fallbacks.
+    # This avoids treating an Introduction as the sample when a conventional
+    # Chapter 1 appears later in the manuscript.
+    first_chapter_candidates = [
+        item for item in candidates
+        if item[2] == "chapter" and FIRST_CHAPTER_RE.match(item[1])
+    ]
+    numbered_one_candidates = [
+        item for item in candidates
+        if item[2] == "numbered" and _numbered_heading_value(item[1]) == 1
+    ]
+    if first_chapter_candidates:
+        start_page, heading, start_kind = first_chapter_candidates[0]
+    elif numbered_one_candidates:
+        start_page, heading, start_kind = numbered_one_candidates[0]
+    else:
+        start_page, heading, start_kind = candidates[0]
+
     end_page: int | None = None
+    accumulated_words = 0
     for index in range(start_page + 1, len(page_texts)):
+        previous_text = normalise_text(page_texts[index - 1])
+        accumulated_words += len(re.findall(r"\b\w+\b", previous_text))
+
         text = normalise_text(page_texts[index])
         if not text:
             continue
-        if NEXT_CHAPTER_RE.search(text):
+
+        # Explicit Chapter 1 manuscripts must only end at an explicit Chapter 2.
+        # Numbered subsection headings inside Chapter 1 are not chapter boundaries.
+        if start_kind == "chapter":
+            if NEXT_CHAPTER_RE.search(text):
+                end_page = index
+                break
+            continue
+
+        found = _find_heading(text)
+        if not found:
+            continue
+        heading_text, kind = found
+
+        # If a fallback-numbered manuscript later exposes an explicit Chapter 2,
+        # that is authoritative.
+        if kind == "chapter" and NEXT_CHAPTER_RE.search(text):
             end_page = index
             break
-        found = _find_heading(text)
-        if found:
-            # Do not treat a body page containing an incidental numbered list as a
-            # chapter boundary. Fallback headings must appear near the top and the
-            # page must have enough following body text or be a sparse title page.
-            heading_text, kind = found
-            if kind == "chapter":
-                end_page = index
-                break
+
+        if start_kind == "numbered" and kind == "numbered":
+            # Only a top-level-looking "2 ..." can end a "1 ..." chapter, and
+            # never before enough body text has accumulated to satisfy the
+            # genuine-sample floor. This blocks 1.1/1.2-style section headings
+            # and early numbered lists from truncating the chapter.
             top = _top_lines(text)
-            if heading_text in top and (_lookahead_body_words(page_texts, index, pages=2) >= 80):
+            if (
+                _numbered_heading_value(heading_text) == 2
+                and heading_text in top
+                and accumulated_words >= 350
+                and _lookahead_body_words(page_texts, index, pages=2) >= 80
+            ):
                 end_page = index
                 break
-    return start_page, heading, end_page
+
+        if start_kind == "named" and kind in {"chapter", "numbered"}:
+            # Named front matter is only a last-resort fallback. Stop when the
+            # next substantive structural section begins.
+            top = _top_lines(text)
+            if heading_text in top and accumulated_words >= 350:
+                end_page = index
+                break
+
+    return start_page, heading, end_page, start_kind
 
 
 def extract_chapter(pdf_path: Path) -> dict[str, object]:
@@ -263,7 +326,7 @@ def extract_chapter(pdf_path: Path) -> dict[str, object]:
         except Exception as exc:
             raise ValueError(f"Encrypted PDF cannot be read: {exc}") from exc
     page_texts = [(page.extract_text() or "") for page in reader.pages]
-    start_page, heading, end_page = find_first_chapter(page_texts)
+    start_page, heading, end_page, _start_kind = find_first_chapter(page_texts)
     stop = end_page if end_page is not None else min(len(page_texts), start_page + 30)
     selected = page_texts[start_page:stop]
     combined = normalise_text("\n\n".join(selected))
