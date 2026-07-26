@@ -226,15 +226,21 @@ def find_first_chapter(page_texts: list[str]) -> tuple[int, str, int | None, str
         if not found:
             continue
         heading, kind = found
-        top_lines = [line.strip().lower() for line in _top_lines(text).splitlines()]
-        if any(line in {"contents", "table of contents"} for line in top_lines[:5]):
+        top_text = _top_lines(text, limit=24)
+        top_lines = [line.strip().lower() for line in top_text.splitlines()]
+        if any(line in {"contents", "table of contents"} for line in top_lines):
             continue
 
-        # Contents pages commonly contain many explicit chapter headings. The
-        # older manuscript layout may put a chapter heading on an otherwise sparse
-        # title page, so assess substance across the following two pages as well.
+        # Explicit chapter headings are only credible starts when they appear near
+        # the top of the page. This blocks chapter references buried in front matter.
+        if kind == "chapter" and not CHAPTER_HEADING_RE.search(top_text):
+            continue
+
+        # Contents pages can be split across several PDF pages and may expose only
+        # Chapter 1 + Chapter 2 on a given page. Treat two or more explicit chapter
+        # headings on the same page as navigation, not manuscript body.
         heading_count = len(CHAPTER_HEADING_RE.findall(text))
-        if kind == "chapter" and heading_count > 2:
+        if kind == "chapter" and heading_count >= 2:
             continue
         if kind == "numbered" and len(NUMBERED_HEADING_RE.findall(_top_lines(text))) > 2:
             continue
