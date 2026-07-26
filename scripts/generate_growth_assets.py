@@ -15,6 +15,7 @@ from scripts.ebook_pipeline import (
     ROOT, SITE_URL, build_person_schema, build_website_schema, json_script,
     load_master, render_footer, render_header, render_inline_newsletter_form,
 )
+from scripts.ebook_content_helpers import build_same_source_srcset, cover_sizes
 
 DATA = ROOT / "data"
 FONT_HEAD = '''<link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -61,8 +62,37 @@ def sync_book_counts(count: int) -> None:
 
 
 def homepage(count: int) -> None:
-    path = ROOT / "index.html"
-    text = path.read_text(encoding="utf-8")
+    """Render the homepage deterministically from governed book data."""
+    books = load_master()
+    if not books:
+        raise RuntimeError("Cannot build homepage without governed ebook records")
+    featured = books[0]
+    cover = featured.get("cover", "")
+    srcset = build_same_source_srcset(cover, None)
+    sizes = cover_sizes("featured-cover-img")
+    srcset_attrs = f' srcset="{html.escape(srcset, quote=True)}" sizes="{html.escape(sizes, quote=True)}"' if srcset else ""
+    featured_url = f"/ebooks/{featured['slug']}/"
+    featured_buy = featured.get("buy_route") or f"{featured_url}buy-now"
+    topic_links = [
+        ("AI for Beginners", "/topics/ai-for-beginners/"),
+        ("Generative AI", "/topics/generative-ai/"),
+        ("AI in Healthcare", "/topics/ai-in-healthcare/"),
+        ("AI in Business", "/topics/ai-in-business/"),
+        ("Robotics & Automation", "/topics/robotics-automation/"),
+        ("AI Glossary", "/glossary/"),
+        ("AI Comparisons", "/compare/"),
+        ("All Topics", "/topics/"),
+    ]
+    topic_html = "".join(f'<a class="chip" href="{href}">{html.escape(label)}</a>' for label, href in topic_links)
+    organisation_schema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "@id": f"{SITE_URL}/#organisation",
+        "name": "Jonathan Harris",
+        "url": f"{SITE_URL}/",
+        "logo": "https://images.jonathan-harris.online/site-logo",
+        "founder": {"@id": f"{SITE_URL}/#person"},
+    }
     hero = f'''<!-- GROWTH:HERO START -->
 <section aria-labelledby="hero-heading" class="hero hero--home hero--commercial" role="region">
 <div class="wrap">
@@ -77,33 +107,21 @@ def homepage(count: int) -> None:
 </div>
 </section>
 <!-- GROWTH:HERO END -->'''
-    if "<!-- GROWTH:HERO START -->" in text:
-        text = replace_between(text, "<!-- GROWTH:HERO START -->", "<!-- GROWTH:HERO END -->", hero)
-    else:
-        match = re.search(r'<section aria-labelledby="hero-heading" class="hero hero--home" role="region">.*?</section>', text, flags=re.S)
-        if not match:
-            raise RuntimeError("Homepage hero block not found")
-        text = text[:match.start()] + hero + text[match.end():]
-
-    growth = f'''<!-- GROWTH:ROUTER START -->
-<section class="main home-commercial-router" aria-labelledby="home-commercial-heading">
-<div class="wrap">
-<section class="card answer-first"><h2 id="home-commercial-heading">What is the quickest route to the useful bit?</h2><p>Start with the <a href="/book-finder/">book finder</a> when you have a problem to solve, use the evidence guides when you need sources, or take a reading path when one book will not cover the whole decision. The podcast and newsletter handle the moving story.</p></section>
-<section class="card" id="home-newsletter-inline"><h2>Get the useful update without another tab safari</h2>{render_inline_newsletter_form("homepage:inline")}</section>
-<section class="card home-latest-podcast" aria-labelledby="home-latest-podcast-heading"><h2 id="home-latest-podcast-heading">Latest Turing’s Torch</h2><div data-podcast-latest-server><p>Current episode details are supplied from the governed podcast RSS feed at request time. <a href="/podcast/">Open the podcast</a> or <a href="/transcripts/">browse transcripts</a>.</p></div></section>
-<section class="card" aria-labelledby="home-reading-paths-heading"><h2 id="home-reading-paths-heading">Reading paths</h2><p>Curated routes through books that belong together. The books are still bought separately on Amazon.</p><div class="jh-journey-actions"><a href="/bundles/ai-at-work/">AI at Work</a><a href="/bundles/ai-health-and-care/">AI Health &amp; Care</a><a href="/bundles/ai-mobility-and-logistics/">AI Mobility &amp; Logistics</a><a href="/bundles/ai-in-regulated-industries/">AI in Regulated Industries</a></div></section>
+    router = '''<!-- GROWTH:ROUTER START -->
+<section class="main home-commercial-router" aria-labelledby="home-commercial-heading"><div class="wrap">
+<section class="card answer-first"><h2 id="home-commercial-heading">What is the quickest route to the useful bit?</h2><p>Use the <a href="/book-finder/">book finder</a> when you have a problem to solve, the <a href="/evidence/">evidence guides</a> when you need sources, or a reading path when one book will not cover the whole decision. The podcast and newsletter handle the moving story.</p></section>
+<section class="card home-latest-podcast" aria-labelledby="home-latest-podcast-heading"><h2 id="home-latest-podcast-heading">Latest Turing’s Torch</h2><div data-podcast-latest-server><p>Current episode details come from the governed podcast RSS feed. <a href="/podcast/">Open the podcast</a> or <a href="/transcripts/">browse transcripts</a>.</p></div></section>
+<section class="card" aria-labelledby="home-reading-paths-heading"><h2 id="home-reading-paths-heading">Reading paths</h2><p>Curated routes through books that belong together. The books are bought separately on Amazon.</p><div class="jh-journey-actions"><a href="/bundles/ai-at-work/">AI at Work</a><a href="/bundles/ai-health-and-care/">AI Health &amp; Care</a><a href="/bundles/ai-mobility-and-logistics/">AI Mobility &amp; Logistics</a><a href="/bundles/ai-in-regulated-industries/">AI in Regulated Industries</a></div></section>
 <section class="card" aria-labelledby="home-evidence-heading"><h2 id="home-evidence-heading">Evidence, not vibes</h2><p>Source-backed guides on workplace AI literacy, agents, small business, deepfakes, healthcare, finance and governance.</p><div class="jh-journey-actions"><a href="/evidence/">Browse evidence guides</a><a href="/resources/">Use practical checklists</a></div></section>
 </div></section>
 <!-- GROWTH:ROUTER END -->'''
-    if "<!-- GROWTH:ROUTER START -->" in text:
-        text = replace_between(text, "<!-- GROWTH:ROUTER START -->", "<!-- GROWTH:ROUTER END -->", growth)
-    else:
-        text = text.replace('<main id="main" role="main">', '<main id="main" role="main">\n' + growth, 1)
-    # Canonical Person/WebSite identity on the static home page.
-    text = text.replace('"@id": "https://jonathan-harris.online/#person",\n  "name": "Jonathan Harris",\n  "url": "https://jonathan-harris.online/",', '"@id": "https://jonathan-harris.online/#person",\n  "name": "Jonathan Harris",\n  "url": "https://jonathan-harris.online/bio/",', 1)
-    text = text.replace('"publisher": {"@id": "https://jonathan-harris.online/#organisation"},', '"publisher": {"@id": "https://jonathan-harris.online/#person"},')
-    path.write_text(text, encoding="utf-8")
-
+    featured_block = f'''<section class="section--featured"><div class="wrap"><h2 class="section-label--centered">Featured this week</h2><article class="card featured-ebook"><a aria-label="View featured book" href="{html.escape(featured_url)}" id="featuredEbookPage"><img alt="{html.escape(featured['title'], quote=True)} cover" class="featured-cover-img" decoding="async" height="3508" id="featuredEbookCover" loading="lazy" src="{html.escape(cover, quote=True)}" width="2480"{srcset_attrs}/></a><div class="featured-copy"><span class="featured-meta" id="featuredEbookMeta">{html.escape(featured.get('topic',''))} · {featured.get('pages') or ''} pages</span><h3 class="featured-title" id="featuredEbookTitle">{html.escape(featured['title'])}</h3><p class="featured-desc" id="featuredEbookDesc">{html.escape(featured.get('short',''))}</p><p class="book-market-signal muted" id="featuredEbookMarketSignal">Current Kindle price and ratings are checked on Amazon at the buy step.</p><div class="featured-actions"><a class="button" href="{html.escape(featured_url)}" id="featuredEbookLink">View book</a><a class="button secondary" href="{html.escape(featured_buy)}" id="featuredEbookBuy">Buy on Amazon</a></div></div></article><p class="featured-footer-note">Updated weekly · <a href="/ebooks/">See all {count} books →</a></p></div></section>'''
+    explore = f'''<section class="section--explore"><div class="wrap"><h2 class="section-label--centered">Explore</h2><div class="grid grid--explore"><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📚</span><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">🎙️</span><h3 class="card__title">Turing’s Torch Podcast</h3><p class="card__desc">Weekly AI analysis with practical context and zero patience for buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📬</span><h3 class="card__title">AI Edge Newsletter</h3><p class="card__desc">A three-minute weekday briefing plus the free plain-English AI glossary.</p><a class="button" href="/newsletter/">Get the glossary</a></article></div></div></section>'''
+    about = f'''<section class="section--about"><div class="wrap wrap--narrow"><h2 class="about__title">About Jonathan Harris</h2><p class="about__copy">Jonathan Harris is a UK artificial intelligence author and host of Turing’s Torch AI Weekly. His {count} books explain how AI works across industries without dressing the answer in conference-stage fog.</p><a class="button button--bio" href="/bio/">Read the full bio</a></div></section>'''
+    topics = f'''<section class="section--topics"><div class="wrap"><h2 class="section-label--centered">Learn about AI</h2><nav class="chips chips--topics" aria-label="AI topics">{topic_html}</nav></div></section>'''
+    description = "Plain-English AI books, Turing’s Torch podcast, AI Edge newsletter, evidence guides and practical resources from UK author Jonathan Harris."
+    page = f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>Jonathan Harris — AI Author &amp; Podcast Host</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{SITE_URL}/"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="organisation" type="application/ld+json">{json.dumps(organisation_schema, ensure_ascii=False)}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body class="home page-home" data-page-type="home">{render_header()}<main id="main" role="main">{hero}{router}{featured_block}{explore}{about}{topics}</main>{render_footer()}<script defer src="/assets/js/newsletter-signup.min.js"></script><script defer src="/assets/js/featured-book.min.js"></script><script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+    (ROOT / "index.html").write_text(page, encoding="utf-8")
 
 def benefit_newsletter_copy() -> None:
     p = ROOT / "newsletter" / "index.html"
@@ -135,6 +153,21 @@ def podcast_page() -> None:
         anchor = '<section class="card podcast-card u-s21" aria-label="Podcast player">'
         if anchor in t:
             t = t.replace(anchor, latest + "\n\n" + anchor, 1)
+    t = re.sub(
+        r'(<span data-latest-episode-title>).*?(</span>)',
+        r"\1current episode\2",
+        t, flags=re.S|re.I,
+    )
+    t = re.sub(
+        r'(<strong data-latest-episode-title>).*?(</strong>)',
+        r"\1Current Turing's Torch episode\2",
+        t, flags=re.S|re.I,
+    )
+    t = re.sub(
+        r'(<p class="muted" data-latest-episode-teaser>).*?(</p>)',
+        r'\1The server-rendered episode list above provides the current titles and links even when the enhanced player is unavailable.\2',
+        t, flags=re.S|re.I,
+    )
     t = re.sub(
         r'<div class="responsive-media podcast-spotify-fallback">\s*<iframe[^>]+></iframe>\s*</div>',
         '<div class="responsive-media podcast-spotify-fallback" data-spotify-facade><button class="button secondary" type="button" data-spotify-load>Load Spotify player</button><p class="muted">Spotify loads only after you ask for it.</p></div>',

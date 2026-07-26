@@ -35,6 +35,7 @@ CRAWLER_SNAPSHOTS_DIR = ROOT / "config" / "crawler-snapshots"
 DYNAMIC_ROUTE_MANIFEST_PATH = DATA_DIR / "dynamic-route-manifest.json"
 SEARCH_VISIBILITY_SURFACES_PATH = DATA_DIR / "search-visibility-surfaces.json"
 AMAZON_BOOK_SIGNALS_PATH = DATA_DIR / "amazon-book-signals.json"
+BOOK_SAMPLE_CHAPTERS_PATH = DATA_DIR / "book-sample-chapters.json"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -918,39 +919,92 @@ def book_preview_path(book: Dict[str, Any]) -> str:
     return f"/ebooks/{book['slug']}/sample/"
 
 
+def load_book_sample_chapters() -> Dict[str, Dict[str, Any]]:
+    if not BOOK_SAMPLE_CHAPTERS_PATH.exists():
+        return {}
+    try:
+        payload = json.loads(BOOK_SAMPLE_CHAPTERS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    books = payload.get("books", []) if isinstance(payload, dict) else []
+    return {
+        clean_paragraph(item.get("slug", "")): item
+        for item in books
+        if isinstance(item, dict) and clean_paragraph(item.get("slug", ""))
+    }
+
+
 def render_book_sample_page(book: Dict[str, Any]) -> str:
     canonical = f"{SITE_URL}{book_preview_path(book)}"
     title = html.escape(book["title"])
-    learn = "".join(f"<li>{html.escape(item)}</li>" for item in book.get("what_youll_learn", [])[:4])
-    schema = {
-        "@context": "https://schema.org",
-        "@type": "WebPage",
-        "name": f"Free preview: {book['title']}",
-        "url": canonical,
-        "description": f"A governed preview companion for {book['title']}.",
-        "isPartOf": {
-            "@type": "Book",
-            "name": book["title"],
-            "url": book["canonical_url"],
-        },
-        "author": {"@id": f"{SITE_URL}/#person"},
-        "inLanguage": "en-GB",
-    }
+    sample = load_book_sample_chapters().get(book["slug"])
     header = render_header()
     footer = render_footer()
-    return f'''<!doctype html>
+
+    if not sample or not sample.get("paragraphs"):
+        # Production CI requires a genuine manuscript extraction before release.
+        # This state exists only so local diagnostics fail honestly instead of
+        # manufacturing a "preview" from marketing copy.
+        schema = {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": f"Sample chapter: {book['title']}",
+            "url": canonical,
+            "description": f"Sample chapter for {book['title']}.",
+            "isPartOf": {"@type": "Book", "name": book["title"], "url": book["canonical_url"]},
+            "author": {"@id": f"{SITE_URL}/#person"},
+            "inLanguage": "en-GB",
+        }
+        return f'''<!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Free preview: {title} | Jonathan Harris</title><meta name="robots" content="noindex,follow"/><link rel="canonical" href="{canonical}"/>
+<title>Sample chapter: {title} | Jonathan Harris</title><meta name="robots" content="noindex,follow"/><link rel="canonical" href="{canonical}"/>
 <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {SHARED_INTER_FONT_HEAD_BLOCK}
 <link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" href="/assets/css/ebook-template.css"/></head>
 <body class="ebook-detail">{header}<main class="main" id="main"><div class="wrap ebook-shell"><section class="card ebook-section">
-<p class="eyebrow">Free book preview</p><h1>{title}</h1><p>This is a governed preview built from the book’s published description and learning points. It is not presented as a chapter when no chapter sample is available in the website source.</p><p>{html.escape(book['summary'])}</p>
-<h2>What does this preview cover?</h2><p>{html.escape(book['what_this_book_covers'])}</p>
-<h2>What questions does the full book tackle?</h2><ul>{learn}</ul><p>{html.escape(book['why_it_matters'])}</p>
+<p class="eyebrow">Sample chapter</p><h1>{title}</h1><p>The manuscript chapter has not been extracted for this build, so no substitute preview is being shown.</p>
 <div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Back to book page</a></div>
 </section></div></main>{footer}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
 
+    chapter_title = html.escape(clean_paragraph(sample.get("chapter_title", "Chapter sample")))
+    paragraphs = sample.get("paragraphs", [])
+    body = "".join(
+        f"<p>{html.escape(clean_paragraph(paragraph))}</p>"
+        for paragraph in paragraphs
+        if clean_paragraph(paragraph)
+    )
+    word_count = int(sample.get("word_count") or 0)
+    page_start = sample.get("page_start")
+    page_end = sample.get("page_end")
+    page_note = ""
+    if page_start and page_end:
+        page_note = f" · manuscript pages {int(page_start)}–{int(page_end)}"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": f"{sample.get('chapter_title', 'Sample chapter')} — {book['title']}",
+        "url": canonical,
+        "description": f"Read a genuine sample chapter from {book['title']} by Jonathan Harris.",
+        "isPartOf": {"@type": "Book", "name": book["title"], "url": book["canonical_url"]},
+        "author": {"@id": f"{SITE_URL}/#person"},
+        "inLanguage": "en-GB",
+    }
+    description = html.escape(
+        f"Read a genuine sample chapter from {book['title']} by Jonathan Harris before buying the Kindle ebook.",
+        quote=True,
+    )
+    return f'''<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Free chapter: {title} | Jonathan Harris</title><meta name="description" content="{description}"/><meta name="robots" content="index,follow"/><link rel="canonical" href="{canonical}"/>
+<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+{SHARED_INTER_FONT_HEAD_BLOCK}
+<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" href="/assets/css/ebook-template.css"/></head>
+<body class="ebook-detail ebook-sample">{header}<main class="main" id="main"><div class="wrap ebook-shell">
+<nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a> / <a href="/ebooks/">eBooks</a> / <a href="/ebooks/{html.escape(book['slug'])}/">{title}</a> / Sample chapter</nav>
+<section class="card ebook-section ebook-sample-intro"><p class="eyebrow">Read before you buy</p><h1>{title}</h1><h2>{chapter_title}</h2><p>This page contains text extracted from the actual manuscript, not a summary or generated substitute.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_top">Buy the full book on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Book details</a></div></section>
+<article class="card ebook-section ebook-sample-chapter" aria-labelledby="sample-chapter-heading"><h2 id="sample-chapter-heading">{chapter_title}</h2>{body}<p class="meta">Genuine manuscript extract · {word_count:,} words{page_note}.</p></article>
+<section class="card ebook-section ebook-section--accent"><h2>Continue reading</h2><p>If this chapter is useful, the full Kindle ebook continues the argument with the rest of the book’s practical guidance.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_bottom">Buy on Amazon</a><a class="button secondary" href="/newsletter/">Get the free AI glossary</a></div></section>
+</div></main>{footer}<script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
 
 def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
     about_terms = [{"@type": "Thing", "name": name} for name in book_about_terms(book)]
@@ -3425,10 +3479,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
         <div class="ebook-actions">
           <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Buy on Amazon</a>
-          <a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Free preview</a>
+          <a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Read a free chapter</a>
           <a class="button secondary" href="/ebooks/">Browse related books</a>
         </div>
-        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))} · Free preview available · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
+        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))} · Free chapter available · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
         {render_book_market_signal(book)}
         <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
       </article>
@@ -3512,9 +3566,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <section class="card ebook-section ebook-preview-capture" id="free-preview">
-      <h2>Want a free preview before you buy?</h2>
-      <p>Join the weekday AI briefing and continue straight to a preview built from this book’s governed summary, scope and learning points.</p>
-      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=book_preview_path(book), cta="Unlock the free preview")}
+      <h2>Read a real chapter before you buy</h2>
+      <p>Open a genuine chapter from the manuscript now. The AI Edge signup is optional, not a gate between you and the sample.</p>
+      <div class="ebook-actions"><a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_sample_section">Read the sample chapter</a></div>
+      {render_inline_newsletter_form(f"ebook:{book['slug']}", cta="Get the free AI glossary")}
     </section>
 
     <section class="related-books card">
@@ -4199,12 +4254,7 @@ def load_bundle_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
 
 
 def load_book_preview_dynamic_routes(books: List[Dict[str, Any]], generated_lastmod: str) -> List[Dict[str, str]]:
-    """Register generated, noindex book previews for release governance.
-
-    These pages are conversion assets rather than search landing pages. They belong in
-    the dynamic route manifest so the live-repo route gate knows who owns them, but
-    ``build_public_route_registry`` deliberately keeps the family out of sitemap.xml.
-    """
+    """Register generated sample chapters for release governance."""
     routes: List[Dict[str, str]] = []
     for book in books:
         slug = clean_paragraph(book.get("slug", ""))
@@ -4216,13 +4266,13 @@ def load_book_preview_dynamic_routes(books: List[Dict[str, Any]], generated_last
             continue
         routes.append(_manifest_route(
             family="book-preview",
-            title=f"Free preview: {title}",
+            title=f"Sample chapter: {title}",
             path=f"/ebooks/{slug}/sample/",
             lastmod=normalise_lastmod(book.get("dateModified") or book.get("datePublished") or generated_lastmod),
             source="generated-html",
             repo_path=repo_path,
-            summary="Email-gated preview companion for the published eBook page.",
-            entity="book preview",
+            summary="Genuine manuscript chapter sample for the published eBook page.",
+            entity="book sample chapter",
         ))
     return routes
 
@@ -4379,10 +4429,6 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         }
 
     for route in build_dynamic_route_entries(books):
-        if route.get("family") == "book-preview":
-            # Preview companions intentionally declare noindex,follow. Keep them in
-            # release governance without leaking them into the public sitemap.
-            continue
         loc = route.get("loc")
         if not loc or loc in by_loc:
             continue
@@ -4762,6 +4808,8 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
         file_path.write_text(content, encoding="utf-8")
 
     for legacy_path in (
+        ROOT / "Sitemap.xml",
+        ROOT / "site-map.xml",
         ROOT / "sitemap (1).xml",
         CRAWLER_SNAPSHOTS_DIR / "site-map.xml",
     ):
