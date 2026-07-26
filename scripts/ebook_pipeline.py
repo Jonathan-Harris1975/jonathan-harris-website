@@ -982,9 +982,13 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
     schema = {
         "@context": "https://schema.org",
         "@type": "Article",
+        "@id": f"{canonical}#article",
         "headline": f"{sample.get('chapter_title', 'Sample chapter')} — {book['title']}",
         "url": canonical,
         "description": f"Read a genuine sample chapter from {book['title']} by Jonathan Harris.",
+        "datePublished": book["datePublished"],
+        "dateModified": book.get("dateModified") or book["datePublished"],
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canonical},
         "isPartOf": {"@type": "Book", "name": book["title"], "url": book["canonical_url"]},
         "author": {"@id": f"{SITE_URL}/#person"},
         "inLanguage": "en-GB",
