@@ -87,7 +87,7 @@ def main() -> int:
     parser.add_argument(
         "--skip-manuscript-sync",
         action="store_true",
-        help="Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every advertised sample to be a genuine extracted chapter.",
+        help="Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every advertised sample to be a genuine extracted chapter, but individual books may omit a sample when extraction is unavailable.",
     )
     args = parser.parse_args()
 
@@ -118,7 +118,10 @@ def main() -> int:
                 print("\n==> Manuscript sample sync skipped")
                 print("Local diagnostics mode: generated sample pages will not be release-ready without a genuine chapter cache.")
             else:
-                run_step("Extract genuine sample chapters from manuscript PDFs", [sys.executable, "scripts/sync_manuscript_samples.py"])
+                run_step(
+                    "Extract genuine sample chapters from manuscript PDFs",
+                    [sys.executable, "scripts/sync_manuscript_samples.py", "--allow-partial"],
+                )
         else:
             print("\n==> Workbook import skipped")
             print("Proceeding without workbook only because --allow-missing-workbook was supplied.")

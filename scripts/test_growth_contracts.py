@@ -54,10 +54,29 @@ def main()->int:
     check('/bundles/ai-in-regulated-industries/' in text(ROOT/'compare'/'index.html'),'comparison hub does not expose reading paths')
     check('/bundles/ai-health-and-care/' in text(ROOT/'topics'/'ai-in-healthcare'/'index.html'),'healthcare topic hub does not expose its relevant reading path')
 
-    # A sample route only exists when a genuine manuscript chapter was extracted.
+    # A sample route may exist only when a genuine manuscript chapter was extracted.
+    # Partial extraction is allowed so one legacy manuscript cannot block the whole site.
+    sample_cache_path=ROOT/'data'/'book-sample-chapters.json'
+    genuine_sample_slugs=set()
+    if sample_cache_path.exists():
+        try:
+            sample_payload=json.loads(text(sample_cache_path))
+            for item in sample_payload.get('books',[]) if isinstance(sample_payload,dict) else []:
+                if not isinstance(item,dict):
+                    continue
+                slug=str(item.get('slug','')).strip()
+                paragraphs=item.get('paragraphs')
+                try: word_count=int(item.get('word_count') or 0)
+                except (TypeError,ValueError): word_count=0
+                if slug and paragraphs and word_count>=350:
+                    genuine_sample_slugs.add(slug)
+        except (OSError,json.JSONDecodeError) as exc:
+            check(False,f'could not parse manuscript sample cache: {exc}')
     sample_dirs=list((ROOT/'ebooks').glob('*/sample'))
-    check(not sample_dirs, f'local diagnostic build contains {len(sample_dirs)} sample route(s) without a genuine extraction cache')
-    check('/sample/' not in sitemap, 'sitemap exposes an ebook sample route without a genuine extraction cache')
+    routed_sample_slugs={path.parent.name for path in sample_dirs if (path/'index.html').exists()}
+    check(routed_sample_slugs==genuine_sample_slugs, f'sample route/cache mismatch: routes={len(routed_sample_slugs)} genuine={len(genuine_sample_slugs)}')
+    sitemap_sample_slugs=set(re.findall(r'/ebooks/([^/]+)/sample/',sitemap))
+    check(sitemap_sample_slugs==genuine_sample_slugs, f'sitemap sample/cache mismatch: sitemap={len(sitemap_sample_slugs)} genuine={len(genuine_sample_slugs)}')
 
     # Legacy redirects are permanent, exact and chain-free in repository rules.
     redirects=text(ROOT/'_redirects')
