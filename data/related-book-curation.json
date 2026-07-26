@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "books": {
+    "ai-literacy-for-the-modern-workplace": [
+      {"slug": "the-artificial-intelligence-job-shift-navigating-the-future-of-work", "reason": "Read next for the career and workforce consequences behind day-to-day AI literacy."},
+      {"slug": "ai-agents-for-everyday-work", "reason": "Choose this next when you are ready to move from understanding AI to automating ordinary work."},
+      {"slug": "artificial-intelligence-for-small-business", "reason": "Choose this instead if your main question is practical adoption inside a small company."}
+    ],
+    "ai-agents-for-everyday-work": [
+      {"slug": "ai-literacy-for-the-modern-workplace", "reason": "Read first if your team needs the judgement and verification skills that should come before automation."},
+      {"slug": "artificial-intelligence-for-small-business", "reason": "Read next for broader adoption decisions beyond agents alone."},
+      {"slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention", "reason": "Read next for the security controls that become more important as automation gains access to systems and data."}
+    ],
+    "artificial-intelligence-for-small-business": [
+      {"slug": "ai-literacy-for-the-modern-workplace", "reason": "Read next to build safer, more useful AI habits across a small team."},
+      {"slug": "ai-agents-for-everyday-work", "reason": "Choose this next for practical workflow automation and agent-style tools."},
+      {"slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention", "reason": "Read alongside it when security, data handling and access controls are part of the adoption decision."}
+    ],
+    "artificial-intelligence-and-the-law-case-studies-and-future-trends": [
+      {"slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information", "reason": "Read next for public-sector governance, accountability and service-delivery questions."},
+      {"slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security", "reason": "Choose this next for a regulated-industry example where governance and operational risk collide."},
+      {"slug": "deepfakes-ai-scams-and-synthetic-reality", "reason": "Read next for evidence, authenticity and deception risks increasingly relevant to legal decisions."}
+    ],
+    "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security": [
+      {"slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends", "reason": "Read next for the legal and governance questions around regulated AI decisions."},
+      {"slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention", "reason": "Read next for the security side of financial AI and data protection."},
+      {"slug": "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information", "reason": "Choose this for a wider accountability and public-governance perspective."}
+    ],
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": [
+      {"slug": "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare", "reason": "Read next for drug discovery, development and the pharmaceutical side of healthcare AI."},
+      {"slug": "artificial-intelligence-in-veterinary-medicine-transforming-animal-healthcare-through-innovation", "reason": "Choose this for a parallel clinical domain with different workflows and constraints."},
+      {"slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends", "reason": "Read alongside it for liability, governance and accountability questions."}
+    ],
+    "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention": [
+      {"slug": "deepfakes-ai-scams-and-synthetic-reality", "reason": "Read next for synthetic-media fraud, impersonation and verification risks."},
+      {"slug": "ai-agents-for-everyday-work", "reason": "Choose this next if autonomous tools and delegated access are becoming part of your threat model."},
+      {"slug": "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security", "reason": "Read next for security and AI inside a heavily regulated financial environment."}
+    ],
+    "deepfakes-ai-scams-and-synthetic-reality": [
+      {"slug": "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention", "reason": "Read next for the wider defensive controls around data breaches, scams and AI-enabled attacks."},
+      {"slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media", "reason": "Read next for the platform, moderation and information-system context in which synthetic media spreads."},
+      {"slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism", "reason": "Choose this for verification, newsroom and public-information consequences."}
+    ],
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": [
+      {"slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends", "reason": "Read next for legal accountability and case-based governance questions."},
+      {"slug": "ai-literacy-for-the-modern-workplace", "reason": "Read next for the workforce skills needed to use AI responsibly in ordinary roles."},
+      {"slug": "digital-defense-the-role-of-ai-in-modern-warfare", "reason": "Choose this for the national-security edge of government AI."}
+    ],
+    "the-artificial-intelligence-job-shift-navigating-the-future-of-work": [
+      {"slug": "ai-literacy-for-the-modern-workplace", "reason": "Read next for the practical skills workers and managers can build now."},
+      {"slug": "ai-agents-for-everyday-work", "reason": "Read next for the automation mechanics changing individual workflows."},
+      {"slug": "artificial-intelligence-for-small-business", "reason": "Choose this for the employer and owner perspective on adoption."}
+    ],
+    "the-artificial-intelligence-revolution-from-algorithms-to-consciousness": [
+      {"slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead", "reason": "Read next for the people, breakthroughs and historical path behind modern AI."},
+      {"slug": "the-dumbening-how-ai-is-reshaping-our-minds", "reason": "Choose this next for the human cognitive costs and trade-offs around widespread AI use."},
+      {"slug": "ai-literacy-for-the-modern-workplace", "reason": "Choose this for a more practical workplace application of the fundamentals."}
+    ],
+    "artificial-intelligence-in-pharmaceuticals-revolutionizing-healthcare": [
+      {"slug": "digital-diagnosis-how-ai-is-revolutionizing-healthcare", "reason": "Read next for clinical diagnosis and healthcare delivery beyond pharmaceuticals."},
+      {"slug": "artificial-intelligence-and-the-law-case-studies-and-future-trends", "reason": "Read alongside it for regulatory, liability and governance questions."},
+      {"slug": "artificial-intelligence-in-industry-a-comprehensive-guide", "reason": "Choose this for a wider industrial view of AI-enabled operations."}
+    ],
+    "artificial-intelligence-in-construction-building-a-sustainable-future": [
+      {"slug": "smart-buildings-ai-powered-efficiency-and-sustainability", "reason": "Read next for the operational life of buildings after design and construction."},
+      {"slug": "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery", "reason": "Choose this for automation, maintenance and production parallels."},
+      {"slug": "climate-intelligence-harnessing-ai-for-a-greener-future", "reason": "Read next for the broader sustainability and climate context."}
+    ],
+    "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery": [
+      {"slug": "artificial-intelligence-in-industry-a-comprehensive-guide", "reason": "Read next for the broader cross-industry context around industrial AI."},
+      {"slug": "artificial-intelligence-in-logistics-optimizing-efficiency-and-sustainability", "reason": "Choose this next for the supply-chain systems surrounding production."},
+      {"slug": "artificial-intelligence-in-construction-building-a-sustainable-future", "reason": "Read next for a project-based physical industry with similar automation pressures."}
+    ],
+    "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media": [
+      {"slug": "deepfakes-ai-scams-and-synthetic-reality", "reason": "Read next for synthetic media, impersonation and trust risks travelling through social platforms."},
+      {"slug": "from-reporters-to-robots-how-ai-is-reshaping-journalism", "reason": "Choose this for the newsroom and information-quality side of algorithmic media."},
+      {"slug": "the-dumbening-how-ai-is-reshaping-our-minds", "reason": "Read next for the attention, cognition and behavioural consequences behind algorithmic feeds."}
+    ]
+  }
+}

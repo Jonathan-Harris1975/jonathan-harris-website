@@ -1,0 +1,8 @@
+{
+  "book_count": 40,
+  "newsletter_name": "AI Edge",
+  "newsletter_cadence": "weekday",
+  "newsletter_descriptor": "three-minute weekday AI briefing",
+  "podcast_name": "Turing's Torch: AI Weekly",
+  "book_count_source": "data/ebooks-master.json"
+}
