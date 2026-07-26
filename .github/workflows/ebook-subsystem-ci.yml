@@ -65,7 +65,7 @@ jobs:
         run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20 --require-content-match --require-redirect-contract
 
       - name: Verify live crawler publication
-        run: python scripts/validate_release.py --workbook jonathan-harris-site-url-inventory-remediated-release-ready.xlsm --strict-post-deploy-live
+        run: python scripts/validate_release.py --workbook jonathan-harris-site-url-inventory-remediated-release-ready.xlsx --strict-post-deploy-live
 
       - name: Verify live redirect chains
         run: python scripts/maintenance/check_redirect_chains.py
