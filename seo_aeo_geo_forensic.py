@@ -1214,7 +1214,7 @@ def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[s
     "aiAnalysisStatus": analysis_state.get("statusLabel", "Unknown"),
     "auditCompletionState": analysis_state.get("completionState", "Unknown"),
     "repoSource": "jonathan-harris-website-main repository snapshot",
-    "workbookSource": "jonathan-harris-site-url-inventory-remediated-release-ready.xlsm",
+    "workbookSource": "jonathan-harris-site-url-inventory-remediated-release-ready.xlsx",
     "sitemapFeedSource": "sitemap.xml, local sitemap snapshot, podcast RSS feed, blog and podcast manifests, live internal links",
     "liveFetchStatus": "Live route responses fetched during workflow execution; fetch failures are recorded URL-by-URL.",
     "generatedArtefactPaths": artefacts,

@@ -6,13 +6,14 @@ cd "$REPO_ROOT"
 
 if ! python3 - <<'PYDEP'
 import openpyxl
-raise SystemExit(0 if openpyxl.__version__ == "3.1.5" else 1)
+import pypdf
+raise SystemExit(0 if openpyxl.__version__ == "3.1.5" and pypdf.__version__ == "5.9.0" else 1)
 PYDEP
 then
   python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
 fi
 
-DEFAULT_WORKBOOK="$REPO_ROOT/jonathan-harris-site-url-inventory-remediated-release-ready.xlsm"
+DEFAULT_WORKBOOK="$REPO_ROOT/jonathan-harris-site-url-inventory-remediated-release-ready.xlsx"
 if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then
   export EBOOK_WORKBOOK_PATH="$DEFAULT_WORKBOOK"
 fi

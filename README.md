@@ -30,7 +30,7 @@ python -m pip install -r requirements.txt
 bash build.sh
 ```
 
-The governed workbook defaults to `jonathan-harris-site-url-inventory-remediated-release-ready.xlsm`. Set `EBOOK_WORKBOOK_PATH` when validating a different approved workbook.
+The governed workbook defaults to `jonathan-harris-site-url-inventory-remediated-release-ready.xlsx`. Set `EBOOK_WORKBOOK_PATH` when validating a different approved workbook.
 
 ## Release workflow
 
