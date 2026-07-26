@@ -34,6 +34,9 @@ jobs:
       - name: Run post-deploy notification unit tests
         run: python -m unittest scripts.test_post_deploy_notify
 
+      - name: Run manuscript extraction regression tests
+        run: python -m unittest scripts.test_sync_manuscript_samples
+
       - name: Run build pipeline
         run: bash build.sh
 
