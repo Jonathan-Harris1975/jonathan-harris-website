@@ -58,7 +58,8 @@
         "/evidence/workplace-ai-literacy/",
         "/ebooks/ai-literacy-for-the-modern-workplace/",
         "/bundles/ai-at-work/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "deepfake-verification-checklist",
@@ -121,7 +122,8 @@
       "related": [
         "/evidence/deepfake-detection-and-synthetic-media/",
         "/ebooks/deepfakes-ai-scams-and-synthetic-reality/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "ai-procurement-questions-small-businesses",
@@ -184,7 +186,8 @@
       "related": [
         "/evidence/ai-for-small-business/",
         "/ebooks/artificial-intelligence-for-small-business/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "responsible-ai-checklist-managers",
@@ -247,7 +250,8 @@
       "related": [
         "/evidence/ai-governance-and-law/",
         "/ebooks/artificial-intelligence-and-the-law-case-studies-and-future-trends/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "ai-agent-risk-checklist",
@@ -305,7 +309,8 @@
         "/evidence/ai-agents-for-ordinary-work/",
         "/ebooks/ai-agents-for-everyday-work/",
         "/bundles/ai-at-work/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "ai-regulated-industries-evidence-map",
@@ -382,7 +387,8 @@
         "/evidence/ai-in-finance/",
         "/evidence/ai-governance-and-law/",
         "/bundles/ai-in-regulated-industries/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     },
     {
       "slug": "eu-ai-act-article-50-readiness-checklist",
@@ -449,7 +455,8 @@
         "/evidence/ai-governance-and-law/",
         "/resources/responsible-ai-checklist-managers/",
         "/bundles/ai-in-regulated-industries/"
-      ]
+      ],
+      "last_reviewed": "2026-07-26"
     }
   ]
 }
