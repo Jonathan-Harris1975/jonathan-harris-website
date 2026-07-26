@@ -1,3 +1,4 @@
+import { ensureSharedChrome } from "../../_shared/chrome.js";
 const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
 
 function slugPartsFromParams(params) {
@@ -169,7 +170,7 @@ async function fetchFeed(context) {
       const response = await fetch(feedUrl, { headers: { Accept: "application/rss+xml, application/xml, text/xml" }, signal: controller.signal });
       if (!response.ok) throw new Error(`Podcast feed fetch failed: ${response.status}`);
       const xml = await response.text();
-      if (!/<item/i.test(xml)) throw new Error("Podcast feed returned no items");
+      if (!/<item\b/i.test(xml)) throw new Error("Podcast feed returned no items");
       return { feedUrl, xml };
     } catch (error) {
       lastError = error;
@@ -312,7 +313,7 @@ ${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-epi
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Transcript preview</a>
 <a class="button secondary" href="/topics/">Related AI topic guides</a>
 <a class="button secondary" href="/book-finder/">Find a related Jonathan Harris book</a>
-<a class="button secondary" href="/newsletter/">Join the newsletter</a>
+<a class="button secondary" href="/newsletter/">Join AI Edge</a>
 </nav>
 ${relatedBooks}
 ${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : ""}
@@ -347,7 +348,11 @@ export async function onRequest(context) {
   if (!episode) episode = fallbackEpisodeFromSlug(slug, context.request);
   const relatedBooks = await relatedBooksMarkup(context, episode);
 
-  return new Response(renderEpisodePage(episode, context.request, feedUrl, relatedBooks), {
+  const pageHtml = await ensureSharedChrome(
+    context,
+    renderEpisodePage(episode, context.request, feedUrl, relatedBooks),
+  );
+  return new Response(pageHtml, {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
