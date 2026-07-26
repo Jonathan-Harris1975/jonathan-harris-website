@@ -1,5 +1,5 @@
 > **Document status:** Production reference  
-> **Last reviewed:** 16 June 2026  
+> **Last reviewed:** 17 June 2026  
 > **Operational authority:** Current repository README, SECURITY policy and operations guide.
 
 # Jonathan Harris Online
