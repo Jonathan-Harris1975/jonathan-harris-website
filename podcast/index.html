@@ -151,8 +151,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- GROWTH:PODCAST-LATEST START -->
 <section class="card podcast-card u-s21" aria-labelledby="latest-three-episodes-heading">
 <h2 id="latest-three-episodes-heading">Latest three episodes</h2>
-<p class="muted">Episode facts stay governed by the podcast RSS pipeline. This block is populated from that feed by the same-origin Pages Function before the HTML response is returned.</p>
-<div data-podcast-latest-server><p>Latest episode details are temporarily unavailable. Use the platform links above or <a href="/transcripts/">browse the transcript archive</a>.</p></div>
+<p class="muted">Current episode links come from the governed podcast RSS feed and remain available in the page HTML when enhanced players are unavailable.</p>
+<div data-podcast-latest-server><p>Browse the platform links above or <a href="/transcripts/">the transcript archive</a> while the current RSS snapshot refreshes.</p></div>
 </section>
 <!-- GROWTH:PODCAST-LATEST END -->
 
@@ -160,12 +160,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <section class="card podcast-card u-s21" aria-labelledby="podcast-topic-filter-heading">
 <h2 id="podcast-topic-filter-heading">Browse episodes by topic</h2>
 <p class="muted">Use the same podcast feed, filtered around the subject you are already interested in.</p>
-<div class="jh-journey-actions"><a href="/podcast/?topic=finance">Finance</a><a href="/podcast/?topic=work">Work</a><a href="/podcast/?topic=governance">Governance</a><a href="/podcast/?topic=healthcare">Healthcare</a><a href="/podcast/?topic=agents">AI agents</a><a href="/podcast/?topic=deepfake">Deepfakes &amp; trust</a></div>
+<div class="jh-journey-actions"><a href="/evidence/eu-ai-act-article-50-transparency/">EU AI Act Article 50</a><a href="/podcast/?topic=finance">Finance</a><a href="/podcast/?topic=work">Work</a><a href="/podcast/?topic=governance">Governance</a><a href="/podcast/?topic=healthcare">Healthcare</a><a href="/podcast/?topic=agents">AI agents</a><a href="/podcast/?topic=deepfake">Deepfakes &amp; trust</a></div>
 </section>
 <!-- GROWTH:PODCAST-TOPICS END -->
 
 <section class="card podcast-card u-s21" aria-label="Podcast player">
-<h2>Latest episode</h2>
+<h2>Podcast Player</h2>
 <p class="podcast-latest-title"><strong data-latest-episode-title>Current Turing's Torch episode</strong></p>
 <p class="muted" data-latest-episode-teaser>The server-rendered episode list above provides the current titles and links even when the enhanced player is unavailable.</p>
 <div class="actions podcast-latest-actions">
@@ -174,13 +174,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <audio class="podcast-native-audio" data-latest-audio controls preload="none" hidden></audio>
 <div class="responsive-media podcast-video" data-latest-video hidden></div>
-<p class="muted">The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.</p>
+<p class="muted">Use the six-episode player below, or choose Spotify, Apple Podcasts or RSS above.</p>
 <div class="responsive-media podcast-spotify-fallback" data-spotify-facade><button class="button secondary" type="button" data-spotify-load>Load Spotify player</button><p class="muted">Spotify loads only after you ask for it.</p></div>
-<details class="podcast-archive-widget"><summary>Browse the extended episode player</summary>
 <!-- Elfsight Podcast Player | Podcast Player -->
 <script src="https://elfsightcdn.com/platform.js" async></script>
 <div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>
-</details>
 </section>
 
 <section class="card podcast-card u-s21" aria-label="Transcript archive">
@@ -192,17 +190,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </section>
 
 <!-- GROWTH:NEWSLETTER podcast:index --><section class="card growth-newsletter-placement" aria-label="Newsletter sign-up"><div class="inline-newsletter" data-newsletter-shell data-newsletter-source="podcast:index">
-  <h3>Get the free AI glossary and tomorrow’s 3-minute AI briefing</h3>
-  <p>One useful weekday briefing, plus the plain-English AI glossary. No second lead magnet hiding behind the curtain.</p>
-  <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
-    <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com"/></label>
-    <input type="hidden" name="source" value="podcast:index"/>
-    <input type="hidden" name="next" value="/downloads/ai-glossary-cheat-sheet/"/>
-    <span class="newsletter-honeypot" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"/></label></span>
-    <button class="button" type="submit">Send me the briefing + glossary</button>
-    <p class="subtle" data-newsletter-status hidden aria-live="polite"></p>
-  </form>
-  <p class="newsletter-fallback-copy"><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Use the hosted AI Edge sign-up instead</a></p>
+  <h3>Get the free AI glossary with AI Edge</h3>
+  <p>Practical AI analysis, plus the plain-English AI glossary. No duplicate form, no second signup route.</p>
+  <a class="button" href="/newsletter/?source=podcast%3Aindex&amp;placement=inline" data-newsletter-cta data-placement="podcast:index">Join AI Edge</a>
+  <p class="newsletter-fallback-copy"><a href="/downloads/ai-glossary-cheat-sheet/">Already subscribed? Get the AI glossary</a></p>
 </div></section>
 </main>
 <footer aria-label="Website footer" class="site-footer" role="contentinfo">
@@ -210,7 +201,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="footer-grid">
 <section aria-label="Brand summary" class="footer-panel footer-panel--brand">
 <a class="footer-brand" href="/">Jonathan Harris</a>
-<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and AI Edge, the three-minute weekday briefing for readers who prefer signal over noise.</p>
+<p class="footer-copy">AI analysis for grown-ups. eBooks, podcast episodes, and AI Edge, the practical AI briefing for readers who prefer signal over noise.</p>
 <div aria-label="Core site areas" class="footer-badges">
 <a href="/ebooks/">40 eBooks</a>
 <a href="/podcast/">Weekly podcast</a>
