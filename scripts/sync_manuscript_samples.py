@@ -13,6 +13,8 @@ import json
 import re
 import tempfile
 import urllib.request
+import urllib.parse
+import http.cookiejar
 from pathlib import Path
 from typing import Iterable
 
@@ -21,6 +23,7 @@ from pypdf import PdfReader
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = ROOT / "scripts" / "data" / "manuscripts.json"
 DEFAULT_OUTPUT = ROOT / "data" / "book-sample-chapters.json"
+MASTER_BOOKS_PATH = ROOT / "data" / "ebooks-master.json"
 CHAPTER_HEADING_RE = re.compile(
     r"(?im)^(?:\s*)(chapter\s+(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|i{1,3}|iv|v|vi{0,3}|ix|x)\b[^\n]{0,140})\s*$"
 )
@@ -46,20 +49,87 @@ FRONT_MATTER_TITLES = {
 }
 
 
-def fetch_pdf(url: str, destination: Path) -> None:
+def _request_bytes(opener: urllib.request.OpenerDirector, url: str) -> tuple[bytes, str]:
     request = urllib.request.Request(
         url,
         headers={
             "User-Agent": "Mozilla/5.0 (compatible; JonathanHarrisBuild/1.0)",
-            "Accept": "application/pdf,application/octet-stream;q=0.9,*/*;q=0.1",
+            "Accept": "application/pdf,application/octet-stream,text/html;q=0.8,*/*;q=0.1",
+            "Referer": "https://drive.google.com/",
         },
     )
-    with urllib.request.urlopen(request, timeout=90) as response:
-        data = response.read()
-    if not data.startswith(PDF_MAGIC):
-        preview = data[:120].decode("utf-8", errors="replace").replace("\n", " ")
-        raise ValueError(f"Google Drive did not return a PDF (response starts: {preview!r})")
-    destination.write_bytes(data)
+    with opener.open(request, timeout=90) as response:
+        return response.read(), response.geturl()
+
+
+def _drive_confirmation_url(html_text: str, response_url: str, file_id: str) -> str | None:
+    """Extract Drive's virus-scan/large-file confirmation form when present."""
+    form = re.search(r'<form[^>]+action=["\']([^"\']+)["\'][^>]*>([\s\S]*?)</form>', html_text, re.I)
+    if form:
+        action = urllib.parse.urljoin(response_url, form.group(1))
+        fields: dict[str, str] = {}
+        for name, value in re.findall(r'<input[^>]+name=["\']([^"\']+)["\'][^>]+value=["\']([^"\']*)["\']', form.group(2), re.I):
+            fields[name] = value
+        fields.setdefault("id", file_id)
+        fields.setdefault("export", "download")
+        if fields:
+            return action + ("&" if "?" in action else "?") + urllib.parse.urlencode(fields)
+
+    token = re.search(r'(?:confirm=|name=["\']confirm["\'][^>]+value=["\'])([0-9A-Za-z_-]+)', html_text, re.I)
+    if token:
+        return f"https://drive.usercontent.google.com/download?id={urllib.parse.quote(file_id)}&export=download&confirm={urllib.parse.quote(token.group(1))}"
+    return None
+
+
+def fetch_pdf(url: str, destination: Path, file_id: str = "") -> None:
+    """Fetch a public/shared Drive PDF, including Drive confirmation flows.
+
+    A production sample must be sourced from the manuscript. HTML interstitials are
+    followed only to obtain the real file; they are never treated as sample content.
+    """
+    file_id = (file_id or "").strip()
+    jar = http.cookiejar.CookieJar()
+    opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
+    candidates = [url]
+    if file_id:
+        candidates.extend([
+            f"https://drive.usercontent.google.com/download?id={urllib.parse.quote(file_id)}&export=download&confirm=t",
+            f"https://drive.google.com/uc?export=download&id={urllib.parse.quote(file_id)}&confirm=t",
+        ])
+
+    seen: set[str] = set()
+    diagnostics: list[str] = []
+    for candidate in candidates:
+        if not candidate or candidate in seen:
+            continue
+        seen.add(candidate)
+        try:
+            data, final_url = _request_bytes(opener, candidate)
+        except Exception as exc:
+            diagnostics.append(f"{candidate}: {type(exc).__name__}: {exc}")
+            continue
+        if data.startswith(PDF_MAGIC):
+            destination.write_bytes(data)
+            return
+        html_text = data.decode("utf-8", errors="replace")
+        if file_id:
+            confirm_url = _drive_confirmation_url(html_text, final_url, file_id)
+            if confirm_url and confirm_url not in seen:
+                seen.add(confirm_url)
+                try:
+                    confirmed, confirmed_url = _request_bytes(opener, confirm_url)
+                    if confirmed.startswith(PDF_MAGIC):
+                        destination.write_bytes(confirmed)
+                        return
+                    preview = confirmed[:160].decode("utf-8", errors="replace").replace("\n", " ")
+                    diagnostics.append(f"{confirmed_url}: confirmation response was not PDF: {preview!r}")
+                except Exception as exc:
+                    diagnostics.append(f"{confirm_url}: {type(exc).__name__}: {exc}")
+        preview = data[:160].decode("utf-8", errors="replace").replace("\n", " ")
+        diagnostics.append(f"{final_url}: response was not PDF: {preview!r}")
+
+    detail = " | ".join(diagnostics[-4:])
+    raise ValueError(f"Google Drive manuscript download did not return a PDF. {detail}")
 
 
 def normalise_text(text: str) -> str:
@@ -234,6 +304,19 @@ def main() -> int:
 
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     records = manifest.get("books", [])
+    if not isinstance(records, list) or not records:
+        raise RuntimeError("Manuscript manifest contains no book records")
+    master = json.loads(MASTER_BOOKS_PATH.read_text(encoding="utf-8"))
+    master_books = master.get("books", []) if isinstance(master, dict) else master
+    expected_slugs = {str(item.get("slug", "")).strip() for item in master_books if isinstance(item, dict) and item.get("slug")}
+    manifest_slugs = {str(item.get("slug", "")).strip() for item in records if isinstance(item, dict) and item.get("slug")}
+    if manifest_slugs != expected_slugs:
+        missing = sorted(expected_slugs - manifest_slugs)
+        extra = sorted(manifest_slugs - expected_slugs)
+        details = []
+        if missing: details.append(f"missing {len(missing)} governed book(s): {', '.join(missing[:5])}")
+        if extra: details.append(f"contains {len(extra)} unknown book(s): {', '.join(extra[:5])}")
+        raise RuntimeError("Manuscript manifest does not cover the full governed catalogue; " + "; ".join(details))
     existing = load_existing(args.output)
     output_records: list[dict[str, object]] = []
     failures: list[str] = []
@@ -251,7 +334,7 @@ def main() -> int:
             try:
                 pdf_path = temp / f"{position:02d}.pdf"
                 print(f"[{position}/{len(records)}] {slug}: downloading")
-                fetch_pdf(str(record["download_url"]), pdf_path)
+                fetch_pdf(str(record["download_url"]), pdf_path, str(record.get("file_id", "")))
                 extracted = extract_chapter(pdf_path)
                 output_records.append(
                     {
@@ -279,7 +362,7 @@ def main() -> int:
         message = "Manuscript sample extraction failed:\n- " + "\n- ".join(failures)
         if not args.allow_partial:
             raise RuntimeError(message)
-        print(f"WARN: {len(failures)} manuscript sample(s) could not be extracted; continuing with noindex fallback pages for those titles.")
+        print(f"WARN: {len(failures)} manuscript sample(s) could not be extracted; continuing without sample routes for those titles.")
         print("WARN: " + "\nWARN: ".join(failures))
     return 0
 

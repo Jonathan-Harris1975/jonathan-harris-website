@@ -33,6 +33,13 @@ REQUIRED_CSS_SNIPPETS = (
     "body.page-topics #main",
 )
 
+DYNAMIC_CHROME_FILES = (
+    ROOT / "functions" / "podcast" / "[[slug]].js",
+    ROOT / "functions" / "podcast" / "episodes" / "[[slug]].js",
+    ROOT / "functions" / "transcripts" / "[[slug]].js",
+)
+SHARED_CHROME_HELPER = ROOT / "functions" / "_shared" / "chrome.js"
+
 
 def fail(message: str) -> None:
     print(f"[FAIL] {message}")
@@ -69,6 +76,12 @@ def main() -> int:
             errors.append(f"{rel}: footer appears before the shared header")
         if '<nav aria-label="Primary navigation" class="jh-nav-desktop">' not in header_match.group(0):
             errors.append(f"{rel}: desktop navigation class is missing")
+        if 'data-jh-mobile-menu-toggle' not in header_match.group(0) or 'aria-controls="jh-mobile-nav"' not in header_match.group(0):
+            errors.append(f"{rel}: hamburger toggle contract is missing")
+        if 'id="jh-mobile-nav"' not in header_match.group(0):
+            errors.append(f"{rel}: mobile navigation drawer is missing")
+        if text.count('/assets/js/site-ui.min.js') != 1:
+            errors.append(f"{rel}: expected exactly one shared site-ui script for hamburger behaviour")
         if text.count('footer aria-label="Website footer"') != 1:
             errors.append(f"{rel}: expected exactly one governed website footer")
 
@@ -86,6 +99,25 @@ def main() -> int:
     for snippet in REQUIRED_CSS_SNIPPETS:
         if snippet not in contract:
             errors.append(f"shared chrome contract is missing required rule: {snippet}")
+
+    if not SHARED_CHROME_HELPER.exists():
+        errors.append("functions/_shared/chrome.js: shared runtime chrome helper is missing")
+    else:
+        helper_text = SHARED_CHROME_HELPER.read_text(encoding="utf-8")
+        for snippet in ('/assets/partials/header.html', '/assets/partials/footer.html', '/assets/js/site-ui.min.js'):
+            if snippet not in helper_text:
+                errors.append(f"functions/_shared/chrome.js: runtime helper is missing {snippet}")
+
+    for dynamic_path in DYNAMIC_CHROME_FILES:
+        rel = dynamic_path.relative_to(ROOT).as_posix()
+        if not dynamic_path.exists():
+            errors.append(f"{rel}: dynamic route file is missing")
+            continue
+        dynamic_text = dynamic_path.read_text(encoding="utf-8")
+        if 'ensureSharedChrome' not in dynamic_text:
+            errors.append(f"{rel}: dynamic route does not use ensureSharedChrome")
+        if '/assets/js/site-ui.min.js' in dynamic_text and 'ensureSharedChrome' not in dynamic_text:
+            errors.append(f"{rel}: embeds site-ui without the canonical runtime chrome helper")
 
     if errors:
         print("Shared chrome layout contract failed:\n")

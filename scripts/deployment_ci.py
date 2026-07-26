@@ -87,7 +87,7 @@ def main() -> int:
     parser.add_argument(
         "--skip-manuscript-sync",
         action="store_true",
-        help="Skip remote manuscript download/extraction. Local diagnostics only; production builds normally attempt extraction with graceful per-book fallback.",
+        help="Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every advertised sample to be a genuine extracted chapter.",
     )
     args = parser.parse_args()
 
@@ -118,7 +118,7 @@ def main() -> int:
                 print("\n==> Manuscript sample sync skipped")
                 print("Local diagnostics mode: generated sample pages will not be release-ready without a genuine chapter cache.")
             else:
-                run_step("Extract genuine sample chapters from manuscript PDFs", [sys.executable, "scripts/sync_manuscript_samples.py", "--allow-partial"])
+                run_step("Extract genuine sample chapters from manuscript PDFs", [sys.executable, "scripts/sync_manuscript_samples.py"])
         else:
             print("\n==> Workbook import skipped")
             print("Proceeding without workbook only because --allow-missing-workbook was supplied.")
@@ -126,6 +126,9 @@ def main() -> int:
         run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
         run_step("Generate curated ebook reading paths", [sys.executable, "scripts/generate_ebook_bundles.py"])
         run_step("Generate growth, evidence and conversion assets", [sys.executable, "scripts/generate_growth_assets.py"])
+        run_step("Generate downloadable AI glossary PDF", [sys.executable, "scripts/generate_ai_glossary_pdf.py"])
+        run_step("Mark stale blog snapshots honestly", [sys.executable, "scripts/mark_stale_blog_snapshot.py"])
+        run_step("Validate governed ebook route integrity", [sys.executable, "scripts/check_ebook_route_integrity.py"])
         run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
         run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])
         run_step("Validate crawler snapshots", [sys.executable, "scripts/check_crawlers.py"])
@@ -135,6 +138,7 @@ def main() -> int:
         run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
         run_step("Validate shared chrome visibility and spacing", [sys.executable, "scripts/check_shared_chrome_layout.py"])
         run_step("Check CSS size budget", [sys.executable, "scripts/check_css_budget.py", "--check"])
+        run_step("Check core colour contrast", [sys.executable, "scripts/check_colour_contrast.py"])
         run_step("Apply third-party script governance", [sys.executable, "scripts/govern_page_scripts.py"])
         run_step("Validate third-party script governance", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
         run_step("Run growth regression contracts", [sys.executable, "scripts/test_growth_contracts.py"])

@@ -104,14 +104,19 @@ def build_resized_image_url(src: str, width: int, *, quality: int = 85, fit: str
 
 
 def build_same_source_srcset(src: str, intrinsic_width: int | None) -> str:
+    """Build Cloudflare Image Resizing variants only for same-origin paths.
+
+    The governed book covers are served from images.jonathan-harris.online. Wrapping
+    those remote URLs in /cdn-cgi/image/ asks the website zone to fetch a second
+    host and follow its delivery chain. That has proved brittle in browsers and can
+    make an otherwise healthy direct cover disappear when a srcset candidate wins.
+    Remote covers therefore use their direct governed URL; local/same-origin image
+    paths may still use Cloudflare resizing.
+    """
     cleaned = (src or "").strip()
-    if not cleaned:
+    if not cleaned or cleaned.lower().endswith(".svg"):
         return ""
-    if cleaned.lower().endswith(".svg"):
-        return ""
-    if cleaned.startswith("http://"):
-        return ""
-    if cleaned.startswith("https://") and not cleaned.startswith("https://images.jonathan-harris.online/"):
+    if cleaned.startswith(("http://", "https://", "//")):
         return ""
     widths = [width for width in RESPONSIVE_IMAGE_WIDTHS if intrinsic_width is None or width <= intrinsic_width]
     if not widths:

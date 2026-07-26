@@ -5,6 +5,7 @@ import datetime as dt
 import html
 import json
 import re
+import shutil
 import hashlib
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -36,6 +37,8 @@ DYNAMIC_ROUTE_MANIFEST_PATH = DATA_DIR / "dynamic-route-manifest.json"
 SEARCH_VISIBILITY_SURFACES_PATH = DATA_DIR / "search-visibility-surfaces.json"
 AMAZON_BOOK_SIGNALS_PATH = DATA_DIR / "amazon-book-signals.json"
 BOOK_SAMPLE_CHAPTERS_PATH = DATA_DIR / "book-sample-chapters.json"
+SITE_FACTS_PATH = DATA_DIR / "site-facts.json"
+RELATED_BOOK_CURATION_PATH = DATA_DIR / "related-book-curation.json"
 HEADER_PARTIAL = ROOT / "assets" / "partials" / "header.html"
 FOOTER_PARTIAL = ROOT / "assets" / "partials" / "footer.html"
 EBOOK_TEMPLATE_CSS = ROOT / "assets" / "css" / "ebook-template.css"
@@ -794,7 +797,17 @@ def render_tag_pills(tags: Iterable[str], class_name: str = "ebook-pill") -> str
 
 
 
+def load_site_facts() -> Dict[str, Any]:
+    try:
+        payload = json.loads(SITE_FACTS_PATH.read_text(encoding="utf-8"))
+        return payload if isinstance(payload, dict) else {}
+    except Exception:
+        return {}
+
+
 def build_person_schema() -> Dict[str, Any]:
+    facts = load_site_facts()
+    podcast_name = clean_paragraph(facts.get("podcast_name", "")) or "Turing’s Torch: AI Weekly"
     return {
         "@context": "https://schema.org",
         "@type": "Person",
@@ -802,15 +815,16 @@ def build_person_schema() -> Dict[str, Any]:
         "name": SITE_NAME,
         "url": f"{SITE_URL}/bio/",
         "jobTitle": ["AI Author", "Podcast Host"],
-        "description": "Jonathan Harris is an artificial intelligence author and host of the Turing’s Torch AI Weekly podcast. He writes plain-English books explaining how AI works across industries including healthcare, finance, law, manufacturing, and education.",
+        "description": f"Jonathan Harris is an artificial intelligence author and host of {podcast_name}. He writes plain-English books explaining how AI works across industries including healthcare, finance, law, manufacturing, and education.",
         "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Generative AI", "AI Ethics", "Applied AI", "LLMs"],
         "sameAs": [
-            "https://about.me/jonathan_harris",
             "https://youtube.com/@jonathanharris-r7i",
-            "https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF",
             "https://www.amazon.com/kindle-dbs/author?ref=dbs_G_A_C&asin=B0DNCHC337",
             "https://www.goodreads.com/author/show/54004095.Jonathan_Harris",
             "https://twitter.com/jonathan_harris_01",
+            "https://www.instagram.com/jonathan.harris1975",
+            "https://www.tiktok.com/@jonathan_harris_01",
+            "https://www.facebook.com/share/1G7v4P69xa",
         ],
     }
 
@@ -860,8 +874,9 @@ def amazon_signal_for(book: Dict[str, Any]) -> Dict[str, Any]:
 
 def render_book_market_signal(book: Dict[str, Any]) -> str:
     signal = amazon_signal_for(book)
+    buy_route = html.escape(clean_paragraph(book.get("buy_route", "")) or f"/ebooks/{book.get('slug','')}/buy-now", quote=True)
     if not signal:
-        return '<p class="book-market-signal muted">Current Kindle price and ratings are checked on Amazon at the buy step.</p>'
+        return f'<p class="book-market-signal muted"><a href="{buy_route}" data-ebook-amazon data-book-slug="{html.escape(clean_paragraph(book.get("slug", "")), quote=True)}" data-placement="ebook_market_signal">Check today’s Kindle price and reviews on Amazon</a>.</p>'
     parts: List[str] = []
     rating = signal.get("rating")
     count = signal.get("rating_count")
@@ -871,7 +886,7 @@ def render_book_market_signal(book: Dict[str, Any]) -> str:
     if price:
         parts.append(f'<strong>{html.escape(price)}</strong> on Kindle')
     if not parts:
-        return '<p class="book-market-signal muted">Current Kindle price and ratings are checked on Amazon at the buy step.</p>'
+        return f'<p class="book-market-signal muted"><a href="{buy_route}" data-ebook-amazon data-book-slug="{html.escape(clean_paragraph(book.get("slug", "")), quote=True)}" data-placement="ebook_market_signal">Check today’s Kindle price and reviews on Amazon</a>.</p>'
     checked = clean_paragraph(signal.get("checked_at", ""))[:10]
     joined = " · ".join(parts)
     return f'<p class="book-market-signal">{joined} <span class="muted">Last verified {html.escape(checked)}; Amazon pricing may vary.</span></p>'
@@ -882,10 +897,12 @@ def render_inline_newsletter_form(
     *,
     next_path: str = "/downloads/ai-glossary-cheat-sheet/",
     cta: str = "Send me the briefing + glossary",
+    heading: str = "Get the free AI glossary and tomorrow’s 3-minute AI briefing",
+    description: str = "One useful weekday briefing, plus the plain-English AI glossary. No second lead magnet hiding behind the curtain.",
 ) -> str:
     return f'''<div class="inline-newsletter" data-newsletter-shell data-newsletter-source="{html.escape(source)}">
-  <h3>Get the free AI glossary and tomorrow’s 3-minute AI briefing</h3>
-  <p>One useful weekday briefing, plus the plain-English AI glossary. No second lead magnet hiding behind the curtain.</p>
+  <h3>{html.escape(heading)}</h3>
+  <p>{html.escape(description)}</p>
   <form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
     <label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required placeholder="you@example.com"/></label>
     <input type="hidden" name="source" value="{html.escape(source)}"/>
@@ -894,8 +911,103 @@ def render_inline_newsletter_form(
     <button class="button" type="submit">{html.escape(cta)}</button>
     <p class="subtle" data-newsletter-status hidden aria-live="polite"></p>
   </form>
-  <p class="newsletter-fallback-copy"><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Hosted sign-up fallback</a></p>
+  <p class="newsletter-fallback-copy"><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Use the hosted AI Edge sign-up instead</a></p>
 </div>'''
+
+
+def newsletter_offer_for_book(book: Dict[str, Any]) -> Dict[str, str]:
+    topic = clean_paragraph(book.get("topic_slug", ""))
+    mapping = {
+        "future-of-work": ("/resources/uk-workplace-ai-literacy-checklist/", "Get AI Edge + the workplace AI literacy checklist"),
+        "business": ("/resources/ai-procurement-questions-for-small-businesses/", "Get AI Edge + the small-business AI procurement checklist"),
+        "law": ("/resources/responsible-ai-checklist-for-managers/", "Get AI Edge + the responsible AI manager checklist"),
+        "finance": ("/resources/ai-regulated-industries-evidence-map/", "Get AI Edge + the regulated-industries evidence map"),
+        "cyber-security": ("/resources/deepfake-verification-checklist/", "Get AI Edge + the verification checklist"),
+        "media": ("/resources/deepfake-verification-checklist/", "Get AI Edge + the verification checklist"),
+    }
+    next_path, heading = mapping.get(topic, ("/downloads/ai-glossary-cheat-sheet/", "Get AI Edge + the free AI glossary"))
+    return {
+        "next_path": next_path,
+        "heading": heading,
+        "description": "A useful weekday AI briefing, then a practical resource matched to what you are reading now.",
+    }
+
+
+PRIORITY_BOOK_EVIDENCE_MAP = {
+    "ai-literacy-for-the-modern-workplace": "workplace-ai-literacy",
+    "the-artificial-intelligence-job-shift-navigating-the-future-of-work": "workplace-ai-literacy",
+    "ai-agents-for-everyday-work": "ai-agents-for-ordinary-work",
+    "artificial-intelligence-for-small-business": "ai-for-small-business",
+    "artificial-intelligence-and-the-law-case-studies-and-future-trends": "ai-governance-and-law",
+    "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information": "ai-governance-and-law",
+    "artificial-intelligence-in-banking-revolutionizing-finance-and-data-security": "ai-in-finance",
+    "digital-diagnosis-how-ai-is-revolutionizing-healthcare": "ai-in-healthcare",
+    "artificial-intelligence-for-cyber-security-a-practical-guide-to-data-breach-prevention": "deepfake-detection-and-synthetic-media",
+    "deepfakes-ai-scams-and-synthetic-reality": "deepfake-detection-and-synthetic-media",
+}
+
+
+def render_priority_evidence_module(book: Dict[str, Any]) -> str:
+    evidence_slug = PRIORITY_BOOK_EVIDENCE_MAP.get(clean_paragraph(book.get("slug", "")))
+    if not evidence_slug:
+        return ""
+    try:
+        payload = json.loads((DATA_DIR / "evidence-content.json").read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+    items = payload.get("items", []) if isinstance(payload, dict) else []
+    item = next(
+        (x for x in items if isinstance(x, dict) and clean_paragraph(x.get("slug", "")) == evidence_slug),
+        None,
+    )
+    if not item:
+        return ""
+    stats = item.get("stats", []) if isinstance(item.get("stats"), list) else []
+    questions = item.get("questions", []) if isinstance(item.get("questions"), list) else []
+    claim_html = ""
+    if stats and isinstance(stats[0], dict):
+        stat = stats[0]
+        source = stat.get("source", {}) if isinstance(stat.get("source"), dict) else {}
+        claim = clean_paragraph(stat.get("claim", ""))
+        organisation = clean_paragraph(source.get("organisation", ""))
+        publication_date = clean_paragraph(source.get("publication_date", ""))
+        source_url = clean_paragraph(source.get("url", ""))
+        if claim and source_url:
+            source_label = organisation or "Primary source"
+            date_suffix = f" · {html.escape(publication_date)}" if publication_date else ""
+            claim_html = (
+                f'<p><strong>Current evidence:</strong> {html.escape(claim)} '
+                f'<a href="{html.escape(source_url, quote=True)}" rel="noopener">{html.escape(source_label)}</a>'
+                f'{date_suffix}.</p>'
+            )
+    counterpoint = clean_paragraph(item.get("counterpoint", ""))
+    question_items = "".join(
+        f'<li>{html.escape(clean_paragraph(q.get("q", "")))}</li>'
+        for q in questions[:4]
+        if isinstance(q, dict) and clean_paragraph(q.get("q", ""))
+    )
+    return f'''<section class="card ebook-section ebook-current-evidence" aria-labelledby="current-evidence-{html.escape(evidence_slug, quote=True)}">
+      <h2 id="current-evidence-{html.escape(evidence_slug, quote=True)}">Current evidence and decision questions</h2>
+      {claim_html}
+      <h3>What often gets oversimplified</h3>
+      <p>{html.escape(counterpoint)}</p>
+      <h3>Questions worth asking before acting</h3>
+      <ul class="ebook-learn-list">{question_items}</ul>
+      <p><a href="/evidence/{html.escape(evidence_slug, quote=True)}/">Read the full source-backed evidence guide</a>.</p>
+    </section>'''
+
+
+def podcast_link_for_book(book: Dict[str, Any]) -> Dict[str, str]:
+    topic = clean_paragraph(book.get("topic_slug", ""))
+    mapping = {
+        "finance": ("/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/", "AI safety in finance, robotics and multilingual models"),
+        "law": ("/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/", "AI governance and accountability"),
+        "government": ("/podcast/episodes/ai-accountability-costs-and-local-control/", "AI accountability, costs and local control"),
+        "future-of-work": ("/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/", "AI innovation and human needs"),
+        "environment": ("/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/", "AI, climate change and the path ahead"),
+    }
+    href, label = mapping.get(topic, (f"/podcast/?topic={topic}", f"Turing’s Torch on {clean_paragraph(book.get('topic', 'AI'))}"))
+    return {"href": href, "label": label}
 
 
 def render_book_bundle_links(book: Dict[str, Any]) -> str:
@@ -3170,19 +3282,37 @@ def build_featured_book_payload(public_records: List[Dict[str, Any]], now: dt.da
 
 
 
+def load_related_book_curation() -> Dict[str, List[Dict[str, str]]]:
+    try:
+        payload = json.loads(RELATED_BOOK_CURATION_PATH.read_text(encoding="utf-8"))
+        items = payload.get("books", {}) if isinstance(payload, dict) else {}
+        return items if isinstance(items, dict) else {}
+    except Exception:
+        return {}
+
+
 def render_related_links(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> str:
     by_slug = {item["slug"]: item for item in all_books}
+    curation = load_related_book_curation().get(book.get("slug", ""), [])
+    related_specs: List[Tuple[str, str]] = []
+    if isinstance(curation, list):
+        for spec in curation[:4]:
+            if isinstance(spec, dict):
+                related_specs.append((clean_paragraph(spec.get("slug", "")), clean_paragraph(spec.get("reason", ""))))
+    if not related_specs:
+        related_specs = [(slug, "") for slug in book.get("related_slugs", [])[:4]]
+
     items = []
-    for slug in book.get("related_slugs", [])[:4]:
+    for slug, reason in related_specs:
         related = by_slug.get(slug)
         if not related:
             continue
+        reason_html = f'<span class="related-book-reason">{html.escape(reason)}</span>' if reason else f'<span>{html.escape(related["topic"])} · {related["pages"]} pages</span>'
         items.append(
-            '<li><a href="/ebooks/{slug}/">{title}</a><span>{topic} · {pages} pages</span></li>'.format(
+            '<li><a href="/ebooks/{slug}/">{title}</a>{reason}</li>'.format(
                 slug=html.escape(related["slug"]),
                 title=html.escape(related["title"]),
-                topic=html.escape(related["topic"]),
-                pages=related["pages"],
+                reason=reason_html,
             )
         )
     return "\n".join(items)
@@ -3383,6 +3513,29 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
     audience_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in audience_bullets(book))
     key_theme_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in book.get("tags", []))
     signal_items = "\n".join(f"<li>{html.escape(item)}</li>" for item in practical_outcomes(book))
+    sample = load_book_sample_chapters().get(book["slug"])
+    sample_available = bool(sample and sample.get("paragraphs") and int(sample.get("word_count") or 0) >= 350)
+    newsletter_offer = newsletter_offer_for_book(book)
+    podcast_link = podcast_link_for_book(book)
+    sample_primary_cta = (
+        f'<a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book["slug"])}" data-topic="{html.escape(book["topic_slug"])}" data-placement="ebook_primary">Read a free chapter</a>'
+        if sample_available else ""
+    )
+    sample_confidence = " · Free chapter available" if sample_available else ""
+    sample_section = (
+        f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
+      <h2>Read a real chapter before you buy</h2>
+      <p>Open a genuine chapter from the manuscript now. The AI Edge signup is optional, not a gate between you and the sample.</p>
+      <div class="ebook-actions"><a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_sample_section">Read the sample chapter</a></div>
+      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
+    </section>"""
+        if sample_available
+        else f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
+      <h2>Get the free AI glossary</h2>
+      <p>The manuscript sample is not available in this build, so this page does not promise a chapter it cannot deliver.</p>
+      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
+    </section>"""
+    )
 
     return f'''<!DOCTYPE html>
 <html lang="en">
@@ -3483,10 +3636,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
         <div class="ebook-actions">
           <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Buy on Amazon</a>
-          <a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Read a free chapter</a>
+          {sample_primary_cta}
           <a class="button secondary" href="/ebooks/">Browse related books</a>
         </div>
-        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))} · Free chapter available · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
+        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))}{sample_confidence} · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
         {render_book_market_signal(book)}
         <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
       </article>
@@ -3538,10 +3691,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {escape_paragraphs(book['summary'])}
     </section>
 
+    <section class="ebook-mid-buy" aria-label="Book purchase option">
+      <p><strong>Ready to continue?</strong> Check the current Kindle price and reviews before buying.</p>
+      <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_midpage">Check Kindle price on Amazon</a>
+    </section>
+
     <section class="card ebook-section">
       <h2>Why this title is useful in practice</h2>
       <p>{html.escape(book_unique_evidence_passage(book))}</p>
     </section>
+
+    {render_priority_evidence_module(book)}
 
     <section class="card ebook-section ebook-section--accent">
       <h2>Why does this topic get messy?</h2>
@@ -3569,12 +3729,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {escape_paragraphs(book['why_it_matters'])}
     </section>
 
-    <section class="card ebook-section ebook-preview-capture" id="free-preview">
-      <h2>Read a real chapter before you buy</h2>
-      <p>Open a genuine chapter from the manuscript now. The AI Edge signup is optional, not a gate between you and the sample.</p>
-      <div class="ebook-actions"><a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_sample_section">Read the sample chapter</a></div>
-      {render_inline_newsletter_form(f"ebook:{book['slug']}", cta="Get the free AI glossary")}
-    </section>
+    {sample_section}
 
     <section class="related-books card">
       <h2>Related books</h2>
@@ -3587,8 +3742,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <section class="card ebook-section ebook-listen-next" aria-labelledby="listen-next-heading">
       <h2 id="listen-next-heading">Listen next</h2>
-      <p>Use the podcast route for current analysis related to {html.escape(book['topic'].lower())}; episode facts stay governed by the podcast feed rather than copied into this book page.</p>
-      <a class="button secondary" href="/podcast/?topic={html.escape(book['topic_slug'])}">Turing’s Torch on {html.escape(book['topic'])}</a>
+      <p>Continue with current audio analysis related to {html.escape(book['topic'].lower())}. Episode metadata stays governed by the podcast feed rather than being copied into this book page.</p>
+      <a class="button secondary" href="{html.escape(podcast_link['href'])}" data-podcast-contextual data-placement="ebook_listen_next">{html.escape(podcast_link['label'])}</a>
     </section>
 
     <section class="faq card" aria-label="Frequently asked questions">
@@ -3604,10 +3759,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="jh-journey-actions">
         {book_semantic_journey_links(book)}
       </div>
-      {render_inline_newsletter_form(f"ebook-footer:{book['slug']}")}
+      {render_inline_newsletter_form(f"ebook-footer:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
     </section>
   </div>
 </main>
+<div class="ebook-sticky-buy" aria-label="Quick purchase"><span>{title}</span><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_mobile_sticky">Check Kindle price</a></div>
 <script defer="" src="/assets/js/related-books.min.js"></script>
 {footer}
 <script defer="" src="/assets/js/newsletter-signup.min.js"></script>
@@ -3754,6 +3910,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </section>
 
+    <section class="card book-finder-bridge"><h2>Prefer a guided starting point?</h2><p>Use the rule-based finder when a 40-book grid is a bit too much buffet.</p><a class="button secondary" href="/book-finder/?source=ebooks-index">Find the right AI book</a></section>
+
     <section aria-label="eBook grid" class="grid" id="booksGrid">
       {static_cards}
     </section>
@@ -3880,6 +4038,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <section class="card ebook-index-intro">
       <h2>Best place to start</h2>
       <p>{category_best_start_copy(topic, books)}</p>
+    </section>
+    <section class="card book-finder-bridge">
+      <h2>Not sure which {html.escape(topic)} book fits?</h2>
+      <p>Use the rule-based finder to narrow the 40-book catalogue by the problem you are trying to solve.</p>
+      <a class="button secondary" href="/book-finder/?source=catalogue-{html.escape(topic_slug, quote=True)}" data-book-finder-bridge data-placement="catalogue:{html.escape(topic_slug, quote=True)}">Find the right AI book</a>
     </section>
     <section class="faq card" aria-label="Category questions">
       <h2>Common questions</h2>
@@ -4272,7 +4435,8 @@ def load_book_preview_dynamic_routes(books: List[Dict[str, Any]], generated_last
         if not slug or not title:
             continue
         repo_path = f"ebooks/{slug}/sample/index.html"
-        if not (ROOT / repo_path).exists():
+        sample_file = ROOT / repo_path
+        if not sample_file.exists() or html_declares_noindex(sample_file):
             continue
         routes.append(_manifest_route(
             family="book-preview",
@@ -4297,11 +4461,15 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
         ("topic-index", "AI topic guides", "/topics/", "topics/index.html", "Topic-led entry points into the Jonathan Harris AI library.", "topic index"),
         ("glossary", "AI glossary", "/glossary/", "glossary/index.html", "Plain-English AI glossary for answer engines and readers.", "glossary"),
         ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
-        ("newsletter", "AI Edge newsletter", "/newsletter/", "newsletter/index.html", "Newsletter sign-up page for daily AI briefings.", "newsletter"),
+        ("newsletter", "AI Edge", "/newsletter/", "newsletter/index.html", "Sign-up page for AI Edge, the three-minute weekday AI briefing.", "newsletter"),
         ("lead-magnet", "AI glossary cheat sheet", "/downloads/ai-glossary-cheat-sheet/", "downloads/ai-glossary-cheat-sheet/index.html", "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.", "lead magnet"),
         ("book-finder", "Find the right AI book", "/book-finder/", "book-finder/index.html", "A deterministic book finder based on reader problem and topic.", "book finder"),
         ("evidence-index", "AI evidence guides", "/evidence/", "evidence/index.html", "Source-backed AI evidence guides designed for useful retrieval and citation.", "evidence index"),
         ("resource-index", "Practical AI checklists", "/resources/", "resources/index.html", "Practical AI checklists and decision resources.", "resource index"),
+        ("methodology", "Editorial and evidence methodology", "/methodology/", "methodology/index.html", "How sources are selected, claims are checked, review dates are handled and corrections are made.", "editorial methodology"),
+        ("teams", "Practical AI for teams", "/for-teams/", "for-teams/index.html", "AI literacy, reading paths and practical briefing options for managers and teams.", "team AI literacy"),
+        ("media", "Media and speaking", "/media/", "media/index.html", "Media, podcast guest and speaking background for Jonathan Harris on practical artificial intelligence.", "media enquiries"),
+        ("contributor", "Contribute an AI case study", "/contribute/", "contribute/index.html", "Evidence-first route for submitting a real AI deployment, result or failure for editorial review.", "case study contribution"),
     ]
     routes: List[Dict[str, str]] = []
     for family, title, path, repo_path, summary, entity in candidates:
@@ -4429,7 +4597,7 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         if relative_path in book_paths:
             lastmod = normalise_lastmod(book_paths[relative_path].get("dateModified") or book_paths[relative_path].get("datePublished") or governed_lastmod)
         else:
-            lastmod = governed_lastmod
+            lastmod = normalise_lastmod(file_lastmod(file_path))
 
         loc = path_to_public_url(relative_path)
         by_loc[loc] = {
@@ -4519,6 +4687,12 @@ def build_llms_txt(books: List[Dict[str, Any]]) -> str:
     lines.extend(["", "## Canonical books"])
     for book in books:
         lines.append(f"- {book['title']}: {book['canonical_url']} — {brand_safe_discovery_text(book['short'])}")
+
+    service_routes = routes_by_family.get("methodology", []) + routes_by_family.get("teams", []) + routes_by_family.get("media", []) + routes_by_family.get("contributor", []) + routes_by_family.get("book-finder", []) + routes_by_family.get("lead-magnet", [])
+    if service_routes:
+        lines.extend(["", "## Methodology and practical routes"])
+        for route in service_routes:
+            lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
 
     evidence_routes = routes_by_family.get("evidence-guide", []) + routes_by_family.get("practical-resource", [])
     if evidence_routes:
@@ -4788,7 +4962,9 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
             for book in books
         ],
         "topic_authority_pages": [f"/catalogue/{slugify(topic)}/" for topic in sorted({book['topic'] for book in books})],
-        "site_sections": [route for route in build_dynamic_route_entries(books) if route.get("family") in {"site-home", "person", "blog-hub", "podcast-hub", "transcript-archive", "topic-index", "glossary", "comparison", "newsletter"}],
+        "site_sections": [route for route in build_dynamic_route_entries(books) if route.get("family") in {"site-home", "person", "blog-hub", "podcast-hub", "transcript-archive", "topic-index", "glossary", "comparison", "newsletter", "lead-magnet", "book-finder", "evidence-index", "resource-index", "methodology", "teams", "media", "contributor"}],
+        "evidence_guides": [route for route in build_dynamic_route_entries(books) if route.get("family") == "evidence-guide"],
+        "practical_resources": [route for route in build_dynamic_route_entries(books) if route.get("family") == "practical-resource"],
         "blog_posts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "blog-post"],
         "podcast_episodes": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-episode"],
         "transcripts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-transcript"],
@@ -4834,12 +5010,23 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
 
 
 def build_book_files(books: List[Dict[str, Any]]) -> None:
+    samples = load_book_sample_chapters()
     for book in books:
         book_dir = EBOOKS_DIR / book["slug"]
         book_dir.mkdir(parents=True, exist_ok=True)
         sample_dir = book_dir / "sample"
-        sample_dir.mkdir(parents=True, exist_ok=True)
-        (sample_dir / "index.html").write_text(render_book_sample_page(book), encoding="utf-8")
+        sample = samples.get(book["slug"], {})
+        sample_available = bool(
+            isinstance(sample, dict)
+            and sample.get("paragraphs")
+            and int(sample.get("word_count") or 0) >= 350
+        )
+        if sample_available:
+            sample_dir.mkdir(parents=True, exist_ok=True)
+            (sample_dir / "index.html").write_text(render_book_sample_page(book), encoding="utf-8")
+        elif sample_dir.exists():
+            # A missing manuscript extraction must never leave a stale placeholder route behind.
+            shutil.rmtree(sample_dir)
         metadata = {
             "title": book["title"],
             "slug": book["slug"],
@@ -5660,12 +5847,20 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             if is_remote_image_src(src) and not src.startswith("https://images.jonathan-harris.online/"):
                 errors.append(f"Unapproved remote cover host in {page_path.relative_to(ROOT)}.")
                 break
-            if 'srcset="' not in tag or 'sizes="' not in tag:
-                errors.append(f"Responsive cover markup missing from {page_path.relative_to(ROOT)}.")
-                break
-            if not all(f" {width}w" in tag for width in (400, 800, 1200)):
-                errors.append(f"Responsive cover widths drift detected for {page_path.relative_to(ROOT)}.")
-                break
+            # Absolute covers are served directly from the governed image host.
+            # Do not wrap them in same-origin /cdn-cgi/image transforms because that
+            # path is not reliable when the image host redirects upstream.
+            if is_remote_image_src(src):
+                if '/cdn-cgi/image/' in tag:
+                    errors.append(f"Remote cover is incorrectly wrapped in Cloudflare image resizing: {page_path.relative_to(ROOT)}.")
+                    break
+            else:
+                if 'srcset="' not in tag or 'sizes="' not in tag:
+                    errors.append(f"Same-origin responsive cover markup missing from {page_path.relative_to(ROOT)}.")
+                    break
+                if not all(f" {width}w" in tag for width in (400, 800, 1200)):
+                    errors.append(f"Same-origin responsive cover widths drift detected for {page_path.relative_to(ROOT)}.")
+                    break
 
     homepage_text = (ROOT / "index.html").read_text(encoding="utf-8", errors="ignore")
     featured_cover_match = re.search(r'<img\b[^>]*id="featuredEbookCover"[^>]*>', homepage_text, re.I)
@@ -5676,10 +5871,13 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         featured_src = extract_img_src(featured_tag)
         if is_remote_image_src(featured_src) and not featured_src.startswith("https://images.jonathan-harris.online/"):
             errors.append("Homepage featured cover uses an unapproved remote image host.")
-        if 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
-            errors.append("Homepage featured cover is missing responsive srcset/sizes markup.")
+        if is_remote_image_src(featured_src):
+            if '/cdn-cgi/image/' in featured_tag:
+                errors.append("Homepage remote featured cover is incorrectly wrapped in Cloudflare image resizing.")
+        elif 'srcset="' not in featured_tag or 'sizes="' not in featured_tag:
+            errors.append("Homepage same-origin featured cover is missing responsive srcset/sizes markup.")
         elif not all(f" {width}w" in featured_tag for width in (400, 800, 1200)):
-            errors.append("Homepage featured cover responsive widths drifted from the governed 400/800/1200 contract.")
+            errors.append("Homepage same-origin featured cover responsive widths drifted from the governed 400/800/1200 contract.")
 
     for book in books:
         page_path = EBOOKS_DIR / book["slug"] / "index.html"
@@ -5695,22 +5893,25 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if is_remote_image_src(cover_src) and not cover_src.startswith("https://images.jonathan-harris.online/"):
             errors.append(f"Unapproved remote book cover host in {page_path.relative_to(ROOT)}.")
             continue
-        if 'srcset="' not in cover_tag or 'sizes="' not in cover_tag:
-            errors.append(f"Responsive book cover markup missing from {page_path.relative_to(ROOT)}.")
-            continue
-        if not all(f" {width}w" in cover_tag for width in (400, 800, 1200)):
-            errors.append(f"Responsive book cover widths drift detected for {page_path.relative_to(ROOT)}.")
+        if is_remote_image_src(cover_src):
+            if '/cdn-cgi/image/' in cover_tag:
+                errors.append(f"Remote book cover is incorrectly wrapped in Cloudflare image resizing: {page_path.relative_to(ROOT)}.")
+        else:
+            if 'srcset="' not in cover_tag or 'sizes="' not in cover_tag:
+                errors.append(f"Same-origin responsive book cover markup missing from {page_path.relative_to(ROOT)}.")
+                continue
+            if not all(f" {width}w" in cover_tag for width in (400, 800, 1200)):
+                errors.append(f"Same-origin responsive book cover widths drift detected for {page_path.relative_to(ROOT)}.")
 
-    js_responsive_checks = {
-        ROOT / "assets" / "js" / "featured-book.min.js": ["/cdn-cgi/image/width=", "[400,800,1200]"],
-        ROOT / "assets" / "js" / "books.min.js": ["/cdn-cgi/image/width=", "[400,800,1200]"],
+    js_image_checks = {
+        ROOT / "assets" / "js" / "featured-book.min.js": r'if(!e||!Array.isArray(t)||/^https?:\/\//i.test(e))return""',
+        ROOT / "assets" / "js" / "books.min.js": r'if(/^https?:\/\//i.test(e))return""',
     }
-    for file_path, required_snippets in js_responsive_checks.items():
+    for file_path, required_snippet in js_image_checks.items():
         file_text = file_path.read_text(encoding="utf-8", errors="ignore")
         compact_text = re.sub(r"\s+", "", file_text)
-        for snippet in required_snippets:
-            if snippet not in compact_text:
-                errors.append(f"Responsive image helper drift detected in {file_path.relative_to(ROOT)}: missing {snippet}")
+        if required_snippet not in compact_text:
+            errors.append(f"Remote-image safety guard drift detected in {file_path.relative_to(ROOT)}")
 
     removal_plan_path = ROOT / "docs" / "search-console-stale-url-removal-plan.md"
     if not removal_plan_path.exists():

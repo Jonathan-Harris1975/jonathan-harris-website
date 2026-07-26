@@ -90,6 +90,25 @@ _FONT_HEAD_BLOCK_RE = re.compile(
 _SITE_CSS_LINK_RE = re.compile(r'<link[^>]+href="/assets/css/site\.css"[^>]*>', re.IGNORECASE)
 _VIEWPORT_META_RE = re.compile(r'<meta[^>]+name=\"viewport\"[^>]*>', re.IGNORECASE)
 
+_SITE_UI_SCRIPT = '<script defer src="/assets/js/site-ui.min.js"></script>'
+
+def ensure_site_ui_script(text: str) -> tuple[str, bool]:
+    """Ensure every governed page loads the shared mobile-menu behaviour."""
+    if '/assets/js/site-ui.min.js' in text:
+        return text, False
+    match = re.search(r'</body>', text, flags=re.I)
+    if not match:
+        return text, False
+    updated = text[:match.start()] + _SITE_UI_SCRIPT + "\n" + text[match.start():]
+    return updated, True
+
+def validate_site_ui_script(text: str) -> str | None:
+    if text.count('/assets/js/site-ui.min.js') != 1:
+        return f"expected exactly one shared site-ui script, found {text.count('/assets/js/site-ui.min.js')}"
+    if 'data-jh-mobile-menu-toggle' not in text or 'id="jh-mobile-nav"' not in text:
+        return "shared hamburger/mobile navigation markers are missing"
+    return None
+
 
 # ---------------------------------------------------------------------------
 # Core helpers
@@ -238,8 +257,9 @@ def inject(dry_run: bool = False) -> int:
             continue
         updated_text = updated_text[:footer_match.start()] + footer_partial + updated_text[footer_match.end():]
         updated_text, font_changed = ensure_font_head_block(updated_text)
+        updated_text, site_ui_changed = ensure_site_ui_script(updated_text)
 
-        if existing_header_block == header_partial and existing_footer_block == footer_partial and not font_changed:
+        if existing_header_block == header_partial and existing_footer_block == footer_partial and not font_changed and not site_ui_changed:
             in_sync += 1
             print(f"  [OK]      {rel}")
             continue
@@ -316,10 +336,11 @@ def validate() -> int:
         footer_reason = None if footer_match.group(0) == footer_partial else "Footer differs from partial"
         font_reason = validate_font_head_block(text)
         viewport_reason = validate_viewport_head_block(text)
-        if not header_reason and not footer_reason and not font_reason and not viewport_reason:
+        site_ui_reason = validate_site_ui_script(text)
+        if not header_reason and not footer_reason and not font_reason and not viewport_reason and not site_ui_reason:
             ok += 1
         else:
-            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason, viewport_reason] if reason)
+            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason, viewport_reason, site_ui_reason] if reason)
             drift.append((rel, reasons))
 
     print()

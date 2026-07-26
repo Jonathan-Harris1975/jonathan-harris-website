@@ -30,6 +30,11 @@ def main()->int:
         body=text(ROOT/rel)
         check(not re.search(r'\b36(?:-book|\s+(?:plain-English\s+)?(?:AI\s+)?(?:books|ebooks|eBooks))\b',body,re.I),f'{rel} contains stale 36-book catalogue residue')
     check(str(count) in text(ROOT/'index.html'),'homepage does not expose generated book count')
+    stale_newsletter_phrases=('AI Edge - a daily weekday newsletter','AI Edge — a daily weekday newsletter','AI Edge – a daily weekday newsletter','Get the AI Edge','AI Edge Newsletter','Weekly AI updates')
+    for page_path in ROOT.rglob('*.html'):
+        page_text=text(page_path)
+        for phrase in stale_newsletter_phrases:
+            check(phrase not in page_text,f'{page_path.relative_to(ROOT)} contains stale AI Edge naming: {phrase}')
 
     # Retail/category route invariants.
     retail=text(ROOT/'catalogue'/'retail'/'index.html')
@@ -48,6 +53,11 @@ def main()->int:
     check('/bundles/ai-at-work/' in text(ROOT/'index.html'),'homepage does not route to reading paths')
     check('/bundles/ai-in-regulated-industries/' in text(ROOT/'compare'/'index.html'),'comparison hub does not expose reading paths')
     check('/bundles/ai-health-and-care/' in text(ROOT/'topics'/'ai-in-healthcare'/'index.html'),'healthcare topic hub does not expose its relevant reading path')
+
+    # A sample route only exists when a genuine manuscript chapter was extracted.
+    sample_dirs=list((ROOT/'ebooks').glob('*/sample'))
+    check(not sample_dirs, f'local diagnostic build contains {len(sample_dirs)} sample route(s) without a genuine extraction cache')
+    check('/sample/' not in sitemap, 'sitemap exposes an ebook sample route without a genuine extraction cache')
 
     # Legacy redirects are permanent, exact and chain-free in repository rules.
     redirects=text(ROOT/'_redirects')
@@ -76,9 +86,10 @@ def main()->int:
             check(book_schema.get('author')=={'@id':f'{SITE_URL}/#person'},f'{book["slug"]} author does not reference canonical #person')
             check(book_schema.get('publisher')=={'@id':f'{SITE_URL}/#person'},f'{book["slug"]} publisher does not reference canonical #person')
         check('Before you buy' in page and 'See exactly what this book covers' in page,f'{book["slug"]} confidence strip missing')
-        check('/podcast/?topic=' in page and 'Listen next' in page,f'{book["slug"]} contextual podcast route missing')
+        check(('/podcast/?topic=' in page or '/podcast/episodes/' in page) and 'Listen next' in page,f'{book["slug"]} contextual podcast route missing')
         img=soup.select_one('img.ebook-showcase__cover')
-        check(bool(img and all(f'{w}w' in (img.get('srcset') or '') for w in (400,800,1200))),f'{book["slug"]} responsive cover variants missing')
+        check(bool(img and str(img.get('src') or '').startswith('https://images.jonathan-harris.online/')), f'{book["slug"]} governed direct cover URL missing')
+        check('/cdn-cgi/image/' not in (img.get('srcset') or ''), f'{book["slug"]} remote cover is incorrectly wrapped in Cloudflare image resizing')
 
     # Catalogue commercial actions must remain outside details.
     catalogue=BeautifulSoup(text(ROOT/'ebooks'/'index.html'),'html.parser')
@@ -95,28 +106,42 @@ def main()->int:
     # Homepage featured cover responsive contract.
     home=BeautifulSoup(text(ROOT/'index.html'),'html.parser')
     featured=home.select_one('img.featured-cover-img')
-    check(bool(featured and all(f'{w}w' in (featured.get('srcset') or '') for w in (400,800,1200))),'homepage featured cover lacks 400/800/1200 srcset')
+    check(bool(featured and str(featured.get('src') or '').startswith('https://images.jonathan-harris.online/')),'homepage featured cover is not using the governed direct image host')
+    check('/cdn-cgi/image/' not in (featured.get('srcset') or ''),'homepage remote featured cover is incorrectly wrapped in Cloudflare image resizing')
 
     # Funnel event contract and PII boundary.
     funnel=text(ROOT/'assets/js/funnel-events.min.js')
-    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','bundle_view','bundle_book_click']
+    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','podcast_platform_click','bundle_view','bundle_book_click']
     for event in required: check(f"'{event}'" in funnel,f'funnel event {event} missing')
     check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
     newsletter=text(ROOT/'assets/js/newsletter-signup.min.js')
     check('newsletter_success' in newsletter and 'newsletter_submit' in newsletter,'newsletter success/submit instrumentation missing')
+    newsletter_page=text(ROOT/'newsletter'/'index.html')
+    check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/260277027608054' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
+    check('/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf' in newsletter_page,'AI Edge page is missing the direct glossary download')
+    media_page=text(ROOT/'media'/'index.html')
+    check('https://images.jonathan-harris.online/headshot' in media_page and 'Open the press headshot' in media_page,'media page is missing the governed press headshot asset')
 
     # Podcast crawlable integration seam and deferred third parties.
     podcast=text(ROOT/'podcast'/'index.html')
     check('Latest three episodes' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks server-populated latest-three seam')
     check('data-spotify-load' in podcast and '<iframe title="Turing\'s Torch on Spotify"' not in podcast,'Spotify embed is not click-to-load')
-    check('data-elfsight-load' in podcast and 'src="https://elfsightcdn.com/platform.js"' not in podcast,'Elfsight script is not deferred behind interaction')
+    check('src="https://elfsightcdn.com/platform.js"' in podcast and 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' in podcast and 'data-elfsight-load' not in podcast,'Elfsight six-episode player embed is missing or still deferred')
+    check('data-podcast-platform="spotify"' in podcast and 'data-podcast-platform="apple"' in podcast and 'data-podcast-platform="rss"' in podcast,'podcast platform click markers are missing')
     check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
 
     # Evidence/resource estate and source provenance.
     evidence=json.loads(text(ROOT/'data'/'evidence-content.json')).get('items',[])
     resources=json.loads(text(ROOT/'data'/'resource-content.json')).get('items',[])
-    check(len(evidence)==7,'expected seven commercial evidence clusters')
-    check(len(resources)==6,'expected six linkable HTML resources')
+    check(len(evidence)>=8,'expected at least eight commercial evidence clusters')
+    check(len(resources)>=7,'expected at least seven linkable HTML resources')
+    check(any(item.get('slug')=='eu-ai-act-article-50-transparency' for item in evidence),'Article 50 evidence opportunity is missing')
+    check(any(item.get('slug')=='eu-ai-act-article-50-readiness-checklist' for item in resources),'Article 50 readiness checklist is missing')
+    llm_payload=json.loads(text(ROOT/'llm-index.json'))
+    llm_evidence={row.get('path') for row in llm_payload.get('evidence_guides',[]) if isinstance(row,dict)}
+    llm_resources={row.get('path') for row in llm_payload.get('practical_resources',[]) if isinstance(row,dict)}
+    check('/evidence/eu-ai-act-article-50-transparency/' in llm_evidence,'llm-index is missing the Article 50 evidence guide')
+    check('/resources/eu-ai-act-article-50-readiness-checklist/' in llm_resources,'llm-index is missing the Article 50 readiness checklist')
     for item in evidence:
         check((ROOT/'evidence'/item['slug']/'index.html').exists(),f'evidence page missing: {item["slug"]}')
         for qa in item.get('questions',[]):
@@ -138,6 +163,6 @@ def main()->int:
         print('Growth contract failures:')
         for error in ERRORS: print(f' - {error}')
         return 1
-    print(f'Growth contracts passed: {count} books, 7 evidence guides, 6 resources, funnel + conversion + crawler invariants.')
+    print(f'Growth contracts passed: {count} books, {len(evidence)} evidence guides, {len(resources)} resources, funnel + conversion + crawler invariants.')
     return 0
 if __name__=='__main__': raise SystemExit(main())
