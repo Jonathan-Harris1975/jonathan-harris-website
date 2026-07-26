@@ -8,12 +8,14 @@ if ! python3 - <<'PYDEP'
 import openpyxl
 import pypdf
 import bs4
+import reportlab
 raise SystemExit(
     0
     if (
         openpyxl.__version__ == "3.1.5"
         and pypdf.__version__ == "5.9.0"
         and bs4.__version__ == "4.14.3"
+        and reportlab.Version == "5.0.0"
     )
     else 1
 )
