@@ -83,7 +83,7 @@ IMPORTANT_PAGE_TYPES = {
   "podcast hub",
   "blog archive",
 }
-FINAL_ARTIFACTS = ("report.html", "report.json", "summary.json", "coverage.json")
+FINAL_ARTIFACTS = ("report.html", "summary.json", "coverage.json")
 DEFAULT_PODCAST_FEED = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml"
 ANALYSED_STATES = {"Fully analysed", "Analysed through shared template plus page-specific checks"}
 EXCLUDED_STATE_PREFIX = "Excluded"
@@ -1763,7 +1763,7 @@ def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[s
     "aiAnalysisStatus": analysis_state.get("statusLabel", "Unknown"),
     "auditCompletionState": analysis_state.get("completionState", "Unknown"),
     "repoSource": "jonathan-harris-website-main repository snapshot",
-    "workbookSource": "jonathan-harris-site-url-inventory-remediated-release-ready.xlsm",
+    "workbookSource": "jonathan-harris-site-url-inventory-remediated-release-ready.xlsx",
     "sitemapFeedSource": "sitemap.xml, local sitemap snapshot, podcast RSS feed, blog and podcast manifests, live internal links",
     "liveFetchStatus": "Live route responses fetched during workflow execution; fetch failures are recorded URL-by-URL.",
     "generatedArtefactPaths": artefacts,
@@ -3297,26 +3297,6 @@ def main() -> int:
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
-  report_json = {
-    "schemaVersion": "seo-aeo-geo-stage-report-v1",
-    "auditType": "seo-aeo-geo",
-    "sessionId": args.session_id,
-    "generatedAt": utc_now(),
-    "status": "completed" if claude_analysis else "failed",
-    "auditCompletionState": analysis_state["completionState"],
-    "analysisState": analysis_state,
-    "summary": summary,
-    "scores": (claude_analysis or {}).get("scores", {}),
-    "analysis": claude_analysis or {},
-    "heuristicIssues": issues,
-    "priorityPages": priority_pages,
-    "sourceLedger": source_ledger,
-    "sourceMismatchesThatMatter": source_mismatches,
-    "familyDiagnostics": family_diagnostics,
-    "templateDiagnostics": template_diagnostics,
-    "coverage": coverage_json,
-  }
-  report_json_path = write_json(output_dir / "report.json", report_json)
 
   # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
@@ -3325,7 +3305,6 @@ def main() -> int:
     try:
       r2_client = build_r2_client()
       artefact_files: dict[str, Path] = {
-        "report.json": report_json_path,
         "summary.json": summary_path,
         "coverage.json": coverage_path,
       }
@@ -3355,7 +3334,7 @@ def main() -> int:
       r2_client = build_r2_client()
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix,
-        {"report.json": report_json_path, "summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
+        {"summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
         r2_public_base,
       )
     except Exception as exc:
@@ -3373,7 +3352,6 @@ def main() -> int:
     "message": "Full AI-assisted forensic analysis completed." if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE: failed-gate report generated; no release-ready verdict issued.",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_path)),
-    "reportJsonUrl": uploaded.get("report.json", str(report_json_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "coverageUrl": uploaded.get("coverage.json", str(coverage_path)),
     "issueCount": len(issues),
@@ -3387,9 +3365,7 @@ def main() -> int:
   try:
     post_callback(args.callback_url, args.callback_token, callback_payload)
   except Exception as exc:
-    print(f"[callback] post failed: {exc}", file=sys.stderr)
-    if args.callback_url:
-      raise
+    print(f"[callback] post failed (non-fatal): {exc}", file=sys.stderr)
 
   return 0
 
