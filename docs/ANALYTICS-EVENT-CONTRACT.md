@@ -17,10 +17,11 @@ Event payloads are allow-listed. They may contain only `book_slug`, `topic`, `pa
 | `ebook_view` | A canonical ebook page initialises with a governed `data-book-slug`. |
 | `ebook_amazon_click` | An intentional click on a governed buy route marked `data-ebook-amazon`. |
 | `ebook_preview_open` | An intentional click on a governed preview route. |
-| `ebook_preview_signup` | The newsletter endpoint confirms success for an ebook preview/source placement. |
-| `newsletter_view` | A governed newsletter component first enters the viewport. |
-| `newsletter_submit` | A governed newsletter form is submitted. The email field is never included. |
-| `newsletter_success` | The subscription endpoint confirms success. It does not fire on the button click alone. |
+| `ebook_preview_signup` | The governed Jotform confirms an AI Edge signup that originated from an ebook placement. The email field is never included. |
+| `newsletter_view` | The governed AI Edge Jotform page is viewed. |
+| `newsletter_cta_click` | A tracked AI Edge link is clicked from a book, topic, evidence, resource or other site placement. |
+| `newsletter_submit` | The governed Jotform reports a completed submission. The email field is never included. |
+| `newsletter_success` | The governed Jotform confirms completion. It does not fire on the CTA click alone. |
 | `podcast_episode_view` | A podcast episode response/page initialises. |
 | `podcast_play` | A governed native audio element emits a real `play` event. Deduplicated per episode. |
 | `podcast_30_seconds` | A governed native audio element reaches at least 30 seconds of playback. Fires once per episode. |
