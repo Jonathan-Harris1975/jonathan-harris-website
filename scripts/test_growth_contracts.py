@@ -18,6 +18,45 @@ def check(condition:bool,message:str):
 
 def text(path:Path)->str: return path.read_text(encoding='utf-8',errors='ignore')
 
+NEWSLETTER_TIME_RE=re.compile(r'(?:three[- ]minute|3[- ]minute|weekday|daily\s+(?:AI\s+)?(?:newsletter|briefing))',re.I)
+NEWSLETTER_MARKER_RE=re.compile(r'(?:\bAI Edge\b|\bnewsletter\b)',re.I)
+NEWSLETTER_CONTEXT_BOUNDARIES={'html','body','main','article','nav','header','footer'}
+
+def newsletter_contexts(source:str)->list[str]:
+    """Return bounded copy blocks that are actually about the newsletter.
+
+    Shared navigation puts an AI Edge link on almost every page, including ebook
+    samples.  Newsletter timing policy must therefore inspect the CTA/copy block
+    around a newsletter marker, not unrelated manuscript prose elsewhere in the
+    document.
+    """
+    soup=BeautifulSoup(source,'html.parser')
+    contexts=[]; seen=set()
+    for tag in soup.find_all(True):
+        direct=' '.join(str(node).strip() for node in tag.find_all(string=True,recursive=False) if str(node).strip())
+        href=str(tag.get('href') or '')
+        attrs=' '.join([str(tag.get('id') or ''), ' '.join(tag.get('class') or [])])
+        if not (NEWSLETTER_MARKER_RE.search(direct) or '/newsletter/' in href or 'newsletter' in attrs.lower()):
+            continue
+        best=' '.join(tag.get_text(' ',strip=True).split())
+        parent=tag.parent
+        while getattr(parent,'name',None) and parent.name not in NEWSLETTER_CONTEXT_BOUNDARIES:
+            candidate=' '.join(parent.get_text(' ',strip=True).split())
+            if len(candidate)>800:
+                break
+            best=candidate
+            parent=parent.parent
+        if best and best not in seen:
+            seen.add(best); contexts.append(best)
+    return contexts
+
+def newsletter_timing_match(source:str):
+    for context in newsletter_contexts(source):
+        match=NEWSLETTER_TIME_RE.search(context)
+        if match:
+            return match
+    return None
+
 def main()->int:
     books=load_master(); count=len(books)
     check(count>0,'governed ebook master is empty')
@@ -34,14 +73,18 @@ def main()->int:
     check('/book-finder/' in home_source,'homepage does not expose the book finder')
     check('/evidence/eu-ai-act-article-50-transparency/' in home_source,'homepage does not surface the current Article 50 evidence guide')
     stale_newsletter_phrases=('AI Edge - a daily weekday newsletter','AI Edge — a daily weekday newsletter','AI Edge – a daily weekday newsletter','Get the AI Edge','AI Edge Newsletter','Weekly AI updates')
-    newsletter_time_re=re.compile(r'(?:three[- ]minute|3[- ]minute|weekday|daily\s+(?:AI\s+)?(?:newsletter|briefing))',re.I)
+    # Regression: shared AI Edge navigation must not make ordinary manuscript prose
+    # subject to the newsletter timing rule.  Actual newsletter copy must still fail.
+    unrelated_fixture='<nav><a href="/newsletter/">AI Edge</a></nav><article><p>The control room is staffed every weekday.</p></article>'
+    newsletter_fixture='<main><section><h2>AI Edge</h2><p>A weekday briefing for practical AI decisions.</p></section></main>'
+    check(newsletter_timing_match(unrelated_fixture) is None,'newsletter timing contract leaks into unrelated page copy')
+    check(newsletter_timing_match(newsletter_fixture) is not None,'newsletter timing contract no longer catches actual AI Edge timing copy')
     for page_path in ROOT.rglob('*.html'):
         page_text=text(page_path)
         for phrase in stale_newsletter_phrases:
             check(phrase not in page_text,f'{page_path.relative_to(ROOT)} contains stale AI Edge naming: {phrase}')
-        if 'AI Edge' in page_text or '/newsletter/' in page_text:
-            match=newsletter_time_re.search(page_text)
-            check(match is None,f'{page_path.relative_to(ROOT)} contains newsletter time/cadence wording: {match.group(0) if match else ""}')
+        match=newsletter_timing_match(page_text)
+        check(match is None,f'{page_path.relative_to(ROOT)} contains newsletter time/cadence wording: {match.group(0) if match else ""}')
         check('/api/newsletter/subscribe' not in page_text and 'newsletter-native-form' not in page_text and 'data-newsletter-form' not in page_text,f'{page_path.relative_to(ROOT)} exposes a retired second newsletter collection path')
 
     # Retail/category route invariants.
@@ -157,7 +200,7 @@ def main()->int:
     newsletter_page=text(ROOT/'newsletter'/'index.html')
     check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/260277027608054' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
     check('/api/newsletter/subscribe' not in newsletter_page and 'data-newsletter-form' not in newsletter_page,'AI Edge page exposes more than the governed Jotform collection path')
-    check(newsletter_time_re.search(newsletter_page) is None,'AI Edge page contains a timing/cadence promise')
+    check(newsletter_timing_match(newsletter_page) is None,'AI Edge page contains a timing/cadence promise')
     check('/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf' in newsletter_page,'AI Edge page is missing the direct glossary download')
     media_page=text(ROOT/'media'/'index.html')
     check('https://images.jonathan-harris.online/headshot' in media_page and 'Open the press headshot' in media_page,'media page is missing the governed press headshot asset')
