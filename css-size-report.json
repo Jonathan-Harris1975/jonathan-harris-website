@@ -36,9 +36,9 @@
   },
   {
     "file": "assets/css/site.css",
-    "original_bytes": 134194,
-    "minified_bytes": 124368,
-    "reduction_bytes": 9826,
-    "reduction_pct": 7.32
+    "original_bytes": 135165,
+    "minified_bytes": 125690,
+    "reduction_bytes": 9475,
+    "reduction_pct": 7.01
   }
 ]
