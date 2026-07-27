@@ -27,6 +27,9 @@ DEFAULT_TIMEOUT_SECONDS = 15.0
 DEFAULT_MAX_ATTEMPTS = 5
 DEFAULT_INITIAL_BACKOFF_SECONDS = 1.0
 DEFAULT_MAX_BACKOFF_SECONDS = 16.0
+DEFAULT_PURGE_COUNT = 1
+DEFAULT_PURGE_INITIAL_DELAY_SECONDS = 0.0
+DEFAULT_PURGE_INTERVAL_SECONDS = 0.0
 TRANSIENT_HTTP_STATUS_CODES = {408, 425, 429, 500, 502, 503, 504}
 PRODUCTION_BRANCHES = {"main", "master"}
 CLOUDFLARE_PURGE_ENDPOINT_ENV = "CLOUDFLARE_PURGE_ENDPOINT_URL"
@@ -101,6 +104,30 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Optional comma-separated hostnames to purge. Defaults to the deployed URL hostname when omitted. "
             f"Defaults to {CLOUDFLARE_PURGE_HOSTS_ENV}."
+        ),
+    )
+    parser.add_argument(
+        "--purge-count",
+        type=int,
+        default=DEFAULT_PURGE_COUNT,
+        help=f"Number of Cloudflare purge passes to run. Default: {DEFAULT_PURGE_COUNT}",
+    )
+    parser.add_argument(
+        "--purge-initial-delay-seconds",
+        type=float,
+        default=DEFAULT_PURGE_INITIAL_DELAY_SECONDS,
+        help=(
+            "Delay before the first Cloudflare purge after the live release gate has passed. "
+            f"Default: {DEFAULT_PURGE_INITIAL_DELAY_SECONDS}"
+        ),
+    )
+    parser.add_argument(
+        "--purge-interval-seconds",
+        type=float,
+        default=DEFAULT_PURGE_INTERVAL_SECONDS,
+        help=(
+            "Delay between Cloudflare purge passes when --purge-count is greater than one. "
+            f"Default: {DEFAULT_PURGE_INTERVAL_SECONDS}"
         ),
     )
     parser.add_argument("--deployed-url", default=default_deployed_url(), help="Published production URL included in the payload.")
@@ -374,19 +401,53 @@ def maybe_deliver_cloudflare_purge(args: argparse.Namespace) -> None:
     if args.cloudflare_purge_secret.strip():
         purge_headers["x-cloudflare-purge-secret"] = args.cloudflare_purge_secret.strip()
 
+    purge_count = max(int(args.purge_count), 1)
+    initial_delay = max(float(args.purge_initial_delay_seconds), 0.0)
+    interval = max(float(args.purge_interval_seconds), 0.0)
+
     print("[INFO] Prepared Cloudflare purge payload:")
     print(json.dumps(purge_payload, indent=2, sort_keys=True))
-
-    deliver_with_retries(
-        target_url=endpoint,
-        payload=purge_payload,
-        timeout_seconds=max(args.timeout_seconds, 1.0),
-        max_attempts=max(args.max_attempts, 1),
-        initial_backoff_seconds=max(args.initial_backoff_seconds, 0.0),
-        max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
-        headers=purge_headers,
-        label="Cloudflare purge",
+    print(
+        f"[INFO] Cloudflare purge schedule: {purge_count} pass(es), "
+        f"initial delay {initial_delay:.0f}s, interval {interval:.0f}s."
     )
+
+    if initial_delay > 0:
+        print(f"[INFO] Waiting {initial_delay:.0f} seconds before Cloudflare purge 1/{purge_count}...")
+        time.sleep(initial_delay)
+
+    failures: list[str] = []
+    for purge_number in range(1, purge_count + 1):
+        try:
+            deliver_with_retries(
+                target_url=endpoint,
+                payload=purge_payload,
+                timeout_seconds=max(args.timeout_seconds, 1.0),
+                max_attempts=max(args.max_attempts, 1),
+                initial_backoff_seconds=max(args.initial_backoff_seconds, 0.0),
+                max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
+                headers=purge_headers,
+                label=f"Cloudflare purge {purge_number}/{purge_count}",
+            )
+        except DeliveryFailure as exc:
+            failures.append(f"purge {purge_number}/{purge_count}: {exc}")
+            print(
+                f"[WARN] Cloudflare purge {purge_number}/{purge_count} exhausted its retries. "
+                "The remaining scheduled purge passes will still run."
+            )
+
+        if purge_number < purge_count and interval > 0:
+            print(
+                f"[INFO] Waiting {interval:.0f} seconds before Cloudflare purge "
+                f"{purge_number + 1}/{purge_count}..."
+            )
+            time.sleep(interval)
+
+    if failures:
+        raise DeliveryFailure(
+            "One or more scheduled Cloudflare purge passes failed after retries: " + "; ".join(failures),
+            transient=False,
+        )
 
 
 def main() -> int:

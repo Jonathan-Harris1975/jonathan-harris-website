@@ -33,6 +33,76 @@ class PostDeployNotifyConfigurationTests(unittest.TestCase):
             notifier.maybe_deliver_legacy_webhook(args, {"status": "success"})
         deliver.assert_not_called()
 
+    def test_cloudflare_purge_sequence_uses_initial_and_interval_delays(self) -> None:
+        args = mock.Mock(
+            cloudflare_purge_endpoint="https://example.invalid/purge",
+            cloudflare_purge_secret="secret",
+            cloudflare_purge_hosts="jonathan-harris.online",
+            deployed_url="https://jonathan-harris.online",
+            timeout_seconds=15.0,
+            max_attempts=1,
+            initial_backoff_seconds=0.0,
+            max_backoff_seconds=0.0,
+            purge_count=3,
+            purge_initial_delay_seconds=300.0,
+            purge_interval_seconds=300.0,
+        )
+
+        with mock.patch.object(notifier, "deliver_with_retries") as deliver, mock.patch.object(
+            notifier.time, "sleep"
+        ) as sleep:
+            notifier.maybe_deliver_cloudflare_purge(args)
+
+        self.assertEqual(deliver.call_count, 3)
+        self.assertEqual(sleep.call_args_list, [mock.call(300.0), mock.call(300.0), mock.call(300.0)])
+
+    def test_later_purges_still_run_when_an_earlier_pass_fails(self) -> None:
+        args = mock.Mock(
+            cloudflare_purge_endpoint="https://example.invalid/purge",
+            cloudflare_purge_secret="",
+            cloudflare_purge_hosts="jonathan-harris.online",
+            deployed_url="https://jonathan-harris.online",
+            timeout_seconds=15.0,
+            max_attempts=1,
+            initial_backoff_seconds=0.0,
+            max_backoff_seconds=0.0,
+            purge_count=3,
+            purge_initial_delay_seconds=0.0,
+            purge_interval_seconds=0.0,
+        )
+        first_failure = notifier.DeliveryFailure("temporary outage", transient=True)
+
+        with mock.patch.object(
+            notifier, "deliver_with_retries", side_effect=[first_failure, None, None]
+        ) as deliver:
+            with self.assertRaises(notifier.DeliveryFailure):
+                notifier.maybe_deliver_cloudflare_purge(args)
+
+        self.assertEqual(deliver.call_count, 3)
+
+    def test_single_purge_has_no_schedule_sleep_by_default(self) -> None:
+        args = mock.Mock(
+            cloudflare_purge_endpoint="https://example.invalid/purge",
+            cloudflare_purge_secret="",
+            cloudflare_purge_hosts="jonathan-harris.online",
+            deployed_url="https://jonathan-harris.online",
+            timeout_seconds=15.0,
+            max_attempts=1,
+            initial_backoff_seconds=0.0,
+            max_backoff_seconds=0.0,
+            purge_count=1,
+            purge_initial_delay_seconds=0.0,
+            purge_interval_seconds=0.0,
+        )
+
+        with mock.patch.object(notifier, "deliver_with_retries") as deliver, mock.patch.object(
+            notifier.time, "sleep"
+        ) as sleep:
+            notifier.maybe_deliver_cloudflare_purge(args)
+
+        deliver.assert_called_once()
+        sleep.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()
