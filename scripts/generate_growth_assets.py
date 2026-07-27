@@ -165,7 +165,7 @@ def homepage(count: int) -> None:
         "founder": {"@id": f"{SITE_URL}/#person"},
     }
     hero = f'''<!-- GROWTH:HERO START -->
-<section aria-labelledby="hero-heading" class="hero hero--home hero--commercial" role="region">
+<section aria-labelledby="hero-heading" class="hero hero--home hero--commercial" role="region" data-jh-header-reveal-anchor>
 <div class="wrap">
 <img alt="Jonathan Harris" class="logo-plain logo-plain--hero" fetchpriority="high" height="96" loading="eager" src="https://images.jonathan-harris.online/site-logo" width="96"/>
 <h1 class="hero__title" id="hero-heading">Practical AI books and analysis, without the hype</h1>
@@ -466,8 +466,34 @@ def topic_reading_paths() -> None:
         index.write_text(t, encoding="utf-8")
 
 
+
+PAGE_HERO_BRAND = '<a class="jh-page-hero__brand" href="/" aria-label="Jonathan Harris home"><img class="jh-page-hero__logo" src="https://images.jonathan-harris.online/site-logo" alt="Jonathan Harris" width="96" height="96" loading="eager" fetchpriority="high" decoding="async"/></a>'
+
+
+def split_growth_hero(body: str) -> tuple[str, str]:
+    """Lift the first generated hero out of the content wrap and give it the full shared brand treatment."""
+    match = re.search(r'<header class="(?P<classes>[^"]*\bhero\b[^"]*)"(?P<attrs>[^>]*)>(?P<inner>[\s\S]*?)</header>', body, re.I)
+    if not match:
+        return "", body
+    classes = match.group("classes").split()
+    if "jh-page-hero" not in classes:
+        classes.append("jh-page-hero")
+    attrs = match.group("attrs")
+    if "data-jh-header-reveal-anchor" not in attrs:
+        attrs += " data-jh-header-reveal-anchor"
+    inner = match.group("inner").strip()
+    if 'class="wrap"' in inner[:120]:
+        inner = re.sub(r'(<div class="wrap"[^>]*>)', r'\1' + PAGE_HERO_BRAND, inner, count=1, flags=re.I)
+    else:
+        inner = f'<div class="wrap">{PAGE_HERO_BRAND}{inner}</div>'
+    hero = f'<header class="{" ".join(classes)}"{attrs}>{inner}</header>'
+    rest = body[:match.start()] + body[match.end():]
+    return hero, rest
+
 def base_page(title: str, description: str, canonical: str, body: str, page_type: str) -> str:
-    return f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>{html.escape(title)} | Jonathan Harris</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{canonical}"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body data-page-type="{page_type}">{render_header()}<main class="main" id="main"><div class="wrap">{body}</div></main>{render_footer()}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+    hero, content = split_growth_hero(body)
+    safe_type = re.sub(r"[^a-z0-9_-]+", "-", page_type.lower()).strip("-")
+    return f'''<!doctype html><html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/><title>{html.escape(title)} | Jonathan Harris</title><meta name="description" content="{html.escape(description, quote=True)}"/><link rel="canonical" href="{canonical}"/><meta name="robots" content="index,follow"/>{FONT_HEAD}<link rel="stylesheet" href="/assets/css/site.css"/><script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script><script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script></head><body class="jh-growth-page page-{safe_type}" data-page-type="{page_type}">{render_header()}{hero}<main class="main" id="main"><div class="wrap">{content}</div></main>{render_footer()}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
 
 
 def render_book_finder_module(source: str, *, heading: str = "Not sure which book fits?") -> str:

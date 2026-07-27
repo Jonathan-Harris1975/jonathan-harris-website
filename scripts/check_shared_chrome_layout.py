@@ -6,8 +6,8 @@ and complete even before a browser script runs. This gate prevents three
 regressions:
 
 * generated pages drifting from the canonical header/footer partials;
-* hero-reveal CSS making the primary header invisible on initial load;
-* fixed-header compensation leaving large empty bands above page content.
+* hero pages missing their full branded masthead;
+* the compact header appearing before the hero has scrolled out of view.
 """
 from __future__ import annotations
 
@@ -21,16 +21,14 @@ if str(ROOT) not in sys.path:
 from scripts import inject_partials  # noqa: E402
 
 CSS_PATH = ROOT / "assets" / "css" / "site.css"
-CONTRACT_MARKER = "JH-SHARED-CHROME-VISIBILITY-CONTRACT"
 REQUIRED_CSS_SNIPPETS = (
-    ".jh-header.jh-header--hero-mode:not(.is-visible)",
-    "opacity:1!important",
-    "visibility:visible!important",
-    ".site-footer",
-    "body.page-home .hero--home",
-    "body.page-topics .hero",
-    "body:not(.home):not(.jh-no-hero-page)>main:not([class])",
-    "body.page-topics #main",
+    ".jh-header.jh-header--hero-mode{position:fixed!important",
+    ".jh-header.jh-header--hero-mode:not(.is-visible){opacity:0!important",
+    "transform:translateY(-110%)!important",
+    ".jh-header.jh-header--hero-mode.is-visible{opacity:1!important",
+    ".jh-page-hero__logo",
+    ".hero .inline-newsletter",
+    ".jh-growth-page .card",
 )
 
 DYNAMIC_CHROME_FILES = (
@@ -84,21 +82,29 @@ def main() -> int:
             errors.append(f"{rel}: expected exactly one shared site-ui script for hamburger behaviour")
         if text.count('footer aria-label="Website footer"') != 1:
             errors.append(f"{rel}: expected exactly one governed website footer")
+        if 'jh-growth-page' in text:
+            hero_pos = text.find('jh-page-hero')
+            main_pos = text.find('<main')
+            if hero_pos < 0:
+                errors.append(f"{rel}: generated growth page is missing the full page hero")
+            elif main_pos >= 0 and hero_pos > main_pos:
+                errors.append(f"{rel}: generated growth page hero is trapped inside the content wrapper")
+            if 'jh-page-hero__logo' not in text:
+                errors.append(f"{rel}: generated growth page hero is missing the governed Jonathan Harris logo")
+            if 'data-jh-header-reveal-anchor' not in text:
+                errors.append(f"{rel}: generated growth page hero is missing the compact-header reveal anchor")
+
+    site_ui = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8", errors="ignore")
+    for snippet in ("jh-header--hero-mode", "is-visible", "data-jh-header-show-immediately"):
+        if snippet not in site_ui:
+            errors.append(f"assets/js/site-ui.min.js: hero-aware compact-header logic is missing {snippet}")
 
     css = CSS_PATH.read_text(encoding="utf-8")
-    marker_index = css.rfind(CONTRACT_MARKER)
-    if marker_index < 0:
-        errors.append(f"{CSS_PATH.relative_to(ROOT)}: shared chrome contract marker is missing")
-        contract = ""
-    else:
-        contract = css[marker_index:]
-        legacy_hide_index = css[:marker_index].rfind(".jh-header--hero-mode:not(.is-visible)")
-        if legacy_hide_index >= marker_index:
-            errors.append("shared chrome visibility contract must follow all legacy header-hide rules")
-
     for snippet in REQUIRED_CSS_SNIPPETS:
-        if snippet not in contract:
-            errors.append(f"shared chrome contract is missing required rule: {snippet}")
+        if snippet not in css:
+            errors.append(f"shared chrome reveal contract is missing required rule: {snippet}")
+    if ".jh-header.jh-header--hero-mode:not(.is-visible){opacity:1!important" in css:
+        errors.append("shared chrome still forces the compact header visible before the hero has scrolled away")
 
     if not SHARED_CHROME_HELPER.exists():
         errors.append("functions/_shared/chrome.js: shared runtime chrome helper is missing")
@@ -128,7 +134,7 @@ def main() -> int:
 
     print(
         "Shared chrome layout contract passed: "
-        f"{checked} pages use the canonical visible header and footer with bounded top spacing."
+        f"{checked} pages use the canonical header/footer and hero-aware compact navigation."
     )
     return 0
 

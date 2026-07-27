@@ -25,6 +25,9 @@ PAIRS={
     'body text':('#374151','#FFFFFF',4.5),
     'muted text':('#4B5563','#FFFFFF',4.5),
     'primary button':('#FFFFFF','#4F46E5',4.5),
+    'hero newsletter text':('#374151','#FFFFFF',4.5),
+    'hero newsletter heading':('#111827','#FFFFFF',4.5),
+    'hero secondary button':('#111827','#FFFFFF',4.5),
 }
 
 def main():
