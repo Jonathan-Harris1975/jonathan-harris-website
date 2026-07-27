@@ -2,3 +2,4 @@ __pycache__/
 *.py[cod]
 scripts/data/manuscripts.json
 data/book-sample-chapters.json
+release.json

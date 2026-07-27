@@ -41,4 +41,7 @@ if [[ -n "${AMAZON_BOOK_SIGNALS_SOURCE:-}" ]]; then
 fi
 
 python3 scripts/check_health_contract.py
+# Publish a commit-specific marker so the post-deploy workflow can distinguish
+# the new Pages release from an older deployment whose crawler files are unchanged.
+python3 scripts/write_release_marker.py
 python3 scripts/deployment_ci.py "$@"
