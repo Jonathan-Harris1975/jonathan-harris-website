@@ -1,5 +1,5 @@
 {
-  "schema_version": "2026-06-11.website-hive-skills.v2",
+  "schema_version": "2026-07-28.website-hive-skills.v3",
   "repo": "website",
   "purpose": "Read-only access configuration for the shared HIVE skill pool stored in Cloudflare R2.",
   "access_mode": "read_only",
@@ -32,9 +32,10 @@
     "The website may read approved JSON descriptors and indexes only.",
     "The website must not execute skills directly.",
     "Reasoning, model routing, Vectorize search, repo writes, deployment actions and R2 writes belong behind HIVE or backend services.",
-    "Do not expose OpenRouter, Cloudflare write tokens, GitHub tokens, Koyeb tokens or Vectorize tokens to browser code."
+    "Do not expose OpenRouter, Cloudflare write tokens, GitHub tokens, Koyeb tokens or Vectorize tokens to browser code.",
+    "RAMS remediation is AIMS-triggered only; the browser/site never receives RAMS write credentials or direct repository-write authority."
   ],
-  "updated_at_utc": "2026-06-11T00:00:00Z",
+  "updated_at_utc": "2026-07-28T00:00:00Z",
   "local_agents_folder_required": false,
   "local_skill_descriptors": "centralised_in_hive_r2",
   "migration_notes": [
@@ -42,5 +43,28 @@
     "The website should not keep executable or duplicated local skill descriptors in .agents.",
     "The website may read the approved website manifest and indexes only.",
     "HIVE remains the skill execution, reasoning, search and governance layer."
-  ]
+  ],
+  "rams_remediation": {
+    "enabled": true,
+    "orchestrator": "AIMS",
+    "schedule_owner": "MAST",
+    "cadence": "first_saturday_monthly",
+    "write_mode": "rms-qa branch only",
+    "direct_main_writes": false,
+    "max_issues_per_run": 5,
+    "micro_surgery": {
+      "max_files": 3,
+      "max_changes": 6,
+      "dependency_changes": false,
+      "config_or_infrastructure_changes": false
+    },
+    "required_gates": [
+      "confirmed final audit finding",
+      "exact affectedPaths",
+      "engineering council approval",
+      "clean baseline validation",
+      "post-patch validation",
+      "automatic rollback on failure"
+    ]
+  }
 }
