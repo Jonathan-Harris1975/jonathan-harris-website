@@ -23,6 +23,18 @@ function cleanText(value = "") {
     .trim();
 }
 
+function stripPodcastTiming(value = "") {
+  return cleanText(value)
+    .replace(/\b\d+\s*(?:-|–|—)?\s*minutes?\b/gi, "")
+    .replace(/\b\d+\s*mins?\b/gi, "")
+    .replace(/\b\d{1,2}:\d{2}(?::\d{2})?\b/g, "")
+    .replace(/\bthis\s+week(?:[’']s)?\b/gi, "")
+    .replace(/\bweekly\s+(briefing|analysis|round-?up|update)\b/gi, "$1")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .replace(/^[\s,;:–—-]+|[\s,;:–—-]+$/g, "");
+}
+
 function escapeHtml(value = "") {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -148,7 +160,7 @@ function detectEntities(text = "") {
 
 function deriveTakeaways(episode) {
   const title = episode.title || "this AI story";
-  const summary = clampWords(episode.description || title, 38);
+  const summary = clampWords(stripPodcastTiming(episode.description || title), 38);
   return [
     `What changed: ${summary}`,
     "Why it matters: the episode separates useful deployment signals from vendor fireworks and vague future talk.",
@@ -204,7 +216,7 @@ function fallbackEpisodeFromSlug(slug, request) {
     .join(" ") || "Archived Turing's Torch episode";
   return {
     title,
-    description: "This archived Turing's Torch podcast route is retained for crawl continuity. Use the podcast hub and transcript archive for the current canonical episode, audio and transcript paths.",
+    description: "This archived Turing's Torch podcast route is retained for crawl continuity. Use the podcast hub and transcript archive for canonical episode, audio and transcript paths.",
     link: new URL(`/podcast/episodes/${slug}/`, request.url).toString(),
     guid: slug,
     transcriptUrl: new URL("/transcripts/", request.url).toString(),
@@ -237,7 +249,7 @@ async function relatedBooksMarkup(context, episode) {
 
 function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
   const title = episode.title || "Turing's Torch AI Weekly";
-  const summary = clampWords(episode.description || "Jonathan Harris cuts through the week's artificial intelligence stories with practical judgement, scepticism and a working-person tolerance for less nonsense.", 60);
+  const summary = clampWords(stripPodcastTiming(episode.description || "Jonathan Harris cuts through artificial intelligence stories with practical judgement, scepticism and a working-person tolerance for less nonsense."), 60);
   const canonical = episode.link || new URL(request.url).toString();
   const topics = detectTopics(`${title} ${summary}`);
   const entities = detectEntities(`${title} ${summary}`);
@@ -302,7 +314,7 @@ ${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-epi
 </div>
 </section>
 <section class="section"><div class="wrap card">
-<h2>What changed this week?</h2>
+<h2>What changed?</h2>
 <p>${escapeHtml(summary)}</p>
 <h2>Key takeaways</h2>
 <ul>${takeaways.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
