@@ -53,7 +53,7 @@ def market_signal_markup(book: dict) -> str:
     except Exception:
         signal = {}
     if not isinstance(signal, dict) or not signal.get("source_url") or not signal.get("checked_at"):
-        return "Current Kindle price and ratings are checked on Amazon at the buy step."
+        return ""
     parts = []
     try:
         rating = float(signal.get("rating"))
@@ -66,7 +66,7 @@ def market_signal_markup(book: dict) -> str:
     if price:
         parts.append(f"{price} on Kindle")
     if not parts:
-        return "Current Kindle price and ratings are checked on Amazon at the buy step."
+        return ""
     checked = str(signal.get("checked_at") or "")[:10]
     return " · ".join(parts) + (f" · last verified {checked}; Amazon pricing may vary." if checked else " · Amazon pricing may vary.")
 

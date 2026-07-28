@@ -897,23 +897,8 @@ def amazon_signal_for(book: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def render_book_market_signal(book: Dict[str, Any]) -> str:
-    signal = amazon_signal_for(book)
-    buy_route = html.escape(clean_paragraph(book.get("buy_route", "")) or f"/ebooks/{book.get('slug','')}/buy-now", quote=True)
-    if not signal:
-        return f'<p class="book-market-signal muted"><a href="{buy_route}" data-ebook-amazon data-book-slug="{html.escape(clean_paragraph(book.get("slug", "")), quote=True)}" data-placement="ebook_market_signal">Check today’s Kindle price and reviews on Amazon</a>.</p>'
-    parts: List[str] = []
-    rating = signal.get("rating")
-    count = signal.get("rating_count")
-    price = clean_paragraph(signal.get("kindle_price", ""))
-    if rating is not None and count is not None:
-        parts.append(f'<strong>★ {float(rating):.1f}</strong> ({int(count):,} ratings)')
-    if price:
-        parts.append(f'<strong>{html.escape(price)}</strong> on Kindle')
-    if not parts:
-        return f'<p class="book-market-signal muted"><a href="{buy_route}" data-ebook-amazon data-book-slug="{html.escape(clean_paragraph(book.get("slug", "")), quote=True)}" data-placement="ebook_market_signal">Check today’s Kindle price and reviews on Amazon</a>.</p>'
-    checked = clean_paragraph(signal.get("checked_at", ""))[:10]
-    joined = " · ".join(parts)
-    return f'<p class="book-market-signal">{joined} <span class="muted">Last verified {html.escape(checked)}; Amazon pricing may vary.</span></p>'
+    """Amazon purchase CTAs remain available without volatile price/rating copy."""
+    return ""
 
 
 def render_inline_newsletter_form(
@@ -1110,12 +1095,6 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
         for paragraph in paragraphs
         if clean_paragraph(paragraph)
     )
-    word_count = int(sample.get("word_count") or 0)
-    page_start = sample.get("page_start")
-    page_end = sample.get("page_end")
-    page_note = ""
-    if page_start and page_end:
-        page_note = f" · manuscript pages {int(page_start)}–{int(page_end)}"
     schema = {
         "@context": "https://schema.org",
         "@type": "Article",
@@ -1143,7 +1122,7 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
 <body class="ebook-detail ebook-sample">{header}<main class="main" id="main"><div class="wrap ebook-shell">
 <nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a> / <a href="/ebooks/">eBooks</a> / <a href="/ebooks/{html.escape(book['slug'])}/">{title}</a> / Sample chapter</nav>
 <section class="card ebook-section ebook-sample-intro"><p class="eyebrow">Read before you buy</p><h1>{title}</h1><h2>{chapter_title}</h2><p>This page contains text extracted from the actual manuscript, not a summary or generated substitute.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_top">Buy the full book on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Book details</a></div></section>
-<article class="card ebook-section ebook-sample-chapter" aria-labelledby="sample-chapter-heading"><h2 id="sample-chapter-heading">{chapter_title}</h2>{body}<p class="meta">Genuine manuscript extract · {word_count:,} words{page_note}.</p></article>
+<article class="card ebook-section ebook-sample-chapter" aria-labelledby="sample-chapter-heading"><h2 id="sample-chapter-heading">{chapter_title}</h2>{body}<p class="meta">Genuine manuscript extract.</p></article>
 <section class="card ebook-section ebook-section--accent"><h2>Continue reading</h2><p>If this chapter is useful, the full Kindle ebook continues the argument with the rest of the book’s practical guidance.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_bottom">Buy on Amazon</a><a class="button secondary" href="/newsletter/">Get the free AI glossary</a></div></section>
 </div></main>{footer}<script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
 
@@ -3716,10 +3695,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       {escape_paragraphs(book['summary'])}
     </section>
 
-    <section class="ebook-mid-buy" aria-label="Book purchase option">
-      <p><strong>Ready to continue?</strong> Check the current Kindle price and reviews before buying.</p>
-      <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_midpage">Check Kindle price on Amazon</a>
-    </section>
 
     <section class="card ebook-section">
       <h2>Why this title is useful in practice</h2>
@@ -3788,7 +3763,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
   </div>
 </main>
-<div class="ebook-sticky-buy" aria-label="Quick purchase"><span>{title}</span><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_mobile_sticky">Check Kindle price</a></div>
 <script defer="" src="/assets/js/related-books.min.js"></script>
 {footer}
 <script defer="" src="/assets/js/site-ui.min.js"></script>

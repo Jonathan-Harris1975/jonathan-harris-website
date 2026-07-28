@@ -207,9 +207,11 @@ def main()->int:
 
     # Podcast crawlable integration seam and deferred third parties.
     podcast=text(ROOT/'podcast'/'index.html')
-    check('Latest three episodes' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks server/static latest-three seam')
+    check('<h2 id="latest-three-episodes-heading">Episodes</h2>' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks the server/static episode seam')
     check('Latest episode details are temporarily unavailable' not in podcast and 'loading current episode' not in podcast.lower(),'podcast landing ships an unresolved episode placeholder')
-    check('data-spotify-load' in podcast and '<iframe title="Turing\'s Torch on Spotify"' not in podcast,'Spotify embed is not click-to-load')
+    podcast_cards=' '.join(str(node) for node in BeautifulSoup(podcast,'html.parser').select('.podcast-latest-card'))
+    check(re.search(r'\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+\s*(?:-|–|—)?\s*minutes?\b|\bthis\s+week(?:[’\']s)?\b', podcast_cards, re.I) is None,'podcast episode cards contain visible timing/cadence references')
+    check('open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF' in podcast and 'spotify.com/embed' not in podcast and 'data-spotify-load' not in podcast,'podcast page should use the platform link rather than a duplicate Spotify embed')
     check('src="https://elfsightcdn.com/platform.js"' in podcast and 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' in podcast and 'data-elfsight-load' not in podcast,'Elfsight six-episode player embed is missing or still deferred')
     check('podcast-archive-widget' not in podcast,'Elfsight player is still hidden inside a disclosure')
     check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')

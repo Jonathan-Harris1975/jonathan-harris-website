@@ -171,8 +171,7 @@ def homepage(count: int) -> None:
 <h1 class="hero__title" id="hero-heading">Practical AI books and analysis, without the hype</h1>
 <p class="hero__lead">Explore {count} plain-English AI books, Turing’s Torch analysis and AI Edge, the practical AI briefing.</p>
 <div class="cta-row"><a class="button" href="/book-finder/">Find the right AI book</a><a class="button secondary" href="#home-newsletter-hero">Get the free AI glossary</a></div>
-<p class="home-podcast-text-link"><a href="/podcast/">Listen to the latest Turing’s Torch →</a></p>
-<div class="home-trust-strip" aria-label="Publishing scale"><span>{count} books</span><span>Weekly podcast</span><span>Practical AI briefing</span><span>Plain-English AI</span></div>
+<p class="home-podcast-text-link"><a href="/podcast/">Listen to Turing’s Torch →</a></p>
 <div class="home-intent" aria-labelledby="home-intent-heading"><h2 id="home-intent-heading">Start with your problem</h2><nav aria-label="Choose an AI route"><a href="/bundles/ai-at-work/">Work &amp; careers</a><a href="/catalogue/business/">Business</a><a href="/bundles/ai-health-and-care/">Healthcare</a><a href="/bundles/ai-in-regulated-industries/">Law &amp; regulation</a><a href="/catalogue/finance/">Finance</a><a href="/topics/ai-for-beginners/">AI fundamentals</a><a href="/blog/">Current AI news</a></nav></div>
 <div id="home-newsletter-hero">{render_inline_newsletter_form("homepage:hero")}</div>
 </div>
@@ -181,13 +180,13 @@ def homepage(count: int) -> None:
     router = '''<!-- GROWTH:ROUTER START -->
 <section class="main home-commercial-router" aria-labelledby="home-commercial-heading"><div class="wrap">
 <section class="card answer-first"><h2 id="home-commercial-heading">What is the quickest route to the useful bit?</h2><p>Use the <a href="/book-finder/">book finder</a> when you have a problem to solve, the <a href="/evidence/">evidence guides</a> when you need sources, or a reading path when one book will not cover the whole decision. The podcast and AI Edge handle the moving story.</p></section>
-<section class="card home-latest-podcast" aria-labelledby="home-latest-podcast-heading"><h2 id="home-latest-podcast-heading">Latest Turing’s Torch</h2><div data-podcast-latest-server><p>Current episode details come from the governed podcast RSS feed. <a href="/podcast/">Open the podcast</a> or <a href="/transcripts/">browse transcripts</a>.</p></div></section>
+<section class="card home-latest-podcast" aria-labelledby="home-latest-podcast-heading"><h2 id="home-latest-podcast-heading">Turing’s Torch</h2><div data-podcast-latest-server><p>Episode details come from the governed podcast RSS feed. <a href="/podcast/">Open the podcast</a> or <a href="/transcripts/">browse transcripts</a>.</p></div></section>
 <section class="card" aria-labelledby="home-reading-paths-heading"><h2 id="home-reading-paths-heading">Reading paths</h2><p>Curated routes through books that belong together. The books are bought separately on Amazon.</p><div class="jh-journey-actions"><a href="/bundles/ai-at-work/">AI at Work</a><a href="/bundles/ai-health-and-care/">AI Health &amp; Care</a><a href="/bundles/ai-mobility-and-logistics/">AI Mobility &amp; Logistics</a><a href="/bundles/ai-in-regulated-industries/">AI in Regulated Industries</a></div></section>
 <section class="card" aria-labelledby="home-evidence-heading"><h2 id="home-evidence-heading">Evidence, not vibes</h2><p>Source-backed guides on workplace AI literacy, agents, small business, deepfakes, healthcare, finance and governance.</p><div class="jh-journey-actions"><a href="/evidence/eu-ai-act-article-50-transparency/">Current evidence: EU AI Act Article 50</a><a href="/resources/eu-ai-act-article-50-readiness-checklist/">Article 50 readiness checklist</a><a href="/evidence/">Browse all evidence guides</a><a href="/resources/">Use practical checklists</a></div></section>
 </div></section>
 <!-- GROWTH:ROUTER END -->'''
-    featured_block = f'''<section class="section--featured"><div class="wrap"><h2 class="section-label--centered">Featured this week</h2><article class="card featured-ebook"><a aria-label="View featured book" href="{html.escape(featured_url)}" id="featuredEbookPage"><img alt="{html.escape(featured['title'], quote=True)} cover" class="featured-cover-img" decoding="async" height="3508" id="featuredEbookCover" loading="lazy" src="{html.escape(cover, quote=True)}" width="2480"{srcset_attrs}/></a><div class="featured-copy"><span class="featured-meta" id="featuredEbookMeta">{html.escape(featured.get('topic',''))} · {featured.get('pages') or ''} pages</span><h3 class="featured-title" id="featuredEbookTitle">{html.escape(featured['title'])}</h3><p class="featured-desc" id="featuredEbookDesc">{html.escape(featured.get('short',''))}</p><p class="book-market-signal muted" id="featuredEbookMarketSignal">Current Kindle price and ratings are checked on Amazon at the buy step.</p><div class="featured-actions"><a class="button" href="{html.escape(featured_url)}" id="featuredEbookLink">View book</a><a class="button secondary" href="{html.escape(featured_buy)}" id="featuredEbookBuy">Buy on Amazon</a></div></div></article><p class="featured-footer-note">Updated weekly · <a href="/ebooks/">See all {count} books →</a></p></div></section>'''
-    explore = f'''<section class="section--explore"><div class="wrap"><h2 class="section-label--centered">Explore</h2><div class="grid grid--explore"><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📚</span><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">🎙️</span><h3 class="card__title">Turing’s Torch Podcast</h3><p class="card__desc">Weekly AI analysis with practical context and zero patience for buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📬</span><h3 class="card__title">AI Edge</h3><p class="card__desc">A practical AI briefing plus the free plain-English AI glossary.</p><a class="button" href="/newsletter/">Get the glossary</a></article></div></div></section>'''
+    featured_block = f'''<section class="section--featured"><div class="wrap"><h2 class="section-label--centered">Featured this week</h2><article class="card featured-ebook"><a aria-label="View featured book" href="{html.escape(featured_url)}" id="featuredEbookPage"><img alt="{html.escape(featured['title'], quote=True)} cover" class="featured-cover-img" decoding="async" height="3508" id="featuredEbookCover" loading="lazy" src="{html.escape(cover, quote=True)}" width="2480"{srcset_attrs}/></a><div class="featured-copy"><span class="featured-meta" id="featuredEbookMeta">{html.escape(featured.get('topic',''))} · {featured.get('pages') or ''} pages</span><h3 class="featured-title" id="featuredEbookTitle">{html.escape(featured['title'])}</h3><p class="featured-desc" id="featuredEbookDesc">{html.escape(featured.get('short',''))}</p><div class="featured-actions"><a class="button" href="{html.escape(featured_url)}" id="featuredEbookLink">View book</a><a class="button secondary" href="{html.escape(featured_buy)}" id="featuredEbookBuy">Buy on Amazon</a></div></div></article><p class="featured-footer-note">Updated weekly · <a href="/ebooks/">See all {count} books →</a></p></div></section>'''
+    explore = f'''<section class="section--explore"><div class="wrap"><h2 class="section-label--centered">Explore</h2><div class="grid grid--explore"><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📚</span><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">🎙️</span><h3 class="card__title">Turing’s Torch Podcast</h3><p class="card__desc">Practical AI analysis with clear context and zero patience for buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card card--explore"><span class="card__emoji" aria-hidden="true">📬</span><h3 class="card__title">AI Edge</h3><p class="card__desc">A practical AI briefing plus the free plain-English AI glossary.</p><a class="button" href="/newsletter/">Get the glossary</a></article></div></div></section>'''
     about = f'''<section class="section--about"><div class="wrap wrap--narrow"><h2 class="about__title">About Jonathan Harris</h2><p class="about__copy">Jonathan Harris is a UK artificial intelligence author and host of Turing’s Torch AI Weekly. His {count} books explain how AI works across industries without dressing the answer in conference-stage fog.</p><a class="button button--bio" href="/bio/">Read the full bio</a></div></section>'''
     topics = f'''<section class="section--topics"><div class="wrap"><h2 class="section-label--centered">Learn about AI</h2><nav class="chips chips--topics" aria-label="AI topics">{topic_html}</nav></div></section>'''
     description = "Plain-English AI books, Turing’s Torch podcast, AI Edge, evidence guides and practical resources from UK author Jonathan Harris."
@@ -211,7 +210,7 @@ def benefit_newsletter_copy() -> None:
 <section class="card newsletter-signup-card newsletter-signup-card--primary" role="region" aria-labelledby="ai-edge-signup-heading" data-newsletter-shell data-newsletter-source="newsletter:primary">
 <h2 id="ai-edge-signup-heading">Join AI Edge and get the free AI glossary</h2>
 <p>The hosted form now collects your name and email address. Subscribe here, then keep the glossary as a quick-reference PDF.</p>
-<div class="newsletter-jotform-wrap"><iframe id="JotFormIFrame-260277027608054" title="AI Edge newsletter sign-up" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" data-jotform-base-src="{jotform_url}" frameborder="0" class="newsletter-jotform-frame" scrolling="no"></iframe></div>
+<div class="newsletter-jotform-wrap"><iframe id="JotFormIFrame-260277027608054" title="AI Edge newsletter sign-up" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" data-jotform-base-src="{jotform_url}" frameborder="0" class="newsletter-jotform-frame" scrolling="no" loading="eager"></iframe></div>
 <p class="newsletter-form-fallback">Form blocked by your browser? <a href="{jotform_url}" target="_blank" rel="noopener">Open the AI Edge sign-up form directly</a>.</p>
 <div class="newsletter-glossary-cta"><p><strong>Already subscribed?</strong> The glossary is available as a direct download too.</p><a class="button secondary" href="{glossary_pdf}" download>Download the AI glossary PDF</a></div>
 </section>
@@ -258,20 +257,31 @@ def load_podcast_fallback(limit: int = 3) -> list[dict[str, str]]:
     return records[:limit]
 
 
+def clean_podcast_display_text(value: str) -> str:
+    """Remove timing/cadence references from user-visible podcast summaries."""
+    text = str(value or "")
+    text = re.sub(r"\b\d+\s*(?:-|–|—)?\s*minutes?\b", "", text, flags=re.I)
+    text = re.sub(r"\b\d+\s*mins?\b", "", text, flags=re.I)
+    text = re.sub(r"\b\d{1,2}:\d{2}(?::\d{2})?\b", "", text)
+    text = re.sub(r"\bthis\s+week(?:[’']s)?\b", "", text, flags=re.I)
+    text = re.sub(r"\bweekly\s+(briefing|analysis|round-?up|update)\b", r"\1", text, flags=re.I)
+    text = re.sub(r"\s+([,.;:!?])", r"\1", text)
+    text = re.sub(r"\s{2,}", " ", text).strip(" -–—,;:")
+    return text
+
+
 def render_static_podcast_cards(records: list[dict[str, str]]) -> str:
     if not records:
-        return '<p>Browse the platform links above or <a href="/transcripts/">the transcript archive</a> while the current RSS snapshot refreshes.</p>'
+        return '<p>Browse the platform links above or <a href="/transcripts/">the transcript archive</a> if the RSS snapshot is unavailable.</p>'
     cards: list[str] = []
     for item in records:
         title = html.escape(item["title"])
         slug = html.escape(item["slug"], quote=True)
         episode_url = html.escape(item.get("episode_url") or f'/podcast/episodes/{slug}/', quote=True)
-        summary = html.escape(item.get("summary") or "Practical AI analysis from Turing’s Torch.")
-        date = html.escape(item.get("date") or "")
+        summary = html.escape(clean_podcast_display_text(item.get("summary") or "Practical AI analysis from Turing’s Torch."))
         transcript = item.get("transcript_url") or ""
         transcript_link = f'<a class="button secondary" href="{html.escape(transcript, quote=True)}" data-placement="podcast_latest">Read transcript</a>' if transcript else ""
-        eyebrow = f'<p class="eyebrow">{date}</p>' if date else ""
-        cards.append(f'<article class="card podcast-latest-card" data-episode-slug="{slug}">{eyebrow}<h3>{title}</h3><p>{summary}</p><div class="actions"><a class="button" href="{episode_url}" data-placement="podcast_latest">Listen</a>{transcript_link}</div></article>')
+        cards.append(f'<article class="card podcast-latest-card" data-episode-slug="{slug}"><h3>{title}</h3><p>{summary}</p><div class="actions"><a class="button" href="{episode_url}" data-placement="podcast_latest">Listen</a>{transcript_link}</div></article>')
     return '<div class="grid podcast-latest-grid">' + ''.join(cards) + '</div>'
 
 
@@ -314,8 +324,8 @@ def podcast_page() -> None:
     latest_cards = render_static_podcast_cards(static_records)
     latest = f'''<!-- GROWTH:PODCAST-LATEST START -->
 <section class="card podcast-card u-s21" aria-labelledby="latest-three-episodes-heading">
-<h2 id="latest-three-episodes-heading">Latest three episodes</h2>
-<p class="muted">Current episode links come from the governed podcast RSS feed and remain available in the page HTML when enhanced players are unavailable.</p>
+<h2 id="latest-three-episodes-heading">Episodes</h2>
+<p class="muted">Episode links come from the governed podcast RSS feed and remain available when enhanced players are unavailable.</p>
 <div data-podcast-latest-server>{latest_cards}</div>
 </section>
 <!-- GROWTH:PODCAST-LATEST END -->'''
@@ -327,17 +337,17 @@ def podcast_page() -> None:
             t = t.replace(anchor, latest + "\n\n" + anchor, 1)
     t = re.sub(
         r'(<span data-latest-episode-title>).*?(</span>)',
-        r"\1current episode\2",
+        r"\1episode\2",
         t, flags=re.S|re.I,
     )
     t = re.sub(
         r'(<strong data-latest-episode-title>).*?(</strong>)',
-        r"\1Current Turing's Torch episode\2",
+        r"\1Turing's Torch episode\2",
         t, flags=re.S|re.I,
     )
     t = re.sub(
         r'(<p class="muted" data-latest-episode-teaser>).*?(</p>)',
-        r'\1The server-rendered episode list above provides the current titles and links even when the enhanced player is unavailable.\2',
+        r'\1The server-rendered episode list above provides episode titles and links even when the enhanced player is unavailable.\2',
         t, flags=re.S|re.I,
     )
     t = re.sub(
@@ -360,7 +370,7 @@ def podcast_page() -> None:
     if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in t:
         player_anchor = '<section class="card podcast-card u-s21" aria-label="Podcast player">'
         if player_anchor in t:
-            t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Listen to the latest six episodes here.</p>\n' + elfsight_widget, 1)
+            t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget, 1)
     # The loader sits immediately before the widget and appears exactly once.
     t = t.replace(elfsight_widget, elfsight_script + '\n' + elfsight_widget, 1)
     # Elfsight is the visible six-episode player, not a disclosure/facade.
@@ -370,7 +380,11 @@ def podcast_page() -> None:
         t, flags=re.S | re.I,
     )
     t = t.replace('<h2>Latest episode</h2>', '<h2>Podcast Player</h2>', 1)
+    t = t.replace('<h2>Latest three episodes</h2>', '<h2>Episodes</h2>')
     t = t.replace('The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.', 'Use the six-episode player below, or choose Spotify, Apple Podcasts or RSS above.', 1)
+    t = re.sub(r'<!-- GROWTH:NEWSLETTER podcast:index --><section class="card growth-newsletter-placement"[\s\S]*?</section>', '', t, flags=re.I)
+    t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-latest\.min\.js"[^>]*></script>', '', t, flags=re.I)
+    t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-facade\.min\.js"[^>]*></script>', '', t, flags=re.I)
     platform_hosts = {
         'open.spotify.com': 'spotify',
         'podcasts.apple.com': 'apple',
@@ -384,12 +398,10 @@ def podcast_page() -> None:
             flags=re.I,
         )
     t = re.sub(r'"author":\{"@type":"Person","name":"Jonathan Harris","url":"https://jonathan-harris.online/bio/"\}', '"author":{"@id":"https://jonathan-harris.online/#person"}', t)
-    if '/assets/js/podcast-facade.min.js' not in t:
-        t = t.replace('</body>', '<script defer src="/assets/js/podcast-facade.min.js"></script>\n</body>')
     p.write_text(t, encoding="utf-8")
 
 def add_static_newsletter_placements() -> None:
-    targets = [(ROOT / "compare" / "index.html", "compare:index"), (ROOT / "podcast" / "index.html", "podcast:index")]
+    targets = [(ROOT / "compare" / "index.html", "compare:index")]
     for guide in sorted((ROOT / "topics").glob("*/index.html")):
         if guide.parent.name != "topics":
             targets.append((guide, f"topic-guide:{guide.parent.name}"))
@@ -535,9 +547,9 @@ def generate_high_value_pages() -> None:
             '''<header class="hero"><img src="https://images.jonathan-harris.online/headshot" alt="Jonathan Harris, AI author and podcast host" class="bio-headshot" loading="eager" fetchpriority="high" width="180" height="180"/><h1>Media and speaking</h1><p>Jonathan Harris is an AI author and host of Turing’s Torch: AI Weekly, focused on practical artificial intelligence without the hype layer.</p><p><a href="https://images.jonathan-harris.online/headshot" target="_blank" rel="noopener">Open the press headshot</a></p></header><section class="card"><h2>Useful discussion areas</h2><ul><li>AI literacy and the future of work.</li><li>AI governance, regulation and accountability.</li><li>Agentic AI, automation and ordinary business workflows.</li><li>Deepfakes, synthetic media and trust.</li><li>AI adoption across healthcare, finance, law and industry.</li></ul></section><section class="card"><h2>Short biography</h2><p>Jonathan Harris is an artificial intelligence author and host of Turing’s Torch: AI Weekly. His work focuses on explaining practical AI, its trade-offs and its effect on ordinary work and regulated industries in plain English.</p></section><section class="card"><h2>Background material</h2><p>For current work and supporting material, use the <a href="/bio/">author page</a>, <a href="/ebooks/">book catalogue</a>, <a href="/podcast/">podcast</a>, <a href="/transcripts/">transcript archive</a> and <a href="/evidence/">evidence guides</a>.</p><a class="button" href="/contact/?subject=media">Media or speaking enquiry</a></section>'''
         ),
         "contribute": (
-            "Contribute a case study",
-            "Submit a sourced AI case-study idea for possible consideration in Jonathan Harris’s podcast and editorial work.",
-            '''<header class="hero"><h1>Contribute an AI case study</h1><p>Have a real deployment, result or failure worth examining? Start with evidence rather than a sales deck.</p></header><section class="card"><h2>What makes a useful submission</h2><ul><li>A concise description of what was deployed and for whom.</li><li>Source URLs that can be checked independently.</li><li>Measured outcomes, including the awkward numbers rather than only the flattering ones.</li><li>Known limitations, trade-offs or failures.</li><li>Confirmation that you have permission to share the material you submit.</li></ul></section><section class="card"><h2>Initial review route</h2><p>Use the contact page for the first pass and include the relevant public URLs. Files or additional evidence can be requested after that initial review, which avoids creating an ungoverned public upload bucket.</p><a class="button" href="/contact/?subject=case-study">Submit a case-study idea</a></section><section class="card"><h2>What happens next</h2><p>Submissions are reviewed for relevance, evidence quality and whether they add something useful to the audience. Submission does not guarantee podcast or editorial inclusion.</p></section>'''
+            "Contribute a Case Study or Evidence",
+            "Submit a sourced AI case study, research source or supporting evidence for possible editorial or podcast consideration.",
+            '''<header class="hero"><h1>Contribute a Case Study or Evidence</h1><p>Share a real deployment, result, failure, research source or supporting material that is worth examining properly.</p></header><section class="card"><h2>What makes a useful submission</h2><ul><li>A concise description of what was deployed, observed or researched.</li><li>Source URLs or supporting material that can be checked independently.</li><li>Measured outcomes, including limitations and awkward numbers.</li><li>Confirmation that you have permission to share the material you submit.</li></ul></section><section class="card contribute-form-card" aria-labelledby="contribute-form-heading"><h2 id="contribute-form-heading">Contribute a Case Study or Evidence</h2><p>Use the form below for the initial review. Supporting files and source links can be included with the submission.</p><div class="contribute-jotform-wrap"><iframe id="JotFormIFrame-262063136008044" title="Contribute a Case Study or Evidence" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="https://form.jotform.com/262063136008044" frameborder="0" class="contribute-jotform-frame" scrolling="no" loading="eager"></iframe></div><p class="form-direct-link">Form blocked by your browser? <a href="https://form.jotform.com/262063136008044" target="_blank" rel="noopener">Open the contribution form directly</a>.</p><script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script><script>window.jotformEmbedHandler("iframe[id='JotFormIFrame-262063136008044']", "https://form.jotform.com/")</script></section><section class="card"><h2>What happens next</h2><p>Submissions are reviewed for relevance, evidence quality and whether they add something useful to the audience. Submission does not guarantee podcast or editorial inclusion.</p></section>'''
         ),
     }
     for slug, (title, description, body) in pages.items():
