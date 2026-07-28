@@ -80,6 +80,9 @@ def main()->int:
     check(newsletter_timing_match(unrelated_fixture) is None,'newsletter timing contract leaks into unrelated page copy')
     check(newsletter_timing_match(newsletter_fixture) is not None,'newsletter timing contract no longer catches actual AI Edge timing copy')
     for page_path in ROOT.rglob('*.html'):
+        rel=page_path.relative_to(ROOT).as_posix()
+        if rel.startswith('assets/site-shell/'):
+            continue
         page_text=text(page_path)
         for phrase in stale_newsletter_phrases:
             check(phrase not in page_text,f'{page_path.relative_to(ROOT)} contains stale AI Edge naming: {phrase}')

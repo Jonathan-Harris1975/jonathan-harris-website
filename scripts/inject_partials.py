@@ -125,14 +125,20 @@ def load_partial(partial_path: Path, label: str) -> str:
 
 
 def should_skip_page(path: Path) -> bool:
-    """Return True when a page is intentionally outside shared header/footer governance.
+    """Return True when a file is intentionally outside page governance.
+
+    The versioned site-shell header/footer files are HTML *fragments*, not
+    standalone pages. They are published for AIMS-managed R2 content and must
+    never be treated as pages requiring both a header and footer.
 
     Podcast episode pages are published and governed from Cloudflare R2, not
-    from the static website repository.  They may exist locally as generated
+    from the static website repository. They may exist locally as generated
     artefacts or deployment mirrors, but they must not block repo-level header,
     footer, font, or viewport validation.
     """
     rel = path.relative_to(ROOT).as_posix()
+    if rel.startswith("assets/site-shell/"):
+        return True
     if rel.startswith("podcast/episodes/"):
         return True
     if _COMPAT_REDIRECT_RE.match(rel):

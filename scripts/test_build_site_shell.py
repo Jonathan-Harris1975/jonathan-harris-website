@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_site_shell import build_site_shell
+from scripts import inject_partials
 
 
 class BuildSiteShellTests(unittest.TestCase):
@@ -34,6 +35,11 @@ class BuildSiteShellTests(unittest.TestCase):
             self.assertEqual(latest["releaseSha"], "abc1234567")
             self.assertEqual(len(manifest["headerSha256"]), 64)
             self.assertEqual(len(manifest["footerSha256"]), 64)
+
+    def test_site_shell_fragments_are_not_treated_as_standalone_pages(self):
+        version_dir = inject_partials.ROOT / "assets" / "site-shell" / "abc1234567"
+        self.assertTrue(inject_partials.should_skip_page(version_dir / "header.html"))
+        self.assertTrue(inject_partials.should_skip_page(version_dir / "footer.html"))
 
 
 if __name__ == "__main__":

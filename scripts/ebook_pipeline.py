@@ -5794,6 +5794,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     html_files = [
         p for p in ROOT.rglob("*.html")
         if "node_modules" not in p.parts
+        and not p.relative_to(ROOT).as_posix().startswith("assets/site-shell/")
         and not is_r2_hosted_podcast_episode_path(p.relative_to(ROOT))
     ]
     css_bundle = "\n".join(css_path.read_text(encoding="utf-8", errors="ignore") for css_path in (ROOT / "assets" / "css").glob("*.css"))

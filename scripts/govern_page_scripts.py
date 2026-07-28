@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / 'assets' / 'partials'
+SITE_SHELL_DIR = ROOT / 'assets' / 'site-shell'
 LEGACY_SCRIPT_PATH = ROOT / 'assets' / 'js' / 'consent-managed-scripts.min.js'
 GTM_ID = 'GTM-PC4K9KRK'
 FUNNEL_SCRIPT = '<script defer src="/assets/js/funnel-events.min.js"></script>'
@@ -60,7 +61,7 @@ CLEANUP_PATTERNS = [
 def collect_pages() -> list[Path]:
     pages: list[Path] = []
     for path in sorted(ROOT.rglob('*.html')):
-        if path.is_relative_to(PARTIALS_DIR):
+        if path.is_relative_to(PARTIALS_DIR) or path.is_relative_to(SITE_SHELL_DIR):
             continue
         if any(part.startswith('.') for part in path.relative_to(ROOT).parts):
             continue
