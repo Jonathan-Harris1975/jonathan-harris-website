@@ -3,6 +3,7 @@ const MANIFEST_PATH = "/data/podcast-episodes.json";
 const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
 
 function slugPartsFromParams(params) { const v = Array.isArray(params.slug) ? params.slug : [params.slug]; return v.filter(Boolean); }
+function stripPodcastTiming(value=''){return cleanText(value).replace(/\b\d+\s*(?:-|–|—)?\s*minutes?\b/gi,'').replace(/\b\d+\s*mins?\b/gi,'').replace(/\b\d{1,2}:\d{2}(?::\d{2})?\b/g,'').replace(/\bthis\s+week(?:[’']s)?\b/gi,'').replace(/\bweekly\s+(briefing|analysis|round-?up|update)\b/gi,'$1').replace(/\s+([,.;:!?])/g,'$1').replace(/\s{2,}/g,' ').replace(/^[\s,;:–—-]+|[\s,;:–—-]+$/g,'')}
 function escapeHtml(v="") { return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
 function cleanText(v="") { return String(v||"").replace(/<!\[CDATA\[|\]\]>/g,"").replace(/<script[\s\S]*?<\/script>/gi," ").replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]+>/g," ").replace(/&quot;/gi,'"').replace(/&#39;|&#x27;/gi,"'").replace(/&amp;/gi,"&").replace(/\s+/g," ").trim(); }
 function firstNonEmpty(...values) { for (const value of values) { const text=cleanText(value); if(text) return text; } return ""; }
@@ -16,7 +17,7 @@ function defaultTakeaways(episode) {
   const title=firstNonEmpty(episode?.title,"this episode");
   return [
     `Why ${title} matters beyond the usual artificial intelligence headline noise.`,
-    "What changed for work, policy, business, creators or ordinary users this week.",
+    "What changed for work, policy, business, creators or ordinary users.",
     "Where the technology looks useful, where the claims need testing, and what evidence matters next.",
     "Which power, money, data, labour, security and control questions sit underneath the announcement.",
     "How the episode connects back to Jonathan Harris's wider artificial intelligence books, glossary and topic guides.",
@@ -62,7 +63,7 @@ async function relatedBookMarkup(context, episode) {
 
 function buildAeoPrelude(episode, request, relatedBooks="") {
   if(!episode)return"";
-  const title=firstNonEmpty(episode.title,"Turing's Torch AI Weekly transcript"), summary=clamp(firstNonEmpty(episode.summary,`Jonathan Harris examines ${title} in plain English, focusing on what changed, what is useful, and where the evidence or incentives deserve a closer look.`),72), takeaways=Array.isArray(episode.key_takeaways)&&episode.key_takeaways.length?episode.key_takeaways.map(cleanText).filter(Boolean).slice(0,5):defaultTakeaways(episode), topics=Array.from(new Set([...(Array.isArray(episode.topics)?episode.topics:[]),...detectTopics(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,8), entities=Array.from(new Set([...(Array.isArray(episode.entities)?episode.entities:[]),...detectEntities(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,12), episodePath=episode.slug?`/podcast/episodes/${episode.slug}/`:"/podcast/", canonicalEpisodeUrl=normaliseManifestUrl(episode.episode_url,request)||new URL(episodePath,request.url).toString(), transcriptUrl=normaliseManifestUrl(episode.transcript_url,request)||request.url, audioUrl=normaliseManifestUrl(episode.audio_url,request);
+  const title=firstNonEmpty(episode.title,"Turing's Torch AI Weekly transcript"), summary=clamp(stripPodcastTiming(firstNonEmpty(episode.summary,`Jonathan Harris examines ${title} in plain English, focusing on what changed, what is useful, and where the evidence or incentives deserve a closer look.`)),72), takeaways=Array.isArray(episode.key_takeaways)&&episode.key_takeaways.length?episode.key_takeaways.map(cleanText).filter(Boolean).slice(0,5):defaultTakeaways(episode), topics=Array.from(new Set([...(Array.isArray(episode.topics)?episode.topics:[]),...detectTopics(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,8), entities=Array.from(new Set([...(Array.isArray(episode.entities)?episode.entities:[]),...detectEntities(`${title} ${summary}`)].map(cleanText).filter(Boolean))).slice(0,12), episodePath=episode.slug?`/podcast/episodes/${episode.slug}/`:"/podcast/", canonicalEpisodeUrl=normaliseManifestUrl(episode.episode_url,request)||new URL(episodePath,request.url).toString(), transcriptUrl=normaliseManifestUrl(episode.transcript_url,request)||request.url, audioUrl=normaliseManifestUrl(episode.audio_url,request);
   const episodeSchema={"@context":"https://schema.org","@type":"PodcastEpisode","name":title,"url":canonicalEpisodeUrl,"datePublished":firstNonEmpty(episode.date)||undefined,"description":summary,"transcript":transcriptUrl,"partOfSeries":{"@type":"PodcastSeries","name":"Turing's Torch: AI Weekly","url":new URL('/podcast/',request.url).toString()},"author":{"@id":new URL('/#person',request.url).toString()},"about":[...topics,...entities].map(name=>({"@type":"Thing","name":name}))};
   const transcriptSchema={"@context":"https://schema.org","@type":["CreativeWork","Transcript"],"additionalType":"https://schema.org/Transcript","name":`Transcript: ${title}`,"url":transcriptUrl,"isPartOf":{"@type":"PodcastEpisode","url":canonicalEpisodeUrl,"name":title},"author":{"@id":new URL('/#person',request.url).toString()},"description":summary,"inLanguage":"en-GB"};
   const serialise=o=>JSON.stringify(o,(k,v)=>v===undefined?undefined:v).replace(/<\/script/gi,"<\\/script");
@@ -74,7 +75,7 @@ function buildAeoPrelude(episode, request, relatedBooks="") {
   <nav class="actions transcript-listen-actions" aria-label="Listen to this episode"><a class="button" href="${escapeHtml(episodePath)}">Listen to this episode</a><a class="button secondary" href="/podcast/">Podcast home</a><a class="button secondary" href="/newsletter/">Join AI Edge</a></nav>
   ${audioUrl?`<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug||'')}" data-placement="transcript_top" src="${escapeHtml(audioUrl)}"></audio>`:""}
   <nav class="transcript-topic-index" aria-label="Transcript topic index"><strong>On this page:</strong> <a href="#what-changed">What changed</a> <a href="#key-takeaways">Takeaways</a> <a href="#named-entities">Named entities</a> <a href="#topic-index">Topics</a> <a href="#transcript-body">Full transcript</a></nav>
-  <h2 id="what-changed">What changed this week?</h2><p>${escapeHtml(summary)}</p>
+  <h2 id="what-changed">What changed?</h2><p>${escapeHtml(summary)}</p>
   <h2 id="key-takeaways">Five key takeaways</h2><ul>${takeaways.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
   <h2 id="named-entities">Key named entities</h2><ul>${entities.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
   <h2 id="topic-index">Topic index</h2><ul>${topics.map(item=>`<li>${escapeHtml(item)}</li>`).join("")}</ul>
