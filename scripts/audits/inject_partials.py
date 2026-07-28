@@ -108,8 +108,10 @@ def load_partial(partial_path: Path, label: str) -> str:
 
 
 def should_skip_page(path: Path) -> bool:
-    """Return True when a page is intentionally outside shared header/footer governance."""
+    """Return True when a file is intentionally outside page governance."""
     rel = path.relative_to(ROOT).as_posix()
+    if rel.startswith("assets/site-shell/"):
+        return True
     if _COMPAT_REDIRECT_RE.match(rel):
         return True
     return False

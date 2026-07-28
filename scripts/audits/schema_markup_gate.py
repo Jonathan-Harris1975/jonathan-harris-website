@@ -75,6 +75,10 @@ def validate_html_file(path: Path, root: Path) -> list[SchemaGateFinding]:
     rel = _repo_path(path, root)
     if ".git" in path.parts or path.name.startswith("."):
         return []
+    if rel.startswith("assets/site-shell/"):
+        # Published site-shell header/footer files are reusable HTML fragments,
+        # not standalone schema-bearing pages.
+        return []
 
     # The podcast area is embed-led. Previous episodes and transcripts are
     # governed by the embedded player/R2 podcast estate, not by collected static
@@ -115,7 +119,11 @@ def validate_html_file(path: Path, root: Path) -> list[SchemaGateFinding]:
 
 def run_schema_gate(root: Path) -> dict[str, Any]:
     root = root.resolve()
-    html_files = sorted(path for path in root.rglob("*.html") if ".git" not in path.parts)
+    html_files = sorted(
+        path for path in root.rglob("*.html")
+        if ".git" not in path.parts
+        and not path.relative_to(root).as_posix().startswith("assets/site-shell/")
+    )
     findings: list[SchemaGateFinding] = []
     checked = 0
 
