@@ -35,6 +35,7 @@ DYNAMIC_CHROME_FILES = (
     ROOT / "functions" / "podcast" / "[[slug]].js",
     ROOT / "functions" / "podcast" / "episodes" / "[[slug]].js",
     ROOT / "functions" / "transcripts" / "[[slug]].js",
+    ROOT / "functions" / "blog" / "posts" / "[[slug]].js",
 )
 SHARED_CHROME_HELPER = ROOT / "functions" / "_shared" / "chrome.js"
 

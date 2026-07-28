@@ -141,6 +141,7 @@ def main() -> int:
         run_step("Inject featured book into homepage (source-of-truth sync)", [sys.executable, "scripts/inject_featured_book.py"])
         run_step("Inject shared partials (header + footer)", [sys.executable, "scripts/inject_partials.py"])
         run_step("Validate shared partials (header + footer - fail-fast gate)", [sys.executable, "scripts/inject_partials.py", "--validate"])
+        run_step("Publish versioned site-shell contract for AIMS-managed R2 pages", [sys.executable, "scripts/build_site_shell.py"])
         run_step("Validate shared chrome visibility and spacing", [sys.executable, "scripts/check_shared_chrome_layout.py"])
         run_step("Check CSS size budget", [sys.executable, "scripts/check_css_budget.py", "--check"])
         run_step("Check core colour contrast", [sys.executable, "scripts/check_colour_contrast.py"])

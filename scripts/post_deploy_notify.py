@@ -36,6 +36,8 @@ CLOUDFLARE_PURGE_ENDPOINT_ENV = "CLOUDFLARE_PURGE_ENDPOINT_URL"
 CLOUDFLARE_PURGE_SECRET_ENV = "CLOUDFLARE_PURGE_SHARED_SECRET"
 CLOUDFLARE_PURGE_HOSTS_ENV = "CLOUDFLARE_PURGE_HOSTS"
 POST_DEPLOY_WEBHOOK_URL_ENV = "POST_DEPLOY_WEBHOOK_URL"
+SITE_SHELL_SYNC_ENDPOINT_ENV = "SITE_SHELL_SYNC_ENDPOINT_URL"
+SITE_SHELL_SYNC_SECRET_ENV = "SITE_SHELL_SYNC_SHARED_SECRET"
 
 
 @dataclass(frozen=True)
@@ -104,6 +106,23 @@ def parse_args() -> argparse.Namespace:
         help=(
             "Optional comma-separated hostnames to purge. Defaults to the deployed URL hostname when omitted. "
             f"Defaults to {CLOUDFLARE_PURGE_HOSTS_ENV}."
+        ),
+    )
+    parser.add_argument(
+        "--site-shell-sync-endpoint",
+        default=env(SITE_SHELL_SYNC_ENDPOINT_ENV),
+        help=(
+            "Optional internal AIMS site-shell sync endpoint. When omitted, a direct AIMS "
+            "/cloudflare/purge URL is automatically mapped to /cloudflare/site-shell/sync. "
+            f"Defaults to {SITE_SHELL_SYNC_ENDPOINT_ENV}."
+        ),
+    )
+    parser.add_argument(
+        "--site-shell-sync-secret",
+        default=env(SITE_SHELL_SYNC_SECRET_ENV) or env(CLOUDFLARE_PURGE_SECRET_ENV),
+        help=(
+            "Shared secret for the internal site-shell sync endpoint. Defaults to "
+            f"{SITE_SHELL_SYNC_SECRET_ENV}, then {CLOUDFLARE_PURGE_SECRET_ENV}."
         ),
     )
     parser.add_argument(
@@ -248,12 +267,19 @@ def build_context(deployed_url: str) -> NotificationContext:
     )
 
 
+def build_site_shell_manifest_url(deployed_url: str, commit_sha: str) -> str:
+    base = deployed_url.rstrip("/")
+    return f"{base}/assets/site-shell/{commit_sha}/manifest.json"
+
+
 def build_payload(context: NotificationContext) -> dict[str, str]:
     return {
         "event": "post_deploy_success",
         "repository": context.repository,
         "branch": context.branch,
         "commit_sha": context.commit_sha,
+        "site_shell_release_sha": context.commit_sha,
+        "site_shell_manifest_url": build_site_shell_manifest_url(context.deployed_url, context.commit_sha),
         "commit_message": context.commit_message,
         "actor": context.actor,
         "workflow": context.workflow,
@@ -390,6 +416,55 @@ def maybe_deliver_legacy_webhook(args: argparse.Namespace, payload: dict[str, st
     )
 
 
+def derive_site_shell_sync_endpoint(explicit_endpoint: str, purge_endpoint: str) -> str:
+    explicit = str(explicit_endpoint or "").strip()
+    if explicit:
+        return explicit
+
+    purge = str(purge_endpoint or "").strip()
+    if not purge:
+        return ""
+
+    parsed = parse.urlparse(purge)
+    if parsed.path.rstrip("/").lower().endswith("/cloudflare/purge"):
+        new_path = parsed.path.rstrip("/")[:-len("/purge")] + "/site-shell/sync"
+        return parse.urlunparse(parsed._replace(path=new_path))
+    return ""
+
+
+def maybe_deliver_site_shell_sync(args: argparse.Namespace, payload: dict[str, str]) -> None:
+    endpoint = derive_site_shell_sync_endpoint(
+        getattr(args, "site_shell_sync_endpoint", ""),
+        getattr(args, "cloudflare_purge_endpoint", ""),
+    )
+    if not endpoint:
+        print("[INFO] Site-shell sync skipped because no internal AIMS sync endpoint was configured or derivable.")
+        return
+
+    sync_payload = {
+        "event": "site_shell_sync",
+        "release_sha": payload.get("site_shell_release_sha") or payload.get("commit_sha") or "",
+        "manifest_url": payload.get("site_shell_manifest_url") or "",
+        "deployed_url": payload.get("deployed_url") or "",
+        "repository": payload.get("repository") or "",
+    }
+    headers: dict[str, str] = {}
+    secret = str(getattr(args, "site_shell_sync_secret", "") or "").strip()
+    if secret:
+        headers["x-cloudflare-purge-secret"] = secret
+
+    deliver_with_retries(
+        target_url=endpoint,
+        payload=sync_payload,
+        timeout_seconds=max(args.timeout_seconds, 1.0),
+        max_attempts=max(args.max_attempts, 1),
+        initial_backoff_seconds=max(args.initial_backoff_seconds, 0.0),
+        max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
+        headers=headers,
+        label="AIMS site-shell sync",
+    )
+
+
 def maybe_deliver_cloudflare_purge(args: argparse.Namespace) -> None:
     endpoint = args.cloudflare_purge_endpoint.strip()
     if not endpoint:
@@ -464,6 +539,7 @@ def main() -> int:
 
     try:
         maybe_deliver_cloudflare_purge(args)
+        maybe_deliver_site_shell_sync(args, payload)
         maybe_deliver_legacy_webhook(args, payload)
     except DeliveryFailure as exc:
         print(f"[ERROR] Post-deploy notification failed: {exc}")
