@@ -1,3 +1,4 @@
+import { ensureSharedChrome } from "../../_shared/chrome.js";
 import {
   extensionContentType,
   getIfNoneMatchResponse,
@@ -39,7 +40,10 @@ export async function onRequest(context) {
   }
 
   const body = await object.text();
-  const html = key.endsWith(".html") ? rewriteHtml(body, request) : body;
+  let html = key.endsWith(".html") ? rewriteHtml(body, request) : body;
+  if (key.endsWith(".html")) {
+    html = await ensureSharedChrome(context, html);
+  }
 
   return new Response(html, { status: 200, headers });
 }
