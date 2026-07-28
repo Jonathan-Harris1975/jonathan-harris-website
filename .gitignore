@@ -3,3 +3,5 @@ __pycache__/
 scripts/data/manuscripts.json
 data/book-sample-chapters.json
 release.json
+
+assets/site-shell/
