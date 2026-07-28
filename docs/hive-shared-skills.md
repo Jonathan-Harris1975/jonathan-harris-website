@@ -1,5 +1,5 @@
 > **Document status:** Production reference  
-> **Last reviewed:** 16 June 2026  
+> **Last reviewed:** 28 July 2026  
 > **Operational authority:** Current repository README, SECURITY policy and operations guide.
 
 # HIVE shared skills access for the website
@@ -72,3 +72,12 @@ api/hive-skills/
 ## Safety rule
 
 The website can know what skills exist. HIVE decides what a skill is allowed to do.
+
+
+## RAMS autonomous remediation contract
+
+The production website is eligible for RAMS remediation only when AIMS has completed the governed website audit and supplied the exact final JSON report. MAST owns the monthly first-Saturday trigger; AIMS owns audit/RAMS sequencing.
+
+RAMS works on `rms-qa/*` branches only. Direct writes or pushes to `main` are forbidden. Autonomous work is intentionally micro-surgery: at most three files and six anchored changes per task, no dependency, configuration, infrastructure, schema/migration, secret, authentication-policy or deployment-policy changes. Every live patch requires independent engineering-council approval, clean baseline validation, post-patch validation and rollback on failure.
+
+HIVE remains read-only from the website. RAMS and AIMS hold all write authority behind authenticated backend gates.
