@@ -34,6 +34,9 @@ jobs:
       - name: Run post-deploy notification unit tests
         run: python -m unittest scripts.test_post_deploy_notify
 
+      - name: Run site-shell contract unit tests
+        run: python -m unittest scripts.test_build_site_shell
+
       - name: Run production readiness gate unit tests
         run: python -m unittest scripts.test_wait_for_live_release
 
@@ -87,4 +90,6 @@ jobs:
           CLOUDFLARE_PURGE_ENDPOINT_URL: ${{ secrets.CLOUDFLARE_PURGE_ENDPOINT_URL }}
           CLOUDFLARE_PURGE_SHARED_SECRET: ${{ secrets.CLOUDFLARE_PURGE_SHARED_SECRET }}
           CLOUDFLARE_PURGE_HOSTS: ${{ vars.CLOUDFLARE_PURGE_HOSTS }}
+          SITE_SHELL_SYNC_ENDPOINT_URL: ${{ secrets.SITE_SHELL_SYNC_ENDPOINT_URL }}
+          SITE_SHELL_SYNC_SHARED_SECRET: ${{ secrets.SITE_SHELL_SYNC_SHARED_SECRET }}
         run: python scripts/post_deploy_notify.py --purge-count 3 --purge-initial-delay-seconds 300 --purge-interval-seconds 300
