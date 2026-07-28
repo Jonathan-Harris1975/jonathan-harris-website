@@ -2,62 +2,66 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 30,
+    "iso_week": 31,
     "year": 2026
   },
   "book": {
-    "id": 31,
-    "key": "31-ebook",
-    "title": "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "short": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
-    "short_description": "A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence.",
-    "cover": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
-    "main_image": "https://images.jonathan-harris.online/architects-ai_-pioneers_-breakthroughs_-webp",
+    "id": 32,
+    "key": "32-ebook",
+    "title": "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+    "short": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
+    "short_description": "A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help.",
+    "cover": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-house-always-knows-webp",
     "tags": [
-      "History",
+      "Ethics",
       "Artificial Intelligence",
-      "AI Trends"
-    ],
-    "filter": "History",
-    "keywords": [
-      "History",
-      "The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
       "AI Trends",
-      "Artificial Intelligence"
+      "Law"
     ],
-    "buy_url": "https://mybook.to/qFAI",
-    "buy_target_url": "https://mybook.to/qFAI",
-    "slug": "the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead",
-    "asin": "B0DY5MRT6K",
-    "pages": 302,
-    "datePublished": "2025-02-22",
+    "filter": "Ethics",
+    "keywords": [
+      "Ethics",
+      "The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+      "AI Trends",
+      "Artificial Intelligence",
+      "Law"
+    ],
+    "buy_url": "https://mybook.to/K7nVJGv",
+    "buy_target_url": "https://mybook.to/K7nVJGv",
+    "slug": "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+    "asin": "B0DY4PSD8Z",
+    "pages": 327,
+    "datePublished": "2025-02-21",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
-    "buy_route": "/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
-    "topic_url": "/catalogue/history/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+    "buy_route": "/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+    "topic_url": "/catalogue/ethics/",
     "related_slugs": [
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-in-aviation-transforming-safety-and-sustainability",
-      "ai-in-education-reimagining-learning-for-every-student"
+      "the-dumbening-how-ai-is-reshaping-our-minds",
+      "artificial-intelligence-and-the-law-case-studies-and-future-trends",
+      "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology"
     ],
     "title_tokens": [
-      "ahead",
-      "architect",
-      "breakthrough",
-      "pione",
-      "road"
+      "alway",
+      "ethic",
+      "gam",
+      "gambl",
+      "house",
+      "know",
+      "personaliz"
     ],
     "topic_tokens": [
-      "history"
+      "ethic"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now",
-    "midroll_15": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead. A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence. Read more at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/",
-    "midroll_30": "This week's sponsor is The Architects of AI: Pioneers, Breakthroughs, and the Road Ahead. A clear guide to the people, breakthroughs, false starts, and stubborn questions that shaped artificial intelligence. It focuses on History. It runs 302 pages. Topics include History, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-architects-of-ai-pioneers-breakthroughs-and-the-road-ahead/buy-now."
+    "headline": "This week's sponsor is The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now",
+    "midroll_15": "This week's sponsor is The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming. A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help. Read more at https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/",
+    "midroll_30": "This week's sponsor is The House Always Knows: AI, Gambling, and the Ethics of Personalized Gaming. A sceptical guide to personalisation, gambling design, addiction risk, regulation, and why the house rarely needs extra help. It focuses on Ethics. It runs 327 pages. Topics include Ethics, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming/buy-now."
   }
 }
