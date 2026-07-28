@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_site_shell import build_site_shell
-from scripts import inject_partials
+from scripts import inject_partials, ebook_pipeline
 
 
 class BuildSiteShellTests(unittest.TestCase):
@@ -35,6 +35,13 @@ class BuildSiteShellTests(unittest.TestCase):
             self.assertEqual(latest["releaseSha"], "abc1234567")
             self.assertEqual(len(manifest["headerSha256"]), 64)
             self.assertEqual(len(manifest["footerSha256"]), 64)
+
+    def test_site_shell_artifacts_are_excluded_from_public_route_discovery(self):
+        self.assertTrue(ebook_pipeline.is_site_shell_artifact_path(Path("assets/site-shell/abc1234567/header.html")))
+        self.assertTrue(ebook_pipeline.is_site_shell_artifact_path(Path("assets/site-shell/abc1234567/footer.html")))
+        self.assertTrue(ebook_pipeline.is_site_shell_artifact_path(Path("assets/site-shell/manifest.json")))
+        self.assertFalse(ebook_pipeline.is_site_shell_artifact_path(Path("assets/partials/header.html")))
+        self.assertFalse(ebook_pipeline.is_site_shell_artifact_path(Path("podcast/index.html")))
 
     def test_site_shell_fragments_are_not_treated_as_standalone_pages(self):
         version_dir = inject_partials.ROOT / "assets" / "site-shell" / "abc1234567"

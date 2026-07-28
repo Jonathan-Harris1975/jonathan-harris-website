@@ -4565,6 +4565,16 @@ def build_search_visibility_surfaces(books: List[Dict[str, Any]]) -> Dict[str, A
     }
 
 
+def is_site_shell_artifact_path(relative_path: Path) -> bool:
+    """Return True for published Site Shell implementation artefacts.
+
+    These files are intentionally fetchable by AIMS but are not standalone
+    public pages and therefore must stay out of sitemap/route discovery.
+    """
+    parts = relative_path.parts
+    return len(parts) >= 2 and parts[0] == "assets" and parts[1] == "site-shell"
+
+
 def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, str]]:
     governed_lastmod = normalise_lastmod(governed_generated_utc(books))
     book_paths = {Path("ebooks") / book["slug"] / "index.html": book for book in books}
@@ -4585,6 +4595,11 @@ def build_public_route_registry(books: List[Dict[str, Any]]) -> List[Dict[str, s
         if is_r2_hosted_podcast_episode_path(relative_path):
             continue
         if rel_parts and rel_parts[0] in {"scripts", "functions"}:
+            continue
+        # Site Shell header/footer files are published implementation fragments
+        # for AIMS-managed R2 content. They are fetchable assets, not public
+        # website routes, and must never enter sitemap/crawler route discovery.
+        if is_site_shell_artifact_path(relative_path):
             continue
         if html_declares_noindex(file_path):
             continue
