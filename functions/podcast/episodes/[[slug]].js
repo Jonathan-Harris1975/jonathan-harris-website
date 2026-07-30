@@ -208,22 +208,15 @@ function matchEpisode(episodes, slug, request) {
   }) || null;
 }
 
-function fallbackEpisodeFromSlug(slug, request) {
-  const title = slug
-    .split("-")
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ") || "Archived Turing's Torch episode";
-  return {
-    title,
-    description: "This archived Turing's Torch podcast route is retained for crawl continuity. Use the podcast hub and transcript archive for canonical episode, audio and transcript paths.",
-    link: new URL(`/podcast/episodes/${slug}/`, request.url).toString(),
-    guid: slug,
-    transcriptUrl: new URL("/transcripts/", request.url).toString(),
-    audioUrl: "",
-    imageUrl: "https://podcast-coverart.jonathan-harris.online/cover-art.png",
-    noindex: true,
-  };
+function notFoundResponse() {
+  return new Response("Podcast episode not found", {
+    status: 404,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=300",
+      "X-Podcast-Episode-Source": "not-in-governed-rss",
+    },
+  });
 }
 
 async function relatedBooksMarkup(context, episode) {
@@ -357,7 +350,11 @@ export async function onRequest(context) {
     episode = matchEpisode(parseEpisodesFromFeed(loaded.xml, context.request), slug, context.request);
   } catch {}
 
-  if (!episode) episode = fallbackEpisodeFromSlug(slug, context.request);
+  // Episode routes are governed exclusively by the live AIMS RSS feed.
+  // Never manufacture a page for an arbitrary/future slug. If AIMS has not
+  // published the episode into the feed, the episode does not exist publicly.
+  if (!episode) return notFoundResponse();
+
   const relatedBooks = await relatedBooksMarkup(context, episode);
 
   const pageHtml = await ensureSharedChrome(
@@ -368,8 +365,8 @@ export async function onRequest(context) {
     status: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": episode.noindex ? "public, max-age=900" : "public, max-age=1800, stale-while-revalidate=86400",
-      "X-Podcast-Episode-Source": episode.noindex ? "fallback-canonical-continuity" : "aims-rss-feed",
+      "Cache-Control": "public, max-age=1800, stale-while-revalidate=86400",
+      "X-Podcast-Episode-Source": "aims-rss-feed",
     },
   });
 }
