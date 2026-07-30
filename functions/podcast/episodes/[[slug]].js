@@ -297,7 +297,7 @@ ${episode.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta nam
 <div class="wrap">
 <p class="eyebrow">Turing's Torch podcast episode</p>
 <h1>${escapeHtml(title)}</h1>
-<p class="section-lead"><strong>Short answer:</strong> ${escapeHtml(summary)}</p>
+<p class="section-lead">${escapeHtml(summary)}</p>
 <div class="actions">
 ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" rel="noopener noreferrer">Listen to the episode</a>` : `<a class="button" href="/podcast/">Open podcast hub</a>`}
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the transcript</a>
@@ -306,33 +306,18 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 ${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placement="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
 </div>
 </section>
-<section class="section"><div class="wrap card">
-<h2>What changed?</h2>
+<section class="section"><div class="wrap card podcast-episode-summary">
+<h2>About this episode</h2>
 <p>${escapeHtml(summary)}</p>
-<h2>Key takeaways</h2>
-<ul>${takeaways.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-<h2>Entities and topics discussed</h2>
-<ul>${entities.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
-<h2>Transcript preview and next steps</h2>
-<nav class="actions" aria-label="Episode links">
-<a class="button secondary" href="${escapeHtml(transcriptUrl)}">Transcript preview</a>
-<a class="button secondary" href="/topics/">Related AI topic guides</a>
-<a class="button secondary" href="/book-finder/">Find a related Jonathan Harris book</a>
+<nav class="actions" aria-label="Episode resources">
+<a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the full transcript</a>
+<a class="button secondary" href="/podcast/">More episodes</a>
 <a class="button secondary" href="/newsletter/">Join AI Edge</a>
 </nav>
-${relatedBooks}
 ${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : ""}
-<h2>Share this episode</h2>
-<nav class="share-links" aria-label="Share episode">
-<a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(canonical)}&text=${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer">Share on X</a>
-<a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(canonical)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-<a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonical)}" target="_blank" rel="noopener noreferrer">Facebook</a>
-<button type="button" data-copy-url="${escapeHtml(canonical)}">Copy link</button>
-</nav>
 </div></section>
 </main>
 <script defer src="/assets/js/funnel-events.min.js"></script>
-<script defer src="/assets/js/share.min.js"></script>
 <script defer src="/assets/js/site-ui.min.js"></script>
 </body>
 </html>`;
@@ -355,7 +340,7 @@ export async function onRequest(context) {
   // published the episode into the feed, the episode does not exist publicly.
   if (!episode) return notFoundResponse();
 
-  const relatedBooks = await relatedBooksMarkup(context, episode);
+  const relatedBooks = "";
 
   const pageHtml = await ensureSharedChrome(
     context,
