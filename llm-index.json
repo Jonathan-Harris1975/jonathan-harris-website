@@ -982,7 +982,7 @@
       ]
     },
     {
-      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
+      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "url": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
       "summary": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
@@ -994,7 +994,7 @@
       ],
       "keywords": [
         "creativity",
-        "lights, camera, algorithm: ai’s role in modern filmmaking",
+        "lights, camera, algorithm: ai\u2019s role in modern filmmaking",
         "ai trends",
         "artificial intelligence"
       ],
@@ -1717,7 +1717,7 @@
       "lastmod": "2026-07-25",
       "source": "data/evidence-content.json",
       "repo_path": "evidence/deepfake-detection-and-synthetic-media/index.html",
-      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between “looks real” and “is verified”.",
+      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between \u201clooks real\u201d and \u201cis verified\u201d.",
       "entity": "AI evidence guide"
     },
     {
@@ -1822,152 +1822,7 @@
       "entity": "AI checklist"
     }
   ],
-  "blog_posts": [
-    {
-      "family": "blog-post",
-      "title": "AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress",
-      "path": "/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
-      "loc": "https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/",
-      "lastmod": "2026-04-13",
-      "source": "blog/posts.json",
-      "repo_path": "",
-      "summary": "This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.",
-      "entity": "weekly AI briefing"
-    }
-  ],
-  "podcast_episodes": [
-    {
-      "family": "podcast-episode",
-      "title": "Ai Accountability Costs And Local Control",
-      "path": "/podcast/episodes/ai-accountability-costs-and-local-control/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/ai-accountability-costs-and-local-control/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Ai Safety In Finance Robot Integration Multilingual Models",
-      "path": "/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Artificial Intelligence Weekly",
-      "path": "/podcast/episodes/artificial-intelligence-weekly/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/artificial-intelligence-weekly/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Navigating Ais Future Balancing Innovation And Human Needs",
-      "path": "/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Navigating The Future Ai Climate Change And The Path Ahead",
-      "path": "/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Openais Four Day Week Ai Governance And Memory Problems",
-      "path": "/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Ai Weekly 2026 03 06",
-      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-06/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-06/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Ai Weekly 2026 03 13",
-      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-13/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-13/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Ai Weekly 2026 03 20",
-      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-20/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-20/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Ai Weekly 2026 03 27",
-      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-03-27/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Ai Weekly 2026 04 24",
-      "path": "/podcast/episodes/turings-torch-ai-weekly-2026-04-24/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-04-24/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    },
-    {
-      "family": "podcast-episode",
-      "title": "Turings Torch Unpacking Ais Promise And Pitfalls",
-      "path": "/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
-      "loc": "https://jonathan-harris.online/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
-      "lastmod": "2026-06-22",
-      "source": "data/podcast-route-registry.json",
-      "repo_path": "",
-      "summary": "Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-      "entity": "Turing's Torch AI Weekly episode"
-    }
-  ],
+  "blog_posts": [],
+  "podcast_episodes": [],
   "transcripts": []
 }
