@@ -25,35 +25,35 @@ FONT_HEAD = '''<link href="https://fonts.googleapis.com" rel="preconnect"/>
 
 EVIDENCE_PODCAST_LINKS = {
     "workplace-ai-literacy": (
-        "/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
+        "/podcast/",
         "AI innovation, work and human needs",
     ),
     "ai-agents-for-ordinary-work": (
-        "/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
+        "/podcast/",
         "AI promise, pitfalls and practical automation",
     ),
     "ai-for-small-business": (
-        "/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/",
+        "/podcast/",
         "AI promise, pitfalls and practical adoption",
     ),
     "deepfake-detection-and-synthetic-media": (
-        "/podcast/episodes/artificial-intelligence-weekly/",
+        "/podcast/",
         "Turing’s Torch: current AI risks and verification context",
     ),
     "ai-in-healthcare": (
-        "/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/",
+        "/podcast/",
         "AI innovation balanced against human needs",
     ),
     "ai-in-finance": (
-        "/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/",
+        "/podcast/",
         "AI safety in finance, robotics and multilingual models",
     ),
     "ai-governance-and-law": (
-        "/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
+        "/podcast/",
         "AI governance, accountability and memory problems",
     ),
     "eu-ai-act-article-50-transparency": (
-        "/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/",
+        "/podcast/",
         "AI governance, accountability and implementation",
     ),
 }
@@ -277,7 +277,7 @@ def render_static_podcast_cards(records: list[dict[str, str]]) -> str:
     for item in records:
         title = html.escape(item["title"])
         slug = html.escape(item["slug"], quote=True)
-        episode_url = html.escape(item.get("episode_url") or f'/podcast/episodes/{slug}/', quote=True)
+        episode_url = html.escape(item.get("episode_url") or '/podcast/', quote=True)
         summary = html.escape(clean_podcast_display_text(item.get("summary") or "Practical AI analysis from Turing’s Torch."))
         transcript = item.get("transcript_url") or ""
         transcript_link = f'<a class="button secondary" href="{html.escape(transcript, quote=True)}" data-placement="podcast_latest">Read transcript</a>' if transcript else ""

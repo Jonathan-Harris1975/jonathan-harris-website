@@ -128,11 +128,8 @@ def main() -> int:
 
         run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
         run_step("Generate curated ebook reading paths", [sys.executable, "scripts/generate_ebook_bundles.py"])
-        run_step("Test podcast RSS fallback parser", [sys.executable, "scripts/test_sync_podcast_episodes.py"])
-        run_step("Refresh podcast RSS fallback", [sys.executable, "scripts/sync_podcast_episodes.py"])
         run_step("Generate growth, evidence and conversion assets", [sys.executable, "scripts/generate_growth_assets.py"])
         run_step("Generate downloadable AI glossary PDF", [sys.executable, "scripts/generate_ai_glossary_pdf.py"])
-        run_step("Mark stale blog snapshots honestly", [sys.executable, "scripts/mark_stale_blog_snapshot.py"])
         run_step("Validate governed ebook route integrity", [sys.executable, "scripts/check_ebook_route_integrity.py"])
         run_step("Rebuild derivative manifests and crawler snapshots", [sys.executable, "scripts/build_book_derivatives.py"])
         run_step("Synchronise redirects", [sys.executable, "scripts/sync_redirects.py"])

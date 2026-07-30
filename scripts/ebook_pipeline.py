@@ -1009,15 +1009,8 @@ def render_priority_evidence_module(book: Dict[str, Any]) -> str:
 
 def podcast_link_for_book(book: Dict[str, Any]) -> Dict[str, str]:
     topic = clean_paragraph(book.get("topic_slug", ""))
-    mapping = {
-        "finance": ("/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/", "AI safety in finance, robotics and multilingual models"),
-        "law": ("/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/", "AI governance and accountability"),
-        "government": ("/podcast/episodes/ai-accountability-costs-and-local-control/", "AI accountability, costs and local control"),
-        "future-of-work": ("/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/", "AI innovation and human needs"),
-        "environment": ("/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/", "AI, climate change and the path ahead"),
-    }
-    href, label = mapping.get(topic, (f"/podcast/?topic={topic}", f"Turing’s Torch on {clean_paragraph(book.get('topic', 'AI'))}"))
-    return {"href": href, "label": label}
+    label = f"Turing’s Torch on {clean_paragraph(book.get('topic', 'AI'))}"
+    return {"href": f"/podcast/?topic={topic}" if topic else "/podcast/", "label": label}
 
 
 def render_book_bundle_links(book: Dict[str, Any]) -> str:
@@ -4315,7 +4308,7 @@ def load_blog_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
             title=_first_text(item.get("title"), slug),
             path=path,
             lastmod=_normalise_manifest_lastmod(item.get("published_at") or item.get("datePublished") or item.get("pubDate"), generated_lastmod),
-            source="blog/posts.json",
+            source="runtime-r2",
             summary=_first_text(item.get("summary"), item.get("excerpt")),
             entity="weekly AI briefing",
         ))
@@ -4323,63 +4316,11 @@ def load_blog_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
 
 
 def load_podcast_episode_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
-    items = _load_json_file(DATA_DIR / "podcast-episodes.json", [])
-    routes: List[Dict[str, str]] = []
-    for item in items if isinstance(items, list) else []:
-        if not isinstance(item, dict):
-            continue
-        slug = _first_text(item.get("slug"))
-        title = _first_text(item.get("title"), slug)
-        date = _normalise_manifest_lastmod(item.get("date"), generated_lastmod)
-        if slug:
-            repo_path = f"podcast/episodes/{slug}/index.html"
-            routes.append(_manifest_route(
-                family="podcast-episode",
-                title=title,
-                path=f"/podcast/episodes/{slug}/",
-                lastmod=date,
-                source="data/podcast-episodes.json",
-                repo_path=repo_path if (ROOT / repo_path).exists() else "",
-                summary=_first_text(item.get("summary")),
-                entity="Turing's Torch AI Weekly episode",
-            ))
-        transcript_url = _first_party_site_url(item.get("transcript_url"))
-        session_id = _first_text(item.get("session_id"))
-        if transcript_url or session_id:
-            transcript_path = _site_path_from_url(transcript_url) if transcript_url else f"/transcripts/{session_id}.html"
-            if transcript_path.startswith("/transcripts/"):
-                routes.append(_manifest_route(
-                    family="podcast-transcript",
-                    title=f"Transcript: {title}",
-                    path=transcript_path,
-                    lastmod=date,
-                    source="data/podcast-episodes.json",
-                    summary=_first_text(item.get("summary")),
-                    entity="podcast transcript",
-                ))
-    return routes
+    return []
 
 
 def load_podcast_route_registry(generated_lastmod: str) -> List[Dict[str, str]]:
-    payload = _load_json_file(DATA_DIR / "podcast-route-registry.json", {})
-    raw_routes = payload.get("routes") if isinstance(payload, dict) else []
-    routes: List[Dict[str, str]] = []
-    for raw in raw_routes if isinstance(raw_routes, list) else []:
-        path = _first_text(raw)
-        match = re.fullmatch(r"/podcast/episodes/([^/]+)/?", path)
-        if not match:
-            continue
-        slug = match.group(1)
-        routes.append(_manifest_route(
-            family="podcast-episode",
-            title=slug.replace("-", " ").title(),
-            path=f"/podcast/episodes/{slug}/",
-            lastmod=normalise_lastmod(generated_lastmod),
-            source="data/podcast-route-registry.json",
-            summary="Governed podcast episode route resolved dynamically from the live AIMS RSS feed.",
-            entity="Turing's Torch AI Weekly episode",
-        ))
-    return routes
+    return []
 
 
 def load_bundle_dynamic_routes(generated_lastmod: str) -> List[Dict[str, str]]:
