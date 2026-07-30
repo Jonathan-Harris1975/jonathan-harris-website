@@ -91,18 +91,5 @@ Glossary: https://jonathan-harris.online/glossary/
 - AI in Mobility and Logistics: Three-Book Reading Path: https://jonathan-harris.online/bundles/ai-mobility-and-logistics/ — Three perspectives on AI in aviation, logistics, and high-speed transport decision-making.
 
 ## Blog and weekly AI analysis
-- AI Under Scrutiny: Regulation, Memory, and the Illusion of Progress: https://jonathan-harris.online/blog/posts/2026-w15-ai-under-scrutiny-regulation-memory-and-the-illusion-of-progress/ — This week, AI development faces increased regulatory pressure in Washington, while advancements in AI memory and topic modelling are met with scepticism. Concerns about governance, open-source principles, and the limitations of AI agents temper the enthusiasm surrounding new technologies.
 
 ## Podcast episodes
-- Ai Accountability Costs And Local Control: https://jonathan-harris.online/podcast/episodes/ai-accountability-costs-and-local-control/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Ai Safety In Finance Robot Integration Multilingual Models: https://jonathan-harris.online/podcast/episodes/ai-safety-in-finance-robot-integration-multilingual-models/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Artificial Intelligence Weekly: https://jonathan-harris.online/podcast/episodes/artificial-intelligence-weekly/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Navigating Ais Future Balancing Innovation And Human Needs: https://jonathan-harris.online/podcast/episodes/navigating-ais-future-balancing-innovation-and-human-needs/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Navigating The Future Ai Climate Change And The Path Ahead: https://jonathan-harris.online/podcast/episodes/navigating-the-future-ai-climate-change-and-the-path-ahead/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Openais Four Day Week Ai Governance And Memory Problems: https://jonathan-harris.online/podcast/episodes/openais-four-day-week-ai-governance-and-memory-problems/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Ai Weekly 2026 03 06: https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-06/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Ai Weekly 2026 03 13: https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-13/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Ai Weekly 2026 03 20: https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-20/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Ai Weekly 2026 03 27: https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-03-27/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Ai Weekly 2026 04 24: https://jonathan-harris.online/podcast/episodes/turings-torch-ai-weekly-2026-04-24/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
-- Turings Torch Unpacking Ais Promise And Pitfalls: https://jonathan-harris.online/podcast/episodes/turings-torch-unpacking-ais-promise-and-pitfalls/ — Governed podcast episode route resolved dynamically from the live AIMS RSS feed.
