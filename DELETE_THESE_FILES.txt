@@ -1,2 +1,0 @@
-assets/js/newsletter-signup.min.js
-functions/api/newsletter/subscribe.js
