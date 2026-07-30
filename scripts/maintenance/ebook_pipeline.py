@@ -4939,35 +4939,13 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         if file_payload.get("sha256") != expected_hash:
             errors.append(f"Crawler checksum drift detected for {name}.")
 
-    blog_manifest = read_json(ROOT / "blog" / "posts.json", default={}) or {}
-    blog_manifest_items = blog_manifest.get("items") if isinstance(blog_manifest, dict) else None
-    if not isinstance(blog_manifest, dict):
-        errors.append("blog/posts.json must remain a JSON object.")
-    else:
-        if blog_manifest.get("schema_version") != 1:
-            errors.append("blog/posts.json must declare schema_version = 1.")
-        if not isinstance(blog_manifest_items, list):
-            errors.append("blog/posts.json must expose an items array.")
-        else:
-            for item in blog_manifest_items:
-                if not isinstance(item, dict):
-                    errors.append("blog/posts.json contains a non-object entry.")
-                    continue
-                slug = clean_paragraph(item.get("slug"))
-                url = clean_paragraph(item.get("url") or item.get("canonical_url"))
-                path = clean_paragraph(item.get("path"))
-                published_at = clean_paragraph(item.get("published_at") or item.get("datePublished") or item.get("pubDate"))
-                if not slug:
-                    errors.append("blog/posts.json contains an entry without a slug.")
-                    continue
-                expected_path = f"/blog/posts/{slug}/"
-                expected_url = f"https://jonathan-harris.online{expected_path}"
-                if path and path != expected_path:
-                    errors.append(f"blog/posts.json entry for {slug} must use path {expected_path}.")
-                if url and url != expected_url:
-                    errors.append(f"blog/posts.json entry for {slug} must use url {expected_url}.")
-                if published_at and not re.match(r"^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z)?$", published_at):
-                    errors.append(f"blog/posts.json entry for {slug} has an invalid published date shape.")
+    # Blog publication content is externally governed in R2. The repository must not
+    # carry or validate a committed blog/posts.json snapshot, because that could
+    # resurrect stale posts after the source object has been removed. Runtime
+    # functions below remain responsible for exposing the live R2 manifest.
+    committed_blog_manifest = ROOT / "blog" / "posts.json"
+    if committed_blog_manifest.exists():
+        errors.append("blog/posts.json must not be committed; the live blog manifest is governed in R2.")
 
     weekly_archive_html = (ROOT / "blog" / "weekly" / "index.html").read_text(encoding="utf-8")
     site_ui_js = (ROOT / "assets" / "js" / "site-ui.min.js").read_text(encoding="utf-8")
