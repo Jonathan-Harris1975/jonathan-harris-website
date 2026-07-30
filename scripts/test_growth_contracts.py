@@ -197,8 +197,8 @@ def main()->int:
     check(not (ROOT/'assets/js/newsletter-signup.min.js').exists(),'retired newsletter signup JavaScript still exists')
     newsletter_jotform=text(ROOT/'assets/js/newsletter-jotform.min.js')
     check('newsletter_success' in newsletter_jotform and 'newsletter_submit' in newsletter_jotform and 'ebook_preview_signup' in newsletter_jotform and 'utm_campaign' in newsletter_jotform,'Jotform newsletter instrumentation/source forwarding is incomplete')
-    retired_endpoint=text(ROOT/'functions'/'api'/'newsletter'/'subscribe.js')
-    check('status: 410' in retired_endpoint and 'MAILCHIMP' not in retired_endpoint and 'NEWSLETTER_SUBSCRIBE_ENDPOINT' not in retired_endpoint,'retired newsletter API still exposes a competing provider path')
+    retired_endpoint=ROOT/'functions'/'api'/'newsletter'/'subscribe.js'
+    check(not retired_endpoint.exists(),'retired newsletter API endpoint still exists')
     newsletter_page=text(ROOT/'newsletter'/'index.html')
     check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/260277027608054' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
     check('/api/newsletter/subscribe' not in newsletter_page and 'data-newsletter-form' not in newsletter_page,'AI Edge page exposes more than the governed Jotform collection path')
