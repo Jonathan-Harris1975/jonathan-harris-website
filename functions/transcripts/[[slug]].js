@@ -1,5 +1,4 @@
 import { ensureSharedChrome } from "../_shared/chrome.js";
-const MANIFEST_PATH = "/data/podcast-episodes.json";
 const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
 
 function slugPartsFromParams(params) { const v = Array.isArray(params.slug) ? params.slug : [params.slug]; return v.filter(Boolean); }
@@ -32,9 +31,6 @@ function detectTopics(text="") {
 }
 function detectEntities(text="") { const matches=cleanText(text).match(/\b(?:OpenAI|Anthropic|Google|Microsoft|NVIDIA|Meta|Apple|Amazon|Gemini|Claude|GPT|LLM|DeepMind)\b/gi)||[]; return [...new Set(["Jonathan Harris","Turing's Torch AI Weekly","artificial intelligence",...matches].map(cleanText).filter(Boolean))].slice(0,12); }
 
-async function fetchEpisodeManifest(context) {
-  try { const url=new URL(MANIFEST_PATH,context.request.url), req=new Request(url.toString(),{headers:{Accept:"application/json"}}), response=context.env?.ASSETS?.fetch?await context.env.ASSETS.fetch(req):await fetch(req); if(!response.ok)return[]; const data=await response.json(); return Array.isArray(data)?data:[]; } catch { return []; }
-}
 function findEpisodeForTranscript(episodes, rawKey, request) {
   const key=String(rawKey||"").replace(/^\/+/,""), absolute=new URL(`/transcripts/${key}`,request.url).toString(), bare=key.replace(/\.(html|htm|txt)$/i,"");
   return episodes.find((episode)=>{const u=normaliseManifestUrl(episode?.transcript_url,request);return u===absolute||u.endsWith(`/${key}`)||firstNonEmpty(episode?.session_id)===bare})||null;
@@ -90,6 +86,6 @@ export async function onRequest(context) {
   const {params,env,request}=context, rawKey=slugPartsFromParams(params).join('/'); if(!rawKey)return context.next();
   let object=await env.TRANSCRIPTS_BUCKET.get(rawKey); if(!object&&!rawKey.match(/\.(html|htm|txt|json|xml)$/i))object=await env.TRANSCRIPTS_BUCKET.get(`${rawKey}.html`); if(!object)return context.next();
   const headers=new Headers(), contentType=object.httpMetadata?.contentType??"text/html; charset=utf-8"; headers.set('Content-Type',contentType);headers.set('Cache-Control','public, max-age=3600, stale-while-revalidate=86400');headers.set('X-Transcript-AEO-Enhancement','enabled');if(object.etag)headers.set('ETag',object.etag);if(request.headers.get('If-None-Match')===object.etag)return new Response(null,{status:304,headers});if(!contentType.includes('text/html'))return new Response(object.body,{status:200,headers});
-  let episodes=await fetchEpisodeManifest(context), episode=findEpisodeForTranscript(episodes,rawKey,request); if(!episode){try{episodes=await fetchFeedEpisodes(context);episode=findEpisodeForTranscript(episodes,rawKey,request)}catch{}}
+  let episode=null; try{const episodes=await fetchFeedEpisodes(context);episode=findEpisodeForTranscript(episodes,rawKey,request)}catch{}
   const relatedBooks=await relatedBookMarkup(context,episode),html=await object.text(), enhanced=enhanceTranscriptHtml(html,buildAeoPrelude(episode,request,relatedBooks)), withChrome=await ensureSharedChrome(context,enhanced); return new Response(withChrome,{status:200,headers});
 }
