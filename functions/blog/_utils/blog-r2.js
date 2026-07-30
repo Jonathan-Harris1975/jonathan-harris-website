@@ -176,13 +176,8 @@ function blogGrowthMarkup(request, source = "") {
   const encodedUrl = encodeURIComponent(canonical);
   return `<section class="card blog-growth-panel" data-jh-blog-growth="1">
 <h2>Keep the useful bits</h2>
-<p>Get the practical AI briefing and the free plain-English AI glossary cheat sheet without leaving this article.</p>
-<form class="newsletter-native-form" action="/api/newsletter/subscribe" method="post" data-newsletter-form>
-<label>Email address <input name="email" type="email" autocomplete="email" inputmode="email" required maxlength="254" placeholder="you@example.com"></label>
-<input type="hidden" name="source" value="blog-post"><input type="hidden" name="next" value="/downloads/ai-glossary-cheat-sheet/"><span class="newsletter-honeypot" aria-hidden="true"><label>Company <input name="company" tabindex="-1" autocomplete="off"></label></span>
-<button class="button" type="submit">Join and get the cheat sheet</button><p class="subtle" data-newsletter-status hidden aria-live="polite"></p>
-</form>
-<p><a data-newsletter-fallback href="https://form.jotform.com/260277027608054" target="_blank" rel="noopener">Hosted sign-up fallback</a></p>
+<p>Continue with AI Edge for the written briefing and glossary download.</p>
+<p><a class="button" href="/newsletter/?source=blog-post">Join AI Edge</a></p>
 <h2>Share this briefing</h2><nav class="share-links" aria-label="Share this briefing"><a href="https://twitter.com/intent/tweet?url=${encodedUrl}" target="_blank" rel="noopener noreferrer">Share on X</a><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}" target="_blank" rel="noopener noreferrer">Facebook</a><button type="button" data-copy-url="${canonical}">Copy link</button>${(() => { const card = blogShareCardParams(source); return `<a href="/api/blog/share-card?title=${encodeURIComponent(card.title)}&quote=${encodeURIComponent(card.quote)}" target="_blank" rel="noopener">Share graphic</a>`; })()}</nav>
 <p class="jh-related-callout">Continue with the <a href="/topics/">AI topic guides</a>, <a href="/glossary/">plain-English glossary</a>, <a href="/ebooks/">eBook catalogue</a>, or <a href="/podcast/">podcast archive</a>.</p>
 </section>`;
@@ -198,7 +193,6 @@ function injectBeforeContentEnd(source, markup) {
 }
 
 function ensureGrowthScripts(source) {
-  if (!source.includes('/assets/js/newsletter-signup.min.js')) source = source.replace(/<\/body>/i, '<script defer src="/assets/js/newsletter-signup.min.js"></script>\n</body>');
   if (!source.includes('/assets/js/share.min.js')) source = source.replace(/<\/body>/i, '<script defer src="/assets/js/share.min.js"></script>\n</body>');
   return source;
 }
