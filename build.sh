@@ -29,13 +29,9 @@ if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then
   export EBOOK_WORKBOOK_PATH="$DEFAULT_WORKBOOK"
 fi
 
-# Podcast episodes, RSS-derived episode lists, and transcript assets are governed
-# outside this static website repository. The podcast page uses the embedded
-# player for previous episodes, so Pages builds must not collect podcast data.
-if command -v node >/dev/null 2>&1; then
-  node scripts/generate-blog-from-rss.mjs || echo "WARN: Blog RSS snapshot sync exhausted retries; validating the committed fallback next."
-fi
-python3 scripts/check_blog_freshness.py --warn-only
+# Podcast episodes, transcripts and weekly blog publications are governed in
+# Cloudflare R2/RSS. Pages builds render the website shell and runtime routes
+# only; they must not generate or validate committed content snapshots.
 if [[ -n "${AMAZON_BOOK_SIGNALS_SOURCE:-}" ]]; then
   python3 scripts/refresh_amazon_book_signals.py
 fi

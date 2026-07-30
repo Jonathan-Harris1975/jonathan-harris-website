@@ -11,7 +11,7 @@ This repository is the governed static source for `https://jonathan-harris.onlin
 - The workbook is the human-editable source for ebook routing and book content.
 - `data/ebooks-master.json` is the generated in-repository source used by pages and derivatives.
 - Podcast episodes and transcript objects are governed in Cloudflare R2, not as repository-owned static patch targets.
-- AIMS publishes weekly blog artefacts to the same-origin publication contract; the repository carries the shell and committed fallback.
+- AIMS publishes weekly blog artefacts to Cloudflare R2; this repository carries only the website shell and runtime renderer, with no committed blog fallback.
 - `sitemap.xml`, `robots.txt`, `llms.txt`, `_redirects` and `_headers` are release-governed assets.
 
 ## Health and deployment
