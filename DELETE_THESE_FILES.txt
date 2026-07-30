@@ -1,7 +1,6 @@
 .github/workflows/blog-freshness.yml
 blog/posts.json
-data/podcast-episodes.json
-data/podcast-route-registry.json
+
 scripts/generate-blog-from-rss.mjs
 scripts/check_blog_freshness.py
 scripts/mark_stale_blog_snapshot.py
