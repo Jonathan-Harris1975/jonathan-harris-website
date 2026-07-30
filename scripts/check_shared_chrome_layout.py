@@ -90,7 +90,12 @@ def main() -> int:
                 errors.append(f"{rel}: generated growth page is missing the full page hero")
             elif main_pos >= 0 and hero_pos > main_pos:
                 errors.append(f"{rel}: generated growth page hero is trapped inside the content wrapper")
-            if 'jh-page-hero__logo' not in text:
+            if rel == "media/index.html":
+                if 'https://images.jonathan-harris.online/headshot' not in text:
+                    errors.append(f"{rel}: media hero is missing the governed Jonathan Harris headshot")
+                if 'jh-page-hero__logo' in text:
+                    errors.append(f"{rel}: media hero must not contain the shared site logo")
+            elif 'jh-page-hero__logo' not in text:
                 errors.append(f"{rel}: generated growth page hero is missing the governed Jonathan Harris logo")
             if 'data-jh-header-reveal-anchor' not in text:
                 errors.append(f"{rel}: generated growth page hero is missing the compact-header reveal anchor")
