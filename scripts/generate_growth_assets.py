@@ -355,12 +355,34 @@ def podcast_page() -> None:
         '<div class="responsive-media podcast-spotify-fallback" data-spotify-facade><button class="button secondary" type="button" data-spotify-load>Load Spotify player</button><p class="muted">Spotify loads only after you ask for it.</p></div>',
         t, flags=re.S|re.I,
     )
-    # The governed RSS episode seam is the only on-page episode source.
-    # Remove retired third-party players and duplicate topic/player furniture on every build.
-    t = re.sub(r'<script\s+src="https://elfsightcdn\.com/platform\.js"[^>]*></script>\s*', '', t, flags=re.I)
-    t = re.sub(r'<div class="elfsight-app-[^"]+"[^>]*>.*?</div>', '', t, flags=re.S | re.I)
-    t = re.sub(r'\n?<section class="card podcast-card podcast-player-card"[\s\S]*?</section>\n?', '\n', t, count=1, flags=re.I)
-    t = re.sub(r'\n?<!-- GROWTH:PODCAST-TOPICS START -->[\s\S]*?<!-- GROWTH:PODCAST-TOPICS END -->\n?', '\n', t, count=1, flags=re.I)
+    # Elfsight is the intended primary on-page player because its configured widget
+    # exposes the latest six episodes. Keep the exact embed in generated builds.
+    elfsight_script = '<script src="https://elfsightcdn.com/platform.js" async></script>'
+    elfsight_widget = '<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>'
+    # Make regeneration idempotent: remove any prior loader before normalising the widget.
+    t = re.sub(r'<script\s+src="https://elfsightcdn\.com/platform\.js"\s+async(?:="")?\s*></script>\s*', '', t, flags=re.I)
+    t = re.sub(
+        r'<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d"[^>]*>.*?</div>',
+        elfsight_widget,
+        t,
+        flags=re.S | re.I,
+    )
+    if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in t:
+        player_anchor = '<section class="card podcast-card u-s21" aria-label="Podcast player">'
+        if player_anchor in t:
+            t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget, 1)
+    # The loader sits immediately before the widget and appears exactly once.
+    t = t.replace(elfsight_widget, elfsight_script + '\n' + elfsight_widget, 1)
+    # Elfsight is the visible six-episode player, not a disclosure/facade.
+    t = re.sub(
+        r'<details class="podcast-archive-widget">\s*<summary>.*?</summary>\s*(<!-- Elfsight Podcast Player \| Podcast Player -->\s*<script src="https://elfsightcdn\.com/platform\.js" async></script>\s*<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>)\s*</details>',
+        r'\1',
+        t, flags=re.S | re.I,
+    )
+    t = t.replace('<h2>Latest episode</h2>', '<h2>Podcast Player</h2>', 1)
+    t = t.replace('<h2>Latest three episodes</h2>', '<h2>Episodes</h2>')
+    t = t.replace('The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.', 'Use the six-episode player below, or choose Spotify, Apple Podcasts or RSS above.', 1)
+    t = re.sub(r'<!-- GROWTH:NEWSLETTER podcast:index --><section class="card growth-newsletter-placement"[\s\S]*?</section>', '', t, flags=re.I)
     t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-latest\.min\.js"[^>]*></script>', '', t, flags=re.I)
     t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-facade\.min\.js"[^>]*></script>', '', t, flags=re.I)
     platform_hosts = {
@@ -527,7 +549,7 @@ def generate_high_value_pages() -> None:
         "contribute": (
             "Contribute a Case Study or Evidence",
             "Submit a sourced AI case study, research source or supporting evidence for possible editorial or podcast consideration.",
-            '''<header class="hero"><h1>Contribute a Case Study or Evidence</h1><p>Share a real deployment, result, failure, research source or supporting material that is worth examining properly.</p></header><section class="card"><h2>What makes a useful submission</h2><ul><li>A concise description of what was deployed, observed or researched.</li><li>Source URLs or supporting material that can be checked independently.</li><li>Measured outcomes, including limitations and awkward numbers.</li><li>Confirmation that you have permission to share the material you submit.</li></ul></section><section class="card contribute-form-card" aria-labelledby="contribute-form-heading"><h2 id="contribute-form-heading">Contribute a Case Study or Evidence</h2><p>Use the form below for the initial review. Supporting files and source links can be included with the submission.</p><div class="contribute-jotform-wrap"><iframe id="JotFormIFrame-262063136008044" title="Contribute a Case Study or Evidence" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="https://form.jotform.com/262063136008044" frameborder="0" class="contribute-jotform-frame" scrolling="no" loading="eager"></iframe></div><p class="form-direct-link">Form blocked by your browser? <a href="https://form.jotform.com/262063136008044" target="_blank" rel="noopener">Open the contribution form directly</a>.</p><script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script><script>window.jotformEmbedHandler("iframe[id='JotFormIFrame-262063136008044']", "https://form.jotform.com/")</script></section><section class="card"><h2>What happens next</h2><p>Submissions are reviewed for relevance, evidence quality and whether they add something useful to the audience. Submission does not guarantee podcast or editorial inclusion.</p></section>'''
+            '''<header class="hero"><h1>Contribute a Case Study or Evidence</h1><p>Share a real deployment, result, failure, research source or supporting material that is worth examining properly.</p></header><section class="card"><h2>What makes a useful submission</h2><ul><li>A concise description of what was deployed, observed or researched.</li><li>Source URLs or supporting material that can be checked independently.</li><li>Measured outcomes, including limitations and awkward numbers.</li><li>Confirmation that you have permission to share the material you submit.</li></ul></section><section class="card contribute-form-card" aria-labelledby="contribute-form-heading"><h2 id="contribute-form-heading">Contribute a Case Study or Evidence</h2><p>Use the form below for the initial review. Supporting files and source links can be included with the submission.</p><div class="contribute-jotform-wrap"><iframe id="JotFormIFrame-262063136008044" title="Contribute a Case Study or Evidence" allowtransparency="true" allow="geolocation; microphone; camera; fullscreen; payment" src="https://form.jotform.com/262063136008044" frameborder="0" class="contribute-jotform-frame" scrolling="yes" loading="eager"></iframe></div><p class="form-direct-link">Form blocked by your browser? <a href="https://form.jotform.com/262063136008044" target="_blank" rel="noopener">Open the contribution form directly</a>.</p><script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script><script>window.jotformEmbedHandler("iframe[id='JotFormIFrame-262063136008044']", "https://form.jotform.com/")</script></section><section class="card"><h2>What happens next</h2><p>Submissions are reviewed for relevance, evidence quality and whether they add something useful to the audience. Submission does not guarantee podcast or editorial inclusion.</p></section>'''
         ),
     }
     for slug, (title, description, body) in pages.items():
