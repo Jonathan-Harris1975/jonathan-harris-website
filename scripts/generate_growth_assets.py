@@ -355,34 +355,12 @@ def podcast_page() -> None:
         '<div class="responsive-media podcast-spotify-fallback" data-spotify-facade><button class="button secondary" type="button" data-spotify-load>Load Spotify player</button><p class="muted">Spotify loads only after you ask for it.</p></div>',
         t, flags=re.S|re.I,
     )
-    # Elfsight is the intended primary on-page player because its configured widget
-    # exposes the latest six episodes. Keep the exact embed in generated builds.
-    elfsight_script = '<script src="https://elfsightcdn.com/platform.js" async></script>'
-    elfsight_widget = '<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>'
-    # Make regeneration idempotent: remove any prior loader before normalising the widget.
-    t = re.sub(r'<script\s+src="https://elfsightcdn\.com/platform\.js"\s+async(?:="")?\s*></script>\s*', '', t, flags=re.I)
-    t = re.sub(
-        r'<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d"[^>]*>.*?</div>',
-        elfsight_widget,
-        t,
-        flags=re.S | re.I,
-    )
-    if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in t:
-        player_anchor = '<section class="card podcast-card u-s21" aria-label="Podcast player">'
-        if player_anchor in t:
-            t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget, 1)
-    # The loader sits immediately before the widget and appears exactly once.
-    t = t.replace(elfsight_widget, elfsight_script + '\n' + elfsight_widget, 1)
-    # Elfsight is the visible six-episode player, not a disclosure/facade.
-    t = re.sub(
-        r'<details class="podcast-archive-widget">\s*<summary>.*?</summary>\s*(<!-- Elfsight Podcast Player \| Podcast Player -->\s*<script src="https://elfsightcdn\.com/platform\.js" async></script>\s*<div class="elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d" data-elfsight-app-lazy></div>)\s*</details>',
-        r'\1',
-        t, flags=re.S | re.I,
-    )
-    t = t.replace('<h2>Latest episode</h2>', '<h2>Podcast Player</h2>', 1)
-    t = t.replace('<h2>Latest three episodes</h2>', '<h2>Episodes</h2>')
-    t = t.replace('The RSS-driven player is backed by the Spotify show embed below, so the page still has playable audio if the extended archive widget is blocked.', 'Use the six-episode player below, or choose Spotify, Apple Podcasts or RSS above.', 1)
-    t = re.sub(r'<!-- GROWTH:NEWSLETTER podcast:index --><section class="card growth-newsletter-placement"[\s\S]*?</section>', '', t, flags=re.I)
+    # The governed RSS episode seam is the only on-page episode source.
+    # Remove retired third-party players and duplicate topic/player furniture on every build.
+    t = re.sub(r'<script\s+src="https://elfsightcdn\.com/platform\.js"[^>]*></script>\s*', '', t, flags=re.I)
+    t = re.sub(r'<div class="elfsight-app-[^"]+"[^>]*>.*?</div>', '', t, flags=re.S | re.I)
+    t = re.sub(r'\n?<section class="card podcast-card podcast-player-card"[\s\S]*?</section>\n?', '\n', t, count=1, flags=re.I)
+    t = re.sub(r'\n?<!-- GROWTH:PODCAST-TOPICS START -->[\s\S]*?<!-- GROWTH:PODCAST-TOPICS END -->\n?', '\n', t, count=1, flags=re.I)
     t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-latest\.min\.js"[^>]*></script>', '', t, flags=re.I)
     t = re.sub(r'\s*<script[^>]+src="/assets/js/podcast-facade\.min\.js"[^>]*></script>', '', t, flags=re.I)
     platform_hosts = {

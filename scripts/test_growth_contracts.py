@@ -194,8 +194,7 @@ def main()->int:
     required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_cta_click','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','podcast_platform_click','bundle_view','bundle_book_click']
     for event in required: check(f"'{event}'" in funnel,f'funnel event {event} missing')
     check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
-    newsletter_legacy=text(ROOT/'assets/js/newsletter-signup.min.js')
-    check('/api/newsletter/subscribe' not in newsletter_legacy and 'fetch(' not in newsletter_legacy,'legacy newsletter JS can still collect subscriptions')
+    check(not (ROOT/'assets/js/newsletter-signup.min.js').exists(),'retired newsletter signup JavaScript still exists')
     newsletter_jotform=text(ROOT/'assets/js/newsletter-jotform.min.js')
     check('newsletter_success' in newsletter_jotform and 'newsletter_submit' in newsletter_jotform and 'ebook_preview_signup' in newsletter_jotform and 'utm_campaign' in newsletter_jotform,'Jotform newsletter instrumentation/source forwarding is incomplete')
     retired_endpoint=text(ROOT/'functions'/'api'/'newsletter'/'subscribe.js')
@@ -206,7 +205,9 @@ def main()->int:
     check(newsletter_timing_match(newsletter_page) is None,'AI Edge page contains a timing/cadence promise')
     check('/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf' in newsletter_page,'AI Edge page is missing the direct glossary download')
     media_page=text(ROOT/'media'/'index.html')
-    check('https://images.jonathan-harris.online/headshot' in media_page and 'Open the press headshot' in media_page,'media page is missing the governed press headshot asset')
+    media_hero=BeautifulSoup(media_page,'html.parser').select_one('header.hero')
+    media_images=media_hero.select('img') if media_hero else []
+    check(len(media_images)==1 and media_images[0].get('src')=='https://images.jonathan-harris.online/headshot','media header must contain only the governed headshot')
 
     # Podcast crawlable integration seam and deferred third parties.
     podcast=text(ROOT/'podcast'/'index.html')
@@ -215,8 +216,8 @@ def main()->int:
     podcast_cards=' '.join(str(node) for node in BeautifulSoup(podcast,'html.parser').select('.podcast-latest-card'))
     check(re.search(r'\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+\s*(?:-|–|—)?\s*minutes?\b|\bthis\s+week(?:[’\']s)?\b', podcast_cards, re.I) is None,'podcast episode cards contain visible timing/cadence references')
     check('open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF' in podcast and 'spotify.com/embed' not in podcast and 'data-spotify-load' not in podcast,'podcast page should use the platform link rather than a duplicate Spotify embed')
-    check('src="https://elfsightcdn.com/platform.js"' in podcast and 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' in podcast and 'data-elfsight-load' not in podcast,'Elfsight six-episode player embed is missing or still deferred')
-    check('podcast-archive-widget' not in podcast,'Elfsight player is still hidden inside a disclosure')
+    check('elfsightcdn.com' not in podcast and 'elfsight-app-' not in podcast,'retired Elfsight player remains on podcast page')
+    check('podcast-player-card' not in podcast and 'GROWTH:PODCAST-TOPICS' not in podcast,'duplicate podcast player/topic furniture remains')
     check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')
     check('data-podcast-platform="spotify"' in podcast and 'data-podcast-platform="apple"' in podcast and 'data-podcast-platform="rss"' in podcast,'podcast platform click markers are missing')
     check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
