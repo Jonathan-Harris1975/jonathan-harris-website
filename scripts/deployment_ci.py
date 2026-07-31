@@ -163,7 +163,23 @@ def main() -> int:
             validate_command.append("--skip-live-page-smoke")
 
         run_step("Run release validation", validate_command)
-        run_step("Reject generated-output drift", [sys.executable, "scripts/check_generated_output_drift.py"])
+
+        # Cloudflare Pages builds intentionally generate the deployable site inside
+        # the checked-out repository. Those legitimate build artefacts make the Git
+        # worktree dirty, so the local generated-output drift gate must not run in
+        # that environment. Keep the gate enabled everywhere else so developers and
+        # non-Cloudflare CI still catch uncommitted generated-output drift.
+        if os.environ.get("CF_PAGES") == "1":
+            print(
+                "\n==> Generated-output Git cleanliness check skipped "
+                "during Cloudflare Pages release build."
+            )
+        else:
+            run_step(
+                "Reject generated-output drift",
+                [sys.executable, "scripts/check_generated_output_drift.py"],
+            )
+
         print("\nDeployment CI pipeline passed.")
         return 0
     finally:
