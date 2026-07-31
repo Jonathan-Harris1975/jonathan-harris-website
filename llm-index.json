@@ -982,7 +982,7 @@
       ]
     },
     {
-      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
       "url": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
       "summary": "A plain-English guide to scripts, editing, visual effects, production budgets, and where AI helps filmmaking without replacing taste.",
@@ -994,7 +994,7 @@
       ],
       "keywords": [
         "creativity",
-        "lights, camera, algorithm: ai\u2019s role in modern filmmaking",
+        "lights, camera, algorithm: ai’s role in modern filmmaking",
         "ai trends",
         "artificial intelligence"
       ],
@@ -1717,7 +1717,7 @@
       "lastmod": "2026-07-25",
       "source": "data/evidence-content.json",
       "repo_path": "evidence/deepfake-detection-and-synthetic-media/index.html",
-      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between \u201clooks real\u201d and \u201cis verified\u201d.",
+      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between “looks real” and “is verified”.",
       "entity": "AI evidence guide"
     },
     {
