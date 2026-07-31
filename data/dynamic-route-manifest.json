@@ -1,7 +1,7 @@
 {
   "generated_utc": "2026-06-22T00:00:00Z",
   "base_url": "https://jonathan-harris.online",
-  "purpose": "Governed route ledger for repository-owned static and hub surfaces. Dynamic blog posts, podcast episodes and transcripts are governed at runtime by R2 and RSS.",
+  "purpose": "Governed route ledger for generated conversion pages plus blog, podcast, transcript, and LLM discovery surfaces.",
   "route_count": 37,
   "families": {
     "blog-hub": 1,
@@ -189,7 +189,7 @@
       "lastmod": "2026-07-25",
       "source": "data/evidence-content.json",
       "repo_path": "evidence/deepfake-detection-and-synthetic-media/index.html",
-      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between \u201clooks real\u201d and \u201cis verified\u201d.",
+      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between “looks real” and “is verified”.",
       "entity": "AI evidence guide"
     },
     {

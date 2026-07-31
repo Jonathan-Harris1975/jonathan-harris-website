@@ -68,7 +68,9 @@
           "publication_date": "2026-02-13",
           "url": "https://www.gov.uk/government/publications/ai-adoption-research/ai-adoption-research"
         }
-      ]
+      ],
+      "seo_title": "Workplace AI literacy guide",
+      "seo_description": "Practical guidance on workplace AI literacy, including output checks, data handling, human judgement and staff preparation."
     },
     {
       "slug": "ai-agents-for-ordinary-work",
@@ -127,7 +129,9 @@
           "publication_date": "2025-01-31",
           "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
         }
-      ]
+      ],
+      "seo_title": "AI agents for everyday work",
+      "seo_description": "Evidence-led guidance on useful AI agents, permissions, monitoring, task selection and avoiding uncontrolled automation."
     },
     {
       "slug": "ai-for-small-business",
@@ -200,7 +204,9 @@
           "publication_date": "2025-01-31",
           "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
         }
-      ]
+      ],
+      "seo_title": "AI for small business: evidence guide",
+      "seo_description": "Practical evidence on where AI can save small businesses time, where risks remain and how to assess tools before buying."
     },
     {
       "slug": "deepfake-detection-and-synthetic-media",
@@ -273,7 +279,9 @@
           "publication_date": "2026-03-26",
           "url": "https://www.gov.uk/government/publications/deepfake-detection-technology"
         }
-      ]
+      ],
+      "seo_title": "Deepfake detection guide",
+      "seo_description": "Evidence-led guidance on synthetic-media verification, provenance, labels, contextual checks and the limits of detection tools."
     },
     {
       "slug": "ai-in-healthcare",
@@ -332,7 +340,9 @@
           "publication_date": "2025-06-19",
           "url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/guidance-on-ai-and-data-protection/"
         }
-      ]
+      ],
+      "seo_title": "AI in healthcare: evidence guide",
+      "seo_description": "Practical evidence on authorised healthcare AI, workflow support, clinical judgement and the limits of automation."
     },
     {
       "slug": "ai-in-finance",
@@ -400,7 +410,9 @@
           "publication_date": "2026-07-06",
           "url": "https://www.fca.org.uk/news/press-releases/fca-publishes-landmark-review-impact-ai-retail-financial-services"
         }
-      ]
+      ],
+      "seo_title": "AI in finance: evidence guide",
+      "seo_description": "Evidence on AI adoption in financial services, accountability, third-party dependence, automation and agentic finance."
     },
     {
       "slug": "ai-governance-and-law",
@@ -481,7 +493,9 @@
           "publication_date": "2025-01-31",
           "url": "https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai"
         }
-      ]
+      ],
+      "seo_title": "AI governance and law guide",
+      "seo_description": "Practical guidance on AI governance, legal duties, accountability, data protection, security and working controls."
     },
     {
       "slug": "eu-ai-act-article-50-transparency",
@@ -555,7 +569,9 @@
           "publication_date": "2026-05-01",
           "url": "https://digital-strategy.ec.europa.eu/en/policies/guidelines-gpai-providers"
         }
-      ]
+      ],
+      "seo_title": "EU AI Act Article 50 guide",
+      "seo_description": "Practical guidance on Article 50 transparency duties for interactive AI, generated content, deepfakes and disclosure."
     }
   ]
 }

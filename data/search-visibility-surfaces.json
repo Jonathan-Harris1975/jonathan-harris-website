@@ -4,14 +4,13 @@
   "seo": {
     "sitemap_includes_dynamic_routes": true,
     "transcript_urls": 0,
-    "podcast_episode_urls": 12,
-    "blog_post_urls": 1
+    "podcast_episode_urls": 0,
+    "blog_post_urls": 0
   },
   "geo": {
     "llms_scope": "full-estate",
     "discovery_families": [
       "blog-hub",
-      "blog-post",
       "book-bundle",
       "book-finder",
       "bundle-index",
@@ -25,7 +24,6 @@
       "methodology",
       "newsletter",
       "person",
-      "podcast-episode",
       "podcast-hub",
       "practical-resource",
       "resource-index",
