@@ -19,7 +19,6 @@ DEFAULT_TIMEOUT = 15.0
 ALLOWED_IMAGE_HOST = "images.jonathan-harris.online"
 LOGO_URL = f"https://{ALLOWED_IMAGE_HOST}/site-logo"
 SRC_RE = re.compile(r'\bsrc="([^"]+)"', re.I)
-SRCSET_RE = re.compile(r'\bsrcset="([^"]+)"', re.I)
 
 
 @dataclass
@@ -87,9 +86,8 @@ def static_checks() -> list[str]:
         homepage_tag = homepage_tag_match.group(0)
         homepage_src = extract_img_src(homepage_tag)
         errors.extend(validate_remote_image_url("homepage featured cover", homepage_src))
-        srcset_match = SRCSET_RE.search(homepage_tag)
-        if not srcset_match or not all(f"width={width}" in srcset_match.group(1) for width in (400, 800, 1200)):
-            errors.append("Homepage featured cover must emit 400w, 800w and 1200w Cloudflare variants.")
+        if not re.search(r'\bwidth="[1-9][0-9]*"', homepage_tag, re.I) or not re.search(r'\bheight="[1-9][0-9]*"', homepage_tag, re.I):
+            errors.append("Homepage featured cover must declare intrinsic width and height.")
 
     for book in books:
         cover = clean_paragraph(book.get("cover", ""))
@@ -107,9 +105,8 @@ def static_checks() -> list[str]:
         page_src = extract_img_src(cover_tag)
         if page_src != cover:
             errors.append(f"{book['slug']} cover check: page src does not match the governed cover URL.")
-        srcset_match = SRCSET_RE.search(cover_tag)
-        if not srcset_match or not all(f"width={width}" in srcset_match.group(1) for width in (400, 800, 1200)):
-            errors.append(f"{book['slug']} cover check: expected 400w, 800w and 1200w Cloudflare variants.")
+        if not re.search(r'\bwidth="[1-9][0-9]*"', cover_tag, re.I) or not re.search(r'\bheight="[1-9][0-9]*"', cover_tag, re.I):
+            errors.append(f"{book['slug']} cover check: intrinsic width and height are required.")
 
     return errors
 

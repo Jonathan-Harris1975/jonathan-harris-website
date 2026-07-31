@@ -35,7 +35,7 @@ def wrap(text, c, font, size, width):
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     w,h=A4; m=42
-    c=canvas.Canvas(str(OUT), pagesize=A4, pageCompression=1)
+    c=canvas.Canvas(str(OUT), pagesize=A4, pageCompression=1, invariant=1)
     c.setTitle("AI Edge - Plain-English AI Glossary Cheat Sheet")
     c.setAuthor("Jonathan Harris")
     c.setFillColor(HexColor("#0D1420")); c.rect(0,h-112,w,112,fill=1,stroke=0)

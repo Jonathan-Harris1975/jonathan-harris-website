@@ -2858,6 +2858,7 @@ def default_short(topic: str, pages: int | None) -> str:
 
 
 SEO_TITLE_OVERRIDES = {
+    "ai-in-education-reimagining-learning-for-every-student": "AI in Education",
     "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology": "AI and Formula 1",
     "ai-powered-smart-grid-revolutionizing-electricity-distribution-and-generation": "AI-Powered Smart Grid",
     "artificial-intelligence-and-the-law-case-studies-and-future-trends": "AI and the Law",
@@ -2876,7 +2877,7 @@ SEO_TITLE_OVERRIDES = {
     "ai-in-aviation-transforming-safety-and-sustainability": "AI in Aviation",
     "ai-in-maritime-revolutionizing-shipping-for-sustainability": "AI in Maritime",
     "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future": "AI in Agriculture",
-    "ai-in-education-reimagining-learning-for-every-student": "AI in Education: Reimagining Learning for Every Student",
+    "ai-in-education-reimagining-learning-for-every-student": "AI in Education",
     "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future": "AI Revolution in Railways",
     "artificial-intelligence-in-construction-building-a-sustainable-future": "AI in Construction",
     "artificial-intelligence-in-industry-a-comprehensive-guide": "AI in Industry",
