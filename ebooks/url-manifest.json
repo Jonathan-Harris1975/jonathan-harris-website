@@ -760,7 +760,7 @@
     },
     {
       "slug": "lights-camera-algorithm-ai-s-role-in-modern-filmmaking",
-      "title": "Lights, Camera, Algorithm: AI\u2019s Role in Modern Filmmaking",
+      "title": "Lights, Camera, Algorithm: AI’s Role in Modern Filmmaking",
       "canonical": {
         "path": "/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/",
         "url": "https://jonathan-harris.online/ebooks/lights-camera-algorithm-ai-s-role-in-modern-filmmaking/"
@@ -1234,7 +1234,7 @@
       "lastmod": "2026-07-25",
       "source": "data/evidence-content.json",
       "repo_path": "evidence/deepfake-detection-and-synthetic-media/index.html",
-      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between \u201clooks real\u201d and \u201cis verified\u201d.",
+      "summary": "A source-backed guide to recognising and verifying synthetic media, covering provenance, labels, contextual checks, detection limits and the growing gap between “looks real” and “is verified”.",
       "entity": "AI evidence guide"
     },
     {
@@ -1467,6 +1467,17 @@
       "repo_path": "topics/index.html",
       "summary": "Topic-led entry points into the Jonathan Harris AI library.",
       "entity": "topic index"
+    },
+    {
+      "family": "transcript-archive",
+      "title": "Podcast transcript archive",
+      "path": "/transcripts/",
+      "loc": "https://jonathan-harris.online/transcripts/",
+      "lastmod": "",
+      "source": "repo-html",
+      "repo_path": "transcripts/index.html",
+      "summary": "Searchable transcript archive for podcast episodes.",
+      "entity": "transcripts"
     }
   ]
 }
