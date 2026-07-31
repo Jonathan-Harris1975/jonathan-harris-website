@@ -89,7 +89,3 @@ Glossary: https://jonathan-harris.online/glossary/
 - AI in Health and Care: Three-Book Reading Path: https://jonathan-harris.online/bundles/ai-health-and-care/ — A practical reading path across healthcare diagnosis, pharmaceuticals, and veterinary medicine.
 - AI in Regulated Industries: Law, Finance and Healthcare: https://jonathan-harris.online/bundles/ai-in-regulated-industries/ — A three-book route through AI where evidence, oversight, risk and accountability matter most.
 - AI in Mobility and Logistics: Three-Book Reading Path: https://jonathan-harris.online/bundles/ai-mobility-and-logistics/ — Three perspectives on AI in aviation, logistics, and high-speed transport decision-making.
-
-## Blog and weekly AI analysis
-
-## Podcast episodes
