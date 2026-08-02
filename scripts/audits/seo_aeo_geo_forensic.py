@@ -3179,6 +3179,20 @@ def render_llm_gap_matrix(items: list[dict[str, Any]]) -> str:
   )
 
 
+def seo_analysis_is_complete(analysis: dict[str, Any] | None) -> bool:
+  if not isinstance(analysis, dict):
+    return False
+  completion_state = str(analysis.get("auditCompletionState") or "").strip().lower()
+  if completion_state != "complete":
+    return False
+  score_table = analysis.get("scoreTable") if isinstance(analysis.get("scoreTable"), dict) else {}
+  ranked = analysis.get("rankedIssueLedger") if isinstance(analysis.get("rankedIssueLedger"), list) else []
+  full_records = analysis.get("fullIssueRecords") if isinstance(analysis.get("fullIssueRecords"), list) else []
+  gap_matrix = analysis.get("bestPracticeGapMatrix") if isinstance(analysis.get("bestPracticeGapMatrix"), list) else []
+  has_summary = bool(str(analysis.get("executiveSummary") or analysis.get("overallVerdict") or "").strip())
+  return bool(score_table) and bool(ranked or full_records or gap_matrix or has_summary)
+
+
 def main() -> int:
   global args
   args = parse_args()
@@ -3259,14 +3273,20 @@ def main() -> int:
   # ─────────────────────────────────────────────────────────────────────────────
 
   real_failed_url_count = sum(1 for row in coverage_rows if row.get("failed", 0))
-  completion_state = "Complete" if claude_analysis and real_failed_url_count == 0 else ("Incomplete" if claude_analysis else "Failed-gate")
+  analysis_contract_complete = seo_analysis_is_complete(claude_analysis)
+  completion_state = "Complete" if analysis_contract_complete and real_failed_url_count == 0 else ("Incomplete" if claude_analysis else "Failed-gate")
   analysis_state: dict[str, Any] = {
     "available": bool(claude_analysis),
+    "contractComplete": analysis_contract_complete,
     "completionState": completion_state,
     "statusLabel": "AI forensic analysis available" if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE",
-    "failureReason": "" if claude_analysis else (
-      next((attempt.get("detail") for attempt in analysis_attempts if attempt.get("path") == "AI Management Suite /analysis" and attempt.get("status") in {"failed", "not-configured"} and attempt.get("detail")), "")
-      or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."
+    "failureReason": (
+      "" if completion_state == "Complete"
+      else f"AI analysis contract was incomplete or {real_failed_url_count} URL coverage row(s) failed." if claude_analysis
+      else (
+        next((attempt.get("detail") for attempt in analysis_attempts if attempt.get("path") == "AI Management Suite /analysis" and attempt.get("status") in {"failed", "not-configured"} and attempt.get("detail")), "")
+        or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."
+      )
     ),
     "attempts": analysis_attempts,
     "skippedSections": [] if claude_analysis else AI_REQUIRED_SECTIONS,
@@ -3294,9 +3314,40 @@ def main() -> int:
     "urls": [make_url_entry(page) for page in pages],
   }
   summary = build_summary(base_url, pages, issues, coverage_rows, args.report_prefix, workbook, analysis_state, args.session_id)
+  stage_completed = completion_state == "Complete"
+  machine_report = {
+    "schemaVersion": "seo-aeo-geo-stage-report-v2",
+    "auditType": "seo-aeo-geo",
+    "sessionId": args.session_id,
+    "status": "completed" if stage_completed else "failed",
+    "auditCompletionState": completion_state,
+    "generatedAt": utc_now(),
+    "websiteUrl": base_url,
+    "analysis": claude_analysis or {},
+    "scores": (claude_analysis or {}).get("scoreTable", {}),
+    "executiveSummary": (claude_analysis or {}).get("executiveSummary", ""),
+    "rankedIssueLedger": (claude_analysis or {}).get("rankedIssueLedger", []),
+    "fullIssueRecords": (claude_analysis or {}).get("fullIssueRecords", []),
+    "bestPracticeGapMatrix": (claude_analysis or {}).get("bestPracticeGapMatrix", gap_matrix),
+    "pageTypeFindings": (claude_analysis or {}).get("pageTypeFindings", page_type_findings),
+    "heuristicIssues": issues,
+    "coverage": coverage_json,
+    "sourceLedger": source_ledger,
+    "sourceMismatchesThatMatter": source_mismatches,
+    "familyDiagnostics": family_diagnostics,
+    "templateDiagnostics": template_diagnostics,
+    "priorityPages": priority_pages,
+    "repoSignals": repo_signals,
+    "analysisState": analysis_state,
+    "limitations": [
+      "Core Web Vitals, Search Console and analytics exports were not supplied and are not invented.",
+      "The stage is complete only when the AI analysis contract is substantive and every discovered URL has a valid coverage state.",
+    ],
+  }
 
   coverage_path = write_json(output_dir / "coverage.json", coverage_json)
   summary_path = write_json(output_dir / "summary.json", summary)
+  report_json_path = write_json(output_dir / "report.json", machine_report)
 
   # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
@@ -3305,6 +3356,7 @@ def main() -> int:
     try:
       r2_client = build_r2_client()
       artefact_files: dict[str, Path] = {
+        "report.json": report_json_path,
         "summary.json": summary_path,
         "coverage.json": coverage_path,
       }
@@ -3334,7 +3386,7 @@ def main() -> int:
       r2_client = build_r2_client()
       uploaded = upload_selected_files_to_r2(
         r2_client, r2_bucket, args.report_prefix,
-        {"summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
+        {"report.json": report_json_path, "summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
         r2_public_base,
       )
     except Exception as exc:
@@ -3346,12 +3398,14 @@ def main() -> int:
   callback_payload = {
     "auditType": "seo-aeo-geo",
     "sessionId": args.session_id,
-    "status": "completed" if claude_analysis else "failed",
+    "status": "completed" if stage_completed else "failed",
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
-    "message": "Full AI-assisted forensic analysis completed." if claude_analysis else "AI FORENSIC ANALYSIS UNAVAILABLE: failed-gate report generated; no release-ready verdict issued.",
+    "message": "Full AI-assisted forensic analysis completed with a valid machine-readable evidence contract." if stage_completed else f"SEO/AEO/GEO stage did not complete its evidence contract ({completion_state}); no release-ready verdict issued.",
+    "error": None if stage_completed else analysis_state.get("failureReason") or f"SEO/AEO/GEO audit completion state was {completion_state}.",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_path)),
+    "reportJsonUrl": uploaded.get("report.json", str(report_json_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "coverageUrl": uploaded.get("coverage.json", str(coverage_path)),
     "issueCount": len(issues),
@@ -3365,7 +3419,9 @@ def main() -> int:
   try:
     post_callback(args.callback_url, args.callback_token, callback_payload)
   except Exception as exc:
-    print(f"[callback] post failed (non-fatal): {exc}", file=sys.stderr)
+    print(f"[callback] post failed: {exc}", file=sys.stderr)
+    if args.callback_url:
+      raise
 
   return 0
 

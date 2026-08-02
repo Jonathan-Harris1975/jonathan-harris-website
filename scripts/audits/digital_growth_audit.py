@@ -340,6 +340,20 @@ def report_html(report: dict[str, Any]) -> str:
   return html_report_shell("Digital Growth & Monetisation Audit - Temporary Stage Report", body)
 
 
+def analysis_is_complete(analysis: dict[str, Any] | None) -> bool:
+  if not isinstance(analysis, dict):
+    return False
+  completion_state = str(analysis.get("auditCompletionState") or "").strip().lower()
+  if completion_state != "complete":
+    return False
+  scorecard = analysis.get("scorecard") if isinstance(analysis.get("scorecard"), dict) else {}
+  findings = analysis.get("findings") if isinstance(analysis.get("findings"), list) else []
+  executive = analysis.get("executiveSummary") if isinstance(analysis.get("executiveSummary"), dict) else {}
+  top_actions = executive.get("top10Actions") if isinstance(executive.get("top10Actions"), list) else []
+  has_verdict = bool(str(analysis.get("overallVerdict") or "").strip())
+  return bool(scorecard) and bool(findings or top_actions or has_verdict)
+
+
 def main() -> int:
   args = parse_args()
   base_url = args.base_url.rstrip("/")
@@ -380,7 +394,9 @@ def main() -> int:
 
   analysis_url = derive_analysis_url(args.callback_url, args.analysis_url)
   analysis, analysis_detail = call_analysis(analysis_url, args.callback_token, analysis_payload)
-  status = "completed" if analysis else "failed"
+  complete_analysis = analysis_is_complete(analysis)
+  status = "completed" if complete_analysis else "failed"
+  audit_completion_state = "Complete" if complete_analysis else str((analysis or {}).get("auditCompletionState") or "Incomplete")
   evidence = {
     "auditType": AUDIT_TYPE,
     "sessionId": args.session_id,
@@ -400,6 +416,7 @@ def main() -> int:
     "sessionId": args.session_id,
     "generatedAt": utc_now(),
     "status": status,
+    "auditCompletionState": audit_completion_state,
     "analysisDetail": analysis_detail,
     "analysis": analysis or {},
     "evidenceSummary": evidence,
@@ -412,7 +429,9 @@ def main() -> int:
     "auditType": AUDIT_TYPE,
     "sessionId": args.session_id,
     "status": status,
+    "auditCompletionState": audit_completion_state,
     "analysisAvailable": bool(analysis),
+    "analysisComplete": complete_analysis,
     "analysisDetail": analysis_detail,
     "scorecard": (analysis or {}).get("scorecard", {}),
     "overallVerdict": (analysis or {}).get("overallVerdict", "Digital growth AI analysis unavailable; evidence was preserved without invented scores."),
@@ -444,13 +463,15 @@ def main() -> int:
     "auditType": AUDIT_TYPE,
     "sessionId": args.session_id,
     "status": status,
+    "auditCompletionState": audit_completion_state,
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_html_path)),
     "reportJsonUrl": uploaded.get("report.json", str(report_json_path)),
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "evidenceUrl": uploaded.get("evidence.json", str(evidence_path)),
     "issueCount": len((analysis or {}).get("findings") or heuristics),
-    "message": "Digital Growth and Monetisation stage completed." if analysis else f"Digital Growth stage froze verified evidence but AI analysis was unavailable: {analysis_detail}",
+    "message": "Digital Growth and Monetisation stage completed with a valid machine-readable analysis contract." if complete_analysis else f"Digital Growth stage failed its analysis evidence contract: {analysis_detail}",
+    "error": None if complete_analysis else f"Digital Growth analysis was missing auditCompletionState=Complete, a scorecard, or substantive findings/actions. Detail: {analysis_detail}",
     "artefacts": uploaded,
     "finishedAt": utc_now(),
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
