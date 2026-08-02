@@ -61,12 +61,17 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: mobile-ux-${{ inputs.session_id }}
+  cancel-in-progress: false
+
 jobs:
   mobile-ux:
     environment: R2
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 75
     env:
+      PYTHONUNBUFFERED: "1"
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
       R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
       R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
@@ -74,7 +79,10 @@ jobs:
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
+      INPUT_CALLBACK_URL: ${{ inputs.callback_url }}
+      INPUT_CALLBACK_TOKEN: ${{ inputs.callback_token }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v6
@@ -83,13 +91,15 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements.txt
 
       - name: Resolve audit runtime configuration
         shell: bash
         run: |
           set -euo pipefail
 
-          callback_url="${{ inputs.callback_url }}"
+          callback_url="$INPUT_CALLBACK_URL"
           if [ -z "$callback_url" ]; then
             callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
           fi
@@ -104,7 +114,7 @@ jobs:
               ;;
           esac
 
-          callback_token="${{ inputs.callback_token }}"
+          callback_token="$INPUT_CALLBACK_TOKEN"
           if [ -z "$callback_token" ]; then
             callback_token="$AUDIT_CALLBACK_TOKEN"
           fi
@@ -112,7 +122,7 @@ jobs:
             callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
           fi
           if [ -z "$callback_token" ]; then
-            echo "::error::AUDIT callback token was not supplied. The AI Management Suite should dispatch callback_token from Koyeb, or the R2 environment must define AUDIT_CALLBACK_TOKEN/AI_SUITE_AUDIT_CALLBACK_TOKEN for manual runs."
+            echo "::error::AUDIT callback token was not supplied. Dispatch callback_token from AIMS or configure AUDIT_CALLBACK_TOKEN/AI_SUITE_AUDIT_CALLBACK_TOKEN in the R2 environment."
             exit 1
           fi
 
@@ -124,7 +134,7 @@ jobs:
             audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
           fi
           if [ -z "$audit_bucket" ]; then
-            echo "::error::R2_BUCKET_AUDITS was not supplied. Mobile UX audit artefacts must use the dedicated audits bucket."
+            echo "::error::R2_BUCKET_AUDITS was not supplied. Mobile UX artefacts must use the dedicated audits bucket."
             exit 1
           fi
 
@@ -136,9 +146,16 @@ jobs:
             audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
           fi
           if [ -z "$audit_public_base_url" ]; then
-            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied. Mobile UX audit artefacts must resolve from the dedicated audits public base URL."
+            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied."
             exit 1
           fi
+
+          for required_name in R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_ENDPOINT; do
+            if [ -z "${!required_name:-}" ]; then
+              echo "::error::$required_name is not configured in the R2 environment."
+              exit 1
+            fi
+          done
 
           if [ "${{ inputs.audit_bucket_env }}" != "R2_BUCKET_AUDITS" ]; then
             echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS for mobile-ux outputs."
@@ -149,10 +166,14 @@ jobs:
             exit 1
           fi
 
+          if [ -z "${R2_REGION:-}" ]; then
+            echo "R2_REGION=auto" >> "$GITHUB_ENV"
+          fi
+
           echo "::add-mask::$callback_token"
           echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
           echo "R2_BUCKET_AUDITS=$audit_bucket" >> "$GITHUB_ENV"
-          echo "R2_PUBLIC_BASE_URL_AUDITS=$audit_public_base_url" >> "$GITHUB_ENV"
+          echo "R2_PUBLIC_BASE_URL_AUDITS=${audit_public_base_url%/}" >> "$GITHUB_ENV"
           {
             echo "RESOLVED_CALLBACK_TOKEN<<__AUDIT_TOKEN__"
             echo "$callback_token"
@@ -160,27 +181,58 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Install core Python dependencies
+        shell: bash
         run: |
+          set -euo pipefail
           python -m pip install --disable-pip-version-check -r requirements.txt
-          python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
+          python -m pip install --disable-pip-version-check boto3 requests playwright
 
-      - name: Install Playwright package and Chromium
+      - name: Install Chromium for Playwright
         id: playwright_install
-        continue-on-error: true
+        shell: bash
         run: |
-          python -m pip install --disable-pip-version-check playwright
+          set -euo pipefail
           python -m playwright install --with-deps chromium
 
       - name: Record Playwright install outcome
         if: always()
+        shell: bash
         run: echo "PLAYWRIGHT_INSTALL_OUTCOME=${{ steps.playwright_install.outcome }}" >> "$GITHUB_ENV"
 
+      - name: Validate mobile audit entry point, workbook and browser
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/audits/common.py scripts/audits/mobile_ux_hard_gate.py
+          python - <<'PY'
+          from scripts.audits.common import find_workbook, load_workbook_info
+          from playwright.sync_api import sync_playwright
+
+          workbook = find_workbook()
+          info = load_workbook_info(workbook)
+          if info.primary_sheet != "Pages":
+              raise SystemExit(f"Expected Pages worksheet, got {info.primary_sheet!r}")
+          if info.url_count < 1:
+              raise SystemExit("Website inventory workbook contains no usable routes")
+
+          with sync_playwright() as playwright:
+              browser = playwright.chromium.launch(headless=True)
+              page = browser.new_page(viewport={"width": 390, "height": 844})
+              page.set_content("<main>mobile-audit-browser-ready</main>")
+              assert page.locator("main").inner_text() == "mobile-audit-browser-ready"
+              browser.close()
+
+          print(f"Validated {workbook.name}: routes={info.url_count}; Chromium launch succeeded")
+          PY
+
       - name: Run rendered mobile UX audit
+        id: audit
         timeout-minutes: 45
         env:
           MOBILE_UX_MAX_RUNTIME_SECONDS: "2400"
         shell: bash
         run: |
+          mkdir -p artifacts/mobile-ux
           set +e
           python -u scripts/audits/mobile_ux_hard_gate.py \
             --base-url "${{ inputs.base_url }}" \
@@ -192,36 +244,39 @@ jobs:
             --analysis-url "${{ inputs.analysis_url }}" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
             --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS" \
-            --max-runtime-seconds "$MOBILE_UX_MAX_RUNTIME_SECONDS"
-          audit_status=$?
+            --max-runtime-seconds "$MOBILE_UX_MAX_RUNTIME_SECONDS" \
+            --output-dir artifacts/mobile-ux \
+            2>&1 | tee artifacts/mobile-ux/workflow.log
+          audit_status=${PIPESTATUS[0]}
           set -e
+          echo "AUDIT_EXIT_CODE=$audit_status" >> "$GITHUB_ENV"
 
           marker="artifacts/mobile-ux/.mobile-ux-callback-posted.json"
           if [ "$audit_status" -ne 0 ] && [ -f "$marker" ]; then
-            echo "Mobile UX audit produced a controlled callback marker:"
+            echo "Mobile UX audit produced a structured callback marker:"
             cat "$marker"
             workflow_failure="$(python - <<'PY'
           import json
           from pathlib import Path
           marker = Path("artifacts/mobile-ux/.mobile-ux-callback-posted.json")
           try:
-            print("true" if json.loads(marker.read_text(encoding="utf-8")).get("workflowFailure") else "false")
+              print("true" if json.loads(marker.read_text(encoding="utf-8")).get("workflowFailure") else "false")
           except Exception:
-            print("true")
+              print("true")
           PY
           )"
             if [ "$workflow_failure" = "true" ]; then
-              echo "Mobile UX audit reported an infrastructure/publication failure; preserving failed job status without posting a generic fallback callback."
+              echo "Mobile UX audit reported an infrastructure/publication failure."
               exit "$audit_status"
             fi
-            echo "Mobile UX audit reported a controlled non-scoring audit outcome; treating workflow transport as successful."
+            echo "Mobile UX audit posted a controlled non-scoring result; workflow transport completed."
             exit 0
           fi
 
           exit "$audit_status"
 
-      - name: Notify AI Suite if workflow failed before artefacts were published
-        if: failure() && env.RESOLVED_CALLBACK_URL != ''
+      - name: Notify AIMS if workflow failed before artefacts were published
+        if: failure()
         shell: bash
         run: |
           if [ -f artifacts/mobile-ux/.mobile-ux-callback-posted.json ]; then
@@ -233,47 +288,76 @@ jobs:
           python - <<'PY'
           import json
           import os
+          import re
           import urllib.error
           import urllib.request
+          from pathlib import Path
 
-          callback_url = os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
-          token = os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
-          if not callback_url:
-            raise SystemExit(0)
+          callback_url = (
+              os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
+              or os.environ.get("INPUT_CALLBACK_URL", "").strip()
+              or os.environ.get("AI_SUITE_AUDIT_CALLBACK_URL", "").strip()
+              or "https://app.jonathan-harris.online/audits/mobile-ux/callback"
+          )
+          token = (
+              os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("INPUT_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("AUDIT_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("AI_SUITE_AUDIT_CALLBACK_TOKEN", "").strip()
+          )
+          if not callback_url or not token:
+              print("::warning::Unable to post fallback callback because URL or token is unavailable")
+              raise SystemExit(0)
+
+          log_path = Path("artifacts/mobile-ux/workflow.log")
+          detail = log_path.read_text(encoding="utf-8", errors="replace")[-6000:] if log_path.exists() else ""
+          detail = re.sub(r"Bearer\s+\S+", "Bearer [masked]", detail)
+          detail = re.sub(r"(?:sk-or-|github_pat_)[A-Za-z0-9._-]+", "[masked-token]", detail)
 
           payload = {
-            "auditType": "mobile-ux",
-            "sessionId": "${{ inputs.session_id }}",
-            "status": "failed",
-            "reportPrefix": "${{ inputs.report_prefix }}",
-            "message": "Mobile UX GitHub workflow failed before a complete artefact set was published to R2.",
-            "error": "GitHub Actions job failure before Mobile UX artefact publication completed",
-            "storageUploadError": "Only request.json may exist because the website workflow did not publish completion artefacts.",
-            "blocked": True,
-            "hardGateBlocked": False,
-            "blockedTests": [
-              {
-                "stage": "GitHub Actions workflow",
-                "blocker": "workflow failure before complete Mobile UX artefact publication",
-                "reason": "AI Management Suite must publish a controlled failure artefact instead of leaving only request.json."
-              }
-            ],
-            "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
+              "auditType": "mobile-ux",
+              "sessionId": "${{ inputs.session_id }}",
+              "status": "failed",
+              "reportPrefix": "${{ inputs.report_prefix }}",
+              "message": "Mobile UX GitHub workflow failed before a complete artefact set was published to R2.",
+              "error": detail or "GitHub Actions failure before Mobile UX artefact publication completed",
+              "storageUploadError": "The workflow did not publish the mandatory completion artefacts.",
+              "blocked": True,
+              "hardGateBlocked": False,
+              "workflowFailure": True,
+              "auditExitCode": os.environ.get("AUDIT_EXIT_CODE"),
+              "playwrightInstallOutcome": os.environ.get("PLAYWRIGHT_INSTALL_OUTCOME"),
+              "blockedTests": [{
+                  "stage": "GitHub Actions workflow",
+                  "blocker": "workflow failure before complete Mobile UX artefact publication",
+                  "reason": "The workflow log and local artefacts are retained for diagnosis."
+              }],
+              "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
           }
-          data = json.dumps(payload).encode("utf-8")
-          headers = {"Content-Type": "application/json"}
-          if token:
-            headers["Authorization"] = f"Bearer {token}"
-            headers["X-Audit-Callback-Token"] = token
-          request = urllib.request.Request(callback_url, data=data, headers=headers, method="POST")
+          headers = {
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {token}",
+              "X-Audit-Callback-Token": token,
+          }
+          request = urllib.request.Request(callback_url, data=json.dumps(payload).encode(), headers=headers, method="POST")
           try:
-            with urllib.request.urlopen(request, timeout=20) as response:
-              print(f"Fallback callback posted: HTTP {response.status}")
+              with urllib.request.urlopen(request, timeout=20) as response:
+                  print(f"Fallback callback posted: HTTP {response.status}")
           except urllib.error.HTTPError as exc:
-            print(f"::warning::Fallback callback failed with HTTP {exc.code}: {exc.read().decode('utf-8', 'replace')[:1000]}")
+              print(f"::warning::Fallback callback returned HTTP {exc.code}: {exc.read().decode('utf-8', 'replace')[:1000]}")
           except Exception as exc:
-            print(f"::warning::Fallback callback failed: {exc}")
+              print(f"::warning::Fallback callback failed: {exc}")
           PY
+
+      - name: Upload Mobile UX diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-ux-${{ inputs.session_id }}
+          path: artifacts/mobile-ux
+          if-no-files-found: warn
+          retention-days: 14
+          include-hidden-files: true
 
       - name: Clean local temporary Mobile UX audit files
         if: always()
