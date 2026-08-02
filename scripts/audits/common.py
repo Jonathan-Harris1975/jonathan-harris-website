@@ -95,7 +95,16 @@ def load_workbook_info(path: Path) -> WorkbookInfo:
     return WorkbookInfo(str(path), [], None, None, 0, [], [], [])
 
   ws = wb[primary_sheet]
-  rows = list(ws.iter_rows(min_row=1, max_row=min(ws.max_row, 12), values_only=True))
+
+  # Some generated workbooks omit the worksheet dimension metadata. In
+  # openpyxl read-only mode that leaves max_row/max_column as None and causes
+  # min(ws.max_row, 12) to raise before either audit can start. Force a bounded
+  # dimension scan once, then continue with the normal header probe.
+  if not isinstance(ws.max_row, int) or ws.max_row < 1:
+    ws.calculate_dimension(force=True)
+  max_row = ws.max_row if isinstance(ws.max_row, int) and ws.max_row > 0 else 12
+
+  rows = list(ws.iter_rows(min_row=1, max_row=min(max_row, 12), values_only=True))
   header_row, header_map = _find_header_row(rows)
 
   discovered_urls: list[str] = []
