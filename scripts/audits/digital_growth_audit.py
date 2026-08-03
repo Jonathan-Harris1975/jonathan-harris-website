@@ -33,6 +33,7 @@ from scripts.audits.common import (
   route_to_url,
   upload_selected_files_to_r2,
   utc_now,
+  validate_public_json_artifacts,
   write_json,
   write_text,
 )
@@ -483,6 +484,7 @@ def main() -> int:
     raise RuntimeError("R2_BUCKET_AUDITS and R2_PUBLIC_BASE_URL_AUDITS are required for pipeline execution")
 
   uploaded: dict[str, str] = {}
+  public_json_validation: dict[str, Any] | None = None
   if bucket and public_base:
     client = build_r2_client()
     uploaded = upload_selected_files_to_r2(client, bucket, args.report_prefix, {
@@ -491,6 +493,10 @@ def main() -> int:
       "evidence.json": evidence_path,
       "report.html": report_html_path,
     }, public_base)
+    public_json_validation = validate_public_json_artifacts(
+      uploaded,
+      ["report.json", "summary.json", "evidence.json"],
+    )
 
   callback = {
     "auditType": AUDIT_TYPE,
@@ -505,6 +511,7 @@ def main() -> int:
     "issueCount": len((analysis or {}).get("findings") or heuristics),
     "message": "Digital Growth and Monetisation stage completed with a valid machine-readable analysis contract." if complete_analysis else f"Digital Growth stage failed its analysis evidence contract: {analysis_detail}",
     "artefacts": uploaded,
+    "publicJsonValidation": public_json_validation,
     "finishedAt": utc_now(),
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
   }

@@ -39,6 +39,7 @@ from scripts.audits.common import (
   should_exclude,
   upload_directory_to_r2,
   utc_now,
+  validate_public_json_artifacts,
   write_json,
   write_text,
 )
@@ -1328,34 +1329,6 @@ def missing_required_completion_artefacts(uploaded: dict[str, str]) -> list[str]
   return [name for name in MANDATORY_COMPLETION_ARTEFACTS if not uploaded.get(name)]
 
 
-
-def validate_public_json_artifacts(uploaded: dict[str, str], names: list[str] | None = None, *, attempts: int = 6, delay_seconds: float = 1.5) -> dict[str, Any]:
-  json_names = names or [name for name in MANDATORY_COMPLETION_ARTEFACTS if name.endswith(".json")]
-  results = {}
-  try:
-    import requests  # type: ignore
-  except Exception as exc:  # pragma: no cover - requests is installed in workflow dependencies
-    raise RuntimeError(f"requests is required for public JSON artefact validation: {exc}") from exc
-
-  for name in json_names:
-    url = uploaded.get(name)
-    if not url:
-      raise RuntimeError(f"public JSON validation missing URL for {name}")
-    last_error = None
-    for attempt in range(1, attempts + 1):
-      try:
-        response = requests.get(url, timeout=20)
-        response.raise_for_status()
-        json.loads(response.text)
-        results[name] = {"url": url, "status": "PASS", "attempt": attempt}
-        break
-      except Exception as exc:  # pragma: no cover - depends on live R2 public endpoint
-        last_error = exc
-        if attempt < attempts:
-          time.sleep(delay_seconds)
-    else:
-      raise RuntimeError(f"public JSON artefact validation failed for {name}: {last_error}")
-  return {"status": "PASS", "checked": results, "generatedAt": utc_now()}
 
 def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) -> dict[str, str | None]:
   try:
@@ -2891,7 +2864,10 @@ def main() -> int:
     missing = missing_required_completion_artefacts(uploaded)
     if missing:
       raise RuntimeError(f"R2 completion upload missing required artefact(s) after linked-report rewrite: {', '.join(missing)}")
-    summary["publicJsonValidation"] = validate_public_json_artifacts(uploaded)
+    summary["publicJsonValidation"] = validate_public_json_artifacts(
+      uploaded,
+      [name for name in MANDATORY_COMPLETION_ARTEFACTS if name.endswith(".json")],
+    )
     write_json(output_dir / "summary.json", summary)
     write_json(output_dir / "report.json", report_json_document(summary, records, issues, coverage, reconciliation, uploaded))
     uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)

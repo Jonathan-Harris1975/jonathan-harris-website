@@ -5,6 +5,7 @@ import json
 import mimetypes
 import os
 import re
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -414,6 +415,55 @@ def upload_selected_files_to_r2(client: Any, bucket: str, prefix: str, files: di
     client.upload_file(str(file_path), bucket, key, ExtraArgs={"ContentType": content_type})
     uploaded[relative_name] = f"{public_base}/{key}"
   return uploaded
+
+
+def validate_public_json_artifacts(
+  uploaded: dict[str, str],
+  names: Iterable[str],
+  *,
+  attempts: int = 8,
+  delay_seconds: float = 1.5,
+  timeout_seconds: float = 20,
+) -> dict[str, Any]:
+  """Verify that required uploaded JSON artefacts are publicly readable.
+
+  A completed callback is the hand-off boundary to AIMS.  Do not cross that
+  boundary until every required machine-readable object can be fetched and
+  parsed from the same public URL advertised in the callback.
+  """
+  required = [str(name).strip() for name in names if str(name).strip()]
+  if not required:
+    raise ValueError("At least one public JSON artefact name is required")
+
+  results: dict[str, Any] = {}
+  for name in required:
+    url = str(uploaded.get(name) or "").strip()
+    if not url:
+      raise RuntimeError(f"public JSON validation missing URL for {name}")
+
+    last_error: Exception | None = None
+    for attempt in range(1, max(1, int(attempts)) + 1):
+      try:
+        response = requests.get(url, headers={"Accept": "application/json"}, timeout=timeout_seconds)
+        response.raise_for_status()
+        payload = response.json()
+        if not isinstance(payload, dict):
+          raise RuntimeError(f"{name} returned {type(payload).__name__}; expected a JSON object")
+        results[name] = {
+          "url": url,
+          "status": "PASS",
+          "attempt": attempt,
+          "contentLength": len(response.content),
+        }
+        break
+      except Exception as exc:  # pragma: no cover - depends on the live R2 endpoint
+        last_error = exc
+        if attempt < max(1, int(attempts)):
+          time.sleep(max(0.0, float(delay_seconds)))
+    else:
+      raise RuntimeError(f"public JSON artefact validation failed for {name}: {last_error}")
+
+  return {"status": "PASS", "checked": results, "generatedAt": utc_now()}
 
 
 def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> None:

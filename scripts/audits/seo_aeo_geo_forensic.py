@@ -39,6 +39,7 @@ from scripts.audits.common import (
   should_exclude,
   upload_selected_files_to_r2,
   utc_now,
+  validate_public_json_artifacts,
   write_json,
   write_text,
 )
@@ -3355,6 +3356,7 @@ def main() -> int:
 
   # ── R2 upload — dedicated audits bucket only ────────────────────────────────
   uploaded: dict[str, str] = {}
+  public_json_validation: dict[str, Any] | None = None
   r2_bucket, r2_public_base = require_audit_r2_config(args.callback_url)
   if r2_bucket and r2_public_base:
     try:
@@ -3393,6 +3395,10 @@ def main() -> int:
         {"report.json": report_json_path, "summary.json": summary_path, "coverage.json": coverage_path, "report.html": report_path},
         r2_public_base,
       )
+      public_json_validation = validate_public_json_artifacts(
+        uploaded,
+        ["report.json", "summary.json", "coverage.json"],
+      )
     except Exception as exc:
       if args.callback_url:
         raise
@@ -3415,6 +3421,7 @@ def main() -> int:
     "issueCount": len(issues),
     "auditedUrlCount": len(pages),
     "artefacts": uploaded,
+    "publicJsonValidation": public_json_validation,
     "auditBucket": r2_bucket,
     "auditPublicBaseUrl": r2_public_base,
     "finishedAt": utc_now(),
