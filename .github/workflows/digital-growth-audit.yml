@@ -130,7 +130,10 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Run Digital Growth audit
+        shell: bash
         run: |
+          mkdir -p artifacts/digital-growth
+          set +e
           python scripts/audits/digital_growth_audit.py \
             --base-url "${{ inputs.base_url }}" \
             --session-id "${{ inputs.session_id }}" \
@@ -140,25 +143,46 @@ jobs:
             --callback-token "$RESOLVED_CALLBACK_TOKEN" \
             --analysis-url "${{ inputs.analysis_url }}" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
-            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS"
+            --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS" \
+            2>&1 | tee artifacts/digital-growth/workflow.log
+          audit_status=${PIPESTATUS[0]}
+          set -e
+          echo "AUDIT_EXIT_CODE=$audit_status" >> "$GITHUB_ENV"
+          exit "$audit_status"
 
       - name: Notify AIMS if workflow failed before stage callback
         if: failure() && env.RESOLVED_CALLBACK_URL != ''
         shell: bash
         run: |
+          marker="artifacts/digital-growth/.digital-growth-callback-posted.json"
+          if [ -f "$marker" ]; then
+            echo "Digital Growth audit already posted a structured callback; suppressing generic fallback callback."
+            cat "$marker"
+            exit 0
+          fi
+
           python - <<'PY'
           import json, os, urllib.request
+          from pathlib import Path
           callback_url = os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
           token = os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
           if not callback_url:
             raise SystemExit(0)
+          log_path = Path("artifacts/digital-growth/workflow.log")
+          workflow_log_tail = ""
+          if log_path.exists():
+            workflow_log_tail = "\n".join(log_path.read_text(encoding="utf-8", errors="replace").splitlines()[-120:])[-20000:]
+          exit_code = os.environ.get("AUDIT_EXIT_CODE", "unknown")
           payload = {
             "auditType": "digital-growth",
             "sessionId": "${{ inputs.session_id }}",
             "status": "failed",
             "reportPrefix": "${{ inputs.report_prefix }}",
-            "message": "Digital Growth GitHub workflow failed before temporary stage artefacts were published.",
-            "error": "GitHub Actions failure before Digital Growth stage publication completed",
+            "message": "Digital Growth GitHub workflow failed before a structured stage callback was posted.",
+            "error": (workflow_log_tail.splitlines()[-1] if workflow_log_tail else "GitHub Actions failure before Digital Growth stage publication completed")[:4000],
+            "failedStep": "Run Digital Growth audit",
+            "exitCode": exit_code,
+            "workflowLogTail": workflow_log_tail,
             "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
           }
           headers = {"Content-Type":"application/json", "Authorization":f"Bearer {token}", "X-Audit-Callback-Token":token}
@@ -166,6 +190,15 @@ jobs:
           with urllib.request.urlopen(request, timeout=20) as response:
             print(f"Fallback callback posted: HTTP {response.status}")
           PY
+
+      - name: Upload Digital Growth audit diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-growth-${{ inputs.session_id }}
+          path: artifacts/digital-growth
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Clean local temporary Digital Growth files
         if: always()
