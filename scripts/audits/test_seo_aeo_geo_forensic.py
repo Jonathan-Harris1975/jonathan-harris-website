@@ -1,6 +1,11 @@
 import argparse
+import json
 import os
+import tempfile
 import unittest
+from pathlib import Path
+
+from bs4 import BeautifulSoup
 
 from scripts.audits import seo_aeo_geo_forensic as audit
 
@@ -70,6 +75,48 @@ class SeoAeoGeoForensicWorkflowTests(unittest.TestCase):
       ),
       "https://app.example.com/audits/seo-aeo-geo/analysis/abc123",
     )
+
+  def test_priority_page_serialisation_removes_runtime_only_objects(self):
+    page = {
+      "url": "https://jonathan-harris.online/",
+      "status": 200,
+      "pageType": "homepage",
+      "coverageState": "Analysed",
+      "meta": {
+        "title": "Home",
+        "metaDescription": "Description",
+        "canonical": "https://jonathan-harris.online/",
+        "h1": "Jonathan Harris",
+        "og": {"og:title": "Home"},
+        "schemaCount": 1,
+      },
+      "indexability": "Indexable",
+      "wordCount": 500,
+      "internalLinkCount": 12,
+      "questionHeadings": [],
+      "hasFaqSchema": False,
+      "scores": {"technicalSeo": 90},
+      "total": 90,
+      "grade": "A",
+      "riskFlag": "Low",
+      "introText": "Intro text",
+      "sources": {"repo", "workbook"},
+      "soup": BeautifulSoup("<main><h2>Evidence</h2></main>", "html.parser"),
+    }
+
+    serialised = audit.serialise_page_for_analysis(page, is_priority=True)
+    encoded = json.dumps({"priorityPages": [serialised]})
+
+    self.assertIn('"priorityPages"', encoded)
+    self.assertNotIn("soup", serialised)
+    self.assertNotIn("sources", serialised)
+    self.assertEqual(serialised["h2Headings"], ["Evidence"])
+
+  def test_shared_json_writer_serialises_sets_deterministically(self):
+    with tempfile.TemporaryDirectory() as tmp:
+      path = audit.write_json(Path(tmp) / "report.json", {"sources": {"workbook", "repo"}})
+      payload = json.loads(path.read_text(encoding="utf-8"))
+      self.assertEqual(payload["sources"], ["repo", "workbook"])
 
 
 if __name__ == "__main__":

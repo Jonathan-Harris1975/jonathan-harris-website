@@ -75,6 +75,7 @@ MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY = int(os.environ.get("MOBILE_UX_MAX_WORKBOO
 CALLBACK_MARKER_FILENAME = ".mobile-ux-callback-posted.json"
 NAV_TOGGLE = ".jh-hamburger"
 MOBILE_NAV = "#jh-mobile-nav"
+MOBILE_NAV_BREAKPOINT = 1100
 PRIMARY_CTA_SELECTORS = [
   ".jh-mobile-nav__cta",
   ".jh-topnav__cta",
@@ -466,9 +467,15 @@ def inspect_readability(page: Any) -> tuple[str, list[dict[str, Any]]]:
       const issues = [];
       for (const el of items) {
         const style = window.getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        const hidden = el.hidden || el.getAttribute('aria-hidden') === 'true'
+          || style.display === 'none' || style.visibility === 'hidden'
+          || parseFloat(style.opacity || '1') === 0
+          || rect.width <= 0 || rect.height <= 0
+          || rect.bottom < 0 || rect.top > window.innerHeight;
+        if (hidden) continue;
         const fontSize = parseFloat(style.fontSize || '0');
         const clipped = el.scrollHeight - el.clientHeight > 6 && ['hidden', 'clip'].includes(style.overflowY || style.overflow);
-        const rect = el.getBoundingClientRect();
         const overlapRisk = rect.width > window.innerWidth + 2;
         if (fontSize && fontSize < 14) {
           issues.push({ type: 'font-size', text: (el.textContent || '').trim().slice(0, 60), fontSize });
@@ -641,8 +648,25 @@ def inspect_overflow(page: Any) -> tuple[str, list[dict[str, Any]]]:
       for (const el of nodes) {
         const rect = el.getBoundingClientRect();
         const style = window.getComputedStyle(el);
-        if (style.position === 'fixed' && rect.left < -viewport) continue;
-        if (rect.width > viewport + 2 || rect.right > viewport + 2) {
+        const hidden = el.hidden || el.getAttribute('aria-hidden') === 'true'
+          || style.display === 'none' || style.visibility === 'hidden'
+          || parseFloat(style.opacity || '1') === 0
+          || rect.width <= 0 || rect.height <= 0
+          || rect.bottom < 0 || rect.top > window.innerHeight;
+        if (hidden) continue;
+        if (rect.right <= -2 || rect.left >= viewport + 2) continue;
+
+        let intentionalScroller = false;
+        for (let parent = el.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+          const parentStyle = window.getComputedStyle(parent);
+          if (['auto', 'scroll'].includes(parentStyle.overflowX) && parent.scrollWidth > parent.clientWidth + 2) {
+            intentionalScroller = true;
+            break;
+          }
+        }
+        if (intentionalScroller) continue;
+
+        if (rect.left < -2 || rect.width > viewport + 2 || rect.right > viewport + 2) {
           offenders.push({
             tag: el.tagName.toLowerCase(),
             className: (el.className || '').toString().trim(),
@@ -661,7 +685,7 @@ def inspect_overflow(page: Any) -> tuple[str, list[dict[str, Any]]]:
 
 
 def inspect_hamburger(page: Any, width: int) -> tuple[str, dict[str, Any] | str]:
-  if width >= 1024:
+  if width > MOBILE_NAV_BREAKPOINT:
     return "N/A", "Desktop viewport"
 
   toggle = page.locator(NAV_TOGGLE)
@@ -671,25 +695,41 @@ def inspect_hamburger(page: Any, width: int) -> tuple[str, dict[str, Any] | str]
   nav = page.locator(MOBILE_NAV)
   details: dict[str, Any] = {"selector": NAV_TOGGLE, "navSelector": MOBILE_NAV}
   try:
+    def nav_is_open() -> bool:
+      return nav.count() > 0 and nav.get_attribute("hidden") is None and toggle.first.get_attribute("aria-expanded") == "true"
+
+    def nav_is_closed() -> bool:
+      return nav.count() > 0 and nav.get_attribute("hidden") is not None and toggle.first.get_attribute("aria-expanded") == "false"
+
     toggle.first.click(timeout=5000)
     page.wait_for_timeout(250)
-    open_state = nav.count() > 0 and nav.get_attribute("hidden") is None and toggle.first.get_attribute("aria-expanded") == "true"
+    open_state = nav_is_open()
     details["open"] = open_state
 
     page.keyboard.press("Escape")
     page.wait_for_timeout(200)
-    closed_state = nav.count() > 0 and nav.get_attribute("hidden") is not None and toggle.first.get_attribute("aria-expanded") == "false"
+    closed_state = nav_is_closed()
     details["escapeClose"] = closed_state
 
     toggle.first.click(timeout=5000)
     page.wait_for_timeout(200)
-    page.mouse.click(8, 8)
+    details["reopen"] = nav_is_open()
+    overlay = page.locator("#jh-nav-overlay")
+    if overlay.count() > 0 and overlay.first.is_visible():
+      box = overlay.first.bounding_box()
+      if box:
+        page.mouse.click(box["x"] + max(2, box["width"] - 8), box["y"] + max(2, box["height"] - 8))
+      else:
+        overlay.first.click(position={"x": 4, "y": 4}, timeout=3000)
+    else:
+      page.mouse.click(max(1, width - 8), 900)
     page.wait_for_timeout(200)
-    outside_close = nav.count() > 0 and nav.get_attribute("hidden") is not None
+    outside_close = nav_is_closed()
     details["outsideClose"] = outside_close
 
-    toggle.first.click(timeout=5000) if nav.count() > 0 and nav.get_attribute("hidden") is None else None
-    page.wait_for_timeout(100)
+    if nav_is_open():
+      page.keyboard.press("Escape")
+      page.wait_for_timeout(100)
 
     if all(value for key, value in details.items() if key not in {"selector", "navSelector"}):
       return "PASS", details
@@ -699,6 +739,10 @@ def inspect_hamburger(page: Any, width: int) -> tuple[str, dict[str, Any] | str]
 
 
 def inspect_cta(page: Any, base_url: str) -> tuple[str, dict[str, Any] | str]:
+  nav = page.locator(MOBILE_NAV)
+  if nav.count() > 0 and nav.get_attribute("hidden") is None:
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(100)
   locator = first_visible_locator(page, PRIMARY_CTA_SELECTORS)
   if locator is None:
     return "FAIL", "No visible primary CTA detected"
@@ -715,10 +759,11 @@ def inspect_cta(page: Any, base_url: str) -> tuple[str, dict[str, Any] | str]:
     try:
       locator.click(timeout=5000)
       page.wait_for_load_state("domcontentloaded", timeout=8000)
-      ok = page.url.startswith(target) or normalise_route(page.url, None) == normalise_route(href)
+      clicked_url = page.url
+      ok = clicked_url.startswith(target) or normalise_route(clicked_url, None) == normalise_route(href)
       page.go_back(wait_until="domcontentloaded", timeout=8000)
       page.wait_for_timeout(150)
-      return ("PASS" if ok else "FAIL", {"label": label, "href": href, "expectedTarget": target, "currentUrlAfterClick": page.url})
+      return ("PASS" if ok else "FAIL", {"label": label, "href": href, "expectedTarget": target, "clickedUrl": clicked_url})
     except Exception as exc:
       return "FAIL", {"label": label, "href": href, "reason": str(exc)}
 
@@ -740,7 +785,7 @@ def inspect_viewport_markup(page: Any) -> tuple[str, str]:
 
 def inspect_dynamic_resize(page: Any, width: int) -> tuple[str, dict[str, Any] | str]:
   original = {"width": width, "height": 920}
-  sequence = [390, 768, 1024, width]
+  sequence = [390, 768, MOBILE_NAV_BREAKPOINT, MOBILE_NAV_BREAKPOINT + 1, width]
   try:
     stuck_states = []
     for next_width in sequence:
@@ -749,7 +794,7 @@ def inspect_dynamic_resize(page: Any, width: int) -> tuple[str, dict[str, Any] |
       nav = page.locator(MOBILE_NAV)
       stuck_states.append({
         "width": next_width,
-        "mobileNavVisibleOnDesktop": nav.count() > 0 and nav.get_attribute("hidden") is None and next_width >= 1024,
+        "mobileNavVisibleOnDesktop": nav.count() > 0 and nav.get_attribute("hidden") is None and next_width > MOBILE_NAV_BREAKPOINT,
         "bodyScrollWidth": page.evaluate("() => document.documentElement.scrollWidth"),
       })
     page.set_viewport_size(original)
@@ -1258,7 +1303,7 @@ def run_single_record(page: Any, base_url: str, route: str, width: int, target: 
 
 
 def best_anchor(details: dict[str, Any]) -> str:
-  for key in ("hamburger", "cta", "accessibility", "form", "overflow", "tables"):
+  for key in ("overflow", "hamburger", "cta", "accessibility", "form", "tables"):
     value = details.get(key)
     if isinstance(value, dict):
       if value.get("selector"):
@@ -2599,7 +2644,7 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "sessionId": args.session_id,
     "status": "completed",
     "auditCompletionState": "Complete",
-    "hardGateBlocked": False,
+    "hardGateBlocked": verdict == "BLOCKED",
     "reportPrefix": args.report_prefix,
     "renderedPages": len(routes),
     "viewportRuns": len(records),
@@ -2859,7 +2904,7 @@ def main() -> int:
     "sessionId": args.session_id,
     "status": "completed",
     "auditCompletionState": "Complete",
-    "hardGateBlocked": False,
+    "hardGateBlocked": summary["releaseVerdict"] == "BLOCKED",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html"),
     "reportJsonUrl": uploaded.get("report.json"),

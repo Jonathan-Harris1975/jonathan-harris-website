@@ -3336,7 +3336,11 @@ def main() -> int:
     "sourceMismatchesThatMatter": source_mismatches,
     "familyDiagnostics": family_diagnostics,
     "templateDiagnostics": template_diagnostics,
-    "priorityPages": priority_pages,
+    # Priority pages originate from the live crawl objects and therefore also
+    # contain non-JSON runtime fields such as BeautifulSoup instances and
+    # discovery source sets.  The analysis API already uses the deliberately
+    # serialised representation; persist the same safe contract in report.json.
+    "priorityPages": [serialise_page_for_analysis(page, is_priority=True) for page in priority_pages],
     "repoSignals": repo_signals,
     "analysisState": analysis_state,
     "limitations": [

@@ -48,7 +48,14 @@ def ensure_dir(path: Path) -> Path:
 
 def write_json(path: Path, payload: Any) -> Path:
   ensure_dir(path.parent)
-  path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+  def audit_json_default(value: Any) -> Any:
+    if isinstance(value, set):
+      return sorted(value, key=lambda item: str(item))
+    if isinstance(value, Path):
+      return str(value)
+    raise TypeError(f"Object of type {value.__class__.__name__} is not JSON serializable")
+
+  path.write_text(json.dumps(payload, indent=2, ensure_ascii=False, default=audit_json_default), encoding="utf-8")
   return path
 
 

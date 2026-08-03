@@ -38,12 +38,45 @@ from scripts.audits.common import (
 )
 
 AUDIT_TYPE = "digital-growth"
+CALLBACK_MARKER_FILENAME = ".digital-growth-callback-posted.json"
 DEFAULT_PRIORITY_ROUTES = [
   "/", "/newsletter", "/podcast", "/ebooks", "/catalogue", "/compare", "/bio", "/contact", "/topics", "/blog", "/transcripts",
 ]
 CTA_WORDS = (
   "subscribe", "newsletter", "listen", "podcast", "buy", "ebook", "book", "download", "read", "contact", "learn more", "get",
 )
+
+
+def callback_marker_path(output_dir: Path) -> Path:
+  return output_dir / CALLBACK_MARKER_FILENAME
+
+
+def post_digital_growth_callback(
+  callback_url: str | None,
+  callback_token: str | None,
+  output_dir: Path,
+  payload: dict[str, Any],
+) -> None:
+  """Post one structured callback and leave a workflow-visible marker.
+
+  Optional fields with ``None`` values are omitted so strict receivers do not
+  reject an otherwise successful callback as JSON ``null``.
+  """
+  if not callback_url:
+    print(f"[digital-growth] callback not configured; status={payload.get('status')}", flush=True)
+    return
+  clean_payload = {key: value for key, value in payload.items() if value is not None}
+  post_callback(callback_url, callback_token, clean_payload)
+  write_json(callback_marker_path(output_dir), {
+    "postedAt": utc_now(),
+    "auditType": clean_payload.get("auditType"),
+    "sessionId": clean_payload.get("sessionId"),
+    "status": clean_payload.get("status"),
+    "reportPrefix": clean_payload.get("reportPrefix"),
+    "hasReportUrl": bool(clean_payload.get("reportUrl")),
+    "hasReportJsonUrl": bool(clean_payload.get("reportJsonUrl")),
+  })
+  print(f"[digital-growth] callback posted status={clean_payload.get('status')}", flush=True)
 
 
 def parse_args() -> argparse.Namespace:
@@ -471,13 +504,14 @@ def main() -> int:
     "evidenceUrl": uploaded.get("evidence.json", str(evidence_path)),
     "issueCount": len((analysis or {}).get("findings") or heuristics),
     "message": "Digital Growth and Monetisation stage completed with a valid machine-readable analysis contract." if complete_analysis else f"Digital Growth stage failed its analysis evidence contract: {analysis_detail}",
-    "error": None if complete_analysis else f"Digital Growth analysis was missing auditCompletionState=Complete, a scorecard, or substantive findings/actions. Detail: {analysis_detail}",
     "artefacts": uploaded,
     "finishedAt": utc_now(),
     "workflowRunUrl": os.environ.get("WORKFLOW_RUN_URL", ""),
   }
+  if not complete_analysis:
+    callback["error"] = f"Digital Growth analysis was missing auditCompletionState=Complete, a scorecard, or substantive findings/actions. Detail: {analysis_detail}"
   try:
-    post_callback(args.callback_url, args.callback_token, callback)
+    post_digital_growth_callback(args.callback_url, args.callback_token, output_dir, callback)
   except Exception as exc:
     print(f"[callback] post failed: {exc}", file=sys.stderr)
     if args.callback_url:

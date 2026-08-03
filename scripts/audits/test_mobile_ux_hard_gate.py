@@ -386,7 +386,7 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
     checks = {
       "viewportCorrectness": "PASS",
       "overflow": "PASS",
-      "hamburgerNavigation": "PASS" if viewport < 1024 else "N/A",
+      "hamburgerNavigation": "PASS" if viewport <= audit.MOBILE_NAV_BREAKPOINT else "N/A",
       "touchTargetUsability": "PASS",
       "dynamicResizeReflow": "PASS",
       "ctaContinuity": "PASS",
@@ -425,6 +425,36 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
     self.assertTrue(all(issue.get("groupId") for issue in issues))
     self.assertEqual(groups["groups"][0]["bestAvailableCodeAnchor"], ".shared-card-grid")
     self.assertIn("repository-issue-appendix.json", groups["groups"][0]["detailedAppendixReference"])
+
+  def test_blocked_release_is_declared_in_completed_summary(self):
+    records = [self._record("/", 390, "overflow")]
+    issues = audit.build_issues(records)
+    summary = audit.build_summary(
+      argparse.Namespace(session_id="blocked-test", report_prefix="audits/mobile-ux/blocked-test"),
+      {
+        "workbook": {"filename": "inventory.xlsx", "primarySheet": "Pages", "headerRow": 1, "urlCount": 1},
+        "capabilities": audit.build_capabilities(),
+        "repository": {"totalFiles": 1, "mediaQueryCount": 1, "containerQueryCount": 0},
+        "exceptionSweep": {"urlCount": 1},
+      },
+      ["/"],
+      records,
+      issues,
+      {"complete": True, "skippedRequiredTasksCount": 0},
+      {"crossSourceMismatchCount": 0},
+      "2026-08-03T00:00:00Z",
+    )
+
+    self.assertEqual(summary["status"], "completed")
+    self.assertEqual(summary["releaseVerdict"], "BLOCKED")
+    self.assertTrue(summary["hardGateBlocked"])
+
+  def test_mobile_navigation_checks_match_the_1100px_site_breakpoint(self):
+    self.assertEqual(audit.MOBILE_NAV_BREAKPOINT, 1100)
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+    self.assertIn("intentionalScroller", source)
+    self.assertIn("el.getAttribute('aria-hidden') === 'true'", source)
+    self.assertIn('page.locator("#jh-nav-overlay")', source)
 
   def test_responsive_fix_appendix_uses_group_contracts_and_retest_steps(self):
     records = [self._record("/ebooks", 320), self._record("/ebooks", 390)]

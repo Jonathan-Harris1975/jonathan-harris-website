@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -42,6 +43,33 @@ class DigitalGrowthAuditTests(unittest.TestCase):
     self.assertIn("R2_PUBLIC_BASE_URL_AUDITS", workflow)
     self.assertIn("/audits/digital-growth/callback", workflow)
     self.assertIn("rm -rf artifacts/digital-growth", workflow)
+
+  def test_success_callback_omits_null_error_and_writes_marker(self):
+    posted = []
+    original = audit.post_callback
+    try:
+      audit.post_callback = lambda url, token, payload: posted.append(payload)
+      with tempfile.TemporaryDirectory() as tmp:
+        output_dir = Path(tmp)
+        audit.post_digital_growth_callback(
+          "https://app.example.test/audits/digital-growth/callback",
+          "token",
+          output_dir,
+          {
+            "auditType": "digital-growth",
+            "sessionId": "session-1",
+            "status": "completed",
+            "reportPrefix": "audits/test",
+            "reportUrl": "https://example.test/report.html",
+            "reportJsonUrl": "https://example.test/report.json",
+            "error": None,
+          },
+        )
+        self.assertEqual(len(posted), 1)
+        self.assertNotIn("error", posted[0])
+        self.assertTrue((output_dir / audit.CALLBACK_MARKER_FILENAME).exists())
+    finally:
+      audit.post_callback = original
 
   def test_existing_stage_workflows_clean_local_temporary_files(self):
     seo = Path(".github/workflows/seo-aeo-geo-forensic.yml").read_text(encoding="utf-8")
