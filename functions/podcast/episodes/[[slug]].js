@@ -240,6 +240,33 @@ async function relatedBooksMarkup(context, episode) {
   } catch { return ""; }
 }
 
+function canonicalTranscriptUrl(episode, request) {
+  const slug = episode.slug || slugify(episode.title || "episode");
+  return new URL(`/transcripts/${slug}/`, request.url).toString();
+}
+
+function topicGuideMarkup(topics = []) {
+  const guides = {
+    "AI governance": ["/topics/ai-ethics/", "AI ethics and governance"],
+    "agentic AI": ["/resources/ai-agent-risk-checklist/", "AI agent risk checklist"],
+    "AI models": ["/topics/generative-ai/", "Generative AI guide"],
+    "workflow automation": ["/topics/robotics-automation/", "Robotics and automation"],
+    "AI costs": ["/topics/ai-in-business/", "AI in business"],
+    "data and security": ["/catalogue/cyber-security/", "AI and cyber security"],
+    "robotics": ["/topics/robotics-automation/", "Robotics and automation"],
+    "AI in healthcare": ["/topics/ai-in-healthcare/", "AI in healthcare"],
+  };
+  const unique = [];
+  for (const topic of topics) {
+    const guide = guides[topic];
+    if (!guide || unique.some((item) => item[0] === guide[0])) continue;
+    unique.push(guide);
+  }
+  if (!unique.length) unique.push(["/topics/", "Browse all AI topic guides"]);
+  const links = unique.slice(0, 4).map(([href, label]) => `<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`).join("");
+  return `<section class="podcast-topic-guides" aria-labelledby="topic-guides-heading"><h2 id="topic-guides-heading">Related topic guides</h2><ul class="link-list">${links}</ul></section>`;
+}
+
 function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
   const title = episode.title || "Turing's Torch AI Weekly";
   const summary = clampWords(stripPodcastTiming(episode.description || "Jonathan Harris cuts through artificial intelligence stories with practical judgement, scepticism and a working-person tolerance for less nonsense."), 60);
@@ -248,8 +275,16 @@ function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
   const entities = detectEntities(`${title} ${summary}`);
   const takeaways = deriveTakeaways({ ...episode, description: summary });
   const imageUrl = episode.imageUrl || "https://podcast-coverart.jonathan-harris.online/cover-art.png";
-  const transcriptUrl = episode.transcriptUrl || new URL("/transcripts/", request.url).toString();
+  const transcriptUrl = canonicalTranscriptUrl(episode, request);
+  const sourceTranscriptUrl = episode.transcriptUrl || "";
   const description = clampWords(summary, 42);
+  const transcriptPreview = clampWords(summary, 34);
+  const topicGuides = topicGuideMarkup(topics);
+  const takeawayItems = takeaways.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  const topicItems = topics.length
+    ? topics.map((topic) => `<span class="podcast-topic-chip">${escapeHtml(topic)}</span>`).join("")
+    : `<span class="podcast-topic-chip">Artificial intelligence</span>`;
+  const entityItems = entities.map((entity) => `<span class="podcast-entity-chip">${escapeHtml(entity)}</span>`).join("");
   const faq = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -266,6 +301,8 @@ function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
     url: canonical,
     datePublished: episode.pubDate ? new Date(episode.pubDate).toISOString() : undefined,
     transcript: transcriptUrl,
+    subjectOf: { "@type": "WebPage", name: `${title} transcript`, url: transcriptUrl },
+    citation: sourceTranscriptUrl || undefined,
     image: imageUrl,
     associatedMedia: episode.audioUrl ? { "@type": "AudioObject", contentUrl: episode.audioUrl, encodingFormat: "audio/mpeg" } : undefined,
     partOfSeries: { "@type": "PodcastSeries", name: "Turing's Torch: AI Weekly", url: new URL("/podcast/", request.url).toString() },
@@ -282,6 +319,7 @@ function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
 <meta name="description" content="${escapeHtml(description)}">
 ${episode.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta name="robots" content="index,follow">'}
 <link rel="canonical" href="${escapeHtml(canonical)}">
+<link rel="alternate" type="text/html" title="Transcript for ${escapeHtml(title)}" href="${escapeHtml(transcriptUrl)}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="${escapeHtml(title)}">
 <meta property="og:description" content="${escapeHtml(description)}">
@@ -306,15 +344,40 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 ${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placement="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
 </div>
 </section>
-<section class="section"><div class="wrap card podcast-episode-summary">
-<h2>About this episode</h2>
-<p>${escapeHtml(summary)}</p>
-<nav class="actions" aria-label="Episode resources">
+<section class="section"><div class="wrap podcast-episode-layout">
+<article class="card podcast-episode-summary" id="answer-first-summary" aria-labelledby="answer-first-heading">
+<p class="eyebrow">Answer first</p>
+<h2 id="answer-first-heading">What does this episode explain?</h2>
+<p class="podcast-answer-first">${escapeHtml(summary)}</p>
+</article>
+<section class="card podcast-episode-takeaways" id="key-takeaways" aria-labelledby="key-takeaways-heading">
+<h2 id="key-takeaways-heading">Key takeaways</h2>
+<ol>${takeawayItems}</ol>
+</section>
+<section class="card podcast-episode-index" id="discussed-topics" aria-labelledby="discussed-topics-heading">
+<h2 id="discussed-topics-heading">Topics and entities discussed</h2>
+<h3>Topics</h3><div class="podcast-chip-list">${topicItems}</div>
+<h3>Named entities</h3><div class="podcast-chip-list">${entityItems}</div>
+</section>
+<section class="card podcast-transcript-preview" id="transcript-preview" aria-labelledby="transcript-preview-heading">
+<h2 id="transcript-preview-heading">Transcript preview</h2>
+<p>${escapeHtml(transcriptPreview)}</p>
+<nav class="actions" aria-label="Transcript links">
+<a class="button secondary" href="${escapeHtml(transcriptUrl)}#transcript-body">Jump to the transcript text</a>
+<a class="button secondary" href="${escapeHtml(transcriptUrl)}">Open the transcript page</a>
+</nav>
+</section>
+<section class="card podcast-related-reading" id="related-reading" aria-labelledby="related-reading-heading">
+<h2 id="related-reading-heading">Continue exploring</h2>
+${topicGuides}
+${relatedBooks}
+</section>
+<nav class="card actions podcast-episode-actions" aria-label="Episode resources">
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the full transcript</a>
 <a class="button secondary" href="/podcast/">More episodes</a>
 <a class="button secondary" href="/newsletter/">Join AI Edge</a>
 </nav>
-${episode.youtubeVideoId ? `<h2>Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>` : ""}
+${episode.youtubeVideoId ? `<section class="card podcast-episode-video" aria-labelledby="watch-episode-heading"><h2 id="watch-episode-heading">Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></section>` : ""}
 </div></section>
 </main>
 <script defer src="/assets/js/funnel-events.min.js"></script>
@@ -340,7 +403,7 @@ export async function onRequest(context) {
   // published the episode into the feed, the episode does not exist publicly.
   if (!episode) return notFoundResponse();
 
-  const relatedBooks = "";
+  const relatedBooks = await relatedBooksMarkup(context, episode);
 
   const pageHtml = await ensureSharedChrome(
     context,
