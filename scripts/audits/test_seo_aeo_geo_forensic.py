@@ -112,6 +112,19 @@ class SeoAeoGeoForensicWorkflowTests(unittest.TestCase):
     self.assertNotIn("sources", serialised)
     self.assertEqual(serialised["h2Headings"], ["Evidence"])
 
+  def test_dynamic_feed_or_sitemap_route_is_not_workbook_only(self):
+    self.assertFalse(audit.is_workbook_only_entry({"sources": {"workbook", "feed"}}))
+    self.assertFalse(audit.is_workbook_only_entry({"sources": {"workbook", "sitemap"}}))
+    self.assertFalse(audit.is_workbook_only_entry({"sources": {"workbook", "podcast-manifest"}}))
+    self.assertTrue(audit.is_workbook_only_entry({"sources": {"workbook"}}))
+
+  def test_source_mismatch_does_not_flag_feed_governed_podcast_routes(self):
+    discovered = {
+      "episode": {"path": "/podcast/episodes/example", "sources": {"workbook", "feed", "sitemap"}},
+    }
+    mismatches = audit.build_source_mismatches(discovered, [], type("Workbook", (), {})(), {})
+    self.assertNotIn("SRC-005", {item["id"] for item in mismatches})
+
   def test_shared_json_writer_serialises_sets_deterministically(self):
     with tempfile.TemporaryDirectory() as tmp:
       path = audit.write_json(Path(tmp) / "report.json", {"sources": {"workbook", "repo"}})

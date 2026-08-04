@@ -581,6 +581,16 @@ def build_source_ledger(discovery_meta: dict[str, Any], workbook: WorkbookInfo, 
   ]
 
 
+def is_workbook_only_entry(entry: dict[str, Any]) -> bool:
+  """True only when the workbook is the route's sole independent source.
+
+  Dynamic podcast/blog routes are intentionally governed through RSS, sitemap and
+  generated manifests rather than static HTML snapshots in the repository.
+  """
+  sources = set(entry.get("sources", set()) or set())
+  return "workbook" in sources and not (sources - {"workbook"})
+
+
 def build_source_mismatches(
   discovered: dict[str, dict[str, Any]],
   pages: list[dict[str, Any]],
@@ -627,16 +637,16 @@ def build_source_mismatches(
       "fix": "Expand llms.txt and llm-index.json to include topics, glossary, blog, podcast, transcripts and entity pages.",
     })
 
-  workbook_only = [entry for entry in discovered.values() if "workbook" in entry.get("sources", set()) and "repo" not in entry.get("sources", set())]
+  workbook_only = [entry for entry in discovered.values() if is_workbook_only_entry(entry)]
   repo_only = [entry for entry in discovered.values() if "repo" in entry.get("sources", set()) and "workbook" not in entry.get("sources", set())]
   if workbook_only:
     mismatches.append({
       "id": "SRC-005",
       "severity": "High",
-      "sources": "workbook vs repository routes",
+      "sources": "workbook vs independently governed routes",
       "evidence": f"{len(workbook_only)} workbook-only URLs remain, including {', '.join(item.get('path', '') for item in workbook_only[:5])}.",
-      "impact": "The governance workbook and repo snapshot disagree about what the estate contains.",
-      "fix": "Restore intended workbook-only URLs or retire them from the workbook with evidence.",
+      "impact": "The workbook names routes that are not corroborated by the repository, sitemap, feed, manifest or live-link evidence.",
+      "fix": "Restore intended URLs, add them to an independent generated route source, or retire the workbook rows with evidence.",
     })
   if repo_only:
     mismatches.append({
@@ -1446,7 +1456,7 @@ def collect_issues(
       "Engineering / Content",
     ))
 
-  workbook_only = [entry for entry in discovered.values() if "workbook" in entry.get("sources", set()) and "repo" not in entry.get("sources", set())]
+  workbook_only = [entry for entry in discovered.values() if is_workbook_only_entry(entry)]
   repo_only = [entry for entry in discovered.values() if "repo" in entry.get("sources", set()) and "workbook" not in entry.get("sources", set()) and classify_page(entry["url"]) != "podcast episode"]
   if workbook_only and not any(item["issueId"] == "JH-SEO-002" for item in issues):
     add(issue_record(

@@ -441,6 +441,9 @@ def inspect_touch_targets(page: Any) -> tuple[str, list[dict[str, Any]]]:
   targets = page.locator(INTERACTIVE_SELECTORS)
   count = min(targets.count(), 30)
   failures = []
+  viewport = page.viewport_size or {}
+  viewport_width = float(viewport.get("width") or 0)
+  viewport_height = float(viewport.get("height") or 0)
   for index in range(count):
     item = targets.nth(index)
     try:
@@ -449,7 +452,19 @@ def inspect_touch_targets(page: Any) -> tuple[str, list[dict[str, Any]]]:
       box = item.bounding_box()
       if not box:
         continue
-      if box["width"] < 40 or box["height"] < 40:
+      # Playwright considers off-canvas controls (for example the unfocused
+      # skip link) visible when they still have a non-zero box. Touch-target
+      # checks should measure controls a user can actually reach in the
+      # current viewport, not accessibility controls parked off screen.
+      if viewport_width and viewport_height:
+        if (
+          box["x"] + box["width"] <= 0
+          or box["y"] + box["height"] <= 0
+          or box["x"] >= viewport_width
+          or box["y"] >= viewport_height
+        ):
+          continue
+      if box["width"] < 44 or box["height"] < 44:
         failures.append({
           "selector": item.evaluate("el => el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().replace(/\\s+/g,'.') : '')"),
           "width": round(box["width"], 1),
@@ -602,9 +617,28 @@ def inspect_images(page: Any) -> tuple[str, list[dict[str, Any]] | str]:
   issues = page.evaluate(
     """
     () => Array.from(document.images)
-      .filter((img) => img.clientWidth > window.innerWidth + 2 || !img.complete || img.naturalWidth === 0)
+      .filter((img) => {
+        const style = window.getComputedStyle(img);
+        const rect = img.getBoundingClientRect();
+        const hidden = img.hidden || img.getAttribute('aria-hidden') === 'true'
+          || style.display === 'none' || style.visibility === 'hidden'
+          || rect.width <= 0 || rect.height <= 0;
+        if (hidden) return false;
+        return rect.left < -2 || rect.right > window.innerWidth + 2 || rect.width > window.innerWidth + 2;
+      })
       .slice(0, 25)
-      .map((img) => ({ src: img.currentSrc || img.src || '', width: img.clientWidth, viewport: window.innerWidth, complete: img.complete, naturalWidth: img.naturalWidth }))
+      .map((img) => {
+        const rect = img.getBoundingClientRect();
+        return {
+          src: img.currentSrc || img.src || '',
+          left: Math.round(rect.left),
+          right: Math.round(rect.right),
+          width: Math.round(rect.width),
+          viewport: window.innerWidth,
+          complete: img.complete,
+          naturalWidth: img.naturalWidth
+        };
+      })
     """
   )
   return ("PASS" if not issues else "FAIL", issues)
@@ -685,16 +719,66 @@ def inspect_overflow(page: Any) -> tuple[str, list[dict[str, Any]]]:
   return ("PASS" if not issues else "FAIL", issues)
 
 
+def reveal_conditional_header(page: Any) -> dict[str, Any]:
+  """Reveal a hero-mode header before testing controls that are intentionally deferred.
+
+  The site contract hides the compact header until the page's reveal anchor leaves
+  the viewport. Auditing it at scroll position zero tests the wrong UI state.
+  """
+  details: dict[str, Any] = {"conditionalReveal": False, "revealAttempted": False, "revealed": False}
+  header = page.locator(".jh-header").first
+  if header.count() == 0:
+    details["reason"] = "Shared header not found"
+    return details
+
+  class_name = header.get_attribute("class") or ""
+  details["conditionalReveal"] = "jh-header--hero-mode" in class_name
+  toggle = page.locator(NAV_TOGGLE).first
+  if toggle.count() > 0 and toggle.is_visible():
+    details["revealed"] = True
+    return details
+
+  anchor = page.locator("[data-jh-header-reveal-anchor]").first
+  if anchor.count() == 0 and not details["conditionalReveal"]:
+    details["reason"] = "Header is not conditional and the toggle is not visible"
+    return details
+
+  details["revealAttempted"] = True
+  result = page.evaluate(
+    """
+    () => {
+      const anchor = document.querySelector('[data-jh-header-reveal-anchor]') || document.querySelector('.hero');
+      const current = window.scrollY || window.pageYOffset || 0;
+      let target = current + Math.max(window.innerHeight * 0.75, 420);
+      if (anchor) {
+        const rect = anchor.getBoundingClientRect();
+        target = Math.max(target, current + rect.bottom + 12);
+      }
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      target = Math.min(target, maxScroll);
+      window.scrollTo(0, target);
+      return { target, maxScroll, anchorFound: Boolean(anchor) };
+    }
+    """
+  )
+  details.update(result or {})
+  page.wait_for_timeout(320)
+  details["revealed"] = toggle.count() > 0 and toggle.is_visible()
+  details["headerClassAfterReveal"] = header.get_attribute("class") or ""
+  return details
+
+
 def inspect_hamburger(page: Any, width: int) -> tuple[str, dict[str, Any] | str]:
   if width > MOBILE_NAV_BREAKPOINT:
     return "N/A", "Desktop viewport"
 
+  reveal_details = reveal_conditional_header(page)
   toggle = page.locator(NAV_TOGGLE)
   if toggle.count() == 0 or not toggle.first.is_visible():
-    return "FAIL", {"reason": "Hamburger toggle not visible at mobile width", "selector": NAV_TOGGLE}
+    return "FAIL", {"reason": "Hamburger toggle not visible after the intentional header reveal point", "selector": NAV_TOGGLE, **reveal_details}
 
   nav = page.locator(MOBILE_NAV)
-  details: dict[str, Any] = {"selector": NAV_TOGGLE, "navSelector": MOBILE_NAV}
+  details: dict[str, Any] = {"selector": NAV_TOGGLE, "navSelector": MOBILE_NAV, **reveal_details}
   try:
     def nav_is_open() -> bool:
       return nav.count() > 0 and nav.get_attribute("hidden") is None and toggle.first.get_attribute("aria-expanded") == "true"
@@ -732,7 +816,8 @@ def inspect_hamburger(page: Any, width: int) -> tuple[str, dict[str, Any] | str]
       page.keyboard.press("Escape")
       page.wait_for_timeout(100)
 
-    if all(value for key, value in details.items() if key not in {"selector", "navSelector"}):
+    required_checks = ("revealed", "open", "escapeClose", "reopen", "outsideClose")
+    if all(bool(details.get(key)) for key in required_checks):
       return "PASS", details
     return "FAIL", details
   except Exception as exc:
@@ -788,20 +873,77 @@ def inspect_dynamic_resize(page: Any, width: int) -> tuple[str, dict[str, Any] |
   original = {"width": width, "height": 920}
   sequence = [390, 768, MOBILE_NAV_BREAKPOINT, MOBILE_NAV_BREAKPOINT + 1, width]
   try:
+    # Start from an open mobile menu so the desktop breakpoint proves that it
+    # clears every transient state, not merely that a closed menu stays closed.
+    page.set_viewport_size({"width": 390, "height": 920})
+    page.wait_for_timeout(120)
+    reveal_conditional_header(page)
+    toggle = page.locator(NAV_TOGGLE).first
+    nav = page.locator(MOBILE_NAV).first
+    overlay = page.locator("#jh-nav-overlay").first
+    if toggle.count() > 0 and toggle.is_visible() and toggle.get_attribute("aria-expanded") != "true":
+      toggle.evaluate("el => el.click()")
+      page.wait_for_timeout(180)
+    opened_before_resize = (
+      nav.count() > 0
+      and nav.get_attribute("hidden") is None
+      and toggle.count() > 0
+      and toggle.get_attribute("aria-expanded") == "true"
+    )
+
     stuck_states = []
     for next_width in sequence:
       page.set_viewport_size({"width": next_width, "height": 920})
       page.wait_for_timeout(160)
-      nav = page.locator(MOBILE_NAV)
+      body_state = page.evaluate(
+        """
+        () => ({
+          innerWidth: window.innerWidth,
+          scrollWidth: document.documentElement.scrollWidth,
+          scrollLocked: document.documentElement.classList.contains('jh-nav-open')
+            || document.body.classList.contains('jh-nav-open')
+            || ['hidden', 'clip'].includes(getComputedStyle(document.documentElement).overflowY)
+            || ['hidden', 'clip'].includes(getComputedStyle(document.body).overflowY)
+        })
+        """
+      )
+      desktop = body_state["innerWidth"] > MOBILE_NAV_BREAKPOINT
       stuck_states.append({
         "width": next_width,
-        "mobileNavVisibleOnDesktop": nav.count() > 0 and nav.get_attribute("hidden") is None and next_width > MOBILE_NAV_BREAKPOINT,
-        "bodyScrollWidth": page.evaluate("() => document.documentElement.scrollWidth"),
+        "innerWidth": body_state["innerWidth"],
+        "mobileNavVisibleOnDesktop": desktop and nav.count() > 0 and nav.get_attribute("hidden") is None,
+        "ariaExpandedOnDesktop": desktop and toggle.count() > 0 and toggle.get_attribute("aria-expanded") == "true",
+        "overlayVisibleOnDesktop": desktop and overlay.count() > 0 and overlay.is_visible(),
+        "scrollLockedOnDesktop": desktop and bool(body_state["scrollLocked"]),
+        "horizontalOverflow": body_state["scrollWidth"] > body_state["innerWidth"] + 2,
+        "bodyScrollWidth": body_state["scrollWidth"],
       })
     page.set_viewport_size(original)
     page.wait_for_timeout(120)
-    failed = any(item["mobileNavVisibleOnDesktop"] for item in stuck_states)
-    return ("FAIL" if failed else "PASS", {"resizeSequence": stuck_states})
+    reset_at_original = (
+      not opened_before_resize
+      or (
+        nav.count() > 0
+        and nav.get_attribute("hidden") is not None
+        and toggle.count() > 0
+        and toggle.get_attribute("aria-expanded") == "false"
+        and (overlay.count() == 0 or not overlay.is_visible())
+        and not page.evaluate("() => document.documentElement.classList.contains('jh-nav-open') || document.body.classList.contains('jh-nav-open')")
+      )
+    )
+    failed = any(
+      item["mobileNavVisibleOnDesktop"]
+      or item["ariaExpandedOnDesktop"]
+      or item["overlayVisibleOnDesktop"]
+      or item["scrollLockedOnDesktop"]
+      or item["horizontalOverflow"]
+      for item in stuck_states
+    ) or not reset_at_original
+    return ("FAIL" if failed else "PASS", {
+      "openedBeforeResize": opened_before_resize,
+      "resetAtOriginalWidth": reset_at_original,
+      "resizeSequence": stuck_states,
+    })
   except Exception as exc:
     return "FAIL", {"reason": str(exc)}
 

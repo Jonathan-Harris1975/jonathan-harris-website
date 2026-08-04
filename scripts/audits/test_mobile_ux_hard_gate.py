@@ -241,6 +241,28 @@ class MobileUxHardGateTests(unittest.TestCase):
     self.assertIn("suppressing generic fallback callback", workflow)
     self.assertIn("python -u scripts/audits/mobile_ux_hard_gate.py", workflow)
 
+  def test_mobile_interaction_contract_preserves_conditional_header_and_real_viewport_checks(self):
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+    self.assertIn("reveal_conditional_header(page)", source)
+    self.assertIn('required_checks = ("revealed", "open", "escapeClose", "reopen", "outsideClose")', source)
+    self.assertIn('box["x"] + box["width"] <= 0', source)
+    self.assertIn('box["y"] >= viewport_height', source)
+    self.assertIn('box["width"] < 44 or box["height"] < 44', source)
+    self.assertIn('"openedBeforeResize": opened_before_resize', source)
+    self.assertIn('"overlayVisibleOnDesktop"', source)
+    self.assertIn('"scrollLockedOnDesktop"', source)
+    self.assertIn('"resetAtOriginalWidth": reset_at_original', source)
+    site_ui = audit.Path("assets/js/site-ui.min.js").read_text(encoding="utf-8")
+    self.assertIn('qa(".jh-mobile-nav").forEach', site_ui)
+    self.assertIn('set(menu,btn,false)', site_ui)
+
+  def test_image_responsiveness_check_is_geometry_based_not_lazy_load_based(self):
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+    inspect_images_source = source[source.index("def inspect_images"):source.index("def inspect_tables")]
+    self.assertIn("rect.right > window.innerWidth + 2", inspect_images_source)
+    self.assertNotIn("!img.complete", inspect_images_source)
+    self.assertNotIn("img.naturalWidth === 0", inspect_images_source)
+
 
 class MobileUxReportArtifactTests(unittest.TestCase):
   def test_production_report_appendix_documents_are_generated_from_rendered_records(self):
@@ -448,6 +470,13 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
     self.assertEqual(summary["status"], "completed")
     self.assertEqual(summary["releaseVerdict"], "BLOCKED")
     self.assertTrue(summary["hardGateBlocked"])
+
+  def test_mobile_navigation_audit_reveals_intentionally_deferred_header(self):
+    source = audit.Path("scripts/audits/mobile_ux_hard_gate.py").read_text(encoding="utf-8")
+    self.assertIn("def reveal_conditional_header", source)
+    self.assertIn("[data-jh-header-reveal-anchor]", source)
+    self.assertIn("intentional header reveal point", source)
+    self.assertIn('if box["width"] < 44 or box["height"] < 44', source)
 
   def test_mobile_navigation_checks_match_the_1100px_site_breakpoint(self):
     self.assertEqual(audit.MOBILE_NAV_BREAKPOINT, 1100)
