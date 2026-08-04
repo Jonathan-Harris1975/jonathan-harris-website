@@ -1270,3 +1270,16 @@ body.home .home-commercial-router .card p{color:var(--jh-text);}
   body.home .hero--home{padding-top:16px!important;}
 }
 /* hero-logo-effects-v1 */.hero-logo-stage{position:relative;isolation:isolate}.hero-logo-stage:before{content:"";position:absolute;top:6px;left:50%;width:148px;height:148px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(96,165,250,.3) 0%,rgba(79,70,229,.14) 44%,rgba(79,70,229,.05) 60%,transparent 74%);filter:blur(8px);pointer-events:none;z-index:-1}.hero-logo-effect{position:relative;z-index:1;filter:drop-shadow(0 0 10px rgba(96,165,250,.48)) drop-shadow(0 0 24px rgba(79,70,229,.28))}.card__brand-icon{display:block;width:72px;height:72px;object-fit:cover;border-radius:18px;margin:0 auto 1rem}@media(max-width:640px){.hero-logo-stage:before{top:3px;width:126px;height:126px;filter:blur(7px)}.hero-logo-effect{filter:drop-shadow(0 0 8px rgba(96,165,250,.44)) drop-shadow(0 0 18px rgba(79,70,229,.24))}.card__brand-icon{width:64px;height:64px;border-radius:16px}}
+
+/* AUD-WEBSITE-website-1785761834951 */
+.podcast-episode-layout{display:grid;gap:18px}
+.podcast-episode-layout>.card{margin:0;min-width:0}
+.podcast-answer-first{font-size:1.08rem;line-height:1.75}
+.podcast-episode-takeaways ol{display:grid;gap:10px;padding-left:1.25rem}
+.podcast-chip-list{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 16px}
+.podcast-topic-chip,.podcast-entity-chip{display:inline-flex;align-items:center;min-height:36px;padding:7px 11px;border:1px solid #c7d2fe;border-radius:999px;background:#eef2ff;color:#312e81;font-size:.875rem;font-weight:700}
+.podcast-related-reading>section{margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.podcast-related-reading .link-list li{display:grid;gap:3px}
+body.jh-page-404 .jh-404-ctas a{min-height:44px;box-sizing:border-box}
+@media(max-width:1100px){.jh-hamburger__label,body.jh-page-404 .jh-404-kicker{font-size:.875rem}.jh-brand{min-height:44px}}
+@media(max-width:760px){.podcast-episode-actions .button{width:100%;text-align:center}body.jh-page-404 .jh-404-ctas{display:grid;grid-template-columns:1fr}body.jh-page-404 .jh-404-ctas a{width:100%}.featured-meta{font-size:.875rem}}
