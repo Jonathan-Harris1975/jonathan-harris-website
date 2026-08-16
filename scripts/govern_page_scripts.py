@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTIALS_DIR = ROOT / 'assets' / 'partials'
@@ -104,6 +105,16 @@ def inject_blocks(text: str) -> tuple[str, list[str]]:
     return re.sub(r'\n{3,}', '\n\n', updated), errors
 
 
+def contains_botsailor_url_reference(text: str) -> bool:
+    for url in re.findall(r'https?://[^\s"\'<>]+', text, flags=re.I):
+        host = urlparse(url).hostname
+        if host:
+            host = host.lower()
+            if host == 'botsailor.com' or host.endswith('.botsailor.com'):
+                return True
+    return False
+
+
 def validate_page(text: str) -> list[str]:
     errors: list[str] = []
     if GTM_ID not in text or 'https://www.googletagmanager.com/gtm.js' not in text:
@@ -128,7 +139,7 @@ def validate_page(text: str) -> list[str]:
         errors.append('missing Metricool loader script')
     if not (has_governed_loader or has_metricool_init):
         errors.append('missing Metricool tracker initialiser')
-    if 'botsailor.com' in text.lower():
+    if contains_botsailor_url_reference(text):
         errors.append('contains removed BotSailor reference')
 
     if re.search(r'GTM-TFM7Q3RB|G-NLC3RN7H86|\bgtag\(', text, re.I):
