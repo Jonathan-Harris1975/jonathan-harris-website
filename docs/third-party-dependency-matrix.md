@@ -1,5 +1,5 @@
 > **Document status:** Production reference  
-> **Last reviewed:** 16 June 2026  
+> **Last reviewed:** 16 August 2026  
 > **Operational authority:** Current repository README, SECURITY policy and operations guide.
 
 # Third-party dependency matrix
@@ -13,7 +13,7 @@ This site depends on a small set of external services that sit outside the repos
 | CookieYes | Consent management, now routed through the Google Tag Manager setup rather than a direct page-level CookieYes loader | Homepage, catalogue, ebook pages, newsletter, contact, podcast, bio, compare, glossary, utility pages | Consent or CSP drift can block analytics consent signalling | Core content stays server-rendered and readable without consent-managed scripts |
 | Google Tag Manager | Site-wide tag container for the updated Google/CookieYes interface | All public HTML pages | Analytics and consent-managed tags fail to initialise if GTM or CSP is blocked | No content, routing, or form dependency |
 | Metricool | Analytics script loaded by the governed runtime loader | Core marketing pages | Measurement loss only | No content, routing, or form dependency |
-| BotSailor | Chat widget loaded by the governed runtime loader | Core marketing pages | Chat entry point disappears | Navigation, CTAs, and page content remain available without chat |
+| CogniPal / AIMS Web Chat | First-party chat widget served from this site; same-origin Pages Functions sign server-to-server requests into AIMS Comms Hub | All public HTML pages | Chat entry point remains visible but reports temporary unavailability if the AIMS gateway is unavailable | Core content and navigation remain independent; conversations are persisted in AIMS D1 when the gateway is healthy |
 | Jotform | Hosted forms and embeds | Newsletter and contact pages | Embedded form may fail or be blocked | Hosted Jotform fallback links remain published on-page |
 | ImageKit via images.jonathan-harris.online | Remote delivery for logo and ebook cover images | Header, homepage, catalogue pages, ebook pages, metadata image tags | Logo / covers may fail to render if remote assets drift or image host is unavailable | `scripts/check_image_assets.py` validates the governed contract and supports live URL checks |
 | assets.jonathan-harris.online | Favicon and governed static assets | Site-wide head metadata | Favicon / asset preload drift | Repo keeps explicit asset URLs and release validation checks head markup |
