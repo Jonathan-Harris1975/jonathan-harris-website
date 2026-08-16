@@ -39,18 +39,50 @@ async function hmacHex(secret, input) {
   return [...new Uint8Array(signature)].map((value) => value.toString(16).padStart(2, '0')).join('');
 }
 
-function aimsEndpoint(baseUrl, path) {
+function normaliseAimsBase(baseUrl) {
   const configured = new URL(baseUrl);
-  const basePath = configured.pathname.replace(/\/+$/, '');
-  const requested = String(path || '').startsWith('/') ? String(path) : `/${path}`;
-  if (basePath.toLowerCase().endsWith('/comms-hub') && requested.toLowerCase().startsWith('/comms-hub/')) {
-    configured.pathname = `${basePath}${requested.slice('/comms-hub'.length)}`;
-  } else {
-    configured.pathname = `${basePath}${requested}`.replace(/\/{2,}/g, '/');
+  let pathname = configured.pathname.replace(/\/+$/, '');
+  const lower = pathname.toLowerCase();
+  const knownSuffixes = [
+    '/comms-hub/intake/chat/sync',
+    '/comms-hub/intake/chat',
+    '/comms-hub/health',
+    '/comms-hub',
+  ];
+  for (const suffix of knownSuffixes) {
+    if (lower.endsWith(suffix)) {
+      pathname = pathname.slice(0, pathname.length - suffix.length);
+      break;
+    }
   }
+  configured.pathname = pathname || '/';
+  configured.search = '';
+  configured.hash = '';
+  return configured;
+}
+
+function aimsEndpoint(baseUrl, path) {
+  const configured = normaliseAimsBase(baseUrl);
+  const requested = String(path || '').startsWith('/') ? String(path) : `/${path}`;
+  const prefix = configured.pathname === '/' ? '' : configured.pathname.replace(/\/+$/, '');
+  configured.pathname = `${prefix}${requested}`.replace(/\/{2,}/g, '/');
+  return configured.toString().replace(/\/$/, '');
+}
+
+function aimsFallbackEndpoint(baseUrl, path) {
+  const configured = new URL(baseUrl);
+  const requested = String(path || '').startsWith('/') ? String(path) : `/${path}`;
+  configured.pathname = requested;
   configured.search = '';
   configured.hash = '';
   return configured.toString().replace(/\/$/, '');
+}
+
+function routeMissing(status, data) {
+  if (status !== 404) return false;
+  const code = String(data?.error || data?.code || '').toLowerCase();
+  if (code === 'chat_channel_disabled') return false;
+  return !code || code === 'not_found' || code === 'route_not_found' || code === 'webchat_upstream_route_not_found';
 }
 
 async function signedAimsRequest(context, path, payload) {
@@ -59,9 +91,11 @@ async function signedAimsRequest(context, path, payload) {
   if (!baseUrl || !secret) {
     return json({ ok: false, error: 'webchat_not_configured', message: 'Web chat is temporarily unavailable.' }, 503);
   }
-  let upstreamUrl;
+  let endpoints;
   try {
-    upstreamUrl = aimsEndpoint(baseUrl, path);
+    const primary = aimsEndpoint(baseUrl, path);
+    const fallback = aimsFallbackEndpoint(baseUrl, path);
+    endpoints = primary === fallback ? [primary] : [primary, fallback];
   } catch {
     return json({ ok: false, error: 'webchat_base_url_invalid', message: 'Web chat is temporarily unavailable.' }, 503);
   }
@@ -69,39 +103,52 @@ async function signedAimsRequest(context, path, payload) {
   const timestamp = String(Date.now());
   const nonce = crypto.randomUUID();
   const signature = await hmacHex(secret, `${timestamp}.${nonce}.${body}`);
-  const controller = new AbortController();
   const configuredTimeout = Number(envText(context.env, 'AIMS_COMMS_HUB_CHAT_TIMEOUT_MS'));
   const timeoutMs = Number.isFinite(configuredTimeout) && configuredTimeout >= 2000 && configuredTimeout <= 30000
     ? configuredTimeout : DEFAULT_TIMEOUT_MS;
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const response = await fetch(upstreamUrl, {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json',
-        'x-coginpal-timestamp': timestamp,
-        'x-coginpal-nonce': nonce,
-        'x-coginpal-signature': `sha256=${signature}`,
-        'user-agent': 'jonathan-harris-website-cognipal/1.0',
-      },
-      body,
-      signal: controller.signal,
-    });
-    const data = await response.json().catch(() => null);
-    if (response.status === 404) {
-      return json({ ok: false, error: 'webchat_upstream_route_not_found', message: 'Web chat is reconnecting. Please try again in a moment.' }, 502);
+
+  let lastStatus = 502;
+  let lastData = null;
+  for (let index = 0; index < endpoints.length; index += 1) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetch(endpoints[index], {
+        method: 'POST',
+        headers: {
+          accept: 'application/json',
+          'content-type': 'application/json',
+          'x-coginpal-timestamp': timestamp,
+          'x-coginpal-nonce': nonce,
+          'x-coginpal-signature': `sha256=${signature}`,
+          'user-agent': 'jonathan-harris-website-cognipal/1.1',
+        },
+        body,
+        signal: controller.signal,
+      });
+      const data = await response.json().catch(() => null);
+      lastStatus = response.status;
+      lastData = data;
+      if (routeMissing(response.status, data) && index + 1 < endpoints.length) continue;
+      if (response.status === 404 && routeMissing(response.status, data)) {
+        return json({ ok: false, error: 'webchat_upstream_route_not_found', message: 'Web chat is temporarily unavailable.' }, 502);
+      }
+      if (!data || typeof data !== 'object') {
+        return json({ ok: false, error: 'webchat_upstream_invalid', message: 'Web chat is temporarily unavailable.' }, 502);
+      }
+      if (data.error === 'chat_channel_disabled') {
+        return json({ ok: false, error: 'webchat_channel_disabled', message: 'Web chat is temporarily unavailable.' }, 503);
+      }
+      return json(data, response.status);
+    } catch (error) {
+      const timeout = error?.name === 'AbortError';
+      if (index + 1 < endpoints.length && !timeout) continue;
+      return json({ ok: false, error: timeout ? 'webchat_timeout' : 'webchat_upstream_failed', message: 'Web chat is temporarily unavailable.' }, 502);
+    } finally {
+      clearTimeout(timer);
     }
-    if (!data || typeof data !== 'object') {
-      return json({ ok: false, error: 'webchat_upstream_invalid', message: 'Web chat is temporarily unavailable.' }, 502);
-    }
-    return json(data, response.status);
-  } catch (error) {
-    const timeout = error?.name === 'AbortError';
-    return json({ ok: false, error: timeout ? 'webchat_timeout' : 'webchat_upstream_failed', message: 'Web chat is temporarily unavailable.' }, 502);
-  } finally {
-    clearTimeout(timer);
   }
+  return json(lastData && typeof lastData === 'object' ? lastData : { ok: false, error: 'webchat_upstream_failed', message: 'Web chat is temporarily unavailable.' }, lastStatus);
 }
 
 export async function readVisitorRequest(context, { requireMessage = false } = {}) {
