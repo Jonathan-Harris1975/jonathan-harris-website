@@ -35,3 +35,9 @@ compatibility_date = "2024-09-23"
   R2_BUCKET_HIVE_SKILLS = "hive-skills"
   HIVE_SKILLS_DEFAULT_MANIFEST = "manifests/website-skills-manifest.json"
   HIVE_SKILLS_ACCESS_MODE = "read_only"
+
+# CogniPal website chat runtime variables are configured in Cloudflare Pages.
+# AIMS_COMMS_HUB_BASE_URL is non-secret and may point at the current Koyeb AIMS origin.
+# COMMS_HUB_COGINPAL_WEBHOOK_SECRET must be configured as a Pages secret and must
+# match the Koyeb/AIMS secret of the same name. Do not commit either real value.
+# Optional: AIMS_COMMS_HUB_CHAT_TIMEOUT_MS (default 12000).
