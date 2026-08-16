@@ -85,6 +85,7 @@ def build_site_shell(*, root: Path = ROOT, base_url: str = SITE_BASE_URL, versio
         "footerUrl": urljoin(f"{base}/", f"{version_path}/footer.html"),
         "stylesheetUrl": urljoin(f"{base}/", f"assets/css/site.css?v={version}"),
         "siteUiScriptUrl": urljoin(f"{base}/", f"assets/js/site-ui.min.js?v={version}"),
+        "scriptGovernanceUrl": urljoin(f"{base}/", f"assets/js/script-governance.min.js?v={version}"),
         "headerSha256": sha256_text(header_html),
         "footerSha256": sha256_text(footer_html),
         "managedFamilies": ["newsletter-web", "blog", "blog-social", "transcripts"],

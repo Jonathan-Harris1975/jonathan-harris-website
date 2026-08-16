@@ -147,6 +147,7 @@ def main() -> int:
         run_step("Validate governed image assets", [sys.executable, "scripts/check_image_assets.py"])
         run_step("Apply third-party script governance", [sys.executable, "scripts/govern_page_scripts.py"])
         run_step("Validate third-party script governance", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
+        run_step("Validate first-party CogniPal webchat and BotSailor removal", [sys.executable, "scripts/check_webchat_contract.py"])
         run_step("Run growth regression contracts", [sys.executable, "scripts/test_growth_contracts.py"])
         run_step("Run Phase 4A schema-markup gate", [sys.executable, "scripts/audits/schema_markup_gate.py", "--root", "."])
 

@@ -26,7 +26,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->'''
 
 RUNTIME_HEAD_BLOCK = '''<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script defer data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>'''
 
 GOOGLE_PATTERNS = [
@@ -121,7 +120,6 @@ def validate_page(text: str) -> list[str]:
         'beTracker.t({hash: "fe05ab38be8b4875d12740b632198511"});' in text
         or "beTracker.t({hash: 'fe05ab38be8b4875d12740b632198511'});" in text
     )
-    has_botsailor_inline = 'https://botsailor.com/script/webchat-link.js?code=1744067063128291' in text
 
     if has_governed_loader and not has_governed_loader_ignore:
         errors.append('governed loader missing consent-ignore attributes')
@@ -130,8 +128,8 @@ def validate_page(text: str) -> list[str]:
         errors.append('missing Metricool loader script')
     if not (has_governed_loader or has_metricool_init):
         errors.append('missing Metricool tracker initialiser')
-    if not (has_governed_loader or has_botsailor_inline):
-        errors.append('missing BotSailor script')
+    if 'botsailor.com' in text.lower():
+        errors.append('contains removed BotSailor reference')
 
     if re.search(r'GTM-TFM7Q3RB|G-NLC3RN7H86|\bgtag\(', text, re.I):
         errors.append('contains stale Google analytics/tag code')
