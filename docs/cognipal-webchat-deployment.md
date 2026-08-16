@@ -14,7 +14,7 @@ The website chat is first-party. BotSailor is not part of the public runtime.
 
 Set these in the Pages project, not in the repository:
 
-- `AIMS_COMMS_HUB_BASE_URL` — current public AIMS origin, without a trailing slash.
+- `AIMS_COMMS_HUB_BASE_URL` — current public AIMS origin. The gateway now accepts either the bare origin (`https://…`) or an origin ending in `/comms-hub` without duplicating the route prefix.
 - `COMMS_HUB_COGINPAL_WEBHOOK_SECRET` — secret; must exactly match the AIMS/Koyeb value.
 - `AIMS_COMMS_HUB_CHAT_TIMEOUT_MS` — optional, default 12000 ms.
 
@@ -28,6 +28,18 @@ Set these in the Pages project, not in the repository:
 - `COMMS_HUB_CHAT_HISTORY_LIMIT=100`
 
 The optional `COMMS_HUB_COGINPAL_API_BASE_URL` and `COMMS_HUB_COGINPAL_API_KEY` may both remain blank for the first-party transport.
+
+## Launcher behaviour
+
+- The launcher uses `https://assets.jonathan-harris.online/CogniPal.jpg` for both the floating button and chat header avatar.
+- First-time visitors see the launcher after 30 seconds or after scrolling 35% of the page, whichever happens first. The widget never auto-opens.
+- Visitors who have previously opened or used CogniPal see the launcher immediately on later visits.
+- The launcher is vertically offset from the site's back-to-top control so the two floating controls do not overlap.
+- Public copy speaks directly about Jonathan rather than referring to a team.
+
+## Route resilience
+
+The Pages gateway accepts `AIMS_COMMS_HUB_BASE_URL` as either the bare AIMS origin or an origin ending in `/comms-hub`; it normalises the upstream path to prevent a duplicated `/comms-hub/comms-hub/...` route. AIMS captures the exact raw body for both `/intake/chat` and `/intake/chat/sync` so HMAC verification uses the same bytes that Cloudflare signed.
 
 ## Live canary
 
