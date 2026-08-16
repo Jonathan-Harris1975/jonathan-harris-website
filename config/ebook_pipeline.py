@@ -3190,7 +3190,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script type="application/ld+json">{json_script(build_book_schema(book))}</script>
 <script type="application/ld+json">{json_script(faq_schema)}</script>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebook-detail">
@@ -3442,7 +3441,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
 <script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 <link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<link href="https://botsailor.com" rel="dns-prefetch"/>
 <script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
 <body class="ebooks-catalogue">
