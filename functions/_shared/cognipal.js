@@ -39,11 +39,31 @@ async function hmacHex(secret, input) {
   return [...new Uint8Array(signature)].map((value) => value.toString(16).padStart(2, '0')).join('');
 }
 
+function aimsEndpoint(baseUrl, path) {
+  const configured = new URL(baseUrl);
+  const basePath = configured.pathname.replace(/\/+$/, '');
+  const requested = String(path || '').startsWith('/') ? String(path) : `/${path}`;
+  if (basePath.toLowerCase().endsWith('/comms-hub') && requested.toLowerCase().startsWith('/comms-hub/')) {
+    configured.pathname = `${basePath}${requested.slice('/comms-hub'.length)}`;
+  } else {
+    configured.pathname = `${basePath}${requested}`.replace(/\/{2,}/g, '/');
+  }
+  configured.search = '';
+  configured.hash = '';
+  return configured.toString().replace(/\/$/, '');
+}
+
 async function signedAimsRequest(context, path, payload) {
   const baseUrl = envText(context.env, 'AIMS_COMMS_HUB_BASE_URL').replace(/\/+$/, '');
   const secret = envText(context.env, 'COMMS_HUB_COGINPAL_WEBHOOK_SECRET');
   if (!baseUrl || !secret) {
     return json({ ok: false, error: 'webchat_not_configured', message: 'Web chat is temporarily unavailable.' }, 503);
+  }
+  let upstreamUrl;
+  try {
+    upstreamUrl = aimsEndpoint(baseUrl, path);
+  } catch {
+    return json({ ok: false, error: 'webchat_base_url_invalid', message: 'Web chat is temporarily unavailable.' }, 503);
   }
   const body = JSON.stringify(payload);
   const timestamp = String(Date.now());
@@ -55,7 +75,7 @@ async function signedAimsRequest(context, path, payload) {
     ? configuredTimeout : DEFAULT_TIMEOUT_MS;
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetch(`${baseUrl}${path}`, {
+    const response = await fetch(upstreamUrl, {
       method: 'POST',
       headers: {
         accept: 'application/json',
@@ -69,6 +89,9 @@ async function signedAimsRequest(context, path, payload) {
       signal: controller.signal,
     });
     const data = await response.json().catch(() => null);
+    if (response.status === 404) {
+      return json({ ok: false, error: 'webchat_upstream_route_not_found', message: 'Web chat is reconnecting. Please try again in a moment.' }, 502);
+    }
     if (!data || typeof data !== 'object') {
       return json({ ok: false, error: 'webchat_upstream_invalid', message: 'Web chat is temporarily unavailable.' }, 502);
     }
@@ -141,4 +164,4 @@ export function buildSyncPayload(payload) {
   };
 }
 
-export { json, signedAimsRequest };
+export { aimsEndpoint, json, signedAimsRequest };
