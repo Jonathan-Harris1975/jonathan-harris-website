@@ -1,4 +1,5 @@
 import { ensureSharedChrome } from "../../_shared/chrome.js";
+import { sanitizeStoredHtml } from "../../_shared/security.js";
 import {
   extensionContentType,
   getIfNoneMatchResponse,
@@ -40,8 +41,9 @@ export async function onRequest(context) {
   }
 
   const body = await object.text();
-  let html = key.endsWith(".html") ? rewriteHtml(body, request) : body;
+  let html = body;
   if (key.endsWith(".html")) {
+    html = rewriteHtml(await sanitizeStoredHtml(body), request);
     html = await ensureSharedChrome(context, html);
   }
 
