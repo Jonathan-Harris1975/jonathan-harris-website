@@ -74,6 +74,17 @@ jobs:
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
+      INPUT_SESSION_ID: ${{ inputs.session_id }}
+      INPUT_REPORT_PREFIX: ${{ inputs.report_prefix }}
+      INPUT_BASE_URL: ${{ inputs.base_url }}
+      INPUT_EXCLUDE_PREFIXES: ${{ inputs.exclude_prefixes }}
+      INPUT_CALLBACK_URL: ${{ inputs.callback_url }}
+      INPUT_ANALYSIS_URL: ${{ inputs.analysis_url }}
+      INPUT_CALLBACK_TOKEN: ${{ inputs.callback_token }}
+      INPUT_AUDIT_BUCKET: ${{ inputs.audit_bucket }}
+      INPUT_AUDIT_PUBLIC_BASE_URL: ${{ inputs.audit_public_base_url }}
+      INPUT_AUDIT_BUCKET_ENV: ${{ inputs.audit_bucket_env }}
+      INPUT_AUDIT_PUBLIC_BASE_ENV: ${{ inputs.audit_public_base_env }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
     steps:
       - name: Check out repository
@@ -89,11 +100,17 @@ jobs:
           python -m pip install --disable-pip-version-check -r requirements.txt
           python -m pip install --disable-pip-version-check boto3 requests beautifulsoup4 openpyxl
 
+      - name: Validate workflow-dispatch inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audits/validate_workflow_inputs.py --callback-suffix "/audits/digital-growth/callback"
+
       - name: Resolve callback and dedicated audits bucket
         shell: bash
         run: |
           set -euo pipefail
-          callback_url="${{ inputs.callback_url }}"
+          callback_url="$INPUT_CALLBACK_URL"
           [ -n "$callback_url" ] || callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
           [ -n "$callback_url" ] || callback_url="https://app.jonathan-harris.online/audits/digital-growth/callback"
           case "$callback_url" in
@@ -101,23 +118,23 @@ jobs:
             *) echo "::error::callback_url must end with /audits/digital-growth/callback; got $callback_url"; exit 1 ;;
           esac
 
-          callback_token="${{ inputs.callback_token }}"
+          callback_token="$INPUT_CALLBACK_TOKEN"
           [ -n "$callback_token" ] || callback_token="$AUDIT_CALLBACK_TOKEN"
           [ -n "$callback_token" ] || callback_token="$AI_SUITE_AUDIT_CALLBACK_TOKEN"
           [ -n "$callback_token" ] || { echo "::error::Audit callback token is required"; exit 1; }
 
-          audit_bucket="${{ inputs.audit_bucket }}"
+          audit_bucket="$INPUT_AUDIT_BUCKET"
           [ -n "$audit_bucket" ] || audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
           [ -n "$audit_bucket" ] || audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
           [ -n "$audit_bucket" ] || { echo "::error::R2_BUCKET_AUDITS is required"; exit 1; }
 
-          audit_public_base_url="${{ inputs.audit_public_base_url }}"
+          audit_public_base_url="$INPUT_AUDIT_PUBLIC_BASE_URL"
           [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
           [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
           [ -n "$audit_public_base_url" ] || { echo "::error::R2_PUBLIC_BASE_URL_AUDITS is required"; exit 1; }
 
-          [ "${{ inputs.audit_bucket_env }}" = "R2_BUCKET_AUDITS" ] || { echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS"; exit 1; }
-          [ "${{ inputs.audit_public_base_env }}" = "R2_PUBLIC_BASE_URL_AUDITS" ] || { echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS"; exit 1; }
+          [ "$INPUT_AUDIT_BUCKET_ENV" = "R2_BUCKET_AUDITS" ] || { echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS"; exit 1; }
+          [ "$INPUT_AUDIT_PUBLIC_BASE_ENV" = "R2_PUBLIC_BASE_URL_AUDITS" ] || { echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS"; exit 1; }
 
           echo "::add-mask::$callback_token"
           echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
@@ -135,13 +152,13 @@ jobs:
           mkdir -p artifacts/digital-growth
           set +e
           python scripts/audits/digital_growth_audit.py \
-            --base-url "${{ inputs.base_url }}" \
-            --session-id "${{ inputs.session_id }}" \
-            --report-prefix "${{ inputs.report_prefix }}" \
-            --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
+            --base-url "$INPUT_BASE_URL" \
+            --session-id "$INPUT_SESSION_ID" \
+            --report-prefix "$INPUT_REPORT_PREFIX" \
+            --exclude-prefixes "$INPUT_EXCLUDE_PREFIXES" \
             --callback-url "$RESOLVED_CALLBACK_URL" \
             --callback-token "$RESOLVED_CALLBACK_TOKEN" \
-            --analysis-url "${{ inputs.analysis_url }}" \
+            --analysis-url "$INPUT_ANALYSIS_URL" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
             --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS" \
             2>&1 | tee artifacts/digital-growth/workflow.log
@@ -175,9 +192,9 @@ jobs:
           exit_code = os.environ.get("AUDIT_EXIT_CODE", "unknown")
           payload = {
             "auditType": "digital-growth",
-            "sessionId": "${{ inputs.session_id }}",
+            "sessionId": os.environ["INPUT_SESSION_ID"],
             "status": "failed",
-            "reportPrefix": "${{ inputs.report_prefix }}",
+            "reportPrefix": os.environ["INPUT_REPORT_PREFIX"],
             "message": "Digital Growth GitHub workflow failed before a structured stage callback was posted.",
             "error": (workflow_log_tail.splitlines()[-1] if workflow_log_tail else "GitHub Actions failure before Digital Growth stage publication completed")[:4000],
             "failedStep": "Run Digital Growth audit",

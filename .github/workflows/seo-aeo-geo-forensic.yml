@@ -79,8 +79,17 @@ jobs:
       AUDIT_CALLBACK_TOKEN: ${{ secrets.AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_TOKEN: ${{ secrets.AI_SUITE_AUDIT_CALLBACK_TOKEN }}
       AI_SUITE_AUDIT_CALLBACK_URL: ${{ vars.AI_SUITE_AUDIT_CALLBACK_URL }}
+      INPUT_SESSION_ID: ${{ inputs.session_id }}
+      INPUT_REPORT_PREFIX: ${{ inputs.report_prefix }}
+      INPUT_BASE_URL: ${{ inputs.base_url }}
+      INPUT_EXCLUDE_PREFIXES: ${{ inputs.exclude_prefixes }}
       INPUT_CALLBACK_URL: ${{ inputs.callback_url }}
+      INPUT_ANALYSIS_URL: ${{ inputs.analysis_url }}
       INPUT_CALLBACK_TOKEN: ${{ inputs.callback_token }}
+      INPUT_AUDIT_BUCKET: ${{ inputs.audit_bucket }}
+      INPUT_AUDIT_PUBLIC_BASE_URL: ${{ inputs.audit_public_base_url }}
+      INPUT_AUDIT_BUCKET_ENV: ${{ inputs.audit_bucket_env }}
+      INPUT_AUDIT_PUBLIC_BASE_ENV: ${{ inputs.audit_public_base_env }}
       WORKFLOW_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     steps:
@@ -93,6 +102,12 @@ jobs:
           python-version: '3.13'
           cache: pip
           cache-dependency-path: requirements.txt
+
+      - name: Validate workflow-dispatch inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audits/validate_workflow_inputs.py --callback-suffix "/audits/seo-aeo-geo/callback"
 
       - name: Resolve AI-suite callback and audits bucket configuration
         shell: bash
@@ -126,7 +141,7 @@ jobs:
             exit 1
           fi
 
-          audit_bucket="${{ inputs.audit_bucket }}"
+          audit_bucket="$INPUT_AUDIT_BUCKET"
           if [ -z "$audit_bucket" ]; then
             audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
           fi
@@ -138,7 +153,7 @@ jobs:
             exit 1
           fi
 
-          audit_public_base_url="${{ inputs.audit_public_base_url }}"
+          audit_public_base_url="$INPUT_AUDIT_PUBLIC_BASE_URL"
           if [ -z "$audit_public_base_url" ]; then
             audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
           fi
@@ -157,11 +172,11 @@ jobs:
             fi
           done
 
-          if [ "${{ inputs.audit_bucket_env }}" != "R2_BUCKET_AUDITS" ]; then
+          if [ "$INPUT_AUDIT_BUCKET_ENV" != "R2_BUCKET_AUDITS" ]; then
             echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS for SEO/AEO/GEO outputs."
             exit 1
           fi
-          if [ "${{ inputs.audit_public_base_env }}" != "R2_PUBLIC_BASE_URL_AUDITS" ]; then
+          if [ "$INPUT_AUDIT_PUBLIC_BASE_ENV" != "R2_PUBLIC_BASE_URL_AUDITS" ]; then
             echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS for SEO/AEO/GEO outputs."
             exit 1
           fi
@@ -212,13 +227,13 @@ jobs:
           mkdir -p artifacts/seo-aeo-geo
           set +e
           python -u scripts/audits/seo_aeo_geo_forensic.py \
-            --base-url "${{ inputs.base_url }}" \
-            --session-id "${{ inputs.session_id }}" \
-            --report-prefix "${{ inputs.report_prefix }}" \
-            --exclude-prefixes "${{ inputs.exclude_prefixes }}" \
+            --base-url "$INPUT_BASE_URL" \
+            --session-id "$INPUT_SESSION_ID" \
+            --report-prefix "$INPUT_REPORT_PREFIX" \
+            --exclude-prefixes "$INPUT_EXCLUDE_PREFIXES" \
             --callback-url "$RESOLVED_CALLBACK_URL" \
             --callback-token "$RESOLVED_CALLBACK_TOKEN" \
-            --analysis-url "${{ inputs.analysis_url }}" \
+            --analysis-url "$INPUT_ANALYSIS_URL" \
             --audit-bucket "$R2_BUCKET_AUDITS" \
             --audit-public-base-url "$R2_PUBLIC_BASE_URL_AUDITS" \
             --output-dir artifacts/seo-aeo-geo \
@@ -263,9 +278,9 @@ jobs:
 
           payload = {
               "auditType": "seo-aeo-geo",
-              "sessionId": "${{ inputs.session_id }}",
+              "sessionId": os.environ["INPUT_SESSION_ID"],
               "status": "failed",
-              "reportPrefix": "${{ inputs.report_prefix }}",
+              "reportPrefix": os.environ["INPUT_REPORT_PREFIX"],
               "message": "SEO/AEO/GEO GitHub workflow failed before a complete stage callback.",
               "error": detail or "GitHub Actions failure before SEO/AEO/GEO stage publication completed",
               "workflowFailure": True,
