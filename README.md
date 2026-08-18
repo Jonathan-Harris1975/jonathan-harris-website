@@ -1,45 +1,47 @@
-
-
 # Jonathan Harris Online
 
-This repository is the governed static source for `https://jonathan-harris.online`. It contains the public site, ebook catalogue, shared assets, crawler contracts, redirects and build-time validation used by Cloudflare Pages.
+This repository is the governed static source for `https://jonathan-harris.online`. It contains the public site, eBook catalogue, shared assets, crawler contracts, redirects, Cloudflare Pages Functions and validation scripts.
 
-## Production boundaries
+## Source boundaries
 
-- The workbook is the human-editable source for ebook routing and book content.
-- `data/ebooks-master.json` is the generated in-repository source used by pages and derivatives.
-- Podcast episodes and transcript objects are governed in Cloudflare R2, not as repository-owned static patch targets.
-- AIMS publishes weekly blog artefacts to Cloudflare R2; this repository carries only the website shell and runtime renderer, with no committed blog fallback.
-- `sitemap.xml`, `robots.txt`, `llms.txt`, `_redirects` and `_headers` are release-governed assets.
+- The governed workbook is the human-editable source for eBook routing/content.
+- `data/ebooks-master.json` is the generated in-repository eBook data source used by pages and derivatives.
+- Podcast episodes/transcripts are governed in Cloudflare R2 rather than treated as static patch targets here.
+- AIMS publishes weekly blog artefacts to R2; this repository contains the public blog shell/runtime renderer rather than a committed article fallback.
+- `sitemap.xml`, `robots.txt`, `llms.txt`, `_redirects` and `_headers` are governed public assets.
 
-## Health and deployment
+## CogniPal website chat
 
-- **Deployment:** Cloudflare Pages
-- **Build command:** `bash build.sh`
-- **Output directory:** `.`
-- **Health:** `GET /health.json`
+The current site uses the first-party CogniPal integration. Public pages load the governed CogniPal CSS/JavaScript; same-origin Pages Functions under `/api/cognipal/*` sign server-to-server requests into AIMS Comms Hub.
 
-The build validates the static health contract, ebook generation, route integrity, redirect synchronisation, shared header/footer injection, visible-header and bounded-spacing layout rules, crawler assets, images and release rules.
+- BotSailor is intentionally absent from the public runtime and CSP.
+- The launcher uses the CogniPal image asset.
+- First-time visitors see the launcher after 30 seconds or after 35% page scroll, whichever comes first; returning engaged visitors can see it immediately.
+- The widget never auto-opens.
+- Public copy speaks directly about messages going to Jonathan rather than implying a separate team.
 
-## Local release verification
+The validation script `scripts/check_webchat_contract.py` prevents BotSailor from being reintroduced into public runtime surfaces.
+
+## Deployment and validation
+
+Cloudflare Pages publishes the repository root. The deployment validation entry point is the existing `bash build.sh` script, which runs the governed static checks and generation steps required by Pages.
+
+Local verification:
 
 ```bash
 python -m pip install -r requirements.txt
 bash build.sh
 ```
 
-The governed workbook defaults to `jonathan-harris-site-url-inventory-remediated-release-ready.xlsx`. Set `EBOOK_WORKBOOK_PATH` when validating a different approved workbook.
+The default governed workbook is `jonathan-harris-site-url-inventory-remediated-release-ready.xlsx`; use `EBOOK_WORKBOOK_PATH` only when deliberately validating another approved workbook.
 
-## Release workflow
+Validation covers health, eBook derivatives, route/redirect integrity, shared chrome, layout spacing/header visibility, crawler assets, images, first-party webchat and generated-output drift.
 
-1. Make source changes in the governed workbook, templates or source files.
-2. Run `bash build.sh` and resolve every failing gate.
-3. Open a pull request and wait for production-readiness CI.
-4. Merge to `main` or `master` for Cloudflare Pages deployment.
-5. Allow the post-deploy workflow to verify live crawlers, pages, APIs and redirect chains.
+## Operational references
 
-See [`SECURITY.md`](SECURITY.md), [`docs/OPERATIONS.md`](docs/OPERATIONS.md), [`docs/CRAWLER-GOVERNANCE.md`](docs/CRAWLER-GOVERNANCE.md), [`docs/SHARED-CHROME-LAYOUT.md`](docs/SHARED-CHROME-LAYOUT.md) and [`docs/image-publishing-contract.md`](docs/image-publishing-contract.md).
-
-## Deterministic production build
-
-The Cloudflare Pages build uses `bash build.sh`. The only Python dependency is pinned in `requirements.txt`; the build reuses the exact installed version when available and installs it otherwise. This keeps local, CI and Pages builds aligned without unnecessary network work.
+- `SECURITY.md`
+- `docs/OPERATIONS.md`
+- `docs/CRAWLER-GOVERNANCE.md`
+- `docs/SHARED-CHROME-LAYOUT.md`
+- `docs/cognipal-webchat-deployment.md`
+- `docs/image-publishing-contract.md`
