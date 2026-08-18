@@ -1,4 +1,5 @@
 import { ensureSharedChrome } from "../_shared/chrome.js";
+import { sanitizeStoredHtml } from "../_shared/security.js";
 const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
 
 function slugPartsFromParams(params) { const v = Array.isArray(params.slug) ? params.slug : [params.slug]; return v.filter(Boolean); }
@@ -90,5 +91,5 @@ export async function onRequest(context) {
   let object=await env.TRANSCRIPTS_BUCKET.get(rawKey); if(!object&&!rawKey.match(/\.(html|htm|txt|json|xml)$/i))object=await env.TRANSCRIPTS_BUCKET.get(`${rawKey}.html`); if(!object)return context.next();
   const headers=new Headers(), contentType=object.httpMetadata?.contentType??"text/html; charset=utf-8"; headers.set('Content-Type',contentType);headers.set('Cache-Control','public, max-age=3600, stale-while-revalidate=86400');headers.set('X-Transcript-AEO-Enhancement','enabled');if(object.etag)headers.set('ETag',object.etag);if(request.headers.get('If-None-Match')===object.etag)return new Response(null,{status:304,headers});if(!contentType.includes('text/html'))return new Response(object.body,{status:200,headers});
   let episode=null; try{const episodes=await fetchFeedEpisodes(context);episode=findEpisodeForTranscript(episodes,rawKey,request)}catch{}
-  const html=await object.text(), enhanced=enhanceTranscriptHtml(html,buildAeoPrelude(episode,request)), withChrome=await ensureSharedChrome(context,enhanced); return new Response(withChrome,{status:200,headers});
+  const html=await sanitizeStoredHtml(await object.text()), enhanced=enhanceTranscriptHtml(html,buildAeoPrelude(episode,request)), withChrome=await ensureSharedChrome(context,enhanced); return new Response(withChrome,{status:200,headers});
 }
