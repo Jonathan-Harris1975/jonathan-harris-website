@@ -5,20 +5,23 @@ REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_ROOT"
 
 if ! python3 - <<'PYDEP'
-import openpyxl
-import pypdf
-import bs4
-import reportlab
-raise SystemExit(
-    0
-    if (
-        openpyxl.__version__ == "3.1.5"
-        and pypdf.__version__ == "5.9.0"
-        and bs4.__version__ == "4.14.3"
-        and reportlab.Version == "5.0.0"
-    )
-    else 1
-)
+from importlib.metadata import PackageNotFoundError, version
+from pathlib import Path
+
+requirements = Path("requirements.txt").read_text(encoding="utf-8").splitlines()
+for raw_line in requirements:
+    line = raw_line.split("#", 1)[0].strip()
+    if not line:
+        continue
+    if "==" not in line:
+        raise SystemExit(f"Production requirement must be exactly pinned: {line}")
+    package, expected = (part.strip() for part in line.split("==", 1))
+    try:
+        installed = version(package)
+    except PackageNotFoundError:
+        raise SystemExit(1)
+    if installed != expected:
+        raise SystemExit(1)
 PYDEP
 then
   python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
