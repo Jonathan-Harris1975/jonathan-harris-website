@@ -1,0 +1,12 @@
+name = "cognipal-rate-limit"
+main = "index.js"
+compatibility_date = "2026-08-22"
+workers_dev = false
+
+[[durable_objects.bindings]]
+name = "COGNIPAL_RATE_LIMITER"
+class_name = "CogniPalRateLimiter"
+
+[exports.CogniPalRateLimiter]
+type = "durable-object"
+storage = "sqlite"
