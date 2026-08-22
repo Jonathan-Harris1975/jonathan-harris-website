@@ -28,8 +28,8 @@ class FakeRateLimiterNamespace {
   }
 }
 
-function request(path, payload, { origin = 'https://jonathan-harris.online', ip = '203.0.113.8' } = {}) {
-  const headers = { 'content-type': 'application/json', 'cf-connecting-ip': ip };
+function request(path, payload, { origin = 'https://jonathan-harris.online', ip = '203.0.113.8', extraHeaders = {} } = {}) {
+  const headers = { 'content-type': 'application/json', 'cf-connecting-ip': ip, ...extraHeaders };
   if (origin) headers.origin = origin;
   return new Request(`https://jonathan-harris.online${path}`, {
     method: 'POST',
@@ -131,4 +131,66 @@ test('production webchat fails closed if the Durable Object binding is absent', 
   }), null));
   assert.equal(response.status, 503);
   assert.equal((await responseBody(response)).error, 'rate_limiter_unavailable');
+});
+
+
+test('oversized JSON without Content-Length is rejected before rate limiting', async () => {
+  const limiter = new FakeRateLimiterNamespace();
+  const req = request('/api/cognipal/message', {
+    sessionId: 'session-00000001',
+    visitorId: 'visitor-00000001',
+    text: 'body limit test',
+    padding: 'x'.repeat(17_000),
+  });
+  assert.equal(req.headers.get('content-length'), null, 'test must exercise an unknown-length request');
+  const response = await messagePost(context(req, limiter));
+  assert.equal(response.status, 413);
+  assert.equal((await responseBody(response)).error, 'payload_too_large');
+  assert.equal(limiter.counters.size, 0, 'oversized bodies must be rejected before rate-limit state is touched');
+});
+
+test('incorrect small Content-Length cannot bypass the actual body limit', async () => {
+  const limiter = new FakeRateLimiterNamespace();
+  const response = await messagePost(context(request('/api/cognipal/message', {
+    sessionId: 'session-00000001',
+    visitorId: 'visitor-00000001',
+    text: 'body limit test',
+    padding: 'x'.repeat(17_000),
+  }, { extraHeaders: { 'content-length': '1' } }), limiter));
+  assert.equal(response.status, 413);
+  assert.equal((await responseBody(response)).error, 'payload_too_large');
+  assert.equal(limiter.counters.size, 0);
+});
+
+test('streamed unknown-length body is bounded while it is read', async () => {
+  const limiter = new FakeRateLimiterNamespace();
+  const encoder = new TextEncoder();
+  const prefix = JSON.stringify({
+    sessionId: 'session-00000001',
+    visitorId: 'visitor-00000001',
+    text: 'body limit test',
+    padding: '',
+  }).slice(0, -2);
+  const body = new ReadableStream({
+    start(controller) {
+      controller.enqueue(encoder.encode(`${prefix}${'x'.repeat(9_000)}`));
+      controller.enqueue(encoder.encode(`${'y'.repeat(9_000)}"}`));
+      controller.close();
+    },
+  });
+  const req = new Request('https://jonathan-harris.online/api/cognipal/message', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      origin: 'https://jonathan-harris.online',
+      'cf-connecting-ip': '203.0.113.8',
+    },
+    body,
+    duplex: 'half',
+  });
+  assert.equal(req.headers.get('content-length'), null);
+  const response = await messagePost(context(req, limiter));
+  assert.equal(response.status, 413);
+  assert.equal((await responseBody(response)).error, 'payload_too_large');
+  assert.equal(limiter.counters.size, 0);
 });
