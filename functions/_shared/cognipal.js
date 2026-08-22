@@ -1,5 +1,6 @@
 const DEFAULT_WEBSITE_ID = 'jonathan-harris.online';
 const DEFAULT_TIMEOUT_MS = 12000;
+const MAX_VISITOR_REQUEST_BYTES = 16 * 1024;
 
 function envText(env, name) {
   return String(env?.[name] || '').trim();
@@ -220,13 +221,57 @@ async function signedAimsRequest(context, path, payload) {
   return json(lastData && typeof lastData === 'object' ? lastData : { ok: false, error: 'webchat_upstream_failed', message: 'Web chat is temporarily unavailable.' }, lastStatus);
 }
 
+async function readBoundedJson(request, maximumBytes) {
+  const declaredRaw = String(request.headers.get('content-length') || '').trim();
+  if (/^\d+$/.test(declaredRaw) && Number(declaredRaw) > maximumBytes) {
+    return { tooLarge: true, payload: null };
+  }
+
+  if (!request.body) return { tooLarge: false, payload: null };
+
+  const reader = request.body.getReader();
+  const chunks = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!(value instanceof Uint8Array)) return { tooLarge: false, payload: null };
+      totalBytes += value.byteLength;
+      if (totalBytes > maximumBytes) {
+        await reader.cancel('request body exceeds configured limit').catch(() => {});
+        return { tooLarge: true, payload: null };
+      }
+      chunks.push(value);
+    }
+  } catch {
+    return { tooLarge: false, payload: null };
+  } finally {
+    try { reader.releaseLock(); } catch {}
+  }
+
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+
+  try {
+    const text = new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    return { tooLarge: false, payload: JSON.parse(text) };
+  } catch {
+    return { tooLarge: false, payload: null };
+  }
+}
+
 export async function readVisitorRequest(context, { requireMessage = false } = {}) {
   if (!sameOrigin(context.request)) return { error: json({ ok: false, error: 'origin_rejected' }, 403) };
   const contentType = String(context.request.headers.get('content-type') || '').toLowerCase();
   if (!contentType.startsWith('application/json')) return { error: json({ ok: false, error: 'json_required' }, 415) };
-  const declared = Number(context.request.headers.get('content-length') || 0);
-  if (declared > 16384) return { error: json({ ok: false, error: 'payload_too_large' }, 413) };
-  const payload = await context.request.json().catch(() => null);
+  const decoded = await readBoundedJson(context.request, MAX_VISITOR_REQUEST_BYTES);
+  if (decoded.tooLarge) return { error: json({ ok: false, error: 'payload_too_large' }, 413) };
+  const payload = decoded.payload;
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return { error: json({ ok: false, error: 'payload_invalid' }, 400) };
   const sessionId = cleanText(payload.sessionId, 200);
   const visitorId = cleanText(payload.visitorId, 200);
