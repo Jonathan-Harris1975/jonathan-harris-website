@@ -23,8 +23,77 @@ function cleanText(value, maximum) {
 
 function sameOrigin(request) {
   const origin = request.headers.get('origin');
-  if (!origin) return true;
-  try { return new URL(origin).host === new URL(request.url).host; } catch { return false; }
+  if (!origin) return false;
+  try { return new URL(origin).origin === new URL(request.url).origin; } catch { return false; }
+}
+
+function localDevelopmentRequest(request) {
+  try {
+    const host = new URL(request.url).hostname.toLowerCase();
+    return host === 'localhost' || host === '127.0.0.1' || host === '::1';
+  } catch {
+    return false;
+  }
+}
+
+function clientAddress(request) {
+  return cleanText(request.headers.get('cf-connecting-ip') || '', 128) || 'unknown';
+}
+
+async function sha256Hex(input) {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(input));
+  return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, '0')).join('');
+}
+
+async function consumeRateLimit(namespace, key, limit, windowSeconds) {
+  const id = namespace.idFromName(await sha256Hex(key));
+  const stub = namespace.get(id);
+  const response = await stub.fetch('https://cognipal-rate-limit.internal/limit', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ limit, windowSeconds }),
+  });
+  const body = await response.json().catch(() => null);
+  if (!response.ok || !body || typeof body !== 'object') {
+    throw new Error(`rate limiter returned ${response.status}`);
+  }
+  return body;
+}
+
+export async function enforceVisitorRateLimits(context, payload, route) {
+  const namespace = context.env?.COGNIPAL_RATE_LIMITER;
+  if (!namespace) {
+    if (localDevelopmentRequest(context.request)) return null;
+    return json({ ok: false, error: 'rate_limiter_unavailable', message: 'Web chat is temporarily unavailable.' }, 503);
+  }
+
+  const isMessage = route === 'message';
+  const limits = isMessage
+    ? { global: 600, ip: 20, visitor: 15, session: 12 }
+    : { global: 2400, ip: 180, visitor: 90, session: 60 };
+  const ip = clientAddress(context.request);
+  const scopes = [
+    [`${route}:global`, limits.global],
+    [`${route}:ip:${ip}`, limits.ip],
+    [`${route}:visitor:${payload.visitorId}`, limits.visitor],
+    [`${route}:session:${payload.sessionId}`, limits.session],
+  ];
+
+  try {
+    for (const [key, limit] of scopes) {
+      const result = await consumeRateLimit(namespace, key, limit, 60);
+      if (result.success !== true) {
+        const retryAfter = Math.max(1, Number(result.retryAfterSeconds) || 60);
+        const response = json({ ok: false, error: 'rate_limited', message: 'Too many chat requests. Please try again shortly.' }, 429);
+        response.headers.set('retry-after', String(retryAfter));
+        return response;
+      }
+    }
+  } catch {
+    return json({ ok: false, error: 'rate_limiter_unavailable', message: 'Web chat is temporarily unavailable.' }, 503);
+  }
+
+  return null;
 }
 
 async function hmacHex(secret, input) {
