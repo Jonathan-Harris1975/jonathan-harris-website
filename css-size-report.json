@@ -7,6 +7,13 @@
     "reduction_pct": 0.0
   },
   {
+    "file": "assets/css/cognipal-webchat.min.css",
+    "original_bytes": 5625,
+    "minified_bytes": 5624,
+    "reduction_bytes": 1,
+    "reduction_pct": 0.02
+  },
+  {
     "file": "assets/css/compare-inline.css",
     "original_bytes": 928,
     "minified_bytes": 928,
@@ -36,9 +43,9 @@
   },
   {
     "file": "assets/css/site.css",
-    "original_bytes": 134896,
-    "minified_bytes": 131648,
+    "original_bytes": 133241,
+    "minified_bytes": 129993,
     "reduction_bytes": 3248,
-    "reduction_pct": 2.41
+    "reduction_pct": 2.44
   }
 ]
