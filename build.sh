@@ -40,6 +40,7 @@ if [[ -n "${AMAZON_BOOK_SIGNALS_SOURCE:-}" ]]; then
 fi
 
 python3 scripts/check_health_contract.py
+python3 scripts/check_hive_skills_route_parity.py
 # Publish a commit-specific marker so the post-deploy workflow can distinguish
 # the new Pages release from an older deployment whose crawler files are unchanged.
 python3 scripts/write_release_marker.py
