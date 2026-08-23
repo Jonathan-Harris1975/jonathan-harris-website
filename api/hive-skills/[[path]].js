@@ -1,7 +1,7 @@
 const DEFAULT_PUBLIC_BASE_URL = "https://pub-da50a6512f164566955a3076a1c795ef.r2.dev";
 const DEFAULT_OBJECT_KEY = "manifests/website-skills-manifest.json";
 
-const ALLOWED_ROOTS = new Set(["audits", "index", "manifests", "schemas", "skills"]);
+const ALLOWED_ROOTS = new Set(["index", "manifests", "schemas", "skills"]);
 const ALLOWED_ROOT_FILES = new Set(["README.md", "file-manifest.json"]);
 
 const CONTENT_TYPES = {
