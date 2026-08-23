@@ -4786,7 +4786,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     html_files = [p for p in ROOT.rglob("*.html") if "node_modules" not in p.parts]
     css_bundle = "\n".join(css_path.read_text(encoding="utf-8", errors="ignore") for css_path in (ROOT / "assets" / "css").glob("*.css"))
     if any(re.search(r"class=[\"']([^\"']*\bsr-only\b[^\"']*)[\"']", p.read_text(encoding="utf-8", errors="ignore"), re.I) for p in html_files):
-        if not re.search(r"(^|[\s,{])\.sr-only\b", css_bundle, re.M):
+        if not re.search(r"(^|[\s,{}])\.sr-only\b", css_bundle, re.M):
             errors.append("Shared CSS is missing a governed .sr-only utility while HTML still references sr-only.")
     for file_path in html_files:
         text = file_path.read_text(encoding="utf-8", errors="ignore")
