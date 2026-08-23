@@ -40,6 +40,9 @@ jobs:
       - name: Run production readiness gate unit tests
         run: python -m unittest scripts.test_wait_for_live_release
 
+      - name: Run live crawler contract unit tests
+        run: python -m unittest scripts.test_check_crawlers
+
       - name: Run manuscript extraction regression tests
         run: python -m unittest scripts.test_sync_manuscript_samples
 
