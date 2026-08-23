@@ -308,17 +308,16 @@ def podcast_page() -> None:
     if not p.exists():
         return
     t = p.read_text(encoding="utf-8")
-    topic_filters = '''<!-- GROWTH:PODCAST-TOPICS START -->
-<section class="card podcast-card u-s21" aria-labelledby="podcast-topic-filter-heading">
-<h2 id="podcast-topic-filter-heading">Browse episodes by topic</h2>
-<p class="muted">Use the same podcast feed, filtered around the subject you are already interested in.</p>
-<div class="jh-journey-actions"><a href="/evidence/eu-ai-act-article-50-transparency/">EU AI Act Article 50</a><a href="/podcast/?topic=finance">Finance</a><a href="/podcast/?topic=work">Work</a><a href="/podcast/?topic=governance">Governance</a><a href="/podcast/?topic=healthcare">Healthcare</a><a href="/podcast/?topic=agents">AI agents</a><a href="/podcast/?topic=deepfake">Deepfakes &amp; trust</a></div>
-</section>
-<!-- GROWTH:PODCAST-TOPICS END -->'''
-    if "<!-- GROWTH:PODCAST-TOPICS START -->" in t:
-        t = replace_between(t, "<!-- GROWTH:PODCAST-TOPICS START -->", "<!-- GROWTH:PODCAST-TOPICS END -->", topic_filters)
-    elif '<section class="card podcast-card u-s21" aria-label="Podcast player">' in t:
-        t = t.replace('<section class="card podcast-card u-s21" aria-label="Podcast player">', topic_filters + "\n\n" + '<section class="card podcast-card u-s21" aria-label="Podcast player">', 1)
+    # Topic-filter furniture was retired from the landing page. Remove any
+    # stale generated block so regeneration is idempotent and matches the
+    # podcast regression contract.
+    t = re.sub(
+        r'\s*<!-- GROWTH:PODCAST-TOPICS START -->[\s\S]*?<!-- GROWTH:PODCAST-TOPICS END -->\s*',
+        '\n',
+        t,
+        count=1,
+        flags=re.I,
+    )
 
     static_records = load_podcast_fallback(3)
     latest_cards = render_static_podcast_cards(static_records)
@@ -369,8 +368,30 @@ def podcast_page() -> None:
     )
     if 'elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d' not in t:
         player_anchor = '<section class="card podcast-card u-s21" aria-label="Podcast player">'
+        player_section = (
+            player_anchor
+            + '\n<h2>Podcast Player</h2>'
+            + '<p class="muted">Browse and play Turing’s Torch episodes here.</p>\n'
+            + elfsight_widget
+            + '\n</section>'
+        )
         if player_anchor in t:
-            t = t.replace(player_anchor, player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget, 1)
+            t = t.replace(
+                player_anchor,
+                player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget,
+                1,
+            )
+        elif '<!-- GROWTH:PODCAST-LATEST END -->' in t:
+            # The old dedicated player section was retired when the crawlable RSS
+            # episode seam was introduced. Insert the enhanced player immediately
+            # after that governed block so new builds do not depend on stale markup.
+            t = t.replace(
+                '<!-- GROWTH:PODCAST-LATEST END -->',
+                '<!-- GROWTH:PODCAST-LATEST END -->\n' + player_section,
+                1,
+            )
+        else:
+            raise RuntimeError('Podcast page has no governed insertion point for the Elfsight player')
     # The loader sits immediately before the widget and appears exactly once.
     t = t.replace(elfsight_widget, elfsight_script + '\n' + elfsight_widget, 1)
     # Elfsight is the visible six-episode player, not a disclosure/facade.
