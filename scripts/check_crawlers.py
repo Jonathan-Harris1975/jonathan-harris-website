@@ -11,14 +11,17 @@ if str(REPO_ROOT) not in sys.path:
 import argparse
 import re
 from dataclasses import dataclass
+from datetime import date
 from typing import Dict, List
 from urllib import error, request
+from urllib.parse import urlsplit
 import xml.etree.ElementTree as ET
 
 from scripts.ebook_pipeline import (
     CRAWLER_CHECKSUMS_PATH,
     EXTERNAL_CRAWLER_FILES,
     ROOT,
+    SITE_URL,
     build_crawler_checksums,
     build_crawler_snapshot_paths,
     build_published_crawler_paths,
@@ -225,6 +228,71 @@ def _sitemap_loc_lastmod_map(body: str) -> Dict[str, str]:
     return entries
 
 
+def _is_runtime_sitemap_entry(loc: str, lastmod: str) -> bool:
+    """Return True for URL families added by functions/sitemap.xml.js at request time."""
+    try:
+        parsed = urlsplit(loc)
+        site = urlsplit(SITE_URL)
+    except ValueError:
+        return False
+
+    if parsed.scheme != site.scheme or parsed.netloc != site.netloc or parsed.query or parsed.fragment:
+        return False
+
+    path = parsed.path
+    is_podcast_episode = re.fullmatch(r"/podcast/episodes/[^/]+/", path) is not None
+    is_transcript = re.fullmatch(r"/transcripts/[^/]+", path) is not None
+    if not (is_podcast_episode or is_transcript):
+        return False
+
+    if not lastmod:
+        return True
+    try:
+        return date.fromisoformat(lastmod).isoformat() == lastmod
+    except ValueError:
+        return False
+
+
+def _validate_live_sitemap_entries(body: str, expected_text: str) -> str | None:
+    """Validate the static contract while allowing the sitemap's governed runtime enrichment.
+
+    The Pages sitemap function may append current podcast episode/transcript URLs from
+    the external podcast feed and may remove /blog/weekly/ when the live R2 publication
+    manifest is empty. Everything else must remain identical to the governed snapshot.
+    """
+    actual = _sitemap_loc_lastmod_map(body)
+    expected = _sitemap_loc_lastmod_map(expected_text)
+    optional_live_urls = {f"{SITE_URL.rstrip('/')}/blog/weekly/"}
+
+    missing = sorted(loc for loc in expected if loc not in actual and loc not in optional_live_urls)
+    if missing:
+        sample = ", ".join(missing[:3])
+        suffix = "" if len(missing) <= 3 else f" (+{len(missing) - 3} more)"
+        return f"Live sitemap is missing governed entries: {sample}{suffix}"
+
+    changed = sorted(
+        loc
+        for loc, expected_lastmod in expected.items()
+        if loc in actual and actual[loc] != expected_lastmod
+    )
+    if changed:
+        sample = ", ".join(changed[:3])
+        suffix = "" if len(changed) <= 3 else f" (+{len(changed) - 3} more)"
+        return f"Live sitemap lastmod values drift from the governed snapshot: {sample}{suffix}"
+
+    unexpected = sorted(
+        loc
+        for loc, lastmod in actual.items()
+        if loc not in expected and not _is_runtime_sitemap_entry(loc, lastmod)
+    )
+    if unexpected:
+        sample = ", ".join(unexpected[:3])
+        suffix = "" if len(unexpected) <= 3 else f" (+{len(unexpected) - 3} more)"
+        return f"Live sitemap contains ungoverned entries: {sample}{suffix}"
+
+    return None
+
+
 def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
     normalised_body = _normalise_text(body)
     normalised_expected = _normalise_text(expected_text)
@@ -244,9 +312,7 @@ def validate_live_body(name: str, body: str, expected_text: str) -> str | None:
         expected_sitemap_error = _validate_sitemap_structure(expected_text)
         if expected_sitemap_error:
             return f"governed sitemap snapshot is invalid: {expected_sitemap_error}"
-        if _sitemap_loc_lastmod_map(body) != _sitemap_loc_lastmod_map(expected_text):
-            return "Live sitemap entries do not match the governed snapshot"
-        return None
+        return _validate_live_sitemap_entries(body, expected_text)
 
     if normalised_body != normalised_expected:
         return "Live content does not match the governed snapshot"
