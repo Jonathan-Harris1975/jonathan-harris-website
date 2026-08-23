@@ -82,6 +82,18 @@ jobs:
       - name: Verify live redirect chains
         run: python scripts/maintenance/check_redirect_chains.py
 
+      - name: Record exact-SHA live website attestation
+        run: |
+          printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"website","status":"post-deployment-live-gate-green"}\n' \
+            "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" > website-live-attestation.json
+      - name: Retain website deployment evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: website-live-attestation-${{ github.sha }}
+          path: website-live-attestation.json
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Trigger central ecosystem smoke
         env:
           ECOSYSTEM_SMOKE_DISPATCH_TOKEN: ${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
