@@ -46,24 +46,78 @@ async function sha256Hex(input) {
   return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, '0')).join('');
 }
 
-async function consumeRateLimit(namespace, key, limit, windowSeconds) {
-  const id = namespace.idFromName(await sha256Hex(key));
-  const stub = namespace.get(id);
-  const response = await stub.fetch('https://cognipal-rate-limit.internal/limit', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ limit, windowSeconds }),
-  });
-  const body = await response.json().catch(() => null);
-  if (!response.ok || !body || typeof body !== 'object') {
-    throw new Error(`rate limiter returned ${response.status}`);
+const R2_RATE_LIMIT_PREFIX = '__cognipal_rate_limit/v1/';
+const R2_RATE_LIMIT_CAS_ATTEMPTS = 8;
+
+function retryAfterSeconds(resetAt, now = Date.now()) {
+  return Math.max(1, Math.ceil((Number(resetAt) - now) / 1000));
+}
+
+async function consumeR2RateLimit(bucket, key, limit, windowSeconds) {
+  const objectKey = `${R2_RATE_LIMIT_PREFIX}${await sha256Hex(key)}.json`;
+
+  for (let attempt = 0; attempt < R2_RATE_LIMIT_CAS_ATTEMPTS; attempt += 1) {
+    const now = Date.now();
+    const existing = await bucket.get(objectKey);
+
+    if (!existing) {
+      const counter = { count: 1, resetAt: now + (windowSeconds * 1000) };
+      const created = await bucket.put(objectKey, JSON.stringify(counter), {
+        onlyIf: new Headers({ 'if-none-match': '*' }),
+        httpMetadata: { contentType: 'application/json' },
+      });
+      if (created) {
+        return {
+          success: true,
+          remaining: Math.max(0, limit - 1),
+          retryAfterSeconds: windowSeconds,
+        };
+      }
+      continue;
+    }
+
+    const counter = await existing.json().catch(() => null);
+    if (!counter || typeof counter !== 'object') {
+      throw new Error('rate limiter counter is invalid');
+    }
+
+    const resetAt = Number(counter.resetAt);
+    const count = Number(counter.count);
+    if (!Number.isFinite(resetAt) || !Number.isInteger(count) || count < 0) {
+      throw new Error('rate limiter counter is invalid');
+    }
+
+    if (now < resetAt && count >= limit) {
+      return {
+        success: false,
+        remaining: 0,
+        retryAfterSeconds: retryAfterSeconds(resetAt, now),
+      };
+    }
+
+    const next = now >= resetAt
+      ? { count: 1, resetAt: now + (windowSeconds * 1000) }
+      : { count: count + 1, resetAt };
+
+    const updated = await bucket.put(objectKey, JSON.stringify(next), {
+      onlyIf: { etagMatches: existing.etag },
+      httpMetadata: { contentType: 'application/json' },
+    });
+    if (updated) {
+      return {
+        success: true,
+        remaining: Math.max(0, limit - next.count),
+        retryAfterSeconds: retryAfterSeconds(next.resetAt, now),
+      };
+    }
   }
-  return body;
+
+  throw new Error('rate limiter counter contention exceeded retry budget');
 }
 
 export async function enforceVisitorRateLimits(context, payload, route) {
-  const namespace = context.env?.COGNIPAL_RATE_LIMITER;
-  if (!namespace) {
+  const bucket = context.env?.BLOG_BUCKET;
+  if (!bucket) {
     if (localDevelopmentRequest(context.request)) return null;
     return json({ ok: false, error: 'rate_limiter_unavailable', message: 'Web chat is temporarily unavailable.' }, 503);
   }
@@ -82,7 +136,7 @@ export async function enforceVisitorRateLimits(context, payload, route) {
 
   try {
     for (const [key, limit] of scopes) {
-      const result = await consumeRateLimit(namespace, key, limit, 60);
+      const result = await consumeR2RateLimit(bucket, key, limit, 60);
       if (result.success !== true) {
         const retryAfter = Math.max(1, Number(result.retryAfterSeconds) || 60);
         const response = json({ ok: false, error: 'rate_limited', message: 'Too many chat requests. Please try again shortly.' }, 429);
