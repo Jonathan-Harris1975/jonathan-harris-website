@@ -149,6 +149,7 @@ def main() -> int:
         run_step("Validate third-party script governance", [sys.executable, "scripts/govern_page_scripts.py", "--validate"])
         run_step("Validate first-party CogniPal webchat and BotSailor removal", [sys.executable, "scripts/check_webchat_contract.py"])
         run_step("Test CogniPal edge rate limiting", ["node", "--test", "--experimental-default-type=module", "scripts/cognipal-rate-limit.test.mjs"])
+        run_step("Test Pages crawler alias routing", ["node", "--test", "--experimental-default-type=module", "scripts/pages-routing.test.mjs"])
         run_step("Validate executable-script CSP hashes", [sys.executable, "scripts/check_csp_inline_scripts.py"])
         run_step("Run growth regression contracts", [sys.executable, "scripts/test_growth_contracts.py"])
         run_step("Run Phase 4A schema-markup gate", [sys.executable, "scripts/audits/schema_markup_gate.py", "--root", "."])
