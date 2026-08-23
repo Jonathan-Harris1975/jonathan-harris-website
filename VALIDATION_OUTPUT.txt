@@ -1,25 +1,39 @@
-Fresh repository validation
-Date: 2026-07-31
-Scope: uploaded ZIP only, rebuilt through the repository's governed generators.
+Validation run: 2026-06-22T00:00:00Z
+Book count: 40
+Topic count: 25
+Workbook title parity: 92/92 passed, 0 mismatched
+Workbook content parity: 246 exact field matches, 154 approved transformations, 0 mismatches across 400 governed field checks
 
-PASS - 40 canonical ebook pages generated.
-PASS - Ebook route integrity: 40 governed books.
-PASS - Crawler assets and checksums.
-PASS - Shared header/footer validation: 120 of 120 pages in sync.
-PASS - Shared chrome layout contract: 120 pages.
-PASS - CSS budget: site.css 133732 bytes against a 135168-byte budget.
-PASS - Core colour contrast contract.
-PASS - Governed image asset contract.
-PASS - Social metadata contract across public HTML pages.
-PASS - Third-party script governance across 120 pages.
-PASS - Growth contracts: 40 books, 8 evidence guides, 7 resources.
-PASS - Schema gate: 122 checked, 0 critical, 0 advisory.
-PASS - Release validation.
-PASS - Workbook page-title parity: 92 of 92 routes.
-PASS - Workbook content parity: 400 governed fields, 246 exact matches, 154 approved transformations, 0 mismatches.
-PASS - Metadata length scan: 0 titles over 65 characters and 0 descriptions over 170 characters.
-PASS - Deterministic rebuild: a second complete generation and validation pass changed 0 files.
-PASS - AI glossary PDF generation is deterministic and the rendered page was visually checked.
+Topics:
+- Agriculture: 1
+- Artificial Intelligence: 1
+- Business: 1
+- Construction: 2
+- Creativity: 2
+- Cyber Security: 2
+- Defence: 1
+- Education: 1
+- Energy: 1
+- Environment: 2
+- Ethics: 2
+- Finance: 1
+- Future of Work: 3
+- Gaming: 1
+- Government: 1
+- Healthcare: 3
+- History: 1
+- Industry: 1
+- Law: 1
+- Manufacturing: 1
+- Media: 2
+- Retail: 1
+- Science: 1
+- Sports: 1
+- Transportation: 6
 
-Environment note:
-The repository's top-level build.sh was not used because this execution environment's package mirror did not expose the pinned ReportLab 5.0.0 package. The canonical generation and validation scripts were run directly; the PDF generator was also verified with the available ReportLab runtime.
+Status: PASSED
+- Route registry complete
+- Route manifest and host redirect coverage checks passed
+- Topic discovery pages exist for every book
+- Metadata and FAQ checks passed
+- Generated crawler snapshots and redirect governance checks passed
