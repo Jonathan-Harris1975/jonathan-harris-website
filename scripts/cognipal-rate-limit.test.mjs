@@ -4,27 +4,35 @@ import test from 'node:test';
 import { onRequestPost as messagePost } from '../functions/api/cognipal/message.js';
 import { onRequestPost as syncPost } from '../functions/api/cognipal/sync.js';
 
-class FakeRateLimiterNamespace {
+class FakeR2Bucket {
   constructor() {
-    this.counters = new Map();
+    this.objects = new Map();
+    this.version = 0;
   }
 
-  idFromName(name) {
-    return name;
-  }
-
-  get(id) {
+  async get(key) {
+    const stored = this.objects.get(key);
+    if (!stored) return null;
     return {
-      fetch: async (_url, options) => {
-        const { limit } = JSON.parse(options.body);
-        const count = this.counters.get(id) || 0;
-        if (count >= limit) {
-          return Response.json({ ok: true, success: false, retryAfterSeconds: 60, remaining: 0 });
-        }
-        this.counters.set(id, count + 1);
-        return Response.json({ ok: true, success: true, retryAfterSeconds: 60, remaining: limit - count - 1 });
-      },
+      etag: stored.etag,
+      json: async () => JSON.parse(stored.body),
     };
+  }
+
+  async put(key, body, options = {}) {
+    const current = this.objects.get(key);
+    const onlyIf = options.onlyIf;
+
+    if (onlyIf instanceof Headers) {
+      if (onlyIf.get('if-none-match') === '*' && current) return null;
+    } else if (onlyIf?.etagMatches && current?.etag !== onlyIf.etagMatches) {
+      return null;
+    }
+
+    this.version += 1;
+    const stored = { body: String(body), etag: `etag-${this.version}` };
+    this.objects.set(key, stored);
+    return { key, etag: stored.etag };
   }
 }
 
@@ -38,13 +46,13 @@ function request(path, payload, { origin = 'https://jonathan-harris.online', ip 
   });
 }
 
-function context(req, limiter) {
+function context(req, bucket) {
   return {
     request: req,
     env: {
       AIMS_COMMS_HUB_BASE_URL: 'https://app.jonathan-harris.online',
       COMMS_HUB_COGINPAL_WEBHOOK_SECRET: 'test-secret-that-is-not-production',
-      ...(limiter ? { COGNIPAL_RATE_LIMITER: limiter } : {}),
+      ...(bucket ? { BLOG_BUCKET: bucket } : {}),
     },
   };
 }
@@ -54,7 +62,7 @@ async function responseBody(response) {
 }
 
 test('message route blocks session rotation at the IP ceiling', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const originalFetch = globalThis.fetch;
   let upstreamCalls = 0;
   globalThis.fetch = async () => {
@@ -85,7 +93,7 @@ test('message route blocks session rotation at the IP ceiling', async () => {
 });
 
 test('sync route blocks session rotation at the IP ceiling', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const originalFetch = globalThis.fetch;
   let upstreamCalls = 0;
   globalThis.fetch = async () => {
@@ -114,7 +122,7 @@ test('sync route blocks session rotation at the IP ceiling', async () => {
 });
 
 test('public webchat rejects requests without Origin', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const response = await messagePost(context(request('/api/cognipal/message', {
     sessionId: 'session-00000001',
     visitorId: 'visitor-00000001',
@@ -124,7 +132,7 @@ test('public webchat rejects requests without Origin', async () => {
   assert.equal((await responseBody(response)).error, 'origin_rejected');
 });
 
-test('production webchat fails closed if the Durable Object binding is absent', async () => {
+test('production webchat fails closed if the R2 rate-limit store is absent', async () => {
   const response = await syncPost(context(request('/api/cognipal/sync', {
     sessionId: 'session-00000001',
     visitorId: 'visitor-00000001',
@@ -135,7 +143,7 @@ test('production webchat fails closed if the Durable Object binding is absent', 
 
 
 test('oversized JSON without Content-Length is rejected before rate limiting', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const req = request('/api/cognipal/message', {
     sessionId: 'session-00000001',
     visitorId: 'visitor-00000001',
@@ -146,11 +154,11 @@ test('oversized JSON without Content-Length is rejected before rate limiting', a
   const response = await messagePost(context(req, limiter));
   assert.equal(response.status, 413);
   assert.equal((await responseBody(response)).error, 'payload_too_large');
-  assert.equal(limiter.counters.size, 0, 'oversized bodies must be rejected before rate-limit state is touched');
+  assert.equal(limiter.objects.size, 0, 'oversized bodies must be rejected before rate-limit state is touched');
 });
 
 test('incorrect small Content-Length cannot bypass the actual body limit', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const response = await messagePost(context(request('/api/cognipal/message', {
     sessionId: 'session-00000001',
     visitorId: 'visitor-00000001',
@@ -159,11 +167,11 @@ test('incorrect small Content-Length cannot bypass the actual body limit', async
   }, { extraHeaders: { 'content-length': '1' } }), limiter));
   assert.equal(response.status, 413);
   assert.equal((await responseBody(response)).error, 'payload_too_large');
-  assert.equal(limiter.counters.size, 0);
+  assert.equal(limiter.objects.size, 0);
 });
 
 test('streamed unknown-length body is bounded while it is read', async () => {
-  const limiter = new FakeRateLimiterNamespace();
+  const limiter = new FakeR2Bucket();
   const encoder = new TextEncoder();
   const prefix = JSON.stringify({
     sessionId: 'session-00000001',
@@ -192,5 +200,5 @@ test('streamed unknown-length body is bounded while it is read', async () => {
   const response = await messagePost(context(req, limiter));
   assert.equal(response.status, 413);
   assert.equal((await responseBody(response)).error, 'payload_too_large');
-  assert.equal(limiter.counters.size, 0);
+  assert.equal(limiter.objects.size, 0);
 });
