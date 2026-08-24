@@ -1,4 +1,9 @@
 import { withFunctionSecurityHeaders } from "./_shared/security.js";
+import {
+  addHomepageAgentDiscovery,
+  isAgentReadinessPath,
+  proxyAgentReadiness,
+} from "./_shared/agent-readiness.js";
 
 const SUPPORT_ALIASES = new Map([
   ["/robot.txt", "/robots.txt"],
@@ -20,11 +25,20 @@ function supportAliasRedirect(request) {
 }
 
 export async function onRequest(context) {
+  const url = new URL(context.request.url);
+
+  // Agent discovery/protocol requests are publicly exposed by Pages but
+  // executed by the independently deployed Agent Readiness Worker.
+  if (isAgentReadinessPath(url.pathname)) {
+    return withFunctionSecurityHeaders(await proxyAgentReadiness(context));
+  }
+
   const aliasResponse = supportAliasRedirect(context.request);
   if (aliasResponse) {
     return withFunctionSecurityHeaders(aliasResponse);
   }
 
   const response = await context.next();
-  return withFunctionSecurityHeaders(response);
+  const discovered = await addHomepageAgentDiscovery(context.request, response);
+  return withFunctionSecurityHeaders(discovered);
 }
