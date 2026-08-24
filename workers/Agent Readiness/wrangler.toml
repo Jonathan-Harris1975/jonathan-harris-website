@@ -1,0 +1,21 @@
+name = "jonathan-harris-agent-readiness"
+main = "index.js"
+compatibility_date = "2026-08-24"
+workers_dev = false
+
+# This Worker runs in front of the existing Cloudflare Pages custom domain.
+# Any path it does not own is passed through unchanged to the Pages origin.
+[[routes]]
+pattern = "jonathan-harris.online/*"
+zone_name = "jonathan-harris.online"
+
+[vars]
+CANONICAL_ORIGIN = "https://jonathan-harris.online"
+
+[[durable_objects.bindings]]
+name = "AGENT_READINESS_STATE"
+class_name = "AgentReadinessState"
+
+[exports.AgentReadinessState]
+type = "durable-object"
+storage = "sqlite"
