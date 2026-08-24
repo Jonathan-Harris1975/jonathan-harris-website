@@ -2,9 +2,9 @@
 
 ## Architecture
 
-`jonathan-harris.online` stays on Cloudflare Pages. Agent protocol URLs are forwarded by the root Pages middleware to the independently deployed `jonathan-harris-agent-readiness` Worker through the `AGENT_READINESS` Service Binding.
+`jonathan-harris.online` stays on Cloudflare Pages. Agent protocol URLs are forwarded by the root Pages middleware to the independently deployed `agent-readiness` Worker through the `AGENT_READINESS` Service Binding.
 
-Do not attach `jonathan-harris-agent-readiness` to `jonathan-harris.online/*` as a Worker Route. If an old wildcard route remains in the dashboard, remove it.
+Do not attach `agent-readiness` to `jonathan-harris.online/*` as a Worker Route. If an old wildcard route remains in the dashboard, remove it.
 
 ## Deploy order
 
@@ -24,7 +24,7 @@ cd workers/agent-readiness
 npx wrangler deploy
 ```
 
-Expected service name: `jonathan-harris-agent-readiness`.
+Expected service name: `agent-readiness`.
 
 Bindings:
 
@@ -40,7 +40,7 @@ Deploy/redeploy the root Pages project after the Agent Readiness Worker exists. 
 ```toml
 [[services]]
 binding = "AGENT_READINESS"
-service = "jonathan-harris-agent-readiness"
+service = "agent-readiness"
 ```
 
 and the existing external Durable Object binding:
@@ -58,7 +58,7 @@ If the project is Git-connected to Cloudflare Pages, commit/push the repo and al
 
 Cloudflare dashboard:
 
-`Workers & Pages` → `jonathan-harris-agent-readiness` → `Settings` → `Domains & Routes`
+`Workers & Pages` → `agent-readiness` → `Settings` → `Domains & Routes`
 
 There should be no Worker Route for `jonathan-harris.online/*`. `workers.dev` can remain enabled for direct diagnostics.
 
@@ -86,7 +86,7 @@ The key diagnostic is the pair of headers on all readiness endpoints:
 
 ```text
 X-Agent-Readiness-Gateway: cloudflare-pages-service-binding
-X-Agent-Readiness-Worker: jonathan-harris-agent-readiness
+X-Agent-Readiness-Worker: agent-readiness
 ```
 
 If the first is missing, production Pages is not running the updated middleware. If it says `binding-missing`, the Pages service binding is absent. If the first exists but the Worker header is missing, the bound Worker deployment is wrong.
