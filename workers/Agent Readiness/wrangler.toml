@@ -1,7 +1,7 @@
-name = "agent-readiness"
+name = "jonathan-harris-agent-readiness"
 main = "index.js"
 compatibility_date = "2026-08-24"
-workers_dev = false
+workers_dev = true
 
 # This Worker runs in front of the existing Cloudflare Pages custom domain.
 # Any path it does not own is passed through unchanged to the Pages origin.

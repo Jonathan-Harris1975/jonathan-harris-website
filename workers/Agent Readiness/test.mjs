@@ -8,6 +8,7 @@ const call = (path, init = {}) => worker.fetch(new Request(`https://jonathan-har
 test("API catalog is RFC 9727-shaped", async () => {
   const response = await call("/.well-known/api-catalog");
   assert.equal(response.status, 200);
+  assert.equal(response.headers.get("x-agent-readiness-worker"), "jonathan-harris-agent-readiness");
   assert.match(response.headers.get("content-type"), /application\/linkset\+json/);
   const body = await response.json();
   assert.ok(Array.isArray(body.linkset));

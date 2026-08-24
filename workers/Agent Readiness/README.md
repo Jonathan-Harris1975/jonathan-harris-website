@@ -1,6 +1,6 @@
 # Cloudflare Agent Readiness Worker
 
-This is an independently deployed Cloudflare Worker that lives inside the website repository. It runs in front of the existing Cloudflare Pages custom domain and passes ordinary site traffic through unchanged.
+This is an independently deployed Cloudflare Worker named `jonathan-harris-agent-readiness` that lives inside the website repository. It runs in front of the existing Cloudflare Pages custom domain and passes ordinary site traffic through unchanged.
 
 ## What it implements
 
@@ -26,7 +26,25 @@ From this directory:
 npx wrangler deploy
 ```
 
-The route in `wrangler.toml` is `jonathan-harris.online/*`, so deploy this only after confirming the Pages custom domain is live and proxied through Cloudflare. Unmatched requests use `fetch(request)` to reach the existing Pages origin.
+The deploy output must name **`jonathan-harris-agent-readiness`** and must publish the Worker Route **`jonathan-harris.online/*`**. The Worker name must not be `jonathan-harris-website`; that is the Pages project.
+
+The route runs in front of the existing Pages custom domain. Unmatched requests use `fetch(request)` to reach Pages. `workers_dev = true` is intentionally enabled so the deployment also has a direct diagnostic `workers.dev` URL.
+
+### Mandatory production route check
+
+Before running the Agent Readiness scanner, request:
+
+```bash
+curl -i https://jonathan-harris.online/.well-known/agent-readiness/status
+```
+
+Production is wired correctly only if the response is HTTP 200 and contains:
+
+```text
+X-Agent-Readiness-Worker: jonathan-harris-agent-readiness
+```
+
+If that header is absent, do not re-scan yet. In Cloudflare go to **Workers & Pages → jonathan-harris-agent-readiness → Settings → Domains & Routes** and confirm a **Worker Route** exists for `jonathan-harris.online/*`. Do not replace the Pages custom domain with a Worker Custom Domain.
 
 ## External Cloudflare steps still required
 
@@ -52,7 +70,7 @@ Run the local contract tests:
 node --test test.mjs
 ```
 
-Then scan production:
+Then run `node verify-production.mjs` and scan production:
 
 ```bash
 curl -sS https://isitagentready.com/api/scan \

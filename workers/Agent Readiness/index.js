@@ -652,13 +652,24 @@ async function route(request, env) {
   return passthroughWithDiscovery(request, origin);
 }
 
+function markAgentReadinessResponse(response) {
+  const headers = new Headers(response.headers);
+  headers.set("X-Agent-Readiness-Worker", "jonathan-harris-agent-readiness");
+  headers.set("X-Agent-Readiness-Version", AGENT_VERSION);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+}
+
 export default {
   async fetch(request, env) {
     try {
-      return await route(request, env);
+      return markAgentReadinessResponse(await route(request, env));
     } catch (error) {
       console.error("agent-readiness", error);
-      return json({ error: "agent_readiness_internal_error", request_id: request.headers.get("cf-ray") || crypto.randomUUID() }, 500);
+      return markAgentReadinessResponse(json({ error: "agent_readiness_internal_error", request_id: request.headers.get("cf-ray") || crypto.randomUUID() }, 500));
     }
   },
 };
