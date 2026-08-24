@@ -1,4 +1,4 @@
-name = "jonathan-harris-agent-readiness"
+name = "jonathan-harris-website"
 main = "index.js"
 compatibility_date = "2026-08-24"
 workers_dev = false
