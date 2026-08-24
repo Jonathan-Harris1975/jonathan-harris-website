@@ -35,6 +35,12 @@ compatibility_date = "2024-09-23"
   class_name  = "CogniPalRateLimiter"
   script_name = "cognipal-rate-limit"
 
+# Agent Readiness is deployed as its own Worker and reached privately from
+# Pages. Deploy workers/agent-readiness first so this service exists.
+[[services]]
+  binding = "AGENT_READINESS"
+  service = "jonathan-harris-agent-readiness"
+
 [vars]
   R2_PUBLIC_BASE_URL_HIVE_SKILLS = "https://pub-da50a6512f164566955a3076a1c795ef.r2.dev"
   R2_BUCKET_HIVE_SKILLS = "hive-skills"

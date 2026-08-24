@@ -38,3 +38,6 @@
 
 /assets/site-shell/*.json
   Content-Type: application/json; charset=utf-8
+
+/
+  Link: </.well-known/api-catalog>; rel="api-catalog", </openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1", </api/docs/>; rel="service-doc", </.well-known/agent-card.json>; rel="describedby"; type="application/json"
