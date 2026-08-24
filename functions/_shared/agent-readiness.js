@@ -1,4 +1,4 @@
-const AGENT_WORKER = 'jonathan-harris-agent-readiness';
+const AGENT_WORKER = 'agent-readiness';
 const GATEWAY = 'cloudflare-pages-service-binding';
 const WEBMCP_SCRIPT = '/.well-known/agent-readiness/webmcp.js';
 
