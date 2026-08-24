@@ -2,6 +2,20 @@ name = "cognipal-rate-limit"
 main = "index.js"
 compatibility_date = "2026-08-22"
 workers_dev = false
+[observability]
+enabled = false
+head_sampling_rate = 1
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 1
 
 [[durable_objects.bindings]]
 name = "COGNIPAL_RATE_LIMITER"
