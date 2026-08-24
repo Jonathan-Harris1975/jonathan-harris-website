@@ -12,7 +12,7 @@ function contextFor(path, { binding = true, next } = {}) {
         status: 200,
         headers: {
           'content-type': 'application/json; charset=utf-8',
-          'x-agent-readiness-worker': 'jonathan-harris-agent-readiness',
+          'x-agent-readiness-worker': 'agent-readiness',
         },
       });
     },
@@ -32,7 +32,7 @@ test('Pages proxies agent discovery paths through AGENT_READINESS service bindin
   const response = await onRequest(context);
   assert.equal(response.status, 200);
   assert.equal(calls(), 1);
-  assert.equal(response.headers.get('x-agent-readiness-worker'), 'jonathan-harris-agent-readiness');
+  assert.equal(response.headers.get('x-agent-readiness-worker'), 'agent-readiness');
   assert.equal(response.headers.get('x-agent-readiness-gateway'), 'cloudflare-pages-service-binding');
   assert.equal(response.headers.get('x-agent-readiness-gateway-mode'), 'service-binding');
 });
@@ -85,7 +85,7 @@ test('Pages service binding integrates with the real Agent Readiness Worker', as
   assert.equal(response.status, 200);
   assert.equal(response.headers.get('content-type'), 'application/linkset+json');
   assert.equal(response.headers.get('x-agent-readiness-gateway'), 'cloudflare-pages-service-binding');
-  assert.equal(response.headers.get('x-agent-readiness-worker'), 'jonathan-harris-agent-readiness');
+  assert.equal(response.headers.get('x-agent-readiness-worker'), 'agent-readiness');
   const body = await response.json();
   assert.ok(Array.isArray(body.linkset));
 });
