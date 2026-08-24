@@ -55,6 +55,9 @@ jobs:
   post-deploy-live-gate:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     needs: validate-ebook-subsystem
+    environment:
+      name: R2
+      deployment: false
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
