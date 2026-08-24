@@ -8,7 +8,7 @@ const call = (path, init = {}) => worker.fetch(new Request(`https://jonathan-har
 test("API catalog is RFC 9727-shaped", async () => {
   const response = await call("/.well-known/api-catalog");
   assert.equal(response.status, 200);
-  assert.equal(response.headers.get("x-agent-readiness-worker"), "jonathan-harris-agent-readiness");
+  assert.equal(response.headers.get("x-agent-readiness-worker"), "agent-readiness");
   assert.match(response.headers.get("content-type"), /application\/linkset\+json/);
   const body = await response.json();
   assert.ok(Array.isArray(body.linkset));
@@ -116,9 +116,9 @@ test("Web Bot Auth directory exposes signed Ed25519 JWKS", async () => {
 test("standalone worker does not proxy unrelated website traffic", async () => {
   const response = await call("/");
   assert.equal(response.status, 404);
-  assert.equal(response.headers.get("x-agent-readiness-worker"), "jonathan-harris-agent-readiness");
+  assert.equal(response.headers.get("x-agent-readiness-worker"), "agent-readiness");
   const body = await response.json();
-  assert.equal(body.service, "jonathan-harris-agent-readiness");
+  assert.equal(body.service, "agent-readiness");
 });
 
 test("auth.md contains a complete anonymous registration path", async () => {

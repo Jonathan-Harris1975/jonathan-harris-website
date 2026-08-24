@@ -1,5 +1,5 @@
 const origin = String(process.argv[2] || 'https://jonathan-harris.online').replace(/\/+$/, '');
-const expectedWorker = 'jonathan-harris-agent-readiness';
+const expectedWorker = 'agent-readiness';
 const expectedGateway = 'cloudflare-pages-service-binding';
 
 const checks = [
@@ -77,7 +77,7 @@ for (const name of [`_index._agents.${new URL(origin).hostname}`, `_a2a._agents.
 if (failures) {
   console.error(`\nProduction verification failed: ${failures} check(s).`);
   console.error('If gateway is MISSING or binding-missing, redeploy Pages with the AGENT_READINESS service binding.');
-  console.error('If worker is MISSING while gateway is present, deploy jonathan-harris-agent-readiness before redeploying Pages.');
+  console.error('If worker is MISSING while gateway is present, deploy agent-readiness before redeploying Pages.');
   console.error('If only DNS-AID fails, add the SVCB records and enable DNSSEC.');
   process.exit(1);
 }

@@ -613,7 +613,7 @@ async function route(request, env) {
   if (path === "/.well-known/agent-readiness/status" && ["GET", "HEAD"].includes(request.method)) {
     return json({
       ok: true,
-      service: "jonathan-harris-agent-readiness",
+      service: "agent-readiness",
       version: AGENT_VERSION,
       deployment_mode: "cloudflare-pages-service-binding",
       canonical_origin: origin,
@@ -625,12 +625,12 @@ async function route(request, env) {
     return json({ organization: "Jonathan Harris", agents: [{ name: "website-discovery", a2a: `${origin}/.well-known/agent-card.json`, mcp: `${origin}/.well-known/mcp/server-card.json`, skills: `${origin}/.well-known/agent-skills/index.json` }] });
   }
 
-  return json({ error: "not_found", service: "jonathan-harris-agent-readiness" }, 404, { "Cache-Control": "no-store" });
+  return json({ error: "not_found", service: "agent-readiness" }, 404, { "Cache-Control": "no-store" });
 }
 
 function markAgentReadinessResponse(response) {
   const headers = new Headers(response.headers);
-  headers.set("X-Agent-Readiness-Worker", "jonathan-harris-agent-readiness");
+  headers.set("X-Agent-Readiness-Worker", "agent-readiness");
   headers.set("X-Agent-Readiness-Version", AGENT_VERSION);
   return new Response(response.body, {
     status: response.status,

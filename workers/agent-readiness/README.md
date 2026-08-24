@@ -1,6 +1,6 @@
 # Cloudflare Agent Readiness Worker
 
-`jonathan-harris-agent-readiness` is an independently deployed Cloudflare Worker kept inside the website repository.
+`agent-readiness` is an independently deployed Cloudflare Worker kept inside the website repository.
 
 ## Production architecture
 
@@ -15,7 +15,7 @@ Cloudflare Pages + Functions
    |
    | AGENT_READINESS Service Binding
    v
-jonathan-harris-agent-readiness Worker
+agent-readiness Worker
    |
    +-- AGENT_READINESS_STATE Durable Object (persistent Ed25519 key)
 ```
@@ -48,7 +48,7 @@ The Worker generates one Ed25519 key pair and persists it in the Durable Object.
 
 ### Pages project
 
-- Service binding: `AGENT_READINESS` → `jonathan-harris-agent-readiness`
+- Service binding: `AGENT_READINESS` → `agent-readiness`
 - Existing CogniPal Durable Object binding remains separate.
 
 ## Required first deployment order
@@ -64,7 +64,7 @@ The target of a Cloudflare Service Binding must already exist before the caller 
    ```
 
 3. Deploy/redeploy the root Cloudflare Pages project so the `AGENT_READINESS` service binding from the root `wrangler.toml` becomes active. If Pages is Git-connected, push this repository and let the production deployment complete.
-4. Remove any old manually-created Worker Route `jonathan-harris.online/*` from `jonathan-harris-agent-readiness` if it still exists in the Cloudflare dashboard. This Worker intentionally has no production route.
+4. Remove any old manually-created Worker Route `jonathan-harris.online/*` from `agent-readiness` if it still exists in the Cloudflare dashboard. This Worker intentionally has no production route.
 5. Add the three SVCB records from `dns-aid-records.txt` and enable DNSSEC for the zone.
 
 ## Production verification
@@ -80,7 +80,7 @@ A proxied readiness endpoint must contain **both**:
 
 ```text
 X-Agent-Readiness-Gateway: cloudflare-pages-service-binding
-X-Agent-Readiness-Worker: jonathan-harris-agent-readiness
+X-Agent-Readiness-Worker: agent-readiness
 ```
 
 The homepage must contain:
