@@ -243,6 +243,33 @@ function apiCatalog(origin) {
   };
 }
 
+function agentAuthMetadata(origin) {
+  const claimUri = `${origin}/agent/identity/claim`;
+  const revokeUri = `${origin}/agent/identity/revoke`;
+
+  return {
+    skill: `${origin}/auth.md`,
+    documentation_uri: `${origin}/auth.md`,
+
+    // Old/current scanner aliases are both published deliberately.
+    register_uri: `${origin}/agent/identity`,
+    identity_endpoint: `${origin}/agent/identity`,
+    claim_uri: claimUri,
+    claim_endpoint: claimUri,
+    revocation_uri: revokeUri,
+
+    registration_methods_supported: ["anonymous"],
+    identity_types_supported: ["anonymous"],
+    supported_identity_types: ["anonymous"],
+
+    anonymous: {
+      // "bearer" is a transport method, not a credential type.
+      // This service actually issues an OAuth access_token.
+      credential_types_supported: ["access_token"],
+    },
+  };
+}
+
 function oauthProtectedResource(origin) {
   return {
     resource: `${origin}/`,
@@ -250,6 +277,7 @@ function oauthProtectedResource(origin) {
     scopes_supported: ["public.read"],
     bearer_methods_supported: ["header"],
     resource_documentation: `${origin}/auth.md`,
+    agent_auth: agentAuthMetadata(origin),
   };
 }
 
@@ -263,22 +291,72 @@ function oauthMetadata(origin) {
     response_types_supported: ["none"],
     grant_types_supported: ["urn:ietf:params:oauth:grant-type:jwt-bearer"],
     token_endpoint_auth_methods_supported: ["none"],
-    agent_auth: {
-      skill: `${origin}/auth.md`,
-      register_uri: `${origin}/agent/identity`,
-      identity_endpoint: `${origin}/agent/identity`,
-      registration_methods_supported: ["anonymous"],
-      identity_types_supported: ["anonymous"],
-      anonymous: {
-        credential_types_supported: ["bearer"],
-        claim_uri: `${origin}/agent/identity/claim`,
-      },
-    },
+    agent_auth: agentAuthMetadata(origin),
   };
 }
 
 function authMd(origin) {
-  return `# auth.md\n\nJonathan Harris exposes public, read-only website data and a minimal agent registration flow for automated clients.\n\n## Audience\n\nAI agents and automated clients that need a bearer credential for the agent discovery interfaces. Public website browsing does not require a credential.\n\n## Discovery\n\n- Protected Resource Metadata: ${origin}/.well-known/oauth-protected-resource\n- Authorization Server Metadata: ${origin}/.well-known/oauth-authorization-server\n- JWKS: ${origin}/oauth2/jwks\n\n## agent_auth\n\n\`\`\`json\n{\n  "agent_auth": {\n    "skill": "${origin}/auth.md",\n    "register_uri": "${origin}/agent/identity",\n    "registration_methods": [\n      {\n        "type": "anonymous",\n        "identity_types_supported": ["anonymous"],\n        "credential_types_supported": ["bearer"],\n        "claim_uri": "${origin}/agent/identity/claim"\n      }\n    ]\n  }\n}\n\`\`\`\n\n## Register an anonymous agent\n\nPOST JSON to \`${origin}/agent/identity\`:\n\n\`\`\`json\n{"type":"anonymous"}\n\`\`\`\n\nThe service returns a short-lived signed \`identity_assertion\`.\n\n## Exchange the assertion\n\nPOST \`application/x-www-form-urlencoded\` to \`${origin}/oauth2/token\` with:\n\n- \`grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer\`\n- \`assertion=<identity_assertion>\`\n- optional \`scope=public.read\`\n\nThe response contains a short-lived bearer access token. Present it as \`Authorization: Bearer <token>\` when a client chooses to authenticate.\n\n## Scope\n\n\`public.read\` permits read-only discovery and public-data access. It grants no repository writes, Cloudflare writes, HIVE execution, AIMS control, model access, email access or private data access.\n\n## Credential handling\n\nKeep credentials outside model context, do not log them, and discard them after expiry.\n`;
+  return `# auth.md
+
+Jonathan Harris exposes public, read-only website data plus an anonymous agent-registration flow.
+
+## Audience
+
+AI agents and automated clients that want a short-lived OAuth access token for the agent interfaces. Ordinary public website browsing does not require authentication.
+
+## Machine-readable registration metadata
+
+Read the Authorization Server Metadata at:
+
+${origin}/.well-known/oauth-authorization-server
+
+Its \`agent_auth\` object is the source of truth and publishes:
+
+- \`skill\`: ${origin}/auth.md
+- \`register_uri\`: ${origin}/agent/identity
+- \`identity_endpoint\`: ${origin}/agent/identity
+- \`claim_uri\`: ${origin}/agent/identity/claim
+- \`claim_endpoint\`: ${origin}/agent/identity/claim
+- \`revocation_uri\`: ${origin}/agent/identity/revoke
+- \`identity_types_supported\`: anonymous
+- \`anonymous.credential_types_supported\`: access_token
+
+Protected Resource Metadata is available at:
+
+${origin}/.well-known/oauth-protected-resource
+
+## Register an anonymous agent
+
+POST JSON to \`${origin}/agent/identity\`:
+
+\`\`\`json
+{"type":"anonymous"}
+\`\`\`
+
+The service returns a short-lived signed \`identity_assertion\`.
+
+## Exchange the assertion
+
+POST \`application/x-www-form-urlencoded\` to \`${origin}/oauth2/token\` with:
+
+- \`grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer\`
+- \`assertion=<identity_assertion>\`
+- optional \`scope=public.read\`
+
+The response contains an OAuth \`access_token\` with token type \`Bearer\`.
+
+## Claim and revocation
+
+Anonymous \`public.read\` access requires no human claim ceremony. The published claim URI returns that status explicitly. Tokens are short-lived and expire automatically; the revocation URI documents that stateless behaviour.
+
+## Scope
+
+\`public.read\` permits read-only discovery and public-data access. It grants no repository writes, Cloudflare writes, HIVE execution, AIMS control, model access, email access or private data access.
+
+## Credential handling
+
+Keep access tokens outside model context, do not log them, and discard them after expiry.
+`;
 }
 
 function agentCard(origin) {
@@ -599,7 +677,22 @@ async function route(request, env) {
     }, 200, { "Cache-Control": "no-store" });
   }
   if (["/agent/identity", "/agent/auth"].includes(path)) return handleAnonymousIdentity(request, env, origin);
-  if (path === "/agent/identity/claim" && request.method === "POST") return json({ error: "claim_not_required", description: "Anonymous public.read credentials do not require a claim ceremony." }, 400, { "Cache-Control": "no-store" });
+  if (path === "/agent/identity/claim" && ["GET", "HEAD", "POST"].includes(request.method)) {
+    return json({
+      status: "not_required",
+      identity_type: "anonymous",
+      description: "Anonymous public.read credentials do not require a user claim ceremony.",
+      register_uri: `${origin}/agent/identity`,
+      token_endpoint: `${origin}/oauth2/token`,
+    }, 200, { "Cache-Control": "no-store", Allow: "GET, HEAD, POST" });
+  }
+  if (path === "/agent/identity/revoke" && ["GET", "HEAD", "POST"].includes(request.method)) {
+    return json({
+      status: "stateless",
+      description: "Issued public.read access tokens are short-lived and expire automatically; no persistent credential is retained.",
+      token_endpoint: `${origin}/oauth2/token`,
+    }, 200, { "Cache-Control": "no-store", Allow: "GET, HEAD, POST" });
+  }
   if (path === "/oauth2/token") return handleToken(request, env, origin);
   if (path === "/.well-known/agent-card.json" && ["GET", "HEAD"].includes(request.method)) return json(agentCard(origin));
   if (path === "/a2a/message:send") return handleA2A(request, origin);

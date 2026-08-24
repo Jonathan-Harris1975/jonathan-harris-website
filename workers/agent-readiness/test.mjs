@@ -121,6 +121,29 @@ test("standalone worker does not proxy unrelated website traffic", async () => {
   assert.equal(body.service, "agent-readiness");
 });
 
+test("agent_auth exposes a complete scanner-compatible anonymous registration method", async () => {
+  const metadata = await (await call("/.well-known/oauth-authorization-server")).json();
+
+  assert.equal(metadata.agent_auth.skill, "https://jonathan-harris.online/auth.md");
+  assert.equal(metadata.agent_auth.register_uri, "https://jonathan-harris.online/agent/identity");
+  assert.equal(metadata.agent_auth.identity_endpoint, "https://jonathan-harris.online/agent/identity");
+  assert.equal(metadata.agent_auth.claim_uri, "https://jonathan-harris.online/agent/identity/claim");
+  assert.equal(metadata.agent_auth.claim_endpoint, "https://jonathan-harris.online/agent/identity/claim");
+  assert.equal(metadata.agent_auth.revocation_uri, "https://jonathan-harris.online/agent/identity/revoke");
+  assert.deepEqual(metadata.agent_auth.identity_types_supported, ["anonymous"]);
+  assert.deepEqual(metadata.agent_auth.anonymous.credential_types_supported, ["access_token"]);
+
+  const prm = await (await call("/.well-known/oauth-protected-resource")).json();
+  assert.equal(prm.agent_auth.register_uri, metadata.agent_auth.register_uri);
+  assert.deepEqual(prm.agent_auth.anonymous.credential_types_supported, ["access_token"]);
+
+  const claim = await call("/agent/identity/claim");
+  assert.equal(claim.status, 200);
+
+  const revoke = await call("/agent/identity/revoke");
+  assert.equal(revoke.status, 200);
+});
+
 test("auth.md contains a complete anonymous registration path", async () => {
   const response = await call("/auth.md");
   assert.equal(response.status, 200);
