@@ -6,14 +6,14 @@ The website chat is first-party. BotSailor is not part of the public runtime.
 
 1. The governed site script loads `/assets/css/cognipal-webchat.min.css` and `/assets/js/cognipal-webchat.min.js`.
 2. The browser sends same-origin requests to `/api/cognipal/message` and `/api/cognipal/sync`. Requests without a valid same-origin `Origin` header are rejected.
-3. The Pages Function consumes strongly consistent per-global, per-IP, per-visitor and per-session limits from the already-bound `BLOG_BUCKET` R2 bucket before any request reaches AIMS. Rate-limit records live under the reserved `__cognipal_rate_limit/v1/` prefix and use conditional writes to prevent concurrent counter overwrites.
+3. The Pages Function consumes strongly consistent per-global, per-IP, per-visitor and per-session limits from the separately deployed `cognipal-rate-limit` Worker through the `COGNIPAL_RATE_LIMITER` Durable Object binding before any request reaches AIMS.
 4. Cloudflare Pages Functions sign accepted requests with HMAC-SHA256 and forward them to AIMS.
 5. AIMS stores the visitor, conversation, messages and takeover state in Comms Hub D1.
 6. Operator replies are stored in the same conversation and returned to the browser during transcript sync.
 
 ## Rate limiter
 
-The public gateway uses the existing `BLOG_BUCKET` R2 binding as its rate-limit state store, so the Pages deployment has no dependency on a separately provisioned Worker. R2 counter updates use ETag/`If-None-Match` conditional writes and retry on contention; if the bucket is unavailable or a counter cannot be updated safely, the gateway fails closed.
+The public gateway uses the separately deployed `workers/cognipal-rate-limit` Worker as its rate-limit state store. The Pages project binds directly to the Worker's `CogniPalRateLimiter` Durable Object namespace as `COGNIPAL_RATE_LIMITER`. Each rate-limit scope receives its own deterministic Durable Object instance, giving atomic, strongly consistent counters without using the blog R2 bucket.
 
 Production limits are enforced over 60-second windows:
 
@@ -22,7 +22,14 @@ Production limits are enforced over 60-second windows:
 | `/api/cognipal/message` | 600 | 20 | 15 | 12 |
 | `/api/cognipal/sync` | 2400 | 180 | 90 | 60 |
 
-The gateway fails closed with `503 rate_limiter_unavailable` if the R2 rate-limit store is unavailable in production. A rejected limit returns `429 rate_limited` with `Retry-After`. Session rotation does not bypass the client-IP or global ceilings.
+The gateway fails closed with `503 rate_limiter_unavailable` if the Durable Object binding or rate-limit Worker is unavailable in production. A rejected limit returns `429 rate_limited` with `Retry-After`. Session rotation does not bypass the client-IP or global ceilings.
+
+## Cloudflare deployment order
+
+1. Deploy `workers/cognipal-rate-limit` first with `npx wrangler deploy`. It does not need a public route or any secret.
+2. Confirm the Worker is named `cognipal-rate-limit` and exports the `CogniPalRateLimiter` Durable Object.
+3. Deploy/redeploy the Pages project. The repository `wrangler.toml` binds `COGNIPAL_RATE_LIMITER` to `CogniPalRateLimiter@cognipal-rate-limit`.
+4. Only after the Pages deployment has the binding should production CogniPal traffic be tested.
 
 ## Cloudflare Pages settings
 
@@ -57,7 +64,7 @@ The Pages gateway accepts `AIMS_COMMS_HUB_BASE_URL` as either the bare AIMS orig
 
 ## Launch gates
 
-`python3 scripts/check_webchat_contract.py` checks that the first-party gateway and its R2 rate-limit binding are present. `node --test --experimental-default-type=module scripts/cognipal-rate-limit.test.mjs` verifies that rotating visitor/session IDs cannot bypass the per-IP ceiling on either message or sync routes, that missing Origin is rejected, and that production fails closed if the limiter store is unavailable.
+`python3 scripts/check_webchat_contract.py` checks that the first-party gateway and its external Durable Object binding are present. `node --test --experimental-default-type=module scripts/cognipal-rate-limit.test.mjs` exercises the real `CogniPalRateLimiter` class through a fake Durable Object namespace and verifies that rotating visitor/session IDs cannot bypass the per-IP ceiling on either message or sync routes, that missing Origin is rejected, and that production fails closed if the limiter store is unavailable.
 
 The post-deployment ecosystem smoke in MAST sends one production CogniPal message and sync request using the website origin. This verifies the Pages rate limiter, HMAC gateway and AIMS transport together.
 
