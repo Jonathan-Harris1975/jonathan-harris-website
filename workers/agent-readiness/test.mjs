@@ -113,19 +113,12 @@ test("Web Bot Auth directory exposes signed Ed25519 JWKS", async () => {
 });
 
 
-test("homepage pass-through adds RFC 8288 discovery Link headers", async () => {
-  const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => new Response("<!doctype html><html><head></head><body>site</body></html>", { headers: { "content-type": "text/html; charset=utf-8" } });
-  try {
-    const response = await call("/");
-    const link = response.headers.get("link") || "";
-    assert.match(link, /rel="api-catalog"/);
-    assert.match(link, /rel="service-desc"/);
-    assert.match(link, /rel="service-doc"/);
-    assert.match(link, /rel="describedby"/);
-  } finally {
-    globalThis.fetch = originalFetch;
-  }
+test("standalone worker does not proxy unrelated website traffic", async () => {
+  const response = await call("/");
+  assert.equal(response.status, 404);
+  assert.equal(response.headers.get("x-agent-readiness-worker"), "jonathan-harris-agent-readiness");
+  const body = await response.json();
+  assert.equal(body.service, "jonathan-harris-agent-readiness");
 });
 
 test("auth.md contains a complete anonymous registration path", async () => {
@@ -137,9 +130,24 @@ test("auth.md contains a complete anonymous registration path", async () => {
   assert.match(body, /\/oauth2\/token/);
 });
 
-test("WebMCP uses current document.modelContext API", async () => {
+test("WebMCP supports current and scanner-legacy modelContext locations", async () => {
   const script = await (await call("/.well-known/agent-readiness/webmcp.js")).text();
-  assert.match(script, /document\.modelContext\.registerTool/);
-  assert.doesNotMatch(script, /navigator\.modelContext/);
+  assert.match(script, /document\.modelContext/);
+  assert.match(script, /navigator\.modelContext/);
+  assert.match(script, /modelContext\.registerTool/);
   assert.match(script, /AbortController/);
+});
+
+test("MCP discovery aliases and readiness status are available", async () => {
+  for (const path of ["/.well-known/mcp/server-card.json", "/.well-known/mcp/catalog.json", "/.well-known/mcp.json", "/mcp/server-card"]) {
+    const response = await call(path);
+    assert.equal(response.status, 200, path);
+    const body = await response.json();
+    assert.equal(body.serverInfo.name, "jonathan-harris-public-discovery", path);
+    assert.match(body.endpoint, /\/mcp$/);
+    assert.ok(body.tools.every((tool) => tool.inputSchema), path);
+  }
+
+  const status = await (await call("/.well-known/agent-readiness/status")).json();
+  assert.equal(status.deployment_mode, "cloudflare-pages-service-binding");
 });

@@ -1,11 +1,16 @@
 ; DNS-AID records for jonathan-harris.online
-; Apply in Cloudflare DNS after deploying jonathan-harris-agent-readiness.
-; DNSSEC should be enabled for the jonathan-harris.online zone.
+; Apply these in Cloudflare DNS after deploying the Agent Readiness Worker and Pages.
+; DNSSEC must be enabled on the jonathan-harris.online zone for the scanner's authenticated-DNS check.
 ;
-; The attached Agent Readiness prompt checks the _agents namespace and accepts
-; ServiceMode SVCB/HTTPS records. The A2A entry advertises the live A2A endpoint;
-; the index entry advertises the organisation-level agent index.
+; Cloudflare dashboard owner/name fields normally omit the zone suffix, so enter:
+;   _index._agents
+;   _a2a._agents
+;   _mcp._agents
+;
+; Type: SVCB   Priority: 1   Target: jonathan-harris.online
+; Params as shown below. `mandatory=alpn,port` makes the advertised connection
+; parameters explicit and matches the DNS-AID readiness example.
 
-_index._agents.jonathan-harris.online. 3600 IN SVCB 1 jonathan-harris.online. alpn="h2,h3" port=443
-_a2a._agents.jonathan-harris.online.  3600 IN SVCB 1 jonathan-harris.online. alpn="a2a,h2,h3" port=443
-_mcp._agents.jonathan-harris.online.  3600 IN SVCB 1 jonathan-harris.online. alpn="mcp,h2,h3" port=443
+_index._agents.jonathan-harris.online. 3600 IN SVCB 1 jonathan-harris.online. mandatory=alpn,port alpn="h2,h3" port=443
+_a2a._agents.jonathan-harris.online.  3600 IN SVCB 1 jonathan-harris.online. mandatory=alpn,port alpn="a2a,h2,h3" port=443
+_mcp._agents.jonathan-harris.online.  3600 IN SVCB 1 jonathan-harris.online. mandatory=alpn,port alpn="mcp,h2,h3" port=443

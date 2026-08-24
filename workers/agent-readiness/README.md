@@ -1,91 +1,111 @@
 # Cloudflare Agent Readiness Worker
 
-This is an independently deployed Cloudflare Worker named `jonathan-harris-agent-readiness` that lives inside the website repository. It runs in front of the existing Cloudflare Pages custom domain and passes ordinary site traffic through unchanged.
+`jonathan-harris-agent-readiness` is an independently deployed Cloudflare Worker kept inside the website repository.
 
-## What it implements
+## Production architecture
 
-1. RFC 9727 API Catalog at `/.well-known/api-catalog`.
-2. RFC 8288 discovery `Link` headers on the homepage.
-3. `auth.md` agent registration instructions at `/auth.md`.
-4. OAuth authorization-server/OIDC discovery metadata.
-5. RFC 9728 OAuth Protected Resource Metadata.
-6. A2A v1 Agent Card plus a minimal read-only HTTP+JSON `message:send` implementation.
-7. Agent Skills Discovery v0.2.0 index plus a digest-verified `SKILL.md`.
-8. MCP Server Card plus a minimal stateless read-only MCP Streamable HTTP server.
-9. Web Bot Auth Ed25519 JWKS directory with HTTP Message Signature response signing.
-10. WebMCP registration using the current `document.modelContext` API, injected by the Worker into HTML pages.
-11. DNS-AID deployment records in `dns-aid-records.txt`.
-
-The Durable Object stores one persistent Ed25519 signing key. That key signs OAuth JWTs and the Web Bot Auth directory response. No private signing key is committed to the repository.
-
-## Deploy
-
-From this directory:
-
-```bash
-npx wrangler deploy
-```
-
-The deploy output must name **`jonathan-harris-agent-readiness`** and must publish the Worker Route **`jonathan-harris.online/*`**. The Worker name must not be `jonathan-harris-website`; that is the Pages project.
-
-The route runs in front of the existing Pages custom domain. Unmatched requests use `fetch(request)` to reach Pages. `workers_dev = true` is intentionally enabled so the deployment also has a direct diagnostic `workers.dev` URL.
-
-### Mandatory production route check
-
-Before running the Agent Readiness scanner, request:
-
-```bash
-curl -i https://jonathan-harris.online/.well-known/agent-readiness/status
-```
-
-Production is wired correctly only if the response is HTTP 200 and contains:
+The Worker does **not** own `jonathan-harris.online/*` and does not proxy the website.
 
 ```text
+Internet
+   |
+   v
+jonathan-harris.online
+Cloudflare Pages + Functions
+   |
+   | AGENT_READINESS Service Binding
+   v
+jonathan-harris-agent-readiness Worker
+   |
+   +-- AGENT_READINESS_STATE Durable Object (persistent Ed25519 key)
+```
+
+Pages exposes the readiness URLs publicly through `functions/_middleware.js`. The Worker stays independently deployable and internally addressable through the service binding. This avoids Worker Route precedence problems on the Pages custom domain.
+
+## Implemented readiness surfaces
+
+1. API Catalog: `/.well-known/api-catalog`
+2. Homepage RFC 8288 `Link` headers (added by Pages)
+3. Auth.md: `/auth.md`
+4. OAuth/OIDC metadata: `/.well-known/oauth-authorization-server` and `/.well-known/openid-configuration`
+5. OAuth Protected Resource Metadata: `/.well-known/oauth-protected-resource`
+6. A2A Agent Card and read-only A2A endpoint: `/.well-known/agent-card.json`, `/a2a`, `/a2a/message:send`
+7. Agent Skills index + digest-verified SKILL.md
+8. MCP Server Card + stateless read-only MCP endpoint. Compatibility aliases are also served.
+9. Web Bot Auth signed Ed25519 key directory
+10. WebMCP script. It prefers `document.modelContext` and retains `navigator.modelContext` compatibility for scanners/browser builds using the earlier API.
+11. DNS-AID records are defined in `dns-aid-records.txt`; DNSSEC is an authoritative DNS setting and therefore remains outside the Worker.
+
+## Environment, secrets and bindings
+
+### Agent Readiness Worker
+
+- Env var: `CANONICAL_ORIGIN=https://jonathan-harris.online` (committed in `wrangler.toml`)
+- Secret: none
+- Durable Object: `AGENT_READINESS_STATE` → `AgentReadinessState`
+
+The Worker generates one Ed25519 key pair and persists it in the Durable Object. No private key is committed or configured as a secret.
+
+### Pages project
+
+- Service binding: `AGENT_READINESS` → `jonathan-harris-agent-readiness`
+- Existing CogniPal Durable Object binding remains separate.
+
+## Required first deployment order
+
+The target of a Cloudflare Service Binding must already exist before the caller can be deployed.
+
+1. Deploy `workers/cognipal-rate-limit` if its current version is not already live.
+2. Deploy `workers/agent-readiness`:
+
+   ```bash
+   cd workers/agent-readiness
+   npx wrangler deploy
+   ```
+
+3. Deploy/redeploy the root Cloudflare Pages project so the `AGENT_READINESS` service binding from the root `wrangler.toml` becomes active. If Pages is Git-connected, push this repository and let the production deployment complete.
+4. Remove any old manually-created Worker Route `jonathan-harris.online/*` from `jonathan-harris-agent-readiness` if it still exists in the Cloudflare dashboard. This Worker intentionally has no production route.
+5. Add the three SVCB records from `dns-aid-records.txt` and enable DNSSEC for the zone.
+
+## Production verification
+
+After both deployments:
+
+```bash
+cd workers/agent-readiness
+node verify-production.mjs
+```
+
+A proxied readiness endpoint must contain **both**:
+
+```text
+X-Agent-Readiness-Gateway: cloudflare-pages-service-binding
 X-Agent-Readiness-Worker: jonathan-harris-agent-readiness
 ```
 
-If that header is absent, do not re-scan yet. In Cloudflare go to **Workers & Pages → jonathan-harris-agent-readiness → Settings → Domains & Routes** and confirm a **Worker Route** exists for `jonathan-harris.online/*`. Do not replace the Pages custom domain with a Worker Custom Domain.
-
-## External Cloudflare steps still required
-
-### DNS-AID
-
-Create the records in `dns-aid-records.txt` in the `jonathan-harris.online` Cloudflare DNS zone. Enable DNSSEC for the zone. A Worker cannot publish authoritative DNS records by itself.
-
-### Web Bot Auth verified-bot registration
-
-After deployment, confirm this URL returns a signed key directory:
+The homepage must contain:
 
 ```text
-https://jonathan-harris.online/.well-known/http-message-signatures-directory
+X-Agent-Readiness-Homepage-Discovery: enabled
+X-Agent-Readiness-WebMCP: injected
 ```
 
-Then submit that URL through Cloudflare's Bot Submission Form with **Request Signature** as the verification method. Publishing the key directory is implemented by this Worker; Cloudflare's external verified-bot registration is an account-level action.
+and RFC 8288 `Link` headers.
 
-## Validation
-
-Run the local contract tests:
+To call the Cloudflare scanner and print all matching readiness statuses:
 
 ```bash
-node --test test.mjs
+node rescan.mjs
 ```
 
-Then run `node verify-production.mjs` and scan production:
+## Local/CI validation
+
+From the repository root:
 
 ```bash
-curl -sS https://isitagentready.com/api/scan \
-  -H 'Content-Type: application/json' \
-  --data '{"url":"https://jonathan-harris.online"}'
+node --test workers/agent-readiness/test.mjs
+node --test scripts/agent-readiness-pages.test.mjs
+node --test scripts/cognipal-rate-limit.test.mjs
 ```
 
-Useful direct checks:
-
-```bash
-curl -i https://jonathan-harris.online/.well-known/api-catalog
-curl -i https://jonathan-harris.online/.well-known/oauth-protected-resource
-curl -i https://jonathan-harris.online/.well-known/oauth-authorization-server
-curl -i https://jonathan-harris.online/.well-known/agent-card.json
-curl -i https://jonathan-harris.online/.well-known/agent-skills/index.json
-curl -i https://jonathan-harris.online/.well-known/mcp/server-card.json
-curl -i https://jonathan-harris.online/.well-known/http-message-signatures-directory
-```
+These tests are also run by `build.sh` so Pages cannot deploy a code revision that breaks the local readiness contracts.

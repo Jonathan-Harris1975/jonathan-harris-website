@@ -1,13 +1,12 @@
-name = "agent-readiness"
+name = "jonathan-harris-agent-readiness"
 main = "index.js"
 compatibility_date = "2026-08-24"
 workers_dev = true
 
-# This Worker runs in front of the existing Cloudflare Pages custom domain.
-# Any path it does not own is passed through unchanged to the Pages origin.
-[[routes]]
-pattern = "jonathan-harris.online/*"
-zone_name = "jonathan-harris.online"
+# Intentionally NO production Worker Route here.
+# The Cloudflare Pages project exposes this Worker through the AGENT_READINESS
+# Service Binding. This avoids competing with the Pages custom domain and
+# removes wildcard Worker Route precedence from the discovery path.
 
 [vars]
 CANONICAL_ORIGIN = "https://jonathan-harris.online"

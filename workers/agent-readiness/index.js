@@ -327,6 +327,7 @@ async function agentSkillsIndex(origin) {
 }
 
 function mcpServerCard(origin) {
+  const emptyObjectSchema = { type: "object", properties: {}, additionalProperties: false };
   return {
     $schema: "https://static.modelcontextprotocol.io/schemas/mcp-server-card/v1.json",
     version: "1.0",
@@ -334,19 +335,20 @@ function mcpServerCard(origin) {
     serverInfo: { name: "jonathan-harris-public-discovery", title: "Jonathan Harris Public Discovery", version: AGENT_VERSION },
     description: "Stateless, read-only MCP discovery server for Jonathan Harris's public website surfaces.",
     documentationUrl: `${origin}/api/docs/`,
-    transport: { type: "streamable-http", endpoint: "/mcp" },
+    transport: { type: "streamable-http", endpoint: `${origin}/mcp` },
+    endpoint: `${origin}/mcp`,
     capabilities: { tools: {}, resources: {}, prompts: {} },
     authentication: { required: false, schemes: ["bearer", "oauth2"] },
     instructions: "Use the tools and resources for public discovery only. No write operations are exposed.",
     resources: [
-      { name: "public_entry_points", uri: "website://public-entry-points", description: "Canonical public website and API entry points", mimeType: "application/json" },
+      { name: "public_entry_points", title: "Public entry points", uri: "website://public-entry-points", description: "Canonical public website and API entry points", mimeType: "application/json" },
     ],
     tools: [
-      { name: "list_public_surfaces", description: "List canonical public website and agent-discovery endpoints." },
-      { name: "get_agent_readiness", description: "Return the machine-readable agent readiness endpoints exposed by the site." },
+      { name: "list_public_surfaces", title: "List public surfaces", description: "List canonical public website and agent-discovery endpoints.", inputSchema: emptyObjectSchema },
+      { name: "get_agent_readiness", title: "Get agent readiness", description: "Return the machine-readable agent readiness endpoints exposed by the site.", inputSchema: emptyObjectSchema },
     ],
     prompts: [
-      { name: "research_public_ai_content", description: "Guide an agent towards the site's public AI research surfaces." },
+      { name: "research_public_ai_content", title: "Research public AI content", description: "Guide an agent towards the site's public AI research surfaces." },
     ],
   };
 }
@@ -382,7 +384,7 @@ function readinessSurfaces(origin) {
 }
 
 function webMcpScript() {
-  return `(() => {\n  if (!document.modelContext?.registerTool) return;\n  const controller = new AbortController();\n  const register = (tool) => document.modelContext.registerTool(tool, { signal: controller.signal }).catch(() => {});\n\n  register({\n    name: "search_books",\n    description: "Search Jonathan Harris's public ebook catalogue by title, topic, tags or summary.",\n    inputSchema: {\n      type: "object",\n      properties: { query: { type: "string", minLength: 1, maxLength: 160 } },\n      required: ["query"]\n    },\n    annotations: { readOnlyHint: true },\n    execute: async ({ query }, { signal } = {}) => {\n      const response = await fetch("/api/v1/books.json", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Public catalogue unavailable");\n      const books = await response.json();\n      const needle = String(query).toLowerCase();\n      const matches = books.filter((book) => [book.title, book.topic, book.summary, ...(book.tags || [])].join(" ").toLowerCase().includes(needle)).slice(0, 5);\n      return JSON.stringify(matches.map(({ title, slug, topic, summary, buy_route }) => ({ title, topic, summary, url: "/ebooks/" + slug + "/", buy_route })));\n    }\n  });\n\n  register({\n    name: "get_latest_podcast",\n    description: "Return metadata for the latest public Turing's Torch podcast episode.",\n    inputSchema: { type: "object", properties: {} },\n    annotations: { readOnlyHint: true },\n    execute: async (_input, { signal } = {}) => {\n      const response = await fetch("/api/podcast/latest", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Latest podcast metadata unavailable");\n      return JSON.stringify(await response.json());\n    }\n  });\n\n  register({\n    name: "open_public_section",\n    description: "Navigate to a canonical public section of the website.",\n    inputSchema: {\n      type: "object",\n      properties: { section: { type: "string", enum: ["books", "book-finder", "podcast", "blog", "resources", "topics"] } },\n      required: ["section"]\n    },\n    annotations: { readOnlyHint: false },\n    execute: async ({ section }) => {\n      const paths = { books: "/ebooks/", "book-finder": "/book-finder/", podcast: "/podcast/", blog: "/blog/", resources: "/resources/", topics: "/topics/" };\n      location.assign(paths[section]);\n      return "Navigating to " + section;\n    }\n  });\n\n  addEventListener("pagehide", () => controller.abort(), { once: true });\n})();\n`;
+  return `(() => {\n  // WebMCP moved from navigator.modelContext to document.modelContext.\n  // Keep the legacy fallback because some readiness scanners still emulate the EPP API.\n  const modelContext = document.modelContext || navigator.modelContext;\n  if (!modelContext?.registerTool) return;\n  const controller = new AbortController();\n  const register = (tool) => Promise.resolve(modelContext.registerTool(tool, { signal: controller.signal })).catch(() => {});\n\n  register({\n    name: "search_books",\n    description: "Search Jonathan Harris's public ebook catalogue by title, topic, tags or summary.",\n    inputSchema: {\n      type: "object",\n      properties: { query: { type: "string", minLength: 1, maxLength: 160 } },\n      required: ["query"]\n    },\n    annotations: { readOnlyHint: true },\n    execute: async ({ query }, { signal } = {}) => {\n      const response = await fetch("/api/v1/books.json", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Public catalogue unavailable");\n      const books = await response.json();\n      const needle = String(query).toLowerCase();\n      const matches = books.filter((book) => [book.title, book.topic, book.summary, ...(book.tags || [])].join(" ").toLowerCase().includes(needle)).slice(0, 5);\n      return JSON.stringify(matches.map(({ title, slug, topic, summary, buy_route }) => ({ title, topic, summary, url: "/ebooks/" + slug + "/", buy_route })));\n    }\n  });\n\n  register({\n    name: "get_latest_podcast",\n    description: "Return metadata for the latest public Turing's Torch podcast episode.",\n    inputSchema: { type: "object", properties: {} },\n    annotations: { readOnlyHint: true },\n    execute: async (_input, { signal } = {}) => {\n      const response = await fetch("/api/podcast/latest", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Latest podcast metadata unavailable");\n      return JSON.stringify(await response.json());\n    }\n  });\n\n  register({\n    name: "open_public_section",\n    description: "Navigate to a canonical public section of the website.",\n    inputSchema: {\n      type: "object",\n      properties: { section: { type: "string", enum: ["books", "book-finder", "podcast", "blog", "resources", "topics"] } },\n      required: ["section"]\n    },\n    annotations: { readOnlyHint: false },\n    execute: async ({ section }) => {\n      const paths = { books: "/ebooks/", "book-finder": "/book-finder/", podcast: "/podcast/", blog: "/blog/", resources: "/resources/", topics: "/topics/" };\n      location.assign(paths[section]);\n      return "Navigating to " + section;\n    }\n  });\n\n  addEventListener("pagehide", () => controller.abort(), { once: true });\n})();\n`;
 }
 
 async function handleAnonymousIdentity(request, env, origin) {
@@ -561,40 +563,6 @@ async function handleMcp(request, origin) {
   }
 }
 
-function appendDiscoveryLinks(headers, origin) {
-  const values = [
-    `<${origin}/.well-known/api-catalog>; rel="api-catalog"`,
-    `<${origin}/openapi.json>; rel="service-desc"; type="application/vnd.oai.openapi+json;version=3.1"`,
-    `<${origin}/api/docs/>; rel="service-doc"`,
-    `<${origin}/.well-known/agent-card.json>; rel="describedby"; type="application/json"`,
-  ];
-  const existing = headers.get("Link");
-  headers.set("Link", existing ? `${existing}, ${values.join(", ")}` : values.join(", "));
-}
-
-async function passthroughWithDiscovery(request, origin) {
-  const response = await fetch(request);
-  const headers = new Headers(response.headers);
-  const url = new URL(request.url);
-  if (url.pathname === "/" || url.pathname === "/index.html") appendDiscoveryLinks(headers, origin);
-
-  const contentType = headers.get("content-type") || "";
-  if (request.method === "GET" && contentType.includes("text/html") && typeof HTMLRewriter !== "undefined") {
-    headers.delete("Content-Length");
-    headers.delete("ETag");
-    const rewritten = new HTMLRewriter()
-      .on("head", {
-        element(element) {
-          element.append('<script src="/.well-known/agent-readiness/webmcp.js" defer></script>', { html: true });
-        },
-      })
-      .transform(new Response(response.body, { status: response.status, statusText: response.statusText, headers }));
-    return rewritten;
-  }
-
-  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
-}
-
 async function route(request, env) {
   const url = new URL(request.url);
   const origin = canonicalOrigin(env);
@@ -638,18 +606,26 @@ async function route(request, env) {
   if (path === "/a2a" && request.method === "GET") return json({ card: `${origin}/.well-known/agent-card.json`, sendMessage: `${origin}/a2a/message:send`, protocolVersion: A2A_VERSION });
   if (path === "/.well-known/agent-skills/index.json" && ["GET", "HEAD"].includes(request.method)) return json(await agentSkillsIndex(origin));
   if (path === "/.well-known/agent-skills/jonathan-harris-ai-research/SKILL.md" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : siteSkill(origin), "text/markdown; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
-  if (["/.well-known/mcp/server-card.json", "/.well-known/mcp.json", "/.well-known/mcp"].includes(path) && ["GET", "HEAD"].includes(request.method)) return json(mcpServerCard(origin), 200, { "Access-Control-Allow-Methods": "GET" });
+  if (["/.well-known/mcp/server-card.json", "/.well-known/mcp/catalog.json", "/.well-known/mcp.json", "/.well-known/mcp", "/mcp/server-card"].includes(path) && ["GET", "HEAD"].includes(request.method)) return json(mcpServerCard(origin), 200, { "Access-Control-Allow-Methods": "GET" });
   if (path === "/mcp") return handleMcp(request, origin);
   if (path === "/.well-known/http-message-signatures-directory" && ["GET", "HEAD"].includes(request.method)) return webBotDirectory(request, env);
   if (path === "/.well-known/agent-readiness/webmcp.js" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : webMcpScript(), "application/javascript; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=3600, s-maxage=3600" });
   if (path === "/.well-known/agent-readiness/status" && ["GET", "HEAD"].includes(request.method)) {
-    return json({ ok: true, service: "jonathan-harris-agent-readiness", version: AGENT_VERSION, discovery: readinessSurfaces(origin), dns_aid: "requires Cloudflare DNS records; see workers/agent-readiness/dns-aid-records.txt" }, 200, { "Cache-Control": "no-store" });
+    return json({
+      ok: true,
+      service: "jonathan-harris-agent-readiness",
+      version: AGENT_VERSION,
+      deployment_mode: "cloudflare-pages-service-binding",
+      canonical_origin: origin,
+      discovery: readinessSurfaces(origin),
+      dns_aid: "requires authoritative Cloudflare DNS records and DNSSEC; see workers/agent-readiness/dns-aid-records.txt",
+    }, 200, { "Cache-Control": "no-store" });
   }
   if (path === "/agent-index.json" && ["GET", "HEAD"].includes(request.method)) {
     return json({ organization: "Jonathan Harris", agents: [{ name: "website-discovery", a2a: `${origin}/.well-known/agent-card.json`, mcp: `${origin}/.well-known/mcp/server-card.json`, skills: `${origin}/.well-known/agent-skills/index.json` }] });
   }
 
-  return passthroughWithDiscovery(request, origin);
+  return json({ error: "not_found", service: "jonathan-harris-agent-readiness" }, 404, { "Cache-Control": "no-store" });
 }
 
 function markAgentReadinessResponse(response) {
