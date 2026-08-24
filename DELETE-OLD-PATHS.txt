@@ -1,2 +1,0 @@
-Delete this obsolete folder before deployment:
-workers/Agent Readiness/
