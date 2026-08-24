@@ -23,7 +23,7 @@ Legacy `/book/*` routes remain compatibility redirects to canonical `/ebooks/*` 
 
 ## Post-deployment integrations
 
-The strict live validation gate is the release authority. Notification and cache-purge integrations run only after the live crawler, page, API and redirect checks have passed.
+The strict live validation gate is the release authority. Notification and cache-purge integrations run only after the live crawler, page, API and redirect checks have passed. The website workflow does not dispatch MAST or require a GitHub personal access token; MAST owns its ecosystem smoke independently.
 
 No webhook endpoint is hard-coded in the repository. Configure only the integrations that are actively used:
 
