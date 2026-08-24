@@ -2,64 +2,63 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 34,
+    "iso_week": 35,
     "year": 2026
   },
   "book": {
-    "id": 35,
-    "key": "35-ebook",
-    "title": "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "short": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
-    "short_description": "A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable.",
-    "cover": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-behind-your-feed-webp",
+    "id": 36,
+    "key": "36-ebook",
+    "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
+    "short": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
+    "short_description": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
+    "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
+    "main_image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
     "tags": [
-      "Media",
+      "Gaming",
       "Artificial Intelligence",
       "AI Trends"
     ],
-    "filter": "Media",
+    "filter": "Gaming",
     "keywords": [
-      "Media",
-      "The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
+      "Gaming",
+      "Game AI Unleashed: From Finite State Machines to Machine Learning",
       "AI Trends",
       "Artificial Intelligence"
     ],
-    "buy_url": "https://mybook.to/rNRr",
-    "buy_target_url": "https://mybook.to/rNRr",
-    "slug": "the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media",
-    "asin": "B0DY12Z1SP",
-    "pages": 334,
+    "buy_url": "https://mybook.to/e7GozY6",
+    "buy_target_url": "https://mybook.to/e7GozY6",
+    "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
+    "asin": "B0DY18CYT6",
+    "pages": 344,
     "datePublished": "2025-02-20",
     "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-    "buy_route": "/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
-    "topic_url": "/catalogue/media/",
+    "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+    "buy_route": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+    "topic_url": "/catalogue/gaming/",
     "related_slugs": [
-      "from-reporters-to-robots-how-ai-is-reshaping-journalism",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future",
-      "ai-revolution-in-railways-modernizing-travel-for-a-smarter-future",
-      "artificial-intelligence-and-the-law-case-studies-and-future-trends"
+      "ai-in-education-reimagining-learning-for-every-student",
+      "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
+      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
+      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
     ],
     "title_tokens": [
-      "behind",
-      "feed",
-      "future",
-      "media",
-      "moder",
-      "personal",
-      "social"
+      "finite",
+      "game",
+      "learn",
+      "machine",
+      "state",
+      "unleash"
     ],
     "topic_tokens": [
-      "media"
+      "gam"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/ or buy on Amazon at https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now",
-    "midroll_15": "This week's sponsor is The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media. A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable. Read more at https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/",
-    "midroll_30": "This week's sponsor is The AI Behind Your Feed: Personalization, Moderation, and the Future of Social Media. A clear look at recommendations, moderation, privacy, platform incentives, and why your feed knows more than feels comfortable. It focuses on Media. It runs 334 pages. Topics include Media, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/ or go straight to Amazon at https://jonathan-harris.online/ebooks/the-ai-behind-your-feed-personalization-moderation-and-the-future-of-social-media/buy-now."
+    "headline": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/ or buy on Amazon at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
+    "midroll_15": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning. A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI. Read more at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
+    "midroll_30": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning. A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI. It focuses on Gaming. It runs 344 pages. Topics include Gaming, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/ or go straight to Amazon at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now."
   }
 }
