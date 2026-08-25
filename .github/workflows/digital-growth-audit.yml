@@ -25,7 +25,7 @@ on:
       callback_url:
         description: AI Management Suite callback URL
         required: false
-        default: https://app.jonathan-harris.online/audits/digital-growth/callback
+        default: https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/digital-growth/callback
         type: string
       analysis_url:
         description: Optional AI Management Suite analysis URL override
@@ -112,7 +112,7 @@ jobs:
           set -euo pipefail
           callback_url="$INPUT_CALLBACK_URL"
           [ -n "$callback_url" ] || callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
-          [ -n "$callback_url" ] || callback_url="https://app.jonathan-harris.online/audits/digital-growth/callback"
+          [ -n "$callback_url" ] || callback_url="https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/digital-growth/callback"
           case "$callback_url" in
             */audits/digital-growth/callback) ;;
             *) echo "::error::callback_url must end with /audits/digital-growth/callback; got $callback_url"; exit 1 ;;

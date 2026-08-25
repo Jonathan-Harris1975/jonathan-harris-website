@@ -25,7 +25,7 @@ on:
       callback_url:
         description: AI Management Suite callback URL
         required: false
-        default: https://app.jonathan-harris.online/audits/seo-aeo-geo/callback
+        default: https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/seo-aeo-geo/callback
         type: string
       analysis_url:
         description: Optional AI Management Suite analysis URL override
@@ -119,7 +119,7 @@ jobs:
             callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
           fi
           if [ -z "$callback_url" ]; then
-            callback_url="https://app.jonathan-harris.online/audits/seo-aeo-geo/callback"
+            callback_url="https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/seo-aeo-geo/callback"
           fi
           case "$callback_url" in
             */audits/seo-aeo-geo/callback) ;;
@@ -259,7 +259,7 @@ jobs:
               os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
               or os.environ.get("INPUT_CALLBACK_URL", "").strip()
               or os.environ.get("AI_SUITE_AUDIT_CALLBACK_URL", "").strip()
-              or "https://app.jonathan-harris.online/audits/seo-aeo-geo/callback"
+              or "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/seo-aeo-geo/callback"
           )
           token = (
               os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()

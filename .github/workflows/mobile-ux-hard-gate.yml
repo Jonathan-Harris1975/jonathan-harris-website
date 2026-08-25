@@ -119,7 +119,7 @@ jobs:
             callback_url="$AI_SUITE_AUDIT_CALLBACK_URL"
           fi
           if [ -z "$callback_url" ]; then
-            callback_url="https://app.jonathan-harris.online/audits/mobile-ux/callback"
+            callback_url="https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/mobile-ux/callback"
           fi
           case "$callback_url" in
             */audits/mobile-ux/callback) ;;
@@ -312,7 +312,7 @@ jobs:
               os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
               or os.environ.get("INPUT_CALLBACK_URL", "").strip()
               or os.environ.get("AI_SUITE_AUDIT_CALLBACK_URL", "").strip()
-              or "https://app.jonathan-harris.online/audits/mobile-ux/callback"
+              or "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/mobile-ux/callback"
           )
           token = (
               os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
