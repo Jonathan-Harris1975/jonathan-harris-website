@@ -13,11 +13,11 @@ class MobileUxHardGateTests(unittest.TestCase):
     old_app_url = os.environ.get("APP_URL")
     old_token = os.environ.get("AI_SUITE_AUDIT_CALLBACK_TOKEN")
     try:
-      os.environ["APP_URL"] = "https://app.jonathan-harris.online"
+      os.environ["APP_URL"] = "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app"
       os.environ["AI_SUITE_AUDIT_CALLBACK_TOKEN"] = "token-from-env"
       args = argparse.Namespace(callback_url=None, callback_token=None)
       audit.resolve_runtime_callback_config(args)
-      self.assertEqual(args.callback_url, "https://app.jonathan-harris.online/audits/mobile-ux/callback")
+      self.assertEqual(args.callback_url, "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/mobile-ux/callback")
       self.assertEqual(args.callback_token, "token-from-env")
     finally:
       if old_app_url is None:

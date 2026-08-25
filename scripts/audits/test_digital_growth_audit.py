@@ -22,8 +22,8 @@ class DigitalGrowthAuditTests(unittest.TestCase):
 
   def test_analysis_url_is_derived_from_digital_growth_callback(self):
     self.assertEqual(
-      audit.derive_analysis_url("https://app.jonathan-harris.online/audits/digital-growth/callback", None),
-      "https://app.jonathan-harris.online/audits/digital-growth/analysis",
+      audit.derive_analysis_url("https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/digital-growth/callback", None),
+      "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/digital-growth/analysis",
     )
 
   def test_heuristics_do_not_invent_performance_metrics(self):
