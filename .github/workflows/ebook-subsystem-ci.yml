@@ -63,6 +63,51 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Classify whether this push requires a Pages release
+        id: release-impact
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+
+          release_required=true
+          before="${BEFORE_SHA:-}"
+
+          # A push may contain more than one commit, while actions/checkout uses
+          # a shallow clone by default. Fetch the previous branch tip explicitly
+          # so the classification covers the full push rather than just HEAD~1.
+          if [[ -n "$before" && ! "$before" =~ ^0+$ ]]; then
+            git fetch --no-tags --depth=1 origin "$before" >/dev/null 2>&1 || true
+
+            if git cat-file -e "${before}^{commit}" 2>/dev/null; then
+              mapfile -t changed_files < <(git diff --name-only "$before" "$GITHUB_SHA")
+
+              if (( ${#changed_files[@]} > 0 )); then
+                release_required=false
+                for path in "${changed_files[@]}"; do
+                  case "$path" in
+                    .github/*|docs/*|README.md|SECURITY.md|GHOST_CONTENT_REMOVAL.md|VALIDATION_OUTPUT.txt|CHANGED_FILES.json|test_*.py|scripts/test_*.py|scripts/*test*.py|scripts/*test*.mjs)
+                      ;;
+                    *)
+                      release_required=true
+                      break
+                      ;;
+                  esac
+                done
+              fi
+
+              printf 'Changed files in push:\n'
+              printf ' - %s\n' "${changed_files[@]}"
+            else
+              echo "Previous push SHA is unavailable; requiring an exact Pages release as the safe default."
+            fi
+          else
+            echo "No usable previous push SHA; requiring an exact Pages release as the safe default."
+          fi
+
+          echo "release_required=$release_required" >> "$GITHUB_OUTPUT"
+          echo "Pages release required: $release_required"
+
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
@@ -80,7 +125,12 @@ jobs:
         run: bash build.sh
 
       - name: Wait for the exact production release to become live
+        if: steps.release-impact.outputs.release_required == 'true'
         run: python scripts/wait_for_live_release.py --timeout-seconds 600 --interval-seconds 20 --require-release-sha --stabilisation-seconds 30 --require-content-match --require-redirect-contract
+
+      - name: Validate the current production release for CI-only changes
+        if: steps.release-impact.outputs.release_required == 'false'
+        run: python scripts/wait_for_live_release.py --timeout-seconds 120 --interval-seconds 15 --require-content-match --require-redirect-contract
 
       - name: Verify live crawler publication
         run: python scripts/validate_release.py --workbook jonathan-harris-site-url-inventory-remediated-release-ready.xlsx --strict-post-deploy-live
