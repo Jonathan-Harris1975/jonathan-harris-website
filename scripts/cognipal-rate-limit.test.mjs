@@ -206,3 +206,45 @@ test('streamed unknown-length body is bounded while it is read', async () => {
   assert.equal((await responseBody(response)).error, 'payload_too_large');
   assert.equal(limiter.objects.size, 0);
 });
+
+test('blocked client traffic does not exhaust the shared global message allowance', async () => {
+  const limiter = new FakeDurableObjectNamespace();
+  const originalFetch = globalThis.fetch;
+  let upstreamCalls = 0;
+  globalThis.fetch = async () => {
+    upstreamCalls += 1;
+    return Response.json({ ok: true, accepted: true }, { status: 202 });
+  };
+  try {
+    const attackerIp = '203.0.113.200';
+    for (let i = 0; i < 20; i += 1) {
+      const suffix = String(i).padStart(8, '0');
+      const response = await messagePost(context(request('/api/cognipal/message', {
+        sessionId: `attacker-session-${suffix}`,
+        visitorId: `attacker-visitor-${suffix}`,
+        text: 'rate-limit isolation test',
+      }, { ip: attackerIp }), limiter));
+      assert.equal(response.status, 202);
+    }
+
+    for (let i = 20; i < 620; i += 1) {
+      const suffix = String(i).padStart(8, '0');
+      const response = await messagePost(context(request('/api/cognipal/message', {
+        sessionId: `attacker-session-${suffix}`,
+        visitorId: `attacker-visitor-${suffix}`,
+        text: 'rate-limit isolation test',
+      }, { ip: attackerIp }), limiter));
+      assert.equal(response.status, 429);
+    }
+
+    const legitimate = await messagePost(context(request('/api/cognipal/message', {
+      sessionId: 'legit-session-0001',
+      visitorId: 'legit-visitor-0001',
+      text: 'legitimate visitor',
+    }, { ip: '198.51.100.44' }), limiter));
+    assert.equal(legitimate.status, 202, 'a blocked attacker must not consume the global allowance');
+    assert.equal(upstreamCalls, 21);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
