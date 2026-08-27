@@ -80,11 +80,13 @@ export async function enforceVisitorRateLimits(context, payload, route) {
     ? { global: 600, ip: 20, visitor: 15, session: 12 }
     : { global: 2400, ip: 180, visitor: 90, session: 60 };
   const ip = clientAddress(context.request);
+  // Apply the narrowest scopes first. Once a visitor/IP is blocked, rejected
+  // traffic must not keep consuming the shared global allowance.
   const scopes = [
-    [`${route}:global`, limits.global],
-    [`${route}:ip:${ip}`, limits.ip],
-    [`${route}:visitor:${payload.visitorId}`, limits.visitor],
     [`${route}:session:${payload.sessionId}`, limits.session],
+    [`${route}:visitor:${payload.visitorId}`, limits.visitor],
+    [`${route}:ip:${ip}`, limits.ip],
+    [`${route}:global`, limits.global],
   ];
 
   try {
