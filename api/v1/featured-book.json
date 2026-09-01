@@ -2,63 +2,66 @@
   "version": "v1",
   "selection": {
     "method": "iso_week_rotation",
-    "iso_week": 35,
+    "iso_week": 36,
     "year": 2026
   },
   "book": {
-    "id": 36,
-    "key": "36-ebook",
-    "title": "Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "short": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
-    "short_description": "A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI.",
-    "cover": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
-    "main_image": "https://images.jonathan-harris.online/ai-game-unleashed-finite-webp",
+    "id": 37,
+    "key": "37-ebook",
+    "title": "Artificial Intelligence for Small Business",
+    "short": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "short_description": "A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control.",
+    "cover": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
+    "main_image": "https://images.jonathan-harris.online/artificial-intelligence-small-business-webp",
     "tags": [
-      "Gaming",
+      "Business",
+      "Small Business",
       "Artificial Intelligence",
-      "AI Trends"
-    ],
-    "filter": "Gaming",
-    "keywords": [
-      "Gaming",
-      "Game AI Unleashed: From Finite State Machines to Machine Learning",
       "AI Trends",
-      "Artificial Intelligence"
+      "Productivity"
     ],
-    "buy_url": "https://mybook.to/e7GozY6",
-    "buy_target_url": "https://mybook.to/e7GozY6",
-    "slug": "game-ai-unleashed-from-finite-state-machines-to-machine-learning",
-    "asin": "B0DY18CYT6",
-    "pages": 344,
-    "datePublished": "2025-02-20",
-    "dateModified": "2026-04-18T20:49:01Z",
-    "canonical_url": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-    "buy_route": "/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
-    "buy_route_full": "https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
-    "topic_url": "/catalogue/gaming/",
+    "filter": "Business",
+    "keywords": [
+      "AI for small business",
+      "artificial intelligence for small business",
+      "AI marketing",
+      "AI admin",
+      "customer service AI",
+      "small business productivity",
+      "AI automation",
+      "ChatGPT for business",
+      "plain English AI"
+    ],
+    "buy_url": "https://mybook.to/DcdDU",
+    "buy_target_url": "https://mybook.to/DcdDU",
+    "slug": "artificial-intelligence-for-small-business",
+    "asin": "B0H3FVY6BZ",
+    "pages": 233,
+    "datePublished": "2026-06-14",
+    "dateModified": "2026-06-14",
+    "canonical_url": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "buy_route": "/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "buy_route_full": "https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "topic_url": "/catalogue/business/",
     "related_slugs": [
-      "ai-in-education-reimagining-learning-for-every-student",
-      "the-house-always-knows-ai-gambling-and-the-ethics-of-personalized-gaming",
-      "ai-and-formula-1-redefining-speed-and-strategy-with-intelligent-technology",
-      "ai-in-agriculture-revolutionizing-farming-for-a-sustainable-future"
+      "ai-agents-for-everyday-work",
+      "artificial-intelligence-powered-retail-revolutionizing-customer-experience-for-a-sustainable-future",
+      "artificial-intelligence-revolution-in-manufacturing-modernizing-operations-maintenance-and-service-delivery",
+      "the-future-of-government-leveraging-ai-to-enhance-services-and-safeguard-information"
     ],
     "title_tokens": [
-      "finite",
-      "game",
-      "learn",
-      "machine",
-      "state",
-      "unleash"
+      "busi",
+      "small"
     ],
     "topic_tokens": [
-      "gam"
+      "busi"
     ]
   },
   "podcast_sponsor": {
     "label": "This week's sponsor",
-    "headline": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning",
-    "cta": "See the book at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/ or buy on Amazon at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now",
-    "midroll_15": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning. A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI. Read more at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/",
-    "midroll_30": "This week's sponsor is Game AI Unleashed: From Finite State Machines to Machine Learning. A practical guide to NPC behaviour, procedural systems, player experience, and the design choices hiding behind clever game AI. It focuses on Gaming. It runs 344 pages. Topics include Gaming, Artificial Intelligence, AI Trends. See the full book page at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/ or go straight to Amazon at https://jonathan-harris.online/ebooks/game-ai-unleashed-from-finite-state-machines-to-machine-learning/buy-now."
+    "headline": "This week's sponsor is Artificial Intelligence for Small Business",
+    "cta": "See the book at https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/ or buy on Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now",
+    "midroll_15": "This week's sponsor is Artificial Intelligence for Small Business. A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control. Read more at https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/",
+    "midroll_30": "This week's sponsor is Artificial Intelligence for Small Business. A plain-English guide to using artificial intelligence in small business workflows, from marketing and admin to customer service, privacy and cost control. It focuses on Business. It runs 233 pages. Topics include Business, Small Business, Artificial Intelligence. See the full book page at https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/ or go straight to Amazon at https://jonathan-harris.online/ebooks/artificial-intelligence-for-small-business/buy-now."
   }
 }
