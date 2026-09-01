@@ -36,6 +36,12 @@ SAMPLE_DERIVED_SHARED_FILES = frozenset(
 )
 SAMPLE_ROUTE_RE = re.compile(r"^ebooks/(?P<slug>[^/]+)/sample/index\.html$")
 BOOK_ROUTE_RE = re.compile(r"^ebooks/(?P<slug>[^/]+)/index\.html$")
+FEATURED_SECTION_RE = re.compile(
+    r'<section class="section--featured">.*?(?=<section class="section--explore">)',
+    re.DOTALL,
+)
+WEEKLY_FEATURED_PAYLOAD = "api/v1/featured-book.json"
+WEEKLY_FEATURED_HOMEPAGE = "index.html"
 
 
 def git(*args: str) -> subprocess.CompletedProcess[str]:
@@ -67,6 +73,28 @@ def generated_sample_slugs(status_lines: list[str]) -> set[str]:
     return slugs
 
 
+def homepage_has_only_featured_rotation_drift() -> bool:
+    """Allow the clock-driven homepage rotation without hiding other drift."""
+    committed = git("show", f"HEAD:{WEEKLY_FEATURED_HOMEPAGE}")
+    if committed.returncode != 0:
+        return False
+
+    try:
+        current = (ROOT / WEEKLY_FEATURED_HOMEPAGE).read_text(encoding="utf-8")
+    except OSError:
+        return False
+
+    committed_sections = FEATURED_SECTION_RE.findall(committed.stdout)
+    current_sections = FEATURED_SECTION_RE.findall(current)
+    if len(committed_sections) != 1 or len(current_sections) != 1:
+        return False
+
+    return (
+        FEATURED_SECTION_RE.sub("<FEATURED_WEEKLY_ROTATION>", committed.stdout, count=1)
+        == FEATURED_SECTION_RE.sub("<FEATURED_WEEKLY_ROTATION>", current, count=1)
+    )
+
+
 def is_ignored_build_output(path_text: str, sample_slugs: set[str]) -> bool:
     if any(
         path_text == prefix.rstrip("/") or path_text.startswith(prefix)
@@ -86,6 +114,14 @@ def is_ignored_build_output(path_text: str, sample_slugs: set[str]) -> bool:
 
     if sample_slugs and path_text in SAMPLE_DERIVED_SHARED_FILES:
         return True
+
+    # The featured book is intentionally selected from the current ISO week.
+    # A build that crosses into a new week therefore changes this generated API
+    # payload and the matching homepage section without any source-code drift.
+    if path_text == WEEKLY_FEATURED_PAYLOAD:
+        return True
+    if path_text == WEEKLY_FEATURED_HOMEPAGE:
+        return homepage_has_only_featured_rotation_drift()
 
     return False
 
@@ -122,6 +158,10 @@ def main() -> int:
         print(
             "Generated-output drift check passed: "
             f"{len(sample_slugs)} manuscript sample route(s) were treated as governed build-time output."
+        )
+    elif status_lines:
+        print(
+            "Generated-output drift check passed: only governed build-time output changed."
         )
     else:
         print("Generated-output drift check passed: the canonical build left the Git worktree clean.")
