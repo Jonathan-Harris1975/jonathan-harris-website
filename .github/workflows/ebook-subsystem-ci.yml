@@ -49,6 +49,12 @@ jobs:
       - name: Run ebook sample schema regression tests
         run: python -m unittest scripts.test_ebook_sample_schema
 
+      - name: Run compatibility entrypoint regression tests
+        run: python -m unittest scripts.test_compatibility_entrypoints
+
+      - name: Run repository hygiene regression tests
+        run: python -m unittest scripts.test_repository_hygiene
+
       - name: Run build pipeline
         run: bash build.sh
 
@@ -136,7 +142,7 @@ jobs:
         run: python scripts/validate_release.py --workbook jonathan-harris-site-url-inventory-remediated-release-ready.xlsx --strict-post-deploy-live
 
       - name: Verify live redirect chains
-        run: python scripts/maintenance/check_redirect_chains.py
+        run: python scripts/check_redirect_chains.py
 
       - name: Record exact-SHA live website attestation
         run: |
