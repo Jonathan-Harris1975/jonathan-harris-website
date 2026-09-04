@@ -1,6 +1,11 @@
 from pathlib import Path
+import sys
 
-from schema_markup_gate import run_schema_gate, validate_html_file
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from scripts.audits.schema_markup_gate import run_schema_gate, validate_html_file
 
 
 def test_schema_gate_allows_valid_blogposting(tmp_path: Path):
