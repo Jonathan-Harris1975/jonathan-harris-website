@@ -6,7 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.check_repository_hygiene import fallback_files
+from scripts.check_repository_hygiene import fallback_files, source_lint_issues
 
 
 class RepositoryHygieneFallbackTests(unittest.TestCase):
@@ -31,6 +31,25 @@ class RepositoryHygieneFallbackTests(unittest.TestCase):
                 path.write_text("generated\n", encoding="utf-8")
 
             self.assertEqual(fallback_files(root), [expected])
+
+    def test_source_lint_issues_match_hive_line_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            js = root / "worker.js"
+            py = root / "script.py"
+            ignored = root / "test.mjs"
+            js.write_text("x" * 201 + "\nconst ok = true;   \n", encoding="utf-8")
+            py.write_text("x" * 200 + "\nprint('ok')\t\n", encoding="utf-8")
+            ignored.write_text("x" * 250 + "   \n", encoding="utf-8")
+
+            self.assertEqual(
+                source_lint_issues([js, py, ignored], root=root),
+                [
+                    "line_too_long: worker.js:1 is 201 characters; maximum is 200",
+                    "trailing_whitespace: worker.js:2",
+                    "trailing_whitespace: script.py:2",
+                ],
+            )
 
 
 if __name__ == "__main__":

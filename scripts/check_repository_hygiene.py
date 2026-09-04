@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail CI when source hygiene regresses into duplicate tracked files or extreme Python lines."""
+"""Fail CI when tracked source hygiene regresses."""
 
 from __future__ import annotations
 
@@ -9,7 +9,8 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-MAX_PYTHON_LINE_LENGTH = 200
+MAX_SOURCE_LINE_LENGTH = 200
+SOURCE_SUFFIXES = {".js", ".py"}
 FALLBACK_GENERATED_FILES = {
     "data/book-sample-chapters.json",
     "release.json",
@@ -51,16 +52,42 @@ def tracked_files() -> list[Path]:
     return [ROOT / raw.decode("utf-8") for raw in output.split(b"\0") if raw]
 
 
+def source_lint_issues(paths: list[Path], root: Path = ROOT) -> list[str]:
+    """Return deterministic line-length and trailing-whitespace findings."""
+    issues: list[str] = []
+    for path in paths:
+        if path.suffix not in SOURCE_SUFFIXES or not path.is_file():
+            continue
+        relative = path.relative_to(root)
+        for line_number, line in enumerate(
+            path.read_text(encoding="utf-8", errors="ignore").splitlines(),
+            1,
+        ):
+            if len(line) > MAX_SOURCE_LINE_LENGTH:
+                issues.append(
+                    f"line_too_long: {relative}:{line_number} is {len(line)} characters; "
+                    f"maximum is {MAX_SOURCE_LINE_LENGTH}"
+                )
+            if line.rstrip(" \t") != line:
+                issues.append(f"trailing_whitespace: {relative}:{line_number}")
+    return issues
+
+
 def python_line_issues(paths: list[Path]) -> list[str]:
+    """Backward-compatible helper for callers that only want Python line length."""
     issues: list[str] = []
     for path in paths:
         if path.suffix != ".py" or not path.is_file():
             continue
-        for line_number, line in enumerate(path.read_text(encoding="utf-8", errors="ignore").splitlines(), 1):
-            if len(line) > MAX_PYTHON_LINE_LENGTH:
+        for line_number, line in enumerate(
+            path.read_text(encoding="utf-8", errors="ignore").splitlines(),
+            1,
+        ):
+            if len(line) > MAX_SOURCE_LINE_LENGTH:
                 relative = path.relative_to(ROOT)
                 issues.append(
-                    f"{relative}:{line_number} is {len(line)} characters; maximum is {MAX_PYTHON_LINE_LENGTH}"
+                    f"{relative}:{line_number} is {len(line)} characters; "
+                    f"maximum is {MAX_SOURCE_LINE_LENGTH}"
                 )
     return issues
 
@@ -84,19 +111,20 @@ def duplicate_groups(paths: list[Path]) -> list[list[str]]:
 
 def main() -> int:
     paths = tracked_files()
-    line_issues = python_line_issues(paths)
+    lint_issues = source_lint_issues(paths)
     duplicates = duplicate_groups(paths)
 
-    if not line_issues and not duplicates:
+    if not lint_issues and not duplicates:
         print(
-            "Repository hygiene passed: no tracked byte-identical duplicates and "
-            f"no Python lines exceed {MAX_PYTHON_LINE_LENGTH} characters."
+            "Repository hygiene passed: no tracked byte-identical duplicates, "
+            f"no JavaScript/Python lines exceed {MAX_SOURCE_LINE_LENGTH} characters, "
+            "and no JavaScript/Python lines contain trailing whitespace."
         )
         return 0
 
     print("Repository hygiene failures:")
-    for issue in line_issues:
-        print(f" - line_too_long: {issue}")
+    for issue in lint_issues:
+        print(f" - {issue}")
     for group in duplicates:
         print(f" - duplicate_content: {', '.join(group)}")
     return 1

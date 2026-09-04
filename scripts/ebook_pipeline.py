@@ -3587,7 +3587,7 @@ def problem_framing(book: Dict[str, Any]) -> str:
 
 def practical_outcomes(book: Dict[str, Any]) -> List[str]:
     """Return practical, decision-oriented outcomes distinct from what_youll_learn bullets.
-    
+
     These are action-framed: what can the reader DO or DECIDE differently after reading?
     Derived from why_it_matters, audience, and topic — NOT from what_youll_learn items.
     """
@@ -3595,26 +3595,26 @@ def practical_outcomes(book: Dict[str, Any]) -> List[str]:
     topic_lc = topic.lower()
     audience = book.get("audience", "")
     why = book.get("why_it_matters", "")
-    
+
     # Build decision-framed outcomes from distinct source fields
     outcomes = []
-    
+
     # Outcome 1: from why_it_matters (if available and not empty)
     if why and len(why) > 20:
         # Extract first sentence as an action-frame
         first_sentence = why.split(".")[0].strip()
         if first_sentence and len(first_sentence) > 15:
             outcomes.append(f"Understand why {topic_lc} matters now and what the evidence actually says.")
-    
+
     # Outcome 2: from audience/use-case context
     if audience and len(audience) > 10:
         outcomes.append(f"Assess whether {topic_lc} is applicable to your context before committing resources.")
     else:
         outcomes.append(f"Identify the specific use cases where {topic_lc} delivers measurable value.")
-    
+
     # Outcome 3: always a governance/decision frame
     outcomes.append(f"Ask the right governance and implementation questions before adoption decisions become expensive.")
-    
+
     return outcomes[:3] or default_learning_points(topic)[:3]
 
 
