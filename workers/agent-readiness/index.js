@@ -6,14 +6,11 @@ const MCP_FALLBACK_VERSION = "2025-06-18";
 const AGENT_SKILLS_SCHEMA = "https://schemas.agentskills.io/discovery/0.2.0/schema.json";
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
-
 let fallbackKeyPromise;
-
 function canonicalOrigin(env) {
   const raw = String(env?.CANONICAL_ORIGIN || DEFAULT_ORIGIN).trim();
   return raw.replace(/\/+$/, "");
 }
-
 function json(payload, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(payload, null, 2) + "\n", {
     status,
@@ -26,7 +23,6 @@ function json(payload, status = 200, extraHeaders = {}) {
     },
   });
 }
-
 function text(body, contentType = "text/plain; charset=utf-8", status = 200, extraHeaders = {}) {
   return new Response(body, {
     status,
@@ -38,7 +34,6 @@ function text(body, contentType = "text/plain; charset=utf-8", status = 200, ext
     },
   });
 }
-
 function corsPreflight(methods = "GET, HEAD, OPTIONS") {
   return new Response(null, {
     status: 204,
@@ -50,24 +45,20 @@ function corsPreflight(methods = "GET, HEAD, OPTIONS") {
     },
   });
 }
-
 function base64(bytes) {
   let binary = "";
   const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
   for (const byte of view) binary += String.fromCharCode(byte);
   return btoa(binary);
 }
-
 function base64url(bytes) {
   return base64(bytes).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
-
 function decodeBase64url(value) {
   const padded = String(value).replace(/-/g, "+").replace(/_/g, "/") + "===".slice((String(value).length + 3) % 4);
   const binary = atob(padded);
   return Uint8Array.from(binary, (char) => char.charCodeAt(0));
 }
-
 function parseJwt(jwt) {
   const parts = String(jwt || "").split(".");
   if (parts.length !== 3) return null;
@@ -82,18 +73,15 @@ function parseJwt(jwt) {
     return null;
   }
 }
-
 async function sha256Hex(value) {
   const bytes = typeof value === "string" ? encoder.encode(value) : value;
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
-
 async function jwkThumbprint(publicJwk) {
   const canonical = JSON.stringify({ crv: "Ed25519", kty: "OKP", x: publicJwk.x });
   return base64url(await crypto.subtle.digest("SHA-256", encoder.encode(canonical)));
 }
-
 async function generateSigningMaterial() {
   const pair = await crypto.subtle.generateKey({ name: "Ed25519" }, true, ["sign", "verify"]);
   const privateJwk = await crypto.subtle.exportKey("jwk", pair.privateKey);
@@ -107,17 +95,14 @@ async function generateSigningMaterial() {
   privateJwk.alg = "EdDSA";
   return { privateJwk, publicJwk, thumbprint };
 }
-
 async function fallbackSigningMaterial() {
   if (!fallbackKeyPromise) fallbackKeyPromise = generateSigningMaterial();
   return fallbackKeyPromise;
 }
-
 export class AgentReadinessState {
   constructor(state) {
     this.state = state;
   }
-
   async signingMaterial() {
     let material = await this.state.storage.get("ed25519-signing-material-v1");
     if (!material) {
@@ -126,31 +111,25 @@ export class AgentReadinessState {
     }
     return material;
   }
-
   async fetch(request) {
     const url = new URL(request.url);
     const material = await this.signingMaterial();
-
     if (url.pathname === "/keys" && request.method === "GET") {
       return json({ publicJwk: material.publicJwk, thumbprint: material.thumbprint });
     }
-
     if (url.pathname === "/sign" && request.method === "POST") {
       const key = await crypto.subtle.importKey("jwk", material.privateJwk, { name: "Ed25519" }, false, ["sign"]);
       const signature = await crypto.subtle.sign({ name: "Ed25519" }, key, await request.arrayBuffer());
       return new Response(signature, { status: 200, headers: { "Content-Type": "application/octet-stream" } });
     }
-
     return json({ error: "not_found" }, 404);
   }
 }
-
 function stateStub(env) {
   if (!env?.AGENT_READINESS_STATE) return null;
   const id = env.AGENT_READINESS_STATE.idFromName("global-signing-key");
   return env.AGENT_READINESS_STATE.get(id);
 }
-
 async function signingMaterial(env) {
   const stub = stateStub(env);
   if (!stub) return fallbackSigningMaterial();
@@ -158,7 +137,6 @@ async function signingMaterial(env) {
   if (!response.ok) throw new Error(`signing material unavailable (${response.status})`);
   return response.json();
 }
-
 async function signBytes(env, bytes) {
   const body = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
   const stub = stateStub(env);
@@ -171,7 +149,6 @@ async function signBytes(env, bytes) {
   const key = await crypto.subtle.importKey("jwk", material.privateJwk, { name: "Ed25519" }, false, ["sign"]);
   return new Uint8Array(await crypto.subtle.sign({ name: "Ed25519" }, key, body));
 }
-
 async function signJwt(env, payload) {
   const material = await signingMaterial(env);
   const header = { alg: "EdDSA", kid: material.thumbprint, typ: "JWT" };
@@ -181,7 +158,6 @@ async function signJwt(env, payload) {
   const signature = await signBytes(env, encoder.encode(signingInput));
   return `${signingInput}.${base64url(signature)}`;
 }
-
 async function verifyJwt(env, token, expectedAudience) {
   const parsed = parseJwt(token);
   if (!parsed || parsed.header?.alg !== "EdDSA") return null;
@@ -194,7 +170,6 @@ async function verifyJwt(env, token, expectedAudience) {
   if (expectedAudience && parsed.payload?.aud !== expectedAudience) return null;
   return parsed.payload;
 }
-
 function openApi(origin) {
   return {
     openapi: "3.1.0",
@@ -208,18 +183,21 @@ function openApi(origin) {
       "/api/v1/books.json": { get: { summary: "Public ebook catalogue", responses: { 200: { description: "Catalogue JSON" } } } },
       "/api/v1/featured-book.json": { get: { summary: "Featured ebook", responses: { 200: { description: "Featured book JSON" } } } },
       "/api/podcast/latest": { get: { summary: "Latest podcast episode", responses: { 200: { description: "Latest episode JSON" } } } },
-      "/api/hive-skills/": { get: { summary: "Read-only HIVE skills manifest proxy", responses: { 200: { description: "Approved HIVE metadata" } } } },
+      "/api/hive-skills/": { get: { summary: "Read-only HIVE skills manifest proxy", responses: { 200: { description: "Approved HIVE metadata" } } } }
+,
       "/.well-known/agent-card.json": { get: { summary: "A2A Agent Card", responses: { 200: { description: "A2A discovery metadata" } } } },
-      "/.well-known/agent-skills/index.json": { get: { summary: "Agent Skills index", responses: { 200: { description: "Agent Skills discovery index" } } } },
+      "/.well-known/agent-skills/index.json": { get: { summary: "Agent Skills index", responses: { 200: { description: "Agent Skills discovery index" }
+ } } },
       "/.well-known/mcp/server-card.json": { get: { summary: "MCP Server Card", responses: { 200: { description: "MCP discovery metadata" } } } },
       "/mcp": { post: { summary: "Stateless MCP Streamable HTTP endpoint", responses: { 200: { description: "JSON-RPC response" } } } },
       "/a2a/message:send": { post: { summary: "A2A HTTP+JSON message endpoint", responses: { 200: { description: "A2A message response" } } } },
-      "/agent/identity": { post: { summary: "Anonymous agent identity registration", responses: { 200: { description: "Signed identity assertion" } } } },
-      "/oauth2/token": { post: { summary: "Exchange an agent identity assertion for a bearer token", responses: { 200: { description: "OAuth token response" } } } },
+      "/agent/identity": { post: { summary: "Anonymous agent identity registration", responses: { 200: { description: "Signed identity assertion" } } }
+ },
+      "/oauth2/token": { post: { summary: "Exchange an agent identity assertion for a bearer token", responses: { 200: { description: "OAuth token res\
+ponse" } } } },
     },
   };
 }
-
 function apiCatalog(origin) {
   return {
     linkset: [
@@ -242,26 +220,21 @@ function apiCatalog(origin) {
     ],
   };
 }
-
 function agentAuthMetadata(origin) {
   const claimUri = `${origin}/agent/identity/claim`;
   const revokeUri = `${origin}/agent/identity/revoke`;
-
   return {
     skill: `${origin}/auth.md`,
     documentation_uri: `${origin}/auth.md`,
-
     // Old/current scanner aliases are both published deliberately.
     register_uri: `${origin}/agent/identity`,
     identity_endpoint: `${origin}/agent/identity`,
     claim_uri: claimUri,
     claim_endpoint: claimUri,
     revocation_uri: revokeUri,
-
     registration_methods_supported: ["anonymous"],
     identity_types_supported: ["anonymous"],
     supported_identity_types: ["anonymous"],
-
     anonymous: {
       // "bearer" is a transport method, not a credential type.
       // This service actually issues an OAuth access_token.
@@ -269,7 +242,6 @@ function agentAuthMetadata(origin) {
     },
   };
 }
-
 function oauthProtectedResource(origin) {
   return {
     resource: `${origin}/`,
@@ -280,7 +252,6 @@ function oauthProtectedResource(origin) {
     agent_auth: agentAuthMetadata(origin),
   };
 }
-
 function oauthMetadata(origin) {
   return {
     issuer: origin,
@@ -294,7 +265,6 @@ function oauthMetadata(origin) {
     agent_auth: agentAuthMetadata(origin),
   };
 }
-
 function authMd(origin) {
   return `# auth.md
 
@@ -302,7 +272,8 @@ Jonathan Harris exposes public, read-only website data plus an anonymous agent-r
 
 ## Audience
 
-AI agents and automated clients that want a short-lived OAuth access token for the agent interfaces. Ordinary public website browsing does not require authentication.
+AI agents and automated clients that want a short-lived OAuth access token for the agent interfaces. Ordinary public website browsing does not require\
+ authentication.
 
 ## Machine-readable registration metadata
 
@@ -347,18 +318,19 @@ The response contains an OAuth \`access_token\` with token type \`Bearer\`.
 
 ## Claim and revocation
 
-Anonymous \`public.read\` access requires no human claim ceremony. The published claim URI returns that status explicitly. Tokens are short-lived and expire automatically; the revocation URI documents that stateless behaviour.
+Anonymous \`public.read\` access requires no human claim ceremony. The published claim URI returns that status explicitly. Tokens are short-lived and \
+expire automatically; the revocation URI documents that stateless behaviour.
 
 ## Scope
 
-\`public.read\` permits read-only discovery and public-data access. It grants no repository writes, Cloudflare writes, HIVE execution, AIMS control, model access, email access or private data access.
+\`public.read\` permits read-only discovery and public-data access. It grants no repository writes, Cloudflare writes, HIVE execution, AIMS control, m\
+odel access, email access or private data access.
 
 ## Credential handling
 
 Keep access tokens outside model context, do not log them, and discard them after expiry.
 `;
 }
-
 function agentCard(origin) {
   return {
     name: "Jonathan Harris Website Discovery Agent",
@@ -376,18 +348,23 @@ function agentCard(origin) {
       {
         id: "discover-public-ai-content",
         name: "Discover public AI content",
-        description: "Returns canonical public entry points for books, podcast episodes, blog content, API documentation and agent discovery metadata.",
+        description: "Returns canonical public entry points for books, podcast episodes, blog content, API documentation and agent discovery metadata.\
+",
         tags: ["discovery", "books", "podcast", "artificial-intelligence", "read-only"],
         examples: ["Where can I find the books catalogue?", "Show me the podcast entry point.", "How can another agent discover this site?"],
       },
     ],
   };
 }
-
 function siteSkill(origin) {
-  return `---\nname: jonathan-harris-ai-research\ndescription: Discover and use Jonathan Harris's public AI books, podcast, blog and read-only machine interfaces.\n---\n\n# Jonathan Harris AI Research\n\nUse this skill when an agent needs public information from ${origin}.\n\n## Preferred discovery surfaces\n\n1. Read the public ebook catalogue from \`${origin}/api/v1/books.json\`.\n2. Read the latest podcast metadata from \`${origin}/api/podcast/latest\`.\n3. Use \`${origin}/llms.txt\` and \`${origin}/llm-index.json\` for machine-readable site discovery.\n4. Use \`${origin}/.well-known/api-catalog\` and \`${origin}/openapi.json\` for API discovery.\n5. Use \`${origin}/.well-known/agent-card.json\` for A2A discovery.\n6. Use \`${origin}/.well-known/mcp/server-card.json\` for MCP discovery.\n\n## Safety and authority\n\nAll surfaces described by this skill are read-only. Do not infer write authority, HIVE execution authority, AIMS control or access to private systems from the presence of these public endpoints.\n`;
+  return `---\nname: jonathan-harris-ai-research\ndescription: Discover and use Jonathan Harris's public AI books, podcast, blog and read-only machine\
+ interfaces.\n---\n\n# Jonathan Harris AI Research\n\nUse this skill when an agent needs public information from ${origin}.\n\n## Preferred discovery \
+surfaces\n\n1. Read the public ebook catalogue from \`${origin}/api/v1/books.json\`.\n2. Read the latest podcast metadata from \`${origin}/api/podcast\
+/latest\`.\n3. Use \`${origin}/llms.txt\` and \`${origin}/llm-index.json\` for machine-readable site discovery.\n4. Use \`${origin}/.well-known/api-ca\
+talog\` and \`${origin}/openapi.json\` for API discovery.\n5. Use \`${origin}/.well-known/agent-card.json\` for A2A discovery.\n6. Use \`${origin}/.we\
+ll-known/mcp/server-card.json\` for MCP discovery.\n\n## Safety and authority\n\nAll surfaces described by this skill are read-only. Do not infer writ\
+e authority, HIVE execution authority, AIMS control or access to private systems from the presence of these public endpoints.\n`;
 }
-
 async function agentSkillsIndex(origin) {
   const skill = siteSkill(origin);
   return {
@@ -403,7 +380,6 @@ async function agentSkillsIndex(origin) {
     ],
   };
 }
-
 function mcpServerCard(origin) {
   const emptyObjectSchema = { type: "object", properties: {}, additionalProperties: false };
   return {
@@ -419,18 +395,21 @@ function mcpServerCard(origin) {
     authentication: { required: false, schemes: ["bearer", "oauth2"] },
     instructions: "Use the tools and resources for public discovery only. No write operations are exposed.",
     resources: [
-      { name: "public_entry_points", title: "Public entry points", uri: "website://public-entry-points", description: "Canonical public website and API entry points", mimeType: "application/json" },
+      { name: "public_entry_points", title: "Public entry points", uri: "website://public-entry-points", description: "Canonical public website and AP\
+I entry points", mimeType: "application/json" },
     ],
     tools: [
-      { name: "list_public_surfaces", title: "List public surfaces", description: "List canonical public website and agent-discovery endpoints.", inputSchema: emptyObjectSchema },
-      { name: "get_agent_readiness", title: "Get agent readiness", description: "Return the machine-readable agent readiness endpoints exposed by the site.", inputSchema: emptyObjectSchema },
+      { name: "list_public_surfaces", title: "List public surfaces", description: "List canonical public website and agent-discovery endpoints.", inputSchema: emptyObjectSchema }
+,
+      { name: "get_agent_readiness", title: "Get agent readiness", description: "Return the machine-readable agent readiness endpoints exposed by the \
+site.", inputSchema: emptyObjectSchema },
     ],
     prompts: [
-      { name: "research_public_ai_content", title: "Research public AI content", description: "Guide an agent towards the site's public AI research surfaces." },
+      { name: "research_public_ai_content", title: "Research public AI content", description: "Guide an agent towards the site's public AI research su\
+rfaces." },
     ],
   };
 }
-
 function publicSurfaces(origin) {
   return {
     home: `${origin}/`,
@@ -444,7 +423,6 @@ function publicSurfaces(origin) {
     llm_index: `${origin}/llm-index.json`,
   };
 }
-
 function readinessSurfaces(origin) {
   return {
     api_catalog: `${origin}/.well-known/api-catalog`,
@@ -460,11 +438,27 @@ function readinessSurfaces(origin) {
     dns_aid_a2a_name: `_a2a._agents.${new URL(origin).hostname}`,
   };
 }
-
 function webMcpScript() {
-  return `(() => {\n  // WebMCP moved from navigator.modelContext to document.modelContext.\n  // Keep the legacy fallback because some readiness scanners still emulate the EPP API.\n  const modelContext = document.modelContext || navigator.modelContext;\n  if (!modelContext?.registerTool) return;\n  const controller = new AbortController();\n  const register = (tool) => Promise.resolve(modelContext.registerTool(tool, { signal: controller.signal })).catch(() => {});\n\n  register({\n    name: "search_books",\n    description: "Search Jonathan Harris's public ebook catalogue by title, topic, tags or summary.",\n    inputSchema: {\n      type: "object",\n      properties: { query: { type: "string", minLength: 1, maxLength: 160 } },\n      required: ["query"]\n    },\n    annotations: { readOnlyHint: true },\n    execute: async ({ query }, { signal } = {}) => {\n      const response = await fetch("/api/v1/books.json", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Public catalogue unavailable");\n      const books = await response.json();\n      const needle = String(query).toLowerCase();\n      const matches = books.filter((book) => [book.title, book.topic, book.summary, ...(book.tags || [])].join(" ").toLowerCase().includes(needle)).slice(0, 5);\n      return JSON.stringify(matches.map(({ title, slug, topic, summary, buy_route }) => ({ title, topic, summary, url: "/ebooks/" + slug + "/", buy_route })));\n    }\n  });\n\n  register({\n    name: "get_latest_podcast",\n    description: "Return metadata for the latest public Turing's Torch podcast episode.",\n    inputSchema: { type: "object", properties: {} },\n    annotations: { readOnlyHint: true },\n    execute: async (_input, { signal } = {}) => {\n      const response = await fetch("/api/podcast/latest", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Latest podcast metadata unavailable");\n      return JSON.stringify(await response.json());\n    }\n  });\n\n  register({\n    name: "open_public_section",\n    description: "Navigate to a canonical public section of the website.",\n    inputSchema: {\n      type: "object",\n      properties: { section: { type: "string", enum: ["books", "book-finder", "podcast", "blog", "resources", "topics"] } },\n      required: ["section"]\n    },\n    annotations: { readOnlyHint: false },\n    execute: async ({ section }) => {\n      const paths = { books: "/ebooks/", "book-finder": "/book-finder/", podcast: "/podcast/", blog: "/blog/", resources: "/resources/", topics: "/topics/" };\n      location.assign(paths[section]);\n      return "Navigating to " + section;\n    }\n  });\n\n  addEventListener("pagehide", () => controller.abort(), { once: true });\n})();\n`;
+  return `(() => {\n  // WebMCP moved from navigator.modelContext to document.modelContext.\n  // Keep the legacy fallback because some readiness scan\
+ners still emulate the EPP API.\n  const modelContext = document.modelContext || navigator.modelContext;\n  if (!modelContext?.registerTool) return;\n\
+  const controller = new AbortController();\n  const register = (tool) => Promise.resolve(modelContext.registerTool(tool, { signal: controller.signal \
+})).catch(() => {});\n\n  register({\n    name: "search_books",\n    description: "Search Jonathan Harris's public ebook catalogue by title, topic, ta\
+gs or summary.",\n    inputSchema: {\n      type: "object",\n      properties: { query: { type: "string", minLength: 1, maxLength: 160 } },\n      req\
+uired: ["query"]\n    },\n    annotations: { readOnlyHint: true },\n    execute: async ({ query }, { signal } = {}) => {\n      const response = await\
+ fetch("/api/v1/books.json", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Public catalogue unavaila\
+ble");\n      const books = await response.json();\n      const needle = String(query).toLowerCase();\n      const matches = books.filter((book) => [b\
+ook.title, book.topic, book.summary, ...(book.tags || [])].join(" ").toLowerCase().includes(needle)).slice(0, 5);\n      return JSON.stringify(matches\
+.map(({ title, slug, topic, summary, buy_route }) => ({ title, topic, summary, url: "/ebooks/" + slug + "/", buy_route })));\n    }\n  });\n\n  regist\
+er({\n    name: "get_latest_podcast",\n    description: "Return metadata for the latest public Turing's Torch podcast episode.",\n    inputSchema: { t\
+ype: "object", properties: {} },\n    annotations: { readOnlyHint: true },\n    execute: async (_input, { signal } = {}) => {\n      const response = \
+await fetch("/api/podcast/latest", { headers: { Accept: "application/json" }, signal });\n      if (!response.ok) throw new Error("Latest podcast meta\
+data unavailable");\n      return JSON.stringify(await response.json());\n    }\n  });\n\n  register({\n    name: "open_public_section",\n    descript\
+ion: "Navigate to a canonical public section of the website.",\n    inputSchema: {\n      type: "object",\n      properties: { section: { type: "strin\
+g", enum: ["books", "book-finder", "podcast", "blog", "resources", "topics"] } },\n      required: ["section"]\n    },\n    annotations: { readOnlyHin\
+t: false },\n    execute: async ({ section }) => {\n      const paths = { books: "/ebooks/", "book-finder": "/book-finder/", podcast: "/podcast/", blo\
+g: "/blog/", resources: "/resources/", topics: "/topics/" };\n      location.assign(paths[section]);\n      return "Navigating to " + section;\n    }\n\
+  });\n\n  addEventListener("pagehide", () => controller.abort(), { once: true });\n})();\n`;
 }
-
 async function handleAnonymousIdentity(request, env, origin) {
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405, { Allow: "POST" });
   const body = await request.json().catch(() => null);
@@ -489,7 +483,6 @@ async function handleAnonymousIdentity(request, env, origin) {
     scope: "public.read",
   }, 200, { "Cache-Control": "no-store" });
 }
-
 async function handleToken(request, env, origin) {
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405, { Allow: "POST" });
   const contentType = request.headers.get("content-type") || "";
@@ -531,7 +524,6 @@ async function handleToken(request, env, origin) {
     Pragma: "no-cache",
   });
 }
-
 async function webBotDirectory(request, env) {
   const material = await signingMaterial(env);
   const authority = new URL(request.url).host;
@@ -539,7 +531,8 @@ async function webBotDirectory(request, env) {
   const expires = created + 60;
   const nonceBytes = crypto.getRandomValues(new Uint8Array(32));
   const nonce = base64(nonceBytes);
-  const params = `("@authority";req);alg="ed25519";keyid="${material.thumbprint}";nonce="${nonce}";tag="http-message-signatures-directory";created=${created};expires=${expires}`;
+  const params = `("@authority";req);alg="ed25519";keyid="${material.thumbprint}";nonce="${nonce}";tag="http-message-signatures-directory";created=${created}\
+;expires=${expires}`;
   const signatureBase = `"@authority";req: ${authority}\n"@signature-params": ${params}`;
   const signature = base64(await signBytes(env, encoder.encode(signatureBase)));
   const body = JSON.stringify({ keys: [{ kty: "OKP", crv: "Ed25519", x: material.publicJwk.x }] }, null, 2) + "\n";
@@ -555,21 +548,26 @@ async function webBotDirectory(request, env) {
     },
   });
 }
-
 function a2aTextReply(origin, incomingText) {
   const query = String(incomingText || "").toLowerCase();
-  if (query.includes("book")) return `Books catalogue: ${origin}/api/v1/books.json — reader catalogue: ${origin}/ebooks/ — guided finder: ${origin}/book-finder/`;
-  if (query.includes("podcast") || query.includes("turing")) return `Podcast: ${origin}/podcast/ — latest episode metadata: ${origin}/api/podcast/latest`;
+  if (query.includes("book")) return `Books catalogue: ${origin}/api/v1/books.json — reader catalogue: ${origin}/ebooks/ — guided finder: ${origin}/bo\
+ok-finder/`;
+  if (query.includes("podcast") || query.includes("turing")) return `Podcast: ${origin}/podcast/ — latest episode metadata: ${origin}/api/podcast/late\
+st`;
   if (query.includes("blog")) return `Blog: ${origin}/blog/ — machine index: ${origin}/llm-index.json`;
-  if (query.includes("skill") || query.includes("agent") || query.includes("mcp") || query.includes("api")) return `Agent discovery: ${origin}/.well-known/agent-card.json — skills: ${origin}/.well-known/agent-skills/index.json — MCP: ${origin}/.well-known/mcp/server-card.json — API catalog: ${origin}/.well-known/api-catalog`;
-  return `Public entry points: books ${origin}/ebooks/; podcast ${origin}/podcast/; blog ${origin}/blog/; resources ${origin}/resources/; API docs ${origin}/api/docs/.`;
+  if (query.includes("skill") || query.includes("agent") || query.includes("mcp") || query.includes("api")) return `Agent discovery: ${origin}/.well-k\
+nown/agent-card.json — skills: ${origin}/.well-known/agent-skills/index.json — MCP: ${origin}/.well-known/mcp/server-card.json — API catalog: ${origin}\
+/.well-known/api-catalog`;
+  return `Public entry points: books ${origin}/ebooks/; podcast ${origin}/podcast/; blog ${origin}/blog/; resources ${origin}/resources/; API docs ${origin}\
+/api/docs/.`;
 }
-
 async function handleA2A(request, origin) {
-  if (request.method !== "POST") return json({ type: "about:blank", title: "Method Not Allowed", status: 405 }, 405, { Allow: "POST", "Content-Type": "application/problem+json" });
+  if (request.method !== "POST") return json({ type: "about:blank", title: "Method Not Allowed", status: 405 }, 405, { Allow: "POST", "Content-Type": "\
+application/problem+json" });
   const body = await request.json().catch(() => null);
   if (!body?.message || !Array.isArray(body.message.parts)) {
-    return json({ type: "about:blank", title: "Invalid A2A request", status: 400, detail: "message.parts is required" }, 400, { "Content-Type": "application/problem+json" });
+    return json({ type: "about:blank", title: "Invalid A2A request", status: 400, detail: "message.parts is required" }, 400, { "Content-Type": "appli\
+cation/problem+json" });
   }
   const incomingText = body.message.parts.map((part) => part?.text || "").filter(Boolean).join(" ");
   const contextId = body.message.contextId || body.message.context_id || crypto.randomUUID();
@@ -582,24 +580,21 @@ async function handleA2A(request, origin) {
     },
   }, 200, { "Content-Type": "application/a2a+json", "Cache-Control": "no-store" });
 }
-
 function mcpResult(id, result) {
   return json({ jsonrpc: "2.0", id, result }, 200, { "Cache-Control": "no-store", "MCP-Protocol-Version": MCP_VERSION });
 }
-
 function mcpError(id, code, message) {
   return json({ jsonrpc: "2.0", id: id ?? null, error: { code, message } }, 200, { "Cache-Control": "no-store", "MCP-Protocol-Version": MCP_VERSION });
 }
-
 async function handleMcp(request, origin) {
   if (request.method === "GET") {
-    return json({ service: "jonathan-harris-public-discovery", transport: "streamable-http", protocolVersion: MCP_VERSION, card: `${origin}/.well-known/mcp/server-card.json` });
+    return json({ service: "jonathan-harris-public-discovery", transport: "streamable-http", protocolVersion: MCP_VERSION, card: `${origin}/.well-know\
+n/mcp/server-card.json` });
   }
   if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405, { Allow: "GET, POST, OPTIONS" });
   const rpc = await request.json().catch(() => null);
   if (!rpc || rpc.jsonrpc !== "2.0" || typeof rpc.method !== "string") return mcpError(rpc?.id, -32600, "Invalid Request");
   if (rpc.id === undefined || rpc.id === null) return new Response(null, { status: 202 });
-
   switch (rpc.method) {
     case "initialize": {
       const requested = String(rpc.params?.protocolVersion || MCP_VERSION);
@@ -616,8 +611,10 @@ async function handleMcp(request, origin) {
     case "tools/list":
       return mcpResult(rpc.id, {
         tools: [
-          { name: "list_public_surfaces", description: "List canonical public website and API entry points.", inputSchema: { type: "object", properties: {} }, annotations: { readOnlyHint: true } },
-          { name: "get_agent_readiness", description: "Return the standards-based agent discovery endpoints published by the site.", inputSchema: { type: "object", properties: {} }, annotations: { readOnlyHint: true } },
+          { name: "list_public_surfaces", description: "List canonical public website and API entry points.", inputSchema: { type: "object", properties: {
+} }, annotations: { readOnlyHint: true } },
+          { name: "get_agent_readiness", description: "Return the standards-based agent discovery endpoints published by the site.", inputSchema: { type: "\
+object", properties: {} }, annotations: { readOnlyHint: true } },
         ],
       });
     case "tools/call": {
@@ -627,39 +624,44 @@ async function handleMcp(request, origin) {
       return mcpError(rpc.id, -32602, "Unknown tool");
     }
     case "resources/list":
-      return mcpResult(rpc.id, { resources: [{ uri: "website://public-entry-points", name: "public_entry_points", description: "Canonical public website and API entry points", mimeType: "application/json" }] });
+      return mcpResult(rpc.id, { resources: [{ uri: "website://public-entry-points", name: "public_entry_points", description: "Canonical public websi\
+te and API entry points", mimeType: "application/json" }] });
     case "resources/read":
-      if (rpc.params?.uri === "website://public-entry-points") return mcpResult(rpc.id, { contents: [{ uri: "website://public-entry-points", mimeType: "application/json", text: JSON.stringify(publicSurfaces(origin)) }] });
+      if (rpc.params?.uri === "website://public-entry-points") return mcpResult(rpc.id, { contents: [{ uri: "website://public-entry-points", mimeType: "\
+application/json", text: JSON.stringify(publicSurfaces(origin)) }] });
       return mcpError(rpc.id, -32602, "Unknown resource");
     case "prompts/list":
-      return mcpResult(rpc.id, { prompts: [{ name: "research_public_ai_content", description: "Guide an agent towards the site's public AI research surfaces.", arguments: [{ name: "topic", description: "Optional AI topic to research", required: false }] }] });
+      return mcpResult(rpc.id, { prompts: [{ name: "research_public_ai_content", description: "Guide an agent towards the site's public AI research su\
+rfaces.", arguments: [{ name: "topic", description: "Optional AI topic to research", required: false }] }] });
     case "prompts/get":
-      if (rpc.params?.name === "research_public_ai_content") return mcpResult(rpc.id, { description: "Research public AI content", messages: [{ role: "user", content: { type: "text", text: `Use ${origin}/llm-index.json, ${origin}/api/v1/books.json, ${origin}/blog/ and ${origin}/podcast/ to research the requested topic. Prefer canonical public URLs and do not infer private-system access.` } }] });
+      if (rpc.params?.name === "research_public_ai_content") return mcpResult(rpc.id, { description: "Research public AI content", messages: [{ role: "\
+user", content: { type: "text", text: `Use ${origin}/llm-index.json, ${origin}/api/v1/books.json, ${origin}/blog/ and ${origin}/podcast/ to research t\
+he requested topic. Prefer canonical public URLs and do not infer private-system access.` } }] });
       return mcpError(rpc.id, -32602, "Unknown prompt");
     default:
       return mcpError(rpc.id, -32601, "Method not found");
   }
 }
-
 async function route(request, env) {
   const url = new URL(request.url);
   const origin = canonicalOrigin(env);
   const path = url.pathname;
-
   if (request.method === "OPTIONS") {
     if (path === "/mcp") return corsPreflight("GET, POST, OPTIONS");
-    if (path.startsWith("/.well-known/") || path.startsWith("/oauth2/") || path.startsWith("/agent/") || path.startsWith("/a2a/")) return corsPreflight("GET, HEAD, POST, OPTIONS");
+    if (path.startsWith("/.well-known/") || path.startsWith("/oauth2/") || path.startsWith("/agent/") || path.startsWith("/a2a/")) return corsPreflight("\
+GET, HEAD, POST, OPTIONS");
   }
-
   if (path === "/.well-known/api-catalog" && ["GET", "HEAD"].includes(request.method)) {
     const payload = JSON.stringify(apiCatalog(origin), null, 2) + "\n";
     return text(request.method === "HEAD" ? "" : payload, "application/linkset+json", 200, { "Access-Control-Allow-Origin": "*" });
   }
   if (path === "/openapi.json" && ["GET", "HEAD"].includes(request.method)) {
     const payload = JSON.stringify(openApi(origin), null, 2) + "\n";
-    return text(request.method === "HEAD" ? "" : payload, "application/vnd.oai.openapi+json;version=3.1; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
+    return text(request.method === "HEAD" ? "" : payload, "application/vnd.oai.openapi+json;version=3.1; charset=utf-8", 200, { "Access-Control-Allow-\
+Origin": "*" });
   }
-  if (path === "/auth.md" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : authMd(origin), "text/markdown; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
+  if (path === "/auth.md" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : authMd(origin), "text/markdown; ch\
+arset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
   if (path === "/.well-known/oauth-protected-resource" && ["GET", "HEAD"].includes(request.method)) return json(oauthProtectedResource(origin));
   if (["/.well-known/oauth-authorization-server", "/.well-known/openid-configuration"].includes(path) && ["GET", "HEAD"].includes(request.method)) return json(oauthMetadata(origin));
   if (path === "/oauth2/jwks" && ["GET", "HEAD"].includes(request.method)) {
@@ -696,13 +698,17 @@ async function route(request, env) {
   if (path === "/oauth2/token") return handleToken(request, env, origin);
   if (path === "/.well-known/agent-card.json" && ["GET", "HEAD"].includes(request.method)) return json(agentCard(origin));
   if (path === "/a2a/message:send") return handleA2A(request, origin);
-  if (path === "/a2a" && request.method === "GET") return json({ card: `${origin}/.well-known/agent-card.json`, sendMessage: `${origin}/a2a/message:send`, protocolVersion: A2A_VERSION });
+  if (path === "/a2a" && request.method === "GET") return json({ card: `${origin}/.well-known/agent-card.json`, sendMessage: `${origin}/a2a/message:se\
+nd`, protocolVersion: A2A_VERSION });
   if (path === "/.well-known/agent-skills/index.json" && ["GET", "HEAD"].includes(request.method)) return json(await agentSkillsIndex(origin));
-  if (path === "/.well-known/agent-skills/jonathan-harris-ai-research/SKILL.md" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : siteSkill(origin), "text/markdown; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
-  if (["/.well-known/mcp/server-card.json", "/.well-known/mcp/catalog.json", "/.well-known/mcp.json", "/.well-known/mcp", "/mcp/server-card"].includes(path) && ["GET", "HEAD"].includes(request.method)) return json(mcpServerCard(origin), 200, { "Access-Control-Allow-Methods": "GET" });
+  if (path === "/.well-known/agent-skills/jonathan-harris-ai-research/SKILL.md" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "\
+HEAD" ? "" : siteSkill(origin), "text/markdown; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*" });
+  if (["/.well-known/mcp/server-card.json", "/.well-known/mcp/catalog.json", "/.well-known/mcp.json", "/.well-known/mcp", "/mcp/server-card"].includes(path) && ["\
+GET", "HEAD"].includes(request.method)) return json(mcpServerCard(origin), 200, { "Access-Control-Allow-Methods": "GET" });
   if (path === "/mcp") return handleMcp(request, origin);
   if (path === "/.well-known/http-message-signatures-directory" && ["GET", "HEAD"].includes(request.method)) return webBotDirectory(request, env);
-  if (path === "/.well-known/agent-readiness/webmcp.js" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : webMcpScript(), "application/javascript; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=3600, s-maxage=3600" });
+  if (path === "/.well-known/agent-readiness/webmcp.js" && ["GET", "HEAD"].includes(request.method)) return text(request.method === "HEAD" ? "" : webMcpScript(),
+ "application/javascript; charset=utf-8", 200, { "Access-Control-Allow-Origin": "*", "Cache-Control": "public, max-age=3600, s-maxage=3600" });
   if (path === "/.well-known/agent-readiness/status" && ["GET", "HEAD"].includes(request.method)) {
     return json({
       ok: true,
@@ -715,12 +721,11 @@ async function route(request, env) {
     }, 200, { "Cache-Control": "no-store" });
   }
   if (path === "/agent-index.json" && ["GET", "HEAD"].includes(request.method)) {
-    return json({ organization: "Jonathan Harris", agents: [{ name: "website-discovery", a2a: `${origin}/.well-known/agent-card.json`, mcp: `${origin}/.well-known/mcp/server-card.json`, skills: `${origin}/.well-known/agent-skills/index.json` }] });
+    return json({ organization: "Jonathan Harris", agents: [{ name: "website-discovery", a2a: `${origin}/.well-known/agent-card.json`, mcp: `${origin}\
+/.well-known/mcp/server-card.json`, skills: `${origin}/.well-known/agent-skills/index.json` }] });
   }
-
   return json({ error: "not_found", service: "agent-readiness" }, 404, { "Cache-Control": "no-store" });
 }
-
 function markAgentReadinessResponse(response) {
   const headers = new Headers(response.headers);
   headers.set("X-Agent-Readiness-Worker", "agent-readiness");
@@ -731,14 +736,14 @@ function markAgentReadinessResponse(response) {
     headers,
   });
 }
-
 export default {
   async fetch(request, env) {
     try {
       return markAgentReadinessResponse(await route(request, env));
     } catch (error) {
       console.error("agent-readiness", error);
-      return markAgentReadinessResponse(json({ error: "agent_readiness_internal_error", request_id: request.headers.get("cf-ray") || crypto.randomUUID() }, 500));
+      return markAgentReadinessResponse(json({ error: "agent_readiness_internal_error", request_id: request.headers.get("cf-ray") || crypto.randomUUID() }
+, 500));
     }
   },
 };
