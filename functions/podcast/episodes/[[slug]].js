@@ -1,11 +1,9 @@
 import { ensureSharedChrome } from "../../_shared/chrome.js";
 const DEFAULT_PODCAST_FEED_URL = "https://podcast-rss-feeds.jonathan-harris.online/turing-torch.xml";
-
 function slugPartsFromParams(params) {
   const raw = Array.isArray(params?.slug) ? params.slug.join("/") : String(params?.slug || "");
   return raw.replace(/^\/+|\/+$/g, "").replace(/\.(html?|json|xml)$/i, "");
 }
-
 function cleanText(value = "") {
   return String(value || "")
     .replace(/<!\[CDATA\[|\]\]>/g, "")
@@ -22,7 +20,6 @@ function cleanText(value = "") {
     .replace(/\s+/g, " ")
     .trim();
 }
-
 function stripPodcastTiming(value = "") {
   return cleanText(value)
     .replace(/\b\d+\s*(?:-|–|—)?\s*minutes?\b/gi, "")
@@ -34,7 +31,6 @@ function stripPodcastTiming(value = "") {
     .replace(/\s{2,}/g, " ")
     .replace(/^[\s,;:–—-]+|[\s,;:–—-]+$/g, "");
 }
-
 function escapeHtml(value = "") {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -43,26 +39,21 @@ function escapeHtml(value = "") {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
-
 function escapeJsonForScript(value) {
   return JSON.stringify(value, null, 2).replace(/<\/script/gi, "<\\/script");
 }
-
 function stripTags(xml = "") {
   return cleanText(xml);
 }
-
 function tagValue(xml = "", tagName = "") {
   const escaped = tagName.replace(/[.*+?^${}()|[\]\\/\-:]/g, "\\$&");
   const re = new RegExp(`<${escaped}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${escaped}>`, "i");
   return stripTags(xml.match(re)?.[1] || "");
 }
-
 function attrValue(node = "", attr = "") {
   const re = new RegExp(`${attr}=["']([^"']+)["']`, "i");
   return cleanText(node.match(re)?.[1] || "");
 }
-
 function slugify(value = "") {
   return cleanText(value)
     .toLowerCase()
@@ -71,17 +62,14 @@ function slugify(value = "") {
     .replace(/^-+|-+$/g, "")
     .slice(0, 90);
 }
-
 function words(value = "") {
   return cleanText(value).split(/\s+/).filter(Boolean);
 }
-
 function clampWords(value = "", limit = 60) {
   const list = words(value);
   if (list.length <= limit) return cleanText(value);
   return list.slice(0, limit).join(" ").replace(/[\s,;:.]+$/, ".");
 }
-
 function normaliseUrl(value = "", request) {
   const raw = cleanText(value);
   if (!raw) return "";
@@ -91,7 +79,6 @@ function normaliseUrl(value = "", request) {
     return "";
   }
 }
-
 function youtubeVideoId(value = "") {
   const text = String(value || "");
   const patterns = [
@@ -104,7 +91,6 @@ function youtubeVideoId(value = "") {
   }
   return "";
 }
-
 function parseEpisodesFromFeed(xml = "", request) {
   const itemMatches = String(xml || "").match(/<item>[\s\S]*?<\/item>/gi) || [];
   return itemMatches.map((item) => {
@@ -133,7 +119,6 @@ function parseEpisodesFromFeed(xml = "", request) {
     };
   });
 }
-
 function detectTopics(text = "") {
   const haystack = cleanText(text).toLowerCase();
   const topics = [];
@@ -152,12 +137,10 @@ function detectTopics(text = "") {
   }
   return [...new Set(topics)].slice(0, 8);
 }
-
 function detectEntities(text = "") {
   const matches = cleanText(text).match(/\b(?:OpenAI|Anthropic|Google|Microsoft|NVIDIA|Meta|Apple|Amazon|Gemini|Claude|GPT|LLM|AI governance|agentic AI|robotics|finance AI|healthcare AI)\b/gi) || [];
   return [...new Set(["Jonathan Harris", "Turing's Torch", "artificial intelligence", ...matches].map(cleanText).filter(Boolean))].slice(0, 12);
 }
-
 function deriveTakeaways(episode) {
   const title = episode.title || "this AI story";
   const summary = clampWords(stripPodcastTiming(episode.description || title), 38);
@@ -169,7 +152,6 @@ function deriveTakeaways(episode) {
     "Where to go next: use the transcript, topic guides and related books to follow the practical thread.",
   ].slice(0, 5);
 }
-
 async function fetchFeed(context) {
   const configured = context.env?.PODCAST_RSS_FEED_URL || context.env?.R2_PUBLIC_BASE_URL_PODCAST_RSS || DEFAULT_PODCAST_FEED_URL;
   const feedUrl = String(configured || "").endsWith(".xml") ? configured : `${String(configured || "").replace(/\/$/, "")}/turing-torch.xml`;
@@ -193,7 +175,6 @@ async function fetchFeed(context) {
   }
   throw lastError || new Error("Podcast feed fetch failed");
 }
-
 function matchEpisode(episodes, slug, request) {
   const cleanSlug = slugify(slug);
   return episodes.find((episode) => {
@@ -207,7 +188,6 @@ function matchEpisode(episodes, slug, request) {
     }
   }) || null;
 }
-
 function notFoundResponse() {
   return new Response("Podcast episode not found", {
     status: 404,
@@ -218,7 +198,6 @@ function notFoundResponse() {
     },
   });
 }
-
 async function relatedBooksMarkup(context, episode) {
   try {
     const url = new URL("/api/v1/books.json", context.request.url);
@@ -227,7 +206,8 @@ async function relatedBooksMarkup(context, episode) {
     if (!response.ok) return "";
     const payload = await response.json();
     const books = Array.isArray(payload) ? payload : (Array.isArray(payload?.books) ? payload.books : []);
-    const stop = new Set(["this","that","with","from","into","about","artificial","intelligence","weekly","episode","turing","torch","jonathan","harris","what","where","which","when","your","have","will","their"]);
+    const stop = new Set(["this","that","with","from","into","about","artificial","intelligence","weekly","episode","turing","torch","jonathan","harri\
+s","what","where","which","when","your","have","will","their"]);
     const tokens = new Set(cleanText(`${episode.title || ""} ${episode.description || ""}`).toLowerCase().split(/[^a-z0-9]+/).filter(x => x.length > 3 && !stop.has(x)));
     const ranked = books.map(book => {
       const hay = cleanText(`${book.title || ""} ${book.topic || ""} ${(book.tags || []).join(" ")} ${book.short || ""}`).toLowerCase();
@@ -235,16 +215,16 @@ async function relatedBooksMarkup(context, episode) {
       return { book, score };
     }).filter(x => x.score > 0).sort((a,b) => b.score - a.score || String(a.book.title).localeCompare(String(b.book.title))).slice(0,3);
     if (!ranked.length) return "";
-    const cards = ranked.map(({book}) => `<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title)}</a><span>${escapeHtml(book.short || `A related book on ${book.topic || "this topic"}.`)}</span></li>`).join("");
-    return `<section class="podcast-related-books" aria-labelledby="related-books-heading"><h2 id="related-books-heading">Related books</h2><p>Chosen deterministically from the governed catalogue by overlap with this episode's title and summary.</p><ul class="link-list">${cards}</ul></section>`;
+    const cards = ranked.map(({book}) => `<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title)}</a><span>${escapeHtml(book.short || `\
+A related book on ${book.topic || "this topic"}.`)}</span></li>`).join("");
+    return `<section class="podcast-related-books" aria-labelledby="related-books-heading"><h2 id="related-books-heading">Related books</h2><p>Chosen \
+deterministically from the governed catalogue by overlap with this episode's title and summary.</p><ul class="link-list">${cards}</ul></section>`;
   } catch { return ""; }
 }
-
 function canonicalTranscriptUrl(episode, request) {
   const slug = episode.slug || slugify(episode.title || "episode");
   return new URL(`/transcripts/${slug}/`, request.url).toString();
 }
-
 function topicGuideMarkup(topics = []) {
   const guides = {
     "AI governance": ["/topics/ai-ethics/", "AI ethics and governance"],
@@ -264,12 +244,13 @@ function topicGuideMarkup(topics = []) {
   }
   if (!unique.length) unique.push(["/topics/", "Browse all AI topic guides"]);
   const links = unique.slice(0, 4).map(([href, label]) => `<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`).join("");
-  return `<section class="podcast-topic-guides" aria-labelledby="topic-guides-heading"><h2 id="topic-guides-heading">Related topic guides</h2><ul class="link-list">${links}</ul></section>`;
+  return `<section class="podcast-topic-guides" aria-labelledby="topic-guides-heading"><h2 id="topic-guides-heading">Related topic guides</h2><ul clas\
+s="link-list">${links}</ul></section>`;
 }
-
 function renderEpisodePage(episode, request, feedUrl, relatedBooks = "") {
   const title = episode.title || "Turing's Torch AI Weekly";
-  const summary = clampWords(stripPodcastTiming(episode.description || "Jonathan Harris cuts through artificial intelligence stories with practical judgement, scepticism and a working-person tolerance for less nonsense."), 60);
+  const summary = clampWords(stripPodcastTiming(episode.description || "Jonathan Harris cuts through artificial intelligence stories with practical ju\
+dgement, scepticism and a working-person tolerance for less nonsense."), 60);
   const canonical = episode.link || new URL(request.url).toString();
   const topics = detectTopics(`${title} ${summary}`);
   const entities = detectEntities(`${title} ${summary}`);
@@ -337,11 +318,13 @@ ${episode.noindex ? '<meta name="robots" content="noindex,follow">' : '<meta nam
 <h1>${escapeHtml(title)}</h1>
 <p class="section-lead">${escapeHtml(summary)}</p>
 <div class="actions">
-${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" rel="noopener noreferrer">Listen to the episode</a>` : `<a class="button" href="/podcast/">Open podcast hub</a>`}
+${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" rel="noopener noreferrer">Listen to the episode</a>` : `<a class="butto\
+n" href="/podcast/">Open podcast hub</a>`}
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the transcript</a>
 <a class="button secondary" href="${escapeHtml(feedUrl || DEFAULT_PODCAST_FEED_URL)}" rel="noopener noreferrer">Subscribe via RSS</a>
 </div>
-${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placement="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
+${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placeme\
+nt="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
 </div>
 </section>
 <section class="section"><div class="wrap podcast-episode-layout">
@@ -377,7 +360,10 @@ ${relatedBooks}
 <a class="button secondary" href="/podcast/">More episodes</a>
 <a class="button secondary" href="/newsletter/">Join AI Edge</a>
 </nav>
-${episode.youtubeVideoId ? `<section class="card podcast-episode-video" aria-labelledby="watch-episode-heading"><h2 id="watch-episode-heading">Watch this episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)} video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div></section>` : ""}
+${episode.youtubeVideoId ? `<section class="card podcast-episode-video" aria-labelledby="watch-episode-heading"><h2 id="watch-episode-heading">Watch t\
+his episode</h2><div class="responsive-media"><iframe src="https://www.youtube-nocookie.com/embed/${escapeHtml(episode.youtubeVideoId)}" title="${escapeHtml(title)}\
+ video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></i\
+frame></div></section>` : ""}
 </div></section>
 </main>
 <script defer src="/assets/js/funnel-events.min.js"></script>
@@ -385,11 +371,9 @@ ${episode.youtubeVideoId ? `<section class="card podcast-episode-video" aria-lab
 </body>
 </html>`;
 }
-
 export async function onRequest(context) {
   const slug = slugPartsFromParams(context.params);
   if (!slug) return context.next();
-
   let feedUrl = DEFAULT_PODCAST_FEED_URL;
   let episode = null;
   try {
@@ -397,14 +381,11 @@ export async function onRequest(context) {
     feedUrl = loaded.feedUrl;
     episode = matchEpisode(parseEpisodesFromFeed(loaded.xml, context.request), slug, context.request);
   } catch {}
-
   // Episode routes are governed exclusively by the live AIMS RSS feed.
   // Never manufacture a page for an arbitrary/future slug. If AIMS has not
   // published the episode into the feed, the episode does not exist publicly.
   if (!episode) return notFoundResponse();
-
   const relatedBooks = await relatedBooksMarkup(context, episode);
-
   const pageHtml = await ensureSharedChrome(
     context,
     renderEpisodePage(episode, context.request, feedUrl, relatedBooks),
