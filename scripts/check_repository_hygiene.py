@@ -10,6 +10,32 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_PYTHON_LINE_LENGTH = 200
+FALLBACK_GENERATED_FILES = {
+    "data/book-sample-chapters.json",
+    "release.json",
+    "scripts/data/manuscripts.json",
+}
+FALLBACK_GENERATED_PREFIXES = (".pytest_cache/", "assets/site-shell/")
+
+
+def fallback_files(root: Path = ROOT) -> list[Path]:
+    """Approximate ``git ls-files`` for source archives without Git metadata."""
+    files: list[Path] = []
+    for path in root.rglob("*"):
+        if not path.is_file():
+            continue
+        relative = path.relative_to(root)
+        relative_text = relative.as_posix()
+        if ".git" in relative.parts or "__pycache__" in relative.parts:
+            continue
+        if path.suffix in {".pyc", ".pyo"}:
+            continue
+        if relative_text in FALLBACK_GENERATED_FILES:
+            continue
+        if any(relative_text.startswith(prefix) for prefix in FALLBACK_GENERATED_PREFIXES):
+            continue
+        files.append(path)
+    return files
 
 
 def tracked_files() -> list[Path]:
@@ -20,11 +46,7 @@ def tracked_files() -> list[Path]:
             stderr=subprocess.DEVNULL,
         )
     except (FileNotFoundError, subprocess.CalledProcessError):
-        return [
-            path
-            for path in ROOT.rglob("*")
-            if path.is_file() and ".git" not in path.parts and "__pycache__" not in path.parts
-        ]
+        return fallback_files()
 
     return [ROOT / raw.decode("utf-8") for raw in output.split(b"\0") if raw]
 
