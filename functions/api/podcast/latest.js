@@ -1,3 +1,5 @@
 import { fetchPodcastEpisodes } from "../../_shared/podcast.js";
 export async function onRequestGet({env,request}){
-  try{const{feedUrl,episodes}=await fetchPodcastEpisodes(env,request,3),latest=episodes[0];return new Response(JSON.stringify({ok:true,...latest,feed_url:feedUrl,episodes}),{headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"public, max-age=900, stale-while-revalidate=3600"}})}catch{return new Response(JSON.stringify({ok:false,error:'podcast_feed_unavailable'}),{status:503,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}})}}
+  try{const{feedUrl,episodes}=await fetchPodcastEpisodes(env,request,3),latest=episodes[0];return new Response(JSON.stringify({ok:true,...latest,feed_url:feedUrl,
+episodes}),{headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"public, max-age=900, stale-while-revalidate=3600"}})}catch{return new Response(JSON.stringify({
+ok:false,error:'podcast_feed_unavailable'}),{status:503,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}})}}
