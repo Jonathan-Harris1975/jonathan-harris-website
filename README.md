@@ -1,4 +1,4 @@
-# Jonathan Harris Online-
+# Jonathan Harris Online
 
 This repository is the governed static source for `https://jonathan-harris.online`. It contains the public site, eBook catalogue, shared assets, crawler contracts, redirects, Cloudflare Pages Functions and validation scripts.
 
