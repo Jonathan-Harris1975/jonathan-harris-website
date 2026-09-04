@@ -1,3 +1,4 @@
+# Generated validation snapshot; not a publication target.
 # Jonathan Harris AI ecosystem
 # Canonical publication target: https://jonathan-harris.online/llms.txt
 # Scope: full estate, including books, topics, blog, podcast episodes and transcript discovery surfaces.
