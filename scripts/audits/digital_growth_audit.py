@@ -277,17 +277,45 @@ def heuristic_issues(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   for page in pages:
     route = page["route"]
     if page["status"] != 200:
-      issues.append({"issueId": f"DG-H-{len(issues)+1:03d}", "severity": "High", "objective": "Traffic Growth", "location": page["url"], "evidence": f"HTTP status {page['status']}", "issue": "Priority growth page did not return HTTP 200."})
+      issues.append({
+        "issueId": f"DG-H-{len(issues)+1:03d}",
+        "severity": "High",
+        "objective": "Traffic Growth",
+        "location": page["url"],
+        "evidence": f"HTTP status {page['status']}",
+        "issue": "Priority growth page did not return HTTP 200.",
+      })
     if not page["title"]:
-      issues.append({"issueId": f"DG-H-{len(issues)+1:03d}", "severity": "High", "objective": "Traffic Growth", "location": page["url"], "evidence": "Missing <title>", "issue": "Priority page has no title."})
+      issues.append({
+        "issueId": f"DG-H-{len(issues)+1:03d}",
+        "severity": "High",
+        "objective": "Traffic Growth",
+        "location": page["url"],
+        "evidence": "Missing <title>",
+        "issue": "Priority page has no title.",
+      })
     if not page["h1"]:
-      issues.append({"issueId": f"DG-H-{len(issues)+1:03d}", "severity": "Medium", "objective": "Traffic Growth", "location": page["url"], "evidence": "No H1 extracted", "issue": "Priority page has no visible H1 in fetched markup."})
+      issues.append({
+        "issueId": f"DG-H-{len(issues)+1:03d}",
+        "severity": "Medium",
+        "objective": "Traffic Growth",
+        "location": page["url"],
+        "evidence": "No H1 extracted",
+        "issue": "Priority page has no visible H1 in fetched markup.",
+      })
   homepage = next((p for p in pages if p["route"] == "/"), None)
   if homepage:
     cta_text = " ".join(item["label"].lower() for item in homepage["ctas"])
     for term, objective in (("newsletter", "Newsletter Sign-Up Rate"), ("podcast", "Podcast Click-Throughs"), ("ebook", "Ebook Sales Maximisation")):
       if term not in cta_text:
-        issues.append({"issueId": f"DG-H-{len(issues)+1:03d}", "severity": "Medium", "objective": objective, "location": homepage["url"], "evidence": f"No CTA label containing '{term}' was identified in the fetched homepage CTA set.", "issue": f"Homepage CTA prominence for {term} needs human/AI review."})
+        issues.append({
+          "issueId": f"DG-H-{len(issues)+1:03d}",
+          "severity": "Medium",
+          "objective": objective,
+          "location": homepage["url"],
+          "evidence": f"No CTA label containing '{term}' was identified in the fetched homepage CTA set.",
+          "issue": f"Homepage CTA prominence for {term} needs human/AI review.",
+        })
   return issues[:80]
 
 
@@ -305,7 +333,12 @@ def derive_analysis_url(callback_url: str | None, override: str | None) -> str |
 def extract_analysis(data: Any) -> dict[str, Any] | None:
   if not isinstance(data, dict):
     return None
-  for value in (data.get("analysis"), (data.get("result") or {}).get("analysis") if isinstance(data.get("result"), dict) else None, (data.get("job") or {}).get("analysis") if isinstance(data.get("job"), dict) else None):
+  analysis_candidates = (
+    data.get("analysis"),
+    (data.get("result") or {}).get("analysis") if isinstance(data.get("result"), dict) else None,
+    (data.get("job") or {}).get("analysis") if isinstance(data.get("job"), dict) else None,
+  )
+  for value in analysis_candidates:
     if isinstance(value, dict) and value:
       return value
   if data.get("scorecard") and data.get("findings"):
@@ -509,7 +542,11 @@ def main() -> int:
     "summaryUrl": uploaded.get("summary.json", str(summary_path)),
     "evidenceUrl": uploaded.get("evidence.json", str(evidence_path)),
     "issueCount": len((analysis or {}).get("findings") or heuristics),
-    "message": "Digital Growth and Monetisation stage completed with a valid machine-readable analysis contract." if complete_analysis else f"Digital Growth stage failed its analysis evidence contract: {analysis_detail}",
+    "message": (
+      "Digital Growth and Monetisation stage completed with a valid machine-readable analysis contract."
+      if complete_analysis
+      else f"Digital Growth stage failed its analysis evidence contract: {analysis_detail}"
+    ),
     "artefacts": uploaded,
     "publicJsonValidation": public_json_validation,
     "finishedAt": utc_now(),

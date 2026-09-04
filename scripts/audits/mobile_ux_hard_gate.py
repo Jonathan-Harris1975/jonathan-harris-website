@@ -1029,7 +1029,12 @@ def workbook_mobile_risk_routes(workbook_info: WorkbookInfo, excludes: list[str]
   return routes
 
 
-def select_workbook_focus_routes(workbook_routes: list[str], already_required: set[str], max_total: int = MAX_WORKBOOK_FOCUS_ROUTES, max_per_family: int = MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY) -> list[str]:
+def select_workbook_focus_routes(
+  workbook_routes: list[str],
+  already_required: set[str],
+  max_total: int = MAX_WORKBOOK_FOCUS_ROUTES,
+  max_per_family: int = MAX_WORKBOOK_FOCUS_ROUTES_PER_FAMILY,
+) -> list[str]:
   """Choose a deterministic, bounded rendered sample from the workbook exception sweep.
 
   The workbook can contain dozens of catalogue/topic URLs. Rendering every one across
@@ -1483,7 +1488,14 @@ def capture_required_screenshot(page: Any, file_path: Path, relative_path: str) 
   return screenshot_ref(relative_path)
 
 
-def run_rendered_execution(sync_playwright: Any, base_url: str, session_id: str, routes: list[str], screenshots_dir: Path, max_runtime_seconds: int = DEFAULT_MAX_RUNTIME_SECONDS) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
+def run_rendered_execution(
+  sync_playwright: Any,
+  base_url: str,
+  session_id: str,
+  routes: list[str],
+  screenshots_dir: Path,
+  max_runtime_seconds: int = DEFAULT_MAX_RUNTIME_SECONDS,
+) -> tuple[list[dict[str, Any]], list[dict[str, str]], list[dict[str, str]]]:
   records: list[dict[str, Any]] = []
   executed: list[dict[str, str]] = []
   runtime_blocks: list[dict[str, str]] = []
@@ -1598,17 +1610,33 @@ def remediation_for_check(check: str, record: dict[str, Any]) -> str:
   route = record.get("route") or "the affected route"
   viewport = record.get("viewport") or "the failing viewport"
   guidance = {
-    "viewportCorrectness": "Use the shared head/partial viewport declaration `width=device-width, initial-scale=1, viewport-fit=cover` and verify the live rendered page reports the expected viewport width.",
-    "overflow": f"Trace the overflowing element from `{anchor}` on `{route}` at {viewport}px. Replace fixed/min-width layout with max-width:100%, wrapping, grid minmax(), or an intentional overflow-x container for genuinely wide content.",
-    "hamburgerNavigation": "Verify `.jh-hamburger` and `#jh-mobile-nav` open, close, reopen, close on Escape/outside click, and reset on desktop breakpoint without body-scroll or overlay lock defects.",
+    "viewportCorrectness": (
+      "Use the shared head/partial viewport declaration `width=device-width, initial-scale=1, viewport-fit=cover` and "
+      "verify the live rendered page reports the expected viewport width."
+    ),
+    "overflow": (
+                    f"Trace the overflowing element from `{anchor}` on `{route}` at {viewport}px. Replace fixed/min-width layout "
+                    f"with max-width:100%, wrapping, grid minmax(), or an intentional overflow-x container for genuinely wide "
+                    f"content."
+                ),
+    "hamburgerNavigation": (
+      "Verify `.jh-hamburger` and `#jh-mobile-nav` open, close, reopen, close on Escape/outside click, and reset on "
+      "desktop breakpoint without body-scroll or overlay lock defects."
+    ),
     "touchTargetUsability": "Increase crowded controls to a reliable 44px minimum target box with adequate gap, preserving CTA hierarchy and keyboard/focus affordances.",
     "dynamicResizeReflow": "Fix responsive breakpoint/reflow handling so header, nav, cards, forms, grids, drawers, and sticky elements reset cleanly during mobile-tablet-desktop resize.",
     "ctaContinuity": "Keep the primary CTA visible, tappable, and routed to the intended destination in the rendered mobile state without overlay, clipping, or dead-end interactions.",
     "typographyReadability": "Adjust responsive type scale, line length, spacing, and wrapping so headings, body text, labels, buttons, and nav items do not clip, crush, or overlap.",
     "formUsability": "Set visible input/control font size to at least 16px, keep labels and helper text associated, and preserve tappable submit flow at narrow widths.",
-    "accessibilityCompliance": "Resolve WCAG AA mobile accessibility defects: add accessible names, meaningful alt text, associated form labels, logical heading order, meaningful link text, and visible keyboard/focus affordances.",
+    "accessibilityCompliance": (
+      "Resolve WCAG AA mobile accessibility defects: add accessible names, meaningful alt text, associated form labels, "
+      "logical heading order, meaningful link text, and visible keyboard/focus affordances."
+    ),
     "imageResponsiveness": "Constrain images and artwork with responsive sizing/object-fit rules so they scale without distortion, clipping, overflow, or layout breakage.",
-    "tableComparisonHandling": "Use a deliberate table strategy: scroll container, stacked mobile cards, wrapping columns, or transformed comparison rows; do not allow inaccessible clipped wide content.",
+    "tableComparisonHandling": (
+      "Use a deliberate table strategy: scroll container, stacked mobile cards, wrapping columns, or transformed comparison "
+      "rows; do not allow inaccessible clipped wide content."
+    ),
     "live404Verification": "Fix the rendered 404 route shell so header, footer, CTA path, viewport behaviour, and mobile layout all pass the same Stage 3 checks as normal pages.",
   }
   return guidance.get(check, "Fix the affected responsive component, then rerun the same route and viewport in the mobile hard-gate workflow.")
@@ -1630,7 +1658,17 @@ def severity_for_check(check: str, route: str, viewport: int | str) -> str:
     return "P0"
   if check == "accessibilityCompliance" and route in CRITICAL_ROUTES and width <= 768:
     return "P1"
-  if check in {"touchTargetUsability", "dynamicResizeReflow", "formUsability", "accessibilityCompliance", "imageResponsiveness", "tableComparisonHandling", "typographyReadability", "responsiveCoverage"}:
+  p1_checks = {
+    "touchTargetUsability",
+    "dynamicResizeReflow",
+    "formUsability",
+    "accessibilityCompliance",
+    "imageResponsiveness",
+    "tableComparisonHandling",
+    "typographyReadability",
+    "responsiveCoverage",
+  }
+  if check in p1_checks:
     return "P1"
   return "P2"
 
@@ -1724,7 +1762,10 @@ def source_snippet_for_anchor(route: str, anchor: str | None, repo_root: Path = 
   return {
     "available": False,
     "filePath": route_path,
-    "reasonExactReplacementUnavailable": "The rendered browser evidence did not map deterministically to an exact stable source snippet in this repository snapshot. No line number or replacement code has been invented.",
+    "reasonExactReplacementUnavailable": (
+      "The rendered browser evidence did not map deterministically to an exact stable source snippet in this repository "
+      "snapshot. No line number or replacement code has been invented."
+    ),
   }
 
 
@@ -1732,7 +1773,16 @@ def group_key_for_issue(issue: dict[str, Any]) -> tuple[str, str, str]:
   anchor = normalise_anchor(issue.get("bestAvailableCodeAnchor") or issue.get("selectorComponentCodeAnchor"))
   check = str(issue.get("check") or "mobileUx")
   template = str(issue.get("templateFamily") or detect_template_family(issue.get("route") or "/"))
-  shared_component_checks = {"hamburgerNavigation", "ctaContinuity", "overflow", "typographyReadability", "imageResponsiveness", "touchTargetUsability", "dynamicResizeReflow", "accessibilityCompliance"}
+  shared_component_checks = {
+    "hamburgerNavigation",
+    "ctaContinuity",
+    "overflow",
+    "typographyReadability",
+    "imageResponsiveness",
+    "touchTargetUsability",
+    "dynamicResizeReflow",
+    "accessibilityCompliance",
+  }
   if check in shared_component_checks and anchor != "unmapped-rendered-component":
     template = "shared-component"
   return (check, template, anchor)
@@ -1829,7 +1879,11 @@ def root_cause_groups_document(issues: list[dict[str, Any]], records: list[dict[
     "reportPrefix": summary.get("reportPrefix") if summary else None,
     "groupCount": len(groups),
     "groups": groups,
-    "groupingPolicy": "Deterministic grouping by failed metric, template/shared-component family, and best available rendered selector/component anchor. Raw per-viewport records remain in execution.json and mandatory-mobile-scorecard.json.",
+    "groupingPolicy": (
+                          "Deterministic grouping by failed metric, template/shared-component family, and best available rendered "
+                          "selector/component anchor. Raw per-viewport records remain in execution.json and "
+                          "mandatory-mobile-scorecard.json."
+                      ),
     "generatedAt": utc_now(),
   }
 
@@ -2348,7 +2402,9 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     for item in blocked_tests
   ) or "<tr><td colspan='2'>No blocked tests declared after capability probe.</td></tr>"
   mismatch_rows = "".join(
-    f"<tr><td>{escape(item['mismatchId'])}</td><td>{escape(item['intendedState'])}</td><td>{escape(str(item['implementedState']))}</td><td>{escape(str(item['liveState']))}</td><td>{escape(item['remediationOwner'])}</td></tr>"
+    f"<tr><td>{escape(item['mismatchId'])}</td><td>{escape(item['intendedState'])}</td>"
+    f"<td>{escape(str(item['implementedState']))}</td><td>{escape(str(item['liveState']))}</td>"
+    f"<td>{escape(item['remediationOwner'])}</td></tr>"
     for item in reconciliation["crossSourceMismatches"]
   ) or "<tr><td colspan='5'>No material cross-source mismatch recorded during preflight.</td></tr>"
 
@@ -2382,7 +2438,20 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
     key = (str(row.get("templateFamily")), str(row.get("viewport")))
     family_counter.setdefault(key, {"runs": 0, "failRows": 0})
     family_counter[key]["runs"] += 1
-    if any(row.get(check) == "FAIL" for check in ["viewportCorrectness", "responsiveCoverage", "overflow", "touchTargetUsability", "hamburgerNavigation", "dynamicResizeReflow", "ctaContinuity", "typographyReadability", "imageResponsiveness", "formUsability", "tableComparisonHandling"]):
+    scorecard_checks = [
+      "viewportCorrectness",
+      "responsiveCoverage",
+      "overflow",
+      "touchTargetUsability",
+      "hamburgerNavigation",
+      "dynamicResizeReflow",
+      "ctaContinuity",
+      "typographyReadability",
+      "imageResponsiveness",
+      "formUsability",
+      "tableComparisonHandling",
+    ]
+    if any(row.get(check) == "FAIL" for check in scorecard_checks):
       family_counter[key]["failRows"] += 1
   scorecard_rows = "".join(
     f"<tr><td>{escape(template)}</td><td>{escape(viewport)}px</td><td>{counts['runs']}</td><td>{counts['failRows']}</td></tr>"
@@ -2412,194 +2481,335 @@ def report_html(summary: dict[str, Any], records: list[dict[str, Any]], artefact
   artefact_items = "".join(
     f"<li><a href=\"{escape(str(artefacts.get(name, '#')))}\">{escape(name)}</a></li>"
     for name in [
-      "report.html", "report.json", "summary.json", "execution.json", "evidence.json", "preflight.json", "coverage.json", "screenshot-manifest.json", "focused-page-appendix.json", "repository-issue-appendix.json", "mandatory-mobile-scorecard.json", "responsive-fix-appendix.json",
+      "report.html",
+      "report.json",
+      "summary.json",
+      "execution.json",
+      "evidence.json",
+      "preflight.json",
+      "coverage.json",
+      "screenshot-manifest.json",
+      "focused-page-appendix.json",
+      "repository-issue-appendix.json",
+      "mandatory-mobile-scorecard.json",
+      "responsive-fix-appendix.json",
     ]
   )
 
-  body = f"""
+  body = (
+             f"""
   <section class="cover">
     <h1>Jonathan Harris Mobile UX Hard-Gate Audit</h1>
-    <p class="lead">Executive-grade rendered mobile UX report for <strong>{escape(summary['sessionId'])}</strong>.</p>
-    <p>{html_badge(verdict)} <strong>Mobile quality score:</strong> {escape(str(score))}</p>
-    <p class="section-note">The executive layer groups repeated viewport failures into root-cause findings. Raw per-viewport records remain in execution.json and the structured appendices.</p>
+    <p """
+             f"""class="lead">Executive-grade rendered mobile UX report for """
+             f"""<strong>{escape(summary['sessionId'])}</strong>.</p>
+    <p>{html_badge(verdict)} <strong>Mobile quality """
+             f"""score:</strong> {escape(str(score))}</p>
+    <p class="section-note">The executive layer groups repeated """
+             f"""viewport failures into root-cause findings. Raw per-viewport records remain in execution.json and the """
+             f"""structured appendices.</p>
   </section>
 
   <section id="executive-summary">
     <h2>Executive summary</h2>
-    <p>Stage 3 rendered mobile execution completed across {summary['renderedPages']} rendered URL(s) and {summary['viewportRuns']} viewport run(s). The run recorded {summary['mobileFailureCount']} failing viewport record(s), synthesised into {executive_themes_doc['themeCount']} executive theme(s) and {root_groups_doc['groupCount']} technical root-cause group(s).</p>
-    <p><strong>Commercial decision:</strong> {escape(str(verdict))}. P0 technical groups: {len(critical_groups)}. P1 technical groups: {len(p1_groups)}. Screenshots retained: {summary['screenshotCount']}.</p>
+   """
+             f""" <p>Stage 3 rendered mobile execution completed across {summary['renderedPages']} rendered URL(s) and """
+             f"""{summary['viewportRuns']} viewport run(s). The run recorded {summary['mobileFailureCount']} failing viewport """
+             f"""record(s), synthesised into {executive_themes_doc['themeCount']} executive theme(s) and """
+             f"""{root_groups_doc['groupCount']} technical root-cause group(s).</p>
+    <p><strong>Commercial """
+             f"""decision:</strong> {escape(str(verdict))}. P0 technical groups: {len(critical_groups)}. P1 technical groups: """
+             f"""{len(p1_groups)}. Screenshots retained: {summary['screenshotCount']}.</p>
   </section>
 
-  <section id="scope-summary">
+  <section """
+             f"""id="scope-summary">
     <h2>Scope summary</h2>
     <table class="tight"><tbody>
-      <tr><th>Workbook URL inventory</th><td>{escape(str(report_control.get('workbook URL inventory count')))}</td></tr>
-      <tr><th>Primary URL count</th><td>{escape(str(report_control.get('primary URL count')))}</td></tr>
-      <tr><th>Rendered mobile URLs checked</th><td>{escape(str(report_control.get('rendered mobile URLs checked')))}</td></tr>
-      <tr><th>Focused pages audited</th><td>{escape(str(report_control.get('focused pages audited')))}</td></tr>
-      <tr><th>Exception sweep URLs checked</th><td>{escape(str(report_control.get('exception sweep URLs checked')))}</td></tr>
-    </tbody></table>
+      <tr><th>Workbook URL """
+             f"""inventory</th><td>{escape(str(report_control.get('workbook URL inventory count')))}</td></tr>
+      """
+             f"""<tr><th>Primary URL count</th><td>{escape(str(report_control.get('primary URL count')))}</td></tr>
+      """
+             f"""<tr><th>Rendered mobile URLs """
+             f"""checked</th><td>{escape(str(report_control.get('rendered mobile URLs checked')))}</td></tr>
+      """
+             f"""<tr><th>Focused pages audited</th><td>{escape(str(report_control.get('focused pages audited')))}</td></tr>
+   """
+             f"""   <tr><th>Exception sweep URLs """
+             f"""checked</th><td>{escape(str(report_control.get('exception sweep URLs checked')))}</td></tr>
+    """
+             f"""</tbody></table>
   </section>
 
   <section id="preflight">
     <h2>Preflight evidence summary</h2>
-    <p>Live homepage status: {escape(str(summary['preflight']['liveHomepage'].get('status')))}. Repository files reviewed: {escape(str(summary['preflight']['repository'].get('totalFiles')))}. Media queries: {escape(str(summary['preflight']['repository'].get('mediaQueryCount')))}. Container queries: {escape(str(summary['preflight']['repository'].get('containerQueryCount')))}.</p>
+    <p>Live """
+             f"""homepage status: {escape(str(summary['preflight']['liveHomepage'].get('status')))}. Repository files """
+             f"""reviewed: {escape(str(summary['preflight']['repository'].get('totalFiles')))}. Media queries: """
+             f"""{escape(str(summary['preflight']['repository'].get('mediaQueryCount')))}. Container queries: """
+             f"""{escape(str(summary['preflight']['repository'].get('containerQueryCount')))}.</p>
   </section>
 
-  <section id="capabilities">
+  <section """
+             f"""id="capabilities">
     <h2>Capability table</h2>
     <table><tbody>{capability_rows}</tbody></table>
-  </section>
+  """
+             f"""</section>
 
   <section id="blocked-tests">
     <h2>Blocked-tests list</h2>
-    <table class="tight"><thead><tr><th>Capability/task</th><th>Evidence</th></tr></thead><tbody>{blocked_rows}</tbody></table>
-  </section>
+    <table """
+             f"""class="tight"><thead><tr><th>Capability/task</th><th>Evidence</th></tr></thead><tbody>{blocked_rows}</tbody></table>
+"""
+             f"""  </section>
 
   <section id="source-inventory">
     <h2>Source inventory</h2>
-    <p>Workbook: {escape(summary['preflight']['workbook']['filename'])}; primary sheet: {escape(str(summary['preflight']['workbook'].get('primarySheet')))}; header row: {escape(str(summary['preflight']['workbook'].get('headerRow')))}.</p>
+    <p>Workbook: """
+             f"""{escape(summary['preflight']['workbook']['filename'])}; primary sheet: """
+             f"""{escape(str(summary['preflight']['workbook'].get('primarySheet')))}; header row: """
+             f"""{escape(str(summary['preflight']['workbook'].get('headerRow')))}.</p>
   </section>
 
-  <section id="variance-register">
+  <section """
+             f"""id="variance-register">
     <h2>Source-of-truth variance / mismatch register</h2>
-    <table class="tight"><thead><tr><th>ID</th><th>Intended state</th><th>Repository state</th><th>Live state</th><th>Owner</th></tr></thead><tbody>{mismatch_rows}</tbody></table>
+    <table """
+             f"""class="tight"><thead><tr><th>ID</th><th>Intended state</th><th>Repository state</th><th>Live """
+             f"""state</th><th>Owner</th></tr></thead><tbody>{mismatch_rows}</tbody></table>
   </section>
 
-  <section id="scorecard">
+  <section """
+             f"""id="scorecard">
     <h2>Weighted scorecard</h2>
-    <table><thead><tr><th>Dimension</th><th>Weight</th><th>Score</th><th>Evidence note</th></tr></thead><tbody>{score_rows}</tbody></table>
+    """
+             f"""<table><thead><tr><th>Dimension</th><th>Weight</th><th>Score</th><th>Evidence """
+             f"""note</th></tr></thead><tbody>{score_rows}</tbody></table>
   </section>
 
   <section id="confidence">
-    <h2>Confidence model</h2>
-    <p>The model separates coverage, finding quality, scoring confidence, and release confidence so a blocked report cannot sit beside a cheerful unexplained 100.</p>
-    <table><thead><tr><th>Confidence field</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{confidence_rows}</tbody></table>
+    """
+             f"""<h2>Confidence model</h2>
+    <p>The model separates coverage, finding quality, scoring confidence, and """
+             f"""release confidence so a blocked report cannot sit beside a cheerful unexplained 100.</p>
+    """
+             f"""<table><thead><tr><th>Confidence """
+             f"""field</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{confidence_rows}</tbody></table>
   </section>
 
-  <section id="accessibility-phase-5c">
+"""
+             f"""  <section id="accessibility-phase-5c">
     <h2>Phase 5C accessibility evidence</h2>
-    <p>Accessibility is now checked inside the rendered Mobile UX hard gate against WCAG 2.2 AA with WCAG 2.1 AA compatibility mapping for ADA, EAA, Section 508 and AODA. This is deterministic evidence/report-first; safe remediation remains PR-gated.</p>
-    <table class="tight"><thead><tr><th>Route</th><th>Viewport</th><th>Status</th><th>Issues</th><th>Example evidence</th></tr></thead><tbody>{accessibility_rows}</tbody></table>
+    <p>Accessibility is """
+             f"""now checked inside the rendered Mobile UX hard gate against WCAG 2.2 AA with WCAG 2.1 AA compatibility """
+             f"""mapping for ADA, EAA, Section 508 and AODA. This is deterministic evidence/report-first; safe remediation """
+             f"""remains PR-gated.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Route</th><th>Viewport</th><th>Status</th><th>Issues</th><th>Example """
+             f"""evidence</th></tr></thead><tbody>{accessibility_rows}</tbody></table>
   </section>
 
-  <section id="evidence-labels">
+  <section """
+             f"""id="evidence-labels">
     <h2>Evidence labels and claim control</h2>
-    <p>Allowed evidence labels: Observed Live, Observed Live (mobile), Observed in Markup, Observed in Repository, Cross-Source Mismatch, and Reasoned Inference.</p>
-    <p>Visual design, cover-art quality, brand quality, and content tone are not marked FAIL unless the rendered evidence directly supports that exact claim.</p>
+    <p>Allowed evidence labels: Observed """
+             f"""Live, Observed Live (mobile), Observed in Markup, Observed in Repository, Cross-Source Mismatch, and Reasoned """
+             f"""Inference.</p>
+    <p>Visual design, cover-art quality, brand quality, and content tone are not marked FAIL """
+             f"""unless the rendered evidence directly supports that exact claim.</p>
   </section>
 
-  <section id="release-verdict">
+  <section """
+             f"""id="release-verdict">
     <h2>Release verdict</h2>
     <p>{html_badge(verdict)}</p>
-    <p>{escape(str(summary.get('releaseRationale') or 'Release verdict is determined from completed rendered Stage 3 mobile evidence and severity bands.'))}</p>
-  </section>
+    """
+             f"""<p>{escape(str(summary.get('releaseRationale') or 'Release verdict is determined from completed rendered Stage 3 mobile evidence and severity bands.'))}</p>
+"""
+             f"""  </section>
 
   <section id="critical-blockers">
     <h2>Executive blocker themes</h2>
-    <p>Executive synthesis: {executive_themes_doc['themeCount']} board-level remediation theme(s) above {root_groups_doc['groupCount']} technical root-cause group(s). P0 technical groups: {len(critical_groups)}. P1 technical groups: {len(p1_groups)}.</p>
-    <p class="section-note">This table is intentionally capped at systemic themes. Full technical root-cause groups and raw viewport evidence remain in JSON appendices.</p>
-    <table><thead><tr><th>Theme</th><th>Title</th><th>Severity</th><th>Technical groups</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Executive consequence</th><th>Remediation programme</th><th>Primary group IDs</th><th>Screenshots</th></tr></thead><tbody>{''.join(theme_rows) or '<tr><td colspan="11">No executive blocker theme recorded.</td></tr>'}</tbody></table>
-  </section>
+    <p>Executive """
+             f"""synthesis: {executive_themes_doc['themeCount']} board-level remediation theme(s) above """
+             f"""{root_groups_doc['groupCount']} technical root-cause group(s). P0 technical groups: {len(critical_groups)}. """
+             f"""P1 technical groups: {len(p1_groups)}.</p>
+    <p class="section-note">This table is intentionally capped at """
+             f"""systemic themes. Full technical root-cause groups and raw viewport evidence remain in JSON appendices.</p>
+   """
+             f""" <table><thead><tr><th>Theme</th><th>Title</th><th>Severity</th><th>Technical """
+             f"""groups</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Executive consequence</th><th>Remediation """
+             f"""programme</th><th>Primary group """
+             f"""IDs</th><th>Screenshots</th></tr></thead><tbody>{''.join(theme_rows) or '<tr><td colspan="11">No executive blocker theme recorded.</td></tr>'}</tbody></table>
+"""
+             f"""  </section>
 
   <section id="root-cause-findings">
     <h2>Technical root-cause grouped findings</h2>
-    <p>Grouping policy: {escape(root_groups_doc['groupingPolicy'])}</p>
-    <p>Previewing top {TECHNICAL_GROUP_PREVIEW_LIMIT} technical groups by severity and blast radius. Full linked issue rows remain in repository-issue-appendix.json; full execution rows remain in execution.json.</p>
-    <table class="tight"><thead><tr><th>Group</th><th>Title</th><th>Severity</th><th>Route families</th><th>URLs</th><th>Viewport range</th><th>Metrics</th><th>Anchor/source</th><th>Remediation</th></tr></thead><tbody>{''.join(technical_group_rows) or '<tr><td colspan="9">No rendered mobile root-cause group recorded.</td></tr>'}</tbody></table>
-  </section>
+    """
+             f"""<p>Grouping policy: {escape(root_groups_doc['groupingPolicy'])}</p>
+    <p>Previewing top """
+             f"""{TECHNICAL_GROUP_PREVIEW_LIMIT} technical groups by severity and blast radius. Full linked issue rows remain """
+             f"""in repository-issue-appendix.json; full execution rows remain in execution.json.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Group</th><th>Title</th><th>Severity</th><th>Route """
+             f"""families</th><th>URLs</th><th>Viewport """
+             f"""range</th><th>Metrics</th><th>Anchor/source</th><th>Remediation</th></tr></thead><tbody>"""
+             f"""{''.join(technical_group_rows) or '<tr><td colspan="9">No rendered mobile root-cause group recorded.</td></tr>'}"""
+             f"""</tbody></table>
+"""
+             f"""  </section>
 
   <section id="systemic-findings">
     <h2>Systemic findings</h2>
-    <p>Observed in Repository: fixed-width/min-width risk count {len(summary['preflight']['repository']['fixedWidthMinWidthRisks'])}; responsive rule inventory count {len(summary['preflight']['repository']['responsiveRuleInventory'])}.</p>
-    <p>Reasoned Inference: repeated rendered failures across route families indicate shared CSS, shared partials, shared JavaScript, or template-family defects until proved page-specific.</p>
+    <p>Observed in """
+             f"""Repository: fixed-width/min-width risk count """
+             f"""{len(summary['preflight']['repository']['fixedWidthMinWidthRisks'])}; responsive rule inventory count """
+             f"""{len(summary['preflight']['repository']['responsiveRuleInventory'])}.</p>
+    <p>Reasoned Inference: repeated """
+             f"""rendered failures across route families indicate shared CSS, shared partials, shared JavaScript, or """
+             f"""template-family defects until proved page-specific.</p>
   </section>
 
   <section id="stage-3">
-    <h2>Stage 3 rendered Mobile UX execution summary</h2>
-    <p>Required viewport set: {', '.join(str(width) for width in VIEWPORTS)}. Totals: PASS {totals['PASS']}, FAIL {totals['FAIL']}, N/A {totals['N/A']}.</p>
+    <h2>Stage """
+             f"""3 rendered Mobile UX execution summary</h2>
+    <p>Required viewport set: """
+             f"""{', '.join(str(width) for width in VIEWPORTS)}. Totals: PASS {totals['PASS']}, FAIL {totals['FAIL']}, N/A """
+             f"""{totals['N/A']}.</p>
   </section>
 
   <section id="mobile-execution-records">
-    <h2>Mobile Execution Records summary</h2>
-    <p>This section intentionally summarises the records. The full raw Mobile Execution Records are preserved in execution.json.</p>
-    <table class="tight"><thead><tr><th>Template family</th><th>Viewport</th><th>Runs</th><th>Failing rows</th></tr></thead><tbody>{scorecard_rows}</tbody></table>
+    <h2>Mobile Execution Records """
+             f"""summary</h2>
+    <p>This section intentionally summarises the records. The full raw Mobile Execution Records """
+             f"""are preserved in execution.json.</p>
+    <table class="tight"><thead><tr><th>Template """
+             f"""family</th><th>Viewport</th><th>Runs</th><th>Failing """
+             f"""rows</th></tr></thead><tbody>{scorecard_rows}</tbody></table>
   </section>
 
   <section id="focused-pages">
-    <h2>Focused page findings</h2>
-    <p>Focused pages audited: {summary['focusedPagesAudited']}. Exceptions escalated: {summary['exceptionsEscalated']}.</p>
-    <table class="tight"><thead><tr><th>Route</th><th>Template family</th><th>Viewport runs</th><th>Failures</th><th>Group IDs</th></tr></thead><tbody>{focused_rows}</tbody></table>
+   """
+             f""" <h2>Focused page findings</h2>
+    <p>Focused pages audited: {summary['focusedPagesAudited']}. Exceptions """
+             f"""escalated: {summary['exceptionsEscalated']}.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Route</th><th>Template family</th><th>Viewport """
+             f"""runs</th><th>Failures</th><th>Group IDs</th></tr></thead><tbody>{focused_rows}</tbody></table>
   </section>
 
-  <section id="exception-sweep">
+ """
+             f""" <section id="exception-sweep">
     <h2>Exception sweep summary</h2>
-    <p>Exception sweep URLs checked: {escape(str(report_control.get('exception sweep URLs checked')))}. Exceptions escalated: {summary['exceptionsEscalated']}.</p>
+    <p>Exception sweep URLs checked: """
+             f"""{escape(str(report_control.get('exception sweep URLs checked')))}. Exceptions escalated: """
+             f"""{summary['exceptionsEscalated']}.</p>
   </section>
 
   <section id="verification-matrix">
-    <h2>Verification matrix</h2>
-    <table><thead><tr><th>Claim</th><th>Status</th><th>Evidence / appendix reference</th></tr></thead><tbody>{verification_rows}</tbody></table>
+    <h2>Verification """
+             f"""matrix</h2>
+    <table><thead><tr><th>Claim</th><th>Status</th><th>Evidence / appendix """
+             f"""reference</th></tr></thead><tbody>{verification_rows}</tbody></table>
   </section>
 
-  <section id="remediation">
+  <section """
+             f"""id="remediation">
     <h2>Remediation programme</h2>
     <ol>
-      <li>Fix P0 root-cause groups first, especially viewport correctness, live 404 shell, hamburger, overflow, and mobile CTA continuity defects.</li>
-      <li>Fix P1 groups by shared component or template family, not one viewport row at a time.</li>
-      <li>Rerun the same hard-gate workflow and compare execution.json, rootCauseGroups, screenshot-manifest.json, and mandatory-mobile-scorecard.json.</li>
+      <li>Fix P0 root-cause groups first, """
+             f"""especially viewport correctness, live 404 shell, hamburger, overflow, and mobile CTA continuity defects.</li>
+"""
+             f"""      <li>Fix P1 groups by shared component or template family, not one viewport row at a time.</li>
+      """
+             f"""<li>Rerun the same hard-gate workflow and compare execution.json, rootCauseGroups, screenshot-manifest.json, """
+             f"""and mandatory-mobile-scorecard.json.</li>
     </ol>
   </section>
 
   <section id="roadmap">
-    <h2>Roadmap</h2>
-    <p>Release path: P0 clear → P1 clear or formally accepted → refreshed screenshots → callback metadata verified in AIMS latest/job state → release readiness rechecked.</p>
+    """
+             f"""<h2>Roadmap</h2>
+    <p>Release path: P0 clear → P1 clear or formally accepted → refreshed screenshots → """
+             f"""callback metadata verified in AIMS latest/job state → release readiness rechecked.</p>
   </section>
 
-  <section id="screenshot-manifest">
+  """
+             f"""<section id="screenshot-manifest">
     <h2>Screenshot manifest section</h2>
-    <p>Screenshot references are mandatory evidence for rendered FAIL records and key rendered PASS confirmations. Showing first 80 here; full list is in screenshot-manifest.json.</p>
-    <table class="tight"><thead><tr><th>Path</th><th>Route</th><th>Viewport</th><th>Evidence type</th><th>Link</th></tr></thead><tbody>{screenshot_rows}</tbody></table>
+    <p>Screenshot references are """
+             f"""mandatory evidence for rendered FAIL records and key rendered PASS confirmations. Showing first 80 here; full """
+             f"""list is in screenshot-manifest.json.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Path</th><th>Route</th><th>Viewport</th><th>Evidence """
+             f"""type</th><th>Link</th></tr></thead><tbody>{screenshot_rows}</tbody></table>
   </section>
 
-  <section id="focused-page-appendix">
+  <section """
+             f"""id="focused-page-appendix">
     <h2>Focused Page Appendix section</h2>
-    <p>Full structured focused-page data is preserved in focused-page-appendix.json.</p>
+    <p>Full structured focused-page """
+             f"""data is preserved in focused-page-appendix.json.</p>
   </section>
 
   <section id="repository-issue-appendix">
-    <h2>Repository Issue Appendix section</h2>
-    <p>Previewing first 50 issue rows to protect executive readability. Full issue schema and every raw duplicate viewport failure remain in repository-issue-appendix.json.</p>
-    <table class="tight"><thead><tr><th>Issue</th><th>Group</th><th>Severity</th><th>Route</th><th>Metric</th><th>Best anchor</th></tr></thead><tbody>{issue_preview_rows}</tbody></table>
+"""
+             f"""    <h2>Repository Issue Appendix section</h2>
+    <p>Previewing first 50 issue rows to protect executive """
+             f"""readability. Full issue schema and every raw duplicate viewport failure remain in """
+             f"""repository-issue-appendix.json.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Issue</th><th>Group</th><th>Severity</th><th>Route</th><th>Metric</th><th>Best """
+             f"""anchor</th></tr></thead><tbody>{issue_preview_rows}</tbody></table>
   </section>
 
-  <section id="mandatory-mobile-scorecard">
+  <section """
+             f"""id="mandatory-mobile-scorecard">
     <h2>Mandatory Mobile UX Scorecard section</h2>
-    <p>PASS / FAIL values are drawn from rendered Stage 3 execution records. Full rows are in mandatory-mobile-scorecard.json.</p>
-  </section>
+    <p>PASS / FAIL values """
+             f"""are drawn from rendered Stage 3 execution records. Full rows are in mandatory-mobile-scorecard.json.</p>
+  """
+             f"""</section>
 
   <section id="responsive-fix-appendix">
     <h2>Responsive Fix Appendix section</h2>
-    <p>For verified P0/P1 groups, the audit records the best rendered anchor, closest source snippet where available, manual remediation contract, and viewport retest steps. Previewing top {RESPONSIVE_FIX_PREVIEW_LIMIT}; the full contract is in responsive-fix-appendix.json.</p>
-    <table class="tight"><thead><tr><th>Fix/theme</th><th>Severity</th><th>Group</th><th>File/source</th><th>Anchor</th><th>Patch instruction and source-note</th><th>Effort/risk</th><th>Retest</th></tr></thead><tbody>{fix_rows}</tbody></table>
-  </section>
+    <p>For """
+             f"""verified P0/P1 groups, the audit records the best rendered anchor, closest source snippet where available, """
+             f"""manual remediation contract, and viewport retest steps. Previewing top {RESPONSIVE_FIX_PREVIEW_LIMIT}; the """
+             f"""full contract is in responsive-fix-appendix.json.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>Fix/theme</th><th>Severity</th><th>Group</th><th>File/source</th><th>Anchor</th><th>Patch """
+             f"""instruction and """
+             f"""source-note</th><th>Effort/risk</th><th>Retest</th></tr></thead><tbody>{fix_rows}</tbody></table>
+  """
+             f"""</section>
 
   <section id="artefacts">
     <h2>Links to all structured artefacts</h2>
-    <ul>{artefact_items}</ul>
+    """
+             f"""<ul>{artefact_items}</ul>
   </section>
 
   <section id="control">
     <h2>Report control block</h2>
-    <table><tbody>{control_rows}</tbody></table>
+    """
+             f"""<table><tbody>{control_rows}</tbody></table>
   </section>
 
   <section id="final-verdict">
-    <h2>Final verdict and definition of done</h2>
+    <h2>Final """
+             f"""verdict and definition of done</h2>
     <p><strong>Verdict:</strong> {html_badge(verdict)}</p>
-    <p>Definition of done: all required routes and viewports execute, skipped required tasks count is 0, screenshots exist for all rendered FAIL records and key rendered PASS examples, callback artefact URLs resolve under R2_PUBLIC_BASE_URL_AUDITS, and P0/P1 mobile groups are cleared.</p>
+    """
+             f"""<p>Definition of done: all required routes and viewports execute, skipped required tasks count is 0, """
+             f"""screenshots exist for all rendered FAIL records and key rendered PASS examples, callback artefact URLs """
+             f"""resolve under R2_PUBLIC_BASE_URL_AUDITS, and P0/P1 mobile groups are cleared.</p>
   </section>
   """
+         )
   return html_report_shell("Jonathan Harris Mobile UX Hard-Gate Audit", body)
 
 
@@ -2613,7 +2823,11 @@ def status_for_check(records: list[dict[str, Any]], check: str, *, route: str | 
   if applicable_only:
     values = [value for value in values if value in {"PASS", "FAIL"}]
   if not values:
-    return matrix_entry(NOT_ASSESSED_STATUS, f"No applicable rendered {check} PASS/FAIL evidence was recorded by this mobile hard-gate; no unsupported claim is made.", "mandatory-mobile-scorecard.json")
+    return matrix_entry(
+      NOT_ASSESSED_STATUS,
+      f"No applicable rendered {check} PASS/FAIL evidence was recorded by this mobile hard-gate; no unsupported claim is made.",
+      "mandatory-mobile-scorecard.json",
+    )
   if any(value == "FAIL" for value in values):
     return matrix_entry("FAIL", f"Rendered Stage 3 recorded {check} failure(s).", "mandatory-mobile-scorecard.json")
   return matrix_entry("PASS", f"Rendered Stage 3 recorded {check} PASS for applicable row(s).", "mandatory-mobile-scorecard.json")
@@ -2625,7 +2839,11 @@ def build_verification_matrix(records: list[dict[str, Any]], issues: list[dict[s
   return {
     "homepage CTA clarity": status_for_check(records, "ctaContinuity", route="/"),
     "conversion-path continuity": status_for_check(records, "ctaContinuity"),
-    "buy-now route correctness": matrix_entry("PASS" if "ctaContinuity" not in failed_checks else "FAIL", "Verified only through rendered CTA continuity checks; no unsupported manual route claim is made.", "mandatory-mobile-scorecard.json"),
+    "buy-now route correctness": matrix_entry(
+      "PASS" if "ctaContinuity" not in failed_checks else "FAIL",
+      "Verified only through rendered CTA continuity checks; no unsupported manual route claim is made.",
+      "mandatory-mobile-scorecard.json",
+    ),
     "navigation consistency": status_for_check(records, "hamburgerNavigation"),
     "viewport correctness": status_for_check(records, "viewportCorrectness"),
     "responsive coverage across layout states": status_for_check(records, "responsiveCoverage"),
@@ -2638,12 +2856,34 @@ def build_verification_matrix(records: list[dict[str, Any]], issues: list[dict[s
     "image responsiveness": status_for_check(records, "imageResponsiveness"),
     "form usability where relevant": status_for_check(records, "formUsability"),
     "table/comparison handling where relevant": status_for_check(records, "tableComparisonHandling"),
-    "visual design consistency": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Screenshots capture rendered visual state, but this deterministic mobile audit does not issue subjective brand/design PASS or FAIL without a specific rendered layout defect.", "screenshot-manifest.json"),
-    "cover art quality": matrix_entry(NOT_ASSESSED_STATUS, "Subjective cover-art quality is outside this mobile hard-gate. Image responsiveness is assessed separately and must not be converted into a cover-art quality judgement.", "mandatory-mobile-scorecard.json"),
+    "visual design consistency": matrix_entry(
+      EVIDENCE_CAPTURED_STATUS,
+      (
+        "Screenshots capture rendered visual state, but this deterministic mobile audit does not issue subjective "
+        "brand/design PASS or FAIL without a specific rendered layout defect."
+      ),
+      "screenshot-manifest.json",
+    ),
+    "cover art quality": matrix_entry(
+      NOT_ASSESSED_STATUS,
+      (
+        "Subjective cover-art quality is outside this mobile hard-gate. Image responsiveness is assessed separately and "
+        "must not be converted into a cover-art quality judgement."
+      ),
+      "mandatory-mobile-scorecard.json",
+    ),
     "cover art and image presentation responsiveness": status_for_check(records, "imageResponsiveness"),
-    "metadata consistency": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Preflight captured live homepage metadata and repository viewport inventory; detailed SEO scoring belongs to the SEO/AEO/GEO audit.", "preflight.json"),
+    "metadata consistency": matrix_entry(
+      EVIDENCE_CAPTURED_STATUS,
+      "Preflight captured live homepage metadata and repository viewport inventory; detailed SEO scoring belongs to the SEO/AEO/GEO audit.",
+      "preflight.json",
+    ),
     "schema correctness": matrix_entry(NOT_ASSESSED_STATUS, "Schema correctness is outside this mobile-only audit unless rendered evidence exposes a deterministic mobile defect.", "preflight.json"),
-    "redirects": matrix_entry(EVIDENCE_CAPTURED_STATUS, "Mobile rendered CTA/live-route checks captured route behaviour relevant to this audit, but a full redirect-chain audit is outside this report.", "execution.json"),
+    "redirects": matrix_entry(
+      EVIDENCE_CAPTURED_STATUS,
+      "Mobile rendered CTA/live-route checks captured route behaviour relevant to this audit, but a full redirect-chain audit is outside this report.",
+      "execution.json",
+    ),
     "live rendered 404 behaviour": status_for_check(records, "live404Verification", route=LIVE_404_ROUTE),
     "release readiness": matrix_entry("FAIL" if any_p0_or_p1 else "PASS", "Release readiness follows completed Stage 3 evidence and P0/P1 severity bands.", "report.json"),
   }
@@ -2705,7 +2945,16 @@ def weighted_scorecard(score: float | None, issues: list[dict[str, Any]]) -> lis
   ]
 
 
-def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], routes: list[str], records: list[dict[str, Any]], issues: list[dict[str, Any]], coverage: dict[str, Any], reconciliation: dict[str, Any], started_at: str) -> dict[str, Any]:
+def build_summary(
+  args: argparse.Namespace,
+  preflight_data: dict[str, Any],
+  routes: list[str],
+  records: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage: dict[str, Any],
+  reconciliation: dict[str, Any],
+  started_at: str,
+) -> dict[str, Any]:
   failure_count = record_failures(records)
   screenshot_count = len({ref.get("relativePath") for record in records for ref in record.get("screenshotRefs", []) if ref.get("relativePath")})
   score = mobile_quality_score(records, coverage["complete"])
@@ -2788,7 +3037,15 @@ def build_summary(args: argparse.Namespace, preflight_data: dict[str, Any], rout
     "finishedAt": utc_now(),
   }
 
-def write_failure_payload(args: argparse.Namespace, output_dir: Path, message: str, preflight_data: dict[str, Any] | None = None, extra: dict[str, Any] | None = None, *, allow_upload: bool = True) -> dict[str, Any]:
+def write_failure_payload(
+  args: argparse.Namespace,
+  output_dir: Path,
+  message: str,
+  preflight_data: dict[str, Any] | None = None,
+  extra: dict[str, Any] | None = None,
+  *,
+  allow_upload: bool = True,
+) -> dict[str, Any]:
   now = utc_now()
   failure_artifacts = ensure_failure_artifacts(args, output_dir, message, preflight_data, extra)
   hard_gate_blocked = message == HARD_GATE_MESSAGE
@@ -2922,7 +3179,15 @@ def main() -> int:
     preflight_data["checkpoints"].append(checkpoint("AUDIT STORAGE CHECKPOINT", [], [block], False))
     write_json(output_dir / "preflight.json", preflight_data)
     write_json(output_dir / "coverage.json", {"complete": False, "stage3Blocks": [block], "skippedRequiredTasksCount": 1})
-    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": block["blocker"], "workflowFailure": True}, allow_upload=False) else 1
+    write_failure_payload(
+      args,
+      output_dir,
+      STORAGE_GATE_MESSAGE,
+      preflight_data,
+      {"stage3Blocks": [block], "storageUploadError": block["blocker"], "workflowFailure": True},
+      allow_upload=False,
+    )
+    return 1
 
   exception_sweep_routes = workbook_mobile_risk_routes(workbook_info, excludes)
   routes, route_blocks, required_routes = detect_required_routes(REPO_ROOT, workbook_info, excludes)
@@ -2939,7 +3204,12 @@ def main() -> int:
     f"exceptionSweepInventory={len(exception_sweep_routes)} routeBlocks={len(route_blocks)}",
     flush=True,
   )
-  preflight_data["checkpoints"].append(checkpoint("STAGE 2 CHECKPOINT", ["repository template families", "shared CSS/JS/navigation", "page-family mobile risk register"], route_blocks, not route_blocks))
+  preflight_data["checkpoints"].append(checkpoint(
+    "STAGE 2 CHECKPOINT",
+    ["repository template families", "shared CSS/JS/navigation", "page-family mobile risk register"],
+    route_blocks,
+    not route_blocks,
+  ))
   write_json(output_dir / "preflight.json", preflight_data)
 
   if route_blocks:
@@ -3015,7 +3285,15 @@ def main() -> int:
     uploaded = upload_artifacts_if_configured(args.report_prefix, output_dir, require=True)
   except Exception as exc:  # pragma: no cover - depends on live R2 credentials
     block = {"stage": "R2 audit upload", "blocker": str(exc), "reason": "Completed Mobile UX audit cannot be published to the required audits bucket."}
-    return 1 if write_failure_payload(args, output_dir, STORAGE_GATE_MESSAGE, preflight_data, {"stage3Blocks": [block], "storageUploadError": str(exc), "workflowFailure": True}, allow_upload=False) else 1
+    write_failure_payload(
+      args,
+      output_dir,
+      STORAGE_GATE_MESSAGE,
+      preflight_data,
+      {"stage3Blocks": [block], "storageUploadError": str(exc), "workflowFailure": True},
+      allow_upload=False,
+    )
+    return 1
 
   callback_payload = {
     "auditType": "mobile-ux",

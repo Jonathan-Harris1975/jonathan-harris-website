@@ -492,7 +492,11 @@ def build_family_diagnostics(pages: list[dict[str, Any]]) -> list[dict[str, Any]
       )
     elif page_type == "podcast transcript":
       observed.append(
-        f"{len(transcript_structure_gap_pages)}/{len(analysed)} transcript page(s) lack verified above-the-fold summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body."
+        (
+            f"{len(transcript_structure_gap_pages)}/{len(analysed)} transcript page(s) lack verified above-the-fold "
+            f"summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript "
+            f"body."
+        )
       )
     elif page_type == "blog article":
       observed.append(
@@ -1268,7 +1272,19 @@ def crawl_and_analyse(base_url: str, discovered: dict[str, dict[str, Any]], excl
         queue.append(linked_url)
   return [processed[url] for url in sorted(processed.keys())]
 
-def issue_record(issue_id: str, severity: str, confidence: str, lens: str, root_cause: str, affected: str, evidence: str, why: str, remediation: str, effort: str = "Low", owner: str = "Engineering") -> dict[str, Any]:
+def issue_record(
+  issue_id: str,
+  severity: str,
+  confidence: str,
+  lens: str,
+  root_cause: str,
+  affected: str,
+  evidence: str,
+  why: str,
+  remediation: str,
+  effort: str = "Low",
+  owner: str = "Engineering",
+) -> dict[str, Any]:
   return {
     "issueId": issue_id,
     "severity": severity,
@@ -1336,7 +1352,11 @@ def collect_issues(
       "scripts/check_ungoverned_routes.py; blog/posts/; podcast/episodes/; workbook Pages sheet",
       f"EXCLUDED_ROUTE_PREFIXES contains {', '.join(dynamic_exclusions)}.",
       "High-value dynamic blog and podcast routes can exist live without workbook, sitemap, repo, or audit parity.",
-      "Remove canonical dynamic route families from EXCLUDED_ROUTE_PREFIXES and replace the blanket exclusions with a generated route manifest consumed by sitemap, workbook/governance checks, and audit coverage. Keep only compatibility redirect pages such as podcast/TT-* exempted.",
+      (
+          "Remove canonical dynamic route families from EXCLUDED_ROUTE_PREFIXES and replace the blanket exclusions with "
+          "a generated route manifest consumed by sitemap, workbook/governance checks, and audit coverage. Keep only "
+          "compatibility redirect pages such as podcast/TT-* exempted."
+      ),
       "Medium",
       "Engineering / SEO",
     ))
@@ -1353,7 +1373,11 @@ def collect_issues(
       "data/podcast-episodes.json; scripts/generate_podcast_episodes.py; sitemap.xml; podcast episode canonicals",
       f"{duplicate.get('count')} podcast episode records share the same page_url: {duplicate.get('pageUrl')}.",
       "Multiple different episodes collapse into one URL, destroying episode-level canonical integrity and making sitemap coverage misleading.",
-      "Make podcast slugs unique by appending session_id or ISO date when a title slug repeats. Regenerate episode pages, update data/podcast-episodes.json, update sitemap/workbook or dynamic inventory, and add controlled redirects only where a single legacy canonical is deliberately chosen.",
+      (
+          "Make podcast slugs unique by appending session_id or ISO date when a title slug repeats. Regenerate episode "
+          "pages, update data/podcast-episodes.json, update sitemap/workbook or dynamic inventory, and add controlled "
+          "redirects only where a single legacy canonical is deliberately chosen."
+      ),
       "Medium",
       "Engineering",
     ))
@@ -1371,7 +1395,11 @@ def collect_issues(
       "sitemap.xml; transcript archive; transcript leaf pages under /transcripts/TT-*.html",
       f"{missing_transcripts} transcript URLs from data/podcast-episodes.json are absent from sitemap.xml. Sample: {', '.join(sample_paths)}.",
       "Transcript leaves contain citation-ready podcast text, but crawlers and LLM retrieval systems are not being given the full URL ledger.",
-      "Generate transcript sitemap entries from data/podcast-episodes.json and podcast RSS transcript tags. Include lastmod from episode date and add transcript URLs to workbook Pages or a generated dynamic route inventory verified in CI.",
+      (
+          "Generate transcript sitemap entries from data/podcast-episodes.json and podcast RSS transcript tags. Include "
+          "lastmod from episode date and add transcript URLs to workbook Pages or a generated dynamic route inventory "
+          "verified in CI."
+      ),
       "Low / Medium",
       "SEO / Engineering",
     ))
@@ -1386,13 +1414,20 @@ def collect_issues(
       "llms.txt; llm-index.json",
       "llms.txt is detected as ebook-only and llm-index.json does not expose blog, podcast, transcript, glossary, or full topic-guide entities.",
       "The site hides its best retrieval assets from LLM-friendly discovery files, weakening generative search visibility outside the ebook catalogue.",
-      "Expand llms.txt and llm-index.json to include homepage, bio, topic guides, glossary, comparison, blog hub, latest weekly posts, podcast hub, recent episode pages, transcript archive, and transcript leaves with short descriptions and entity relationships.",
+      (
+          "Expand llms.txt and llm-index.json to include homepage, bio, topic guides, glossary, comparison, blog hub, "
+          "latest weekly posts, podcast hub, recent episode pages, transcript archive, and transcript leaves with short "
+          "descriptions and entity relationships."
+      ),
       "Low / Medium",
       "GEO / Engineering",
     ))
 
   podcast_diag = diag_by_type.get("podcast episode") or {}
-  if podcast_diag and (podcast_diag.get("takeawayBlockCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2) or podcast_diag.get("topicOrBookLinkCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2)):
+  if podcast_diag and (
+    podcast_diag.get("takeawayBlockCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2)
+    or podcast_diag.get("topicOrBookLinkCount", 0) < max(1, podcast_diag.get("analysedUrls", 0) // 2)
+  ):
     add(issue_record(
       "JH-AEO-001",
       "High",
@@ -1402,7 +1437,11 @@ def collect_issues(
       podcast_diag.get("sourceFile", "live podcast episode routes"),
       f"Podcast episode family evidence: {', '.join(podcast_diag.get('observedTemplateEvidence', []))}",
       "Episode pages cannot win direct-answer or generative citation surfaces if they remain thin wrappers around audio and a transcript link.",
-      "Update the episode template to render a 60-word answer-first summary, 3-5 key takeaways, discussed entities/topics, transcript preview anchors, related topic guides/books, PodcastEpisode JSON-LD, FAQPage JSON-LD, and canonical transcript relationship.",
+      (
+          "Update the episode template to render a 60-word answer-first summary, 3-5 key takeaways, discussed "
+          "entities/topics, transcript preview anchors, related topic guides/books, PodcastEpisode JSON-LD, FAQPage "
+          "JSON-LD, and canonical transcript relationship."
+      ),
       "Medium",
       "Content / Engineering",
     ))
@@ -1417,9 +1456,16 @@ def collect_issues(
       "AEO / GEO / Transcript",
       "template / content structure",
       transcript_diag.get("sourceFile", "live transcript routes"),
-      f"{analysed_transcripts}/{analysed_transcripts} transcript page(s) lack verified above-the-fold summary, key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body.",
+      (
+          f"{analysed_transcripts}/{analysed_transcripts} transcript page(s) lack verified above-the-fold summary, "
+          f"key-takeaway, topic-index, timestamp/section-anchor, or entity-index evidence before the transcript body."
+      ),
       "Long transcript pages without summary-led chunking are harder for answer engines and LLM retrievers to cite accurately.",
-      "Before the transcript body, render episode summary, what changed this week, key named entities, five bullet takeaways, topic index, timestamped or sectioned anchors, related books/topics, and Transcript/PodcastEpisode schema alignment.",
+      (
+          "Before the transcript body, render episode summary, what changed this week, key named entities, five bullet "
+          "takeaways, topic index, timestamped or sectioned anchors, related books/topics, and Transcript/PodcastEpisode "
+          "schema alignment."
+      ),
       "Medium",
       "Editorial / Engineering",
     ))
@@ -1451,7 +1497,10 @@ def collect_issues(
       "scripts/ebook_pipeline.py; all ebook detail pages",
       f"scripts/ebook_pipeline.py contains a hard heading trim of {ebook_trim} characters.",
       "Hard-trimmed headings can cut meaning mid-phrase and weaken answer-style headings on otherwise strong ebook pages.",
-      "Remove the hard character slice. Use semantic heading source fields or a word-safe shorten utility that preserves whole words and only shortens above 96-110 characters. Let CSS handle wrapping.",
+      (
+        "Remove the hard character slice. Use semantic heading source fields or a word-safe shorten utility that "
+        "preserves whole words and only shortens above 96-110 characters. Let CSS handle wrapping."
+      ),
       "Low",
       "Engineering / Content",
     ))
@@ -1781,7 +1830,24 @@ def build_report_control(pages: list[dict[str, Any]], coverage_rows: list[dict[s
   }
 
 
-def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str, Any], pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], template_annex: list[dict[str, Any]], gap_matrix: list[dict[str, Any]], page_type_findings: list[dict[str, Any]], priority_pages: list[dict[str, Any]], artefacts: dict[str, str], claude_analysis: dict[str, Any] | None = None, analysis_state: dict[str, Any] | None = None, source_ledger: list[dict[str, Any]] | None = None, source_mismatches: list[dict[str, Any]] | None = None, template_diagnostics: list[dict[str, Any]] | None = None) -> str:
+def build_report(
+  base_url: str,
+  workbook: WorkbookInfo,
+  discovery_meta: dict[str, Any],
+  pages: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage_rows: list[dict[str, Any]],
+  template_annex: list[dict[str, Any]],
+  gap_matrix: list[dict[str, Any]],
+  page_type_findings: list[dict[str, Any]],
+  priority_pages: list[dict[str, Any]],
+  artefacts: dict[str, str],
+  claude_analysis: dict[str, Any] | None = None,
+  analysis_state: dict[str, Any] | None = None,
+  source_ledger: list[dict[str, Any]] | None = None,
+  source_mismatches: list[dict[str, Any]] | None = None,
+  template_diagnostics: list[dict[str, Any]] | None = None,
+) -> str:
   analysis_state = analysis_state or {
     "available": bool(claude_analysis),
     "completionState": "Complete" if claude_analysis else "Failed-gate",
@@ -1806,28 +1872,48 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   overall_conversion = round(mean((page["scores"]["conversion"] / 5 * 100) if page["scores"]["conversion"] else 100 for page in conversion_pages)) if conversion_pages else 0
 
   family_rows = "".join(
-    f"<tr><td>{row['pageType']}</td><td>{row['discovered']}</td><td>{row['analysed']}</td><td>{row.get('excluded', 0)}</td><td>{row['failed']}</td><td>{row['coveragePercent']}%</td><td>{row['averageScore']}</td></tr>"
+    f"<tr><td>{row['pageType']}</td><td>{row['discovered']}</td><td>{row['analysed']}</td>"
+    f"<td>{row.get('excluded', 0)}</td><td>{row['failed']}</td><td>{row['coveragePercent']}%</td>"
+    f"<td>{row['averageScore']}</td></tr>"
     for row in coverage_rows
   )
   issue_rows = "".join(
-    f"<tr><td>{item['issueId']}</td><td>{item['severity']}</td><td>{item.get('confidence', '')}</td><td>{item['auditLens']}</td><td>{item.get('rootCauseLevel', '')}</td><td>{item['affected']}</td><td>{item.get('evidenceObserved', '')}</td><td>{item['whyItMatters']}</td><td>{item['exactRemediation']}</td><td>{item.get('expectedGain', '')}</td><td>{item.get('estimatedEffort', '')}</td><td>{item.get('recommendedOwner', '')}</td><td>{item.get('verificationMethod', '')}</td></tr>"
+    f"<tr><td>{item['issueId']}</td><td>{item['severity']}</td><td>{item.get('confidence', '')}</td>"
+    f"<td>{item['auditLens']}</td><td>{item.get('rootCauseLevel', '')}</td><td>{item['affected']}</td>"
+    f"<td>{item.get('evidenceObserved', '')}</td><td>{item['whyItMatters']}</td>"
+    f"<td>{item['exactRemediation']}</td><td>{item.get('expectedGain', '')}</td>"
+    f"<td>{item.get('estimatedEffort', '')}</td><td>{item.get('recommendedOwner', '')}</td>"
+    f"<td>{item.get('verificationMethod', '')}</td></tr>"
     for item in issues
   ) or "<tr><td colspan='13'>No significant issues were confirmed from the available evidence.</td></tr>"
   page_type_rows = "".join(
-    f"<tr><td>{item['pageType']}</td><td>{item['count']}</td><td>{item['coverageState']}</td><td>{item['averageScore']}</td><td>{item['lowestScore']}–{item['highestScore']}</td><td><code>{item['exampleUrl']}</code></td></tr>"
+    f"<tr><td>{item['pageType']}</td><td>{item['count']}</td><td>{item['coverageState']}</td>"
+    f"<td>{item['averageScore']}</td><td>{item['lowestScore']}–{item['highestScore']}</td>"
+    f"<td><code>{item['exampleUrl']}</code></td></tr>"
     for item in page_type_findings
   )
   priority_rows = "".join(
-    f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{page['status']}</td><td>{page['meta']['title'] or '(missing title)'}</td><td>{page['meta']['metaDescription'] and 'Present' or 'Missing'}</td><td>{page['meta']['canonical'] and 'Present' or 'Missing'}</td><td>{page['scores']['aeo']}/20</td><td>{page['scores']['geo']}/20</td><td>{page['total']}</td><td>{page['grade']}</td></tr>"
+    f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{page['status']}</td>"
+    f"<td>{page['meta']['title'] or '(missing title)'}</td>"
+    f"<td>{page['meta']['metaDescription'] and 'Present' or 'Missing'}</td>"
+    f"<td>{page['meta']['canonical'] and 'Present' or 'Missing'}</td>"
+    f"<td>{page['scores']['aeo']}/20</td><td>{page['scores']['geo']}/20</td>"
+    f"<td>{page['total']}</td><td>{page['grade']}</td></tr>"
     for page in priority_pages
   )
   redirect_compatibility_pages = build_redirect_compatibility_pages(pages)
   redirect_compatibility_rows = "".join(
-    f"<tr><td><code>{_esc(page['url'])}</code></td><td>{_esc(page.get('canonicalNormalised') or page['meta'].get('canonical') or '')}</td><td>{_esc(page['coverageState'])}</td><td>{_esc(page.get('exclusionReason') or 'Compatibility redirect / legacy podcast route')}</td></tr>"
+    f"<tr><td><code>{_esc(page['url'])}</code></td>"
+    f"<td>{_esc(page.get('canonicalNormalised') or page['meta'].get('canonical') or '')}</td>"
+    f"<td>{_esc(page['coverageState'])}</td>"
+    f"<td>{_esc(page.get('exclusionReason') or 'Compatibility redirect / legacy podcast route')}</td></tr>"
     for page in redirect_compatibility_pages[:80]
   )
   template_rows = "".join(
-    f"<tr><td>{row['pageType']}</td><td>{row['pagesAffected']}</td><td><code>{row['sourceFile']}</code></td><td>{row['averageScore']}</td><td>{'; '.join(row['repeatedStrengths'])}</td><td>{'; '.join(row['repeatedDefects'])}</td><td>{row['fixPriority']}</td></tr>"
+    f"<tr><td>{row['pageType']}</td><td>{row['pagesAffected']}</td>"
+    f"<td><code>{row['sourceFile']}</code></td><td>{row['averageScore']}</td>"
+    f"<td>{'; '.join(row['repeatedStrengths'])}</td><td>{'; '.join(row['repeatedDefects'])}</td>"
+    f"<td>{row['fixPriority']}</td></tr>"
     for row in template_annex
   )
   gap_rows = "".join(
@@ -1835,19 +1921,37 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     for row in gap_matrix
   )
   coverage_appendix_rows = "".join(
-    f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td><td>{', '.join(sorted(page['sources']))}</td><td>{page['status']}</td><td>{page['canonicalNormalised'] or page['meta']['canonical'] or '—'}</td><td>{page['indexability']}</td><td>{page['coverageState']}</td><td>{page['total']} / {page['grade']}</td><td>{page['riskFlag']}</td></tr>"
+    (
+        f"<tr><td><code>{page['url']}</code></td><td>{page['pageType']}</td>"
+        f"<td>{', '.join(sorted(page['sources']))}</td><td>{page['status']}</td>"
+        f"<td>{page['canonicalNormalised'] or page['meta']['canonical'] or '—'}</td>"
+        f"<td>{page['indexability']}</td><td>{page['coverageState']}</td><td>{page['total']} "
+        f"/ {page['grade']}</td><td>{page['riskFlag']}</td></tr>"
+    )
     for page in pages
   )
   source_ledger_rows = "".join(
-    f"<tr><td>{_esc(row.get('source', ''))}</td><td>{_esc(row.get('count', ''))}</td><td>{_esc(row.get('role', ''))}</td><td>{_esc(row.get('status') or row.get('confidence') or row.get('state') or '')}</td><td>{_esc(row.get('evidence') or row.get('notes') or row.get('detail') or '')}</td></tr>"
+    f"<tr><td>{_esc(row.get('source', ''))}</td><td>{_esc(row.get('count', ''))}</td>"
+    f"<td>{_esc(row.get('role', ''))}</td>"
+    f"<td>{_esc(row.get('status') or row.get('confidence') or row.get('state') or '')}</td>"
+    f"<td>{_esc(row.get('evidence') or row.get('notes') or row.get('detail') or '')}</td></tr>"
     for row in source_ledger
   ) or "<tr><td colspan='5'>No source ledger was supplied by the analysis context.</td></tr>"
   source_mismatch_rows = "".join(
-    f"<tr><td>{_esc(row.get('id') or row.get('issueId') or row.get('mismatch') or '')}</td><td>{_esc(row.get('severity') or row.get('confidence') or '')}</td><td>{_esc(row.get('sources') or row.get('affected') or row.get('sourcePair') or '')}</td><td>{_esc(row.get('evidence') or row.get('evidenceObserved') or row.get('mismatch') or '')}</td><td>{_esc(row.get('impact') or row.get('whyItMatters') or '')}</td><td>{_esc(row.get('fix') or row.get('requiredAction') or row.get('exactRemediation') or '')}</td></tr>"
+    f"<tr><td>{_esc(row.get('id') or row.get('issueId') or row.get('mismatch') or '')}</td>"
+    f"<td>{_esc(row.get('severity') or row.get('confidence') or '')}</td>"
+    f"<td>{_esc(row.get('sources') or row.get('affected') or row.get('sourcePair') or '')}</td>"
+    f"<td>{_esc(row.get('evidence') or row.get('evidenceObserved') or row.get('mismatch') or '')}</td>"
+    f"<td>{_esc(row.get('impact') or row.get('whyItMatters') or '')}</td>"
+    f"<td>{_esc(row.get('fix') or row.get('requiredAction') or row.get('exactRemediation') or '')}</td></tr>"
     for row in source_mismatches
   ) or "<tr><td colspan='6'>No material source mismatch was supplied by the analysis context.</td></tr>"
   template_diagnostic_rows = "".join(
-    f"<tr><td><code>{_esc(row.get('sourceFile', ''))}</code></td><td>{_esc(row.get('area', ''))}</td><td>{_esc(row.get('pagesAffected', ''))}</td><td>{_esc(row.get('observedLogic', ''))}</td><td>{_esc(row.get('metadataLogic', ''))}</td><td>{_esc(row.get('schemaLogic', ''))}</td><td>{_esc(row.get('answerPatternGap', ''))}</td><td>{_esc(row.get('generativeSearchGap', ''))}</td><td>{_esc(row.get('fixPriority', ''))}</td></tr>"
+    f"<tr><td><code>{_esc(row.get('sourceFile', ''))}</code></td><td>{_esc(row.get('area', ''))}</td>"
+    f"<td>{_esc(row.get('pagesAffected', ''))}</td><td>{_esc(row.get('observedLogic', ''))}</td>"
+    f"<td>{_esc(row.get('metadataLogic', ''))}</td><td>{_esc(row.get('schemaLogic', ''))}</td>"
+    f"<td>{_esc(row.get('answerPatternGap', ''))}</td>"
+    f"<td>{_esc(row.get('generativeSearchGap', ''))}</td><td>{_esc(row.get('fixPriority', ''))}</td></tr>"
     for row in template_diagnostics
   )
 
@@ -1904,7 +2008,11 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
   active_issues_html = render_issue_summary_table(issue_items_for_render)
   active_issue_records_html = render_issue_record_cards(full_issue_items_for_render)
   active_page_types_html = render_llm_page_type_table(llm_page_types) if llm_page_types else ""
-  active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else f"<table class='tight'><thead><tr><th>Page type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
+  active_gap_matrix_html = render_llm_gap_matrix(llm_gap_matrix) if llm_gap_matrix else (
+                                                                                            f"<table class='tight'><thead><tr><th>Page "
+                                                                                            f"type</th><th>SEO</th><th>AEO</th><th>GEO</th><th>Confidence</th><th>Top missing element</th><th>Business "
+                                                                                            f"impact</th></tr></thead><tbody>{gap_rows}</tbody></table>"
+                                                                                        )
   active_remediation_html = render_llm_remediation_table(llm_remediation)
 
   overall_verdict = llm_summary.get("overallVerdict") or (
@@ -1960,181 +2068,408 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     """
   baseline_score_note = ""
   if failed_gate:
-    baseline_score_note = f"""
-    <p class="section-note"><strong>Diagnostic-only baseline:</strong> heuristic collection produced SEO {overall_seo}, AEO {overall_aeo}, GEO {overall_geo}, Entity Authority {overall_entity}, and Conversion Support {overall_conversion}. These are not final forensic scores and must not be used as a release-ready verdict.</p>
+    baseline_score_note = (
+                              f"""
+    <p class="section-note"><strong>Diagnostic-only baseline:</strong> heuristic collection produced SEO """
+                              f"""{overall_seo}, AEO {overall_aeo}, GEO {overall_geo}, Entity Authority {overall_entity}, and Conversion """
+                              f"""Support {overall_conversion}. These are not final forensic scores and must not be used as a release-ready """
+                              f"""verdict.</p>
     """
+                          )
 
-  body = f"""
+  material_limitations = (
+    "AI forensic synthesis was unavailable; no final release-ready verdict was issued."
+    if failed_gate
+    else "No AI-analysis limitation was detected. Non-AI data limitations are listed in the method section."
+  )
+  top_priorities_html = (
+    "<br>".join(f'<span class="priority-item">{_esc(priority)}</span>' for priority in llm_top5)
+    if llm_top5
+    else (
+      "; ".join(item["issueId"] + " " + item["whyItMatters"] for item in top_actions)
+      if top_actions
+      else "No Critical or High issue required escalation from the available evidence."
+    )
+  )
+  quick_wins_html = (
+    "<br>".join(_esc(win) for win in llm_quickwins)
+    if llm_quickwins
+    else (
+      "; ".join(item["exactRemediation"] for item in quick_wins[:3])
+      if quick_wins
+      else "No immediate quick-win issue was confirmed."
+    )
+  )
+  analysis_badge = (
+    '<p class="llm-badge">✦ Scores and priorities enriched by LLM forensic analysis</p>'
+    if ai_available
+    else '<p class="llm-badge failed">⚠ AI FORENSIC ANALYSIS UNAVAILABLE — failed gate, no final verdict</p>'
+  )
+  llm_analysis_copy = (
+    "Forensic narrative and ranked issues generated using the configured AI analysis path and the full context package."
+    if ai_available
+    else "Failed. The report was deliberately marked as failed-gate rather than completed."
+  )
+  aeo_lens_html = _lens(
+    "aeo",
+    "Answer-first summaries, extractable question headings, FAQs, tables, and snippet-friendly structures were measured "
+    "family by family.",
+  )
+  podcast_systems_lens_html = _lens(
+    "blogPodcastTranscriptSystems",
+    "Blog article, podcast, archive, topic, catalogue, and book families were inventoried and fully analysed rather than "
+    "silently sampled.",
+  )
+  page_types_content = active_page_types_html or (
+    "<table class='tight'><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th>"
+    "<th>Average score</th><th>Range</th><th>Example</th></tr></thead>"
+    f"<tbody>{page_type_rows}</tbody></table>"
+  )
+  redirect_compatibility_section = (
+    '<section id="redirect-compatibility"><h2>Redirect / compatibility route annex</h2>'
+    '<p class="section-note">These routes are compatibility wrappers and should be verified for canonical/redirect intent, '
+    'not scored as priority content pages.</p><table class="tight"><thead><tr><th>URL</th><th>Canonical target</th>'
+    f'<th>Coverage state</th><th>Reason</th></tr></thead><tbody>{redirect_compatibility_rows}</tbody></table></section>'
+    if redirect_compatibility_rows
+    else ""
+  )
+  template_diagnostics_section = (
+    '<h3>Template diagnostics</h3><table class="tight"><thead><tr><th>Source</th><th>Area</th><th>Pages</th>'
+    '<th>Observed logic</th><th>Metadata logic</th><th>Schema logic</th><th>Answer-pattern gap</th><th>GEO gap</th>'
+    f'<th>Priority</th></tr></thead><tbody>{template_diagnostic_rows}</tbody></table>'
+    if template_diagnostic_rows
+    else ""
+  )
+  code_remediation_section = (
+    '<section id="code-remediation"><h2>Code-level remediation appendix</h2>'
+    '<p class="llm-badge">✦ Exact corrected patterns from LLM forensic analysis</p>'
+    + active_remediation_html
+    + '</section>'
+    if active_remediation_html
+    else ""
+  )
+
+  body = (
+             f"""
   <style>
-    .llm-badge{{display:inline-block;margin:0 0 12px;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#ecfdf5;color:#065f46;border:1px solid #6ee7b7;}}
+    .llm-badge{{display:inline-block;margin:0 0 12px;padding:5px """
+             f"""12px;border-radius:999px;font-size:12px;font-weight:700;background:#ecfdf5;color:#065f46;border:1px solid """
+             f"""#6ee7b7;}}
     .llm-badge.heuristic{{background:#fef9c3;color:#92400e;border-color:#fcd34d;}}
-    .llm-badge.failed{{background:#fee2e2;color:#991b1b;border-color:#fecaca;}}
-    .failed-gate{{border-color:#fecaca;background:#fff7f7;}}
+    """
+             f""".llm-badge.failed{{background:#fee2e2;color:#991b1b;border-color:#fecaca;}}
+    """
+             f""".failed-gate{{border-color:#fecaca;background:#fff7f7;}}
     .failed-gate h2{{color:#991b1b;}}
-    .control-table th{{width:260px;background:#f8fafc;}}
-    .llm-verdict{{font-size:15px;line-height:1.65;border-left:3px solid #4338ca;padding-left:12px;margin:0 0 16px;}}
+    """
+             f""".control-table th{{width:260px;background:#f8fafc;}}
+    """
+             f""".llm-verdict{{font-size:15px;line-height:1.65;border-left:3px solid #4338ca;padding-left:12px;margin:0 0 """
+             f"""16px;}}
     .kpi .grade{{display:block;font-size:28px;font-weight:800;margin-top:4px;}}
-    .priority-item{{display:block;margin:4px 0;padding:4px 8px;border-radius:6px;background:#f3f4f6;font-size:13px;}}
-    .lens-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}}
-    .lens-block{{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;}}
-    .lens-block--full{{grid-column:1/-1;}}
+    """
+             f""".priority-item{{display:block;margin:4px 0;padding:4px """
+             f"""8px;border-radius:6px;background:#f3f4f6;font-size:13px;}}
+    """
+             f""".lens-grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}}
+    """
+             f""".lens-block{{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;}}
+    """
+             f""".lens-block--full{{grid-column:1/-1;}}
     .lens-block h3{{margin:0 0 8px;font-size:14px;color:#1e3a5f;}}
-    .lens-block p{{margin:0;font-size:13px;line-height:1.6;color:#374151;}}
-    .sev-critical td{{background:#fef2f2;}}
+    """
+             f""".lens-block p{{margin:0;font-size:13px;line-height:1.6;color:#374151;}}
+    .sev-critical """
+             f"""td{{background:#fef2f2;}}
     .sev-high td{{background:#fff7ed;}}
     .sev-medium td{{background:#fefce8;}}
-    .issue-summary th,.issue-summary td{{font-size:11px;vertical-align:top;}}
-    .issue-record{{border:1px solid #dbe4ef;border-radius:12px;padding:16px;margin:14px 0;background:#ffffff;page-break-inside:avoid;break-inside:avoid;}}
-    .issue-record h3{{margin:0 0 8px;font-size:16px;color:#102033;}}
+  """
+             f"""  .issue-summary th,.issue-summary td{{font-size:11px;vertical-align:top;}}
+    .issue-record{{border:1px """
+             f"""solid #dbe4ef;border-radius:12px;padding:16px;margin:14px """
+             f"""0;background:#ffffff;page-break-inside:avoid;break-inside:avoid;}}
+    .issue-record h3{{margin:0 0 """
+             f"""8px;font-size:16px;color:#102033;}}
     .issue-meta{{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;}}
-    .issue-chip{{display:inline-block;border:1px solid #cbd5e1;border-radius:999px;background:#f8fafc;padding:3px 8px;font-size:11px;font-weight:700;color:#334155;}}
-    .issue-field{{font-size:13px;line-height:1.55;margin:7px 0;color:#1f2937;}}
-    .issue-field strong{{color:#0f172a;}}
-    .remediation-card{{border:1px solid #dbe4ef;border-radius:12px;padding:14px;margin:12px 0;background:#fff;page-break-inside:avoid;break-inside:avoid;}}
-    .remediation-card h3{{margin:0 0 8px;font-size:15px;color:#102033;}}
-    .remediation-card p{{font-size:13px;line-height:1.55;margin:6px 0;color:#1f2937;}}
-    .remediation-card code{{white-space:normal;word-break:break-word;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:2px 5px;}}
-    pre code{{display:block;white-space:pre-wrap;word-break:break-word;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
-    ol,ul{{padding-left:20px;margin:8px 0;}}
+  """
+             f"""  .issue-chip{{display:inline-block;border:1px solid """
+             f"""#cbd5e1;border-radius:999px;background:#f8fafc;padding:3px """
+             f"""8px;font-size:11px;font-weight:700;color:#334155;}}
+    """
+             f""".issue-field{{font-size:13px;line-height:1.55;margin:7px 0;color:#1f2937;}}
+    .issue-field """
+             f"""strong{{color:#0f172a;}}
+    .remediation-card{{border:1px solid """
+             f"""#dbe4ef;border-radius:12px;padding:14px;margin:12px """
+             f"""0;background:#fff;page-break-inside:avoid;break-inside:avoid;}}
+    .remediation-card h3{{margin:0 0 """
+             f"""8px;font-size:15px;color:#102033;}}
+    .remediation-card p{{font-size:13px;line-height:1.55;margin:6px """
+             f"""0;color:#1f2937;}}
+    .remediation-card """
+             f"""code{{white-space:normal;word-break:break-word;background:#f8fafc;border:1px solid """
+             f"""#e2e8f0;border-radius:6px;padding:2px 5px;}}
+    pre """
+             f"""code{{display:block;white-space:pre-wrap;word-break:break-word;font-size:11px;background:#f3f4f6;padding:8px;border-radius:6px;}}
+"""
+             f"""    ol,ul{{padding-left:20px;margin:8px 0;}}
     ol li,ul li{{margin:4px 0;font-size:14px;}}
   </style>
-  <section id="cover">
+  """
+             f"""<section id="cover">
     <h2>Cover page</h2>
-    <p><strong>Report title:</strong> Full-Estate Forensic SEO + AEO + GEO Audit</p>
+    <p><strong>Report title:</strong> Full-Estate Forensic SEO + """
+             f"""AEO + GEO Audit</p>
     <p><strong>Website:</strong> <a href="{base_url}">{base_url}</a></p>
-    <p><strong>Date/time:</strong> {utc_now()}</p>
-    <p><strong>Audit mode:</strong> {'Full AI-assisted forensic mode' if ai_available else 'Failed-gate control mode'}</p>
-    <p><strong>Workbook:</strong> <code>{Path(workbook.path).name}</code></p>
-    <p><strong>Scope inspected:</strong> Full in-scope website estate including homepage, books, catalogue, topics, blog, podcast, archives, utilities, and programmatic families discovered from repo, workbook, sitemap, feed, and live internal links.</p>
-    <p><strong>Completion state:</strong> {analysis_state.get('completionState', 'Unknown')}</p>
-    <p><strong>AI analysis state:</strong> {analysis_state.get('statusLabel', 'Unknown')}</p>
-    <p><strong>Total URLs discovered:</strong> {control['totalDiscoveredUrls']}</p>
-    <p><strong>Material limitations:</strong> {'AI forensic synthesis was unavailable; no final release-ready verdict was issued.' if failed_gate else 'No AI-analysis limitation was detected. Non-AI data limitations are listed in the method section.'}</p>
-  </section>
+    """
+             f"""<p><strong>Date/time:</strong> {utc_now()}</p>
+    <p><strong>Audit mode:</strong> """
+             f"""{'Full AI-assisted forensic mode' if ai_available else 'Failed-gate control mode'}</p>
+    """
+             f"""<p><strong>Workbook:</strong> <code>{Path(workbook.path).name}</code></p>
+    <p><strong>Scope """
+             f"""inspected:</strong> Full in-scope website estate including homepage, books, catalogue, topics, blog, podcast, """
+             f"""archives, utilities, and programmatic families discovered from repo, workbook, sitemap, feed, and live """
+             f"""internal links.</p>
+    <p><strong>Completion state:</strong> """
+             f"""{analysis_state.get('completionState', 'Unknown')}</p>
+    <p><strong>AI analysis state:</strong> """
+             f"""{analysis_state.get('statusLabel', 'Unknown')}</p>
+    <p><strong>Total URLs discovered:</strong> """
+             f"""{control['totalDiscoveredUrls']}</p>
+    <p><strong>Material limitations:</strong> """
+             f"""{material_limitations}</p>
+"""
+             f"""  </section>
 
   {failure_banner}
 
   <section id="report-control">
     <h2>Report control block</h2>
-    <table class="tight control-table"><tbody>{control_rows}</tbody></table>
+    """
+             f"""<table class="tight control-table"><tbody>{control_rows}</tbody></table>
   </section>
 
-  <section id="summary">
+  <section """
+             f"""id="summary">
     <h2>Executive summary</h2>
-    {'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if ai_available else '<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> The audit halted at the AI forensic gate. Heuristic evidence collection completed, but the required AI-assisted synthesis did not return a validated analysis payload.</p>'}
-    <div class="grid">
-      <div class="kpi"><strong>SEO</strong><div>{display_seo_score}<span class="grade">{display_seo_grade}</span></div></div>
-      <div class="kpi"><strong>AEO</strong><div>{display_aeo_score}<span class="grade">{display_aeo_grade}</span></div></div>
-      <div class="kpi"><strong>GEO</strong><div>{display_geo_score}<span class="grade">{display_geo_grade}</span></div></div>
-      <div class="kpi"><strong>Entity Authority</strong><div>{display_entity_score}<span class="grade">{display_entity_grade}</span></div></div>
-      <div class="kpi"><strong>Conversion Support</strong><div>{display_conv_score}<span class="grade">{display_conv_grade}</span></div></div>
-      <div class="kpi"><strong>Discovered URLs</strong><div>{len(pages)}</div></div>
+    """
+             f"""{'<p class="llm-verdict">' + _esc(overall_verdict) + '</p>' if ai_available else (
+                                                                                         '<p class="llm-verdict"><strong>No release-ready verdict issued.</strong> The audit halted at the AI forensic '
+                                                                                         'gate. Heuristic evidence collection completed, but the required AI-assisted synthesis did not return a '
+                                                                                         'validated analysis payload.</p>'
+                                                                                     )}
+"""
+             f"""    <div class="grid">
+      <div class="kpi"><strong>SEO</strong><div>{display_seo_score}<span """
+             f"""class="grade">{display_seo_grade}</span></div></div>
+      <div """
+             f"""class="kpi"><strong>AEO</strong><div>{display_aeo_score}<span """
+             f"""class="grade">{display_aeo_grade}</span></div></div>
+      <div """
+             f"""class="kpi"><strong>GEO</strong><div>{display_geo_score}<span """
+             f"""class="grade">{display_geo_grade}</span></div></div>
+      <div class="kpi"><strong>Entity """
+             f"""Authority</strong><div>{display_entity_score}<span class="grade">{display_entity_grade}</span></div></div>
+   """
+             f"""   <div class="kpi"><strong>Conversion Support</strong><div>{display_conv_score}<span """
+             f"""class="grade">{display_conv_grade}</span></div></div>
+      <div class="kpi"><strong>Discovered """
+             f"""URLs</strong><div>{len(pages)}</div></div>
     </div>
-    <p>{' '.join(f'<span class="pill">{label}</span>' for label in labels)}</p>
-    <p><strong>Top five priorities:</strong> {('<br>'.join(f'<span class="priority-item">{_esc(p)}</span>' for p in llm_top5)) if llm_top5 else ('; '.join(item['issueId'] + ' ' + item['whyItMatters'] for item in top_actions) if top_actions else 'No Critical or High issue required escalation from the available evidence.')}</p>
-    <p><strong>Quick wins:</strong> {('<br>'.join(_esc(w) for w in llm_quickwins)) if llm_quickwins else ('; '.join(item['exactRemediation'] for item in quick_wins[:3]) if quick_wins else 'No immediate quick-win issue was confirmed.')}</p>
-    <p><strong>Major risks:</strong> {'; '.join(item['whyItMatters'] for item in issues[:3]) if issues else 'No estate-wide blocker was confirmed.'}</p>
-    <p><strong>Strongest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in strongest_areas)}</p>
-    <p><strong>Weakest areas:</strong> {'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in weakest_areas)}</p>
-    {baseline_score_note}
-    {'<p class="llm-badge">✦ Scores and priorities enriched by LLM forensic analysis</p>' if ai_available else '<p class="llm-badge failed">⚠ AI FORENSIC ANALYSIS UNAVAILABLE — failed gate, no final verdict</p>'}
-  </section>
+    """
+             f"""<p>{' '.join(f'<span class="pill">{label}</span>' for label in labels)}</p>
+    <p><strong>Top five """
+             f"""priorities:</strong> """
+             f"""{top_priorities_html}</p>
+"""
+             f"""    <p><strong>Quick wins:</strong> """
+             f"""{quick_wins_html}</p>
+"""
+             f"""    <p><strong>Major risks:</strong> """
+             f"""{'; '.join(item['whyItMatters'] for item in issues[:3]) if issues else 'No estate-wide blocker was confirmed.'}</p>
+"""
+             f"""    <p><strong>Strongest areas:</strong> """
+             f"""{'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in strongest_areas)}</p>
+    """
+             f"""<p><strong>Weakest areas:</strong> """
+             f"""{'; '.join(f"{row['pageType']} ({row['averageScore']})" for row in weakest_areas)}</p>
+    """
+             f"""{baseline_score_note}
+    """
+             f"""{analysis_badge}
+"""
+             f"""  </section>
 
   <section id="method">
     <h2>Scope, inputs, and method</h2>
-    <p><strong>Inspected inputs:</strong> repository routes, live route responses, workbook inventory, sitemap sources, podcast feed sources, blog and podcast manifest files, and live internal links.</p>
-    <p><strong>Known limitations:</strong> metrics such as Core Web Vitals, Search Console, and analytics exports were not supplied, so they are marked as not verified rather than invented.</p>
-    <p><strong>Chain of truth:</strong> repo and source files, live HTML responses, workbook inventory, sitemap and feed sources, and user context.</p>
-    <p><strong>LLM analysis:</strong> {'Forensic narrative and ranked issues generated using the configured AI analysis path and the full context package.' if ai_available else 'Failed. The report was deliberately marked as failed-gate rather than completed.'}</p>
-  </section>
+    <p><strong>Inspected """
+             f"""inputs:</strong> repository routes, live route responses, workbook inventory, sitemap sources, podcast feed """
+             f"""sources, blog and podcast manifest files, and live internal links.</p>
+    <p><strong>Known """
+             f"""limitations:</strong> metrics such as Core Web Vitals, Search Console, and analytics exports were not """
+             f"""supplied, so they are marked as not verified rather than invented.</p>
+    <p><strong>Chain of """
+             f"""truth:</strong> repo and source files, live HTML responses, workbook inventory, sitemap and feed sources, and """
+             f"""user context.</p>
+    <p><strong>LLM analysis:</strong> """
+             f"""{llm_analysis_copy}</p>
+"""
+             f"""  </section>
 
   <section id="source-ledger">
     <h2>Source ledger</h2>
-    <table class="tight"><thead><tr><th>Source</th><th>Count</th><th>Role</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{source_ledger_rows}</tbody></table>
-  </section>
+    <table """
+             f"""class="tight"><thead><tr><th>Source</th><th>Count</th><th>Role</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{source_ledger_rows}</tbody></table>
+"""
+             f"""  </section>
 
   <section id="source-mismatches">
     <h2>Source mismatches that matter</h2>
-    <table class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Sources</th><th>Evidence</th><th>Impact</th><th>Fix</th></tr></thead><tbody>{source_mismatch_rows}</tbody></table>
-  </section>
+    <table """
+             f"""class="tight"><thead><tr><th>ID</th><th>Severity</th><th>Sources</th><th>Evidence</th><th>Impact</th><th>Fix</th></tr></thead><tbody>{source_mismatch_rows}</tbody></table>
+"""
+             f"""  </section>
 
   <section id="inventory">
     <h2>Inventory and reconciliation summary</h2>
-    <p><strong>Workbook rows:</strong> {workbook.url_count}</p>
-    <p><strong>Discovery source counts:</strong> {'; '.join(f"{key}: {value}" for key, value in sorted(discovery_meta['sourceCounts'].items()))}</p>
-    <table class="tight"><thead><tr><th>Page family</th><th>Discovered</th><th>Analysed</th><th>Excluded</th><th>Failed</th><th>Coverage</th><th>Average score</th></tr></thead><tbody>{family_rows}</tbody></table>
-    <p class="section-note">Every discovered in-scope URL was assigned a coverage state. This audit hard-fails if a mandatory family is only partly covered.</p>
+    """
+             f"""<p><strong>Workbook rows:</strong> {workbook.url_count}</p>
+    <p><strong>Discovery source counts:</strong> """
+             f"""{'; '.join(f"{key}: {value}" for key, value in sorted(discovery_meta['sourceCounts'].items()))}</p>
+    """
+             f"""<table class="tight"><thead><tr><th>Page """
+             f"""family</th><th>Discovered</th><th>Analysed</th><th>Excluded</th><th>Failed</th><th>Coverage</th><th>Average """
+             f"""score</th></tr></thead><tbody>{family_rows}</tbody></table>
+    <p class="section-note">Every discovered """
+             f"""in-scope URL was assigned a coverage state. This audit hard-fails if a mandatory family is only partly """
+             f"""covered.</p>
   </section>
 
   <section id="lens">
     <h2>Findings by audit lens</h2>
-    {'<p class="llm-badge">✦ Narratives below are LLM forensic analysis based on live crawl data</p>' if claude_analysis else ''}
-    <div class="lens-grid">
-      <div class="lens-block"><h3>Technical SEO</h3>{_lens('technicalSeo', 'Canonicals, titles, descriptions, indexability, redirect histories, and route normalisation were inspected page by page.')}</div>
-      <div class="lens-block"><h3>On-page SEO and intent match</h3>{_lens('onPageSeo', 'Openings, heading structures, visible copy depth, and title-to-page alignment were scored across the estate.')}</div>
-      <div class="lens-block"><h3>AEO</h3>{_lens('aeo', 'Answer-first summaries, extractable question headings, FAQs, tables, and snippet-friendly structures were measured family by family.')}</div>
-      <div class="lens-block"><h3>GEO</h3>{_lens('geo', 'Entity clarity, summary safety, schema support, and reusable explanatory passages were assessed for citation readiness.')}</div>
-      <div class="lens-block"><h3>Entity authority</h3>{_lens('entityAuthority', 'Author, book, podcast, and topic relationships were checked for visible reinforcement and schema support.')}</div>
-      <div class="lens-block"><h3>Structured data</h3>{_lens('structuredData', 'Schema types, coverage, and alignment with visible content were reviewed across the estate.')}</div>
-      <div class="lens-block"><h3>Internal linking</h3>{_lens('internalLinking', 'Orphan pages, anchor-text precision, cluster connections, and commercial bridging were reviewed.')}</div>
-      <div class="lens-block"><h3>Content architecture</h3>{_lens('contentArchitecture', 'Topical graph coherence, cluster completeness, and static vs dynamic governance alignment were assessed.')}</div>
-      <div class="lens-block"><h3>Conversion support</h3>{_lens('conversionSupport', 'Buy-now path clarity, CTA visibility, and proof-block presence were reviewed on commercial pages.')}</div>
-      <div class="lens-block lens-block--full"><h3>Blog, podcast, transcript, and programmatic systems</h3>{_lens('blogPodcastTranscriptSystems', 'Blog article, podcast, archive, topic, catalogue, and book families were inventoried and fully analysed rather than silently sampled.')}</div>
-    </div>
+    """
+             f"""{'<p class="llm-badge">✦ Narratives below are LLM forensic analysis based on live crawl data</p>' if claude_analysis else ''}
+"""
+             f"""    <div class="lens-grid">
+      <div class="lens-block"><h3>Technical """
+             f"""SEO</h3>{_lens('technicalSeo', 'Canonicals, titles, descriptions, indexability, redirect histories, and route normalisation were inspected page by page.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>On-page SEO and intent """
+             f"""match</h3>{_lens('onPageSeo', 'Openings, heading structures, visible copy depth, and title-to-page alignment were scored across the estate.')}</div>
+"""
+             f"""      <div """
+             f"""class="lens-block"><h3>AEO</h3>{aeo_lens_html}</div>
+"""
+             f"""      <div """
+             f"""class="lens-block"><h3>GEO</h3>{_lens('geo', 'Entity clarity, summary safety, schema support, and reusable explanatory passages were assessed for citation readiness.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>Entity """
+             f"""authority</h3>{_lens('entityAuthority', 'Author, book, podcast, and topic relationships were checked for visible reinforcement and schema support.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>Structured """
+             f"""data</h3>{_lens('structuredData', 'Schema types, coverage, and alignment with visible content were reviewed across the estate.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>Internal """
+             f"""linking</h3>{_lens('internalLinking', 'Orphan pages, anchor-text precision, cluster connections, and commercial bridging were reviewed.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>Content """
+             f"""architecture</h3>{_lens('contentArchitecture', 'Topical graph coherence, cluster completeness, and static vs dynamic governance alignment were assessed.')}</div>
+"""
+             f"""      <div class="lens-block"><h3>Conversion """
+             f"""support</h3>{_lens('conversionSupport', 'Buy-now path clarity, CTA visibility, and proof-block presence were reviewed on commercial pages.')}</div>
+"""
+             f"""      <div class="lens-block lens-block--full"><h3>Blog, podcast, transcript, and programmatic """
+             f"""systems</h3>{podcast_systems_lens_html}</div>
+"""
+             f"""    </div>
   </section>
 
   <section id="issues">
     <h2>Ranked issue ledger</h2>
-    {'<p class="llm-badge">✦ Issues below are LLM forensic findings with exact remediations</p>' if llm_issues_list else ''}
-    {active_issues_html}
+    """
+             f"""{'<p class="llm-badge">✦ Issues below are LLM forensic findings with exact remediations</p>' if llm_issues_list else ''}
+"""
+             f"""    {active_issues_html}
   </section>
 
   <section id="full-issue-records">
     <h2>Full issue records</h2>
-    <p class="section-note">The compact ledger above is for prioritisation. These records preserve the full evidence, root cause, impact, owner, effort and implementation detail required for engineering action.</p>
-    {active_issue_records_html}
+   """
+             f""" <p class="section-note">The compact ledger above is for prioritisation. These records preserve the full """
+             f"""evidence, root cause, impact, owner, effort and implementation detail required for engineering action.</p>
+   """
+             f""" {active_issue_records_html}
   </section>
 
   <section id="page-types">
     <h2>Page-type findings</h2>
-    {active_page_types_html if active_page_types_html else f"<table class='tight'><thead><tr><th>Page type</th><th>Count</th><th>Coverage state</th><th>Average score</th><th>Range</th><th>Example</th></tr></thead><tbody>{page_type_rows}</tbody></table>"}
-  </section>
+    """
+             f"""{page_types_content}
+"""
+             f"""  </section>
 
   <section id="priority">
     <h2>Priority page annex</h2>
-    <p class="section-note">Compatibility redirects and intentionally excluded routes are kept out of this table so real content pages are not buried by redirect wrappers.</p>
-    <table class="tight"><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th><th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead><tbody>{priority_rows}</tbody></table>
-  </section>
+    <p """
+             f"""class="section-note">Compatibility redirects and intentionally excluded routes are kept out of this table so """
+             f"""real content pages are not buried by redirect wrappers.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>URL</th><th>Type</th><th>Status</th><th>Title</th><th>Meta</th>"""
+             f"""<th>Canonical</th><th>AEO</th><th>GEO</th><th>Total</th><th>Grade</th></tr></thead>"""
+             f"""<tbody>{priority_rows}</tbody></table>
+"""
+             f"""  </section>
 
-  {f'<section id="redirect-compatibility"><h2>Redirect / compatibility route annex</h2><p class="section-note">These routes are compatibility wrappers and should be verified for canonical/redirect intent, not scored as priority content pages.</p><table class="tight"><thead><tr><th>URL</th><th>Canonical target</th><th>Coverage state</th><th>Reason</th></tr></thead><tbody>{redirect_compatibility_rows}</tbody></table></section>' if redirect_compatibility_rows else ''}
-
+  """
+             f"""{redirect_compatibility_section}
+"""
+             f"""
   <section id="templates">
     <h2>Template / component / generator annex</h2>
-    <table class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated strengths</th><th>Repeated defects</th><th>Fix priority</th></tr></thead><tbody>{template_rows}</tbody></table>
-    {f'<h3>Template diagnostics</h3><table class="tight"><thead><tr><th>Source</th><th>Area</th><th>Pages</th><th>Observed logic</th><th>Metadata logic</th><th>Schema logic</th><th>Answer-pattern gap</th><th>GEO gap</th><th>Priority</th></tr></thead><tbody>{template_diagnostic_rows}</tbody></table>' if template_diagnostic_rows else ''}
-  </section>
+    <table """
+             f"""class="tight"><thead><tr><th>Page family</th><th>Pages</th><th>Source</th><th>Average score</th><th>Repeated """
+             f"""strengths</th><th>Repeated defects</th><th>Fix """
+             f"""priority</th></tr></thead><tbody>{template_rows}</tbody></table>
+    """
+             f"""{template_diagnostics_section}
+"""
+             f"""  </section>
 
-  {'<section id="code-remediation"><h2>Code-level remediation appendix</h2><p class="llm-badge">✦ Exact corrected patterns from LLM forensic analysis</p>' + active_remediation_html + '</section>' if active_remediation_html else ''}
-
+  """
+             f"""{code_remediation_section}
+"""
+             f"""
   <section id="gap-matrix">
     <h2>Best-practice gap matrix</h2>
     {active_gap_matrix_html}
   </section>
 
-  <section id="implementation">
+"""
+             f"""  <section id="implementation">
     <h2>Final verdict and implementation order</h2>
-    <p><strong>Overall verdict:</strong> {_esc(overall_verdict)}</p>
+    <p><strong>Overall """
+             f"""verdict:</strong> {_esc(overall_verdict)}</p>
     <p><strong>Implementation sequence:</strong></p>
-    <ol>{''.join(f'<li>{_esc(step)}</li>' for step in implementation_steps)}</ol>
-    <p><strong>Expected gains:</strong></p>
+    """
+             f"""<ol>{''.join(f'<li>{_esc(step)}</li>' for step in implementation_steps)}</ol>
+    <p><strong>Expected """
+             f"""gains:</strong></p>
     <ul>{''.join(f'<li>{_esc(gain)}</li>' for gain in implementation_gains)}</ul>
-    {('<p><strong>Forensic narrative:</strong> ' + _esc(implementation_narrative) + '</p>') if claude_analysis else ''}
-  </section>
+    """
+             f"""{('<p><strong>Forensic narrative:</strong> ' + _esc(implementation_narrative) + '</p>') if claude_analysis else ''}
+"""
+             f"""  </section>
 
   <section id="coverage">
     <h2>Full URL coverage appendix</h2>
-    <table class="tight"><thead><tr><th>URL</th><th>Page type</th><th>Discovered from</th><th>Status</th><th>Canonical</th><th>Indexability</th><th>Coverage state</th><th>Score</th><th>Risk</th></tr></thead><tbody>{coverage_appendix_rows}</tbody></table>
-    <p class="section-note">Machine-friendly full-estate ledger is preserved separately in <code>coverage.json</code>.</p>
+    <table """
+             f"""class="tight"><thead><tr><th>URL</th><th>Page type</th><th>Discovered """
+             f"""from</th><th>Status</th><th>Canonical</th><th>Indexability</th><th>Coverage """
+             f"""state</th><th>Score</th><th>Risk</th></tr></thead><tbody>{coverage_appendix_rows}</tbody></table>
+    <p """
+             f"""class="section-note">Machine-friendly full-estate ledger is preserved separately in """
+             f"""<code>coverage.json</code>.</p>
   </section>
 
   <section id="artefacts">
@@ -2146,6 +2481,7 @@ def build_report(base_url: str, workbook: WorkbookInfo, discovery_meta: dict[str
     </ul>
   </section>
   """
+         )
   return html_report_shell("Full-Estate Forensic SEO + AEO + GEO Audit", body)
 
 
@@ -2164,7 +2500,16 @@ def validate_full_coverage(coverage_rows: list[dict[str, Any]]) -> None:
     print(f"[coverage] NOTE: Mandatory families not discovered: {', '.join(absent)}", file=sys.stderr)
 
 
-def build_summary(base_url: str, pages: list[dict[str, Any]], issues: list[dict[str, Any]], coverage_rows: list[dict[str, Any]], report_prefix: str, workbook: WorkbookInfo, analysis_state: dict[str, Any], session_id: str = "") -> dict[str, Any]:
+def build_summary(
+  base_url: str,
+  pages: list[dict[str, Any]],
+  issues: list[dict[str, Any]],
+  coverage_rows: list[dict[str, Any]],
+  report_prefix: str,
+  workbook: WorkbookInfo,
+  analysis_state: dict[str, Any],
+  session_id: str = "",
+) -> dict[str, Any]:
   control = build_report_control(pages, coverage_rows, {}, analysis_state)
   state = analysis_state.get("completionState")
   complete = state == "Complete"
@@ -3295,7 +3640,16 @@ def main() -> int:
       "" if completion_state == "Complete"
       else f"AI analysis contract was incomplete or {real_failed_url_count} URL coverage row(s) failed." if claude_analysis
       else (
-        next((attempt.get("detail") for attempt in analysis_attempts if attempt.get("path") == "AI Management Suite /analysis" and attempt.get("status") in {"failed", "not-configured"} and attempt.get("detail")), "")
+        next(
+          (
+            attempt.get("detail")
+            for attempt in analysis_attempts
+            if attempt.get("path") == "AI Management Suite /analysis"
+            and attempt.get("status") in {"failed", "not-configured"}
+            and attempt.get("detail")
+          ),
+          "",
+        )
         or "The AI-assisted forensic analysis did not return a validated JSON payload after the configured AI analysis paths were attempted."
       )
     ),
@@ -3421,7 +3775,14 @@ def main() -> int:
     "status": "completed" if stage_completed else "failed",
     "auditCompletionState": analysis_state["completionState"],
     "aiAnalysisStatus": analysis_state["statusLabel"],
-    "message": "Full AI-assisted forensic analysis completed with a valid machine-readable evidence contract." if stage_completed else f"SEO/AEO/GEO stage did not complete its evidence contract ({completion_state}); no release-ready verdict issued.",
+    "message": (
+      "Full AI-assisted forensic analysis completed with a valid machine-readable evidence contract."
+      if stage_completed
+      else (
+        f"SEO/AEO/GEO stage did not complete its evidence contract ({completion_state}); "
+        "no release-ready verdict issued."
+      )
+    ),
     "error": None if stage_completed else analysis_state.get("failureReason") or f"SEO/AEO/GEO audit completion state was {completion_state}.",
     "reportPrefix": args.report_prefix,
     "reportUrl": uploaded.get("report.html", str(report_path)),

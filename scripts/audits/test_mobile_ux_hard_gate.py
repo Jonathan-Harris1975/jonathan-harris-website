@@ -428,7 +428,10 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
       "viewport": viewport,
       "checks": checks,
       "details": {check: {"selector": anchor}},
-      "screenshotRefs": [{"relativePath": f"screenshots/{route.strip('/') or 'home'}-{viewport}-fail.png", "publicUrl": f"https://audits.example.test/{route.strip('/') or 'home'}-{viewport}-fail.png"}],
+      "screenshotRefs": [{
+        "relativePath": f"screenshots/{route.strip('/') or 'home'}-{viewport}-fail.png",
+        "publicUrl": f"https://audits.example.test/{route.strip('/') or 'home'}-{viewport}-fail.png",
+      }],
       "defectSummary": check,
       "selectorComponentCodeAnchor": anchor,
     }
@@ -532,7 +535,14 @@ class MobileUxExecutiveGroupingTests(unittest.TestCase):
       "mobileFailureCount": 2,
       "screenshotCount": 2,
     }
-    document = audit.report_json_document(summary, records, issues, {"complete": True, "skippedRequiredTasksCount": 0}, {"crossSourceMismatches": [], "crossSourceMismatchCount": 0}, {"report.json": "https://audits.example.test/report.json"})
+    document = audit.report_json_document(
+      summary,
+      records,
+      issues,
+      {"complete": True, "skippedRequiredTasksCount": 0},
+      {"crossSourceMismatches": [], "crossSourceMismatchCount": 0},
+      {"report.json": "https://audits.example.test/report.json"},
+    )
 
     self.assertIn("executiveThemes", document)
     self.assertIn("rootCauseGroups", document)
