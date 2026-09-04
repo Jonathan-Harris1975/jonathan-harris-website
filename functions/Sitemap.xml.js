@@ -1,8 +1,6 @@
-const CANONICAL_PATH = "/sitemap.xml";
+import { redirectToCanonicalSitemap } from "./_shared/canonical-sitemap-redirect.js";
 
-export async function onRequest(context) {
-  const url = new URL(context.request.url);
-  url.pathname = CANONICAL_PATH;
-  url.search = "";
-  return Response.redirect(url.toString(), 301);
+// Legacy case-sensitive sitemap alias retained for public URL compatibility.
+export async function onRequest({ request }) {
+  return redirectToCanonicalSitemap(request);
 }
