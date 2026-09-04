@@ -3,30 +3,105 @@ from __future__ import annotations
 import re
 
 TOPIC_INTRO_OVERRIDES = {
-    "Agriculture": "These titles look at AI in agriculture where weather, margins, labour, and yield all start arguing at once. The useful question is not whether the tech sounds clever, but whether it helps farmers make better calls in the field.",
-    "Artificial Intelligence": "These titles deal with artificial intelligence itself: how the systems work, where the claims wobble, and what the technology is genuinely good at. Useful if you want the field explained without the smoke machine.",
-    "Construction": "These books cover AI in construction where budgets, delays, safety, and planning collide. They focus on whether the tooling improves delivery in the real world instead of just making the slide deck shinier.",
-    "Creativity": "These titles look at AI in creative work without pretending the messy bits have vanished. Expect the tension between speed and originality, plus the awkward rights questions people usually mutter past.",
-    "Cyber Security": "These books deal with AI in cyber security where detection, response, and noise all arrive in the same van. The focus stays on practical defence, risk, and what actually changes when automation joins the fight.",
-    "Defence": "These titles examine AI in defence with the politics, procurement, and human stakes left firmly on the table. The aim is to understand capability and consequence, not just marvel at the hardware.",
-    "Education": "These books look at AI in education where support, assessment, and shortcuts constantly blur together. They ask what helps people learn better and what simply automates the paperwork around learning.",
-    "Energy": "These titles cover AI in energy systems where reliability and forecasting matter more than buzzwords. The emphasis is on grids, demand, resilience, and how much control you really want to hand over.",
-    "Environment": "These books explore AI in environmental work where monitoring, modelling, and policy are often jammed together. They focus on what the tools can genuinely improve and where the green gloss gets a bit theatrical.",
-    "Ethics": "These titles tackle AI and ethics where convenience, fairness, accountability, and public trust keep bumping into each other. Expect fewer slogans and more of the awkward questions people should be asking earlier.",
-    "Finance": "These books examine AI in finance where speed, risk, fraud, and regulation never stop circling each other. The point is to understand where automation earns its keep and where it quietly creates new liabilities.",
-    "Future of Work": "These titles look at AI and the future of work beyond the usual utopian sales patter. They focus on what changes inside roles, teams, and decision-making once the software stops being a novelty.",
-    "Gaming": "These books cover AI in gaming from design and balance to player manipulation and monetisation. They keep one eye on the craft and the other on the business tricks lurking behind the curtain.",
-    "Government": "These titles examine AI in government where public service, data handling, and accountability all have to coexist. The focus is on whether the systems improve delivery without turning transparency into collateral damage.",
-    "Healthcare": "These books look at AI in healthcare where clinical judgement, workflow pressure, and patient safety meet. The useful question is where the technology genuinely helps care rather than simply adding another dashboard.",
+    "Agriculture": (
+                       "These titles look at AI in agriculture where weather, margins, labour, and yield all start arguing at once. "
+                       "The useful question is not whether the tech sounds clever, but whether it helps farmers make better calls in "
+                       "the field."
+                   ),
+    "Artificial Intelligence": (
+                                   "These titles deal with artificial intelligence itself: how the systems work, where the claims wobble, and "
+                                   "what the technology is genuinely good at. Useful if you want the field explained without the smoke machine."
+                               ),
+    "Construction": (
+                        "These books cover AI in construction where budgets, delays, safety, and planning collide. They focus on "
+                        "whether the tooling improves delivery in the real world instead of just making the slide deck shinier."
+                    ),
+    "Creativity": (
+                      "These titles look at AI in creative work without pretending the messy bits have vanished. Expect the tension "
+                      "between speed and originality, plus the awkward rights questions people usually mutter past."
+                  ),
+    "Cyber Security": (
+                          "These books deal with AI in cyber security where detection, response, and noise all arrive in the same van. "
+                          "The focus stays on practical defence, risk, and what actually changes when automation joins the fight."
+                      ),
+    "Defence": (
+        "These titles examine AI in defence with the politics, procurement, and human stakes left firmly on the table. "
+        "The aim is to understand capability and consequence, not just marvel at the hardware."
+    ),
+    "Education": (
+                     "These books look at AI in education where support, assessment, and shortcuts constantly blur together. They "
+                     "ask what helps people learn better and what simply automates the paperwork around learning."
+                 ),
+    "Energy": (
+        "These titles cover AI in energy systems where reliability and forecasting matter more than buzzwords. "
+        "The emphasis is on grids, demand, resilience, and how much control you really want to hand over."
+    ),
+    "Environment": (
+                       "These books explore AI in environmental work where monitoring, modelling, and policy are often jammed "
+                       "together. They focus on what the tools can genuinely improve and where the green gloss gets a bit theatrical."
+                   ),
+    "Ethics": (
+                  "These titles tackle AI and ethics where convenience, fairness, accountability, and public trust keep bumping "
+                  "into each other. Expect fewer slogans and more of the awkward questions people should be asking earlier."
+              ),
+    "Finance": (
+                   "These books examine AI in finance where speed, risk, fraud, and regulation never stop circling each other. "
+                   "The point is to understand where automation earns its keep and where it quietly creates new liabilities."
+               ),
+    "Future of Work": (
+        "These titles look at AI and the future of work beyond the usual utopian sales patter. "
+        "They focus on what changes inside roles, teams, and decision-making once the software stops being a novelty."
+    ),
+    "Gaming": (
+        "These books cover AI in gaming from design and balance to player manipulation and monetisation. "
+        "They keep one eye on the craft and the other on the business tricks lurking behind the curtain."
+    ),
+    "Government": (
+                      "These titles examine AI in government where public service, data handling, and accountability all have to "
+                      "coexist. The focus is on whether the systems improve delivery without turning transparency into collateral "
+                      "damage."
+                  ),
+    "Healthcare": (
+                      "These books look at AI in healthcare where clinical judgement, workflow pressure, and patient safety meet. "
+                      "The useful question is where the technology genuinely helps care rather than simply adding another dashboard."
+                  ),
     "History": "These titles treat AI through a historical lens so the current noise has some proper context. They help separate what is genuinely new from the same old promises in a sharper suit.",
-    "Industry": "These books cover AI in industry where uptime, quality, cost, and safety all matter at once. They keep the focus on operations and outcomes instead of pretending every factory is one software update away from paradise.",
-    "Law": "These titles examine AI in law where precedent, evidence, compliance, and speed make an uneasy quartet. The aim is to understand what the tools can do without forgetting how expensive mistakes become.",
-    "Manufacturing": "These books look at AI in manufacturing where efficiency only matters if it survives contact with the plant floor. They focus on maintenance, process control, quality, and the decisions humans still need to own.",
-    "Media": "These titles explore AI in media where production speed, trust, and platform incentives rarely point in the same direction. They focus on what happens to judgement, craft, and credibility once the tools start doing more of the work.",
-    "Retail": "These books cover AI in retail where forecasting, recommendation engines, and customer experience all compete for attention. The useful bit is understanding where the tech helps the business and where it just gets creepier.",
-    "Science": "These titles look at AI in science where modelling, experimentation, and interpretation all need discipline. They focus on where the systems accelerate research and where they still need a human with a decent scepticism filter.",
-    "Sports": "These books examine AI in sport where performance analysis, injury prevention, and fan engagement collide. They keep one foot in the numbers and the other in the human judgement that still decides matches.",
-    "Transportation": "These titles cover AI in transportation across road, rail, air, and sea. The emphasis is on safety, logistics, reliability, and what happens when optimisation starts steering systems people actually depend on.",
+    "Industry": (
+                    "These books cover AI in industry where uptime, quality, cost, and safety all matter at once. They keep the "
+                    "focus on operations and outcomes instead of pretending every factory is one software update away from "
+                    "paradise."
+                ),
+    "Law": (
+               "These titles examine AI in law where precedent, evidence, compliance, and speed make an uneasy quartet. The "
+               "aim is to understand what the tools can do without forgetting how expensive mistakes become."
+           ),
+    "Manufacturing": (
+                         "These books look at AI in manufacturing where efficiency only matters if it survives contact with the plant "
+                         "floor. They focus on maintenance, process control, quality, and the decisions humans still need to own."
+                     ),
+    "Media": (
+                 "These titles explore AI in media where production speed, trust, and platform incentives rarely point in the "
+                 "same direction. They focus on what happens to judgement, craft, and credibility once the tools start doing "
+                 "more of the work."
+             ),
+    "Retail": (
+                  "These books cover AI in retail where forecasting, recommendation engines, and customer experience all compete "
+                  "for attention. The useful bit is understanding where the tech helps the business and where it just gets "
+                  "creepier."
+              ),
+    "Science": (
+                   "These titles look at AI in science where modelling, experimentation, and interpretation all need discipline. "
+                   "They focus on where the systems accelerate research and where they still need a human with a decent "
+                   "scepticism filter."
+               ),
+    "Sports": (
+                  "These books examine AI in sport where performance analysis, injury prevention, and fan engagement collide. "
+                  "They keep one foot in the numbers and the other in the human judgement that still decides matches."
+              ),
+    "Transportation": (
+                          "These titles cover AI in transportation across road, rail, air, and sea. The emphasis is on safety, "
+                          "logistics, reliability, and what happens when optimisation starts steering systems people actually depend on."
+                      ),
 }
 
 RESPONSIVE_IMAGE_WIDTHS = (400, 800, 1200)
@@ -37,7 +112,11 @@ def topic_intro(topic: str) -> str:
     topic_name = (topic or "").strip() or "Artificial Intelligence"
     return TOPIC_INTRO_OVERRIDES.get(
         topic_name,
-        f"These titles look at AI in {topic_name.lower()} with the hype stripped out and the practical detail left in place. The job is to show what the tools really change, where they help, and where they still need a wary human eye.",
+        (
+            f"These titles look at AI in {topic_name.lower()} with the hype stripped out and the practical detail left in "
+            f"place. The job is to show what the tools really change, where they help, and where they still need a wary "
+            f"human eye."
+        ),
     )
 
 

@@ -9,7 +9,15 @@ ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = {
     "assets/js/cognipal-webchat.min.js": ["/api/cognipal/message", "/api/cognipal/sync", "Talk to Jonathan", "CogniPal.jpg", "REVEAL_DELAY_MS=30000"],
     "assets/css/cognipal-webchat.min.css": [".jh-cognipal__launcher", ".jh-cognipal__panel"],
-    "functions/_shared/cognipal.js": ["x-coginpal-signature", "AIMS_COMMS_HUB_BASE_URL", "COMMS_HUB_COGINPAL_WEBHOOK_SECRET", "COGNIPAL_RATE_LIMITER", "idFromName", "rate_limited", "if (!origin) return false"],
+    "functions/_shared/cognipal.js": [
+        "x-coginpal-signature",
+        "AIMS_COMMS_HUB_BASE_URL",
+        "COMMS_HUB_COGINPAL_WEBHOOK_SECRET",
+        "COGNIPAL_RATE_LIMITER",
+        "idFromName",
+        "rate_limited",
+        "if (!origin) return false",
+    ],
     "functions/api/cognipal/message.js": ["/comms-hub/intake/chat", "enforceVisitorRateLimits"],
     "functions/api/cognipal/sync.js": ["/comms-hub/intake/chat/sync", "enforceVisitorRateLimits"],
     "assets/js/script-governance.min.js": ["cognipal-webchat.min.js", "cognipal-webchat.min.css"],

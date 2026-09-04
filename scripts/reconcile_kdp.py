@@ -46,7 +46,15 @@ def reconcile(funnel:Path,sales:Path,output:Path)->None:
         w=csv.DictWriter(h,fieldnames=fields); w.writeheader()
         for key in keys:
             m=f.get(key,{k:0 for k in FUNNEL_FIELDS}); sales_count=s.get(key,0)
-            w.writerow({'date':key[0],'book_slug':key[1],**m,'sales':sales_count,'book_reach':rate(m['book_views'],m['qualified_sessions']),'amazon_click_rate':rate(m['amazon_clicks'],m['book_views']),'outbound_to_sale_conversion':rate(sales_count,m['amazon_clicks'])})
+            w.writerow({
+                'date': key[0],
+                'book_slug': key[1],
+                **m,
+                'sales': sales_count,
+                'book_reach': rate(m['book_views'], m['qualified_sessions']),
+                'amazon_click_rate': rate(m['amazon_clicks'], m['book_views']),
+                'outbound_to_sale_conversion': rate(sales_count, m['amazon_clicks']),
+            })
 
 def main()->int:
     ap=argparse.ArgumentParser(description='Reconcile website funnel metrics with real KDP daily sales exports.')

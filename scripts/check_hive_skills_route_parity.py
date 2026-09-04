@@ -1,35 +1,46 @@
 #!/usr/bin/env python3
-"""Fail the website build if duplicate HIVE skills routes drift apart."""
+"""Validate that both HIVE skills route wrappers use one shared implementation."""
 
 from __future__ import annotations
 
-import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CANONICAL = ROOT / "functions" / "api" / "hive-skills" / "[[path]].js"
-LEGACY = ROOT / "api" / "hive-skills" / "[[path]].js"
+SHARED = ROOT / "functions" / "_shared" / "hive-skills-route.js"
+PAGES_ROUTE = ROOT / "functions" / "api" / "hive-skills" / "[[path]].js"
+LEGACY_ROUTE = ROOT / "api" / "hive-skills" / "[[path]].js"
 
-
-def digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+EXPECTED_IMPORTS = {
+    PAGES_ROUTE: '../../_shared/hive-skills-route.js',
+    LEGACY_ROUTE: '../../functions/_shared/hive-skills-route.js',
+}
 
 
 def main() -> None:
-    missing = [str(path.relative_to(ROOT)) for path in (CANONICAL, LEGACY) if not path.is_file()]
+    missing = [
+        str(path.relative_to(ROOT))
+        for path in (SHARED, PAGES_ROUTE, LEGACY_ROUTE)
+        if not path.is_file()
+    ]
     if missing:
         raise SystemExit(f"Missing HIVE skills route file(s): {', '.join(missing)}")
-    canonical_sha = digest(CANONICAL)
-    legacy_sha = digest(LEGACY)
-    if canonical_sha != legacy_sha:
-        raise SystemExit(
-            "HIVE skills route drift detected: functions/api/hive-skills/[[path]].js "
-            "is canonical and api/hive-skills/[[path]].js must remain byte-identical."
-        )
-    source = CANONICAL.read_text(encoding="utf-8")
-    if '"audits"' in source:
+
+    shared_source = SHARED.read_text(encoding="utf-8")
+    if 'export async function onRequest' not in shared_source:
+        raise SystemExit("Shared HIVE skills route does not export onRequest.")
+    if '"audits"' in shared_source:
         raise SystemExit("Public HIVE skills route must not expose the audits root.")
-    print(f"HIVE skills route parity passed: sha256={canonical_sha}")
+
+    for wrapper, expected_import in EXPECTED_IMPORTS.items():
+        source = wrapper.read_text(encoding="utf-8")
+        if expected_import not in source or 'export { onRequest }' not in source:
+            relative = wrapper.relative_to(ROOT)
+            raise SystemExit(
+                f"HIVE skills route wrapper drift detected in {relative}: "
+                f"expected shared import {expected_import!r}."
+            )
+
+    print("HIVE skills route parity passed: one shared implementation, two wrappers.")
 
 
 if __name__ == "__main__":

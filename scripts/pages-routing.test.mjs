@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { onRequest } from "../functions/_middleware.js";
+import { onRequest as onHyphenatedSitemap } from "../functions/site-map.xml.js";
+import { onRequest as onCaseSitemap } from "../functions/Sitemap.xml.js";
 
 async function invoke(path, next = async () => new Response("next", { status: 200 })) {
   return onRequest({
@@ -45,4 +47,18 @@ test("canonical and unrelated paths continue through the Pages pipeline", async 
   assert.equal(response.status, 200);
   assert.equal(await response.text(), "canonical sitemap");
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+});
+
+
+test("sitemap alias route modules share the canonical redirect implementation", async () => {
+  const request = new Request("https://jonathan-harris.online/site-map.xml?stale=1");
+  const hyphenated = await onHyphenatedSitemap({ request });
+  const caseVariant = await onCaseSitemap({
+    request: new Request("https://jonathan-harris.online/Sitemap.xml?stale=1"),
+  });
+
+  assert.equal(hyphenated.status, 301);
+  assert.equal(hyphenated.headers.get("location"), "https://jonathan-harris.online/sitemap.xml");
+  assert.equal(caseVariant.status, 301);
+  assert.equal(caseVariant.headers.get("location"), "https://jonathan-harris.online/sitemap.xml");
 });

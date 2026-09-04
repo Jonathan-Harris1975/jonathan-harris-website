@@ -143,9 +143,27 @@ def fetch_url(url: str, *, timeout: float) -> LiveResult:
             status = getattr(response, 'status', None) or response.getcode()
             final_url = response.geturl()
             content_type = response.headers.get('Content-Type', '')
-            return LiveResult(url=url, ok=200 <= status < 400, message='OK', status_code=status, final_url=final_url, content_type=content_type)
+            return LiveResult(
+                url=url,
+                ok=200 <= status < 400,
+                message='OK',
+                status_code=status,
+                final_url=final_url,
+                content_type=content_type,
+            )
     except error.HTTPError as exc:
-        return LiveResult(url=url, ok=False, message=f'HTTP {exc.code}', status_code=exc.code, final_url=getattr(exc, 'url', url), content_type=exc.headers.get('Content-Type', '') if getattr(exc, 'headers', None) else None)
+        return LiveResult(
+            url=url,
+            ok=False,
+            message=f'HTTP {exc.code}',
+            status_code=exc.code,
+            final_url=getattr(exc, 'url', url),
+            content_type=(
+                exc.headers.get('Content-Type', '')
+                if getattr(exc, 'headers', None)
+                else None
+            ),
+        )
     except error.URLError as exc:
         return LiveResult(url=url, ok=False, message=f'Request failed: {exc.reason}')
 

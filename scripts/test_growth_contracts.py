@@ -61,6 +61,27 @@ def main()->int:
     books=load_master(); count=len(books)
     check(count>0,'governed ebook master is empty')
 
+    # Public book feeds remain semantically identical while their tracked
+    # serialisations stay distinct, avoiding duplicate-content debt.
+    book_payload_paths = [
+        ROOT / 'ebooks' / 'books.json',
+        ROOT / 'assets' / 'js' / 'books.json',
+        ROOT / 'api' / 'v1' / 'books.json',
+    ]
+    book_payload_text = [text(path) for path in book_payload_paths]
+    parsed_book_payloads = [json.loads(payload) for payload in book_payload_text]
+    check(
+        parsed_book_payloads[1:] == parsed_book_payloads[:-1],
+        'public book JSON contracts no longer decode to the same governed records',
+    )
+    check(
+        len(set(book_payload_text)) == len(book_payload_text),
+        'public book JSON contracts have regressed to byte-identical tracked mirrors',
+    )
+    check(not (ROOT / '_redirects.txt').exists(), 'retired _redirects.txt mirror has returned')
+    check(not (ROOT / 'assets' / 'js' / 'blog.bundle.js').exists(), 'retired duplicate blog bundle has returned')
+    check(not (ROOT / 'robot.txt').exists(), 'robot.txt should remain a redirect-only compatibility alias')
+
     # Dynamic count architecture + fixture behaviour.
     fixture='Browse 36 AI Books. His 36 books sit across the 36-book library.'
     changed=apply_book_count(fixture,41)
@@ -72,7 +93,14 @@ def main()->int:
     home_source=text(ROOT/'index.html')
     check('/book-finder/' in home_source,'homepage does not expose the book finder')
     check('/evidence/eu-ai-act-article-50-transparency/' in home_source,'homepage does not surface the current Article 50 evidence guide')
-    stale_newsletter_phrases=('AI Edge - a daily weekday newsletter','AI Edge — a daily weekday newsletter','AI Edge – a daily weekday newsletter','Get the AI Edge','AI Edge Newsletter','Weekly AI updates')
+    stale_newsletter_phrases = (
+        'AI Edge - a daily weekday newsletter',
+        'AI Edge — a daily weekday newsletter',
+        'AI Edge – a daily weekday newsletter',
+        'Get the AI Edge',
+        'AI Edge Newsletter',
+        'Weekly AI updates',
+    )
     # Regression: shared AI Edge navigation must not make ordinary manuscript prose
     # subject to the newsletter timing rule.  Actual newsletter copy must still fail.
     unrelated_fixture='<nav><a href="/newsletter/">AI Edge</a></nav><article><p>The control room is staffed every weekday.</p></article>'
@@ -88,7 +116,12 @@ def main()->int:
             check(phrase not in page_text,f'{page_path.relative_to(ROOT)} contains stale AI Edge naming: {phrase}')
         match=newsletter_timing_match(page_text)
         check(match is None,f'{page_path.relative_to(ROOT)} contains newsletter time/cadence wording: {match.group(0) if match else ""}')
-        check('/api/newsletter/subscribe' not in page_text and 'newsletter-native-form' not in page_text and 'data-newsletter-form' not in page_text,f'{page_path.relative_to(ROOT)} exposes a retired second newsletter collection path')
+        check(
+            '/api/newsletter/subscribe' not in page_text
+            and 'newsletter-native-form' not in page_text
+            and 'data-newsletter-form' not in page_text,
+            f'{page_path.relative_to(ROOT)} exposes a retired second newsletter collection path',
+        )
 
     # Retail/category route invariants.
     retail=text(ROOT/'catalogue'/'retail'/'index.html')
@@ -191,12 +224,24 @@ def main()->int:
 
     # Funnel event contract and PII boundary.
     funnel=text(ROOT/'assets/js/funnel-events.min.js')
-    required=['ebook_impression','ebook_view','ebook_amazon_click','ebook_preview_open','ebook_preview_signup','newsletter_view','newsletter_cta_click','newsletter_submit','newsletter_success','podcast_episode_view','podcast_play','podcast_30_seconds','podcast_platform_click','bundle_view','bundle_book_click']
+    required = [
+        'ebook_impression', 'ebook_view', 'ebook_amazon_click', 'ebook_preview_open',
+        'ebook_preview_signup', 'newsletter_view', 'newsletter_cta_click',
+        'newsletter_submit', 'newsletter_success', 'podcast_episode_view',
+        'podcast_play', 'podcast_30_seconds', 'podcast_platform_click',
+        'bundle_view', 'bundle_book_click',
+    ]
     for event in required: check(f"'{event}'" in funnel,f'funnel event {event} missing')
     check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
     check(not (ROOT/'assets/js/newsletter-signup.min.js').exists(),'retired newsletter signup JavaScript still exists')
     newsletter_jotform=text(ROOT/'assets/js/newsletter-jotform.min.js')
-    check('newsletter_success' in newsletter_jotform and 'newsletter_submit' in newsletter_jotform and 'ebook_preview_signup' in newsletter_jotform and 'utm_campaign' in newsletter_jotform,'Jotform newsletter instrumentation/source forwarding is incomplete')
+    check(
+        'newsletter_success' in newsletter_jotform
+        and 'newsletter_submit' in newsletter_jotform
+        and 'ebook_preview_signup' in newsletter_jotform
+        and 'utm_campaign' in newsletter_jotform,
+        'Jotform newsletter instrumentation/source forwarding is incomplete',
+    )
     retired_endpoint=ROOT/'functions'/'api'/'newsletter'/'subscribe.js'
     check(not retired_endpoint.exists(),'retired newsletter API endpoint still exists')
     newsletter_page=text(ROOT/'newsletter'/'index.html')
@@ -214,9 +259,27 @@ def main()->int:
     check('<h2 id="latest-three-episodes-heading">Episodes</h2>' in podcast and 'data-podcast-latest-server' in podcast,'podcast landing lacks the server/static episode seam')
     check('Latest episode details are temporarily unavailable' not in podcast and 'loading current episode' not in podcast.lower(),'podcast landing ships an unresolved episode placeholder')
     podcast_cards=' '.join(str(node) for node in BeautifulSoup(podcast,'html.parser').select('.podcast-latest-card'))
-    check(re.search(r'\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+\s*(?:-|–|—)?\s*minutes?\b|\bthis\s+week(?:[’\']s)?\b', podcast_cards, re.I) is None,'podcast episode cards contain visible timing/cadence references')
-    check('open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF' in podcast and 'spotify.com/embed' not in podcast and 'data-spotify-load' not in podcast,'podcast page should use the platform link rather than a duplicate Spotify embed')
-    check(podcast.count('https://elfsightcdn.com/platform.js')==1 and podcast.count('elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d')==1,'podcast page must contain exactly one governed Elfsight six-episode player')
+    check(
+        re.search(
+            r'\b\d{1,2}:\d{2}(?::\d{2})?\b|'
+            r'\b\d+\s*(?:-|–|—)?\s*minutes?\b|'
+            r"\bthis\s+week(?:[’']s)?\b",
+            podcast_cards,
+            re.I,
+        ) is None,
+        'podcast episode cards contain visible timing/cadence references',
+    )
+    check(
+        'open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF' in podcast
+        and 'spotify.com/embed' not in podcast
+        and 'data-spotify-load' not in podcast,
+        'podcast page should use the platform link rather than a duplicate Spotify embed',
+    )
+    check(
+        podcast.count('https://elfsightcdn.com/platform.js') == 1
+        and podcast.count('elfsight-app-76cc65a0-0bcf-4dc0-ad36-1046c5a20e3d') == 1,
+        'podcast page must contain exactly one governed Elfsight six-episode player',
+    )
     check(re.search(r'<details[^>]*class=["\'][^"\']*podcast-archive-widget', podcast, re.I) is None,'Elfsight player must remain visible rather than hidden inside a disclosure')
     check('podcast-player-card' not in podcast and 'GROWTH:PODCAST-TOPICS' not in podcast,'duplicate podcast player/topic furniture remains')
     check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')
@@ -240,7 +303,16 @@ def main()->int:
         for qa in item.get('questions',[]):
             wc=len(re.findall(r"\b[\w’'-]+\b",qa.get('a','')))
             check(40<=wc<=90,f'evidence answer {item["slug"]}: {qa.get("q")} is {wc} words; expected citation-sized 40-90')
-        check(all(s.get('organisation') and s.get('title') and s.get('publication_date') and str(s.get('url','')).startswith('https://') for s in item.get('sources',[])),f'evidence provenance incomplete: {item["slug"]}')
+        check(
+            all(
+                source.get('organisation')
+                and source.get('title')
+                and source.get('publication_date')
+                and str(source.get('url', '')).startswith('https://')
+                for source in item.get('sources', [])
+            ),
+            f'evidence provenance incomplete: {item["slug"]}',
+        )
     for item in resources:
         check((ROOT/'resources'/item['slug']/'index.html').exists(),f'resource page missing: {item["slug"]}')
 

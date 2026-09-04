@@ -20,7 +20,13 @@ def report_rows():
     for path in sorted(CSS_DIR.glob('*.css')):
         raw=path.read_text(encoding='utf-8')
         original=len(raw.encode('utf-8')); mini=compact_size(raw)
-        rows.append({'file':str(path.relative_to(ROOT)),'original_bytes':original,'minified_bytes':mini,'reduction_bytes':original-mini,'reduction_pct':round(((original-mini)/original*100),2) if original else 0.0})
+        rows.append({
+            'file': str(path.relative_to(ROOT)),
+            'original_bytes': original,
+            'minified_bytes': mini,
+            'reduction_bytes': original - mini,
+            'reduction_pct': round(((original - mini) / original * 100), 2) if original else 0.0,
+        })
     return rows
 
 def main()->int:

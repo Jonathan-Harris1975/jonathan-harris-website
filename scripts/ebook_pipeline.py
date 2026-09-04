@@ -325,9 +325,17 @@ def read_json(path: Path, default: Any = None) -> Any:
 
 
 
-def write_json(path: Path, payload: Any) -> None:
+def write_json(path: Path, payload: Any, *, indent: int | None = 2) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if indent is None:
+        rendered = json.dumps(
+            payload,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )
+    else:
+        rendered = json.dumps(payload, ensure_ascii=False, indent=indent)
+    path.write_text(rendered + "\n", encoding="utf-8")
 
 
 
@@ -839,7 +847,11 @@ def build_person_schema() -> Dict[str, Any]:
         "name": SITE_NAME,
         "url": f"{SITE_URL}/bio/",
         "jobTitle": ["AI Author", "Podcast Host"],
-        "description": f"Jonathan Harris is an artificial intelligence author and host of {podcast_name}. He writes plain-English books explaining how AI works across industries including healthcare, finance, law, manufacturing, and education.",
+        "description": (
+                           f"Jonathan Harris is an artificial intelligence author and host of {podcast_name}. He writes plain-English "
+                           f"books explaining how AI works across industries including healthcare, finance, law, manufacturing, and "
+                           f"education."
+                       ),
         "knowsAbout": ["Artificial Intelligence", "Machine Learning", "Generative AI", "AI Ethics", "Applied AI", "LLMs"],
         "sameAs": [
             "https://youtube.com/@jonathanharris-r7i",
@@ -1070,16 +1082,28 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
             "author": {"@id": f"{SITE_URL}/#person"},
             "inLanguage": "en-GB",
         }
-        return f'''<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Sample chapter: {title} | Jonathan Harris</title><meta name="robots" content="noindex,follow"/><link rel="canonical" href="{canonical}"/>
-<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
-{SHARED_INTER_FONT_HEAD_BLOCK}
-<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" href="/assets/css/ebook-template.css"/></head>
-<body class="ebook-detail">{header}<main class="main" id="main"><div class="wrap ebook-shell"><section class="card ebook-section">
-<p class="eyebrow">Sample chapter</p><h1>{title}</h1><p>The manuscript chapter has not been extracted for this build, so no substitute preview is being shown.</p>
-<div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}">Buy on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Back to book page</a></div>
+        return (
+                   f'''<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" '''
+                   f'''content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Sample chapter: {title} | Jonathan '''
+                   f'''Harris</title><meta name="robots" content="noindex,follow"/><link rel="canonical" href="{canonical}"/>
+'''
+                   f'''<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+'''
+                   f'''{SHARED_INTER_FONT_HEAD_BLOCK}
+<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" '''
+                   f'''href="/assets/css/ebook-template.css"/></head>
+<body class="ebook-detail">{header}<main class="main" '''
+                   f'''id="main"><div class="wrap ebook-shell"><section class="card ebook-section">
+<p class="eyebrow">Sample '''
+                   f'''chapter</p><h1>{title}</h1><p>The manuscript chapter has not been extracted for this build, so no substitute '''
+                   f'''preview is being shown.</p>
+<div class="ebook-actions"><a class="button" '''
+                   f'''href="{html.escape(book['buy_route'])}">Buy on Amazon</a><a class="button secondary" '''
+                   f'''href="/ebooks/{html.escape(book['slug'])}/">Back to book page</a></div>
 </section></div></main>{footer}<script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+               )
 
     chapter_title = html.escape(clean_paragraph(sample.get("chapter_title", "Chapter sample")))
     paragraphs = sample.get("paragraphs", [])
@@ -1106,18 +1130,45 @@ def render_book_sample_page(book: Dict[str, Any]) -> str:
         f"Read a genuine sample chapter from {book['title']} by Jonathan Harris before buying the Kindle ebook.",
         quote=True,
     )
-    return f'''<!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>Free chapter: {title} | Jonathan Harris</title><meta name="description" content="{description}"/><meta name="robots" content="index,follow"/><link rel="canonical" href="{canonical}"/>
-<script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+    return (
+               f'''<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"/><meta name="viewport" '''
+               f'''content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>Free chapter: {title} | Jonathan '''
+               f'''Harris</title><meta name="description" content="{description}"/><meta name="robots" '''
+               f'''content="index,follow"/><link rel="canonical" href="{canonical}"/>
+<script '''
+               f'''type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 {SHARED_INTER_FONT_HEAD_BLOCK}
-<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" href="/assets/css/ebook-template.css"/></head>
-<body class="ebook-detail ebook-sample">{header}<main class="main" id="main"><div class="wrap ebook-shell">
-<nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a> / <a href="/ebooks/">eBooks</a> / <a href="/ebooks/{html.escape(book['slug'])}/">{title}</a> / Sample chapter</nav>
-<section class="card ebook-section ebook-sample-intro"><p class="eyebrow">Read before you buy</p><h1>{title}</h1><h2>{chapter_title}</h2><p>This page contains text extracted from the actual manuscript, not a summary or generated substitute.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_top">Buy the full book on Amazon</a><a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Book details</a></div></section>
-<article class="card ebook-section ebook-sample-chapter" aria-labelledby="sample-chapter-heading"><h2 id="sample-chapter-heading">{chapter_title}</h2>{body}<p class="meta">Genuine manuscript extract.</p></article>
-<section class="card ebook-section ebook-section--accent"><h2>Continue reading</h2><p>If this chapter is useful, the full Kindle ebook continues the argument with the rest of the book’s practical guidance.</p><div class="ebook-actions"><a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_bottom">Buy on Amazon</a><a class="button secondary" href="/newsletter/">Get the free AI glossary</a></div></section>
-</div></main>{footer}<script defer src="/assets/js/funnel-events.min.js"></script><script defer src="/assets/js/site-ui.min.js"></script></body></html>'''
+'''
+               f'''<link rel="stylesheet" href="/assets/css/site.css"/><link rel="stylesheet" '''
+               f'''href="/assets/css/ebook-template.css"/></head>
+<body class="ebook-detail ebook-sample">{header}<main '''
+               f'''class="main" id="main"><div class="wrap ebook-shell">
+<nav aria-label="Breadcrumb" class="breadcrumbs"><a '''
+               f'''href="/">Home</a> / <a href="/ebooks/">eBooks</a> / <a '''
+               f'''href="/ebooks/{html.escape(book['slug'])}/">{title}</a> / Sample chapter</nav>
+<section class="card '''
+               f'''ebook-section ebook-sample-intro"><p class="eyebrow">Read before you '''
+               f'''buy</p><h1>{title}</h1><h2>{chapter_title}</h2><p>This page contains text extracted from the actual '''
+               f'''manuscript, not a summary or generated substitute.</p><div class="ebook-actions"><a class="button" '''
+               f'''href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" '''
+               f'''data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_top">Buy the full book on Amazon</a><a '''
+               f'''class="button secondary" href="/ebooks/{html.escape(book['slug'])}/">Book details</a></div></section>
+'''
+               f'''<article class="card ebook-section ebook-sample-chapter" aria-labelledby="sample-chapter-heading"><h2 '''
+               f'''id="sample-chapter-heading">{chapter_title}</h2>{body}<p class="meta">Genuine manuscript '''
+               f'''extract.</p></article>
+<section class="card ebook-section ebook-section--accent"><h2>Continue '''
+               f'''reading</h2><p>If this chapter is useful, the full Kindle ebook continues the argument with the rest of the '''
+               f'''book’s practical guidance.</p><div class="ebook-actions"><a class="button" '''
+               f'''href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" '''
+               f'''data-topic="{html.escape(book['topic_slug'])}" data-placement="sample_bottom">Buy on Amazon</a><a '''
+               f'''class="button secondary" href="/newsletter/">Get the free AI glossary</a></div></section>
+'''
+               f'''</div></main>{footer}<script defer src="/assets/js/funnel-events.min.js"></script><script defer '''
+               f'''src="/assets/js/site-ui.min.js"></script></body></html>'''
+           )
 
 def build_book_schema(book: Dict[str, Any]) -> Dict[str, Any]:
     about_terms = [{"@type": "Thing", "name": name} for name in book_about_terms(book)]
@@ -2551,25 +2602,54 @@ def category_scope_copy(topic: str, books: List[Dict[str, Any]]) -> str:
     family = topic_family(topic_name)
     if len(books) == 1:
         return {
-            "regulated": f"The {topic_name.lower()} category focuses on evidence, adoption pressure, oversight, and the point where AI convenience collides with accountability. It is useful when you need more than a glossy vendor promise.",
-            "operations": f"The {topic_name.lower()} category focuses on workflow, reliability, cost, and what happens once AI has to survive contact with real operations instead of a keynote stage.",
-            "security": f"The {topic_name.lower()} category focuses on signal, attacker behaviour, operational noise, and where automation genuinely improves defence rather than just moving the mess around.",
-            "creative": f"The {topic_name.lower()} category focuses on speed, craft, control, and the rights-shaped complications that appear the moment AI output starts looking commercially useful.",
-            "foundation": f"The {topic_name.lower()} category focuses on first principles, practical claims, sharper judgement, and the context readers need before treating broad AI arguments as settled fact.",
-            "environment": f"The {topic_name.lower()} category focuses on measurable environmental outcomes, data quality, and the difference between genuine optimisation and eco-flavoured marketing copy.",
+            "regulated": (
+                             f"The {topic_name.lower()} category focuses on evidence, adoption pressure, oversight, and the point where AI "
+                             f"convenience collides with accountability. It is useful when you need more than a glossy vendor promise."
+                         ),
+            "operations": (
+                f"The {topic_name.lower()} category focuses on workflow, reliability, cost, and what happens once AI has to "
+                f"survive contact with real operations instead of a keynote stage."
+            ),
+            "security": (
+                f"The {topic_name.lower()} category focuses on signal, attacker behaviour, operational noise, and where "
+                f"automation genuinely improves defence rather than just moving the mess around."
+            ),
+            "creative": (
+                f"The {topic_name.lower()} category focuses on speed, craft, control, and the rights-shaped complications "
+                f"that appear the moment AI output starts looking commercially useful."
+            ),
+            "foundation": (
+                f"The {topic_name.lower()} category focuses on first principles, practical claims, sharper judgement, and "
+                f"the context readers need before treating broad AI arguments as settled fact."
+            ),
+            "environment": (
+                f"The {topic_name.lower()} category focuses on measurable environmental outcomes, data quality, and the "
+                f"difference between genuine optimisation and eco-flavoured marketing copy."
+            ),
             "sports": f"The {topic_name.lower()} category focuses on performance analysis, decision-making, and the stubborn fact that data still has to coexist with human judgement.",
         }.get(family, f"The {topic_name.lower()} category focuses on practical use cases, trade-offs, and the questions worth asking before anyone treats AI as a magic trick.")
     titles = ", ".join(book["title"] for book in books[:2])
     if len(books) > 2:
         titles += ", and more"
-    return f"This category spans {len(books)} titles, starting with {titles}. Together they cover the main use cases, trade-offs, and adjacent decisions readers normally need before choosing a narrower book."
+    return (
+        f"This category spans {len(books)} titles, starting with {titles}. Together they cover the main use cases, "
+        f"trade-offs, and adjacent decisions readers normally need before choosing a narrower book."
+    )
 
 
 def category_best_start_copy(topic: str, books: List[Dict[str, Any]]) -> str:
     featured = books[0]
     if len(books) == 1:
-        return f"If you want one grounded entry point, start with <a href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>. It is the clearest way into this topic without having to untangle three tabs, two buzzword decks, and someone's suspiciously cheerful vendor PDF."
-    return f"Start with <a href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>, then use the related titles below to go narrower once you know which part of the subject matters most to you."
+        return (
+                   f"If you want one grounded entry point, start with <a "
+                   f"href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>. It is the clearest way "
+                   f"into this topic without having to untangle three tabs, two buzzword decks, and someone's suspiciously "
+                   f"cheerful vendor PDF."
+               )
+    return (
+               f"Start with <a href='/ebooks/{html.escape(featured['slug'])}/'>{html.escape(featured['title'])}</a>, then use "
+               f"the related titles below to go narrower once you know which part of the subject matters most to you."
+           )
 
 
 def category_faq_markup(topic: str, books: List[Dict[str, Any]]) -> str:
@@ -3105,7 +3185,11 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "who_for": who_for,
             "what_youll_learn": what_youll_learn,
             "why_it_matters": why_it_matters,
-            "showcase_heading": clean_paragraph(content.get("showcase_heading")) or (f"How AI is reshaping {topic.lower()}" if topic.lower() != "artificial intelligence" else "AI without the carnival barker routine"),
+            "showcase_heading": clean_paragraph(content.get("showcase_heading")) or (
+                f"How AI is reshaping {topic.lower()}"
+                if topic.lower() != "artificial intelligence"
+                else "AI without the carnival barker routine"
+            ),
             "distinct_angle": clean_paragraph(content.get("distinct_angle")) or default_distinct_angle(title, topic),
             "notes": workbook.get("notes", ""),
         }
@@ -3346,7 +3430,18 @@ def render_breadcrumbs(book: Dict[str, Any]) -> str:
     ])
     return "".join(crumbs)
 
-def render_image_tag(*, src: str, alt: str, class_name: str, loading: str = "lazy", width: int | None = None, height: int | None = None, srcset: str | None = None, sizes: str | None = None, fetchpriority: str | None = None) -> str:
+def render_image_tag(
+    *,
+    src: str,
+    alt: str,
+    class_name: str,
+    loading: str = "lazy",
+    width: int | None = None,
+    height: int | None = None,
+    srcset: str | None = None,
+    sizes: str | None = None,
+    fetchpriority: str | None = None,
+) -> str:
     attrs = [
         f'alt="{html.escape(alt)}"',
         f'class="{html.escape(class_name)}"',
@@ -3444,17 +3539,49 @@ def problem_framing(book: Dict[str, Any]) -> str:
     learn_line = clean_paragraph(book["what_youll_learn"][0] if book.get("what_youll_learn") else "").rstrip(".")
     framing_tail = f" It keeps coming back to {learn_line[0].lower() + learn_line[1:] if learn_line else 'the practical decisions that expose weak claims fastest'}."
     frames = {
-        "regulated": f"{book['topic']} is where speed, evidence, compliance, and accountability all start elbowing each other for room. This title keeps the focus on what AI is genuinely doing in {topic_lc}, where oversight has to tighten, and where the expensive mistakes tend to hide.{framing_tail}",
-        "operations": f"{book['topic']} is where efficiency claims meet maintenance logs, handovers, failure modes, and people who still have to run the place. This title looks at what AI is actually changing in {topic_lc}, which gains are solid, and where the shiny promise falls apart under operational pressure.{framing_tail}",
-        "security": f"{book['topic']} is one of those domains where signal, false positives, attacker behaviour, and tool sprawl all collide at speed. This title looks at what AI is really doing in {topic_lc}, where it strengthens the work, and where automation simply changes the shape of the problem.{framing_tail}",
-        "creative": f"{book['topic']} gets messy fast because speed, originality, ownership, and platform incentives do not naturally get along. This title looks at what AI is really doing in {topic_lc}, what it improves, and what it muddies the moment the convenience starts looking irresistible.{framing_tail}",
-        "foundation": f"{book['topic']} is one of those areas where the argument gets noisy very quickly: claims versus evidence, fluency versus substance, novelty versus context. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts creating fresh headaches.{framing_tail}",
-        "environment": f"{book['topic']} attracts hopeful claims because everyone likes a cleaner future and a clever dashboard. This title looks at what AI is actually doing in {topic_lc}, where the measurable gains are, and where the story outruns the evidence.{framing_tail}",
-        "sports": f"{book['topic']} sits in that awkward space where numbers can sharpen judgement or flatten it into false certainty. This title looks at what AI is actually doing in {topic_lc}, where the edge is real, and where the human part still refuses to disappear.{framing_tail}",
+        "regulated": (
+                         f"{book['topic']} is where speed, evidence, compliance, and accountability all start elbowing each other for "
+                         f"room. This title keeps the focus on what AI is genuinely doing in {topic_lc}, where oversight has to tighten, "
+                         f"and where the expensive mistakes tend to hide.{framing_tail}"
+                     ),
+        "operations": (
+                          f"{book['topic']} is where efficiency claims meet maintenance logs, handovers, failure modes, and people who "
+                          f"still have to run the place. This title looks at what AI is actually changing in {topic_lc}, which gains are "
+                          f"solid, and where the shiny promise falls apart under operational pressure.{framing_tail}"
+                      ),
+        "security": (
+                        f"{book['topic']} is one of those domains where signal, false positives, attacker behaviour, and tool sprawl "
+                        f"all collide at speed. This title looks at what AI is really doing in {topic_lc}, where it strengthens the "
+                        f"work, and where automation simply changes the shape of the problem.{framing_tail}"
+                    ),
+        "creative": (
+                        f"{book['topic']} gets messy fast because speed, originality, ownership, and platform incentives do not "
+                        f"naturally get along. This title looks at what AI is really doing in {topic_lc}, what it improves, and what it "
+                        f"muddies the moment the convenience starts looking irresistible.{framing_tail}"
+                    ),
+        "foundation": (
+                          f"{book['topic']} is one of those areas where the argument gets noisy very quickly: claims versus evidence, "
+                          f"fluency versus substance, novelty versus context. This title cuts through that din and looks at what AI is "
+                          f"actually doing in {topic_lc}, where it helps, and where it starts creating fresh headaches.{framing_tail}"
+                      ),
+        "environment": (
+                           f"{book['topic']} attracts hopeful claims because everyone likes a cleaner future and a clever dashboard. This "
+                           f"title looks at what AI is actually doing in {topic_lc}, where the measurable gains are, and where the story "
+                           f"outruns the evidence.{framing_tail}"
+                       ),
+        "sports": (
+                      f"{book['topic']} sits in that awkward space where numbers can sharpen judgement or flatten it into false "
+                      f"certainty. This title looks at what AI is actually doing in {topic_lc}, where the edge is real, and where the "
+                      f"human part still refuses to disappear.{framing_tail}"
+                  ),
     }
     return frames.get(
         family,
-        f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience versus control, automation versus accountability. This title cuts through that din and looks at what AI is actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches.{framing_tail}",
+        (
+            f"{book['topic']} is one of those areas where the argument gets noisy: efficiency versus judgement, convenience "
+            f"versus control, automation versus accountability. This title cuts through that din and looks at what AI is "
+            f"actually doing in {topic_lc}, where it helps, and where it starts to create fresh headaches.{framing_tail}"
+        ),
     )
 
 
@@ -3515,245 +3642,389 @@ def render_book_page(book: Dict[str, Any], all_books: List[Dict[str, Any]]) -> s
     sample_available = bool(sample and sample.get("paragraphs") and int(sample.get("word_count") or 0) >= 350)
     newsletter_offer = newsletter_offer_for_book(book)
     podcast_link = podcast_link_for_book(book)
+    ebook_newsletter_form = render_inline_newsletter_form(
+        f"ebook:{book['slug']}",
+        next_path=newsletter_offer["next_path"],
+        cta="Join AI Edge",
+        heading=newsletter_offer["heading"],
+        description=newsletter_offer["description"],
+    )
+    ebook_footer_newsletter_form = render_inline_newsletter_form(
+        f"ebook-footer:{book['slug']}",
+        next_path=newsletter_offer["next_path"],
+        cta="Join AI Edge",
+        heading=newsletter_offer["heading"],
+        description=newsletter_offer["description"],
+    )
     sample_primary_cta = (
-        f'<a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book["slug"])}" data-topic="{html.escape(book["topic_slug"])}" data-placement="ebook_primary">Read a free chapter</a>'
+        (
+            f'<a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview '
+            f'data-book-slug="{html.escape(book["slug"])}" data-topic="{html.escape(book["topic_slug"])}" '
+            f'data-placement="ebook_primary">Read a free chapter</a>'
+        )
         if sample_available else ""
     )
     sample_confidence = " · Free chapter available" if sample_available else ""
     sample_section = (
-        f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
-      <h2>Read a real chapter before you buy</h2>
-      <p>Open a genuine chapter from the manuscript now. The AI Edge signup is optional, not a gate between you and the sample.</p>
-      <div class="ebook-actions"><a class="button secondary" href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_sample_section">Read the sample chapter</a></div>
-      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
-    </section>"""
+        (
+            f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
+      <h2>Read a real chapter """
+            f"""before you buy</h2>
+      <p>Open a genuine chapter from the manuscript now. The AI Edge signup is optional, """
+            f"""not a gate between you and the sample.</p>
+      <div class="ebook-actions"><a class="button secondary" """
+            f"""href="{book_preview_path(book)}" data-ebook-preview data-book-slug="{html.escape(book['slug'])}" """
+            f"""data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_sample_section">Read the sample """
+            f"""chapter</a></div>
+      """
+            f"""{ebook_newsletter_form}
+"""
+            f"""    </section>"""
+        )
         if sample_available
-        else f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
-      <h2>Get the free AI glossary</h2>
-      <p>The manuscript sample is not available in this build, so this page does not promise a chapter it cannot deliver.</p>
-      {render_inline_newsletter_form(f"ebook:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
-    </section>"""
+        else (
+                 f"""<section class="card ebook-section ebook-preview-capture" id="free-preview">
+      <h2>Get the free AI """
+                 f"""glossary</h2>
+      <p>The manuscript sample is not available in this build, so this page does not promise a """
+                 f"""chapter it cannot deliver.</p>
+      """
+                 f"""{ebook_newsletter_form}
+"""
+                 f"""    </section>"""
+             )
     )
 
-    return f'''<!DOCTYPE html>
+    return (
+               f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
-new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+'''
+               f'''<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new '''
+               f'''Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+'''
+               f'''j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'''
+               f''''https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'''
+               f'''}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
 <!-- End Google Tag Manager -->
-<meta charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta '''
+               f'''charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
+               f'''type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<link '''
+               f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, '''
+               f'''initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>{meta_title} | Jonathan Harris</title>
-<meta content="@jonathan_harris_01" name="twitter:site"/>
-<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta '''
+               f'''content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" '''
+               f'''name="twitter:creator"/>
 <meta content="#0D1420" name="theme-color"/>
 {SHARED_INTER_FONT_HEAD_BLOCK}
-<link as="style" href="/assets/css/site.css" rel="preload"/>
+<link '''
+               f'''as="style" href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
 
-<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+'''
+               f'''<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
-<link href="{canonical}" rel="canonical"/>
+<link '''
+               f'''href="{canonical}" rel="canonical"/>
 <link href="{canonical}" hreflang="en" rel="alternate"/>
-<link href="{canonical}" hreflang="x-default" rel="alternate"/>
+<link '''
+               f'''href="{canonical}" hreflang="x-default" rel="alternate"/>
 <meta content="{description}" name="description"/>
-<meta content="index,follow" name="robots"/>
+'''
+               f'''<meta content="index,follow" name="robots"/>
 <meta content="{html.escape(book['asin'])}" name="book:asin"/>
-<meta content="{html.escape(book['datePublished'])}" name="datePublished"/>
-<meta content="{html.escape(book['datePublished'])}" property="book:release_date"/>
-<meta content="books.book" property="og:type"/>
+'''
+               f'''<meta content="{html.escape(book['datePublished'])}" name="datePublished"/>
+<meta '''
+               f'''content="{html.escape(book['datePublished'])}" property="book:release_date"/>
+<meta content="books.book" '''
+               f'''property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
-<meta content="{meta_title} | Jonathan Harris" property="og:title"/>
+<meta content="{meta_title} | Jonathan '''
+               f'''Harris" property="og:title"/>
 <meta content="{description}" property="og:description"/>
-<meta content="{cover}" property="og:image"/>
+<meta '''
+               f'''content="{cover}" property="og:image"/>
 <meta content="{title} cover" property="og:image:alt"/>
-<meta content="summary_large_image" name="twitter:card"/>
+<meta '''
+               f'''content="summary_large_image" name="twitter:card"/>
 <meta content="{cover}" name="twitter:image"/>
-<meta content="{meta_title} | Jonathan Harris" name="twitter:title"/>
-<meta content="{description}" name="twitter:description"/>
+<meta '''
+               f'''content="{meta_title} | Jonathan Harris" name="twitter:title"/>
+<meta content="{description}" '''
+               f'''name="twitter:description"/>
 <meta content="{title}" name="ai:topic"/>
-<meta content="Artificial Intelligence" name="ai:primary"/>
+<meta content="Artificial '''
+               f'''Intelligence" name="ai:primary"/>
 <meta content="Book" name="ai:entity"/>
-<meta content="{html.escape(book['identifier'])}" name="ai:identifier"/>
-<meta content="book" name="ai:content_type"/>
+<meta '''
+               f'''content="{html.escape(book['identifier'])}" name="ai:identifier"/>
+<meta content="book" '''
+               f'''name="ai:content_type"/>
 <meta content="{html.escape(', '.join(book['keywords']))}" name="ai:keywords"/>
-<meta content="{html.escape(book['tone'])}" name="ai-style"/>
-<meta content="{html.escape(book['audience'])}" name="ai-target-audience"/>
+'''
+               f'''<meta content="{html.escape(book['tone'])}" name="ai-style"/>
+<meta content="{html.escape(book['audience'])}" '''
+               f'''name="ai-target-audience"/>
 <meta content="search=y, train-ai=y, citation-preferred=y" name="content-usage"/>
-<script type="application/ld+json">{json_script(build_breadcrumb_schema(book))}</script>
-<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
-<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
-<script type="application/ld+json">{json_script(build_book_schema(book))}</script>
-<script type="application/ld+json">{json_script(faq_schema)}</script>
-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
+'''
+               f'''<script type="application/ld+json">{json_script(build_breadcrumb_schema(book))}</script>
+<script '''
+               f'''data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script '''
+               f'''data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+<script '''
+               f'''type="application/ld+json">{json_script(build_book_schema(book))}</script>
+<script '''
+               f'''type="application/ld+json">{json_script(faq_schema)}</script>
+<link href="https://tracker.metricool.com" '''
+               f'''rel="dns-prefetch"/>
+<script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" '''
+               f'''src="/assets/js/script-governance.min.js"></script>
 </head>
-<body class="ebook-detail" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-page-type="ebook">
+<body class="ebook-detail" '''
+               f'''data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" '''
+               f'''data-page-type="ebook">
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe '''
+               f'''src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
+height="0" width="0" '''
+               f'''style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-{header}
+'''
+               f'''{header}
 <div aria-hidden="false" class="page-loader" id="pageLoader">
-  <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
+  <div aria-label="Preparing page" '''
+               f'''aria-live="polite" class="loader-card" role="status">
     <div aria-hidden="true" class="spinner"></div>
-  </div>
+  '''
+               f'''</div>
 </div>
 <header aria-label="Book header" class="hero ebook-hero" role="region">
   <div class="wrap">
-    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+   '''
+               f''' <img alt="Jonathan Harris site logo" class="logo-plain" height="120" '''
+               f'''src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>{title}</h1>
-    <p>{html.escape(hero_summary)}</p>
+    '''
+               f'''<p>{html.escape(hero_summary)}</p>
   </div>
 </header>
-<main aria-label="Book content" class="main" id="main" role="main">
+<main aria-label="Book content" class="main" id="main" '''
+               f'''role="main">
   <div class="wrap ebook-shell">
-    <nav aria-label="Breadcrumb" class="breadcrumbs">{render_breadcrumbs(book)}</nav>
+    <nav aria-label="Breadcrumb" '''
+               f'''class="breadcrumbs">{render_breadcrumbs(book)}</nav>
 
     <section class="card ebook-section quick-facts">
-      <h2>Quick facts</h2>
+   '''
+               f'''   <h2>Quick facts</h2>
       <ul class="ebook-facts">
-        <li><strong>Topic:</strong> {html.escape(book['topic'])}</li>
-        <li><strong>Tags:</strong> {html.escape(', '.join(book['tags']))}</li>
+        <li><strong>Topic:</strong> '''
+               f'''{html.escape(book['topic'])}</li>
+        <li><strong>Tags:</strong> '''
+               f'''{html.escape(', '.join(book['tags']))}</li>
         <li><strong>Length:</strong> {book['pages']} pages</li>
-        <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
+  '''
+               f'''      <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
       </ul>
     </section>
 
-    <section class="ebook-showcase">
+    '''
+               f'''<section class="ebook-showcase">
       <article class="card ebook-showcase__media">
-        {render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
-        <div class="ebook-actions">
-          <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="ebook_primary">Buy on Amazon</a>
+        '''
+               f'''{render_cover_image(book, class_name="cover ebook-showcase__cover", loading="eager")}
+        <div '''
+               f'''class="ebook-actions">
+          <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon '''
+               f'''data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" '''
+               f'''data-placement="ebook_primary">Buy on Amazon</a>
           {sample_primary_cta}
-          <a class="button secondary" href="/ebooks/">Browse related books</a>
+          <a class="button '''
+               f'''secondary" href="/ebooks/">Browse related books</a>
         </div>
-        <aside class="book-confidence" aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · Published {html.escape(format_date(book['datePublished']))}{sample_confidence} · {html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers ↓</a></aside>
+        <aside class="book-confidence" '''
+               f'''aria-label="Buying information"><strong>Before you buy</strong> — {book['pages']} pages · Kindle ebook · '''
+               f'''Published {html.escape(format_date(book['datePublished']))}{sample_confidence} · '''
+               f'''{html.escape(book['audience'])}<br/><a href="#deeper-overview">See exactly what this book covers '''
+               f'''↓</a></aside>
         {render_book_market_signal(book)}
-        <p class="meta">ASIN: {html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
-      </article>
+        <p class="meta">ASIN: '''
+               f'''{html.escape(book['asin'])} · Published {html.escape(format_date(book['datePublished']))}</p>
+      '''
+               f'''</article>
       <article class="card ebook-showcase__content">
-        <h2>{html.escape(book['showcase_heading'])}</h2>
-        <p class="ebook-showcase__lead">{html.escape(book['what_this_book_covers'])}</p>
-        <p class="ebook-showcase__subhead">{html.escape(showcase_subhead(book))}</p>
-        <ul class="ebook-signal-list">
-          {''.join(f'<li>► {html.escape(item)}</li>' for item in book.get('what_youll_learn', [])[:3])}
+        '''
+               f'''<h2>{html.escape(book['showcase_heading'])}</h2>
+        <p '''
+               f'''class="ebook-showcase__lead">{html.escape(book['what_this_book_covers'])}</p>
+        <p '''
+               f'''class="ebook-showcase__subhead">{html.escape(showcase_subhead(book))}</p>
+        <ul '''
+               f'''class="ebook-signal-list">
+          '''
+               f'''{''.join(f'<li>► {html.escape(item)}</li>' for item in book.get('what_youll_learn', [])[:3])}
         </ul>
-        <p class="ebook-showcase__note">{html.escape(showcase_note(book))}</p>
-        <div class="ebook-inline-actions">
+  '''
+               f'''      <p class="ebook-showcase__note">{html.escape(showcase_note(book))}</p>
+        <div '''
+               f'''class="ebook-inline-actions">
           <a href="{html.escape(book['buy_route'])}">Buy on Amazon</a>
-          <a href="#deeper-overview">Read full overview</a>
+         '''
+               f''' <a href="#deeper-overview">Read full overview</a>
           <a href="/ebooks/">Browse related books</a>
-        </div>
+     '''
+               f'''   </div>
       </article>
     </section>
 
     <section class="card ebook-section">
-      <h2>Who is this book for?</h2>
+      <h2>Who is this '''
+               f'''book for?</h2>
       <ul class="ebook-audience-list">
         {audience_items}
       </ul>
     </section>
 
-    <section class="card ebook-section">
+   '''
+               f''' <section class="card ebook-section">
       <h2>Key themes</h2>
       <ul class="ebook-key-themes">
-        {key_theme_items}
+        '''
+               f'''{key_theme_items}
       </ul>
       <div class="ebook-theme-pills">{render_tag_pills(book['tags'])}</div>
-    </section>
+    '''
+               f'''</section>
 
     <section class="card ebook-section">
       <h2>What will you learn?</h2>
-      <ul class="ebook-learn-list">
+      <ul '''
+               f'''class="ebook-learn-list">
         {learn_items}
       </ul>
     </section>
 
-    <section class="card ebook-section">
+    <section class="card '''
+               f'''ebook-section">
       <h2>Audience fit</h2>
       {escape_paragraphs(book['who_for'])}
     </section>
 
-    <section class="card ebook-section" id="deeper-overview">
+    '''
+               f'''<section class="card ebook-section" id="deeper-overview">
       <h2>Deeper overview</h2>
-      {escape_paragraphs(book['summary'])}
+      '''
+               f'''{escape_paragraphs(book['summary'])}
     </section>
 
 
     <section class="card ebook-section">
-      <h2>Why this title is useful in practice</h2>
+      <h2>Why '''
+               f'''this title is useful in practice</h2>
       <p>{html.escape(book_unique_evidence_passage(book))}</p>
-    </section>
+    '''
+               f'''</section>
 
     {render_priority_evidence_module(book)}
 
-    <section class="card ebook-section ebook-section--accent">
+    <section class="card ebook-section '''
+               f'''ebook-section--accent">
       <h2>Why does this topic get messy?</h2>
-      {escape_paragraphs(problem_framing(book))}
+      '''
+               f'''{escape_paragraphs(problem_framing(book))}
     </section>
 
     <section class="card ebook-section">
-      <h2>What practical decisions will this help with?</h2>
-      <p>{html.escape(practical_outcomes_intro(book))}</p>
+      '''
+               f'''<h2>What practical decisions will this help with?</h2>
+      '''
+               f'''<p>{html.escape(practical_outcomes_intro(book))}</p>
       <ul class="ebook-learn-list">
-        {signal_items}
+        '''
+               f'''{signal_items}
       </ul>
     </section>
 
     <section class="card ebook-section">
-      <h2>What evidence lenses does the book use?</h2>
+      <h2>What evidence '''
+               f'''lenses does the book use?</h2>
       <div class="ebook-signal-grid">
         {chapter_signal_cards(book)}
-      </div>
+    '''
+               f'''  </div>
     </section>
 
     <section class="card ebook-section">
-      <h2>What makes this title distinct</h2>
+      <h2>What makes this title '''
+               f'''distinct</h2>
       {escape_paragraphs(book['distinct_angle'])}
-      {escape_paragraphs(book['why_it_matters'])}
+      '''
+               f'''{escape_paragraphs(book['why_it_matters'])}
     </section>
 
     {sample_section}
 
-    <section class="related-books card">
+    <section '''
+               f'''class="related-books card">
       <h2>Related books</h2>
       <ul>
-        {render_related_links(book, all_books)}
+        '''
+               f'''{render_related_links(book, all_books)}
       </ul>
-      <p class="jh-related-callout">Related titles are chosen from the catalogue based on topic and tag overlap, so the next step stays relevant instead of wandering off into the weeds.</p>
-      <div class="ebook-inline-actions">{render_book_bundle_links(book)}</div>
+      <p class="jh-related-callout">Related titles are '''
+               f'''chosen from the catalogue based on topic and tag overlap, so the next step stays relevant instead of '''
+               f'''wandering off into the weeds.</p>
+      <div '''
+               f'''class="ebook-inline-actions">{render_book_bundle_links(book)}</div>
     </section>
 
-    <section class="card ebook-section ebook-listen-next" aria-labelledby="listen-next-heading">
-      <h2 id="listen-next-heading">Listen next</h2>
-      <p>Continue with current audio analysis related to {html.escape(book['topic'].lower())}. Episode metadata stays governed by the podcast feed rather than being copied into this book page.</p>
-      <a class="button secondary" href="{html.escape(podcast_link['href'])}" data-podcast-contextual data-placement="ebook_listen_next">{html.escape(podcast_link['label'])}</a>
-    </section>
+    <section class="card '''
+               f'''ebook-section ebook-listen-next" aria-labelledby="listen-next-heading">
+      <h2 '''
+               f'''id="listen-next-heading">Listen next</h2>
+      <p>Continue with current audio analysis related to '''
+               f'''{html.escape(book['topic'].lower())}. Episode metadata stays governed by the podcast feed rather than being '''
+               f'''copied into this book page.</p>
+      <a class="button secondary" href="{html.escape(podcast_link['href'])}" '''
+               f'''data-podcast-contextual data-placement="ebook_listen_next">{html.escape(podcast_link['label'])}</a>
+    '''
+               f'''</section>
 
     <section class="faq card" aria-label="Frequently asked questions">
       <h2>FAQ</h2>
-      <div class="ebook-faq-list">
+      '''
+               f'''<div class="ebook-faq-list">
         {render_faq_markup(book)}
       </div>
     </section>
 
-    <section class="jh-journey-panel">
+    <section '''
+               f'''class="jh-journey-panel">
       <h2>Keep exploring the Jonathan Harris AI library</h2>
-      <p>Use the links below to carry on browsing the wider catalogue, the glossary, comparisons, podcast coverage, or a related guide.</p>
+      <p>Use the links '''
+               f'''below to carry on browsing the wider catalogue, the glossary, comparisons, podcast coverage, or a related '''
+               f'''guide.</p>
       <div class="jh-journey-actions">
         {book_semantic_journey_links(book)}
       </div>
-      {render_inline_newsletter_form(f"ebook-footer:{book['slug']}", next_path=newsletter_offer["next_path"], cta="Join AI Edge", heading=newsletter_offer["heading"], description=newsletter_offer["description"])}
-    </section>
+   '''
+               f'''   '''
+               f'''{ebook_footer_newsletter_form}
+'''
+               f'''    </section>
   </div>
 </main>
 <script defer="" src="/assets/js/related-books.min.js"></script>
@@ -3762,29 +4033,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </body>
 </html>
 '''
+           )
 
 
 
 def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
     tags = "".join(f'<span class="tag">{html.escape(tag)}</span>' for tag in book.get("tags", [])[:4])
-    return f'''
-<article class="card ebook-card" aria-label="{html.escape(book['title'])}" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}">
-  {render_cover_image(book, class_name="cover")}
+    return (
+               f'''
+<article class="card ebook-card" aria-label="{html.escape(book['title'])}" '''
+               f'''data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}">
+  '''
+               f'''{render_cover_image(book, class_name="cover")}
   <h2>{html.escape(book['title'])}</h2>
-  <div class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
-  <p>{html.escape(book['short'])}</p>
+  <div '''
+               f'''class="topic-chip-wrap"><span class="topic-chip">{html.escape(book['filter'])}</span></div>
+  '''
+               f'''<p>{html.escape(book['short'])}</p>
   {render_book_market_signal(book)}
   <div class="tags">{tags}</div>
-  <div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
-  <div class="actions ebook-card-actions">
-    <a class="button secondary" href="/ebooks/{html.escape(book['slug'])}/" data-ebook-action="view" data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="catalogue_card">View book</a>
-    <a class="button" href="{html.escape(book['buy_route'])}" data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" data-placement="catalogue_card">Buy on Amazon</a>
+  '''
+               f'''<div class="book-avail"><span class="book-avail__badge">🛍️ Available on Amazon Kindle</span></div>
+  <div '''
+               f'''class="actions ebook-card-actions">
+    <a class="button secondary" '''
+               f'''href="/ebooks/{html.escape(book['slug'])}/" data-ebook-action="view" '''
+               f'''data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" '''
+               f'''data-placement="catalogue_card">View book</a>
+    <a class="button" href="{html.escape(book['buy_route'])}" '''
+               f'''data-ebook-amazon data-book-slug="{html.escape(book['slug'])}" data-topic="{html.escape(book['topic_slug'])}" '''
+               f'''data-placement="catalogue_card">Buy on Amazon</a>
   </div>
   <details class="more">
     <summary aria-expanded="false">More details</summary>
     <div class="meta">{html.escape(cta_copy)}</div>
   </details>
-</article>'''.strip()
+</article>'''
+           ).strip()
 
 
 
@@ -3809,111 +4094,171 @@ def render_ebooks_index(books: List[Dict[str, Any]]) -> str:
         ],
     }
     static_cards = "\n".join(render_catalogue_card(book, catalogue_cta_copy(book["topic"])) for book in books)
-    return f'''<!DOCTYPE html>
+    return (
+               f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
-new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+'''
+               f'''<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new '''
+               f'''Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+'''
+               f'''j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'''
+               f''''https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'''
+               f'''}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
 <!-- End Google Tag Manager -->
-<meta charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta '''
+               f'''charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
+               f'''type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<link '''
+               f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, '''
+               f'''initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>AI eBooks Catalogue | Jonathan Harris</title>
-<meta content="{description}" name="description"/>
+'''
+               f'''<meta content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
-<meta content="{description}" name="ai:summary"/>
+<meta '''
+               f'''content="{description}" name="ai:summary"/>
 <meta content="#0D1420" name="theme-color"/>
-{SHARED_INTER_FONT_HEAD_BLOCK}
+'''
+               f'''{SHARED_INTER_FONT_HEAD_BLOCK}
 <link as="style" href="/assets/css/site.css" rel="preload"/>
-<link href="/assets/css/site.css" rel="stylesheet"/>
+<link '''
+               f'''href="/assets/css/site.css" rel="stylesheet"/>
 
 
-<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<link href="/assets/css/ebook-template.css" '''
+               f'''rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
 <meta content="website" property="og:type"/>
-<meta content="Jonathan Harris eBooks" property="og:site_name"/>
+<meta '''
+               f'''content="Jonathan Harris eBooks" property="og:site_name"/>
 <meta content="{canonical}" property="og:url"/>
-<meta content="AI eBooks Catalogue | Jonathan Harris" property="og:title"/>
-<meta content="{description}" property="og:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+'''
+               f'''<meta content="AI eBooks Catalogue | Jonathan Harris" property="og:title"/>
+<meta content="{description}" '''
+               f'''property="og:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" '''
+               f'''property="og:image"/>
 <meta content="Jonathan Harris site logo" property="og:image:alt"/>
-<meta content="1200" property="og:image:width"/>
+<meta '''
+               f'''content="1200" property="og:image:width"/>
 <meta content="630" property="og:image:height"/>
-<meta content="@jonathan_harris_01" name="twitter:site"/>
-<meta content="@jonathan_harris_01" name="twitter:creator"/>
+<meta '''
+               f'''content="@jonathan_harris_01" name="twitter:site"/>
+<meta content="@jonathan_harris_01" '''
+               f'''name="twitter:creator"/>
 <meta content="summary_large_image" name="twitter:card"/>
-<meta content="AI eBooks Catalogue | Jonathan Harris" name="twitter:title"/>
-<meta content="{description}" name="twitter:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<meta content="AI eBooks '''
+               f'''Catalogue | Jonathan Harris" name="twitter:title"/>
+<meta content="{description}" '''
+               f'''name="twitter:description"/>
+<meta content="https://images.jonathan-harris.online/site-logo" '''
+               f'''name="twitter:image"/>
 <meta content="AI ebook catalogue and practical AI guide" name="ai-role"/>
-<meta content="Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight" name="ai-target-audience"/>
+<meta '''
+               f'''content="Curious professionals, entrepreneurs, and non-technical readers who want practical AI insight" '''
+               f'''name="ai-target-audience"/>
 <meta content="Plain-English, practical, sceptical, no-hype" name="ai-style"/>
-<meta content="search=y, train-ai=y" name="content-usage"/>
+'''
+               f'''<meta content="search=y, train-ai=y" name="content-usage"/>
 <link href="{canonical}" rel="canonical"/>
-<link href="{canonical}" hreflang="en" rel="alternate"/>
-<link href="{canonical}" hreflang="x-default" rel="alternate"/>
+<link '''
+               f'''href="{canonical}" hreflang="en" rel="alternate"/>
+<link href="{canonical}" hreflang="x-default" '''
+               f'''rel="alternate"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
-<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
-<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
-<link href="https://tracker.metricool.com" rel="dns-prefetch"/>
-<script defer="" data-cookieyes="ignore" data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
+<script '''
+               f'''data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script '''
+               f'''data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+<link '''
+               f'''href="https://tracker.metricool.com" rel="dns-prefetch"/>
+<script defer="" data-cookieyes="ignore" '''
+               f'''data-cookieconsent="ignore" src="/assets/js/script-governance.min.js"></script>
 </head>
-<body class="ebooks-catalogue">
+<body '''
+               f'''class="ebooks-catalogue">
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe '''
+               f'''src="https://www.googletagmanager.com/ns.html?id=GTM-PC4K9KRK"
+height="0" width="0" '''
+               f'''style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-{header}
+'''
+               f'''{header}
 <div aria-hidden="false" class="page-loader is-active" id="pageLoader">
-  <div aria-label="Preparing page" aria-live="polite" class="loader-card" role="status">
-    <div aria-hidden="true" class="spinner"></div>
+  <div aria-label="Preparing '''
+               f'''page" aria-live="polite" class="loader-card" role="status">
+    <div aria-hidden="true" '''
+               f'''class="spinner"></div>
   </div>
 </div>
-<header class="hero ebook-hero ebook-catalogue-hero" role="region" aria-label="eBook catalogue intro">
+<header class="hero ebook-hero ebook-catalogue-hero" role="region" '''
+               f'''aria-label="eBook catalogue intro">
   <div class="wrap">
     <h1>AI eBooks Catalogue</h1>
-    <p>Browse {len(books)} practical, plain-English AI titles covering industries, ethics, safety, and real-world adoption.</p>
+    <p>Browse '''
+               f'''{len(books)} practical, plain-English AI titles covering industries, ethics, safety, and real-world '''
+               f'''adoption.</p>
   </div>
 </header>
 <main class="main" id="main" role="main" aria-label="eBook catalogue">
-  <div class="wrap">
+  '''
+               f'''<div class="wrap">
     <section class="ebook-catalogue-controls" aria-labelledby="ebook-finder-heading">
-      <div class="ebook-catalogue-controls__intro">
+     '''
+               f''' <div class="ebook-catalogue-controls__intro">
         <div>
-          <h2 id="ebook-finder-heading">Find the right AI eBook</h2>
-          <p>Search by title or keyword, then narrow the catalogue with one topic filter.</p>
+          <h2 id="ebook-finder-heading">Find the '''
+               f'''right AI eBook</h2>
+          <p>Search by title or keyword, then narrow the catalogue with one topic '''
+               f'''filter.</p>
         </div>
-        <p class="meta ebook-count" id="count">{len(books)} of {len(books)} books</p>
+        <p class="meta ebook-count" id="count">{len(books)} of {len(books)} '''
+               f'''books</p>
       </div>
 
       <div class="toolbar ebook-catalogue-toolbar" aria-label="Catalogue controls">
-        <label class="ebook-search-label" for="search">Search the catalogue</label>
-        <input aria-label="Search books" class="search" id="search" placeholder="Search by title, topic, or keyword" type="search"/>
+  '''
+               f'''      <label class="ebook-search-label" for="search">Search the catalogue</label>
+        <input '''
+               f'''aria-label="Search books" class="search" id="search" placeholder="Search by title, topic, or keyword" '''
+               f'''type="search"/>
         <div aria-label="Filter books by topic" class="chips" id="chips"></div>
       </div>
-    </section>
+ '''
+               f'''   </section>
 
-    <section class="card book-finder-bridge"><h2>Prefer a guided starting point?</h2><p>Use the rule-based finder when a 40-book grid is a bit too much buffet.</p><a class="button secondary" href="/book-finder/?source=ebooks-index">Find the right AI book</a></section>
+    <section class="card book-finder-bridge"><h2>Prefer a guided starting point?</h2><p>Use '''
+               f'''the rule-based finder when a 40-book grid is a bit too much buffet.</p><a class="button secondary" '''
+               f'''href="/book-finder/?source=ebooks-index">Find the right AI book</a></section>
 
-    <section aria-label="eBook grid" class="grid" id="booksGrid">
+    <section aria-label="eBook '''
+               f'''grid" class="grid" id="booksGrid">
       {static_cards}
     </section>
 
-    <nav aria-label="Pagination" class="pager u-s24" id="pager">
-      <button class="button secondary" id="prevPage" type="button">Previous</button>
+    <nav aria-label="Pagination" '''
+               f'''class="pager u-s24" id="pager">
+      <button class="button secondary" id="prevPage" '''
+               f'''type="button">Previous</button>
       <span class="meta" id="pageInfo"></span>
-      <button class="button" id="nextPage" type="button">Next</button>
+      <button class="button" '''
+               f'''id="nextPage" type="button">Next</button>
     </nav>
 
     <section class="jh-journey-panel">
-      <h2>Keep exploring the wider library</h2>
-      <p>Every ebook page links back into the catalogue, but you can also hop out to the podcast, newsletter, or topic guides when you want the broader view.</p>
+      <h2>Keep '''
+               f'''exploring the wider library</h2>
+      <p>Every ebook page links back into the catalogue, but you can also '''
+               f'''hop out to the podcast, newsletter, or topic guides when you want the broader view.</p>
       <div class="jh-journey-actions">
         <a href="/podcast/">Listen to the podcast</a>
         <a href="/newsletter/">Join the newsletter</a>
@@ -3935,6 +4280,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </body>
 </html>
 '''
+           )
 
 
 
@@ -3954,83 +4300,128 @@ def render_topic_page(topic: str, books: List[Dict[str, Any]]) -> str:
             for idx, book in enumerate(books, start=1)
         ],
     }
-    return f'''<!DOCTYPE html>
+    return (
+               f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
-new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+'''
+               f'''<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new '''
+               f'''Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+'''
+               f'''j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'''
+               f''''https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'''
+               f'''}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
 <!-- End Google Tag Manager -->
-<meta charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta '''
+               f'''charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
+               f'''type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
-<title>{html.escape(topic)} AI Books | Jonathan Harris</title>
+<link '''
+               f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, '''
+               f'''initial-scale=1, viewport-fit=cover" name="viewport"/>
+<title>{html.escape(topic)} AI Books | Jonathan '''
+               f'''Harris</title>
 <meta content="{html.escape(description)}" name="description"/>
-<meta content="index,follow" name="robots"/>
+<meta content="index,follow" '''
+               f'''name="robots"/>
 <meta content="#0D1420" name="theme-color"/>
 {SHARED_INTER_FONT_HEAD_BLOCK}
-<link as="style" href="/assets/css/site.css" rel="preload"/>
+<link as="style" '''
+               f'''href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
 
-<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<link '''
+               f'''href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
-<meta content="website" property="og:type"/>
+<meta '''
+               f'''content="website" property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
-<meta content="{html.escape(topic)} AI Books | Jonathan Harris" property="og:title"/>
-<meta content="{html.escape(description)}" property="og:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
-<meta content="Jonathan Harris site logo" property="og:image:alt"/>
+<meta '''
+               f'''content="{html.escape(topic)} AI Books | Jonathan Harris" property="og:title"/>
+<meta '''
+               f'''content="{html.escape(description)}" property="og:description"/>
+<meta '''
+               f'''content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="Jonathan '''
+               f'''Harris site logo" property="og:image:alt"/>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
-<meta content="@jonathan_harris_01" name="twitter:creator"/>
-<meta content="summary_large_image" name="twitter:card"/>
+<meta '''
+               f'''content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="summary_large_image" '''
+               f'''name="twitter:card"/>
 <meta content="{html.escape(topic)} AI Books | Jonathan Harris" name="twitter:title"/>
-<meta content="{html.escape(description)}" name="twitter:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
-<link href="{canonical}" rel="canonical"/>
+'''
+               f'''<meta content="{html.escape(description)}" name="twitter:description"/>
+<meta '''
+               f'''content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<link href="{canonical}" '''
+               f'''rel="canonical"/>
 <link href="{canonical}" hreflang="en" rel="alternate"/>
-<link href="{canonical}" hreflang="x-default" rel="alternate"/>
+<link href="{canonical}" '''
+               f'''hreflang="x-default" rel="alternate"/>
 <script type="application/ld+json">{json_script(item_list)}</script>
-<script type="application/ld+json">{json_script(build_topic_breadcrumb_schema(topic))}</script>
-<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
-<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+'''
+               f'''<script type="application/ld+json">{json_script(build_topic_breadcrumb_schema(topic))}</script>
+<script '''
+               f'''data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
+<script '''
+               f'''data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
 </head>
-<body class="ebooks-catalogue topic-catalogue">
+'''
+               f'''<body class="ebooks-catalogue topic-catalogue">
 {header}
-<header class="hero ebook-hero" role="region" aria-label="Topic catalogue intro">
+<header class="hero ebook-hero" role="region" '''
+               f'''aria-label="Topic catalogue intro">
   <div class="wrap">
-    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
-    <h1>{html.escape(topic)} AI Books</h1>
+    <img alt="Jonathan Harris site logo" '''
+               f'''class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+    '''
+               f'''<h1>{html.escape(topic)} AI Books</h1>
     <p>{html.escape(topic_intro(topic))}</p>
   </div>
 </header>
-<main class="main" id="main" role="main">
+<main '''
+               f'''class="main" id="main" role="main">
   <div class="wrap ebook-shell">
-    <nav aria-label="Breadcrumb" class="breadcrumbs">{render_topic_breadcrumbs(topic)}</nav>
+    <nav aria-label="Breadcrumb" '''
+               f'''class="breadcrumbs">{render_topic_breadcrumbs(topic)}</nav>
     <section class="card ebook-index-intro">
-      <h2>{category_question_heading(topic)}</h2>
-      <p>{html.escape(category_answer_first_copy(topic, books))}</p>
+     '''
+               f''' <h2>{category_question_heading(topic)}</h2>
+      '''
+               f'''<p>{html.escape(category_answer_first_copy(topic, books))}</p>
     </section>
-    <section class="card ebook-index-intro">
+    <section class="card '''
+               f'''ebook-index-intro">
       <h2>What this category covers</h2>
-      <p>{html.escape(category_scope_copy(topic, books))}</p>
+      '''
+               f'''<p>{html.escape(category_scope_copy(topic, books))}</p>
     </section>
-    <section class="card ebook-index-intro">
+    <section class="card '''
+               f'''ebook-index-intro">
       {render_inline_newsletter_form(f"topic:{topic_slug}")}
     </section>
-    <section class="card ebook-index-intro">
+    <section '''
+               f'''class="card ebook-index-intro">
       <h2>Best place to start</h2>
-      <p>{category_best_start_copy(topic, books)}</p>
+      '''
+               f'''<p>{category_best_start_copy(topic, books)}</p>
     </section>
     <section class="card book-finder-bridge">
-      <h2>Not sure which {html.escape(topic)} book fits?</h2>
-      <p>Use the rule-based finder to narrow the 40-book catalogue by the problem you are trying to solve.</p>
-      <a class="button secondary" href="/book-finder/?source=catalogue-{html.escape(topic_slug, quote=True)}" data-book-finder-bridge data-placement="catalogue:{html.escape(topic_slug, quote=True)}">Find the right AI book</a>
+ '''
+               f'''     <h2>Not sure which {html.escape(topic)} book fits?</h2>
+      <p>Use the rule-based finder to narrow the '''
+               f'''40-book catalogue by the problem you are trying to solve.</p>
+      <a class="button secondary" '''
+               f'''href="/book-finder/?source=catalogue-{html.escape(topic_slug, quote=True)}" data-book-finder-bridge '''
+               f'''data-placement="catalogue:{html.escape(topic_slug, quote=True)}">Find the right AI book</a>
     </section>
     <section class="faq card" aria-label="Category questions">
       <h2>Common questions</h2>
@@ -4058,6 +4449,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </body>
 </html>
 '''
+           )
 
 
 def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
@@ -4076,73 +4468,113 @@ def render_topics_index(topic_map: Dict[str, List[Dict[str, Any]]]) -> str:
         )
     cards_html = "\n".join(cards)
     guide_cards_html = topic_guide_cards_markup()
-    return f'''<!DOCTYPE html>
+    return (
+               f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
-new Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
+'''
+               f'''<script>(function(w,d,s,l,i){{w[l]=w[l]||[];w[l].push({{'gtm.start':
+new '''
+               f'''Date().getTime(),event:'gtm.js'}});var f=d.getElementsByTagName(s)[0],
+'''
+               f'''j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'''
+               f''''https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+'''
+               f'''}})(window,document,'script','dataLayer','GTM-PC4K9KRK');</script>
 <!-- End Google Tag Manager -->
-<meta charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>
+<meta '''
+               f'''charset="utf-8"/>
+<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
+               f'''type="image/x-icon"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
-<link href="https://assets.jonathan-harris.online" rel="preconnect"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<link '''
+               f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
+<meta content="width=device-width, '''
+               f'''initial-scale=1, viewport-fit=cover" name="viewport"/>
 <title>AI Topics | Jonathan Harris</title>
-<meta content="{description}" name="description"/>
+<meta '''
+               f'''content="{description}" name="description"/>
 <meta content="index,follow" name="robots"/>
-<meta content="#0D1420" name="theme-color"/>
+<meta '''
+               f'''content="#0D1420" name="theme-color"/>
 {SHARED_INTER_FONT_HEAD_BLOCK}
-<link as="style" href="/assets/css/site.css" rel="preload"/>
+<link as="style" '''
+               f'''href="/assets/css/site.css" rel="preload"/>
 <link href="/assets/css/site.css" rel="stylesheet"/>
 
 
-<link href="/assets/css/ebook-template.css" rel="stylesheet"/>
+<link '''
+               f'''href="/assets/css/ebook-template.css" rel="stylesheet"/>
 <meta content="GB" name="geo.region"/>
-<meta content="website" property="og:type"/>
+<meta '''
+               f'''content="website" property="og:type"/>
 <meta content="{canonical}" property="og:url"/>
-<meta content="AI Topics | Jonathan Harris" property="og:title"/>
+<meta content="AI '''
+               f'''Topics | Jonathan Harris" property="og:title"/>
 <meta content="{description}" property="og:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
-<meta content="Jonathan Harris site logo" property="og:image:alt"/>
+'''
+               f'''<meta content="https://images.jonathan-harris.online/site-logo" property="og:image"/>
+<meta content="Jonathan '''
+               f'''Harris site logo" property="og:image:alt"/>
 <meta content="@jonathan_harris_01" name="twitter:site"/>
-<meta content="@jonathan_harris_01" name="twitter:creator"/>
-<meta content="summary_large_image" name="twitter:card"/>
+<meta '''
+               f'''content="@jonathan_harris_01" name="twitter:creator"/>
+<meta content="summary_large_image" '''
+               f'''name="twitter:card"/>
 <meta content="AI Topics | Jonathan Harris" name="twitter:title"/>
-<meta content="{description}" name="twitter:description"/>
-<meta content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
-<link href="{canonical}" rel="canonical"/>
+<meta '''
+               f'''content="{description}" name="twitter:description"/>
+<meta '''
+               f'''content="https://images.jonathan-harris.online/site-logo" name="twitter:image"/>
+<link href="{canonical}" '''
+               f'''rel="canonical"/>
 <link href="{canonical}" hreflang="en" rel="alternate"/>
-<link href="{canonical}" hreflang="x-default" rel="alternate"/>
-<script data-jh-ai-pack="person" type="application/ld+json">{json_script(build_person_schema())}</script>
-<script data-jh-ai-pack="website" type="application/ld+json">{json_script(build_website_schema())}</script>
+<link href="{canonical}" '''
+               f'''hreflang="x-default" rel="alternate"/>
+<script data-jh-ai-pack="person" '''
+               f'''type="application/ld+json">{json_script(build_person_schema())}</script>
+<script data-jh-ai-pack="website" '''
+               f'''type="application/ld+json">{json_script(build_website_schema())}</script>
 </head>
-<body class="ebooks-catalogue topics-index">
+<body '''
+               f'''class="ebooks-catalogue topics-index">
 {header}
 <header class="hero ebook-hero" role="region">
-  <div class="wrap">
-    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" src="https://images.jonathan-harris.online/site-logo" width="120"/>
+  <div '''
+               f'''class="wrap">
+    <img alt="Jonathan Harris site logo" class="logo-plain" height="120" '''
+               f'''src="https://images.jonathan-harris.online/site-logo" width="120"/>
     <h1>Explore AI topics</h1>
-    <p>Use this page to find the right route into the site: topic guides when you want the plain-English explanation, catalogue pages when you want the books, and glossary or comparison pages when the language starts getting slippery.</p>
+    <p>Use '''
+               f'''this page to find the right route into the site: topic guides when you want the plain-English explanation, '''
+               f'''catalogue pages when you want the books, and glossary or comparison pages when the language starts getting '''
+               f'''slippery.</p>
   </div>
 </header>
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
-    <section class="card ebook-index-intro">
+  '''
+               f'''  <section class="card ebook-index-intro">
       <h2>How to use this page</h2>
-      <p>Start with a topic guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject you care about and want the relevant books without playing hide-and-seek.</p>
+      <p>Start with a topic '''
+               f'''guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject '''
+               f'''you care about and want the relevant books without playing hide-and-seek.</p>
     </section>
-    <section class="card ebook-index-intro">
+    <section '''
+               f'''class="card ebook-index-intro">
       <h2>Topic guides</h2>
-      <p>These pages explain the subject before you choose a book, so you are not buying your way through a fog bank.</p>
+      <p>These pages explain the subject before '''
+               f'''you choose a book, so you are not buying your way through a fog bank.</p>
     </section>
-    <section class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
-    <section class="card ebook-index-intro u-mt40">
+    <section '''
+               f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
+    <section class="card '''
+               f'''ebook-index-intro u-mt40">
       <h2>Browse by catalogue</h2>
-      <p>These category pages group the books by subject, so you can move from a broad theme to the title that actually fits.</p>
+      <p>These category pages group the books '''
+               f'''by subject, so you can move from a broad theme to the title that actually fits.</p>
     </section>
     <section class="grid topic-grid" aria-label="Catalogue pages">{cards_html}</section>
     <section class="related-books card">
@@ -4158,6 +4590,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </body>
 </html>
 '''
+           )
 
 
 def path_to_public_url(relative_path: Path) -> str:
@@ -4397,14 +4830,35 @@ def load_static_discovery_routes(generated_lastmod: str) -> List[Dict[str, str]]
         ("glossary", "AI glossary", "/glossary/", "glossary/index.html", "Plain-English AI glossary for answer engines and readers.", "glossary"),
         ("comparison", "AI book comparison guide", "/compare/", "compare/index.html", "Comparison page for choosing relevant AI books.", "comparison"),
         ("newsletter", "AI Edge", "/newsletter/", "newsletter/index.html", "Sign-up page for AI Edge, the practical AI briefing.", "newsletter"),
-        ("lead-magnet", "AI glossary cheat sheet", "/downloads/ai-glossary-cheat-sheet/", "downloads/ai-glossary-cheat-sheet/index.html", "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.", "lead magnet"),
+        (
+            "lead-magnet",
+            "AI glossary cheat sheet",
+            "/downloads/ai-glossary-cheat-sheet/",
+            "downloads/ai-glossary-cheat-sheet/index.html",
+            "Plain-English AI glossary cheat sheet offered as the newsletter lead magnet.",
+            "lead magnet",
+        ),
         ("book-finder", "Find the right AI book", "/book-finder/", "book-finder/index.html", "A deterministic book finder based on reader problem and topic.", "book finder"),
         ("evidence-index", "AI evidence guides", "/evidence/", "evidence/index.html", "Source-backed AI evidence guides designed for useful retrieval and citation.", "evidence index"),
         ("resource-index", "Practical AI checklists", "/resources/", "resources/index.html", "Practical AI checklists and decision resources.", "resource index"),
-        ("methodology", "Editorial and evidence methodology", "/methodology/", "methodology/index.html", "How sources are selected, claims are checked, review dates are handled and corrections are made.", "editorial methodology"),
+        (
+            "methodology",
+            "Editorial and evidence methodology",
+            "/methodology/",
+            "methodology/index.html",
+            "How sources are selected, claims are checked, review dates are handled and corrections are made.",
+            "editorial methodology",
+        ),
         ("teams", "Practical AI for teams", "/for-teams/", "for-teams/index.html", "AI literacy, reading paths and practical briefing options for managers and teams.", "team AI literacy"),
         ("media", "Media and speaking", "/media/", "media/index.html", "Media, podcast guest and speaking background for Jonathan Harris on practical artificial intelligence.", "media enquiries"),
-        ("contributor", "Contribute an AI case study", "/contribute/", "contribute/index.html", "Evidence-first route for submitting a real AI deployment, result or failure for editorial review.", "case study contribution"),
+        (
+            "contributor",
+            "Contribute an AI case study",
+            "/contribute/",
+            "contribute/index.html",
+            "Evidence-first route for submitting a real AI deployment, result or failure for editorial review.",
+            "case study contribution",
+        ),
     ]
     routes: List[Dict[str, str]] = []
     for family, title, path, repo_path, summary, entity in candidates:
@@ -4640,14 +5094,28 @@ def build_llms_txt(books: List[Dict[str, Any]]) -> str:
         "",
         "## Core discovery surfaces",
     ]
-    for route in routes_by_family.get("site-home", []) + routes_by_family.get("person", []) + routes_by_family.get("topic-index", []) + routes_by_family.get("glossary", []) + routes_by_family.get("comparison", []):
+    core_routes = (
+        routes_by_family.get("site-home", [])
+        + routes_by_family.get("person", [])
+        + routes_by_family.get("topic-index", [])
+        + routes_by_family.get("glossary", [])
+        + routes_by_family.get("comparison", [])
+    )
+    for route in core_routes:
         lines.append(f"- {route['title']}: {route['loc']} — {brand_safe_discovery_text(route.get('summary', ''))}")
 
     lines.extend(["", "## Canonical books"])
     for book in books:
         lines.append(f"- {book['title']}: {book['canonical_url']} — {brand_safe_discovery_text(book['short'])}")
 
-    service_routes = routes_by_family.get("methodology", []) + routes_by_family.get("teams", []) + routes_by_family.get("media", []) + routes_by_family.get("contributor", []) + routes_by_family.get("book-finder", []) + routes_by_family.get("lead-magnet", [])
+    service_routes = (
+        routes_by_family.get("methodology", [])
+        + routes_by_family.get("teams", [])
+        + routes_by_family.get("media", [])
+        + routes_by_family.get("contributor", [])
+        + routes_by_family.get("book-finder", [])
+        + routes_by_family.get("lead-magnet", [])
+    )
     if service_routes:
         lines.extend(["", "## Methodology and practical routes"])
         for route in service_routes:
@@ -4696,10 +5164,21 @@ def build_crawler_snapshot_payloads(books: List[Dict[str, Any]]) -> Dict[str, st
 
 
 
+def _crawler_snapshot_copy(name: str, content: str) -> str:
+    """Mark repository-only crawler snapshots without changing live payloads."""
+    marker = "Generated validation snapshot; not a publication target."
+    if name.endswith(".xml"):
+        declaration = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        if content.startswith(declaration):
+            return declaration + f"<!-- {marker} -->\n" + content[len(declaration):]
+        return f"<!-- {marker} -->\n{content}"
+    return f"# {marker}\n{content}"
+
+
 def build_crawler_snapshot_paths(books: List[Dict[str, Any]]) -> Dict[Path, str]:
     payloads = build_crawler_snapshot_payloads(books)
     return {
-        CRAWLER_SNAPSHOTS_DIR / name: content
+        CRAWLER_SNAPSHOTS_DIR / name: _crawler_snapshot_copy(name, content)
         for name, content in payloads.items()
     }
 
@@ -4712,7 +5191,6 @@ def build_published_crawler_paths(books: List[Dict[str, Any]]) -> Dict[Path, str
     llms_payload = payloads[CRAWLER_SNAPSHOT_FILENAMES["llms"]]
     return {
         ROOT / "robots.txt": robots_payload,
-        ROOT / "robot.txt": robots_payload,
         ROOT / "sitemap.xml": sitemap_payload,
         ROOT / "llms.txt": llms_payload,
     }
@@ -4850,9 +5328,11 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
         if alias_path.exists():
             alias_path.unlink()
     public_records = [book_to_public_record(book) for book in books]
-    write_json(EBOOKS_DIR / "books.json", public_records)
-    write_json(ROOT / "assets" / "js" / "books.json", public_records)
-    write_json(ROOT / "api" / "v1" / "books.json", public_records)
+    # Preserve the three public JSON contracts while avoiding byte-identical
+    # tracked mirrors. All three decode to the same governed records.
+    write_json(EBOOKS_DIR / "books.json", public_records, indent=2)
+    write_json(ROOT / "assets" / "js" / "books.json", public_records, indent=None)
+    write_json(ROOT / "api" / "v1" / "books.json", public_records, indent=1)
     write_json(ROOT / "api" / "v1" / "featured-book.json", build_featured_book_payload(public_records))
 
     feed = {
@@ -4894,6 +5374,26 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
     }
     write_json(ROOT / "ai" / "entity-map.json", entity_map)
 
+    dynamic_routes = build_dynamic_route_entries(books)
+    site_section_families = {
+        "site-home",
+        "person",
+        "blog-hub",
+        "podcast-hub",
+        "transcript-archive",
+        "topic-index",
+        "glossary",
+        "comparison",
+        "newsletter",
+        "lead-magnet",
+        "book-finder",
+        "evidence-index",
+        "resource-index",
+        "methodology",
+        "teams",
+        "media",
+        "contributor",
+    }
     llm_index = {
         "generated_utc": generated_utc,
         "books": [
@@ -4921,12 +5421,12 @@ def build_derivatives(books: List[Dict[str, Any]]) -> None:
             for book in books
         ],
         "topic_authority_pages": [f"/catalogue/{slugify(topic)}/" for topic in sorted({book['topic'] for book in books})],
-        "site_sections": [route for route in build_dynamic_route_entries(books) if route.get("family") in {"site-home", "person", "blog-hub", "podcast-hub", "transcript-archive", "topic-index", "glossary", "comparison", "newsletter", "lead-magnet", "book-finder", "evidence-index", "resource-index", "methodology", "teams", "media", "contributor"}],
-        "evidence_guides": [route for route in build_dynamic_route_entries(books) if route.get("family") == "evidence-guide"],
-        "practical_resources": [route for route in build_dynamic_route_entries(books) if route.get("family") == "practical-resource"],
-        "blog_posts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "blog-post"],
-        "podcast_episodes": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-episode"],
-        "transcripts": [route for route in build_dynamic_route_entries(books) if route.get("family") == "podcast-transcript"],
+        "site_sections": [route for route in dynamic_routes if route.get("family") in site_section_families],
+        "evidence_guides": [route for route in dynamic_routes if route.get("family") == "evidence-guide"],
+        "practical_resources": [route for route in dynamic_routes if route.get("family") == "practical-resource"],
+        "blog_posts": [route for route in dynamic_routes if route.get("family") == "blog-post"],
+        "podcast_episodes": [route for route in dynamic_routes if route.get("family") == "podcast-episode"],
+        "transcripts": [route for route in dynamic_routes if route.get("family") == "podcast-transcript"],
     }
     write_json(ROOT / "llm-index.json", llm_index)
     write_json(DYNAMIC_ROUTE_MANIFEST_PATH, build_dynamic_route_manifest(books))
@@ -5065,7 +5565,6 @@ def build_redirect_block(books: List[Dict[str, Any]]) -> str:
 
 def sync_redirects(books: List[Dict[str, Any]]) -> None:
     primary_path = ROOT / "_redirects"
-    mirror_path = ROOT / "_redirects.txt"
     block = build_redirect_block(books)
     pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     legacy_anchor = "# retire legacy detail routes to the canonical ebook page\n"
@@ -5095,66 +5594,120 @@ def sync_redirects(books: List[Dict[str, Any]]) -> None:
         raise ValueError(f"Could not refresh crawler alias block in {primary_path}")
 
     primary_path.write_text(new_text, encoding="utf-8")
-    mirror_path.write_text(new_text, encoding="utf-8")
     (ROOT / "_redirects.books-domain").write_text(build_books_domain_redirects(), encoding="utf-8")
     (ROOT / "_redirects.ebooks-domain").write_text(build_ebooks_domain_redirects(), encoding="utf-8")
 
 
 def ensure_css_file() -> None:
-    css = """
+    css = (
+              """
 .ebook-shell{display:grid;gap:20px}
 .ebook-hero .muted{opacity:.88}
-.ebook-section h2,.related-books h2,.faq h2,.ebook-index-intro h2{margin-top:0}
-.quick-facts ul.ebook-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;list-style:none;padding:0;margin:0}
+.ebook-section h2,.related-books h2,.faq """
+              """h2,.ebook-index-intro h2{margin-top:0}
+.quick-facts """
+              """ul.ebook-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px """
+              """20px;list-style:none;padding:0;margin:0}
 .quick-facts li{color:#374151}
-.ebook-showcase{display:grid;grid-template-columns:minmax(280px,360px) minmax(0,1fr);gap:20px;align-items:start}
+"""
+              """.ebook-showcase{display:grid;grid-template-columns:minmax(280px,360px) """
+              """minmax(0,1fr);gap:20px;align-items:start}
 .ebook-showcase__media,.ebook-showcase__content{height:100%}
-.ebook-showcase__cover{background:#0D1420}
-.ebook-showcase__lead{font-size:1.03rem;line-height:1.75;color:#111827}
-.ebook-showcase__subhead,.ebook-showcase__note{color:#4B5563}
-.ebook-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-.ebook-inline-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
-.ebook-inline-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid rgba(15,23,42,.12);background:#fff;color:#111827}
-.ebook-signal-list{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+"""
+              """.ebook-showcase__cover{background:#0D1420}
+"""
+              """.ebook-showcase__lead{font-size:1.03rem;line-height:1.75;color:#111827}
+"""
+              """.ebook-showcase__subhead,.ebook-showcase__note{color:#4B5563}
+"""
+              """.ebook-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+"""
+              """.ebook-inline-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.ebook-inline-actions """
+              """a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px """
+              """14px;border-radius:999px;text-decoration:none;font-weight:700;border:1px solid """
+              """rgba(15,23,42,.12);background:#fff;color:#111827}
+.ebook-signal-list{list-style:none;padding:0;margin:16px 0 """
+              """0;display:grid;gap:10px}
 .ebook-signal-list li{color:#111827;font-weight:600}
-.ebook-theme-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.ebook-pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;border:1px solid rgba(79,70,229,.18);color:#312E81;font-size:.9rem;font-weight:700}
-.ebook-pill--dark{background:#111827;color:#E5E7EB;border-color:rgba(255,255,255,.12)}
-.ebook-learn-list,.ebook-audience-list,.ebook-key-themes{margin:0;padding-left:20px;display:grid;gap:10px}
-.ebook-section--accent{background:linear-gradient(180deg,#111827 0%,#0F172A 100%);color:#E5E7EB;border-color:rgba(255,255,255,.08)}
+"""
+              """.ebook-theme-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+"""
+              """.ebook-pill{display:inline-flex;align-items:center;padding:6px """
+              """10px;border-radius:999px;background:#EEF2FF;border:1px solid """
+              """rgba(79,70,229,.18);color:#312E81;font-size:.9rem;font-weight:700}
+"""
+              """.ebook-pill--dark{background:#111827;color:#E5E7EB;border-color:rgba(255,255,255,.12)}
+"""
+              """.ebook-learn-list,.ebook-audience-list,.ebook-key-themes{margin:0;padding-left:20px;display:grid;gap:10px}
+"""
+              """.ebook-section--accent{background:linear-gradient(180deg,#111827 0%,#0F172A """
+              """100%);color:#E5E7EB;border-color:rgba(255,255,255,.08)}
 .ebook-section--accent h2{color:#fff}
-.ebook-section--accent p,.ebook-section--accent li{color:#E5E7EB}
-.related-books ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
-.related-books li{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px solid rgba(15,23,42,.08)}
+"""
+              """.ebook-section--accent p,.ebook-section--accent li{color:#E5E7EB}
+.related-books """
+              """ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.related-books """
+              """li{display:flex;justify-content:space-between;gap:16px;align-items:baseline;padding:12px 0;border-bottom:1px """
+              """solid rgba(15,23,42,.08)}
 .related-books li:last-child{border-bottom:none;padding-bottom:0}
-.related-books li span{font-size:.92rem;color:#6B7280}
+.related-books li """
+              """span{font-size:.92rem;color:#6B7280}
 .ebook-faq-list{display:grid;gap:12px}
-.ebook-faq-item{border:1px solid rgba(15,23,42,.10);border-radius:14px;padding:0 14px;background:#F8FAFC}
-.ebook-faq-item summary{cursor:pointer;font-weight:800;padding:14px 0;color:#111827}
-.ebook-faq-item p{margin:0 0 14px;color:#374151}
+.ebook-faq-item{border:1px solid """
+              """rgba(15,23,42,.10);border-radius:14px;padding:0 14px;background:#F8FAFC}
+.ebook-faq-item """
+              """summary{cursor:pointer;font-weight:800;padding:14px 0;color:#111827}
+.ebook-faq-item p{margin:0 0 """
+              """14px;color:#374151}
 .ebook-index-intro p{max-width:72ch}
-.ebook-catalogue-hero{padding-top:38px;padding-bottom:30px;text-align:center}
-.ebook-catalogue-hero h1{margin-bottom:8px}
+"""
+              """.ebook-catalogue-hero{padding-top:38px;padding-bottom:30px;text-align:center}
+.ebook-catalogue-hero """
+              """h1{margin-bottom:8px}
 .ebook-catalogue-hero p{max-width:760px}
-.ebook-catalogue-controls{margin:0 0 24px;padding:22px 24px;border:1px solid rgba(15,23,42,.10);border-radius:18px;background:#fff;box-shadow:0 10px 28px rgba(15,23,42,.07)}
-.ebook-catalogue-controls__intro{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
-.ebook-catalogue-controls__intro h2{margin:0 0 6px;color:#111827;font-size:1.35rem;line-height:1.25}
-.ebook-catalogue-controls__intro p:not(.ebook-count){margin:0;color:#4B5563;max-width:66ch}
-.ebook-catalogue-toolbar{display:grid;gap:10px;justify-content:stretch;margin:18px 0 0}
-.ebook-search-label{font-size:.82rem;font-weight:800;color:#374151;letter-spacing:.01em}
-.ebook-catalogue-toolbar .search{width:100%;max-width:none;box-sizing:border-box;min-height:50px}
-.ebook-catalogue-toolbar .chips{justify-content:flex-start;margin:2px 0 0}
-.ebook-catalogue-toolbar .chip{background:#F8FAFC;border-color:#E2E8F0;color:#334155}
-.ebook-catalogue-toolbar .chip[aria-pressed="true"]{background:#EEF2FF;border-color:rgba(79,70,229,.36);color:#312E81;box-shadow:none}
-.ebook-count{margin:3px 0 0;white-space:nowrap;font-weight:700;color:#64748B}
-.ebook-topic-directory{margin-top:22px;padding-top:18px;border-top:1px solid rgba(15,23,42,.10)}
-.ebook-topic-directory summary{cursor:pointer;font-weight:800;color:#312E81}
-.ebook-topic-directory .jh-topic-links{margin-top:14px}
-.pager{margin:24px 0 0;display:flex;align-items:center;justify-content:center;gap:14px}
+.ebook-catalogue-controls{margin:0 0 """
+              """24px;padding:22px 24px;border:1px solid rgba(15,23,42,.10);border-radius:18px;background:#fff;box-shadow:0 """
+              """10px 28px rgba(15,23,42,.07)}
+"""
+              """.ebook-catalogue-controls__intro{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+"""
+              """.ebook-catalogue-controls__intro h2{margin:0 0 6px;color:#111827;font-size:1.35rem;line-height:1.25}
+"""
+              """.ebook-catalogue-controls__intro p:not(.ebook-count){margin:0;color:#4B5563;max-width:66ch}
+"""
+              """.ebook-catalogue-toolbar{display:grid;gap:10px;justify-content:stretch;margin:18px 0 0}
+"""
+              """.ebook-search-label{font-size:.82rem;font-weight:800;color:#374151;letter-spacing:.01em}
+"""
+              """.ebook-catalogue-toolbar .search{width:100%;max-width:none;box-sizing:border-box;min-height:50px}
+"""
+              """.ebook-catalogue-toolbar .chips{justify-content:flex-start;margin:2px 0 0}
+.ebook-catalogue-toolbar """
+              """.chip{background:#F8FAFC;border-color:#E2E8F0;color:#334155}
+.ebook-catalogue-toolbar """
+              """.chip[aria-pressed="true"]{background:#EEF2FF;border-color:rgba(79,70,229,.36);color:#312E81;box-shadow:none}
+"""
+              """.ebook-count{margin:3px 0 0;white-space:nowrap;font-weight:700;color:#64748B}
+"""
+              """.ebook-topic-directory{margin-top:22px;padding-top:18px;border-top:1px solid rgba(15,23,42,.10)}
+"""
+              """.ebook-topic-directory summary{cursor:pointer;font-weight:800;color:#312E81}
+.ebook-topic-directory """
+              """.jh-topic-links{margin-top:14px}
+.pager{margin:24px 0 """
+              """0;display:flex;align-items:center;justify-content:center;gap:14px}
 .topic-chip-wrap{margin:2px 0 8px}
-.topic-chip{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#EEF2FF;color:#312E81;font-size:.88rem;font-weight:700;border:1px solid rgba(79,70,229,.18)}
+"""
+              """.topic-chip{display:inline-flex;align-items:center;padding:6px """
+              """10px;border-radius:999px;background:#EEF2FF;color:#312E81;font-size:.88rem;font-weight:700;border:1px solid """
+              """rgba(79,70,229,.18)}
 .book-avail{margin:12px 0 0}
-.book-avail__badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:#ECFDF5;color:#166534;border:1px solid rgba(22,101,52,.12);font-size:.88rem;font-weight:700}
+"""
+              """.book-avail__badge{display:inline-flex;align-items:center;gap:8px;padding:8px """
+              """12px;border-radius:999px;background:#ECFDF5;color:#166534;border:1px solid """
+              """rgba(22,101,52,.12);font-size:.88rem;font-weight:700}
 .ebook-signal-grid,.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .ebook-signal-card h3,.topic-card h2{margin-top:0}
 .ebook-signal-card p,.topic-card p{margin:0;color:#4B5563}
@@ -5176,7 +5729,8 @@ def ensure_css_file() -> None:
   .ebook-actions .button,.pager .button,.ebook-inline-actions a{width:100%;text-align:center}
   .related-books li{flex-direction:column;align-items:flex-start}
 }
-""".strip() + "\n"
+"""
+          ).strip() + "\n"
     EBOOK_TEMPLATE_CSS.write_text(css, encoding="utf-8")
 
 
@@ -5365,7 +5919,12 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             continue
         text = page.read_text(encoding="utf-8", errors="ignore")
         expected_url = f"{SITE_URL}/catalogue/{slug}/"
-        for marker, label in ((f'<link href="{expected_url}" rel="canonical"/>', "canonical"), (f'<h1>{html.escape(topic)} AI Books</h1>', "H1"), (f'/newsletter/?source=topic%3A{slug}&amp;placement=inline', "newsletter source")):
+        expected_markers = (
+            (f'<link href="{expected_url}" rel="canonical"/>', "canonical"),
+            (f'<h1>{html.escape(topic)} AI Books</h1>', "H1"),
+            (f'/newsletter/?source=topic%3A{slug}&amp;placement=inline', "newsletter source"),
+        )
+        for marker, label in expected_markers:
             if marker not in text:
                 errors.append(f"catalogue/{slug}/ {label} does not align with route/category metadata.")
         sig = re.sub(r"\s+", " ", re.sub(r"<footer.*", "", text, flags=re.I | re.S)).strip()
@@ -5587,14 +6146,6 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         errors.extend(metadata_budget_errors(page["label"], page_text, min_description=page.get("min_description"), max_description=page.get("max_description")))
 
     redirects_text = (ROOT / "_redirects").read_text(encoding="utf-8")
-    redirects_mirror_path = ROOT / "_redirects.txt"
-    if not redirects_mirror_path.exists():
-        errors.append("_redirects.txt is missing. Run scripts/sync_redirects.py to regenerate the governed mirror.")
-        redirects_mirror = ""
-    else:
-        redirects_mirror = redirects_mirror_path.read_text(encoding="utf-8")
-        if redirects_text != redirects_mirror:
-            errors.append("_redirects.txt is not an exact generated mirror of _redirects.")
     redirect_block_pattern = re.compile(r"# 6A\) Branded buy-now redirects.*?(?=\n# 7\) CANONICAL: old /book URLs permanently redirect to /ebooks)", re.S)
     existing_redirect_block = redirect_block_pattern.search(redirects_text)
     expected_redirect_block = build_redirect_block(books).strip()
@@ -5603,22 +6154,16 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     for line in LEGACY_DETAIL_REDIRECT_LINES:
         if line not in redirects_text:
             errors.append(f"Redirect family missing from _redirects: {line}")
-        if line not in redirects_mirror:
-            errors.append(f"Redirect family missing from _redirects.txt: {line}")
     for legacy_alias in ("/en-gb/*  /:splat  200", "/en-us/*  /:splat  200", "/en-ca/*  /:splat  200", "/en-au/*  /:splat  200"):
-        if legacy_alias in redirects_text or legacy_alias in redirects_mirror:
+        if legacy_alias in redirects_text:
             errors.append(f"Locale alias pass-through must not remain live: {legacy_alias}")
     for line in LOCALE_ALIAS_REDIRECT_LINES:
         if line not in redirects_text:
             errors.append(f"Locale alias redirect missing from _redirects: {line}")
-        if line not in redirects_mirror:
-            errors.append(f"Locale alias redirect missing from _redirects.txt: {line}")
     malformed_lines = [f"{item['source']}   {item['target']}  301" for item in MALFORMED_SLUG_FIXES]
     for line in malformed_lines:
         if line not in redirects_text:
             errors.append(f"Malformed slug fix missing from _redirects: {line}")
-        if line not in redirects_mirror:
-            errors.append(f"Malformed slug fix missing from _redirects.txt: {line}")
     for book in books:
         required_lines = [
             f"{book['buy_route']}   {book['buy_url']}   302",
@@ -5627,8 +6172,6 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         for line in required_lines:
             if line not in redirects_text:
                 errors.append(f"Redirect rule missing from _redirects: {line}")
-            if line not in redirects_mirror:
-                errors.append(f"Redirect rule missing from _redirects.txt: {line}")
 
     forbidden_main_redirects = [
         f"/robots.txt    {EXTERNAL_CRAWLER_FILES['robots']}   301",
@@ -5638,18 +6181,16 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
     for snippet in forbidden_main_redirects:
         if snippet in redirects_text:
             errors.append(f"Main redirect file still redirects a governed crawler asset instead of serving it directly: {snippet}")
-        if snippet in redirects_mirror:
-            errors.append(f"Main redirect mirror still redirects a governed crawler asset instead of serving it directly: {snippet}")
 
     legacy_typo_alias = "/robot.txt    /robots.txt   301"
     legacy_sitemap_alias = "/Sitemap.xml  /sitemap.xml  301"
     legacy_site_map_alias = "/site-map.xml  /sitemap.xml  301"
-    if legacy_typo_alias not in redirects_text or legacy_typo_alias not in redirects_mirror:
-        errors.append("Legacy /robot.txt crawler alias is missing from the main redirect files.")
-    if legacy_sitemap_alias not in redirects_text or legacy_sitemap_alias not in redirects_mirror:
-        errors.append("Legacy /Sitemap.xml crawler alias is missing from the main redirect files.")
-    if legacy_site_map_alias not in redirects_text or legacy_site_map_alias not in redirects_mirror:
-        errors.append("Legacy /site-map.xml crawler alias is missing from the main redirect files.")
+    if legacy_typo_alias not in redirects_text:
+        errors.append("Legacy /robot.txt crawler alias is missing from _redirects.")
+    if legacy_sitemap_alias not in redirects_text:
+        errors.append("Legacy /Sitemap.xml crawler alias is missing from _redirects.")
+    if legacy_site_map_alias not in redirects_text:
+        errors.append("Legacy /site-map.xml crawler alias is missing from _redirects.")
 
     books_domain = (ROOT / "_redirects.books-domain").read_text(encoding="utf-8")
     ebooks_domain = (ROOT / "_redirects.ebooks-domain").read_text(encoding="utf-8")
@@ -5795,7 +6336,10 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             errors.append(f"Catalogue topic page missing for breadcrumb validation: {page_path.relative_to(ROOT)}")
             continue
         page_text = page_path.read_text(encoding="utf-8", errors="ignore")
-        expected_nav = f'<nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a href="/topics/">Topics</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>'
+        expected_nav = (
+                           f'<nav aria-label="Breadcrumb" class="breadcrumbs"><a href="/">Home</a><span aria-hidden="true">›</span><a '
+                           f'href="/topics/">Topics</a><span aria-hidden="true">›</span><span>{html.escape(topic)}</span></nav>'
+                       )
         if expected_nav not in page_text:
             errors.append(f"Catalogue breadcrumb trail drift detected for {page_path.relative_to(ROOT)}.")
         breadcrumb_payload = json.dumps(build_topic_breadcrumb_schema(topic), ensure_ascii=False, separators=(",", ":"))

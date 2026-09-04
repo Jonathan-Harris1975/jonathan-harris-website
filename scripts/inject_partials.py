@@ -83,7 +83,12 @@ _FOOTER_BLOCK_RE = re.compile(
 )
 
 _FONT_HEAD_BLOCK_RE = re.compile(
-    r'(?:\s*<link[^>]+href="https://fonts.googleapis.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.gstatic.com"[^>]*>\s*\n?\s*<link[^>]+href="https://fonts.googleapis.com/css2\?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap"[^>]*>)',
+    (
+        r'(?:\s*<link[^>]+href="https://fonts.googleapis.com"[^>]*>\s*\n?\s*'
+        r'<link[^>]+href="https://fonts.gstatic.com"[^>]*>\s*\n?\s*'
+        r'<link[^>]+href="https://fonts.googleapis.com/css2\?family='
+        r'Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap"[^>]*>)'
+    ),
     re.IGNORECASE,
 )
 

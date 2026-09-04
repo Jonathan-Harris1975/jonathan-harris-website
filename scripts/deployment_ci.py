@@ -87,7 +87,11 @@ def main() -> int:
     parser.add_argument(
         "--skip-manuscript-sync",
         action="store_true",
-        help="Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every advertised sample to be a genuine extracted chapter, but individual books may omit a sample when extraction is unavailable.",
+        help=(
+                 "Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every "
+                 "advertised sample to be a genuine extracted chapter, but individual books may omit a sample when extraction "
+                 "is unavailable."
+             ),
     )
     args = parser.parse_args()
 

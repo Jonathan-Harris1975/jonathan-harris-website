@@ -110,5 +110,29 @@ class LiveSitemapValidationTests(unittest.TestCase):
         self.assertIn("ungoverned entries", self.validate(bad_date) or "")
 
 
+class RepositoryCrawlerPublicationTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.books = check_crawlers.load_master()
+
+    def test_validation_snapshots_are_distinct_from_live_payloads(self) -> None:
+        snapshots = check_crawlers.build_crawler_snapshot_paths(self.books)
+        live_payloads = check_crawlers.build_crawler_snapshot_payloads(self.books)
+
+        for path, snapshot in snapshots.items():
+            live = live_payloads[path.name]
+            self.assertNotEqual(snapshot, live)
+            self.assertIn("Generated validation snapshot; not a publication target.", snapshot)
+            self.assertNotIn("Generated validation snapshot; not a publication target.", live)
+
+    def test_robot_typo_is_redirect_only(self) -> None:
+        published = check_crawlers.build_published_crawler_paths(self.books)
+        published_names = {path.name for path in published}
+        self.assertIn("robots.txt", published_names)
+        self.assertNotIn("robot.txt", published_names)
+
+        redirects = (check_crawlers.ROOT / "_redirects").read_text(encoding="utf-8")
+        self.assertRegex(redirects, r"(?m)^/robot\.txt\s+/robots\.txt\s+301\s*$")
+
+
 if __name__ == "__main__":
     unittest.main()

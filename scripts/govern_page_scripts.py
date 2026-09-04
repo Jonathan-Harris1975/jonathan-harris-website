@@ -32,7 +32,12 @@ RUNTIME_HEAD_BLOCK = '''<link href="https://tracker.metricool.com" rel="dns-pref
 GOOGLE_PATTERNS = [
     re.compile(r'\s*<!--\s*Google Tag Manager\s*-->.*?googletagmanager\.com/gtm\.js.*?</script>\s*<!--\s*End Google Tag Manager\s*-->', re.I | re.S),
     re.compile(r'\s*<!--\s*Google Tag Manager \(noscript\)\s*-->.*?googletagmanager\.com/ns\.html\?id=.*?</noscript>\s*<!--\s*End Google Tag Manager \(noscript\)\s*-->', re.I | re.S),
-    re.compile(r'\s*<!--\s*Google tag \(gtag\.js\)\s*-->\s*<script[^>]*src="https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"[^>]*></script>\s*<script>.*?gtag\(["\']config["\']\s*,\s*["\'][^"\']+["\']\);.*?</script>', re.I | re.S),
+    re.compile((
+                   r'\s*<!--\s*Google tag '
+                   r'\(gtag\.js\)\s*-->\s*<script[^>]*src="'
+                   r'https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"[^>]*></script>'
+                   r'\s*<script>.*?gtag\(["\']config["\']\s*,\s*["\'][^"\']+["\']\);.*?</script>'
+               ), re.I | re.S),
     re.compile(r'\s*<script[^>]*src="https://www\.googletagmanager\.com/gtag/js\?id=[^"]+"[^>]*></script>', re.I | re.S),
     re.compile(r'\s*<script>\s*\(function\(w,d,s,l,i\).*?googletagmanager\.com/gtm\.js.*?</script>', re.I | re.S),
     re.compile(r'\s*<script>.*?\bgtag\s*\(.*?</script>', re.I | re.S),

@@ -483,7 +483,14 @@ def run_growth_surface_checks(*, timeout: float) -> list[PageResult]:
             failures.append(f"generated catalogue count {book_count} is not visible")
         if "/evidence/eu-ai-act-article-50-transparency/" not in home.body:
             failures.append("Article 50 evidence route is not surfaced on the homepage")
-        results.append(PageResult("Homepage growth contract", not failures, "Homepage catalogue/evidence contract is current" if not failures else "Homepage growth contract failed", home_url, failures, status_code=home.status_code))
+        results.append(PageResult(
+            "Homepage growth contract",
+            not failures,
+            "Homepage catalogue/evidence contract is current" if not failures else "Homepage growth contract failed",
+            home_url,
+            failures,
+            status_code=home.status_code,
+        ))
 
     # AI Edge: one collection system and no cadence/read-time promise.
     news_url = f"{SITE_URL}/newsletter/"
@@ -500,7 +507,14 @@ def run_growth_surface_checks(*, timeout: float) -> list[PageResult]:
         forbidden = re.search(r"(?:three[- ]minute|3[- ]minute|weekday|daily\s+(?:AI\s+)?(?:newsletter|briefing))", visible, re.I)
         if forbidden:
             failures.append(f"newsletter time/cadence wording remains live: {forbidden.group(0)}")
-        results.append(PageResult("AI Edge signup contract", not failures, "AI Edge uses one Jotform path with no time promise" if not failures else "AI Edge signup contract failed", news_url, failures, status_code=news.status_code))
+        results.append(PageResult(
+            "AI Edge signup contract",
+            not failures,
+            "AI Edge uses one Jotform path with no time promise" if not failures else "AI Edge signup contract failed",
+            news_url,
+            failures,
+            status_code=news.status_code,
+        ))
 
     # Podcast: current episodes must be crawlable before any third-party enhancement.
     pod_url = f"{SITE_URL}/podcast/"
@@ -517,7 +531,18 @@ def run_growth_surface_checks(*, timeout: float) -> list[PageResult]:
             failures.append("Elfsight six-episode player is missing")
         if re.search(r'<details[^>]*class=["\'][^"\']*podcast-archive-widget', pod.body, re.I):
             failures.append("Elfsight player is still hidden inside a disclosure")
-        results.append(PageResult("Podcast crawlable contract", not failures, "Podcast returns current crawlable episodes plus the visible six-episode player" if not failures else "Podcast crawlable contract failed", pod_url, failures, status_code=pod.status_code))
+        results.append(PageResult(
+            "Podcast crawlable contract",
+            not failures,
+            (
+                "Podcast returns current crawlable episodes plus the visible six-episode player"
+                if not failures
+                else "Podcast crawlable contract failed"
+            ),
+            pod_url,
+            failures,
+            status_code=pod.status_code,
+        ))
 
     return results
 
