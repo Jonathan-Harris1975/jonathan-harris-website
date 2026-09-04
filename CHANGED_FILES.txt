@@ -1,0 +1,54 @@
+Baseline: aa2bda3
+Remediation: 9880b74
+Changed paths: 50
+
+D	_redirects.txt
+M	api/hive-skills/[[path]].js
+M	api/v1/books.json
+D	assets/js/blog.bundle.js
+M	assets/js/books.json
+M	build.sh
+D	config/check_crawlers.py
+M	config/crawler-snapshots/llms.txt
+M	config/crawler-snapshots/robots.txt
+M	config/crawler-snapshots/sitemap.xml
+D	config/ebook_pipeline.py
+D	config/inject_partials.py
+M	functions/Sitemap.xml.js
+R061	site-map.xml.js	functions/_shared/canonical-sitemap-redirect.js
+A	functions/_shared/hive-skills-route.js
+M	functions/api/hive-skills/[[path]].js
+M	functions/site-map.xml.js
+D	robot.txt
+D	scripts/audits/Sitemap.xml
+D	scripts/audits/_redirects
+D	scripts/audits/check_crawlers.py
+M	scripts/audits/digital_growth_audit.py
+D	scripts/audits/ebook_pipeline.py
+D	scripts/audits/inject_partials.py
+D	scripts/audits/llms.txt
+M	scripts/audits/mobile_ux_hard_gate.py
+M	scripts/audits/seo_aeo_geo_forensic.py
+D	scripts/audits/site-map.xml
+D	scripts/audits/sitemap (1).xml
+M	scripts/audits/test_mobile_ux_hard_gate.py
+M	scripts/audits/test_schema_markup_gate.py
+M	scripts/check_css_budget.py
+M	scripts/check_hive_skills_route_parity.py
+M	scripts/check_live_pages.py
+A	scripts/check_repository_hygiene.py
+M	scripts/check_transcript_assets.py
+M	scripts/check_webchat_contract.py
+M	scripts/deployment_ci.py
+M	scripts/ebook_content_helpers.py
+M	scripts/ebook_pipeline.py
+M	scripts/generate_ebook_bundles.py
+M	scripts/generate_growth_assets.py
+M	scripts/govern_page_scripts.py
+M	scripts/inject_partials.py
+D	scripts/maintenance/ebook_pipeline.py
+M	scripts/pages-routing.test.mjs
+M	scripts/reconcile_kdp.py
+M	scripts/test_check_crawlers.py
+M	scripts/test_growth_contracts.py
+D	seo_aeo_geo_forensic.py
