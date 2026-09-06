@@ -43,7 +43,7 @@ on:
         default: ""
         type: string
       audit_public_base_url:
-        description: Dedicated audits R2 public base URL
+        description: Dedicated audits R2 reference base (HTTPS or r2://bucket)
         required: false
         default: ""
         type: string
@@ -161,8 +161,8 @@ jobs:
             audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
           fi
           if [ -z "$audit_public_base_url" ]; then
-            echo "::error::R2_PUBLIC_BASE_URL_AUDITS was not supplied."
-            exit 1
+            # Audit artefacts are private by design; use an authenticated R2 reference.
+            audit_public_base_url="r2://$audit_bucket"
           fi
 
           for required_name in R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY R2_ENDPOINT; do

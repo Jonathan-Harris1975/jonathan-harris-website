@@ -43,7 +43,7 @@ on:
         default: ""
         type: string
       audit_public_base_url:
-        description: Dedicated audits R2 public base URL
+        description: Dedicated audits R2 reference base (HTTPS or r2://bucket)
         required: false
         default: ""
         type: string
@@ -131,7 +131,9 @@ jobs:
           audit_public_base_url="$INPUT_AUDIT_PUBLIC_BASE_URL"
           [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
           [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
-          [ -n "$audit_public_base_url" ] || { echo "::error::R2_PUBLIC_BASE_URL_AUDITS is required"; exit 1; }
+          # Audit artefacts are stored in a private R2 bucket.  If no HTTP-public
+          # base is configured, advertise canonical authenticated R2 references.
+          [ -n "$audit_public_base_url" ] || audit_public_base_url="r2://$audit_bucket"
 
           [ "$INPUT_AUDIT_BUCKET_ENV" = "R2_BUCKET_AUDITS" ] || { echo "::error::audit_bucket_env must be R2_BUCKET_AUDITS"; exit 1; }
           [ "$INPUT_AUDIT_PUBLIC_BASE_ENV" = "R2_PUBLIC_BASE_URL_AUDITS" ] || { echo "::error::audit_public_base_env must be R2_PUBLIC_BASE_URL_AUDITS"; exit 1; }
@@ -168,7 +170,7 @@ jobs:
           exit "$audit_status"
 
       - name: Notify AIMS if workflow failed before stage callback
-        if: failure() && env.RESOLVED_CALLBACK_URL != ''
+        if: failure()
         shell: bash
         run: |
           marker="artifacts/digital-growth/.digital-growth-callback-posted.json"
@@ -181,9 +183,20 @@ jobs:
           python - <<'PY'
           import json, os, urllib.request
           from pathlib import Path
-          callback_url = os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
-          token = os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
-          if not callback_url:
+          callback_url = (
+              os.environ.get("RESOLVED_CALLBACK_URL", "").strip()
+              or os.environ.get("INPUT_CALLBACK_URL", "").strip()
+              or os.environ.get("AI_SUITE_AUDIT_CALLBACK_URL", "").strip()
+              or "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app/audits/digital-growth/callback"
+          )
+          token = (
+              os.environ.get("RESOLVED_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("INPUT_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("AUDIT_CALLBACK_TOKEN", "").strip()
+              or os.environ.get("AI_SUITE_AUDIT_CALLBACK_TOKEN", "").strip()
+          )
+          if not callback_url or not token:
+            print("::warning::Unable to post fallback callback because URL or token is unavailable")
             raise SystemExit(0)
           log_path = Path("artifacts/digital-growth/workflow.log")
           workflow_log_tail = ""
