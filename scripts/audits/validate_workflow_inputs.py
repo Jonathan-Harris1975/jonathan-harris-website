@@ -33,6 +33,31 @@ def validate_https_url(name: str, raw: str, *, optional: bool = False, required_
         raise SystemExit(f"{name} must end with {required_suffix}")
 
 
+
+def validate_audit_reference(name: str, raw: str, *, optional: bool = False) -> None:
+    if not raw:
+        if optional:
+            return
+        raise SystemExit(f"{name} is required")
+    try:
+        parsed = urlsplit(raw)
+    except ValueError as exc:
+        raise SystemExit(f"{name} is not a valid storage reference: {exc}") from exc
+    scheme = parsed.scheme.lower()
+    if scheme == "https":
+        validate_https_url(name, raw, optional=optional)
+        return
+    if scheme == "r2":
+        bucket = parsed.netloc.strip()
+        if not bucket or not BUCKET_RE.fullmatch(bucket):
+            raise SystemExit(f"{name} r2:// reference must contain a valid bucket name")
+        if parsed.username or parsed.password or parsed.query or parsed.fragment:
+            raise SystemExit(f"{name} r2:// reference must not contain credentials, query parameters or fragments")
+        if parsed.path not in {"", "/"}:
+            raise SystemExit(f"{name} r2:// reference must identify a bucket base, not an object key")
+        return
+    raise SystemExit(f"{name} must be an absolute HTTPS URL or r2://bucket reference")
+
 def validate() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--callback-suffix", required=True)
@@ -56,7 +81,7 @@ def validate() -> None:
         optional=True,
         required_suffix=args.callback_suffix,
     )
-    validate_https_url("audit_public_base_url", value("INPUT_AUDIT_PUBLIC_BASE_URL"), optional=True)
+    validate_audit_reference("audit_public_base_url", value("INPUT_AUDIT_PUBLIC_BASE_URL"), optional=True)
 
     exclude_prefixes = value("INPUT_EXCLUDE_PREFIXES")
     for prefix in [item.strip() for item in exclude_prefixes.split(",") if item.strip()]:

@@ -369,9 +369,11 @@ def resolve_r2_public_base_for_bucket(bucket: str, explicit_public_base: str | N
       return public_base.rstrip("/")
 
   public_base = os.environ.get("R2_PUBLIC_BASE_URL_AUDITS", "").strip() or os.environ.get("R2_PUBLIC_BASE_URL_BRAND_ASSETS", "").strip()
-  if not public_base:
-    raise RuntimeError("No public R2 base URL is configured for the selected audit bucket")
-  return public_base.rstrip("/")
+  if public_base:
+    return public_base.rstrip("/")
+  if bucket:
+    return f"r2://{bucket}"
+  raise RuntimeError("No R2 bucket/reference base is configured for the selected audit bucket")
 
 
 def upload_file_to_r2(client: Any, bucket: str, prefix: str, file_path: Path, public_base_url: str | None = None) -> str:
@@ -425,35 +427,51 @@ def validate_public_json_artifacts(
   delay_seconds: float = 1.5,
   timeout_seconds: float = 20,
 ) -> dict[str, Any]:
-  """Verify that required uploaded JSON artefacts are publicly readable.
+  """Verify required uploaded JSON artefacts through their advertised reference.
 
-  A completed callback is the hand-off boundary to AIMS.  Do not cross that
-  boundary until every required machine-readable object can be fetched and
-  parsed from the same public URL advertised in the callback.
+  HTTP(S) references are fetched normally. Private ``r2://bucket/key``
+  references are read with the configured authenticated R2 client. A completed
+  callback is the hand-off boundary to AIMS, so do not cross it until every
+  required machine-readable object can be read and parsed.
   """
   required = [str(name).strip() for name in names if str(name).strip()]
   if not required:
-    raise ValueError("At least one public JSON artefact name is required")
+    raise ValueError("At least one JSON artefact name is required")
 
   results: dict[str, Any] = {}
+  r2_client: Any | None = None
   for name in required:
-    url = str(uploaded.get(name) or "").strip()
-    if not url:
-      raise RuntimeError(f"public JSON validation missing URL for {name}")
+    reference = str(uploaded.get(name) or "").strip()
+    if not reference:
+      raise RuntimeError(f"JSON validation missing reference for {name}")
 
     last_error: Exception | None = None
     for attempt in range(1, max(1, int(attempts)) + 1):
       try:
-        response = requests.get(url, headers={"Accept": "application/json"}, timeout=timeout_seconds)
-        response.raise_for_status()
-        payload = response.json()
+        if reference.startswith("r2://"):
+          parsed = urlparse(reference)
+          bucket = parsed.netloc.strip()
+          key = parsed.path.lstrip("/")
+          if not bucket or not key:
+            raise RuntimeError(f"invalid private R2 JSON reference for {name}: {reference}")
+          if r2_client is None:
+            r2_client = build_r2_client()
+          obj = r2_client.get_object(Bucket=bucket, Key=key)
+          raw = obj["Body"].read()
+          payload = json.loads(raw.decode("utf-8"))
+          content_length = len(raw)
+        else:
+          response = requests.get(reference, headers={"Accept": "application/json"}, timeout=timeout_seconds)
+          response.raise_for_status()
+          payload = response.json()
+          content_length = len(response.content)
         if not isinstance(payload, dict):
           raise RuntimeError(f"{name} returned {type(payload).__name__}; expected a JSON object")
         results[name] = {
-          "url": url,
+          "url": reference,
           "status": "PASS",
           "attempt": attempt,
-          "contentLength": len(response.content),
+          "contentLength": content_length,
         }
         break
       except Exception as exc:  # pragma: no cover - depends on the live R2 endpoint
@@ -461,10 +479,8 @@ def validate_public_json_artifacts(
         if attempt < max(1, int(attempts)):
           time.sleep(max(0.0, float(delay_seconds)))
     else:
-      raise RuntimeError(f"public JSON artefact validation failed for {name}: {last_error}")
-
+      raise RuntimeError(f"JSON artefact validation failed for {name}: {last_error}")
   return {"status": "PASS", "checked": results, "generatedAt": utc_now()}
-
 
 def post_callback(callback_url: str | None, callback_token: str | None, payload: dict[str, Any]) -> None:
   if not callback_url:
