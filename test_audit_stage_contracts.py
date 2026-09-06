@@ -1,8 +1,10 @@
 import unittest
 from pathlib import Path
 from unittest.mock import Mock, patch
+import io
 
-from scripts.audits.common import validate_public_json_artifacts
+from scripts.audits.common import resolve_r2_public_base_for_bucket, validate_public_json_artifacts
+from scripts.audits.validate_workflow_inputs import validate_audit_reference
 from scripts.audits.digital_growth_audit import analysis_is_complete
 from scripts.audits.seo_aeo_geo_forensic import seo_analysis_is_complete
 
@@ -42,6 +44,28 @@ class AuditStageContractTests(unittest.TestCase):
     self.assertIn('["report.json", "summary.json", "evidence.json"]', digital)
     self.assertIn('validate_public_json_artifacts(', seo)
     self.assertIn('["report.json", "summary.json", "coverage.json"]', seo)
+
+  def test_private_audit_bucket_resolves_to_r2_reference_when_no_public_base_exists(self):
+    with patch.dict("os.environ", {"R2_BUCKET_AUDITS": "private-audits"}, clear=False):
+      with patch.dict("os.environ", {"R2_PUBLIC_BASE_URL_AUDITS": ""}, clear=False):
+        self.assertEqual(resolve_r2_public_base_for_bucket("private-audits"), "r2://private-audits")
+
+  def test_private_r2_json_validation_uses_authenticated_r2_client(self):
+    client = Mock()
+    client.get_object.return_value = {"Body": io.BytesIO(b'{"auditCompletionState":"Complete"}')}
+    with patch("scripts.audits.common.build_r2_client", return_value=client):
+      result = validate_public_json_artifacts(
+        {"report.json": "r2://private-audits/audits/run/report.json"},
+        ["report.json"],
+        attempts=1,
+      )
+    client.get_object.assert_called_once_with(Bucket="private-audits", Key="audits/run/report.json")
+    self.assertEqual(result["status"], "PASS")
+
+  def test_workflow_input_validator_accepts_private_r2_bucket_reference(self):
+    validate_audit_reference("audit_public_base_url", "r2://private-audits", optional=True)
+    with self.assertRaises(SystemExit):
+      validate_audit_reference("audit_public_base_url", "r2://private-audits/object.json", optional=True)
 
   def test_public_json_validation_retries_then_returns_parseable_object_metadata(self):
     failed = Mock()

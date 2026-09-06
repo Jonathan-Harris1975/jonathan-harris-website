@@ -1,0 +1,23 @@
+Verified website monthly-audit fix against uploaded current repository snapshot.
+
+Required changed files: 6
+- .github/workflows/digital-growth-audit.yml
+- .github/workflows/seo-aeo-geo-forensic.yml
+- .github/workflows/mobile-ux-hard-gate.yml
+- scripts/audits/common.py
+- scripts/audits/validate_workflow_inputs.py
+- test_audit_stage_contracts.py
+
+Key corrections:
+1. Private audits bucket can use r2://<bucket> when no public base URL exists.
+2. Shared JSON validation reads r2:// references with authenticated R2/S3 access.
+3. Workflow input validation accepts a bucket-level r2:// reference.
+4. Digital Growth fallback callback runs even when the resolution step itself failed and resolves URL/token from raw inputs/environment.
+5. SEO/AEO/GEO and Mobile UX no longer require the audits bucket to be publicly exposed.
+
+Validation:
+- Python compilation: PASS
+- Three workflow YAML parse checks: PASS
+- Private r2:// workflow input smoke test: PASS
+- Audit unit/contract tests: 54/54 PASS
+- Full build.sh could not complete in the sandbox because it attempts to pip-install pypdf==6.16.1 and outbound DNS/network access is unavailable. The failure occurred before repository build validation and is unrelated to these source changes.
