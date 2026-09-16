@@ -92,7 +92,7 @@ jobs:
                 release_required=false
                 for path in "${changed_files[@]}"; do
                   case "$path" in
-                    .github/*|docs/*|README.md|SECURITY.md|GHOST_CONTENT_REMOVAL.md|VALIDATION_OUTPUT.txt|CHANGED_FILES.json|test_*.py|scripts/test_*.py|scripts/*test*.py|scripts/*test*.mjs)
+                    .github/*|docs/*|README.md|SECURITY.md|GHOST_CONTENT_REMOVAL.md|artifacts/*|test_*.py|scripts/test_*.py|scripts/*test*.py|scripts/*test*.mjs)
                       ;;
                     *)
                       release_required=true
