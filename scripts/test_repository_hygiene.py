@@ -6,7 +6,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.check_repository_hygiene import fallback_files, source_lint_issues
+from scripts.check_repository_hygiene import (
+    fallback_files,
+    retired_hive_skills_issues,
+    source_lint_issues,
+)
 
 
 class RepositoryHygieneFallbackTests(unittest.TestCase):
@@ -49,6 +53,33 @@ class RepositoryHygieneFallbackTests(unittest.TestCase):
                     "trailing_whitespace: worker.js:2",
                     "trailing_whitespace: script.py:2",
                 ],
+            )
+
+    def test_retired_hive_skills_integration_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            clean = root / "keep.js"
+            retired_route = root / "api" / ("hive-" + "skills") / "[[path]].js"
+            stale_config = root / "wrangler.toml"
+            clean.write_text("export const ok = true;\n", encoding="utf-8")
+            retired_route.parent.mkdir(parents=True)
+            retired_route.write_text("export const stale = true;\n", encoding="utf-8")
+            stale_config.write_text(
+                'binding = "' + "HIVE_" + "SKILLS_BUCKET" + '"\n',
+                encoding="utf-8",
+            )
+
+            issues = retired_hive_skills_issues(
+                [clean, retired_route, stale_config],
+                root=root,
+            )
+
+            self.assertIn(
+                "retired_hive_skills_path: api/" + "hive-" + "skills/[[path]].js",
+                issues,
+            )
+            self.assertTrue(
+                any(issue.startswith("retired_hive_skills_marker: wrangler.toml") for issue in issues)
             )
 
 

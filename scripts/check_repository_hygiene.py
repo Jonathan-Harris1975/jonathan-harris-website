@@ -11,6 +11,24 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 MAX_SOURCE_LINE_LENGTH = 200
 SOURCE_SUFFIXES = {".js", ".py"}
+TEXT_SUFFIXES = {".js", ".json", ".md", ".mjs", ".py", ".sh", ".toml", ".txt", ".yaml", ".yml"}
+HIVE_SKILLS_SEGMENT = "hive-" + "skills"
+RETIRED_HIVE_SKILLS_PATHS = {
+    f"api/{HIVE_SKILLS_SEGMENT}/[[path]].js",
+    "data/" + HIVE_SKILLS_SEGMENT + "-config.json",
+    "docs/hive-shared-" + "skills.md",
+    f"functions/api/{HIVE_SKILLS_SEGMENT}/[[path]].js",
+    "functions/_shared/" + HIVE_SKILLS_SEGMENT + "-route.js",
+    "scripts/check_" + HIVE_SKILLS_SEGMENT.replace("-", "_") + "_route_parity.py",
+    "scripts/setup-batch-1-" + "skills.sh",
+}
+RETIRED_HIVE_SKILLS_MARKERS = (
+    HIVE_SKILLS_SEGMENT,
+    "HIVE_" + "SKILLS_BUCKET",
+    "R2_BUCKET_HIVE_" + "SKILLS",
+    "R2_PUBLIC_BASE_URL_HIVE_" + "SKILLS",
+    "skills@" + "latest add coreyhaines31/marketingskills",
+)
 FALLBACK_GENERATED_FILES = {
     "data/book-sample-chapters.json",
     "release.json",
@@ -109,16 +127,36 @@ def duplicate_groups(paths: list[Path]) -> list[list[str]]:
     )
 
 
+def retired_hive_skills_issues(paths: list[Path], root: Path = ROOT) -> list[str]:
+    """Reject the retired shared HIVE skills bucket integration and installer."""
+    issues: list[str] = []
+    for path in paths:
+        if not path.is_file():
+            continue
+        relative = path.relative_to(root).as_posix()
+        if relative in RETIRED_HIVE_SKILLS_PATHS:
+            issues.append(f"retired_hive_skills_path: {relative}")
+        if path.suffix.lower() not in TEXT_SUFFIXES:
+            continue
+        contents = path.read_text(encoding="utf-8", errors="ignore")
+        for marker in RETIRED_HIVE_SKILLS_MARKERS:
+            if marker in contents:
+                issues.append(f"retired_hive_skills_marker: {relative} contains {marker}")
+    return sorted(issues)
+
+
 def main() -> int:
     paths = tracked_files()
     lint_issues = source_lint_issues(paths)
     duplicates = duplicate_groups(paths)
+    retired_skills_issues = retired_hive_skills_issues(paths)
 
-    if not lint_issues and not duplicates:
+    if not lint_issues and not duplicates and not retired_skills_issues:
         print(
             "Repository hygiene passed: no tracked byte-identical duplicates, "
             f"no JavaScript/Python lines exceed {MAX_SOURCE_LINE_LENGTH} characters, "
-            "and no JavaScript/Python lines contain trailing whitespace."
+            "no JavaScript/Python lines contain trailing whitespace, "
+            "and no retired HIVE skills bucket integration remains."
         )
         return 0
 
@@ -127,6 +165,8 @@ def main() -> int:
         print(f" - {issue}")
     for group in duplicates:
         print(f" - duplicate_content: {', '.join(group)}")
+    for issue in retired_skills_issues:
+        print(f" - {issue}")
     return 1
 
 
