@@ -12,6 +12,7 @@ import json
 import os
 import sys
 import time
+import warnings
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -173,8 +174,8 @@ def default_deployed_url() -> str:
 
         if isinstance(SITE_URL, str) and SITE_URL.strip():
             return SITE_URL.strip()
-    except Exception:
-        pass
+    except Exception as exc:
+        warnings.warn(f"Could not read SITE_URL from ebook_pipeline: {exc}", RuntimeWarning, stacklevel=2)
     return "https://jonathan-harris.online"
 
 

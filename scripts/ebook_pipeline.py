@@ -48,7 +48,7 @@ DEFAULT_AUDIENCE = "Readers who want practical, plain-English AI insight without
 DEFAULT_TONE = "Plain-English, practical, sceptical, no-hype"
 BOOK_COVER_WIDTH = 2480
 BOOK_COVER_HEIGHT = 3508
-VALIDATION_REPORT = ROOT / "VALIDATION_OUTPUT.txt"
+VALIDATION_REPORT = ROOT / "artifacts" / "VALIDATION_OUTPUT.txt"
 SHARED_INTER_FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
@@ -6714,6 +6714,7 @@ def rebuild_all(workbook_path: Path) -> List[str]:
     build_derivatives(books)
     sync_redirects(books)
     errors = run_release_checks(books, workbook_path)
+    VALIDATION_REPORT.parent.mkdir(parents=True, exist_ok=True)
     VALIDATION_REPORT.write_text(build_validation_report(errors, books), encoding="utf-8")
     return errors
 
@@ -6769,6 +6770,7 @@ def run_validate_command(workbook_path: Path | None = None) -> int:
     if effective_workbook and effective_workbook.exists():
         _, workbook_title_stats = workbook_title_parity_audit(effective_workbook)
         _, workbook_content_stats = workbook_content_parity_audit(effective_workbook, books)
+    VALIDATION_REPORT.parent.mkdir(parents=True, exist_ok=True)
     VALIDATION_REPORT.write_text(
         build_validation_report(
             errors,

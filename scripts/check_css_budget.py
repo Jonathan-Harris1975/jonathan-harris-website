@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 CSS_DIR=ROOT/'assets'/'css'
-REPORT=ROOT/'css-size-report.json'
+REPORT=ROOT/'artifacts'/'css-size-report.json'
 CONFIG=ROOT/'config'/'css-budget.json'
 
 def compact_size(text:str)->int:
@@ -32,17 +32,14 @@ def report_rows():
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument('--write',action='store_true'); ap.add_argument('--check',action='store_true'); args=ap.parse_args()
     rows=report_rows()
-    if args.write: REPORT.write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+    if args.write:
+        REPORT.parent.mkdir(parents=True, exist_ok=True)
+        REPORT.write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
     cfg=json.loads(CONFIG.read_text(encoding='utf-8')) if CONFIG.exists() else {}
     site=next((x for x in rows if x['file']=='assets/css/site.css'),None)
     if not site: print('ERROR: assets/css/site.css missing',file=sys.stderr); return 1
     maximum=int(cfg.get('site_css_max_bytes') or 0)
     if args.check:
-        if not REPORT.exists(): print('ERROR: css-size-report.json missing',file=sys.stderr); return 1
-        stored=json.loads(REPORT.read_text(encoding='utf-8'))
-        stored_site=next((x for x in stored if x.get('file')=='assets/css/site.css'),None)
-        if not stored_site or stored_site.get('original_bytes')!=site['original_bytes']:
-            print('ERROR: css-size-report.json is stale; run scripts/check_css_budget.py --write',file=sys.stderr); return 1
         if maximum and site['original_bytes']>maximum:
             print(f"ERROR: site.css is {site['original_bytes']} bytes; budget is {maximum}",file=sys.stderr); return 1
     print(f"site.css: {site['original_bytes']} bytes (budget {maximum or 'not set'})")
