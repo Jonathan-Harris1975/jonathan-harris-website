@@ -2573,8 +2573,8 @@ def build_repo_signals(repo_root: Path, base_url: str) -> dict:
       if isinstance(items, list):
         blog_items = [item for item in items if isinstance(item, dict)]
         blog_count = len(blog_items)
-    except Exception:
-      pass
+    except Exception as exc:
+      signals["blogManifestReadError"] = str(exc)
   signals["blogManifestPath"] = "blog/posts.json" if blog_manifest.exists() else ""
   signals["blogManifestCount"] = blog_count
   signals["blogManifestSample"] = [item.get("url") or item.get("path") or item.get("slug") for item in blog_items[:5]]
@@ -2593,8 +2593,8 @@ def build_repo_signals(repo_root: Path, base_url: str) -> dict:
       if isinstance(items, list):
         podcast_items = [item for item in items if isinstance(item, dict)]
         podcast_count = len(podcast_items)
-    except Exception:
-      pass
+    except Exception as exc:
+      signals["podcastManifestReadError"] = str(exc)
   signals["podcastManifestPath"] = "data/podcast-episodes.json" if podcast_manifest.exists() else ""
   signals["podcastManifestCount"] = podcast_count
 
@@ -2728,6 +2728,7 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
   soup = page.get("soup")
   h2_headings: list[str] = []
   schema_types: list[str] = []
+  json_ld_parse_errors = 0
   intro_text = page.get("introText", "")[:300]
 
   if soup:
@@ -2741,7 +2742,7 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
         elif t:
           schema_types.append(t)
       except Exception:
-        pass
+        json_ld_parse_errors += 1
 
   result: dict[str, Any] = {
     "url": page["url"],
@@ -2764,6 +2765,7 @@ def serialise_page_for_analysis(page: dict[str, Any], is_priority: bool = False)
     "total": page["total"],
     "grade": page["grade"],
     "riskFlag": page["riskFlag"],
+    "jsonLdParseErrors": json_ld_parse_errors,
   }
   if is_priority:
     result["introText"] = intro_text

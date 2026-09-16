@@ -1538,15 +1538,17 @@ def run_rendered_execution(
             fail_name = screenshot_name(route, width, "runtime-blocked")
             fail_path = screenshots_dir / fail_name
             refs = []
+            screenshot_error = ""
             try:
               refs.append(capture_required_screenshot(page, fail_path, f"screenshots/{fail_name}"))
-            except Exception:
-              pass
+            except Exception as screenshot_exc:
+              screenshot_error = str(screenshot_exc)
             records.append({
               "route": route,
               "url": target,
               "templateFamily": detect_template_family(route),
               "viewport": width,
+              "runtimeBlockedScreenshotError": screenshot_error,
               "checks": {
                 "viewportCorrectness": "FAIL",
                 "overflow": "FAIL",
