@@ -1,0 +1,9 @@
+Delete these repository-relative paths when applying the updated files:
+
+api/hive-skills/[[path]].js
+data/hive-skills-config.json
+docs/hive-shared-skills.md
+functions/_shared/hive-skills-route.js
+functions/api/hive-skills/[[path]].js
+scripts/check_hive_skills_route_parity.py
+scripts/setup-batch-1-skills.sh
