@@ -6,3 +6,13 @@ data/book-sample-chapters.json
 release.json
 
 assets/site-shell/
+
+# Generated validation/audit artefacts; CI should retain these as workflow artefacts, not source.
+artifacts/
+CHANGED_FILES.json
+VALIDATION_OUTPUT.txt
+VERIFICATION.txt
+css-size-report.json
+css-ref-check.json
+css-ref-check-post-validation.tsv
+expert-sitemap-live-gate-fix.zip
