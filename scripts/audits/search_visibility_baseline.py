@@ -16,17 +16,17 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_BASE_URL = "https://jonathan-harris.online"
 DEFAULT_OUTPUT = Path("artifacts/search-visibility-baseline/search-visibility-baseline.json")
 
-BATCH_1_SKILLS = [
+NATIVE_CAPABILITIES = [
     {
-        "name": "seo-audit",
-        "source": "coreyhaines31/marketingskills",
-        "installCommand": "npx --yes skills@latest add coreyhaines31/marketingskills --skill seo-audit ai-seo -y",
+        "id": "WEB-sk001",
+        "name": "repository-search-visibility-baseline",
+        "implementation": "scripts/audits/search_visibility_baseline.py",
         "purpose": "Search visibility baseline for crawlability, indexation, technical foundations, on-page signals, content quality and authority evidence.",
     },
     {
-        "name": "ai-seo",
-        "source": "coreyhaines31/marketingskills",
-        "installCommand": "npx --yes skills@latest add coreyhaines31/marketingskills --skill seo-audit ai-seo -y",
+        "id": "WEB-sk002",
+        "name": "repository-ai-discovery-baseline",
+        "implementation": "scripts/audits/search_visibility_baseline.py",
         "purpose": "AEO/GEO/LLMO baseline for extractable answers, entity clarity, AI citation readiness, llms.txt coverage and structured context.",
     },
 ]
@@ -249,12 +249,12 @@ def build_search_visibility_baseline_report(
 
     return {
         "generatedAt": utc_now(),
-        "batch": "Batch 1 - Search visibility baseline",
-        "lane": "Lane 1 - Autonomous",
+        "batch": "Repository-native search visibility baseline",
+        "lane": "repository-native",
         "mode": "reports-only",
         "baseUrl": base_url,
         "repoRoot": str(repo_root),
-        "skills": BATCH_1_SKILLS,
+        "capabilities": NATIVE_CAPABILITIES,
         "guardrails": [
             "Reports only; no public page edits.",
             "No commits, pushes, pull requests, deployments, DNS changes, Cloudflare changes, or outreach sends.",
