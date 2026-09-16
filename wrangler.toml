@@ -26,10 +26,6 @@ compatibility_date = "2024-09-23"
   binding     = "BLOG_IMAGES_BUCKET"    # functions/blog/images/[[slug]].js
   bucket_name = "blog-images"
 
-[[r2_buckets]]
-  binding     = "HIVE_SKILLS_BUCKET"   # Read-only shared HIVE skills pool for website metadata/API proxy
-  bucket_name = "hive-skills"
-
 [[durable_objects.bindings]]
   name        = "COGNIPAL_RATE_LIMITER"
   class_name  = "CogniPalRateLimiter"
@@ -40,12 +36,6 @@ compatibility_date = "2024-09-23"
 [[services]]
   binding = "AGENT_READINESS"
   service = "agent-readiness"
-
-[vars]
-  R2_PUBLIC_BASE_URL_HIVE_SKILLS = "https://pub-da50a6512f164566955a3076a1c795ef.r2.dev"
-  R2_BUCKET_HIVE_SKILLS = "hive-skills"
-  HIVE_SKILLS_DEFAULT_MANIFEST = "manifests/website-skills-manifest.json"
-  HIVE_SKILLS_ACCESS_MODE = "read_only"
 
 # CogniPal website chat runtime variables are configured in Cloudflare Pages.
 # AIMS_COMMS_HUB_BASE_URL is non-secret and may point at the current Koyeb AIMS origin.

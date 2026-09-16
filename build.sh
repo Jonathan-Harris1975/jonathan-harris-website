@@ -41,7 +41,6 @@ fi
 
 python3 scripts/check_health_contract.py
 python3 scripts/check_repository_hygiene.py
-python3 scripts/check_hive_skills_route_parity.py
 node --test workers/agent-readiness/test.mjs
 node --test scripts/agent-readiness-pages.test.mjs
 node --test scripts/cognipal-rate-limit.test.mjs
