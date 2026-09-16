@@ -1,7 +1,0 @@
-CHANGED_FILES.json
-VALIDATION_OUTPUT.txt
-VERIFICATION.txt
-css-size-report.json
-css-ref-check.json
-css-ref-check-post-validation.tsv
-expert-sitemap-live-gate-fix.zip
