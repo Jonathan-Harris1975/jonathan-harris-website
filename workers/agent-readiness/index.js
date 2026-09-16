@@ -183,8 +183,6 @@ function openApi(origin) {
       "/api/v1/books.json": { get: { summary: "Public ebook catalogue", responses: { 200: { description: "Catalogue JSON" } } } },
       "/api/v1/featured-book.json": { get: { summary: "Featured ebook", responses: { 200: { description: "Featured book JSON" } } } },
       "/api/podcast/latest": { get: { summary: "Latest podcast episode", responses: { 200: { description: "Latest episode JSON" } } } },
-      "/api/hive-skills/": { get: { summary: "Read-only HIVE skills manifest proxy", responses: { 200: { description: "Approved HIVE metadata" } } } }
-,
       "/.well-known/agent-card.json": { get: { summary: "A2A Agent Card", responses: { 200: { description: "A2A discovery metadata" } } } },
       "/.well-known/agent-skills/index.json": { get: { summary: "Agent Skills index", responses: { 200: { description: "Agent Skills discovery index" }
  } } },

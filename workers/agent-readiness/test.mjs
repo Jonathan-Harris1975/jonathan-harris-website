@@ -15,6 +15,15 @@ test("API catalog is RFC 9727-shaped", async () => {
   assert.ok(body.linkset[0]["service-desc"]);
 });
 
+test("OpenAPI omits the retired HIVE bucket proxy and keeps local Agent Skills discovery", async () => {
+  const response = await call("/openapi.json");
+  assert.equal(response.status, 200);
+  const body = await response.json();
+  const retiredPath = "/api/" + "hive-" + "skills/";
+  assert.equal(body.paths[retiredPath], undefined);
+  assert.ok(body.paths["/.well-known/agent-skills/index.json"]);
+});
+
 test("OAuth discovery and PRM are published", async () => {
   const metadata = await (await call("/.well-known/oauth-authorization-server")).json();
   assert.equal(metadata.issuer, "https://jonathan-harris.online");
