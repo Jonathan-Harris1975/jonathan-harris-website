@@ -4,6 +4,16 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
+    groups:
+      audit-tooling:
+        patterns:
+          - "boto3"
+          - "playwright"
+          - "requests"
+        update-types:
+          - "patch"
+          - "minor"
     commit-message:
       prefix: "deps"
 
@@ -11,5 +21,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 10
     commit-message:
       prefix: "deps(ci)"
