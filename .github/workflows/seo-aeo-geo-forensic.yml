@@ -199,8 +199,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -m pip install --disable-pip-version-check -r requirements.txt
-          python -m pip install --disable-pip-version-check boto3 requests
+          python -m pip install --disable-pip-version-check -r requirements-audit.txt
+          python -m pip check
 
       - name: Validate audit entry point and workbook inventory
         shell: bash

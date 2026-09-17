@@ -23,8 +23,10 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install Python dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - name: Install and validate Python dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip check
 
       - name: Remove tracked Python bytecode caches
         run: |
@@ -119,8 +121,10 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install Python dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
+      - name: Install and validate Python dependencies
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip check
 
       - name: Remove tracked Python bytecode caches
         run: |
@@ -168,3 +172,61 @@ jobs:
           SITE_SHELL_SYNC_ENDPOINT_URL: ${{ secrets.SITE_SHELL_SYNC_ENDPOINT_URL }}
           SITE_SHELL_SYNC_SHARED_SECRET: ${{ secrets.SITE_SHELL_SYNC_SHARED_SECRET }}
         run: python scripts/post_deploy_notify.py --purge-count 3 --purge-initial-delay-seconds 300 --purge-interval-seconds 300
+
+
+  open_dependabot_revert:
+    name: Open validated Dependabot revert PR
+    needs: [validate-ebook-subsystem, post-deploy-live-gate]
+    if: ${{ always() && github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && (needs.validate-ebook-subsystem.result == 'failure' || needs.post-deploy-live-gate.result == 'failure') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - name: Revert only the failed Dependabot merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FAILED_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          pr_number="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "/repos/$GITHUB_REPOSITORY/commits/$FAILED_SHA/pulls" \
+            --jq '[.[] | select(.user.login == "dependabot[bot]" and .merged_at != null)] | first | .number // empty')"
+          if [ -z "$pr_number" ]; then
+            echo "Failed SHA $FAILED_SHA is not a merged Dependabot PR; no automatic revert is created."
+            exit 0
+          fi
+
+          base_ref="$(gh pr view "$pr_number" --json baseRefName --jq '.baseRefName')"
+          title="$(gh pr view "$pr_number" --json title --jq '.title')"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin "$base_ref" --prune
+          git checkout -B "$base_ref" "origin/$base_ref"
+          git cat-file -e "$FAILED_SHA^{commit}" 2>/dev/null || git fetch origin "$FAILED_SHA"
+
+          branch="automation/revert-dependabot-${pr_number}-${GITHUB_RUN_ID}"
+          git switch -c "$branch"
+          parent_count="$(git rev-list --parents -n 1 "$FAILED_SHA" | awk '{print NF-1}')"
+          if [ "$parent_count" -gt 1 ]; then
+            git revert -m 1 --no-edit "$FAILED_SHA"
+          else
+            git revert --no-edit "$FAILED_SHA"
+          fi
+          git push --set-upstream origin "$branch"
+
+          printf '%s\n\n%s\n\n%s\n' \
+            "This PR automatically reverts Dependabot PR #${pr_number} because commit \`${FAILED_SHA}\` failed the website's validation or exact-SHA post-deployment live gate." \
+            "Original Dependabot PR: #${pr_number} — ${title}" \
+            "The revert is deliberately opened as a PR so normal CI validates recovery before it can merge." \
+            > /tmp/revert-body.md
+          gh pr create \
+            --base "$base_ref" \
+            --head "$branch" \
+            --title "revert: Dependabot PR #${pr_number} after failed production validation" \
+            --body-file /tmp/revert-body.md
