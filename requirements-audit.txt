@@ -1,0 +1,4 @@
+-r requirements.txt
+boto3==1.43.41
+requests==2.34.2
+playwright==1.63.0
