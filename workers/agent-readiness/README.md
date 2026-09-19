@@ -1,4 +1,4 @@
-# Cloudflare Agent Readiness Worker
+# Cloudflare Agent Readiness Worker-
 
 `agent-readiness` is an independently deployed Cloudflare Worker kept inside the website repository.
 
