@@ -1,4 +1,7 @@
--r requirements.txt
+# Audit tooling intentionally consumes the direct production inputs rather than
+# the hash-locked production file so audit-only packages can be resolved in a
+# separate, non-production environment.
+-r requirements.in
 boto3==1.43.41
 requests==2.34.2
 playwright==1.63.0

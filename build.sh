@@ -4,18 +4,23 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$REPO_ROOT"
 
+python3 scripts/check_requirements_lock.py
+python3 scripts/check_hash_fail_closed.py
+
 if ! python3 - <<'PYDEP'
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
+import re
 
-requirements = Path("requirements.txt").read_text(encoding="utf-8").splitlines()
-for raw_line in requirements:
-    line = raw_line.split("#", 1)[0].strip()
-    if not line:
+for raw_line in Path("requirements.txt").read_text(encoding="utf-8").splitlines():
+    line = raw_line.strip()
+    if not line or line.startswith("#") or line.startswith("--hash="):
         continue
-    if "==" not in line:
-        raise SystemExit(f"Production requirement must be exactly pinned: {line}")
-    package, expected = (part.strip() for part in line.split("==", 1))
+    clean = line[:-1].rstrip() if line.endswith("\\") else line
+    match = re.fullmatch(r"([A-Za-z0-9_.-]+)==([^\s\\]+)", clean)
+    if not match:
+        raise SystemExit(f"Production lock contains an unsupported requirement line: {line}")
+    package, expected = match.group(1), match.group(2)
     try:
         installed = version(package)
     except PackageNotFoundError:
@@ -24,8 +29,9 @@ for raw_line in requirements:
         raise SystemExit(1)
 PYDEP
 then
-  python3 -m pip install --disable-pip-version-check --quiet -r requirements.txt
+  python3 -m pip install --disable-pip-version-check --quiet --require-hashes -r requirements.txt
 fi
+python3 -m pip check
 
 DEFAULT_WORKBOOK="$REPO_ROOT/jonathan-harris-site-url-inventory-remediated-release-ready.xlsx"
 if [[ -z "${EBOOK_WORKBOOK_PATH:-}" && -f "$DEFAULT_WORKBOOK" ]]; then

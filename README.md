@@ -64,11 +64,12 @@ Cloudflare deployment/verification additionally requires the appropriate Cloudfl
 Install the exact production dependencies:
 
 ```bash
-python -m pip install --disable-pip-version-check -r requirements.txt
+python scripts/check_requirements_lock.py
+python -m pip install --disable-pip-version-check --require-hashes -r requirements.txt
 python -m pip check
 ```
 
-`requirements.txt` is intentionally exactly pinned. Do not loosen those pins merely to make an upgrade pass.
+`requirements.in` contains the four human-maintained direct production pins. `requirements.txt` is the reviewed, fully resolved production closure and every permitted artefact is bound to a repository-controlled SHA-256 hash. Production installs must use `--require-hashes`; do not bypass that flag or loosen the pins merely to make an upgrade pass. When a direct or transitive dependency changes, update the lock and `scripts/check_requirements_lock.py` together from verified package artefacts.
 
 ## Canonical governed build
 
@@ -78,7 +79,7 @@ From the repository root:
 bash build.sh
 ```
 
-`build.sh` validates the exact installed production dependency versions (installing `requirements.txt` when necessary), selects the canonical workbook when `EBOOK_WORKBOOK_PATH` is not explicitly set, and runs the governed release pipeline.
+`build.sh` first validates the reviewed dependency closure and hash format, proves pip fails closed against a deliberately mismatched local artefact, then validates the exact installed production dependency versions. If installation is required it installs `requirements.txt` with `--require-hashes`. It then selects the canonical workbook when `EBOOK_WORKBOOK_PATH` is not explicitly set and runs the governed release pipeline.
 
 The pipeline includes:
 
@@ -164,6 +165,20 @@ python -m pip_audit -r requirements.txt
 Do not treat historical test counts as a release contract. The commands and CI workflows are authoritative as tests are added or removed.
 
 Security controls also include repository secret scanning, CSP/security headers, strict third-party script governance, input/output validation in Pages Functions, bounded CogniPal request bodies/rate limiting, and automated dependency monitoring. See `SECURITY.md` for the repository security policy.
+
+## HIVE repository identity and reconstruction
+
+HIVE must ingest this repository under canonical identity **`Website`**. Repository Memory and Intelligence can reconstruct the current operational model from version-controlled sources:
+
+- architecture and runtime bindings: `README.md`, `wrangler.toml`, `functions/`, `workers/`;
+- production dependency inputs and cryptographic lock: `requirements.in`, `requirements.txt`;
+- audit-only dependency profile: `requirements-audit.txt`;
+- build/release profile: `build.sh`, `scripts/deployment_ci.py`, `.github/workflows/production-readiness.yml`;
+- deployment/live verification profile: `.github/workflows/ebook-subsystem-ci.yml`, `wrangler.toml`, `docs/OPERATIONS.md`;
+- environment and binding contracts: `wrangler.toml` plus the CogniPal and Agent Readiness deployment documentation;
+- operational procedures: `docs/OPERATIONS.md` and `SECURITY.md`.
+
+The hash lock is part of the build profile and must be retained when HIVE snapshots or compares repository state.
 
 ## Deployment
 
