@@ -1,0 +1,5 @@
+Delete this obsolete file from the repository:
+
+assets/js/blog.min.js
+
+The active blog pages use /assets/js/blog.bundle.min.js. The repository hygiene gate now fails if the retired parallel asset returns.
