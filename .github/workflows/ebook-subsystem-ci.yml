@@ -25,7 +25,7 @@ jobs:
 
       - name: Install and validate Python dependencies
         run: |
-          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check --require-hashes -r requirements.txt
           python -m pip check
 
       - name: Remove tracked Python bytecode caches
@@ -123,7 +123,7 @@ jobs:
 
       - name: Install and validate Python dependencies
         run: |
-          python -m pip install --disable-pip-version-check -r requirements.txt
+          python -m pip install --disable-pip-version-check --require-hashes -r requirements.txt
           python -m pip check
 
       - name: Remove tracked Python bytecode caches
