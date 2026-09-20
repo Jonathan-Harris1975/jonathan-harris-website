@@ -35,6 +35,9 @@ FALLBACK_GENERATED_FILES = {
     "scripts/data/manuscripts.json",
 }
 FALLBACK_GENERATED_PREFIXES = (".pytest_cache/", "assets/site-shell/")
+LEGACY_BLOG_ASSET = "assets/js/blog.min.js"
+ACTIVE_BLOG_ASSET = "assets/js/blog.bundle.min.js"
+BLOG_PAGES = ("blog/index.html", "blog/weekly/index.html")
 
 
 def fallback_files(root: Path = ROOT) -> list[Path]:
@@ -145,18 +148,45 @@ def retired_hive_skills_issues(paths: list[Path], root: Path = ROOT) -> list[str
     return sorted(issues)
 
 
+
+def blog_asset_issues(paths: list[Path], root: Path = ROOT) -> list[str]:
+    """Reject the retired blog implementation and require the governed bundle."""
+    issues: list[str] = []
+    relative_paths = {path.relative_to(root).as_posix() for path in paths if path.is_file()}
+
+    if LEGACY_BLOG_ASSET in relative_paths or (root / LEGACY_BLOG_ASSET).exists():
+        issues.append(f"retired_blog_asset_present: {LEGACY_BLOG_ASSET}")
+    if ACTIVE_BLOG_ASSET not in relative_paths and not (root / ACTIVE_BLOG_ASSET).exists():
+        issues.append(f"active_blog_asset_missing: {ACTIVE_BLOG_ASSET}")
+
+    expected_reference = f"/{ACTIVE_BLOG_ASSET}"
+    for page in BLOG_PAGES:
+        page_path = root / page
+        if not page_path.exists():
+            issues.append(f"blog_page_missing: {page}")
+            continue
+        contents = page_path.read_text(encoding="utf-8", errors="ignore")
+        if expected_reference not in contents:
+            issues.append(f"active_blog_asset_unreferenced: {page} must load {expected_reference}")
+        if "/assets/js/blog.min.js" in contents:
+            issues.append(f"retired_blog_asset_reference: {page}")
+
+    return sorted(issues)
+
 def main() -> int:
     paths = tracked_files()
     lint_issues = source_lint_issues(paths)
     duplicates = duplicate_groups(paths)
     retired_skills_issues = retired_hive_skills_issues(paths)
+    blog_issues = blog_asset_issues(paths)
 
-    if not lint_issues and not duplicates and not retired_skills_issues:
+    if not lint_issues and not duplicates and not retired_skills_issues and not blog_issues:
         print(
             "Repository hygiene passed: no tracked byte-identical duplicates, "
             f"no JavaScript/Python lines exceed {MAX_SOURCE_LINE_LENGTH} characters, "
             "no JavaScript/Python lines contain trailing whitespace, "
-            "and no retired HIVE skills bucket integration remains."
+            "no retired HIVE skills bucket integration remains, "
+            "and the governed blog bundle has no legacy parallel implementation."
         )
         return 0
 
@@ -166,6 +196,8 @@ def main() -> int:
     for group in duplicates:
         print(f" - duplicate_content: {', '.join(group)}")
     for issue in retired_skills_issues:
+        print(f" - {issue}")
+    for issue in blog_issues:
         print(f" - {issue}")
     return 1
 

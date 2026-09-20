@@ -7,6 +7,7 @@ import unittest
 from pathlib import Path
 
 from scripts.check_repository_hygiene import (
+    blog_asset_issues,
     fallback_files,
     retired_hive_skills_issues,
     source_lint_issues,
@@ -80,6 +81,44 @@ class RepositoryHygieneFallbackTests(unittest.TestCase):
             )
             self.assertTrue(
                 any(issue.startswith("retired_hive_skills_marker: wrangler.toml") for issue in issues)
+            )
+
+
+    def test_blog_asset_guard_rejects_legacy_parallel_implementation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active = root / "assets" / "js" / "blog.bundle.min.js"
+            legacy = root / "assets" / "js" / "blog.min.js"
+            active.parent.mkdir(parents=True)
+            active.write_text("active", encoding="utf-8")
+            legacy.write_text("legacy", encoding="utf-8")
+            pages = []
+            for relative in ("blog/index.html", "blog/weekly/index.html"):
+                page = root / relative
+                page.parent.mkdir(parents=True, exist_ok=True)
+                page.write_text('<script src="/assets/js/blog.bundle.min.js"></script>', encoding="utf-8")
+                pages.append(page)
+
+            issues = blog_asset_issues([active, legacy, *pages], root=root)
+            self.assertIn("retired_blog_asset_present: assets/js/blog.min.js", issues)
+
+    def test_blog_asset_guard_requires_active_bundle_on_both_blog_pages(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            active = root / "assets" / "js" / "blog.bundle.min.js"
+            active.parent.mkdir(parents=True)
+            active.write_text("active", encoding="utf-8")
+            blog = root / "blog" / "index.html"
+            weekly = root / "blog" / "weekly" / "index.html"
+            weekly.parent.mkdir(parents=True)
+            blog.parent.mkdir(parents=True, exist_ok=True)
+            blog.write_text('<script src="/assets/js/blog.bundle.min.js"></script>', encoding="utf-8")
+            weekly.write_text("<html></html>", encoding="utf-8")
+
+            issues = blog_asset_issues([active, blog, weekly], root=root)
+            self.assertIn(
+                "active_blog_asset_unreferenced: blog/weekly/index.html must load /assets/js/blog.bundle.min.js",
+                issues,
             )
 
 
