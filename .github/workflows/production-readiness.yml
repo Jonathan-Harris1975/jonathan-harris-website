@@ -27,10 +27,8 @@ jobs:
           python -m pip check
       - run: python scripts/check_health_contract.py
       - run: bash build.sh
-      - name: Reject committed secrets
-        run: |
-          ! grep -RIE --exclude-dir=.git --exclude='*.xlsm' --exclude='*.xlsx' \
-            '(api[_-]?key|secret[_-]?access[_-]?key|bearer[_-]?token)\s*[:=]\s*[A-Za-z0-9_./+-]{20,}' .
+      - name: Scan committed source for secrets
+        run: python scripts/scan_secrets.py
 
   release_gate:
     name: Release gate (exact SHA)
