@@ -1,8 +1,2 @@
-github_token = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD"
-aws_access_key_id = "AKIA1234567890ABCDEF"
-api_key = "Q7vP2nR8xL4mT9kW6cY3uF5jH1sD0aZB"
-credential = "fK9vQ2pLm7Xc4Rz8Wn5Ty1Hs6Da3Bj0E"
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.syntheticPayload.syntheticSignature
-webhook = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX"
-vendor_token = "sk_live_1234567890abcdefghijklmnop"
------BEGIN PRIVATE KEY-----
+Synthetic secret-scanner regression inputs are generated at runtime by scripts/test_secret_scan.py.
+No credential-shaped values are committed in this fixture directory.

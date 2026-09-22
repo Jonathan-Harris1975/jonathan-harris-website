@@ -1,3 +1,2 @@
-api_key = "REPLACE_WITH_API_KEY"
-password = "example-password"
-webhook_secret = "${WEBHOOK_SECRET}"
+Safe placeholder regression inputs are generated at runtime by scripts/test_secret_scan.py.
+This file intentionally contains no assignment-shaped credential examples.
