@@ -4065,7 +4065,7 @@ def render_catalogue_card(book: Dict[str, Any], cta_copy: str) -> str:
                f'''data-placement="catalogue_card">Buy on Amazon</a>
   </div>
   <details class="more">
-    <summary aria-expanded="false">More details</summary>
+    <summary>More details</summary>
     <div class="meta">{html.escape(cta_copy)}</div>
   </details>
 </article>'''
@@ -4221,17 +4221,17 @@ height="0" width="0" '''
           <p>Search by title or keyword, then narrow the catalogue with one topic '''
                f'''filter.</p>
         </div>
-        <p class="meta ebook-count" id="count">{len(books)} of {len(books)} '''
+        <p class="meta ebook-count" id="count" role="status" aria-atomic="true">{len(books)} of {len(books)} '''
                f'''books</p>
       </div>
 
-      <div class="toolbar ebook-catalogue-toolbar" aria-label="Catalogue controls">
+      <div class="toolbar ebook-catalogue-toolbar" role="search" aria-label="Catalogue controls">
   '''
                f'''      <label class="ebook-search-label" for="search">Search the catalogue</label>
         <input '''
-               f'''aria-label="Search books" class="search" id="search" placeholder="Search by title, topic, or keyword" '''
+               f'''class="search" id="search" placeholder="Search by title, topic, or keyword" '''
                f'''type="search"/>
-        <div aria-label="Filter books by topic" class="chips" id="chips"></div>
+        <div aria-label="Filter books by topic" class="chips" id="chips" role="group"></div>
       </div>
  '''
                f'''   </section>
