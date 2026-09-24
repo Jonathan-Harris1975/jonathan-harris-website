@@ -16,3 +16,12 @@
 :root.seasonal-theme-ready .hero-logo-stage:before{background:radial-gradient(circle,var(--season-glow) 0%,rgba(79,70,229,.10) 44%,rgba(79,70,229,.03) 60%,transparent 74%)}
 :root.seasonal-theme-ready .main .topic-chip,:root.seasonal-theme-ready .ebooks-catalogue .topic-chip,:root.seasonal-theme-ready .ebooks-catalogue .tag{background:var(--season-soft);border-color:color-mix(in srgb,var(--season-accent) 28%,#fff);color:var(--season-accent-hover)}
 @media (prefers-contrast:more){:root.seasonal-theme-ready{--season-glow:transparent}:root.seasonal-theme-ready .main .topic-chip{border-color:currentColor}}
+:root[data-event="safer-internet-day"]{--season-accent:#0369a1;--season-accent-hover:#075985;--season-glow:rgba(14,165,233,.17);--season-soft:#f0f9ff;--season-hero:#7dd3fc}
+:root[data-event="international-womens-day"]{--season-accent:#7e22ce;--season-accent-hover:#6b21a8;--season-glow:rgba(192,38,211,.16);--season-soft:#faf5ff;--season-hero:#d8b4fe}
+:root[data-event="st-patricks-day"]{--season-accent:#15803d;--season-accent-hover:#166534;--season-glow:rgba(34,197,94,.16);--season-soft:#f0fdf4;--season-hero:#86efac}
+:root[data-event="mothering-sunday"]{--season-accent:#a21caf;--season-accent-hover:#86198f;--season-glow:rgba(232,121,249,.14);--season-soft:#fdf4ff;--season-hero:#f0abfc}
+:root[data-event="earth-day"]{--season-accent:#0f766e;--season-accent-hover:#115e59;--season-glow:rgba(20,184,166,.16);--season-soft:#f0fdfa;--season-hero:#5eead4}
+:root[data-event="pride-month"]{--season-accent:#7c3aed;--season-accent-hover:#6d28d9;--season-glow:rgba(124,58,237,.14);--season-soft:#faf5ff;--season-hero:#c4b5fd}
+:root[data-event="fathers-day"]{--season-accent:#0369a1;--season-accent-hover:#075985;--season-glow:rgba(14,165,233,.15);--season-soft:#f0f9ff;--season-hero:#7dd3fc}
+:root[data-event="bonfire-night"]{--season-accent:#c2410c;--season-accent-hover:#9a3412;--season-glow:rgba(249,115,22,.2);--season-soft:#fff7ed;--season-hero:#fdba74}
+:root[data-event="remembrance"]{--season-accent:#b91c1c;--season-accent-hover:#991b1b;--season-glow:rgba(220,38,38,.12);--season-soft:#fef2f2;--season-hero:#fca5a5}
