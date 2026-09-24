@@ -544,11 +544,16 @@ def podcast_page() -> None:
             + '\n</section>'
         )
         if player_anchor in t:
-            t = t.replace(
-                player_anchor,
-                player_anchor + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>\n' + elfsight_widget,
-                1,
+            # The current podcast section already owns its heading and explanatory
+            # copy. Add only the widget so regeneration cannot duplicate that copy.
+            player_intro = (
+                player_anchor
+                + '\n<h2>Podcast Player</h2><p class="muted">Browse and play Turing’s Torch episodes here.</p>'
             )
+            if player_intro in t:
+                t = t.replace(player_intro, player_intro + '\n' + elfsight_widget, 1)
+            else:
+                t = t.replace(player_anchor, player_anchor + '\n' + elfsight_widget, 1)
         elif '<!-- GROWTH:PODCAST-LATEST END -->' in t:
             # The old dedicated player section was retired when the crawlable RSS
             # episode seam was introduced. Insert the enhanced player immediately
