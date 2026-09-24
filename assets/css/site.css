@@ -25,3 +25,5 @@
 :root[data-event="fathers-day"]{--season-accent:#0369a1;--season-accent-hover:#075985;--season-glow:rgba(14,165,233,.15);--season-soft:#f0f9ff;--season-hero:#7dd3fc}
 :root[data-event="bonfire-night"]{--season-accent:#c2410c;--season-accent-hover:#9a3412;--season-glow:rgba(249,115,22,.2);--season-soft:#fff7ed;--season-hero:#fdba74}
 :root[data-event="remembrance"]{--season-accent:#b91c1c;--season-accent-hover:#991b1b;--season-glow:rgba(220,38,38,.12);--season-soft:#fef2f2;--season-hero:#fca5a5}
+
+/* seasonal-theme-v2 */:root.seasonal-theme-ready .button,:root.seasonal-theme-ready a.button{-webkit-tap-highlight-color:transparent}:root.seasonal-theme-ready .hero .button.secondary:focus-visible,:root.seasonal-theme-ready .hero .button.secondary:active{background:var(--season-soft)!important;color:#111827!important;border-color:var(--season-accent)!important}:root.seasonal-theme-ready .jh-hamburger{background:var(--season-accent)!important;border-color:var(--season-accent-hover)!important}
