@@ -42,43 +42,10 @@ body:has([data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately]))>
 :root.seasonal-theme-ready .main .ebook-section--accent h2,:root.seasonal-theme-ready .main .ebook-section--accent h3,:root.seasonal-theme-ready .main .ebook-section--accent strong{color:var(--season-accent-hover)}
 :root.seasonal-theme-ready .main .ebook-section--accent p,:root.seasonal-theme-ready .main .ebook-section--accent li{color:var(--jh-text)!important}
 
-/* UX/UI consistency hardening — 2026-09-24
-   Keep global navigation present on every viewport and keep secondary CTAs
-   inside the governed dark/seasonal palette in every interaction state. */
-.jh-header,
-.jh-header.jh-header--hero-mode,
-body .jh-header--injected,
-body .jh-header--injected.jh-header--hero-mode{
-  position:sticky!important;
-  top:0!important;
-  left:auto!important;
-  right:auto!important;
-  opacity:1!important;
-  visibility:visible!important;
-  pointer-events:auto!important;
-  transform:none!important;
-}
-html.js-enabled .jh-header.jh-header--hero-mode:not(.is-visible),
-html.js-enabled .jh-header.jh-header--hero-mode.is-visible,
-body .jh-header--injected.jh-header--hero-mode:not(.is-visible){
-  opacity:1!important;
-  visibility:visible!important;
-  pointer-events:auto!important;
-  transform:none!important;
-}
-body:has([data-jh-header-reveal-anchor]:not([data-jh-header-show-immediately]))>.jh-header{
-  position:sticky!important;
-  top:0!important;
-}
-.hero--home,
-.hero--has-fixed-nav,
-.hero--contact,
-.hero--newsletter{
-  padding-top:44px!important;
-}
-@media (max-width:640px){
-  body.home .lp-hero,.hero--home{padding-top:40px!important}
-}
+/* UX/UI consistency hardening — 2026-09-25
+   Hero-aware navigation remains fixed and out of document flow while hidden.
+   This prevents dead space above the hero and reveals the hamburger only
+   after the governed hero/reveal anchor has fully left the viewport. */
 .button.secondary,.btn.secondary,a.button.secondary,
 .hero .button.secondary,
 :root.seasonal-theme-ready .hero .button.secondary,
