@@ -3713,8 +3713,7 @@ new '''
 <!-- End Google Tag Manager -->
 <meta '''
                f'''charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
-               f'''type="image/x-icon"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link '''
                f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
@@ -4112,8 +4111,7 @@ new '''
 <!-- End Google Tag Manager -->
 <meta '''
                f'''charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
-               f'''type="image/x-icon"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link '''
                f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
@@ -4318,8 +4316,7 @@ new '''
 <!-- End Google Tag Manager -->
 <meta '''
                f'''charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
-               f'''type="image/x-icon"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link '''
                f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
@@ -4486,8 +4483,7 @@ new '''
 <!-- End Google Tag Manager -->
 <meta '''
                f'''charset="utf-8"/>
-<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" '''
-               f'''type="image/x-icon"/>
+<link rel="icon" href="/favicon.ico" sizes="any"/>
 <link href="https://images.jonathan-harris.online" rel="preconnect"/>
 <link '''
                f'''href="https://assets.jonathan-harris.online" rel="preconnect"/>
