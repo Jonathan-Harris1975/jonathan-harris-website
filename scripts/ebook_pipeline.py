@@ -6075,7 +6075,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             "path": TOPICS_DIR / "index.html",
             "label": "topics/index.html",
             "required": [
-                '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+                '<link rel="icon" href="/favicon.ico" sizes="any"/>',
                 '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
                 '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
                 '<meta content="#0D1420" name="theme-color"/>',
@@ -6097,7 +6097,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             "path": CATALOGUE_DIR / topic_slug / "index.html",
             "label": f"catalogue/{topic_slug}/index.html",
             "required": [
-                '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+                '<link rel="icon" href="/favicon.ico" sizes="any"/>',
                 '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
                 '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
                 '<meta content="#0D1420" name="theme-color"/>',
@@ -6439,7 +6439,7 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
             continue
         page_text = page_path.read_text(encoding="utf-8", errors="ignore")
         for marker in [
-            '<link href="https://assets.jonathan-harris.online/favicon.ico" rel="icon" type="image/x-icon"/>',
+            '<link rel="icon" href="/favicon.ico" sizes="any"/>',
             '<link href="https://images.jonathan-harris.online" rel="preconnect"/>',
             '<link href="https://assets.jonathan-harris.online" rel="preconnect"/>',
             '<meta content="#0D1420" name="theme-color"/>',
