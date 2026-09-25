@@ -52,6 +52,13 @@ FONT_HEAD_BLOCK = """<link href="https://fonts.googleapis.com" rel="preconnect"/
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,600;0,700;0,800&display=swap" rel="stylesheet"/>"""
 
+FAVICON_HEAD_BLOCK = """<link rel="icon" href="/favicon.ico" sizes="any"/>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+<link rel="manifest" href="/site.webmanifest"/>"""
+
 VIEWPORT_META_VARIANTS = {
     '<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>',
     '<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>',
@@ -94,6 +101,10 @@ _FONT_HEAD_BLOCK_RE = re.compile(
 
 _SITE_CSS_LINK_RE = re.compile(r'<link[^>]+href="/assets/css/site\.css"[^>]*>', re.IGNORECASE)
 _VIEWPORT_META_RE = re.compile(r'<meta[^>]+name=\"viewport\"[^>]*>', re.IGNORECASE)
+_FAVICON_LINK_RE = re.compile(
+    r'<link[^>]+(?:rel="(?:icon|apple-touch-icon)"|href="/site\.webmanifest")[^>]*>\s*',
+    re.IGNORECASE,
+)
 
 _SITE_UI_SCRIPT = '<script defer src="/assets/js/site-ui.min.js"></script>'
 
@@ -203,6 +214,32 @@ def validate_viewport_head_block(text: str) -> str | None:
     return None
 
 
+def ensure_favicon_head_block(text: str) -> tuple[str, bool]:
+    """Normalise the local favicon/app-icon declarations after the viewport meta tag."""
+    if validate_favicon_head_block(text) is None:
+        return text, False
+
+    cleaned = _FAVICON_LINK_RE.sub("", text)
+    viewport_match = _VIEWPORT_META_RE.search(cleaned)
+    if viewport_match is None:
+        return text, False
+
+    updated = cleaned[:viewport_match.end()] + "\n" + FAVICON_HEAD_BLOCK + cleaned[viewport_match.end():]
+    return updated, updated != text
+
+
+def validate_favicon_head_block(text: str) -> str | None:
+    for line in FAVICON_HEAD_BLOCK.splitlines():
+        if text.count(line) != 1:
+            return f"favicon head declaration must appear exactly once: {line}"
+
+    viewport_match = _VIEWPORT_META_RE.search(text)
+    block_start = text.find(FAVICON_HEAD_BLOCK)
+    if viewport_match is None or block_start < viewport_match.end():
+        return "canonical favicon head block must follow the viewport meta tag"
+    return None
+
+
 def validate_font_head_block(text: str) -> str | None:
     match = _SITE_CSS_LINK_RE.search(text)
     if match is None:
@@ -267,10 +304,11 @@ def inject(dry_run: bool = False) -> int:
             failed.append((rel, "Footer block could not be relocated after header injection"))
             continue
         updated_text = updated_text[:footer_match.start()] + footer_partial + updated_text[footer_match.end():]
+        updated_text, favicon_changed = ensure_favicon_head_block(updated_text)
         updated_text, font_changed = ensure_font_head_block(updated_text)
         updated_text, site_ui_changed = ensure_site_ui_script(updated_text)
 
-        if existing_header_block == header_partial and existing_footer_block == footer_partial and not font_changed and not site_ui_changed:
+        if existing_header_block == header_partial and existing_footer_block == footer_partial and not favicon_changed and not font_changed and not site_ui_changed:
             in_sync += 1
             print(f"  [OK]      {rel}")
             continue
@@ -345,13 +383,14 @@ def validate() -> int:
 
         header_reason = None if header_match.group(0) == header_partial else "Header differs from partial"
         footer_reason = None if footer_match.group(0) == footer_partial else "Footer differs from partial"
+        favicon_reason = validate_favicon_head_block(text)
         font_reason = validate_font_head_block(text)
         viewport_reason = validate_viewport_head_block(text)
         site_ui_reason = validate_site_ui_script(text)
-        if not header_reason and not footer_reason and not font_reason and not viewport_reason and not site_ui_reason:
+        if not header_reason and not footer_reason and not favicon_reason and not font_reason and not viewport_reason and not site_ui_reason:
             ok += 1
         else:
-            reasons = "; ".join(reason for reason in [header_reason, footer_reason, font_reason, viewport_reason, site_ui_reason] if reason)
+            reasons = "; ".join(reason for reason in [header_reason, footer_reason, favicon_reason, font_reason, viewport_reason, site_ui_reason] if reason)
             drift.append((rel, reasons))
 
     print()
