@@ -1,4 +1,4 @@
-# Jonathan Harris Online
+# Jonathan Harris Online.
 
 This repository is the governed source and build system for **https://jonathan-harris.online**. Cloudflare Pages publishes the repository root, Cloudflare Pages Functions provide same-origin runtime routes, and two separately deployed Workers provide Agent Readiness and CogniPal rate limiting.
 
