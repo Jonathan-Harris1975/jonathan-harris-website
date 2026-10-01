@@ -500,7 +500,7 @@ def run_growth_surface_checks(*, timeout: float) -> list[PageResult]:
     else:
         visible = normalise_visible_text(news.body)
         failures = []
-        if "form.jotform.com/260277027608054" not in news.body:
+        if "form.jotform.com/262733359026055" not in news.body:
             failures.append("governed AI Edge Jotform is missing")
         if "/api/newsletter/subscribe" in news.body or "newsletter-native-form" in news.body or "data-newsletter-form" in news.body:
             failures.append("a second/native newsletter collection path is still exposed")

@@ -245,7 +245,7 @@ def main()->int:
     retired_endpoint=ROOT/'functions'/'api'/'newsletter'/'subscribe.js'
     check(not retired_endpoint.exists(),'retired newsletter API endpoint still exists')
     newsletter_page=text(ROOT/'newsletter'/'index.html')
-    check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/260277027608054' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
+    check('<title>AI Edge | Jonathan Harris</title>' in newsletter_page and 'form.jotform.com/262733359026055' in newsletter_page,'AI Edge page is missing the governed name or visible Jotform signup')
     check('/api/newsletter/subscribe' not in newsletter_page and 'data-newsletter-form' not in newsletter_page,'AI Edge page exposes more than the governed Jotform collection path')
     check(newsletter_timing_match(newsletter_page) is None,'AI Edge page contains a timing/cadence promise')
     check('/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf' in newsletter_page,'AI Edge page is missing the direct glossary download')

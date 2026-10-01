@@ -293,7 +293,7 @@ def benefit_newsletter_copy() -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     title = "AI Edge | Jonathan Harris"
     description = "Join AI Edge, Jonathan Harris's practical AI briefing, and download the free plain-English AI glossary cheat sheet."
-    jotform_url = "https://form.jotform.com/260277027608054"
+    jotform_url = "https://form.jotform.com/262733359026055"
     glossary_pdf = "/downloads/ai-glossary-cheat-sheet/ai-glossary-cheat-sheet.pdf"
     body = (
                f'''<header class="hero hero--newsletter hero--has-fixed-nav" role="region" aria-label="AI Edge newsletter '''
@@ -313,7 +313,7 @@ def benefit_newsletter_copy() -> None:
 <p>The hosted form now collects your name and email address. Subscribe here, then keep the '''
                f'''glossary as a quick-reference PDF.</p>
 <div class="newsletter-jotform-wrap"><iframe '''
-               f'''id="JotFormIFrame-260277027608054" title="AI Edge newsletter sign-up" allowtransparency="true" '''
+               f'''id="JotFormIFrame-262733359026055" title="AI Edge newsletter sign-up" allowtransparency="true" '''
                f'''allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" '''
                f'''data-jotform-base-src="{jotform_url}" frameborder="0" class="newsletter-jotform-frame" scrolling="no" '''
                f'''loading="eager"></iframe></div>
