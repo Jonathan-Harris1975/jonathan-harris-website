@@ -8,7 +8,7 @@ on:
   pull_request_review_comment:
     types: [created, edited]
   workflow_run:
-    workflows: ["Production readiness", "CodeQL", "Security and repository quality"]
+    workflows: ["Production readiness", "CodeQL", "Security and repository quality", "Branch PR signal"]
     types: [requested, completed]
   # Safety-net reconciliation only around the weekend window (UTC covers both BST and GMT),
   # plus one daily sweep. Event triggers above handle everything else.
@@ -102,6 +102,128 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false
 
+      - name: Create or reuse pull request for approved branch signal
+        if: >-
+          ${{ github.event_name == 'workflow_run' &&
+              github.event.action == 'completed' &&
+              github.event.workflow_run.name == 'Branch PR signal' &&
+              github.event.workflow_run.event == 'push' &&
+              github.event.workflow_run.conclusion == 'success' }}
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          SOURCE_REPO: ${{ github.event.workflow_run.head_repository.full_name }}
+          SOURCE_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+          MANAGED_LABEL: automation:branch-pr
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SOURCE_REPO" = "$REPO" || exit 0
+          case "$SOURCE_BRANCH" in
+            fix/*|feat/*|chore/*|ci/*|work/*|codex/*) ;;
+            *) echo "Branch is outside approved namespaces: $SOURCE_BRANCH"; exit 0 ;;
+          esac
+          case "$SOURCE_BRANCH" in
+            autonomy/*|renovate/*|dependabot/*|mergify/*|tmp/*|temp/*|internal/*) exit 0 ;;
+          esac
+          current_sha="$(gh api "repos/${REPO}/git/ref/heads/${SOURCE_BRANCH}" --jq '.object.sha')"
+          test "$current_sha" = "$SOURCE_SHA" || { echo "Branch moved; newer signal will reconcile it."; exit 0; }
+          ahead="$(gh api "repos/${REPO}/compare/${DEFAULT_BRANCH}...${SOURCE_BRANCH}" --jq '.ahead_by')"
+          test "$ahead" -gt 0 || exit 0
+
+          existing="$(gh pr list --repo "$REPO" --state open --base "$DEFAULT_BRANCH" --head "$SOURCE_BRANCH" --limit 100 --json number --jq '.[0].number // empty')"
+          if test -n "$existing"; then
+            echo "Using existing PR #${existing}."
+            exit 0
+          fi
+
+          gh label create "$MANAGED_LABEL" --repo "$REPO" --color 1D76DB --description "PR created and managed by trusted branch automation" --force >/dev/null
+          message="$(gh api "repos/${REPO}/commits/${SOURCE_SHA}" --jq '.commit.message')"
+          title="$(printf '%s\n' "$message" | head -n 1 | cut -c1-240)"
+          test -n "$title" || title="${SOURCE_BRANCH%%/*}: ${SOURCE_BRANCH#*/}"
+          body="$(cat <<EOF
+          Created automatically by the repository's trusted branch automation.
+
+          - Source branch: \`${SOURCE_BRANCH}\`
+          - Target branch: \`${DEFAULT_BRANCH}\`
+          - Signalled head: \`${SOURCE_SHA}\`
+
+          The repository's normal pull-request CI and security workflows must complete successfully before native GitHub auto-merge is requested.
+          EOF
+          )"
+          url="$(gh pr create --repo "$REPO" --base "$DEFAULT_BRANCH" --head "$SOURCE_BRANCH" --title "$title" --body "$body")"
+          number="${url##*/}"
+          gh pr edit "$number" --repo "$REPO" --add-label "$MANAGED_LABEL"
+          echo "Created managed PR #${number}."
+
+      - name: Reconcile managed branch pull requests
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          REPAIR_APP_LOGIN: ${{ steps.app_token.outputs.repair_app_login }}
+          MANAGED_LABEL: automation:branch-pr
+          REQUIRED_WORKFLOWS: "Production readiness|CodeQL|Security and repository quality"
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh label create "$MANAGED_LABEL" --repo "$REPO" --color 1D76DB --description "PR created and managed by trusted branch automation" --force >/dev/null
+          while IFS=$'\t' read -r number branch sha; do
+            test -n "$number" || continue
+            case "$branch" in fix/*|feat/*|chore/*|ci/*|work/*|codex/*) ;; *) continue ;; esac
+
+            pr="$(gh api "repos/${REPO}/pulls/${number}")"
+            if jq -e '[.labels[].name | ascii_downcase] | any(. == "autonomy:human-hold" or . == "do-not-merge" or . == "do not merge" or . == "hold")' <<< "$pr" >/dev/null; then
+              echo "PR #${number} has a hold label; withholding auto-merge."
+              continue
+            fi
+            merge_state="$(jq -r '.mergeable_state // "unknown"' <<< "$pr")"
+            if test "$merge_state" = "dirty"; then
+              echo "PR #${number} has merge conflicts; withholding auto-merge."
+              continue
+            fi
+            if test "$merge_state" = "behind"; then
+              gh api --method PUT "repos/${REPO}/pulls/${number}/update-branch" -f expected_head_sha="$sha" >/dev/null || true
+              echo "PR #${number} was behind; requested a branch update and fresh CI."
+              continue
+            fi
+
+            runs="$(gh api "repos/${REPO}/actions/runs?head_sha=${sha}&event=pull_request&per_page=100")"
+            ready=true
+            IFS='|' read -ra names <<< "$REQUIRED_WORKFLOWS"
+            for workflow in "${names[@]}"; do
+              state="$(jq -r --arg name "$workflow" '[.workflow_runs[] | select(.name == $name)] | sort_by(.id) | last | if . == null then "missing" else "\(.status)/\(.conclusion)" end' <<< "$runs")"
+              if test "$state" != "completed/success"; then
+                echo "PR #${number} not ready: ${workflow} is ${state}."
+                ready=false
+                break
+              fi
+            done
+            test "$ready" = true || continue
+
+            current="$(gh api "repos/${REPO}/pulls/${number}")"
+            current_sha="$(jq -r '.head.sha' <<< "$current")"
+            test "$current_sha" = "$sha" || { echo "PR #${number} head changed; deferring."; continue; }
+            current_base="$(jq -r '.base.sha' <<< "$current")"
+            live_base="$(gh api "repos/${REPO}/branches/${DEFAULT_BRANCH}" --jq '.commit.sha')"
+            test "$current_base" = "$live_base" || { echo "PR #${number} base moved; deferring."; continue; }
+
+            gh pr merge "$number" --repo "$REPO" --auto --squash
+            echo "Requested native GitHub auto-merge for PR #${number}."
+          done < <(
+            gh api --paginate "repos/${REPO}/pulls?state=open&per_page=100" |
+              jq -r --arg app "$REPAIR_APP_LOGIN" --arg repo "$REPO" --arg base "$DEFAULT_BRANCH" --arg label "$MANAGED_LABEL" '
+                .[] |
+                select(.draft == false) |
+                select(.user.login == $app) |
+                select(.head.repo.full_name == $repo and .base.ref == $base) |
+                select(any(.labels[]?; .name == $label)) |
+                [.number, .head.ref, .head.sha] | @tsv
+              '
+          )
+
       - name: Admit, repair and reconcile verified automation pull requests
         env:
           GH_TOKEN: ${{ steps.app_token.outputs.token }}
@@ -111,5 +233,5 @@ jobs:
           REPAIR_APP_LOGIN: ${{ steps.app_token.outputs.repair_app_login }}
           KILO_REPAIR_PR_LOGIN: ${{ vars.KILO_REPAIR_PR_LOGIN }}
           CURRENT_RUN_ID: ${{ github.run_id }}
-          REQUIRED_WORKFLOWS: "CI|CodeQL|Security and repository quality"
+          REQUIRED_WORKFLOWS: "Production readiness|CodeQL|Security and repository quality"
         run: python .github/scripts/trusted_automation.py
