@@ -186,10 +186,10 @@ jobs:
           fi
 
           echo "::add-mask::$callback_token"
-          echo "RESOLVED_CALLBACK_URL=$callback_url" >> "$GITHUB_ENV"
-          echo "R2_BUCKET_AUDITS=$audit_bucket" >> "$GITHUB_ENV"
-          echo "R2_PUBLIC_BASE_URL_AUDITS=${audit_public_base_url%/}" >> "$GITHUB_ENV"
           {
+            echo "RESOLVED_CALLBACK_URL=$callback_url"
+            echo "R2_BUCKET_AUDITS=$audit_bucket"
+            echo "R2_PUBLIC_BASE_URL_AUDITS=${audit_public_base_url%/}"
             echo "RESOLVED_CALLBACK_TOKEN<<__AUDIT_TOKEN__"
             echo "$callback_token"
             echo "__AUDIT_TOKEN__"
