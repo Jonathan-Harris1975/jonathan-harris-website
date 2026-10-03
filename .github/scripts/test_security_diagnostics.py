@@ -58,6 +58,27 @@ class Diagnostics(unittest.TestCase):
             path.write_text('{}')
             self.assertIn('unexpected structure', security.read_report(path, list)[1])
 
+    def test_actionlint_json_and_ndjson_yield_finding_lists(self):
+        finding_a = {'filepath': '.github/workflows/ci.yml', 'line': 12, 'column': 9, 'kind': 'syntax-check', 'message': 'label issue'}
+        finding_b = {'filepath': '.github/workflows/other.yml', 'line': 3, 'column': 1, 'kind': 'syntax-check', 'message': 'other issue'}
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'actionlint.json'
+            path.write_text('[]\n')
+            data, error = security.read_report(path, list)
+            self.assertEqual((data, error), ([], None))
+            path.write_text(json.dumps([finding_a]) + '\n')
+            data, error = security.read_report(path, list)
+            self.assertIsNone(error)
+            self.assertEqual(len(data), 1)
+            path.write_text(json.dumps(finding_a) + '\n')
+            data, error = security.read_report(path, list)
+            self.assertIsNone(error)
+            self.assertEqual(data, [finding_a])
+            path.write_text(json.dumps(finding_a) + '\n' + json.dumps(finding_b) + '\n')
+            data, error = security.read_report(path, list)
+            self.assertIsNone(error)
+            self.assertEqual(data, [finding_a, finding_b])
+
     def test_workflow_metadata_cannot_inject_markdown(self):
         self.assertEqual(security.cell('<img>|`x`\nnext'), '&lt;img&gt;&#124;&#96;x&#96; next')
 

@@ -54,9 +54,17 @@ jobs:
     - name: Validate GitHub Actions workflows
       run: |
         set +e
-        "${{ runner.temp }}/ci-bin/actionlint"  -format '{{json .}}' > "$RUNNER_TEMP/security-raw/actionlint.json"
+        "${{ runner.temp }}/ci-bin/actionlint" -format '{{json .}}' > "$RUNNER_TEMP/security-raw/actionlint.ndjson"
         status=$?
-        if [ "$status" -eq 0 ]; then printf "[]\n" > "$RUNNER_TEMP/security-raw/actionlint.json"; fi
+        if [ "$status" -eq 0 ]; then
+          printf "[]\n" > "$RUNNER_TEMP/security-raw/actionlint.json"
+        else
+          if ! jq -s '.' "$RUNNER_TEMP/security-raw/actionlint.ndjson" > "$RUNNER_TEMP/security-raw/actionlint.json"; then
+            echo "::error::Failed to normalize actionlint output; preserving raw NDJSON for diagnostics."
+            cp "$RUNNER_TEMP/security-raw/actionlint.ndjson" "$RUNNER_TEMP/security-raw/actionlint.json" || printf "[]\n" > "$RUNNER_TEMP/security-raw/actionlint.json"
+          fi
+        fi
+        rm -f "$RUNNER_TEMP/security-raw/actionlint.ndjson"
         exit "$status"
       id: actionlint
       continue-on-error: true

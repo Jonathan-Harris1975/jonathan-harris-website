@@ -15,7 +15,30 @@ def read_report(path, expected):
     if not path.is_file():
         return None, 'No report was produced; inspect the scanner step for installation, execution or cancellation errors.'
     try:
-        data = json.loads(path.read_text())
+        text = path.read_text()
+    except OSError:
+        return None, 'Report is unreadable or invalid JSON; this is an operational reporting error.'
+    if expected is list and path.name == 'actionlint.json':
+        stripped = text.strip()
+        if not stripped:
+            return [], None
+        try:
+            data = json.loads(text)
+        except ValueError:
+            data = None
+        if isinstance(data, list):
+            return data, None
+        if isinstance(data, dict):
+            return [data], None
+        try:
+            items = [json.loads(line) for line in stripped.splitlines() if line.strip()]
+        except ValueError:
+            return None, 'Report is unreadable or invalid JSON; this is an operational reporting error.'
+        if items and all(isinstance(item, dict) for item in items):
+            return items, None
+        return None, 'Report is unreadable or invalid JSON; this is an operational reporting error.'
+    try:
+        data = json.loads(text)
     except (ValueError, OSError):
         return None, 'Report is unreadable or invalid JSON; this is an operational reporting error.'
     if not isinstance(data, expected):
