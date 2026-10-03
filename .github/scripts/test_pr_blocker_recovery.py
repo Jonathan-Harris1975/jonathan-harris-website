@@ -266,6 +266,110 @@ class Recovery(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.candidate_numbers({"inputs": {"pr_number": "7;bad"}})
 
+    def test_untrusted_comment_does_not_start_recovery(self):
+        event = {
+            "issue": {"number": 7, "pull_request": {}},
+            "comment": {"user": {"login": "outsider"}, "author_association": "NONE"},
+        }
+        event["issue"]["pull_request"] = {"url": "https://example.invalid/pr/7"}
+        self.assertEqual(m.candidate_numbers(event), [])
+        event["comment"]["author_association"] = "COLLABORATOR"
+        self.assertEqual(m.candidate_numbers(event), [7])
+        event["comment"] = {"user": {"login": "kilo-code-bot[bot]"}}
+        self.assertEqual(m.candidate_numbers(event), [7])
+
+    def test_required_check_on_second_rule_page_cannot_be_omitted(self):
+        first = [
+            {
+                "type": "required_status_checks",
+                "parameters": {"required_status_checks": [{"context": "green"}]},
+            }
+        ] + [{"type": "dummy"}] * 99
+        second = [
+            {
+                "type": "required_status_checks",
+                "parameters": {"required_status_checks": [{"context": "red"}]},
+            }
+        ]
+        checks = {
+            "check_runs": [
+                {"name": name, "status": "completed", "conclusion": result}
+                for name, result in [("green", "success"), ("red", "failure")]
+            ]
+        }
+        with patch.object(
+            m.router, "api", side_effect=[first, second, checks, {"statuses": []}]
+        ) as api:
+            self.assertFalse(m.required_checks_pass(self.pr))
+        self.assertIn("page=2", api.call_args_list[1].args[1])
+
+    def test_reviews_and_inline_comments_require_trusted_actor(self):
+        for key in ["review", "comment"]:
+            event = {
+                "pull_request": {"number": 7},
+                key: {"user": {"login": "outsider"}, "author_association": "NONE"},
+            }
+            self.assertEqual(m.candidate_numbers(event), [])
+            event[key]["user"]["login"] = "repair[bot]"
+            self.assertEqual(m.candidate_numbers(event), [7])
+
+    def test_workflow_authentication_precedes_write_scoped_job(self):
+        workflow = (Path(__file__).parents[1] / "workflows/pr-issue-repair.yml").read_text()
+        actor_code = workflow.split("        python3 - <<'PYCODE'\n", 1)[1].split(
+            "        PYCODE", 1
+        )[0]
+        actor_code = "\n".join(line[8:] for line in actor_code.splitlines())
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "output"
+            for event in ["issue_comment", "pull_request_review", "pull_request_review_comment"]:
+                for who, expected in [("outsider", "false"), ("repair[bot]", "true")]:
+                    output.write_text("")
+                    with patch.dict(
+                        os.environ,
+                        {
+                            "EVENT_NAME": event,
+                            "ACTOR_LOGIN": who,
+                            "ACTOR_ASSOCIATION": "NONE",
+                            "KILO_LOGIN": "",
+                            "REPAIR_LOGIN": "repair[bot]",
+                            "GITHUB_OUTPUT": str(output),
+                        },
+                    ):
+                        exec(actor_code, {})
+                    self.assertEqual(output.read_text(), "trusted=" + expected + "\n")
+        self.assertIn("needs: authenticate_actor", workflow)
+        self.assertIn("needs.authenticate_actor.outputs.trusted == 'true'", workflow)
+        self.assertIn(
+            "REPAIR_APP_LOGIN: ${{ needs.authenticate_actor.outputs.repair_app_login }}", workflow
+        )
+
+    def test_rule_page_limit_does_not_authorise_resolution(self):
+        with patch.object(m.router, "api", return_value=[{"type": "dummy"}] * 100):
+            with self.assertRaises(ValueError):
+                m.required_checks_pass(self.pr)
+
+    @patch.dict(os.environ, {"KILO_REPAIR_TRIGGER_URL": "https://example.invalid/repair"})
+    def test_behind_recovery_uses_real_dispatcher_return_and_existing_branch(self):
+        self.pr["mergeable_state"] = "behind"
+        with (
+            patch.object(m.router, "all_pages", return_value=[]),
+            patch.object(m.router, "valid_kilo_webhook_url", return_value=True),
+            patch.object(m.router, "pr_details", return_value=self.pr),
+            patch.object(
+                m.router,
+                "api",
+                side_effect=lambda method, path, payload=None: (
+                    {"sha": "b" * 40} if method == "GET" else None
+                ),
+            ),
+            patch.object(m.router.urllib.request, "urlopen") as openurl,
+        ):
+            openurl.return_value.__enter__.return_value.status = 202
+            self.assertEqual(m.recover(7)["state"], "behind-requested")
+            task = json.loads(openurl.call_args.args[0].data)["task"]
+            self.assertIn("existing source PR branch", task)
+            self.assertNotIn("create one implementation PR", task)
+
     def test_one_pr_error_does_not_stop_others_and_fails_visibly(self):
         with tempfile.TemporaryDirectory() as directory:
             event = Path(directory) / "event.json"
