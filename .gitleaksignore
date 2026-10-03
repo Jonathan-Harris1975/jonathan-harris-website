@@ -1,0 +1,6 @@
+# Exact historical synthetic scanner fixtures, removed from current source.
+# Verified against scripts/test_secret_scan.py; no path or rule exemptions.
+a79978e79141a198cc3b74dc5888d35c27edc8d4:tests/fixtures/secret_scan/detections.txt:stripe-access-token:7
+a79978e79141a198cc3b74dc5888d35c27edc8d4:tests/fixtures/secret_scan/detections.txt:slack-webhook-url:6
+a79978e79141a198cc3b74dc5888d35c27edc8d4:tests/fixtures/secret_scan/detections.txt:generic-api-key:3
+a79978e79141a198cc3b74dc5888d35c27edc8d4:tests/fixtures/secret_scan/detections.txt:generic-api-key:4
