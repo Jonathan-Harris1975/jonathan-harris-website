@@ -1,52 +1,98 @@
 name: Security and repository quality
-
-on:
-  pull_request:
-  workflow_dispatch:
-
 permissions:
   contents: read
-
 concurrency:
   group: website-security-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
   repository_security:
     name: Trivy, Gitleaks and actionlint
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - name: Verify branch PR safety and idempotency
-        run: python3 .github/scripts/test_branch_pr_automation.py
-      - name: Verify PR blocker recovery regressions
-        run: python3 .github/scripts/test_pr_blocker_recovery.py
-      - name: Repository secret policy scan
-        run: python3 scripts/scan_secrets.py
-      - name: Install pinned Gitleaks and actionlint
-        env:
-          GOBIN: ${{ runner.temp }}/ci-bin
-        run: |
-          set -euo pipefail
-          mkdir -p "$GOBIN"
-          go install github.com/zricethezav/gitleaks/v8@v8.28.0
-          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.12
-      - name: Gitleaks history scan
-        run: |
-          "${{ runner.temp }}/ci-bin/gitleaks" git . --redact --no-banner
-      - name: Validate GitHub Actions workflows
-        run: |
-          "${{ runner.temp }}/ci-bin/actionlint" -color
-      - name: Trivy filesystem vulnerability and misconfiguration scan
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
-        with:
-          scan-type: fs
-          scan-ref: .
-          scanners: vuln,misconfig
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: '1'
+    - name: Observe runner processes and egress
+      uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1
+      with:
+        egress-policy: audit
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    - name: Install pinned zizmor
+      run: python3 scripts/install_ci_tools.py zizmor
+    - name: Inspect GitHub Actions security posture
+      run: .ci-tools/bin/zizmor --offline .github/workflows
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+      with:
+        node-version: 24.21.0
+    - name: Strict Renovate configuration validation
+      run: npx --yes --package renovate@44.132.5 -- renovate-config-validator --strict renovate.json
+    - name: Verify automation ownership boundaries
+      run: python3 .github/scripts/test_ci_ownership.py
+    - name: Verify branch PR safety and idempotency
+      run: python3 .github/scripts/test_branch_pr_automation.py
+    - name: Verify PR blocker recovery regressions
+      run: python3 .github/scripts/test_pr_blocker_recovery.py
+    - name: Repository secret policy scan
+      run: python3 scripts/scan_secrets.py
+    - name: Install pinned security CLI tools
+      run: python3 scripts/install_ci_tools.py trivy gitleaks actionlint
+    - name: Gitleaks history scan
+      run: .ci-tools/bin/gitleaks git . --redact=100 --no-banner --gitleaks-ignore-path .gitleaksignore
+    - name: Validate GitHub Actions workflows
+      run: .ci-tools/bin/actionlint -color
+    - name: Trivy filesystem vulnerability and misconfiguration scan
+      run: .ci-tools/bin/trivy fs . --scanners vuln,misconfig --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 --no-progress
+  link_integrity:
+    name: Lychee link integrity
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: false
+    - run: python3 scripts/install_ci_tools.py lychee
+    - name: Check maintained website and documentation links
+      run: .ci-tools/bin/lychee --no-progress --cache --max-retries 2 --timeout 20 README.md docs index.html
+  shell_quality:
+    name: ShellCheck website build script
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        persist-credentials: false
+    - run: python3 scripts/install_ci_tools.py shellcheck
+    - run: .ci-tools/bin/shellcheck build.sh
+  scorecard:
+    name: OpenSSF Scorecard
+    if: github.event_name != 'pull_request'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+      checks: read
+    steps:
+    - name: Install pinned Scorecard CLI from source
+      env:
+        GOBIN: ${{ runner.temp }}/scorecard-bin
+      run: 'set -euo pipefail
 
+        mkdir -p "$GOBIN"
+
+        go install github.com/ossf/scorecard/v5@v5.5.0
+
+        '
+    - name: Assess repository posture without mutation
+      env:
+        GITHUB_AUTH_TOKEN: ${{ github.token }}
+      run: '"${{ runner.temp }}/scorecard-bin/scorecard" --repo="github.com/$GITHUB_REPOSITORY" --format=json --show-details'
+'on':
+  pull_request: null
+  workflow_dispatch: null
+  push:
+    branches:
+    - main

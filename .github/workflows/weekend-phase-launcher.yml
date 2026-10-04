@@ -5,7 +5,7 @@ on:
     - cron: "0 1 * * 6"
     - cron: "0 0 * * 6"
     - cron: "0 0 * * 0"
-    - cron: "0 23 * * 0"
+    - cron: "0 23 * * 6"
     - cron: "30 23 * * 0"
     - cron: "30 22 * * 0"
   workflow_dispatch:
@@ -61,23 +61,28 @@ jobs:
             echo "run=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          {
-            echo "run=true"
-            echo "phase=$phase"
-            echo "workflow=$workflow"
-          } >> "$GITHUB_OUTPUT"
+          echo "run=true" >> "$GITHUB_OUTPUT"
+          echo "phase=$phase" >> "$GITHUB_OUTPUT"
+          echo "workflow=$workflow" >> "$GITHUB_OUTPUT"
 
       - name: Dispatch phase workflow
         if: steps.slot.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           WORKFLOW: ${{ steps.slot.outputs.workflow }}
-        run: gh workflow run "$WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "${{ github.event.repository.default_branch }}"
+          PHASE: ${{ steps.slot.outputs.phase }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          set -euo pipefail
+          gh workflow run "$WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"
+          if [ "$PHASE" = ci ]; then
+            gh workflow run security.yml --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"
+            gh workflow run codeql.yml --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"
+          fi
 
-      - name: Record allocated windows
+      - name: Record prescribed starts
         if: always()
         run: |
-          echo "CI: Sat 01:00–Sat 03:30"
-          echo "DAST: Sun 00:00–Sun 02:00"
-          echo "Council: Sun 23:30–Mon 02:00"
-          echo "Weekend operating envelope: Friday 20:00 to Monday 04:00 Europe/London"
+          echo "CI: Sat 01:00 Europe/London"
+          echo "DAST: Sun 00:00 Europe/London"
+          echo "Council: Sun 23:30 Europe/London"
