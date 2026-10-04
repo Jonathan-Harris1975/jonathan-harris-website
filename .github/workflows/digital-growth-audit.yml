@@ -108,6 +108,11 @@ jobs:
 
       - name: Resolve callback and dedicated audits bucket
         shell: bash
+        env:
+          SECRETS_R2_BUCKET_AUDITS: ${{ secrets.R2_BUCKET_AUDITS }}
+          VARS_R2_BUCKET_AUDITS: ${{ vars.R2_BUCKET_AUDITS }}
+          SECRETS_R2_PUBLIC_BASE_URL_AUDITS: ${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}
+          VARS_R2_PUBLIC_BASE_URL_AUDITS: ${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}
         run: |
           set -euo pipefail
           callback_url="$INPUT_CALLBACK_URL"
@@ -124,13 +129,13 @@ jobs:
           [ -n "$callback_token" ] || { echo "::error::Audit callback token is required"; exit 1; }
 
           audit_bucket="$INPUT_AUDIT_BUCKET"
-          [ -n "$audit_bucket" ] || audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
-          [ -n "$audit_bucket" ] || audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
+          [ -n "$audit_bucket" ] || audit_bucket="$SECRETS_R2_BUCKET_AUDITS"
+          [ -n "$audit_bucket" ] || audit_bucket="$VARS_R2_BUCKET_AUDITS"
           [ -n "$audit_bucket" ] || { echo "::error::R2_BUCKET_AUDITS is required"; exit 1; }
 
           audit_public_base_url="$INPUT_AUDIT_PUBLIC_BASE_URL"
-          [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
-          [ -n "$audit_public_base_url" ] || audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
+          [ -n "$audit_public_base_url" ] || audit_public_base_url="$SECRETS_R2_PUBLIC_BASE_URL_AUDITS"
+          [ -n "$audit_public_base_url" ] || audit_public_base_url="$VARS_R2_PUBLIC_BASE_URL_AUDITS"
           # Audit artefacts are stored in a private R2 bucket.  If no HTTP-public
           # base is configured, advertise canonical authenticated R2 references.
           [ -n "$audit_public_base_url" ] || audit_public_base_url="r2://$audit_bucket"

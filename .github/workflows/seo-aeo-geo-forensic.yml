@@ -111,6 +111,11 @@ jobs:
 
       - name: Resolve AI-suite callback and audits bucket configuration
         shell: bash
+        env:
+          SECRETS_R2_BUCKET_AUDITS: ${{ secrets.R2_BUCKET_AUDITS }}
+          VARS_R2_BUCKET_AUDITS: ${{ vars.R2_BUCKET_AUDITS }}
+          SECRETS_R2_PUBLIC_BASE_URL_AUDITS: ${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}
+          VARS_R2_PUBLIC_BASE_URL_AUDITS: ${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}
         run: |
           set -euo pipefail
 
@@ -143,10 +148,10 @@ jobs:
 
           audit_bucket="$INPUT_AUDIT_BUCKET"
           if [ -z "$audit_bucket" ]; then
-            audit_bucket="${{ secrets.R2_BUCKET_AUDITS }}"
+            audit_bucket="$SECRETS_R2_BUCKET_AUDITS"
           fi
           if [ -z "$audit_bucket" ]; then
-            audit_bucket="${{ vars.R2_BUCKET_AUDITS }}"
+            audit_bucket="$VARS_R2_BUCKET_AUDITS"
           fi
           if [ -z "$audit_bucket" ]; then
             echo "::error::R2_BUCKET_AUDITS was not supplied. SEO/AEO/GEO artefacts must use the dedicated audits bucket."
@@ -155,10 +160,10 @@ jobs:
 
           audit_public_base_url="$INPUT_AUDIT_PUBLIC_BASE_URL"
           if [ -z "$audit_public_base_url" ]; then
-            audit_public_base_url="${{ secrets.R2_PUBLIC_BASE_URL_AUDITS }}"
+            audit_public_base_url="$SECRETS_R2_PUBLIC_BASE_URL_AUDITS"
           fi
           if [ -z "$audit_public_base_url" ]; then
-            audit_public_base_url="${{ vars.R2_PUBLIC_BASE_URL_AUDITS }}"
+            audit_public_base_url="$VARS_R2_PUBLIC_BASE_URL_AUDITS"
           fi
           if [ -z "$audit_public_base_url" ]; then
             # Audit artefacts are private by design; use an authenticated R2 reference.
