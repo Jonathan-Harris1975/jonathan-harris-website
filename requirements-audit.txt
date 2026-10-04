@@ -2,6 +2,6 @@
 # the hash-locked production file so audit-only packages can be resolved in a
 # separate, non-production environment.
 -r requirements.in
-boto3==1.43.41
+boto3==1.43.107
 requests==2.34.2
 playwright==1.63.0
