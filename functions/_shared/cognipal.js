@@ -166,7 +166,7 @@ function routeMissing(status, data) {
 
 async function signedAimsRequest(context, path, payload) {
   const baseUrl = envText(context.env, 'AIMS_COMMS_HUB_BASE_URL').replace(/\/+$/, '');
-  const secret = envText(context.env, 'COMMS_HUB_COGINPAL_WEBHOOK_SECRET');
+  const secret = envText(context.env, 'COGNIPAL_WEBHOOK_SECRET');
   if (!baseUrl || !secret) {
     return json({ ok: false, error: 'webchat_not_configured', message: 'Web chat is temporarily unavailable.' }, 503);
   }

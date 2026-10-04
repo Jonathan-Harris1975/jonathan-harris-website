@@ -55,7 +55,7 @@ function context(req, limiter) {
     request: req,
     env: {
       AIMS_COMMS_HUB_BASE_URL: 'https://zeroth-kara-jonathanharris-3296ed37.koyeb.app',
-      COMMS_HUB_COGINPAL_WEBHOOK_SECRET: 'test-secret-that-is-not-production',
+      COGNIPAL_WEBHOOK_SECRET: 'test-secret-that-is-not-production',
       ...(limiter ? { COGNIPAL_RATE_LIMITER: limiter } : {}),
     },
   };

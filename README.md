@@ -33,7 +33,7 @@ Public pages use the first-party CogniPal integration. Same-origin `/api/cognipa
 Required Pages configuration includes:
 
 - `AIMS_COMMS_HUB_BASE_URL` — non-secret AIMS Comms Hub origin.
-- `COMMS_HUB_COGINPAL_WEBHOOK_SECRET` — Pages secret matching AIMS.
+- `COGNIPAL_WEBHOOK_SECRET` — Pages secret matching AIMS.
 - `COGNIPAL_RATE_LIMITER` — Durable Object binding to the `cognipal-rate-limit` Worker.
 - optional `AIMS_COMMS_HUB_CHAT_TIMEOUT_MS` — gateway timeout override.
 

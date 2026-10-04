@@ -66,7 +66,7 @@ Deploy the standalone Workers before a Pages deployment that depends on them:
 
 Detailed Worker configuration is documented in `docs/cognipal-webchat-deployment.md`, `workers/agent-readiness/README.md` and `docs/AGENT-READINESS-DEPLOYMENT.md`.
 
-CogniPal Pages secrets/variables must remain in Cloudflare configuration, never committed source. The required secret is `COMMS_HUB_COGINPAL_WEBHOOK_SECRET`; the AIMS origin is supplied through `AIMS_COMMS_HUB_BASE_URL`.
+CogniPal Pages secrets/variables must remain in Cloudflare configuration, never committed source. The required secret is `COGNIPAL_WEBHOOK_SECRET`; the AIMS origin is supplied through `AIMS_COMMS_HUB_BASE_URL`.
 
 ## Post-deploy checks
 

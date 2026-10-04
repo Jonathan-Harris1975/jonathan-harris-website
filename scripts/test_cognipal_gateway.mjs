@@ -14,15 +14,22 @@ try {
     if (calls === 1) return new Response(JSON.stringify({ error: "route_not_found" }), { status: 404, headers: { "content-type": "application/json" } });
     return new Response(JSON.stringify({ ok: true, exists: false }), { status: 200, headers: { "content-type": "application/json" } });
   };
-  const response = await signedAimsRequest({ env: { AIMS_COMMS_HUB_BASE_URL: "https://aims.example/some-stale-path", COMMS_HUB_COGINPAL_WEBHOOK_SECRET: "secret" } }, "/comms-hub/intake/chat/sync", { sessionId: "session-123", visitorId: "visitor-123" });
+  const response = await signedAimsRequest({ env: { AIMS_COMMS_HUB_BASE_URL: "https://aims.example/some-stale-path", COGNIPAL_WEBHOOK_SECRET: "secret" } }, "/comms-hub/intake/chat/sync", { sessionId: "session-123", visitorId: "visitor-123" });
   assert.equal(response.status, 200);
   assert.equal(calls, 2);
 
   globalThis.fetch = async () => new Response(JSON.stringify({ ok: false, error: "chat_channel_disabled", message: "Website chat is temporarily unavailable." }), { status: 404, headers: { "content-type": "application/json" } });
-  const disabled = await signedAimsRequest({ env: { AIMS_COMMS_HUB_BASE_URL: "https://aims.example", COMMS_HUB_COGINPAL_WEBHOOK_SECRET: "secret" } }, "/comms-hub/intake/chat/sync", { sessionId: "session-123", visitorId: "visitor-123" });
+  const disabled = await signedAimsRequest({ env: { AIMS_COMMS_HUB_BASE_URL: "https://aims.example", COGNIPAL_WEBHOOK_SECRET: "secret" } }, "/comms-hub/intake/chat/sync", { sessionId: "session-123", visitorId: "visitor-123" });
   assert.equal(disabled.status, 503);
   const body = await disabled.json();
   assert.equal(body.error, "webchat_channel_disabled");
+  let legacyCalls = 0;
+  globalThis.fetch = async () => { legacyCalls += 1; return new Response("{}"); };
+  const legacyOnly = await signedAimsRequest({ env: {
+    AIMS_COMMS_HUB_BASE_URL: "https://aims.example", COMMS_HUB_COGINPAL_WEBHOOK_SECRET: "obsolete-secret",
+  } }, "/comms-hub/intake/chat/sync", { sessionId: "session-123", visitorId: "visitor-123" });
+  assert.equal(legacyOnly.status, 503);
+  assert.equal(legacyCalls, 0);
 } finally {
   globalThis.fetch = originalFetch;
 }

@@ -36,13 +36,13 @@ The gateway fails closed with `503 rate_limiter_unavailable` if the Durable Obje
 Set these in the Pages project, not in the repository:
 
 - `AIMS_COMMS_HUB_BASE_URL` — current public AIMS origin. The gateway accepts either the bare origin (`https://…`) or an origin ending in `/comms-hub` without duplicating the route prefix.
-- `COMMS_HUB_COGINPAL_WEBHOOK_SECRET` — secret; must exactly match the AIMS/Koyeb value.
+- `COGNIPAL_WEBHOOK_SECRET` — secret; must exactly match the AIMS/Koyeb value.
 - `AIMS_COMMS_HUB_CHAT_TIMEOUT_MS` — optional, default 12000 ms.
 
 ## AIMS / Koyeb settings
 
 - `COMMS_HUB_CHAT_ENABLED=true`
-- `COMMS_HUB_COGINPAL_WEBHOOK_SECRET` — same shared secret used by Pages.
+- `COGNIPAL_WEBHOOK_SECRET` — same shared secret used by Pages.
 - `COMMS_HUB_CHAT_AI_WORKFLOW_ENABLED=true` when automated CogniPal replies are intended in production.
 - `COMMS_HUB_CHAT_MAX_MESSAGE_CHARS=4000`
 - `COMMS_HUB_CHAT_MAX_MESSAGES_PER_MINUTE=12`
