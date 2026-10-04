@@ -24,6 +24,14 @@ cd workers/agent-readiness
 npx wrangler deploy
 ```
 
+If the standalone Worker is connected directly to Git in Cloudflare, its build configuration must use:
+
+```text
+Root directory: workers/agent-readiness
+```
+
+The root is relative to the repository root. Do not use `agent-readiness`, `/workers/agent-readiness`, or the website repository root for the standalone Worker project. A wrong root fails immediately after repository cloning, before Wrangler or Worker code runs.
+
 Expected service name: `agent-readiness`.
 
 Bindings:
