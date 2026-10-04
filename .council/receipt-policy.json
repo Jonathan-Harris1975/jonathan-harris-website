@@ -1,0 +1,7 @@
+{
+  "ci": "production-readiness.yml",
+  "deployment": "ebook-subsystem-ci.yml",
+  "artifact": "website-live-attestation-",
+  "dast": true,
+  "dispatch_step": "Dispatch Council contract to Kilo"
+}
