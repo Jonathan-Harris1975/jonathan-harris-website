@@ -3,5 +3,6 @@
   "deployment": "ebook-subsystem-ci.yml",
   "artifact": "website-live-attestation-",
   "dast": true,
-  "dispatch_step": "Dispatch Council contract to Kilo"
+  "dispatch_step": "Dispatch Council contract to Kilo",
+  "ci_start": "Sat 01:00"
 }
