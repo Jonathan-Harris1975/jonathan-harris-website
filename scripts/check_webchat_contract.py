@@ -12,7 +12,7 @@ REQUIRED = {
     "functions/_shared/cognipal.js": [
         "x-coginpal-signature",
         "AIMS_COMMS_HUB_BASE_URL",
-        "COMMS_HUB_COGINPAL_WEBHOOK_SECRET",
+        "COGNIPAL_WEBHOOK_SECRET",
         "COGNIPAL_RATE_LIMITER",
         "idFromName",
         "rate_limited",
