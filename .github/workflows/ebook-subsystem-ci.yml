@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -70,6 +72,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Classify whether this push requires a Pages release
         id: release-impact
@@ -185,6 +189,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           ref: ${{ github.ref_name }}
           fetch-depth: 0
       - name: Revert only the failed dependency merge
@@ -218,6 +223,7 @@ jobs:
           else
             git revert --no-edit "$FAILED_SHA"
           fi
+          gh auth setup-git --hostname github.com --force
           git push --set-upstream origin "$branch"
 
           printf '%s\n\n%s\n\n%s\n' \
