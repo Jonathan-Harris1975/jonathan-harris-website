@@ -79,13 +79,10 @@ jobs:
     - name: Install pinned Scorecard CLI from source
       env:
         GOBIN: ${{ runner.temp }}/scorecard-bin
-      run: 'set -euo pipefail
-
+      run: |
+        set -euo pipefail
         mkdir -p "$GOBIN"
-
         go install github.com/ossf/scorecard/v5@v5.5.0
-
-        '
     - name: Assess repository posture without mutation
       env:
         GITHUB_AUTH_TOKEN: ${{ github.token }}
