@@ -13,6 +13,9 @@ name = "jonathan-harris-website"          # Your Pages project name in the dashb
 pages_build_output_dir = "."             # Required: tells CF this is a Pages project
 compatibility_date = "2024-09-23"
 
+[vars]
+  AIMS_COMMS_HUB_BASE_URL = "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app"
+
 [[r2_buckets]]
   binding     = "TRANSCRIPTS_BUCKET"    # Must match the variable name used in
                                         # functions/transcripts/[[slug]].js
