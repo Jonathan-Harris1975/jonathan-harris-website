@@ -33,6 +33,8 @@ jobs:
         run: python3 .github/scripts/test_autonomy_lifecycle.py
       - name: Verify PR blocker recovery regressions
         run: python3 .github/scripts/test_pr_blocker_recovery.py
+      - name: Verify Kilo ownership-routing regressions
+        run: python3 .github/scripts/test_kilo_failure_classifier.py
       - name: Repository secret policy scan
         run: python3 scripts/scan_secrets.py
       - name: Install pinned Gitleaks and actionlint
