@@ -32,5 +32,6 @@ jobs:
             --cache
             --max-retries 2
             --timeout 20
+            --root-dir .
             './**/*.md'
             './**/*.html'
