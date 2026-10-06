@@ -100,3 +100,28 @@ jobs:
                   client.upload_file(str(path), bucket, f"{prefix}/{name}")
           print(f"Persisted DAST evidence to r2://{bucket}/{prefix}/")
           PY
+
+      - name: Check out trusted evidence persistence helper
+        if: always()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Persist DAST evidence to R2
+        if: always()
+        env:
+          PYTHONPATH: .
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check --no-input -r requirements-audit.txt
+          python3 scripts/audits/persist_repository_evidence.py \
+            --kind dast \
+            --repository "${GITHUB_REPOSITORY}" \
+            --sha "${GITHUB_SHA}" \
+            --run-id "${GITHUB_RUN_ID}" \
+            --run-attempt "${GITHUB_RUN_ATTEMPT}" \
+            --status "${{ steps.zap.outcome }}" \
+            --attach report_html.html \
+            --attach report_json.json \
+            --attach report_md.md
