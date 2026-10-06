@@ -30,6 +30,7 @@ jobs:
           args: >-
             --no-progress
             --cache
+            --root-dir .
             --max-retries 2
             --timeout 20
             './**/*.md'
