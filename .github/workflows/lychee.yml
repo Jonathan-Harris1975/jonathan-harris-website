@@ -16,7 +16,6 @@ concurrency:
 jobs:
   link_integrity:
     name: Lychee link integrity
-    continue-on-error: true
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -33,5 +32,10 @@ jobs:
             --root-dir .
             --max-retries 2
             --timeout 20
+            --exclude '^file://.*/ebooks/[^/]+/buy-now            './**/*.md'
+            './**/*.html'
+
+            --exclude '^https://mybook\.to/'
+            --exclude '^https://www\.ofcom\.org\.uk/online-safety/illegal-and-harmful-content/'
             './**/*.md'
             './**/*.html'
