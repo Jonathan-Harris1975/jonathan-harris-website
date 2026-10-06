@@ -14,6 +14,9 @@ concurrency:
   group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
 
+env:
+  AUTONOMY_WRITER_COORDINATOR: "1"
+
 jobs:
   create_repair_pr:
     if: >-
