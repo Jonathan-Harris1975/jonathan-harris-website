@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "audit-remediation-routing/v1",
+  "schemaVersion": "audit-remediation-routing/v2",
   "repository": "jonathan-harris-website",
   "auditRole": "detect-classify-evidence",
   "repairExecutionPolicy": "external-agent-only",
@@ -7,8 +7,44 @@
   "auditOwnsRepair": false,
   "primaryRepairAgent": "kilo",
   "plannedEngineeringAgent": "cto.new",
+  "workFingerprint": "repository + problem-category + affected-path-or-control + source-pr-or-sha-where-applicable",
   "ownershipTransferRequired": true,
+  "transferRequiresPreviousWriterInactive": true,
   "parallelMutationRule": "allowed-only-for-independent-fingerprints-and-non-overlapping-code-control-surfaces",
+  "maximumConcurrentIndependentWriters": 3,
+  "kiloMaximumAttemptsPerFingerprint": 2,
+  "ctoFallbackMaximumAttemptsPerTransferredFingerprint": 1,
+  "repositoryCircuitBreaker": {
+    "failedAutonomousRepairs": 5,
+    "windowHours": 24,
+    "action": "human-review"
+  },
+  "ctoNew": {
+    "taskModel": "issue-driven",
+    "issuePurpose": "real-actionable-repository-work-only",
+    "genericProgrammeLedgerAllowed": false,
+    "identitySemantics": "verify-live-supported-github-integration-before-trusted-admission",
+    "trustedAdmission": "fail-closed-until-live-task-and-pr-identity-are-proven"
+  },
+  "mutationLease": {
+    "requiredBeforeExternalAgentMutation": true,
+    "genericGithubIssueLedgerAllowed": false,
+    "stateFields": [
+      "repository",
+      "defaultSha",
+      "fingerprint",
+      "owner",
+      "branchOrPr",
+      "attempts",
+      "evidence",
+      "blockers",
+      "nextAction",
+      "ownerOnlyAction",
+      "ownershipTransfer",
+      "leaseFence"
+    ],
+    "status": "external-durable-state-required-before-kilo-cto-concurrent-mutation"
+  },
   "dependencyVersionOwner": "renovate",
   "mergeAuthority": "mergify",
   "humanDecisionSurface": "hive-ui",
@@ -16,6 +52,8 @@
   "notes": [
     "Audit findings must attach to an existing ownership fingerprint when one exists; never open a duplicate repair path.",
     "A changed PR head or audited source revision invalidates stale approval/evidence.",
+    "Kilo and cto.new may not mutate the same fingerprint concurrently.",
+    "cto.new may receive Kilo fallback work only after durable ownership transfer and proof the Kilo writing path is inactive.",
     "Human-gated findings remain pending until HIVE/HIVE-UI records the required decision and GitHub protections are satisfied."
   ]
 }
