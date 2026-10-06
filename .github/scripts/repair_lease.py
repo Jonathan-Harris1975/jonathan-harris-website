@@ -15,6 +15,14 @@ API = "https://api.github.com"
 REPO = os.environ.get("REPO") or os.environ.get("GITHUB_REPOSITORY", "")
 TOKEN = os.environ.get("GH_TOKEN", "")
 MARKER = "<!-- autonomy-lease:v1 "
+COORDINATOR_ENV = "AUTONOMY_WRITER_COORDINATOR"
+
+
+def require_serialized_coordinator() -> None:
+    """Refuse lease mutation outside the serialized GitHub Actions writer lane."""
+    if os.environ.get("GITHUB_ACTIONS") != "true" or os.environ.get(COORDINATOR_ENV) != "1":
+        raise RuntimeError("lease mutation requires the serialized autonomy writer coordinator")
+
 
 
 def fingerprint(repository: str, category: str, scope: str, source_sha: str) -> str:
@@ -81,6 +89,7 @@ def active_for_fingerprint(fp: str) -> dict | None:
 
 
 def post_state(issue: int, payload: dict) -> dict:
+    require_serialized_coordinator()
     body = MARKER + json.dumps(
         payload,
         separators=(",", ":"),
@@ -91,6 +100,10 @@ def post_state(issue: int, payload: dict) -> dict:
         f"/repos/{REPO}/issues/{issue}/comments",
         {"body": body},
     )
+    latest = active_for_fingerprint(str(payload["fingerprint"]))
+    if payload.get("status") == "active":
+        if not latest or latest.get("fence") != payload.get("fence") or latest.get("owner") != payload.get("owner"):
+            raise RuntimeError("lease write lost serialization/fence ownership")
     return payload
 
 
@@ -160,10 +173,17 @@ def previous_writer_inactive(current: dict) -> bool:
     if "autonomy:human-hold" in labels:
         return True
 
-    comments = _request(
-        "GET",
-        f"/repos/{REPO}/issues/{source_issue}/comments?per_page=100",
-    )
+    comments: list[dict] = []
+    for page in range(1, 11):
+        rows = _request(
+            "GET",
+            f"/repos/{REPO}/issues/{source_issue}/comments?per_page=100&page={page}",
+        )
+        comments.extend(rows)
+        if len(rows) < 100:
+            break
+    else:
+        raise RuntimeError("source issue comments exceeded the safe 1,000-entry limit")
     kilo_attempts = sum(
         "<!-- kilo-auto-repair:" in str(item.get("body", ""))
         for item in comments
