@@ -1,3 +1,4 @@
+# Routed through the trusted branch controller; exclusions remain narrow and explicit.
 # Lychee policy for website link integrity.
 #
 # Cloudflare Pages buy-now routes are generated in _redirects and therefore do
