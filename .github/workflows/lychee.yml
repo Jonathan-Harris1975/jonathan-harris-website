@@ -32,10 +32,5 @@ jobs:
             --root-dir .
             --max-retries 2
             --timeout 20
-            --exclude '^file://.*/ebooks/[^/]+/buy-now            './**/*.md'
-            './**/*.html'
-
-            --exclude '^https://mybook\.to/'
-            --exclude '^https://www\.ofcom\.org\.uk/online-safety/illegal-and-harmful-content/'
             './**/*.md'
             './**/*.html'
