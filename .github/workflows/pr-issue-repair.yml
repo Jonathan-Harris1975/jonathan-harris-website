@@ -1,6 +1,6 @@
 name: Autonomous PR issue repair
 concurrency:
-  group: kilo-pr-repair-${{ github.repository }}
+  group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
 jobs:
   authenticate_actor:
