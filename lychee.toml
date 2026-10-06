@@ -1,0 +1,18 @@
+# Lychee policy for repository link integrity.
+# Cloudflare Pages buy-now routes are generated in _redirects and therefore do
+# not exist as files in the checkout. Their presence is validated separately by
+# the ebook release/buy-now routing checks.
+exclude = [
+  "^file://.*/ebooks/[^/]+/buy-now$",
+
+  # mybook.to rate-limits CI crawlers (429). Redirect targets are governed by
+  # _redirects and the ebook route validation, so do not treat bot throttling as
+  # evidence that a purchase route is broken.
+  "^https://mybook\\.to/",
+
+  # These Ofcom pages reject automated probes (403) while remaining publicly
+  # reachable in browsers. Keep this exclusion narrow to the affected section.
+  "^https://www\\.ofcom\\.org\\.uk/online-safety/illegal-and-harmful-content/",
+]
+
+cache_exclude_status = ["403", "429"]
