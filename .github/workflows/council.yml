@@ -22,6 +22,11 @@ jobs:
   council:
     runs-on: ubuntu-latest
     timeout-minutes: 145
+    env:
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      R2_REGION: ${{ secrets.R2_REGION }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -69,6 +74,7 @@ jobs:
           test -n "${KILO_REPAIR_TRIGGER_URL:-}"
           python3 .github/scripts/kilo_webhook_url.py
       - name: Dispatch Council contract to Kilo
+        id: council_dispatch
         env:
           REPO: ${{ github.repository }}
           TARGET_SHA: ${{ steps.target.outputs.sha }}
@@ -80,3 +86,19 @@ jobs:
           payload="$(jq -n --arg repository "$REPO" --arg sha "$TARGET_SHA" --arg task "$task" '{repository:$repository,target_sha:$sha,kind:"repository-council",task:$task}')"
           code="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' --max-time 30 -X POST -H 'Content-Type: application/json' --data "$payload" "$KILO_REPAIR_TRIGGER_URL")"
           [[ "$code" == 2?? ]] || { echo "::error::Kilo Council trigger returned HTTP $code"; exit 1; }
+          echo "accepted=true" >> "$GITHUB_OUTPUT"
+
+      - name: Persist Council workflow evidence to R2
+        env:
+          PYTHONPATH: .
+        run: |
+          set -euo pipefail
+          test "${{ steps.council_dispatch.outputs.accepted }}" = "true"
+          python3 -m pip install --disable-pip-version-check --no-input -r requirements-audit.txt
+          python3 scripts/audits/persist_repository_evidence.py \
+            --kind council \
+            --repository "${GITHUB_REPOSITORY}" \
+            --sha "${{ steps.target.outputs.sha }}" \
+            --run-id "${GITHUB_RUN_ID}" \
+            --run-attempt "${GITHUB_RUN_ATTEMPT}" \
+            --status COUNCIL_CONTRACT_DISPATCHED
