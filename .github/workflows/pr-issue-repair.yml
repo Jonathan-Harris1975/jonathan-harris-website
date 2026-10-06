@@ -116,7 +116,7 @@ jobs:
       pull-requests: write
       security-events: read
 'on':
-  workflow_run:
+  workflow_run: # zizmor: ignore[dangerous-triggers] PR failure metadata is routed only after actor/event validation; the write-scoped job checks out trusted default-branch automation, never PR code
     workflows:
     - Production readiness
     - CodeQL
