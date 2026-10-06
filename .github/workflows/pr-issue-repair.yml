@@ -1,4 +1,7 @@
-name: Autonomous PR issue repair
+nenv:
+  AUTONOMY_WRITER_COORDINATOR: "1"
+
+ame: Autonomous PR issue repair
 concurrency:
   group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
