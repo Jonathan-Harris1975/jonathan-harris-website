@@ -11,7 +11,7 @@ Do not ask for human confirmation, approval, an `@kilocode-bot fix it` reply, Gi
 Before editing:
 - compute/confirm the work fingerprint as repository + problem category + affected path/control + source PR/SHA where applicable;
 - verify no active cto.new or other implementation owner already holds that fingerprint or an overlapping mutation surface;
-- verify the repository's durable mutation lease/fence for that fingerprint belongs to Kilo before writing; if durable lease state is unavailable, stop rather than creating a competing writer;
+- verify the authenticated payload includes an `ownership_lease` whose fingerprint, owner=`kilo`, source SHA and fence match the latest `autonomy-lease:v1` marker on the linked real source PR/carrier; if they do not match, stop rather than creating a competing writer;
 - verify the payload repository is the repository being changed;
 - verify the linked source PR or carrier PR still exists and is current;
 - verify the supplied source/failed SHA still identifies the intended source state;
