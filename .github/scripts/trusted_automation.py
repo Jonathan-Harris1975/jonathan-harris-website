@@ -15,7 +15,16 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
-from repair_lease import all_lease_comments, bind as bind_lease, claim as claim_lease, marker_payload, release as release_lease
+from repair_lease import (
+    active_for_fingerprint,
+    all_lease_comments,
+    bind as bind_lease,
+    claim as claim_lease,
+    fingerprint as lease_fingerprint,
+    marker_payload,
+    release as release_lease,
+    transfer as transfer_lease,
+)
 
 API = "https://api.github.com"
 TOKEN = os.environ["GH_TOKEN"]
@@ -303,10 +312,46 @@ def reconcile_cto_tasks() -> None:
             if source.group(1) != current_sha:
                 log(f"cto.new issue #{number} targets stale SHA {source.group(1)[:12]}; no lease created.")
                 continue
-            leases = active_leases_for_issue(number, "cto")
-            if leases:
+            category_value = category.group(1).strip()
+            scope_value = scope.group(1).strip()
+            source_sha = source.group(1)
+            fp = lease_fingerprint(REPO, category_value, scope_value, source_sha)
+            current_lease = active_for_fingerprint(fp)
+            if current_lease and current_lease.get("owner") == "cto":
                 continue
-            claim_lease(number, "cto", category.group(1).strip(), scope.group(1).strip(), source.group(1))
+            if current_lease and current_lease.get("owner") == "kilo":
+                try:
+                    transfer_lease(
+                        number,
+                        "kilo",
+                        "cto",
+                        category_value,
+                        scope_value,
+                        source_sha,
+                    )
+                    log(
+                        f"Transferred durable ownership from Kilo to cto.new "
+                        f"for actionable issue #{number}."
+                    )
+                except RuntimeError as exc:
+                    log(
+                        f"cto.new issue #{number} waits for Kilo to become inactive: "
+                        f"{exc}."
+                    )
+                continue
+            if current_lease:
+                log(
+                    f"cto.new issue #{number} conflicts with active owner "
+                    f"{current_lease.get('owner')}; no lease created."
+                )
+                continue
+            claim_lease(
+                number,
+                "cto",
+                category_value,
+                scope_value,
+                source_sha,
+            )
             log(f"Created durable cto.new lease for actionable issue #{number}.")
         if len(issues) < 100:
             break
