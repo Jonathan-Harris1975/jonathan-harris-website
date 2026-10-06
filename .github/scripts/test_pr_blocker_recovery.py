@@ -380,6 +380,16 @@ class Recovery(unittest.TestCase):
                 ),
             ),
             patch.object(m.router.urllib.request, "urlopen") as openurl,
+            patch.object(
+                m.router,
+                "claim_lease",
+                return_value={
+                    "fingerprint": "lease-" + "a" * 40,
+                    "owner": "kilo",
+                    "fence": "test-fence",
+                    "source_sha": "a" * 40,
+                },
+            ),
         ):
             openurl.return_value.__enter__.return_value.status = 202
             self.assertEqual(m.recover(7)["state"], "behind-requested")
@@ -458,6 +468,16 @@ class Recovery(unittest.TestCase):
             patch.object(m.router, "pr_details", return_value=self.pr),
             patch.object(m.router, "api", side_effect=self.api),
             patch.object(m.router.urllib.request, "urlopen") as openurl,
+            patch.object(
+                m.router,
+                "claim_lease",
+                return_value={
+                    "fingerprint": "lease-" + "a" * 40,
+                    "owner": "kilo",
+                    "fence": "test-fence",
+                    "source_sha": "a" * 40,
+                },
+            ),
             patch.dict(os.environ, {"KILO_REPAIR_TRIGGER_URL": "https://example.invalid/repair"}),
         ):
             openurl.return_value.__enter__.return_value.status = 202
