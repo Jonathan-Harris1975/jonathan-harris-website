@@ -1,0 +1,22 @@
+# Routed through the trusted branch controller; exclusions remain narrow and explicit.
+# Lychee policy for website link integrity.
+#
+# Cloudflare Pages buy-now routes are generated in _redirects and therefore do
+# not exist as files in the checkout. Their presence is validated separately by
+# the ebook release/buy-now routing checks.
+exclude = [
+  "^file://.*/ebooks/[^/]+/buy-now$",
+
+  # mybook.to rate-limits automated crawlers (429). Purchase targets remain
+  # governed by _redirects and the ebook buy-now validation.
+  "^https://mybook\\.to/",
+
+  # These official pages are publicly reachable but reject/incorrectly answer
+  # automated link-checker probes. Keep exceptions exact rather than weakening
+  # status handling globally.
+  "^https://www\\.ofcom\\.org\\.uk/online-safety/illegal-and-harmful-content/deepfakes-demean-defraud-disinform$",
+  "^https://www\\.ofcom\\.org\\.uk/online-safety/illegal-and-harmful-content/deepfake-defences-2--the-attribution-toolkit$",
+  "^https://www\\.fda\\.gov/news-events/press-announcements/fda-issues-comprehensive-draft-guidance-developers-artificial-intelligence-enabled-medical-devices$",
+]
+
+cache_exclude_status = ["403", "429"]

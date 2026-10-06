@@ -10,20 +10,40 @@ permissions:
   contents: read
 
 concurrency:
-  group: website-lychee-${{ github.ref }}
+  group: website-lychee-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   link_integrity:
     name: Lychee link integrity
-    continue-on-error: true
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Check repository links with pinned Lychee
+      - name: Check deterministic repository links with pinned Lychee
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
+        with:
+          lycheeVersion: v0.24.2
+          args: >-
+            --offline
+            --no-progress
+            --root-dir .
+            './**/*.md'
+            './**/*.html'
+
+  external_link_monitor:
+    name: External link monitor
+    if: github.event_name == 'workflow_dispatch'
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check external links with pinned Lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
           lycheeVersion: v0.24.2
@@ -31,7 +51,7 @@ jobs:
             --no-progress
             --cache
             --root-dir .
-            --max-retries 2
-            --timeout 20
+            --max-retries 1
+            --timeout 15
             './**/*.md'
             './**/*.html'
