@@ -1,10 +1,10 @@
-nenv:
-  AUTONOMY_WRITER_COORDINATOR: "1"
-
-ame: Autonomous PR issue repair
+name: Autonomous PR issue repair
 concurrency:
   group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
+
+env:
+  AUTONOMY_WRITER_COORDINATOR: "1"
 jobs:
   authenticate_actor:
     if: ${{ (github.event_name != 'issue_comment' || github.event.issue.pull_request) && (github.event_name != 'workflow_run'
