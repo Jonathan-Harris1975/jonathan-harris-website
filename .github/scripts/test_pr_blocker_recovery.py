@@ -236,7 +236,7 @@ class Recovery(unittest.TestCase):
                 m.review_threads(7)
 
     def test_no_native_required_checks_never_authorises_resolution(self):
-        with patch.object(m.router, "api", return_value=[]):
+        with patch.object(m.router, "all_pages", return_value=[]):
             self.assertFalse(m.required_checks_pass(self.pr))
 
     def test_check_requires_success_from_expected_app(self):
@@ -264,13 +264,9 @@ class Recovery(unittest.TestCase):
                     }
                 ]
             }
-            rulesets = [{"id": 1, "enforcement": "active", "target": "branch"}]
-            detail = {
-                "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"]}},
-                "rules": requirement,
-            }
-            with patch.object(
-                m.router, "api", side_effect=[rulesets, detail, checks, {"statuses": []}]
+            with (
+                patch.object(m.router, "all_pages", return_value=requirement),
+                patch.object(m.router, "api", side_effect=[checks, {"statuses": []}]),
             ):
                 self.assertEqual(m.required_checks_pass(self.pr), expected)
 
@@ -310,11 +306,13 @@ class Recovery(unittest.TestCase):
                 for name, result in [("green", "success"), ("red", "failure")]
             ]
         }
-        with patch.object(
-            m.router, "api", side_effect=[first, second, checks, {"statuses": []}]
-        ) as api:
+        # all_pages owns pagination for the effective-rules endpoint. The recovery
+        # function must evaluate every returned rule before checking the head SHA.
+        with (
+            patch.object(m.router, "all_pages", return_value=first + second),
+            patch.object(m.router, "api", side_effect=[checks, {"statuses": []}]),
+        ):
             self.assertFalse(m.required_checks_pass(self.pr))
-        self.assertIn("page=2", api.call_args_list[1].args[1])
 
     def test_reviews_and_inline_comments_require_trusted_actor(self):
         for key in ["review", "comment"]:
@@ -361,7 +359,9 @@ class Recovery(unittest.TestCase):
         )
 
     def test_rule_page_limit_does_not_authorise_resolution(self):
-        with patch.object(m.router, "api", return_value=[{"type": "dummy"}] * 100):
+        with patch.object(
+            m.router, "all_pages", side_effect=ValueError("GitHub result exceeded the safe 1,000-entry limit")
+        ):
             with self.assertRaises(ValueError):
                 m.required_checks_pass(self.pr)
 
