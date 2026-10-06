@@ -47,20 +47,19 @@ jobs:
           fail_action: true
           artifact_name: dast-zap-full-${{ github.run_id }}
 
-      - name: Persist DAST evidence to R2
+      - name: Persist and verify DAST evidence in canonical R2 layout
         if: always()
         env:
-          PYTHONPATH: .
+          EVIDENCE_STATUS: ${{ steps.zap.outcome }}
         run: |
           set -euo pipefail
-          python3 -m pip install --disable-pip-version-check --no-input -r requirements-audit.txt
-          python3 scripts/audits/persist_repository_evidence.py \
-            --kind dast \
-            --repository "${GITHUB_REPOSITORY}" \
-            --sha "${GITHUB_SHA}" \
-            --run-id "${GITHUB_RUN_ID}" \
-            --run-attempt "${GITHUB_RUN_ATTEMPT}" \
-            --status "${{ steps.zap.outcome }}" \
-            --attach report_html.html \
-            --attach report_json.json \
-            --attach report_md.md
+          mkdir -p "$RUNNER_TEMP/dast-r2"
+          for file in report_html.html report_json.json report_md.md; do
+            test ! -f "$file" || cp "$file" "$RUNNER_TEMP/dast-r2/$file"
+          done
+          jq -n --arg repository "$GITHUB_REPOSITORY" --arg sha "$GITHUB_SHA" \
+            --arg run_id "$GITHUB_RUN_ID" --arg run_attempt "$GITHUB_RUN_ATTEMPT" \
+            --arg status "$EVIDENCE_STATUS" \
+            '{repository:$repository,default_branch_sha:$sha,workflow_run_id:$run_id,workflow_run_attempt:$run_attempt,dast_status:$status,scanner:"OWASP ZAP"}' \
+            > "$RUNNER_TEMP/dast-r2/summary.json"
+          python3 .github/scripts/persist_ci_report_r2.py dast "$GITHUB_SHA" "$RUNNER_TEMP/dast-r2"
