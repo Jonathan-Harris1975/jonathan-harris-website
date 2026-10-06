@@ -364,10 +364,9 @@ def reconcile_completed_leases() -> None:
             if pr.get("state") != "open":
                 release_lease(issue_number, owner, str(lease["fingerprint"]), "implementation-pr-closed")
                 continue
-        if owner == "cto":
-            issue = get(f"/repos/{REPO}/issues/{issue_number}")
-            if issue.get("state") != "open":
-                release_lease(issue_number, owner, str(lease["fingerprint"]), "cto-task-closed")
+        issue = get(f"/repos/{REPO}/issues/{issue_number}")
+        if issue.get("state") != "open":
+            release_lease(issue_number, owner, str(lease["fingerprint"]), "source-task-closed")
 
 
 def automation_kind(pr: dict[str, Any]) -> str | None:
