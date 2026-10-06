@@ -13,6 +13,7 @@ concurrency:
 env:
   DAST_ENABLED: ${{ vars.DAST_ENABLED || 'false' }}
   DAST_TARGET_URL: ${{ vars.DAST_TARGET_URL || '' }}
+  EVIDENCE_BUCKET: hive-repositories
 
 jobs:
   zap-full-scan:
@@ -20,6 +21,11 @@ jobs:
     if: ${{ vars.DAST_ENABLED == 'true' && vars.DAST_TARGET_URL != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 105
+    env:
+      R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+      R2_REGION: ${{ secrets.R2_REGION }}
     steps:
       - name: Refuse unauthorised/non-HTTPS remote target
         shell: bash
@@ -27,9 +33,70 @@ jobs:
           set -euo pipefail
           case "$DAST_TARGET_URL" in https://*) ;; *) echo "::error::DAST_TARGET_URL must be an authorised HTTPS endpoint."; exit 1;; esac
       - name: Run authorised ZAP full scan
+        id: zap
         uses: zaproxy/action-full-scan@3c58388149901b9a03b7718852c5ba889646c27c # v0.13.0
         with:
           target: ${{ env.DAST_TARGET_URL }}
           allow_issue_writing: false
           fail_action: true
           artifact_name: dast-zap-full-${{ github.run_id }}
+
+      - name: Check out trusted persistence helper context
+        if: always()
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Persist DAST evidence to repository R2 archive
+        if: always()
+        env:
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+          ZAP_OUTCOME: ${{ steps.zap.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${R2_ENDPOINT:-}" || { echo "::error::R2_ENDPOINT is required for DAST evidence persistence."; exit 1; }
+          test -n "${R2_ACCESS_KEY_ID:-}" || { echo "::error::R2_ACCESS_KEY_ID is required for DAST evidence persistence."; exit 1; }
+          test -n "${R2_SECRET_ACCESS_KEY:-}" || { echo "::error::R2_SECRET_ACCESS_KEY is required for DAST evidence persistence."; exit 1; }
+          python3 -m pip install --disable-pip-version-check --no-input -r requirements-audit.txt
+          python3 - <<'PY'
+          import json, os, pathlib
+          import boto3
+
+          repo = os.environ["REPO"]
+          sha = os.environ["SHA"]
+          run_id = os.environ["RUN_ID"]
+          attempt = os.environ["RUN_ATTEMPT"]
+          outcome = os.environ.get("ZAP_OUTCOME") or "unknown"
+          bucket = os.environ["EVIDENCE_BUCKET"]
+          prefix = f"repository-evidence/{repo}/dast/{sha}/run-{run_id}-attempt-{attempt}"
+          evidence = {
+              "schema": "repository-evidence/v1",
+              "kind": "dast",
+              "repository": repo,
+              "default_branch_sha": sha,
+              "workflow_run_id": int(run_id),
+              "workflow_run_attempt": int(attempt),
+              "scanner": "OWASP ZAP full active scan",
+              "target_configured": True,
+              "scan_outcome": outcome,
+          }
+          client = boto3.client(
+              "s3",
+              endpoint_url=os.environ["R2_ENDPOINT"],
+              aws_access_key_id=os.environ["R2_ACCESS_KEY_ID"],
+              aws_secret_access_key=os.environ["R2_SECRET_ACCESS_KEY"],
+              region_name=os.environ.get("R2_REGION") or "auto",
+          )
+          body = (json.dumps(evidence, indent=2, sort_keys=True) + "\n").encode()
+          client.put_object(Bucket=bucket, Key=f"{prefix}/evidence.json", Body=body, ContentType="application/json")
+          for name in ("report_html.html", "report_json.json", "report_md.md"):
+              path = pathlib.Path(name)
+              if path.is_file():
+                  client.upload_file(str(path), bucket, f"{prefix}/{name}")
+          print(f"Persisted DAST evidence to r2://{bucket}/{prefix}/")
+          PY
