@@ -57,15 +57,8 @@ def review_threads(number):
 def required_checks_pass(pr):
     # GitHub supplies the effective native branch requirements. Never infer them
     # from workflow names or accept an empty requirement set as approval.
-    rulesets = router.all_pages(f"/repos/{router.REPO}/rulesets")
-    rules = []
-    for summary in rulesets:
-        if summary.get("enforcement") != "active" or summary.get("target") != "branch":
-            continue
-        detail = router.api("GET", f"/repos/{router.REPO}/rulesets/{summary['id']}")
-        includes = detail.get("conditions", {}).get("ref_name", {}).get("include", [])
-        if "~DEFAULT_BRANCH" in includes or f"refs/heads/{router.DEFAULT}" in includes:
-            rules.extend(detail.get("rules", []))
+    branch = router.urllib.parse.quote(router.DEFAULT, safe="")
+    rules = router.all_pages(f"/repos/{router.REPO}/rules/branches/{branch}")
     required = [
         item
         for rule in rules
