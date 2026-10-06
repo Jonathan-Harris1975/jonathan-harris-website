@@ -15,7 +15,7 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
-from repair_lease import all_lease_comments, bind as bind_lease, marker_payload, release as release_lease
+from repair_lease import all_lease_comments, bind as bind_lease, claim as claim_lease, marker_payload, release as release_lease
 
 API = "https://api.github.com"
 TOKEN = os.environ["GH_TOKEN"]
@@ -282,6 +282,34 @@ def active_leases_for_issue(number: int, owner: str | None = None) -> list[dict[
     if owner is not None:
         states = [x for x in states if x.get("owner") == owner]
     return states
+
+
+def reconcile_cto_tasks() -> None:
+    current = get(f"/repos/{REPO}/commits/{DEFAULT_BRANCH}")
+    current_sha = str(current.get("sha", ""))
+    for page in range(1, 11):
+        issues = get(f"/repos/{REPO}/issues?state=open&labels=autonomy%3Acto-task&per_page=100&page={page}")
+        for issue in issues:
+            if issue.get("pull_request"):
+                continue
+            number = int(issue["number"])
+            body = str(issue.get("body") or "")
+            category = re.search(r"(?im)^Work category:\s*\x60([^\x60]+)\x60\s*$", body)
+            scope = re.search(r"(?im)^Affected path/control:\s*\x60([^\x60]+)\x60\s*$", body)
+            source = re.search(r"(?im)^Source SHA:\s*\x60([0-9a-f]{40})\x60\s*$", body)
+            if not category or not scope or not source:
+                log(f"cto.new issue #{number} lacks the required machine task fields; no lease created.")
+                continue
+            if source.group(1) != current_sha:
+                log(f"cto.new issue #{number} targets stale SHA {source.group(1)[:12]}; no lease created.")
+                continue
+            leases = active_leases_for_issue(number, "cto")
+            if leases:
+                continue
+            claim_lease(number, "cto", category.group(1).strip(), scope.group(1).strip(), source.group(1))
+            log(f"Created durable cto.new lease for actionable issue #{number}.")
+        if len(issues) < 100:
+            break
 
 
 def linked_cto_issue(pr: dict[str, Any]) -> tuple[int, dict[str, Any]] | None:
@@ -625,6 +653,7 @@ def main() -> int:
     ensure_label("autonomy:admitted", "0E8A16", "Exact-head CI/security verification complete; Mergify may merge")
 
     reconcile_completed_leases()
+    reconcile_cto_tasks()
     open_prs = list_open_prs()
     reconcile_stale_carriers(open_prs)
     open_prs = list_open_prs()  # refresh after stale-carrier lifecycle changes
