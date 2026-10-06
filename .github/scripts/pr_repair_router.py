@@ -16,6 +16,7 @@ import urllib.parse
 import urllib.request
 from kilo_webhook_url import valid_kilo_webhook_url
 from kilo_failure_classifier import repairable_failed_steps
+from repair_lease import claim as claim_lease
 
 REPO = os.environ["GITHUB_REPOSITORY"]
 TOKEN = os.environ["GH_TOKEN"]
@@ -265,9 +266,11 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
         "If the finding is stale, not reproducible, unsafe to repair, or requires credentials, explain it "
         "without opening a speculative PR."
     )
+    lease = claim_lease(int(number), "kilo", f"pr-{kind}", f"pr:{number}", sha)
     instruction = machine_contract() + "\n\n" + instruction
     payload = {"repository": REPO, "source_pr": source, "source_sha": sha,
-               "kind": kind, "task": instruction, "findings": findings[:12]}
+               "kind": kind, "task": instruction, "findings": findings[:12],
+               "ownership_lease": lease}
     request = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
                                      headers={"Content-Type": "application/json"})
     try:
@@ -279,7 +282,8 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
     except urllib.error.URLError:
         raise RuntimeError("Kilo trigger could not be reached") from None
     api("POST", f"/repos/{REPO}/issues/{number}/comments", {"body":
-        f"{marker}\nAutonomous Kilo repair requested for the current {kind} findings. "
+        f"{marker}\nAutonomous Kilo repair requested for the current {kind} findings under durable lease "
+        f"{lease['fingerprint']} fence {lease['fence']}. "
         "No human reply or @kilocode-bot command is required. "
         "The source PR remains governed by its normal checks."})
     print(f"Sent {kind} repair for PR #{number} at {sha[:12]} to Kilo.")
