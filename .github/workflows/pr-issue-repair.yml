@@ -5,7 +5,7 @@ concurrency:
 jobs:
   authenticate_actor:
     if: ${{ (github.event_name != 'issue_comment' || github.event.issue.pull_request) && (github.event_name != 'workflow_run'
-      || github.event.workflow_run.event == 'pull_request') }}
+      || (github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -116,7 +116,7 @@ jobs:
       pull-requests: write
       security-events: read
 'on':
-  workflow_run:
+  workflow_run: # zizmor: ignore[dangerous-triggers] PR failure metadata is routed only after actor/event validation; the write-scoped job checks out trusted default-branch automation, never PR code
     workflows:
     - Production readiness
     - CodeQL

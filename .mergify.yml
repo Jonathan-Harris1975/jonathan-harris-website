@@ -11,6 +11,11 @@ merge_protections_settings:
   auto_merge_conditions:
     - base = main
     - label = autonomy:admitted
+    - check-success = ci-gate
+    - check-success = CodeQL security alert gate
+    - check-success = Trivy, Gitleaks and actionlint
+    - check-success = Item 6 / Dependency Review
+    - check-success = Item 6 / Renovate config
     - -draft
     - -conflict
     - -label = do-not-merge
@@ -31,6 +36,8 @@ merge_protections:
       - check-success = ci-gate
       - check-success = CodeQL security alert gate
       - check-success = Trivy, Gitleaks and actionlint
+      - check-success = Item 6 / Dependency Review
+      - check-success = Item 6 / Renovate config
       - -draft
       - -conflict
       - -label = do-not-merge
@@ -51,6 +58,8 @@ queue_rules:
       - check-success = ci-gate
       - check-success = CodeQL security alert gate
       - check-success = Trivy, Gitleaks and actionlint
+      - check-success = Item 6 / Dependency Review
+      - check-success = Item 6 / Renovate config
       - -label = do-not-merge
       - -label = do not merge
       - -label = hold
@@ -62,6 +71,8 @@ queue_rules:
       - check-success = ci-gate
       - check-success = CodeQL security alert gate
       - check-success = Trivy, Gitleaks and actionlint
+      - check-success = Item 6 / Dependency Review
+      - check-success = Item 6 / Renovate config
       - -label = do-not-merge
       - -label = do not merge
       - -label = hold

@@ -56,7 +56,7 @@ class Recovery(unittest.TestCase):
         self.config.start()
         self.addCleanup(self.config.stop)
 
-    def receipt(self, author="kilo-code-bot[bot]", sha=None, base=None):
+    def receipt(self, author="repair[bot]", sha=None, base=None):
         return {
             "user": {"login": author},
             "body": "<!-- pr-blocker-resolution:"
@@ -146,6 +146,9 @@ class Recovery(unittest.TestCase):
         ]:
             self.assertEqual(m.verified_receipts([receipt], "a" * 40, "b" * 40), {})
         self.assertIn("PRRT_test", m.verified_receipts([self.receipt()], "a" * 40, "b" * 40))
+        self.assertEqual(
+            m.verified_receipts([self.receipt(author="kilo-code-bot[bot]")], "a" * 40, "b" * 40), {}
+        )
 
     def test_receipt_accepts_configured_app_identity(self):
         self.assertIn(
@@ -192,9 +195,12 @@ class Recovery(unittest.TestCase):
             patch.object(m, "review_threads", return_value=[self.thread]),
             patch.object(m.router, "all_pages", return_value=[self.receipt()]),
             patch.object(m, "required_checks_pass", return_value=False),
-            patch.object(m.router, "dispatch"),
+            patch.object(m.router, "dispatch") as dispatch,
         ):
-            self.assertEqual(m.recover(7)["resolved"], [])
+            result = m.recover(7)
+            self.assertEqual(result["resolved"], [])
+            self.assertEqual(result["bot_threads_remaining"], 0)
+        dispatch.assert_not_called()
         self.assertFalse(any(c.args[1] == "/graphql" for c in api.call_args_list))
 
     def test_head_movement_before_resolution_defers(self):
@@ -230,7 +236,7 @@ class Recovery(unittest.TestCase):
                 m.review_threads(7)
 
     def test_no_native_required_checks_never_authorises_resolution(self):
-        with patch.object(m.router, "api", return_value=[]):
+        with patch.object(m.router, "all_pages", return_value=[]):
             self.assertFalse(m.required_checks_pass(self.pr))
 
     def test_check_requires_success_from_expected_app(self):
@@ -258,7 +264,10 @@ class Recovery(unittest.TestCase):
                     }
                 ]
             }
-            with patch.object(m.router, "api", side_effect=[requirement, checks, {"statuses": []}]):
+            with (
+                patch.object(m.router, "all_pages", return_value=requirement),
+                patch.object(m.router, "api", side_effect=[checks, {"statuses": []}]),
+            ):
                 self.assertEqual(m.required_checks_pass(self.pr), expected)
 
     def test_manual_pr_selection_and_invalid_number(self):
@@ -297,11 +306,13 @@ class Recovery(unittest.TestCase):
                 for name, result in [("green", "success"), ("red", "failure")]
             ]
         }
-        with patch.object(
-            m.router, "api", side_effect=[first, second, checks, {"statuses": []}]
-        ) as api:
+        # all_pages owns pagination for the effective-rules endpoint. The recovery
+        # function must evaluate every returned rule before checking the head SHA.
+        with (
+            patch.object(m.router, "all_pages", return_value=first + second),
+            patch.object(m.router, "api", side_effect=[checks, {"statuses": []}]),
+        ):
             self.assertFalse(m.required_checks_pass(self.pr))
-        self.assertIn("page=2", api.call_args_list[1].args[1])
 
     def test_reviews_and_inline_comments_require_trusted_actor(self):
         for key in ["review", "comment"]:
@@ -348,7 +359,9 @@ class Recovery(unittest.TestCase):
         )
 
     def test_rule_page_limit_does_not_authorise_resolution(self):
-        with patch.object(m.router, "api", return_value=[{"type": "dummy"}] * 100):
+        with patch.object(
+            m.router, "all_pages", side_effect=ValueError("GitHub result exceeded the safe 1,000-entry limit")
+        ):
             with self.assertRaises(ValueError):
                 m.required_checks_pass(self.pr)
 

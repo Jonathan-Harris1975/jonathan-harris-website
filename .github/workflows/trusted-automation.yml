@@ -7,7 +7,7 @@ on:
     types: [submitted, edited]
   pull_request_review_comment:
     types: [created, edited]
-  workflow_run:
+  workflow_run: # zizmor: ignore[dangerous-triggers] admission reads workflow/PR metadata but executes only pinned trusted default-branch automation
     workflows: ["Production readiness", "CodeQL", "Security and repository quality", "Branch PR signal", "Ebook subsystem CI"]
     types: [requested, completed]
   # Retain repair reconciliation slots and add hourly branch signal recovery.
@@ -17,7 +17,7 @@ on:
     - cron: "17 6 * * *"
     - cron: "23 * * * *"
   # Recover branch signals dropped by GitHub concurrency/event delivery.
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] metadata-only reconciliation; no untrusted PR head is checked out or executed
     types: [labeled, unlabeled, converted_to_draft, ready_for_review, synchronize, reopened]
   workflow_dispatch:
 

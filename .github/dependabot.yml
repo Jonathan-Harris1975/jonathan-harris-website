@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "pip"
+  - package-ecosystem: "pip" # zizmor: ignore[dependabot-cooldown] passive-only: PR creation is disabled; Renovate owns release-age policy
     directory: "/"
     schedule:
       interval: "weekly"
@@ -17,7 +17,7 @@ updates:
     commit-message:
       prefix: "deps"
 
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: "github-actions" # zizmor: ignore[dependabot-cooldown] passive-only: PR creation is disabled; Renovate owns release-age policy
     directory: "/"
     schedule:
       interval: "weekly"
