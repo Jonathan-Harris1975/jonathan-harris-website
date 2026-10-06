@@ -15,6 +15,8 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any
 
+from repair_lease import all_lease_comments, bind as bind_lease, marker_payload, release as release_lease
+
 API = "https://api.github.com"
 TOKEN = os.environ["GH_TOKEN"]
 REPO = os.environ.get("REPO") or os.environ["GITHUB_REPOSITORY"]
@@ -24,6 +26,7 @@ REPAIR_APP_LOGIN = os.environ.get("REPAIR_APP_LOGIN", "")
 
 RENOVATE_LOGIN = "renovate[bot]"
 KILO_LOGIN = os.environ.get("KILO_REPAIR_PR_LOGIN") or "kilo-code-bot[bot]"
+CTO_LOGIN = "cto-new[bot]"
 CARRIER_PREFIX = "[autonomy] Repair "
 BRANCH_PR_LABEL = "automation:branch-pr"
 BRANCH_PR_RE = re.compile(r"^(fix|feat|chore|ci|work|codex)/[A-Za-z0-9._/-]+$")
@@ -268,6 +271,76 @@ def adopt_linked_kilo_prs(open_prs: list[dict[str, Any]]) -> None:
         add_labels(int(pr["number"]), ["autonomy:repair", "autonomy:kilo-implementation"])
         log(f"Trusted Kilo implementation PR #{pr['number']} linked to source PR #{source}.")
 
+def active_leases_for_issue(number: int, owner: str | None = None) -> list[dict[str, Any]]:
+    latest: dict[str, dict[str, Any]] = {}
+    for item in sorted(all_lease_comments(), key=lambda row: int(row["id"])):
+        payload = marker_payload(item.get("body", ""))
+        if not payload or int(payload.get("source_issue", -1)) != number:
+            continue
+        latest[str(payload["fingerprint"])] = payload
+    states = [x for x in latest.values() if x.get("status") == "active"]
+    if owner is not None:
+        states = [x for x in states if x.get("owner") == owner]
+    return states
+
+
+def linked_cto_issue(pr: dict[str, Any]) -> tuple[int, dict[str, Any]] | None:
+    if pr.get("user", {}).get("login") != CTO_LOGIN or not is_same_repo(pr):
+        return None
+    body = str(pr.get("body") or "")
+    pattern = re.compile(r"https://github\.com/" + re.escape(REPO) + r"/issues/(\d+)" + URL_END)
+    numbers = sorted({int(x) for x in pattern.findall(body)})
+    matches: list[tuple[int, dict[str, Any]]] = []
+    for number in numbers:
+        issue = get(f"/repos/{REPO}/issues/{number}")
+        labels = issue_labels(issue)
+        if issue.get("state") != "open" or issue.get("pull_request") or "autonomy:cto-task" not in labels:
+            continue
+        leases = active_leases_for_issue(number, "cto")
+        if len(leases) == 1:
+            matches.append((number, leases[0]))
+    return matches[0] if len(matches) == 1 else None
+
+
+def adopt_linked_cto_prs(open_prs: list[dict[str, Any]]) -> None:
+    for pr in open_prs:
+        if pr.get("user", {}).get("login") != CTO_LOGIN:
+            continue
+        labels = issue_labels(pr)
+        if "autonomy:cto-implementation" in labels:
+            continue
+        linked = linked_cto_issue(pr)
+        if linked is None:
+            log(f"cto.new PR #{pr['number']} has no single verified actionable issue/lease; leaving it untrusted.")
+            continue
+        issue_number, lease = linked
+        bind_lease(issue_number, "cto", str(lease["fingerprint"]), int(pr["number"]))
+        add_labels(int(pr["number"]), ["autonomy:cto-implementation"])
+        log(f"Trusted cto.new PR #{pr['number']} linked to actionable issue #{issue_number}.")
+
+
+def reconcile_completed_leases() -> None:
+    latest: dict[str, dict[str, Any]] = {}
+    for item in sorted(all_lease_comments(), key=lambda row: int(row["id"])):
+        payload = marker_payload(item.get("body", ""))
+        if payload:
+            latest[str(payload["fingerprint"])] = payload
+    for lease in latest.values():
+        if lease.get("status") != "active":
+            continue
+        issue_number = int(lease.get("source_issue", 0))
+        owner = str(lease.get("owner", ""))
+        implementation = lease.get("implementation_pr")
+        if implementation:
+            pr = get(f"/repos/{REPO}/pulls/{int(implementation)}")
+            if pr.get("state") != "open":
+                release_lease(issue_number, owner, str(lease["fingerprint"]), "implementation-pr-closed")
+                continue
+        if owner == "cto":
+            issue = get(f"/repos/{REPO}/issues/{issue_number}")
+            if issue.get("state") != "open":
+                release_lease(issue_number, owner, str(lease["fingerprint"]), "cto-task-closed")
+
 
 def automation_kind(pr: dict[str, Any]) -> str | None:
     labels = issue_labels(pr)
@@ -280,6 +353,9 @@ def automation_kind(pr: dict[str, Any]) -> str | None:
     if (pr.get("user", {}).get("login") == KILO_LOGIN and is_same_repo(pr) and
             "autonomy:kilo-implementation" in labels and "autonomy:repair" in labels):
         return "kilo"
+    if (pr.get("user", {}).get("login") == CTO_LOGIN and is_same_repo(pr) and
+            "autonomy:cto-implementation" in labels):
+        return "cto"
     return None
 
 
@@ -475,10 +551,10 @@ def reconcile_pr(pr: dict[str, Any]) -> None:
         # Renovate eligibility is explicit metadata; manual/unlabelled updates remain human merge decisions.
         return
 
-    if kind in {"kilo", "branch-pr"}:
+    if kind in {"kilo", "cto", "branch-pr"}:
         sensitive = [path for path in pr_files(int(pr["number"])) if sensitive_file(path)]
         if sensitive:
-            source = "repair" if kind == "kilo" else "managed branch"
+            source = "repair" if kind == "kilo" else ("cto.new" if kind == "cto" else "managed branch")
             place_human_hold(
                 pr,
                 f"the {source} PR changes governance/security automation files: " + ", ".join(sensitive[:8]),
@@ -487,10 +563,27 @@ def reconcile_pr(pr: dict[str, Any]) -> None:
 
     if kind == "kilo":
         carriers = [source for source in list_open_prs() if is_carrier(source)]
-        if (linked_kilo_carrier(pr, carriers) is None and
-                linked_kilo_review_source(pr, list_open_prs()) is None):
+        source_number = linked_kilo_carrier(pr, carriers)
+        if source_number is None:
+            source_number = linked_kilo_review_source(pr, list_open_prs())
+        if source_number is None:
             log(f"Kilo PR #{pr['number']} no longer has a current verified source; withholding merge.")
             return
+        leases = active_leases_for_issue(source_number, "kilo")
+        if len(leases) != 1:
+            log(f"Kilo PR #{pr['number']} has no single active durable Kilo lease; withholding merge.")
+            return
+        if leases[0].get("implementation_pr") != int(pr["number"]):
+            bind_lease(source_number, "kilo", str(leases[0]["fingerprint"]), int(pr["number"]))
+
+    if kind == "cto":
+        linked = linked_cto_issue(pr)
+        if linked is None:
+            log(f"cto.new PR #{pr['number']} no longer has a current verified task/lease; withholding merge.")
+            return
+        issue_number, lease = linked
+        if lease.get("implementation_pr") != int(pr["number"]):
+            bind_lease(issue_number, "cto", str(lease["fingerprint"]), int(pr["number"]))
 
     green, reason = all_required_checks_green(pr)
     if not green:
@@ -506,7 +599,7 @@ def reconcile_pr(pr: dict[str, Any]) -> None:
 
     # Renovate and Kilo are distinct identities, so the repair App can provide the trusted review.
     # Carrier PRs are authored by the same repair App and GitHub correctly forbids self-approval.
-    if kind in {"renovate", "kilo"}:
+    if kind in {"renovate", "kilo", "cto"}:
         approve_pr(number, sha)
         if current_head_unchanged(number, sha) is None:
             return
@@ -525,15 +618,19 @@ def main() -> int:
     ensure_label("dependency:auto-eligible", "0E8A16", "Renovate update class is eligible for trusted admission after exact-head gates")
     ensure_label("dependency:manual", "FBCA04", "Renovate update class requires a human merge decision")
     ensure_label("autonomy:kilo-implementation", "5319E7", "Kilo implementation PR linked to an autonomous repair carrier")
+    ensure_label("autonomy:cto-task", "1D76DB", "Real actionable issue intentionally handed to cto.new")
+    ensure_label("autonomy:cto-implementation", "1D76DB", "cto.new implementation PR linked to a verified actionable issue")
     ensure_label("autonomy:human-hold", "FBCA04", "Automation must stop for human action")
     ensure_label("autonomy:obsolete", "D4C5F9", "Repair carrier is no longer current")
     ensure_label("autonomy:admitted", "0E8A16", "Exact-head CI/security verification complete; Mergify may merge")
 
+    reconcile_completed_leases()
     open_prs = list_open_prs()
     reconcile_stale_carriers(open_prs)
     open_prs = list_open_prs()  # refresh after stale-carrier lifecycle changes
     adopt_linked_kilo_prs(open_prs)
-    open_prs = list_open_prs()  # refresh labels after Kilo correlation
+    adopt_linked_cto_prs(open_prs)
+    open_prs = list_open_prs()  # refresh labels after external-agent correlation
     admit_waiting_runs(open_prs)
 
     # Reconcile current trusted PRs. Runs admitted above will normally become ready on a later
