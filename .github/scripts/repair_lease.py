@@ -147,6 +147,77 @@ def release(issue: int, owner: str, fp: str, reason: str) -> dict:
     return post_state(issue, payload)
 
 
+def previous_writer_inactive(current: dict) -> bool:
+    implementation = current.get("implementation_pr")
+    if implementation:
+        pr = _request("GET", f"/repos/{REPO}/pulls/{int(implementation)}")
+        if pr.get("state") == "open":
+            return False
+
+    source_issue = int(current.get("source_issue", 0))
+    issue = _request("GET", f"/repos/{REPO}/issues/{source_issue}")
+    labels = {str(item.get("name", "")) for item in issue.get("labels", [])}
+    if "autonomy:human-hold" in labels:
+        return True
+
+    comments = _request(
+        "GET",
+        f"/repos/{REPO}/issues/{source_issue}/comments?per_page=100",
+    )
+    kilo_attempts = sum(
+        "<!-- kilo-auto-repair:" in str(item.get("body", ""))
+        for item in comments
+    )
+    return kilo_attempts >= 2
+
+
+def transfer(
+    new_issue: int,
+    from_owner: str,
+    to_owner: str,
+    category: str,
+    scope: str,
+    source_sha: str,
+) -> dict:
+    fp = fingerprint(REPO, category, scope, source_sha)
+    current = active_for_fingerprint(fp)
+    if not current or current.get("owner") != from_owner:
+        raise RuntimeError("active transfer source owner mismatch")
+    if not previous_writer_inactive(current):
+        raise RuntimeError("previous writer is still active")
+
+    old_issue = int(current["source_issue"])
+    released = {
+        key: value
+        for key, value in current.items()
+        if key not in {"comment_id", "issue_url"}
+    }
+    released.update(
+        {
+            "status": "released",
+            "reason": "ownership-transfer",
+            "transfer_to": to_owner,
+        }
+    )
+    post_state(old_issue, released)
+
+    payload = {
+        "version": 1,
+        "status": "active",
+        "fingerprint": fp,
+        "owner": to_owner,
+        "fence": uuid.uuid4().hex,
+        "category": category,
+        "scope": scope,
+        "source_sha": source_sha,
+        "source_issue": new_issue,
+        "transferred_from_owner": from_owner,
+        "transferred_from_issue": old_issue,
+        "previous_fence": current.get("fence"),
+    }
+    return post_state(new_issue, payload)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -163,6 +234,14 @@ def main() -> None:
     bind_cmd.add_argument("--owner", required=True)
     bind_cmd.add_argument("--fingerprint", required=True)
     bind_cmd.add_argument("--implementation-pr", type=int, required=True)
+
+    transfer_cmd = sub.add_parser("transfer")
+    transfer_cmd.add_argument("--issue", type=int, required=True)
+    transfer_cmd.add_argument("--from-owner", required=True)
+    transfer_cmd.add_argument("--to-owner", required=True)
+    transfer_cmd.add_argument("--category", required=True)
+    transfer_cmd.add_argument("--scope", required=True)
+    transfer_cmd.add_argument("--source-sha", required=True)
 
     release_cmd = sub.add_parser("release")
     release_cmd.add_argument("--issue", type=int, required=True)
@@ -185,6 +264,15 @@ def main() -> None:
             args.owner,
             args.fingerprint,
             args.implementation_pr,
+        )
+    elif args.cmd == "transfer":
+        result = transfer(
+            args.issue,
+            args.from_owner,
+            args.to_owner,
+            args.category,
+            args.scope,
+            args.source_sha,
         )
     else:
         result = release(
