@@ -100,6 +100,19 @@ jobs:
       - name: Gitleaks history scan
         run: |
           "${{ runner.temp }}/ci-bin/gitleaks" git . --redact --no-banner
+      - name: Prove actionlint rejects a seeded workflow defect
+        run: |
+          set -euo pipefail
+          fixture="${RUNNER_TEMP}/seeded-invalid-workflow.yml"
+          printf '%s\n' 'name: seeded-invalid' 'on: [push]' 'jobs:' '  broken:' '    runs-on: [ubuntu-latest' > "$fixture"
+          set +e
+          "${{ runner.temp }}/ci-bin/actionlint" "$fixture"
+          status=$?
+          set -e
+          test "$status" -ne 0 || {
+            echo "::error::actionlint accepted the seeded invalid workflow."
+            exit 1
+          }
       - name: Validate GitHub Actions workflows
         run: |
           "${{ runner.temp }}/ci-bin/actionlint" -color
