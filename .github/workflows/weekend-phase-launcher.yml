@@ -83,6 +83,13 @@ jobs:
           WORKFLOW: ${{ steps.slot.outputs.workflow }}
         run: gh workflow run "$WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"
 
+      - name: Dispatch external link monitor during weekend CI phase
+        if: steps.slot.outputs.run == 'true' && steps.slot.outputs.phase == 'ci'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: gh workflow run lychee.yml --repo "$GITHUB_REPOSITORY" --ref "$DEFAULT_BRANCH"
+
       - name: Record allocated windows
         if: always()
         run: |
