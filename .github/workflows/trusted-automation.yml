@@ -1,6 +1,8 @@
 name: Trusted automation admission for Mergify
 
 on:
+  issues:
+    types: [labeled, edited, reopened, closed]
   issue_comment:
     types: [created]
   pull_request_review:
@@ -28,7 +30,7 @@ permissions:
   security-events: read
 
 concurrency:
-  group: trusted-automation-${{ github.repository }}
+  group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
