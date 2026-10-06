@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: autonomous-repair-${{ github.repository }}
+  group: autonomy-writer-coordinator-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
