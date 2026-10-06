@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "audit-remediation-routing/v1",
+  "repository": "jonathan-harris-website",
+  "auditRole": "detect-classify-evidence",
+  "repairExecutionPolicy": "external-agent-only",
+  "singleWriterRequired": true,
+  "auditOwnsRepair": false,
+  "primaryRepairAgent": "kilo",
+  "plannedEngineeringAgent": "cto.new",
+  "ownershipTransferRequired": true,
+  "parallelMutationRule": "allowed-only-for-independent-fingerprints-and-non-overlapping-code-control-surfaces",
+  "dependencyVersionOwner": "renovate",
+  "mergeAuthority": "mergify",
+  "humanDecisionSurface": "hive-ui",
+  "postMergeResolution": "require-deployment-and-live-revision-verification",
+  "notes": [
+    "Audit findings must attach to an existing ownership fingerprint when one exists; never open a duplicate repair path.",
+    "A changed PR head or audited source revision invalidates stale approval/evidence.",
+    "Human-gated findings remain pending until HIVE/HIVE-UI records the required decision and GitHub protections are satisfied."
+  ]
+}
