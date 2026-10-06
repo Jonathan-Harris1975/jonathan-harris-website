@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "pip" # zizmor: ignore[dependabot-cooldown] Renovate owns version updates; Dependabot remains for security updates.
+  - package-ecosystem: "pip"
     directory: "/"
     schedule:
       interval: "weekly"
@@ -17,7 +17,7 @@ updates:
     commit-message:
       prefix: "deps"
 
-  - package-ecosystem: "github-actions" # zizmor: ignore[dependabot-cooldown] Renovate owns version updates; Dependabot remains for security updates.
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
