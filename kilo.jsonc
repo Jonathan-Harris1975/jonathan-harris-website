@@ -5,6 +5,7 @@
     "edit": {
       "*": "allow",
       "kilo.jsonc": "deny",
+      "build.sh": "deny",
       ".github/workflows/*": "deny",
       ".github/actions/*": "deny",
       ".github/scripts/*": "deny",
@@ -20,6 +21,7 @@
     "write": {
       "*": "allow",
       "kilo.jsonc": "deny",
+      "build.sh": "deny",
       ".github/workflows/*": "deny",
       ".github/actions/*": "deny",
       ".github/scripts/*": "deny",
@@ -35,6 +37,7 @@
     "apply_patch": {
       "*": "allow",
       "kilo.jsonc": "deny",
+      "build.sh": "deny",
       ".github/workflows/*": "deny",
       ".github/actions/*": "deny",
       ".github/scripts/*": "deny",
