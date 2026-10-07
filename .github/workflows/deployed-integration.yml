@@ -21,7 +21,7 @@ concurrency:
 jobs:
   integration:
     if: >-
-      \${{ github.event_name == 'workflow_dispatch' ||
+      ${{ github.event_name == 'workflow_dispatch' ||
           (github.event.workflow_run.event == 'push' &&
            github.event.workflow_run.conclusion == 'success' &&
            github.event.workflow_run.head_branch == 'main' &&
@@ -36,12 +36,12 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: \${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
       - name: Validate expected deployed commit SHA
         env:
-          EXPECTED_DEPLOYMENT_SHA: \${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
           if [[ ! "$EXPECTED_DEPLOYMENT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
@@ -51,12 +51,12 @@ jobs:
 
       - name: Wait for exact Cloudflare Pages release
         env:
-          EXPECTED_DEPLOYMENT_SHA: \${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
-          WEBSITE_ORIGIN: \${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
+          EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
         run: |
           set -euo pipefail
           for _ in $(seq 1 60); do
-            body="$(curl --fail --silent --show-error --max-time 15 "\${WEBSITE_ORIGIN%/}/release.json" || true)"
+            body="$(curl --fail --silent --show-error --max-time 15 "${WEBSITE_ORIGIN%/}/release.json" || true)"
             deployed="$(printf '%s' "$body" | jq -r '.commit_sha // empty' 2>/dev/null || true)"
             if [ "$deployed" = "$EXPECTED_DEPLOYMENT_SHA" ]; then
               printf 'Exact website release %s is live\n' "$deployed"
@@ -69,7 +69,7 @@ jobs:
 
       - name: Verify Agent Readiness service binding
         env:
-          WEBSITE_ORIGIN: \${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
         run: |
           set -euo pipefail
           headers="$(mktemp)"
@@ -78,7 +78,7 @@ jobs:
           curl --fail --silent --show-error --max-time 20 \
             --dump-header "$headers" \
             --output "$body" \
-            "\${WEBSITE_ORIGIN%/}/.well-known/agent-readiness/status"
+            "${WEBSITE_ORIGIN%/}/.well-known/agent-readiness/status"
           jq -e '.ok == true and .service == "agent-readiness"' "$body" >/dev/null
           grep -Eiq '^x-agent-readiness-worker:[[:space:]]*agent-readiness[[:space:]]*$' "$headers"
           grep -Eiq '^x-agent-readiness-gateway:[[:space:]]*cloudflare-pages-service-binding[[:space:]]*$' "$headers"
@@ -86,7 +86,7 @@ jobs:
 
       - name: Record exact-SHA deployment attestation
         env:
-          DEPLOYED_SHA: \${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          DEPLOYED_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n' \
             "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
@@ -94,30 +94,30 @@ jobs:
       - name: Retain production deployment evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: website-deployment-attestation-\${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          name: website-deployment-attestation-${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
           path: deployment-attestation.json
           if-no-files-found: error
           retention-days: 90
 
       - name: Trigger central ecosystem smoke when configured
         env:
-          ECOSYSTEM_SMOKE_DISPATCH_TOKEN: \${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
-          ECOSYSTEM_SMOKE_REPOSITORY: \${{ vars.ECOSYSTEM_SMOKE_REPOSITORY }}
-          SOURCE_SHA: \${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          ECOSYSTEM_SMOKE_DISPATCH_TOKEN: ${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
+          ECOSYSTEM_SMOKE_REPOSITORY: ${{ vars.ECOSYSTEM_SMOKE_REPOSITORY }}
+          SOURCE_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
-          if [ -z "\${ECOSYSTEM_SMOKE_DISPATCH_TOKEN:-}" ]; then
+          if [ -z "${ECOSYSTEM_SMOKE_DISPATCH_TOKEN:-}" ]; then
             echo "::notice::Optional MAST ecosystem smoke dispatch is not configured; website deployment evidence is retained."
             exit 0
           fi
-          target="\${ECOSYSTEM_SMOKE_REPOSITORY:-\${GITHUB_REPOSITORY_OWNER}/MAST}"
+          target="${ECOSYSTEM_SMOKE_REPOSITORY:-${GITHUB_REPOSITORY_OWNER}/MAST}"
           payload="$(jq -cn --arg ref main --arg repo "$GITHUB_REPOSITORY" --arg sha "$SOURCE_SHA" '{ref:$ref,inputs:{source_repository:$repo,source_sha:$sha}}')"
           if ! curl --fail-with-body --silent --show-error \
             --request POST \
-            --header "Authorization: Bearer \${ECOSYSTEM_SMOKE_DISPATCH_TOKEN}" \
+            --header "Authorization: Bearer ${ECOSYSTEM_SMOKE_DISPATCH_TOKEN}" \
             --header "Accept: application/vnd.github+json" \
             --header "X-GitHub-Api-Version: 2022-11-28" \
             --data "$payload" \
-            "https://api.github.com/repos/\${target}/actions/workflows/ecosystem-smoke.yml/dispatches"; then
+            "https://api.github.com/repos/${target}/actions/workflows/ecosystem-smoke.yml/dispatches"; then
             echo "::warning::Optional MAST ecosystem smoke dispatch failed; check the central MAST workflow independently."
           fi
