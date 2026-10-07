@@ -44,8 +44,8 @@ jobs:
           EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
-          if [[ ! "$EXPECTED_DEPLOYMENT_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
-            echo '::error::Expected deployment SHA must be a full 40-character Git commit SHA.' >&2
+          if [[ ! "$EXPECTED_DEPLOYMENT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo '::error::Expected deployment SHA must be a lowercase 40-character Git commit SHA.' >&2
             exit 1
           fi
 
@@ -76,8 +76,103 @@ jobs:
           body="$(mktemp)"
           trap 'rm -f "$headers" "$body"' EXIT
           curl --fail --silent --show-error --max-time 20             --dump-header "$headers"             --output "$body"             "${WEBSITE_ORIGIN%/}/.well-known/agent-readiness/status"
-          jq -e '.ok == true and .service == "agent-readiness" and .deployment_mode == "cloudflare-pages-service-binding"' "$body" >/dev/null
-          grep -Eiq '^x-agent-readiness-worker:[[:space:]]*agent-readiness[[:space:]]*$' "$headers"
+          jq -e '.ok == true and .service == "agent-readiness"' "$body" >/dev/null
+          grep -Eiq '^x-agent-readiness-worker:[[:space:]]*agent-readiness[[:space:]]*
+      - name: Record exact-SHA deployment attestation
+        env:
+          DEPLOYED_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n'             "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
+
+      - name: Retain production deployment evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: website-deployment-attestation-${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          path: deployment-attestation.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Trigger central ecosystem smoke when configured
+        env:
+          ECOSYSTEM_SMOKE_DISPATCH_TOKEN: ${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
+          ECOSYSTEM_SMOKE_REPOSITORY: ${{ vars.ECOSYSTEM_SMOKE_REPOSITORY }}
+          SOURCE_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ECOSYSTEM_SMOKE_DISPATCH_TOKEN:-}" ]; then
+            echo "::notice::Optional MAST ecosystem smoke dispatch is not configured; website deployment evidence is retained."
+            exit 0
+          fi
+          target="${ECOSYSTEM_SMOKE_REPOSITORY:-${GITHUB_REPOSITORY_OWNER}/MAST}"
+          payload="$(jq -cn --arg ref main --arg repo "$GITHUB_REPOSITORY" --arg sha "$SOURCE_SHA" '{ref:$ref,inputs:{source_repository:$repo,source_sha:$sha}}')"
+          if ! curl --fail-with-body --silent --show-error             --request POST             --header "Authorization: Bearer ${ECOSYSTEM_SMOKE_DISPATCH_TOKEN}"             --header "Accept: application/vnd.github+json"             --header "X-GitHub-Api-Version: 2022-11-28"             --data "$payload"             "https://api.github.com/repos/${target}/actions/workflows/ecosystem-smoke.yml/dispatches"; then
+            echo "::warning::Optional MAST ecosystem smoke dispatch failed; check the central MAST workflow independently."
+          fi
+ "$headers"
+          grep -Eiq '^x-agent-readiness-gateway:[[:space:]]*cloudflare-pages-service-binding[[:space:]]*
+      - name: Record exact-SHA deployment attestation
+        env:
+          DEPLOYED_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n'             "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
+
+      - name: Retain production deployment evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: website-deployment-attestation-${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          path: deployment-attestation.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Trigger central ecosystem smoke when configured
+        env:
+          ECOSYSTEM_SMOKE_DISPATCH_TOKEN: ${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
+          ECOSYSTEM_SMOKE_REPOSITORY: ${{ vars.ECOSYSTEM_SMOKE_REPOSITORY }}
+          SOURCE_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ECOSYSTEM_SMOKE_DISPATCH_TOKEN:-}" ]; then
+            echo "::notice::Optional MAST ecosystem smoke dispatch is not configured; website deployment evidence is retained."
+            exit 0
+          fi
+          target="${ECOSYSTEM_SMOKE_REPOSITORY:-${GITHUB_REPOSITORY_OWNER}/MAST}"
+          payload="$(jq -cn --arg ref main --arg repo "$GITHUB_REPOSITORY" --arg sha "$SOURCE_SHA" '{ref:$ref,inputs:{source_repository:$repo,source_sha:$sha}}')"
+          if ! curl --fail-with-body --silent --show-error             --request POST             --header "Authorization: Bearer ${ECOSYSTEM_SMOKE_DISPATCH_TOKEN}"             --header "Accept: application/vnd.github+json"             --header "X-GitHub-Api-Version: 2022-11-28"             --data "$payload"             "https://api.github.com/repos/${target}/actions/workflows/ecosystem-smoke.yml/dispatches"; then
+            echo "::warning::Optional MAST ecosystem smoke dispatch failed; check the central MAST workflow independently."
+          fi
+ "$headers"
+          grep -Eiq '^x-agent-readiness-gateway-mode:[[:space:]]*service-binding[[:space:]]*
+      - name: Record exact-SHA deployment attestation
+        env:
+          DEPLOYED_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n'             "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
+
+      - name: Retain production deployment evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: website-deployment-attestation-${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          path: deployment-attestation.json
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Trigger central ecosystem smoke when configured
+        env:
+          ECOSYSTEM_SMOKE_DISPATCH_TOKEN: ${{ secrets.ECOSYSTEM_SMOKE_DISPATCH_TOKEN }}
+          ECOSYSTEM_SMOKE_REPOSITORY: ${{ vars.ECOSYSTEM_SMOKE_REPOSITORY }}
+          SOURCE_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ECOSYSTEM_SMOKE_DISPATCH_TOKEN:-}" ]; then
+            echo "::notice::Optional MAST ecosystem smoke dispatch is not configured; website deployment evidence is retained."
+            exit 0
+          fi
+          target="${ECOSYSTEM_SMOKE_REPOSITORY:-${GITHUB_REPOSITORY_OWNER}/MAST}"
+          payload="$(jq -cn --arg ref main --arg repo "$GITHUB_REPOSITORY" --arg sha "$SOURCE_SHA" '{ref:$ref,inputs:{source_repository:$repo,source_sha:$sha}}')"
+          if ! curl --fail-with-body --silent --show-error             --request POST             --header "Authorization: Bearer ${ECOSYSTEM_SMOKE_DISPATCH_TOKEN}"             --header "Accept: application/vnd.github+json"             --header "X-GitHub-Api-Version: 2022-11-28"             --data "$payload"             "https://api.github.com/repos/${target}/actions/workflows/ecosystem-smoke.yml/dispatches"; then
+            echo "::warning::Optional MAST ecosystem smoke dispatch failed; check the central MAST workflow independently."
+          fi
+ "$headers"
 
       - name: Record exact-SHA deployment attestation
         env:
