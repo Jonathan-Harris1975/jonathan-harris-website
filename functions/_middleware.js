@@ -6,6 +6,8 @@ import {
 } from "./_shared/agent-readiness.js";
 
 const SUPPORT_ALIASES = new Map([
+  ["/privacy", "/privacy-policy/"],
+  ["/privacy/", "/privacy-policy/"],
   ["/robot.txt", "/robots.txt"],
   ["/Sitemap.xml", "/sitemap.xml"],
   ["/site-map.xml", "/sitemap.xml"],
