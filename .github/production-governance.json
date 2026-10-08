@@ -1,5 +1,4 @@
 {
-  "schema_version": 1,
   "repository_id": "Website",
   "github_repository": "Jonathan-Harris1975/jonathan-harris-website",
   "ecosystem_manager": "HIVE",
@@ -24,11 +23,5 @@
     "destructive_data_operation"
   ],
   "certification_rule": "The remediation executor must not certify its own repair. Repository gates and live verification remain authoritative.",
-  "required_workflows": [
-    "Production readiness",
-    "Security and repository quality",
-    "CodeQL",
-    "Item 6 hardening"
-  ],
-  "deployment_workflow": "Website deployed integration"
+  "gate_catalogue_authority": "HIVE production_manager.py"
 }
