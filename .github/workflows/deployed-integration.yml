@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: website-deployed-integration
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   integration:
