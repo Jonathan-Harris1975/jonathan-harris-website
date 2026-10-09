@@ -2,7 +2,7 @@ name: Autonomous main-branch repair PR
 
 on:
   workflow_run: # zizmor: ignore[dangerous-triggers] only same-repo default-branch non-PR completions reach the secret-bearing job; checkout is pinned to the trusted default branch
-    workflows: ["Production readiness", "CodeQL", "Security and repository quality"]
+    workflows: ["Production readiness", "Website deployed integration", "CodeQL", "Security and repository quality"]
     types: [completed]
   workflow_dispatch:
 
