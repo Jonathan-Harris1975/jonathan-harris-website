@@ -42,7 +42,7 @@ def marker_payload(body: str) -> dict[str, Any] | None:
         data = json.loads(raw)
     except Exception:
         return None
-    return data if data.get("version") == 1 and data.get("fingerprint") else None
+    return data if isinstance(data, dict) and data.get("version") == 1 and data.get("fingerprint") else None
 
 
 def _request(method: str, path: str, data: dict | None = None):
@@ -63,6 +63,9 @@ def _request(method: str, path: str, data: dict | None = None):
 
 
 def all_lease_comments() -> list[dict]:
+    login = os.environ.get("REPAIR_APP_LOGIN", "")
+    if not login:
+        raise RuntimeError("REPAIR_APP_LOGIN is required to authenticate lease records")
     comments: list[dict] = []
     for page in range(1, 11):
         rows = _request(
@@ -72,7 +75,10 @@ def all_lease_comments() -> list[dict]:
         comments.extend(rows)
         if len(rows) < 100:
             break
-    return [item for item in comments if marker_payload(item.get("body", ""))]
+    else:
+        raise RuntimeError("lease history exceeded 1,000 entries; refusing incomplete ownership state")
+    return [item for item in comments
+            if item.get("user", {}).get("login") == login and marker_payload(item.get("body", ""))]
 
 
 def active_for_fingerprint(fp: str) -> dict | None:
@@ -114,7 +120,9 @@ def claim(
     scope: str,
     source_sha: str,
 ) -> dict:
+    require_serialized_coordinator()
     fp = fingerprint(REPO, category, scope, source_sha)
+    require_serialized_coordinator()
     current = active_for_fingerprint(fp)
     if current:
         if current.get("owner") != owner:
@@ -135,6 +143,7 @@ def claim(
 
 
 def bind(issue: int, owner: str, fp: str, implementation_pr: int) -> dict:
+    require_serialized_coordinator()
     current = active_for_fingerprint(fp)
     if not current or current.get("owner") != owner:
         raise RuntimeError("active lease owner mismatch")
@@ -148,6 +157,7 @@ def bind(issue: int, owner: str, fp: str, implementation_pr: int) -> dict:
 
 
 def release(issue: int, owner: str, fp: str, reason: str) -> dict:
+    require_serialized_coordinator()
     current = active_for_fingerprint(fp)
     if not current or current.get("owner") != owner:
         raise RuntimeError("active lease owner mismatch")
@@ -199,7 +209,9 @@ def transfer(
     scope: str,
     source_sha: str,
 ) -> dict:
+    require_serialized_coordinator()
     fp = fingerprint(REPO, category, scope, source_sha)
+    require_serialized_coordinator()
     current = active_for_fingerprint(fp)
     if not current or current.get("owner") != from_owner:
         raise RuntimeError("active transfer source owner mismatch")
