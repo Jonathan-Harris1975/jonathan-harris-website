@@ -48,7 +48,7 @@ fi
 python3 scripts/check_health_contract.py
 python3 scripts/check_repository_hygiene.py
 python3 scripts/scan_secrets.py
-python3 -m unittest scripts.test_pdf_pipeline
+python3 -m unittest scripts.test_pdf_pipeline scripts.test_wait_for_live_release
 node --test workers/agent-readiness/test.mjs
 node --test scripts/agent-readiness-pages.test.mjs
 node --test scripts/cognipal-rate-limit.test.mjs
