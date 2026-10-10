@@ -21,7 +21,7 @@ concurrency:
 jobs:
   integration:
     if: >-
-      ${{ github.event_name == 'workflow_dispatch' ||
+      ${{ (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') ||
           (github.event.workflow_run.event == 'push' &&
            github.event.workflow_run.conclusion == 'success' &&
            github.event.workflow_run.head_branch == 'main' &&
@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ github.sha }}
           persist-credentials: false
 
       - name: Validate expected deployed commit SHA
@@ -55,17 +55,9 @@ jobs:
           WEBSITE_ORIGIN: ${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
         run: |
           set -euo pipefail
-          for _ in $(seq 1 60); do
-            body="$(curl --fail --silent --show-error --max-time 15 "${WEBSITE_ORIGIN%/}/release.json" || true)"
-            deployed="$(printf '%s' "$body" | jq -r '.commit_sha // empty' 2>/dev/null || true)"
-            if [ "$deployed" = "$EXPECTED_DEPLOYMENT_SHA" ]; then
-              printf 'Exact website release %s is live\n' "$deployed"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "::error::Expected website release $EXPECTED_DEPLOYMENT_SHA did not become live." >&2
-          exit 1
+          python3 scripts/wait_for_live_release.py --marker-only --require-release-sha \
+            --expected-sha "$EXPECTED_DEPLOYMENT_SHA" --release-url "${WEBSITE_ORIGIN%/}/release.json" \
+            --timeout-seconds 600 --interval-seconds 10 --request-timeout 15
 
       - name: Verify Agent Readiness service binding
         env:

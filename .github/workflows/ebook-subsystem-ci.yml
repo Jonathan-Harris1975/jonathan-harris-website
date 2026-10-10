@@ -150,6 +150,7 @@ jobs:
 
       - name: Record exact-SHA live website attestation
         run: |
+          python scripts/wait_for_live_release.py --marker-only --require-release-sha --timeout-seconds 120 --interval-seconds 15
           printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"website","status":"post-deployment-live-gate-green"}\n' \
             "$GITHUB_REPOSITORY" "$GITHUB_SHA" "$GITHUB_RUN_ID" > website-live-attestation.json
       - name: Retain website deployment evidence

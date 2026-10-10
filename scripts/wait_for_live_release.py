@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import os
 import sys
@@ -14,8 +15,20 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.check_crawlers import print_live_summary, run_live_checks
-from scripts.maintenance.check_redirect_chains import run_redirect_checks
+# Keep marker-only verification independent of build-time third-party packages.
+def run_live_checks(**kwargs):
+    from scripts.check_crawlers import run_live_checks as check
+    return check(**kwargs)
+
+
+def print_live_summary(results):
+    from scripts.check_crawlers import print_live_summary as summary
+    return summary(results)
+
+
+def run_redirect_checks(timeout):
+    from scripts.maintenance.check_redirect_chains import run_redirect_checks as check
+    return check(timeout)
 
 DEFAULT_RELEASE_URL = "https://jonathan-harris.online/release.json"
 
@@ -28,8 +41,12 @@ def live_release_matches(release_url: str, expected_sha: str, request_timeout: f
     if not re.fullmatch(r"[0-9a-f]{40}", expected_sha):
         return False, "Expected release SHA must be exactly 40 lowercase hexadecimal characters."
     parsed_url = parse.urlsplit(release_url)
-    if parsed_url.scheme != "https" or not parsed_url.hostname or parsed_url.username or parsed_url.password or parsed_url.fragment or parsed_url.path != "/release.json":
+    if (parsed_url.scheme != "https" or not parsed_url.hostname or parsed_url.username
+            or parsed_url.password or parsed_url.fragment or parsed_url.path != "/release.json"):
         return False, "Release URL must be an HTTPS /release.json endpoint without credentials or fragments."
+
+    if not math.isfinite(request_timeout) or request_timeout <= 0:
+        return False, "Request timeout must be finite and positive."
 
     separator = "&" if "?" in release_url else "?"
     cache_busted_url = f"{release_url}{separator}expected={parse.quote(expected_sha)}&t={int(time.time())}"
@@ -43,9 +60,22 @@ def live_release_matches(release_url: str, expected_sha: str, request_timeout: f
         },
     )
     try:
-        with request.urlopen(req, timeout=max(request_timeout, 1.0)) as response:
+        with request.urlopen(req, timeout=request_timeout) as response:
             status = response.getcode()
-            body = response.read().decode("utf-8", errors="replace")
+            if response.geturl() != cache_busted_url:
+                return False, "Release marker redirected away from the requested endpoint."
+            if "no-store" not in response.headers.get("Cache-Control", "").lower():
+                return False, "Release marker lacks the required no-store cache policy."
+            try:
+                age = int(response.headers.get("Age", "0"))
+            except ValueError:
+                return False, "Release marker has an invalid cache age."
+            if age != 0:
+                return False, "Release marker came from an aged cached response."
+            raw = response.read(65537)
+            if len(raw) > 65536:
+                return False, "Release marker exceeded the 64 KiB response limit."
+            body = raw.decode("utf-8", errors="replace")
     except error.HTTPError as exc:
         return False, f"release marker returned HTTP {exc.code}"
     except (error.URLError, TimeoutError, OSError) as exc:
@@ -75,6 +105,7 @@ def main() -> int:
             "an older deployment from passing merely because unchanged crawler files already match."
         )
     )
+    parser.add_argument("--marker-only", action="store_true", help="Only probe the selected marker origin.")
     parser.add_argument("--timeout-seconds", type=int, default=600, help="Total time to wait before failing. Default: 600")
     parser.add_argument("--interval-seconds", type=int, default=20, help="Delay between checks. Default: 20")
     parser.add_argument("--request-timeout", type=float, default=15.0, help="Per-request timeout in seconds. Default: 15")
@@ -111,8 +142,17 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    if (args.timeout_seconds <= 0 or args.interval_seconds <= 0 or args.stabilisation_seconds < 0
+            or not math.isfinite(args.request_timeout) or args.request_timeout <= 0):
+        parser.error("Polling durations must be positive and finite; stabilisation must be non-negative.")
+    if args.marker_only and (not args.require_release_sha or args.require_content_match or args.require_redirect_contract):
+        parser.error("--marker-only requires --require-release-sha and cannot include crawler or redirect checks.")
+    if args.marker_only and args.stabilisation_seconds:
+        parser.error("--marker-only does not support stabilisation; use repeated independent verification.")
+    if args.release_url != DEFAULT_RELEASE_URL and not args.marker_only:
+        parser.error("A custom origin requires --marker-only; crawler contracts use the production origin.")
     expected_sha = expected_release_sha(args.expected_sha)
-    if args.require_release_sha and not expected_sha:
+    if args.require_release_sha and not re.fullmatch(r"[0-9a-f]{40}", expected_sha):
         print("Cannot require a release SHA because neither --expected-sha nor GITHUB_SHA is available.")
         return 2
 
@@ -131,7 +171,7 @@ def main() -> int:
             release_ready, last_release_message = live_release_matches(
                 release_url=args.release_url,
                 expected_sha=expected_sha,
-                request_timeout=args.request_timeout,
+                request_timeout=min(args.request_timeout, max(0.001, deadline - time.monotonic())),
             )
             print(f"Release marker: {last_release_message}")
             if not release_ready:
@@ -142,6 +182,12 @@ def main() -> int:
                 print(f"Not the new Pages release yet. Waiting {sleep_for} seconds before retrying...")
                 time.sleep(sleep_for)
                 continue
+
+        if args.marker_only:
+            if time.monotonic() > deadline:
+                break
+            print("Selected origin serves the expected commit marker; provider evidence remains separately required.")
+            return 0
 
         print("Checking live crawler endpoints...")
         last_results = run_live_checks(timeout=args.request_timeout, verify_content=args.require_content_match)
@@ -183,6 +229,14 @@ def main() -> int:
             if args.require_redirect_contract:
                 ready_message += ", including the alias redirect contract"
             print(f"\n{ready_message}. Continuing to strict validation and purge.")
+            if time.monotonic() > deadline:
+                break
+            if args.require_release_sha:
+                still_ready, last_release_message = live_release_matches(
+                    args.release_url, expected_sha, min(args.request_timeout, max(0.001, deadline - time.monotonic()))
+                )
+                if not still_ready or time.monotonic() > deadline:
+                    continue
             return 0
 
         remaining = max(0, int(deadline - time.monotonic()))
