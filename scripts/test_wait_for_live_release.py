@@ -39,15 +39,26 @@ class ReleaseGateTests(unittest.TestCase):
 
     def test_release_marker_must_match_exact_commit(self) -> None:
         with mock.patch.object(gate.request, "urlopen", return_value=_Response({"commit_sha": "old"})):
-            ready, message = gate.live_release_matches("https://example.invalid/release.json", "new", 1)
+            ready, message = gate.live_release_matches("https://example.invalid/release.json", "a" * 40, 1)
         self.assertFalse(ready)
         self.assertIn("waiting for new", message)
 
     def test_release_marker_accepts_exact_commit(self) -> None:
-        with mock.patch.object(gate.request, "urlopen", return_value=_Response({"commit_sha": "new"})):
+        with mock.patch.object(gate.request, "urlopen", return_value=_Response({"commit_sha": "a" * 40, "deployment": "cloudflare-pages", "branch": "main"})):
             ready, message = gate.live_release_matches("https://example.invalid/release.json", "new", 1)
         self.assertTrue(ready)
-        self.assertIn("matches commit new", message)
+        self.assertIn("matches commit " + "a" * 40, message)
+
+    def test_wrong_branch_is_rejected(self) -> None:
+        with mock.patch.object(gate.request, "urlopen", return_value=_Response({"commit_sha": "a" * 40, "deployment": "cloudflare-pages", "branch": "preview"})):
+            ready, _ = gate.live_release_matches("https://example.invalid/release.json", "a" * 40, 1)
+        self.assertFalse(ready)
+
+    def test_invalid_sha_does_not_call_network(self) -> None:
+        with mock.patch.object(gate.request, "urlopen") as urlopen:
+            ready, _ = gate.live_release_matches("https://example.invalid/release.json", "short", 1)
+        self.assertFalse(ready)
+        urlopen.assert_not_called()
 
     def test_pages_marker_prefers_cloudflare_commit_sha(self) -> None:
         with mock.patch.dict(
