@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import sys
 import time
@@ -24,8 +25,11 @@ def expected_release_sha(explicit_sha: str) -> str:
 
 
 def live_release_matches(release_url: str, expected_sha: str, request_timeout: float) -> tuple[bool, str]:
-    if not expected_sha:
-        return False, "No expected release SHA was supplied and GITHUB_SHA is empty."
+    if not re.fullmatch(r"[0-9a-f]{40}", expected_sha):
+        return False, "Expected release SHA must be exactly 40 lowercase hexadecimal characters."
+    parsed_url = parse.urlsplit(release_url)
+    if parsed_url.scheme != "https" or not parsed_url.hostname or parsed_url.username or parsed_url.password or parsed_url.fragment or parsed_url.path != "/release.json":
+        return False, "Release URL must be an HTTPS /release.json endpoint without credentials or fragments."
 
     separator = "&" if "?" in release_url else "?"
     cache_busted_url = f"{release_url}{separator}expected={parse.quote(expected_sha)}&t={int(time.time())}"
@@ -54,6 +58,10 @@ def live_release_matches(release_url: str, expected_sha: str, request_timeout: f
     except json.JSONDecodeError:
         return False, "release marker was not valid JSON"
 
+    if not isinstance(payload, dict):
+        return False, "release marker must be a JSON object"
+    if payload.get("deployment") != "cloudflare-pages" or payload.get("branch") != "main":
+        return False, "release marker is not a production Cloudflare Pages main-branch build"
     live_sha = str(payload.get("commit_sha") or "").strip()
     if live_sha != expected_sha:
         return False, f"live commit is {live_sha or '<missing>'}; waiting for {expected_sha}"
