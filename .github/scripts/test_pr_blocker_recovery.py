@@ -489,7 +489,11 @@ class Recovery(unittest.TestCase):
 
             # The acknowledgement write is mocked separately from base reads.
             def api(method, path, payload=None):
-                return {"sha": "b" * 40} if method == "GET" else None
+                if method == "GET":
+                    return {"sha": "b" * 40}
+                if method == "POST" and path.endswith("/issues/7/comments"):
+                    return {"id": 99}
+                return None
 
             with patch.object(m.router, "api", side_effect=api):
                 m.router.dispatch(self.pr, "merge-conflict-" + "b" * 40, ["conflict"])
