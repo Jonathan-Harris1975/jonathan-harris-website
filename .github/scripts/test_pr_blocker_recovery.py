@@ -377,7 +377,11 @@ class Recovery(unittest.TestCase):
                 m.router,
                 "api",
                 side_effect=lambda method, path, payload=None: (
-                    {"sha": "b" * 40} if method == "GET" else None
+                    {"sha": "b" * 40}
+                    if method == "GET"
+                    else {"id": 99}
+                    if method == "POST" and path.endswith("/comments")
+                    else None
                 ),
             ),
             patch.object(m.router.urllib.request, "urlopen") as openurl,
