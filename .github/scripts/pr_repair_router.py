@@ -211,9 +211,12 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
     comments = all_pages(f"/repos/{REPO}/issues/{number}/comments")
     markers = [c for c in comments if c.get("user", {}).get("login") == "github-actions[bot]" and
                "<!-- kilo-auto-repair:" in (c.get("body") or "")]
-    if any(marker in c["body"] for c in markers):
+    matching_markers = [c for c in markers if marker in c["body"]]
+    if matching_markers and any("dispatch-state: rejected-http-" not in c["body"] for c in matching_markers):
         print(f"PR #{number} already has its current {kind} repair request; skipping.")
         return 'already-requested'
+    if matching_markers:
+        print(f"PR #{number} has an explicit rejected handoff; a bounded retry is eligible.")
     if sum(f":{kind} -->" in c["body"] for c in markers) >= 2:
         print(f"::warning::PR #{number} exhausted its two {kind} repair attempts; inspect the repair agent's results.")
         return 'attempt-limit'
@@ -271,6 +274,13 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
     payload = {"repository": REPO, "source_pr": source, "source_sha": sha,
                "kind": kind, "task": instruction, "findings": findings[:12],
                "ownership_lease": lease}
+    reservation = api("POST", f"/repos/{REPO}/issues/{number}/comments", {"body":
+        f"{marker}\ndispatch-state: pending\nKilo repair handoff reserved for the current {kind} findings. "
+        "If delivery outcome is uncertain, inspect Kilo before retrying; the source PR remains governed by its normal checks."})
+    reservation_id = (reservation or {}).get("id") if isinstance(reservation, dict) else None
+    if not isinstance(reservation_id, int) or reservation_id <= 0:
+        raise RuntimeError("Could not persist the Kilo repair deduplication marker")
+
     request = urllib.request.Request(url, data=json.dumps(payload).encode(), method="POST",
                                      headers={"Content-Type": "application/json"})
     try:
@@ -278,14 +288,25 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
             if response.status not in (200, 201, 202, 204):
                 raise RuntimeError(f"Kilo trigger returned HTTP {response.status}")
     except urllib.error.HTTPError as exc:
+        if 400 <= exc.code < 500:
+            try:
+                api("PATCH", f"/repos/{REPO}/issues/comments/{reservation_id}", {"body":
+                    f"{marker}\ndispatch-state: rejected-http-{exc.code}\n"
+                    f"Kilo explicitly rejected this repair handoff with HTTP {exc.code}; "
+                    "one bounded retry remains available after correcting or clearing the rejection."})
+            except Exception:
+                print("::warning::Kilo rejected the repair handoff, but its reservation could not be marked retryable; automatic retry remains suppressed.")
         raise RuntimeError(f"Kilo trigger returned HTTP {exc.code}") from None
     except urllib.error.URLError:
+        # The provider may have accepted before the connection failed; keep the
+        # pending marker and require inspection before another dispatch.
         raise RuntimeError("Kilo trigger could not be reached") from None
-    api("POST", f"/repos/{REPO}/issues/{number}/comments", {"body":
-        f"{marker}\nAutonomous Kilo repair requested for the current {kind} findings under durable lease "
-        f"{lease['fingerprint']} fence {lease['fence']}. "
-        "No human reply or @kilocode-bot command is required. "
-        "The source PR remains governed by its normal checks."})
+    try:
+        api("PATCH", f"/repos/{REPO}/issues/comments/{reservation_id}", {"body":
+            f"{marker}\ndispatch-state: accepted\nKilo accepted the repair request for the current {kind} findings. "
+            "The source PR remains governed by its normal checks."})
+    except Exception as exc:
+        print(f"::warning::Kilo accepted PR #{number} repair request but its marker acknowledgement could not be updated ({type(exc).__name__}); the reservation remains.")
     print(f"Sent {kind} repair for PR #{number} at {sha[:12]} to Kilo.")
     return 'requested'
 
