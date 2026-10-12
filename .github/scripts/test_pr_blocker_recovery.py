@@ -550,6 +550,7 @@ class Recovery(unittest.TestCase):
             patch.object(m.router, "api", side_effect=api),
             patch.object(m.router, "valid_kilo_webhook_url", return_value=True),
             patch.object(m.router, "machine_contract", return_value="machine contract"),
+            patch.object(m.router, "claim_lease", return_value={"lease_id": "test", "fence": 1}),
             patch.object(m.router.urllib.request, "urlopen", side_effect=[rejected, accepted]),
             patch.dict(os.environ, {"KILO_REPAIR_TRIGGER_URL": "https://example.invalid/repair"}),
             patch("builtins.print"),
