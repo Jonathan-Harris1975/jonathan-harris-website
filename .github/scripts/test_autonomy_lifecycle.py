@@ -220,7 +220,7 @@ class ProductionGovernanceProtectionTests(unittest.TestCase):
         self.assertLess(reservation, request)
         self.assertLess(request, acknowledgement)
         self.assertIn('--field body="$marker', dispatch)
-        self.assertIn('--jq '.id'', dispatch)
+        self.assertIn("--jq '.id'", dispatch)
         self.assertIn("if ! gh api --method PATCH", dispatch)
 
 
