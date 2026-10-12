@@ -598,7 +598,13 @@ class Recovery(unittest.TestCase):
 
         self.assertIn("      id: blocker_recovery_safety", step_body("Verify blocker recovery safety"))
         self.assertIn("      id: repair_router", step_body("Extract actionable PR findings and start Kilo repair"))
-        self.assertIn("if: ${{ !cancelled() && steps.blocker_recovery_safety.outcome == 'success' && steps.repair_router.outcome != 'skipped' }}", step_body("Recover merge conflicts and verified review blockers"))
+        recovery_step = step_body("Recover merge conflicts and verified review blockers")
+        self.assertIn(
+            "if: ${{ !cancelled() && "
+            "steps.blocker_recovery_safety.outcome == 'success' && "
+            "steps.repair_router.outcome != 'skipped' }}",
+            recovery_step,
+        )
 
     def test_unresolved_repair_handoff_blocks_duplicate_recovery(self):
         sha = "a" * 40
