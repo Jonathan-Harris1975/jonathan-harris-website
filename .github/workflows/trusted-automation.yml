@@ -1,4 +1,4 @@
-name: Trusted automation admission for Mergify
+name: Trusted automation and native auto-merge
 
 on:
   issues:
@@ -28,6 +28,7 @@ permissions:
   checks: write
   contents: read
   security-events: read
+  pull-requests: write
 
 concurrency:
   group: autonomy-writer-coordinator-${{ github.repository }}
@@ -131,4 +132,11 @@ jobs:
           CURRENT_RUN_ID: ${{ github.run_id }}
           REQUIRED_WORKFLOWS: "Production readiness|CodeQL|Security and repository quality"
         run: python .github/scripts/trusted_automation.py
+
+      - name: Reconcile GitHub native auto-merge requests
+        env:
+          NATIVE_MERGE_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python .github/scripts/native_auto_merge.py
 
