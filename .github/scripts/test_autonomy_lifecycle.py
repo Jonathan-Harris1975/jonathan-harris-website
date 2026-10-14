@@ -168,6 +168,8 @@ ssert_called_once()
 
     def test_managed_branch_pr_cannot_rewrite_admission_controller(self):
         hold = self.enterContext(patch.object(automation, "place_human_hold"))
+        risk_label = self.enterContext(patch.object(automation, "add_labels"))
+        self.enterContext(patch.object(automation, "comment"))
         admit = self.enterContext(patch.object(automation, "admit_to_mergify"))
         self.enterContext(
             patch.object(
@@ -180,8 +182,9 @@ ssert_called_once()
 
         automation.reconcile_pr(copy.deepcopy(self.pr))
 
-        hold.assert_called_once()
+        hold.assert_not_called()
         admit.assert_not_called()
+        risk_label.assert_called_once_with(self.pr["number"], [automation.RISK_APPROVAL_LABEL])
 
     def test_human_hold_label_withdraws_existing_mergify_admission(self):
         pr = copy.deepcopy(self.pr)
