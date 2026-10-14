@@ -4,7 +4,7 @@ on:
   issues:
     types: [labeled, edited, reopened, closed]
   issue_comment:
-    types: [created]
+    types: [created, edited, deleted]
   pull_request_review:
     types: [submitted, edited]
   pull_request_review_comment:
