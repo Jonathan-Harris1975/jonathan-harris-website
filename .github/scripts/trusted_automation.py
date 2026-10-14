@@ -9,6 +9,7 @@ import json
 import os
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -74,6 +75,8 @@ KILO_SENSITIVE_EXACT = {
 }
 
 RISK_APPROVAL_LABEL = "autonomy:risk-approval-required"
+# Exact-head owner approval expires after seven days.
+RISK_APPROVAL_TTL = timedelta(days=7)
 RISK_HIGH_RISK_PREFIXES = (
     ".github/", ".circleci/", ".buildkite/", ".gitlab/", ".devcontainer/",
     "infra/", "infrastructure/", "terraform/", "k8s/", "kubernetes/", "helm/",
@@ -641,15 +644,34 @@ def has_operator_risk_approval(number: int, sha: str) -> bool:
     else:
         raise RuntimeError(f"PR #{number} has too many review records to verify safely")
 
+    def timestamp_order(item: dict[str, Any], key: str) -> float:
+        value = item.get(key)
+        if not isinstance(value, str) or not value:
+            return float("-inf")
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            return float("-inf")
+
+    if any(timestamp_order(review, "submitted_at") == float("-inf") for review in owner_reviews):
+        return False
+    now = datetime.now(timezone.utc).timestamp()
+
+    def unexpired(timestamp: float) -> bool:
+        age = now - timestamp
+        return 0 <= age <= RISK_APPROVAL_TTL.total_seconds()
     latest_review = max(
         owner_reviews,
-        key=lambda review: str(review.get("submitted_at") or ""),
+        key=lambda review: timestamp_order(review, "submitted_at"),
         default=None,
     )
+    latest_review_time = timestamp_order(latest_review, "submitted_at") if latest_review else None
     if (
         latest_review
         and latest_review.get("state") == "APPROVED"
         and latest_review.get("commit_id") == sha
+        and latest_review_time is not None
+        and unexpired(latest_review_time)
     ):
         return True
 
@@ -668,16 +690,19 @@ def has_operator_risk_approval(number: int, sha: str) -> bool:
     else:
         raise RuntimeError(f"PR #{number} has too many comments to verify safely")
 
+    if any(timestamp_order(item, "created_at") == float("-inf") for item in owner_comments):
+        return False
     latest_approval_comment = max(
         owner_comments,
-        key=lambda item: str(item.get("created_at") or ""),
+        key=lambda item: timestamp_order(item, "created_at"),
         default=None,
     )
     if not latest_approval_comment:
         return False
-    comment_time = str(latest_approval_comment.get("created_at") or "")
-    review_time = str((latest_review or {}).get("submitted_at") or "")
-    return bool(comment_time and comment_time > review_time)
+    comment_time = timestamp_order(latest_approval_comment, "created_at")
+    if comment_time == float("-inf"):
+        return False
+    return (latest_review_time is None or comment_time > latest_review_time) and unexpired(comment_time)
 
 
 def require_operator_risk_approval(pr: dict[str, Any], paths: list[str], kind: str) -> bool:
@@ -700,7 +725,7 @@ def require_operator_risk_approval(pr: dict[str, Any], paths: list[str], kind: s
         comment(
             number,
             f"Autonomous merge is paused for high-risk or unclassified changes. The repository owner must approve this exact head "
-            f"SHA: submit an approving review, or comment `/risk-approve {sha}`. Any new commit requires fresh approval. "
+            f"SHA: submit an approving review, or comment `/risk-approve {sha}`. Any new commit requires fresh approval; this approval expires after seven days. "
             f"Paths: {', '.join(risky_paths[:8])}",
         )
     if "autonomy:admitted" in labels:
@@ -995,3 +1020,4 @@ if __name__ == "__main__":
     except Exception as exc:
         print(f"::error::{exc}", file=sys.stderr)
         raise
+
