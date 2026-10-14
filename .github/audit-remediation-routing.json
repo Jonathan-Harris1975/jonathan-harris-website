@@ -46,7 +46,7 @@
     "status": "external-durable-state-required-before-kilo-cto-concurrent-mutation"
   },
   "dependencyVersionOwner": "renovate",
-  "mergeAuthority": "mergify",
+  "mergeAuthority": "github_native_auto_merge",
   "humanDecisionSurface": "hive-ui",
   "postMergeResolution": "require-deployment-and-live-revision-verification",
   "notes": [
