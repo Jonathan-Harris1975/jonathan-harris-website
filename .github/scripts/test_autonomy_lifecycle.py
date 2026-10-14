@@ -109,7 +109,7 @@ class ManagedBranchOwnershipTests(unittest.TestCase):
             "body": "",
         }
         for name, value in {
-            "REPO": "owner/repo",
+            "REPO": "Jonathan-Harris1975/jonathan-harris-website",
             "REPAIR_APP_LOGIN": "repair[bot]",
             "DEFAULT_BRANCH": "main",
         }.items():
@@ -126,7 +126,7 @@ class ManagedBranchOwnershipTests(unittest.TestCase):
         admit = self.enterContext(patch.object(automation, "admit_to_mergify"))
         approve = self.enterContext(patch.object(automation, "approve_pr"))
         self.enterContext(
-            patch.object(automation, "pr_files", return_value=["src/example.ts"])
+            patch.object(automation, "pr_files", return_value=["blog/example.md"])
         )
         self.enterContext(
             patch.object(
@@ -154,6 +154,7 @@ class ManagedBranchOwnershipTests(unittest.TestCase):
                 return_value=[".github/workflows/security.yml"],
             )
         )
+        self.enterContext(patch.object(automation, "has_operator_risk_approval", return_value=False))
 
         automation.reconcile_pr(copy.deepcopy(self.pr))
 
@@ -170,6 +171,7 @@ class ManagedBranchOwnershipTests(unittest.TestCase):
                 return_value=[".github/scripts/trusted_automation.py"],
             )
         )
+        self.enterContext(patch.object(automation, "has_operator_risk_approval", return_value=False))
 
         automation.reconcile_pr(copy.deepcopy(self.pr))
 
