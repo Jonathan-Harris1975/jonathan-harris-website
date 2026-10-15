@@ -13,13 +13,15 @@ async function embed({ configured = true } = {}) {
   };
   let listener;
   const events = [];
+  const redirects = [];
   const window = {
+    location: { assign: (url) => redirects.push(url) },
     JHAnalytics: { track: (name) => events.push(name) },
     addEventListener: (_name, callback) => { listener = callback; },
   };
   const document = { readyState: 'complete', referrer: '', getElementById: () => frame };
   vm.runInNewContext(source, { window, document, URL, URLSearchParams, location: { href: 'https://example.test/newsletter/', search: '' } });
-  return { frame, events, message: (data, origin = 'https://form.jotform.com', source = frameWindow) => listener({ data, origin, source }) };
+  return { frame, events, redirects, message: (data, origin = 'https://form.jotform.com', source = frameWindow) => listener({ data, origin, source }) };
 }
 
 test('newsletter embed uses the registered form even when attributes are absent', async () => {
@@ -32,12 +34,15 @@ test('newsletter embed uses the registered form even when attributes are absent'
 
 test('newsletter form-completion signals belong to its iframe and are recorded once', async () => {
   const harness = await embed();
-  const event = { action: 'submission-completed' };
-  harness.message(event, 'https://evil.example');
-  harness.message(event, 'https://form.jotform.com', {});
+  harness.message({ action: 'submission-completed', formID: 'another-form' });
+  harness.message({ action: 'submission-completed', formID: '262733359026055' }, 'https://evil.example');
+  harness.message({ action: 'submission-completed', formID: '262733359026055' }, 'https://form.jotform.com', {});
   harness.message({ action: 'resize' });
   assert.deepEqual(harness.events, ['newsletter_view']);
-  harness.message(event);
+  assert.deepEqual(harness.redirects, []);
+
+  harness.message({ action: 'submission-completed', formID: '262733359026055' });
   harness.message('submission-completed');
   assert.deepEqual(harness.events, ['newsletter_view', 'newsletter_submit', 'newsletter_success']);
+  assert.deepEqual(harness.redirects, ['https://jonathan-harris.online/newsletter/thanks/']);
 });
