@@ -235,12 +235,16 @@ def main()->int:
     check("'email'" not in funnel and 'formData' not in funnel,'funnel abstraction contains an obvious PII/form-value field')
     check(not (ROOT/'assets/js/newsletter-signup.min.js').exists(),'retired newsletter signup JavaScript still exists')
     newsletter_jotform=text(ROOT/'assets/js/newsletter-jotform.min.js')
+    newsletter_thanks=text(ROOT/'assets/js/newsletter-thanks.min.js')
     check(
-        'newsletter_success' in newsletter_jotform
-        and 'newsletter_submit' in newsletter_jotform
+        'newsletter_view' in newsletter_jotform
         and 'ebook_preview_signup' in newsletter_jotform
-        and 'utm_campaign' in newsletter_jotform,
-        'Jotform newsletter instrumentation/source forwarding is incomplete',
+        and 'utm_campaign' in newsletter_jotform
+        and 'sourceParams()' in newsletter_jotform
+        and 'frame.src = url.toString()' in newsletter_jotform
+        and 'newsletter_submit' in newsletter_thanks
+        and 'newsletter_success' in newsletter_thanks,
+        'Jotform source forwarding or distributed newsletter instrumentation is incomplete',
     )
     retired_endpoint=ROOT/'functions'/'api'/'newsletter'/'subscribe.js'
     check(not retired_endpoint.exists(),'retired newsletter API endpoint still exists')
