@@ -1,8 +1,8 @@
 {
-  "generated_utc": "2026-06-22T00:00:00Z",
+  "generated_utc": "2026-10-15T00:28:41Z",
   "base_url": "https://jonathan-harris.online",
   "purpose": "Governed route ledger for generated conversion pages plus blog, podcast, transcript, and LLM discovery surfaces.",
-  "route_count": 37,
+  "route_count": 38,
   "families": {
     "blog-hub": 1,
     "book-bundle": 4,
@@ -16,7 +16,7 @@
     "lead-magnet": 1,
     "media": 1,
     "methodology": 1,
-    "newsletter": 1,
+    "newsletter": 2,
     "person": 1,
     "podcast-hub": 1,
     "practical-resource": 7,
@@ -279,6 +279,17 @@
       "repo_path": "newsletter/index.html",
       "summary": "Sign-up page for AI Edge, the practical AI briefing.",
       "entity": "newsletter"
+    },
+    {
+      "family": "newsletter",
+      "title": "AI Edge sign-up confirmation",
+      "path": "/newsletter/thanks/",
+      "loc": "https://jonathan-harris.online/newsletter/thanks/",
+      "lastmod": "2026-10-15",
+      "source": "repo-html",
+      "repo_path": "newsletter/thanks/index.html",
+      "summary": "Confirmation page shown after an AI Edge newsletter sign-up.",
+      "entity": "newsletter confirmation page"
     },
     {
       "family": "person",
