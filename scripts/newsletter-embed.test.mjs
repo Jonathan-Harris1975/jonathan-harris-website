@@ -38,7 +38,7 @@ test('newsletter embed uses the registered form even when attributes are absent'
   }
 });
 
-test('newsletter form-completion signals belong to its iframe and are recorded once', async () => {
+test('newsletter form-completion signals are scoped and passed to the page', async () => {
   const harness = await embed();
   harness.message({ action: 'submission-completed', formID: 'another-form' });
   harness.message({ action: 'submission-completed', formID: '262733359026055' }, 'https://evil.example');
