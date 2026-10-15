@@ -44,6 +44,7 @@ COMPAT_REDIRECT_PREFIX = "podcast/TT-"
 # intentionally omitted from the public route inventory.
 NON_INDEXED_FORM_RECEIPT_ROUTES = {
     "contact/thanks/index.html",
+    "newsletter/thanks/index.html",
     "contribute/thanks/index.html",
     "podcast/contribute/thanks/index.html",
 }
