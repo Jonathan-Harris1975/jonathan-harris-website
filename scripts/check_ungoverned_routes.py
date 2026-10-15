@@ -9,6 +9,7 @@ Excludes:
   - hidden directories
   - 404.html
   - podcast compatibility redirects
+  - direct form receipt pages that are intentionally noindex
   - generated dynamic leaves only when they are present in data/dynamic-route-manifest.json
 
 Called from validate_release.py with a workbook path.
@@ -39,6 +40,14 @@ EXCLUDED_FILENAMES = {"404.html"}
 
 COMPAT_REDIRECT_PREFIX = "podcast/TT-"
 
+# These are direct Jotform completion targets. They are noindex pages and are
+# intentionally omitted from the public route inventory.
+NON_INDEXED_FORM_RECEIPT_ROUTES = {
+    "contact/thanks/index.html",
+    "contribute/thanks/index.html",
+    "podcast/contribute/thanks/index.html",
+}
+
 DYNAMIC_ROUTE_MANIFEST = ROOT / "data" / "dynamic-route-manifest.json"
 
 
@@ -62,6 +71,9 @@ def should_exclude_route(rel: Path) -> bool:
     rel_str = rel.as_posix()
 
     if rel_str.startswith(COMPAT_REDIRECT_PREFIX) and rel.name == "index.html":
+        return True
+
+    if rel_str in NON_INDEXED_FORM_RECEIPT_ROUTES:
         return True
 
     return False
