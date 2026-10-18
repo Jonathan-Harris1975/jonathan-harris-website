@@ -21,6 +21,8 @@ concurrency:
 jobs:
   council:
     runs-on: ubuntu-latest
+    environment:
+      name: Koyeb
     timeout-minutes: 145
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
