@@ -22,7 +22,7 @@ jobs:
   council:
     runs-on: ubuntu-latest
     environment:
-      name: Koyeb
+      name: R2
     timeout-minutes: 145
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
