@@ -21,6 +21,9 @@ concurrency:
 jobs:
   council:
     runs-on: ubuntu-latest
+    environment:
+      name: R2
+      deployment: false
     timeout-minutes: 145
     env:
       R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
