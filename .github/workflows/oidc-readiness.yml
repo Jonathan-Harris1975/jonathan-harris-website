@@ -91,7 +91,7 @@ jobs:
             repository_owner_id: process.env.EXPECTED_OWNER_ID,
             ref: process.env.EXPECTED_REF, sha: process.env.GITHUB_SHA,
             run_id: process.env.EXPECTED_RUN_ID,
-            job_workflow_ref: process.env.EXPECTED_WORKFLOW_REF,
+            workflow_ref: process.env.EXPECTED_WORKFLOW_REF,
             event_name: process.env.GITHUB_EVENT_NAME };
           for (const [name, value] of Object.entries(expected)) {
             if (claims[name] !== value) throw new Error(`OIDC claim ${name} mismatch`);
