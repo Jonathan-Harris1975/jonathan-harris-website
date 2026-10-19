@@ -107,5 +107,5 @@ jobs:
 
       - name: Record ecosystem verification boundary
         run: |
-          echo "::notice::HIVE independently validates fresh exact-SHA OIDC and health evidence."
+          echo "::notice::HIVE independently validates fresh exact-SHA GitHub OIDC smoke-test and health evidence; the smoke test proves no provider trust."
           echo "::notice::Legacy MAST ecosystem smoke dispatch is retired."

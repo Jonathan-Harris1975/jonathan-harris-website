@@ -1,4 +1,4 @@
-name: OIDC readiness
+name: OIDC smoke test
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   github-oidc:
-    name: GitHub OIDC claim verification
+    name: GitHub token smoke test
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: read
@@ -107,14 +107,14 @@ jobs:
           safe.claims_checked = true;
           safe.signature_verified = true;
           safe.verification_method = "issuer-jwks-rs256";
-          safe.verification_scope = "GitHub JWT only; RS256 issuer JWKS signature, exact repository identity, legacy or immutable default subject, commit, run and event, and bounded lifetime verified; no cloud provider trust verified";
-          writeFileSync("oidc-readiness.json", JSON.stringify(safe, null, 2) + "\n");
+          safe.verification_scope = "Smoke test only: GitHub JWT signature and selected claims verified; no cloud provider trust, authorization, or deployment health verified";
+          writeFileSync("oidc-smoke-test.json", JSON.stringify(safe, null, 2) + "\n");
           NODE
 
-      - name: Retain sanitised OIDC evidence
+      - name: Retain sanitised OIDC smoke-test result
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: oidc-readiness-${{ github.sha }}
-          path: oidc-readiness.json
+          name: oidc-smoke-test-${{ github.sha }}
+          path: oidc-smoke-test.json
           if-no-files-found: error
           retention-days: 90
