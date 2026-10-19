@@ -83,12 +83,14 @@ jobs:
               head = item.get("head") or {}
               base = item.get("base") or {}
               head_repo = head.get("repo") or {}
+              labels = {label.get("name") for label in item.get("labels", [])}
               if (
                   not isinstance(number, int)
                   or item.get("draft") is True
                   or base.get("ref") != "main"
                   or head_repo.get("full_name", "").casefold() != repo.casefold()
                   or head.get("sha") is None
+                  or labels & {"autonomy:human-hold", "needs-human", "no-auto-update"}
               ):
                   continue
 
