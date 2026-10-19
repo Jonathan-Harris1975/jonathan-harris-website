@@ -91,7 +91,7 @@ jobs:
             repository_owner_id: process.env.EXPECTED_OWNER_ID,
             ref: process.env.EXPECTED_REF, sha: process.env.GITHUB_SHA,
             run_id: process.env.EXPECTED_RUN_ID,
-            workflow_ref: process.env.EXPECTED_WORKFLOW_REF,
+            job_workflow_ref: process.env.EXPECTED_WORKFLOW_REF,
             event_name: process.env.GITHUB_EVENT_NAME };
           for (const [name, value] of Object.entries(expected)) {
             if (claims[name] !== value) throw new Error(`OIDC claim ${name} mismatch`);
@@ -102,7 +102,7 @@ jobs:
             throw new Error("OIDC subject claim mismatch; check the repository subject template");
           }
           const fields = ["iss", "aud", "sub", "repository", "repository_id", "repository_owner", "repository_owner_id",
-            "ref", "sha", "workflow", "workflow_ref", "job_workflow_ref", "event_name", "run_id", "run_attempt"];
+            "ref", "sha", "workflow", "job_workflow_ref", "event_name", "run_id", "run_attempt"];
           const safe = Object.fromEntries(fields.map(field => [field, claims[field] ?? null]));
           safe.claims_checked = true;
           safe.signature_verified = true;

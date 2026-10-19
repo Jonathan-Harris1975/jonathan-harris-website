@@ -22,7 +22,7 @@ async function inspectBucket(env, { binding, required }) {
 export async function onRequest({ env }) {
   const entries = await Promise.all(BUCKETS.map(async (item) => [item.binding, await inspectBucket(env, item)]));
   const bindings = Object.fromEntries(entries);
-  const healthy = Object.values(bindings).every((result) => result.configured && result.runtime_access === "available");
+  const healthy = Object.values(bindings).every((result) => !result.required || (result.configured && result.runtime_access === "available"));
   const revision = /^[0-9a-f]{40}$/.test(env?.CF_PAGES_COMMIT_SHA || "") ? env.CF_PAGES_COMMIT_SHA : null;
   const payload = {
     ok: healthy,
