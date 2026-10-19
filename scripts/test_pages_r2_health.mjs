@@ -71,8 +71,12 @@ test('health reports a missing required blog binding as degraded', async () => {
 test('health distinguishes a missing optional image binding from a healthy runtime', async () => {
   const response = await onRequest({ env: allBuckets({ BLOG_IMAGES_BUCKET: undefined }) });
   const body = await response.json();
-  assert.equal(response.status, 503);
+  assert.equal(response.status, 200);
+  assert.equal(body.ok, true);
+  assert.equal(body.status, 'healthy');
   assert.deepEqual(body.bindings.BLOG_IMAGES_BUCKET, { configured: false, runtime_access: 'not-tested', required: false });
+  assert.equal(body.bindings.TRANSCRIPTS_BUCKET.required, true);
+  assert.equal(body.bindings.BLOG_BUCKET.required, true);
 });
 
 test('transcript route returns a clear retryable response when its required binding is absent', async () => {
