@@ -19,7 +19,7 @@ class_name = "AgentReadinessState"
 type = "durable-object"
 storage = "sqlite"
 [observability]
-enabled = false
+enabled = true
 head_sampling_rate = 1
 
 [observability.logs]
