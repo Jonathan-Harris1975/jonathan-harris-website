@@ -105,10 +105,6 @@ jobs:
               if status not in (409, 422):
                   print("Branch update for PR #" + str(number) + " returned HTTP " + str(status) + "; no repair dispatch.")
                   continue
-              if status == 422 and "conflict" not in str(detail.get("message", "")).casefold():
-                  print("Branch update for PR #" + str(number) + " returned a non-conflict validation response; no repair dispatch.")
-                  continue
-
               current_status = None
               current = None
               for attempt in range(3):
@@ -130,6 +126,10 @@ jobs:
                   current_status != 200
                   or not isinstance(current, dict)
                   or current.get("head", {}).get("sha") != sha
+                  or current.get("state") != "open"
+                  or current.get("draft") is True
+                  or current.get("base", {}).get("ref") != "main"
+                  or (current.get("head", {}).get("repo") or {}).get("full_name", "").casefold() != repo.casefold()
                   or not (current.get("mergeable") is False or current.get("mergeable_state") in ("dirty", "conflicting"))
               ):
                   print("Could not confirm a merge conflict for PR #" + str(number) + "; no repair dispatch.")
