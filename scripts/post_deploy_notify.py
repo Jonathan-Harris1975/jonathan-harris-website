@@ -8,6 +8,7 @@ This script supports two delivery targets:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -62,6 +63,87 @@ class DeliveryFailure(Exception):
 
     def __str__(self) -> str:
         return self.message
+
+
+
+class DeliveryJournal:
+    """Redacted, exact-deployment retry state retained by the notification job.
+
+    Successful targets survive job retries. An interrupted response is still
+    ambiguous, so every retry also carries a stable downstream idempotency key.
+    """
+
+    def __init__(self, directory: str, history: str, context: NotificationContext) -> None:
+        if len(context.commit_sha) != 40 or any(char not in "0123456789abcdef" for char in context.commit_sha):
+            raise DeliveryFailure("Delivery state requires an exact deployment SHA.", transient=False)
+        if not context.repository:
+            raise DeliveryFailure("Delivery state requires the repository identity.", transient=False)
+        self.path = Path(directory) / "delivery-state.json"
+        self.repository = context.repository
+        self.sha = context.commit_sha
+        self.targets: dict[str, dict[str, Any]] = {}
+        self.created_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        candidates = sorted(Path(history).glob("**/delivery-state.json")) if history else []
+        if self.path.is_file():
+            candidates.append(self.path)
+        if len(candidates) > 100:
+            raise DeliveryFailure("Notification retry history exceeds the safe bound.", transient=False)
+        for candidate in candidates:
+            if candidate.stat().st_size > 1024 * 1024:
+                raise DeliveryFailure("Notification retry state exceeds the safe size bound.", transient=False)
+            data = json.loads(candidate.read_text(encoding="utf-8"))
+            if (not isinstance(data, dict) or data.get("schema_version") != 1 or data.get("repository") != self.repository
+                    or data.get("deployment_sha") != self.sha or not isinstance(data.get("targets"), dict)):
+                raise DeliveryFailure("Notification retry state does not match this deployment.", transient=False)
+            created_at = data.get("created_at")
+            if not isinstance(created_at, str) or not created_at:
+                raise DeliveryFailure("Notification retry state has no creation timestamp.", transient=False)
+            self.created_at = min(self.created_at, created_at)
+            if len(data["targets"]) > 100:
+                raise DeliveryFailure("Notification retry state exceeds the safe target bound.", transient=False)
+            for key, value in data["targets"].items():
+                if (not isinstance(key, str) or len(key) != 64
+                        or any(char not in "0123456789abcdef" for char in key)
+                        or not isinstance(value, dict) or value.get("status") not in {"pending", "failed", "delivered"}
+                        or not isinstance(value.get("attempts"), int) or value["attempts"] < 0
+                        or not isinstance(value.get("updated_at"), str)):
+                    raise DeliveryFailure("Notification retry state is malformed.", transient=False)
+                previous = self.targets.get(key, {})
+                if previous.get("status") != "delivered" and (
+                        value["status"] == "delivered"
+                        or value["updated_at"] >= previous.get("updated_at", "")):
+                    self.targets[key] = value
+        self.save()
+
+    def save(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = self.path.with_suffix(".tmp")
+        temporary.write_text(json.dumps({
+            "schema_version": 1, "repository": self.repository,
+            "deployment_sha": self.sha, "created_at": self.created_at, "targets": self.targets,
+        }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        temporary.replace(self.path)
+
+    def key(self, target: str, url: str, payload: dict[str, Any]) -> str:
+        volatile = {"timestamp_utc", "actor", "workflow", "run_id", "run_number", "run_url", "commit_message"}
+        stable_payload = {key: value for key, value in payload.items() if key not in volatile}
+        material = [self.repository, self.sha, target, url, stable_payload]
+        return hashlib.sha256(json.dumps(material, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+    def delivered(self, key: str) -> bool:
+        return self.targets.get(key, {}).get("status") == "delivered"
+
+    def record(self, key: str, target: str, status: str, *, transient: bool | None = None) -> None:
+        previous = self.targets.get(key, {})
+        record: dict[str, Any] = {
+            "target": target, "status": status,
+            "attempts": int(previous.get("attempts", 0)) + (1 if status == "pending" else 0),
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        if transient is not None:
+            record["last_failure_transient"] = transient
+        self.targets[key] = record
+        self.save()
 
 
 def env(name: str, default: str = "") -> str:
@@ -165,6 +247,8 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_MAX_BACKOFF_SECONDS,
         help=f"Maximum backoff delay in seconds. Default: {DEFAULT_MAX_BACKOFF_SECONDS}",
     )
+    parser.add_argument("--delivery-state-dir", default="", help="Write redacted deployment retry state here.")
+    parser.add_argument("--prior-state-dir", default="", help="Read retained exact-SHA notification state from earlier job attempts.")
     return parser.parse_args()
 
 
@@ -376,16 +460,31 @@ def deliver_with_retries(
     max_backoff_seconds: float,
     headers: dict[str, str] | None = None,
     label: str = "Webhook",
+    journal: DeliveryJournal | None = None,
+    delivery_target: str = "",
 ) -> None:
+    state_key = journal.key(delivery_target, target_url, payload) if journal else ""
+    if journal and journal.delivered(state_key):
+        print(f"[INFO] {label} already accepted for this deployment; skipping delivery.")
+        return
+    request_headers = dict(headers or {})
+    if journal:
+        request_headers["Idempotency-Key"] = f"website-{state_key}"
     attempts = max(1, max_attempts)
     next_backoff = max(initial_backoff_seconds, 0.0)
 
     for attempt in range(1, attempts + 1):
         print(f"[INFO] {label} delivery attempt {attempt}/{attempts} to {target_url}")
+        if journal:
+            journal.record(state_key, delivery_target, "pending")
         try:
-            post_json(target_url=target_url, payload=payload, timeout_seconds=timeout_seconds, headers=headers, label=label)
+            post_json(target_url=target_url, payload=payload, timeout_seconds=timeout_seconds, headers=request_headers, label=label)
+            if journal:
+                journal.record(state_key, delivery_target, "delivered")
             return
         except DeliveryFailure as exc:
+            if journal:
+                journal.record(state_key, delivery_target, "failed", transient=exc.transient)
             is_last_attempt = attempt == attempts
             print(f"[WARN] {exc}")
             if is_last_attempt:
@@ -414,6 +513,8 @@ def maybe_deliver_legacy_webhook(args: argparse.Namespace, payload: dict[str, st
         initial_backoff_seconds=max(args.initial_backoff_seconds, 0.0),
         max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
         label="Legacy webhook",
+        journal=getattr(args, "delivery_journal", None),
+        delivery_target="legacy-webhook",
     )
 
 
@@ -463,6 +564,8 @@ def maybe_deliver_site_shell_sync(args: argparse.Namespace, payload: dict[str, s
         max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
         headers=headers,
         label="AIMS site-shell sync",
+        journal=getattr(args, "delivery_journal", None),
+        delivery_target="site-shell-sync",
     )
 
 
@@ -504,6 +607,8 @@ def maybe_deliver_cloudflare_purge(args: argparse.Namespace) -> None:
                 max_backoff_seconds=max(args.max_backoff_seconds, 0.0),
                 headers=purge_headers,
                 label=f"Cloudflare purge {purge_number}/{purge_count}",
+                journal=getattr(args, "delivery_journal", None),
+                delivery_target=f"cloudflare-purge-{purge_number}",
             )
         except DeliveryFailure as exc:
             failures.append(f"purge {purge_number}/{purge_count}: {exc}")
@@ -531,7 +636,13 @@ def main() -> int:
     try:
         context = build_context(deployed_url=args.deployed_url)
         payload = build_payload(context)
-    except DeliveryFailure as exc:
+        args.delivery_journal = (
+            DeliveryJournal(args.delivery_state_dir, args.prior_state_dir, context)
+            if args.delivery_state_dir else None
+        )
+        if args.delivery_journal:
+            payload["timestamp_utc"] = args.delivery_journal.created_at
+    except (DeliveryFailure, OSError, ValueError) as exc:
         print(f"[ERROR] {exc}")
         return 1
 
