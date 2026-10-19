@@ -1,0 +1,37 @@
+name: PR branch sync
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync-pr-branches:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Sync open PR branches with main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          prs=$(gh api "repos/${REPO}/pulls?state=open&per_page=100" --jq '.[] | select(.user.login != "dependabot[bot]") | .number')
+          for pr in $prs; do
+            branch=$(gh api "repos/${REPO}/pulls/${pr}" --jq '.head.ref')
+            base=$(gh api "repos/${REPO}/pulls/${pr}" --jq '.base.ref')
+            if [ "$base" != "main" ]; then continue; fi
+            if gh api -X PUT "repos/${REPO}/pulls/${pr}/update-branch" -f expected_head_sha="$(gh api repos/${REPO}/pulls/${pr} --jq .head.sha)" >/dev/null 2>&1; then
+              echo "Synced PR #${pr} (${branch})"
+            else
+              gh pr comment "$pr" --repo "$REPO" --body "needs-repair: automatic sync with main failed (likely conflict). Please resolve manually." || true
+              gh issue edit "$pr" --repo "$REPO" --add-label "needs-repair" 2>/dev/null || true
+            fi
+          done

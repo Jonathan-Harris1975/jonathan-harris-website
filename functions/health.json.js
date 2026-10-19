@@ -1,10 +1,10 @@
 const BUCKETS = [
   { binding: "TRANSCRIPTS_BUCKET", required: true },
   { binding: "BLOG_BUCKET", required: true },
-  { binding: "BLOG_IMAGES_BUCKET", required: false },
+  { binding: "BLOG_IMAGES_BUCKET" },
 ];
 
-async function inspectBucket(env, { binding, required }) {
+async function inspectBucket(env, { binding, required = false }) {
   const bucket = env?.[binding];
   if (!bucket || typeof bucket.list !== "function") {
     return { configured: false, runtime_access: "not-tested", required };

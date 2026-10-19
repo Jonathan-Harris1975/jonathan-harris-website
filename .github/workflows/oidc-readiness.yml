@@ -102,13 +102,13 @@ jobs:
             throw new Error("OIDC subject claim mismatch; check the repository subject template");
           }
           const fields = ["iss", "aud", "sub", "repository", "repository_id", "repository_owner", "repository_owner_id",
-            "ref", "sha", "workflow", "job_workflow_ref", "event_name", "run_id", "run_attempt"];
+            "ref", "sha", "workflow", "workflow_ref", "job_workflow_ref", "event_name", "run_id", "run_attempt"];
           const safe = Object.fromEntries(fields.map(field => [field, claims[field] ?? null]));
           safe.claims_checked = true;
           safe.signature_verified = true;
           safe.verification_method = "issuer-jwks-rs256";
-          safe.verification_scope = "Smoke test only: GitHub JWT signature and selected claims verified; no cloud provider trust, authorization, or deployment health verified";
-          writeFileSync("oidc-smoke-test.json", JSON.stringify(safe, null, 2) + "\n");
+          safe.verification_scope = "GitHub JWT smoke test only; RS256 issuer JWKS signature, exact repository identity, legacy or immutable default subject, configured default-branch readiness workflow identity, commit, run and event, and bounded lifetime verified; no cloud provider trust verified";
+          writeFileSync("oidc-readiness.json", JSON.stringify(safe, null, 2) + "\n");
           NODE
 
       - name: Retain sanitised OIDC smoke-test result
