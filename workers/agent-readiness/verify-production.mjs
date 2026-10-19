@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const workerRoot = dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = resolve(workerRoot, '../..');
-const expectedWorkerSha = String(process.env.EXPECTED_AGENT_READINESS_SHA || execFileSync('git', ['-C', repositoryRoot, 'log', '-1', '--format=%H', 'HEAD', '--', 'workers/agent-readiness'], { encoding: 'utf8' })).trim().toLowerCase();
+const expectedWorkerSha = String(process.env.EXPECTED_AGENT_READINESS_SHA || execFileSync('git', ['-C', repositoryRoot, 'log', '-1', '--format=%H', 'HEAD', '--', 'workers/agent-readiness/index.js', 'workers/agent-readiness/wrangler.toml'], { encoding: 'utf8' })).trim().toLowerCase();
 if (!/^[0-9a-f]{40}$/.test(expectedWorkerSha)) throw new Error('Could not resolve the exact Agent Readiness Worker source SHA.');
 
 const origin = String(process.argv[2] || 'https://jonathan-harris.online').replace(/\/+$/, '');
