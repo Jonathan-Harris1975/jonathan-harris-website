@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
 
       - name: Validate expected deployed commit SHA
@@ -58,6 +58,21 @@ jobs:
           python3 scripts/wait_for_live_release.py --marker-only --require-release-sha \
             --expected-sha "$EXPECTED_DEPLOYMENT_SHA" --release-url "${WEBSITE_ORIGIN%/}/release.json" \
             --timeout-seconds 600 --interval-seconds 10 --request-timeout 15
+
+      - name: Verify Pages R2 runtime health and exact revision
+        env:
+          WEBSITE_ORIGIN: ${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
+          EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          body="$(curl --fail --silent --show-error --max-time 30 "${WEBSITE_ORIGIN%/}/health.json")"
+          printf '%s' "$body" | jq -e --arg sha "$EXPECTED_DEPLOYMENT_SHA" '
+            .ok == true and .status == "healthy" and .service == "WEBSITE" and
+            .revision == $sha and
+            ([.bindings.TRANSCRIPTS_BUCKET, .bindings.BLOG_BUCKET] |
+              all(.[]; .required == true and .configured == true and .runtime_access == "available")) and
+            .bindings.BLOG_IMAGES_BUCKET.required == false
+          ' >/dev/null
 
       - name: Verify Agent Readiness service binding
         env:
@@ -93,5 +108,5 @@ jobs:
 
       - name: Record ecosystem verification boundary
         run: |
-          echo "::notice::HIVE independently validates fresh exact-SHA OIDC and health evidence."
+          echo "::notice::HIVE independently validates fresh exact-SHA GitHub OIDC smoke-test and health evidence; the smoke test proves no provider trust."
           echo "::notice::Legacy MAST ecosystem smoke dispatch is retired."

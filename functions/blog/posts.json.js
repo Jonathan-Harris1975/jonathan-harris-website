@@ -2,19 +2,34 @@ import { normaliseManifest } from "./_utils/blog-r2.js";
 
 const MANIFEST_KEY = "blog/posts.json";
 
+function unavailable(reason) {
+  return new Response(JSON.stringify({ error: "blog manifest unavailable", reason }), {
+    status: 503,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Retry-After": "60",
+      "X-Blog-Manifest-Source": reason,
+    },
+  });
+}
+
 export async function onRequest(context) {
   const { env, request } = context;
-  const object = await env.BLOG_BUCKET?.get(MANIFEST_KEY);
+  const bucket = env?.BLOG_BUCKET;
+  if (!bucket || typeof bucket.get !== "function") {
+    return unavailable("binding-missing");
+  }
+
+  let object;
+  try {
+    object = await bucket.get(MANIFEST_KEY);
+  } catch {
+    return unavailable("read-failed");
+  }
 
   if (!object) {
-    return new Response(JSON.stringify({ error: "blog manifest unavailable" }), {
-      status: 503,
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "no-store",
-        "X-Blog-Manifest-Source": "r2-missing",
-      },
-    });
+    return unavailable("object-missing");
   }
 
   const payload = await object.json().catch(async () => JSON.parse(await object.text()));

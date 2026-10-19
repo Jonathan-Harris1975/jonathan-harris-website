@@ -54,9 +54,16 @@ session_id:transcriptUrl?transcriptUrl.split('/').pop().replace(/\.(html|htm|txt
  ${description}`)}});
 }
 async function fetchFeedEpisodes(context) {
-  const configured=context.env?.PODCAST_RSS_FEED_URL||context.env?.R2_PUBLIC_BASE_URL_PODCAST_RSS||DEFAULT_PODCAST_FEED_URL, url=String(configured).endsWith('\
-.xml')?String(configured):`${String(configured).replace(/\/$/,"")}/turing-torch.xml`, attempts=Math.max(1,Number(context.env?.PODCAST_RSS_RETRY_ATTEMPTS||4));
- let last;
+  const configured = context.env?.PODCAST_RSS_FEED_URL ||
+    context.env?.R2_PUBLIC_BASE_URL_PODCAST_RSS || DEFAULT_PODCAST_FEED_URL;
+  const url = String(configured).endsWith(".xml")
+    ? String(configured)
+    : `${String(configured).replace(/\/$/, "")}/turing-torch.xml`;
+  const configuredAttempts = Number(context.env?.PODCAST_RSS_RETRY_ATTEMPTS);
+  const attempts = Number.isInteger(configuredAttempts) && configuredAttempts > 0
+    ? Math.min(configuredAttempts, 4)
+    : 4;
+  let last;
   for(let i=0;i<attempts;i++){const c=new AbortController(),timer=setTimeout(()=>c.abort(),12000);try{const r=await fetch(url,{headers:{Accept:"applic\
 ation/rss+xml, application/xml, text/xml"},signal:c.signal});if(!r.ok)throw new Error(`HTTP ${r.status}`);const xml=await r.text();if(!/<item\b/i.test(xml))throw new Error('\
 no podcast items');return parseFeedEpisodes(xml,context.request)}catch(e){last=e;if(i+1<attempts)await new Promise(resolve=>setTimeout(resolve,400*(2**i)))}
@@ -116,10 +123,30 @@ function enhanceTranscriptHtml(html,prelude){if(!prelude)return html;let out=htm
 if(/<main\b[^>]*>/i.test(out))out=out.replace(/<main\b[^>]*>/i,m=>`${m}\n${insertion}`);else if(/<body\b[^>]*>/i.test(out))out=out.replace(/<body\b[^>]*>/i,
 m=>`${m}\n<main id="main">\n${insertion}`).replace(/<\/body>/i,'</main>\n</body>');else out=`${insertion}\n${out}`}if(!out.includes('/assets/js/funnel\
 -events.min.js'))out=out.replace(/<\/body>/i,'<script defer src="/assets/js/funnel-events.min.js"></script></body>');return out}
+function transcriptUnavailable(reason) {
+  return new Response(JSON.stringify({ error: "transcript storage unavailable", reason }), {
+    status: 503,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Retry-After": "60",
+      "X-Transcript-Storage": reason,
+    },
+  });
+}
+
 export async function onRequest(context) {
   const {params,env,request}=context, rawKey=slugPartsFromParams(params).join('/'); if(!rawKey)return context.next();
-  let object=await env.TRANSCRIPTS_BUCKET.get(rawKey); if(!object&&!rawKey.match(/\.(html|htm|txt|json|xml)$/i))object=await env.TRANSCRIPTS_BUCKET.get(`${rawKey}\
-.html`); if(!object)return context.next();
+  const bucket = env?.TRANSCRIPTS_BUCKET;
+  if (!bucket || typeof bucket.get !== "function") return transcriptUnavailable("binding-missing");
+  let object;
+  try {
+    object=await bucket.get(rawKey);
+    if(!object&&!rawKey.match(/\.(html|htm|txt|json|xml)$/i))object=await bucket.get(`${rawKey}.html`);
+  } catch {
+    return transcriptUnavailable("read-failed");
+  }
+  if(!object)return context.next();
   const headers=new Headers(), contentType=object.httpMetadata?.contentType??"text/html; charset=utf-8"; headers.set('Content-Type',contentType);headers.set('\
 Cache-Control','public, max-age=3600, stale-while-revalidate=86400');headers.set('X-Transcript-AEO-Enhancement','enabled');if(object.etag)headers.set('\
 ETag',object.etag);if(request.headers.get('If-None-Match')===object.etag)return new Response(null,{status:304,headers});if(!contentType.includes('text\
