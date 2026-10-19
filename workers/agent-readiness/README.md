@@ -76,7 +76,7 @@ cd workers/agent-readiness
 node verify-production.mjs
 ```
 
-The deploy helper passes the last commit that changed `workers/agent-readiness` to Wrangler as `AGENT_READINESS_SOURCE_SHA`. Do not deploy this Worker with a plain `wrangler deploy`, because that omits the source attestation.
+The deploy helper passes the last commit that changed the Worker entrypoint or Wrangler configuration to Wrangler as `AGENT_READINESS_SOURCE_SHA`. Do not deploy this Worker with a plain `wrangler deploy`, because that omits the source attestation.
 
 The production verification workflow resolves that same path-specific commit from the Pages release and requires the live Worker to report the exact SHA. A mismatch means the Worker needs its established separate deployment before the website integration can pass.
 
