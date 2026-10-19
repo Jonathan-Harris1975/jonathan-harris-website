@@ -38,6 +38,7 @@ jobs:
         with:
           ref: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Validate expected deployed commit SHA
         env:
@@ -108,9 +109,10 @@ jobs:
       - name: Record exact-SHA deployment attestation
         env:
           DEPLOYED_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+          AGENT_READINESS_SOURCE_SHA: ${{ steps.agent_readiness_revision.outputs.sha }}
         run: |
-          printf '{"repository":"%s","sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n' \
-            "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
+          printf '{"repository":"%s","sha":"%s","agent_readiness_source_sha":"%s","workflow_run":"%s","service":"jonathan-harris-website","status":"pages-and-agent-readiness-green"}\n' \
+            "$GITHUB_REPOSITORY" "$DEPLOYED_SHA" "$AGENT_READINESS_SOURCE_SHA" "$GITHUB_RUN_ID" > deployment-attestation.json
 
       - name: Retain production deployment evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
