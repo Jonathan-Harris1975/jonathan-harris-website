@@ -81,7 +81,7 @@ jobs:
           EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -euo pipefail
-          worker_sha="$(git log -1 --format=%H "$EXPECTED_DEPLOYMENT_SHA" -- workers/agent-readiness)"
+          worker_sha="$(git log -1 --format=%H "$EXPECTED_DEPLOYMENT_SHA" -- workers/agent-readiness/index.js workers/agent-readiness/wrangler.toml)"
           if [[ ! "$worker_sha" =~ ^[0-9a-f]{40}$ ]]; then
             echo "::error::Could not resolve the exact Agent Readiness Worker source revision." >&2
             exit 1
