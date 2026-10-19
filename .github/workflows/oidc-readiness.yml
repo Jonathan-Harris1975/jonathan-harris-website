@@ -108,7 +108,7 @@ jobs:
           safe.signature_verified = true;
           safe.verification_method = "issuer-jwks-rs256";
           safe.verification_scope = "GitHub JWT smoke test only; RS256 issuer JWKS signature, exact repository identity, legacy or immutable default subject, configured default-branch readiness workflow identity, commit, run and event, and bounded lifetime verified; no cloud provider trust verified";
-          writeFileSync("oidc-readiness.json", JSON.stringify(safe, null, 2) + "\n");
+          writeFileSync("oidc-smoke-test.json", JSON.stringify(safe, null, 2) + "\n");
           NODE
 
       - name: Retain sanitised OIDC smoke-test result
