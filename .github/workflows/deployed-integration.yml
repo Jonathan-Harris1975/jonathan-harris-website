@@ -69,8 +69,9 @@ jobs:
           printf '%s' "$body" | jq -e --arg sha "$EXPECTED_DEPLOYMENT_SHA" '
             .ok == true and .status == "healthy" and .service == "WEBSITE" and
             .revision == $sha and
-            ([.bindings.TRANSCRIPTS_BUCKET, .bindings.BLOG_BUCKET, .bindings.BLOG_IMAGES_BUCKET] |
-              all(.[]; .configured == true and .runtime_access == "available"))
+            ([.bindings.TRANSCRIPTS_BUCKET, .bindings.BLOG_BUCKET] |
+              all(.[]; .required == true and .configured == true and .runtime_access == "available")) and
+            .bindings.BLOG_IMAGES_BUCKET.required == false
           ' >/dev/null
 
       - name: Verify Agent Readiness service binding
