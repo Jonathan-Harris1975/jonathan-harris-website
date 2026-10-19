@@ -1,3 +1,12 @@
+import { execFileSync } from 'node:child_process';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const workerRoot = dirname(fileURLToPath(import.meta.url));
+const repositoryRoot = resolve(workerRoot, '../..');
+const expectedWorkerSha = String(process.env.EXPECTED_AGENT_READINESS_SHA || execFileSync('git', ['-C', repositoryRoot, 'log', '-1', '--format=%H', 'HEAD', '--', 'workers/agent-readiness'], { encoding: 'utf8' })).trim().toLowerCase();
+if (!/^[0-9a-f]{40}$/.test(expectedWorkerSha)) throw new Error('Could not resolve the exact Agent Readiness Worker source SHA.');
+
 const origin = String(process.argv[2] || 'https://jonathan-harris.online').replace(/\/+$/, '');
 const expectedWorker = 'agent-readiness';
 const expectedGateway = 'cloudflare-pages-service-binding';
@@ -26,8 +35,10 @@ for (const [name, path, contentType] of checks) {
     const gateway = response.headers.get('x-agent-readiness-gateway');
     const mode = response.headers.get('x-agent-readiness-gateway-mode');
     const type = response.headers.get('content-type') || '';
-    const ok = response.status === 200 && worker === expectedWorker && gateway === expectedGateway && mode === 'service-binding' && contentType.test(type);
-    console.log(`${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(28)} HTTP ${response.status}  gateway=${gateway || 'MISSING'}  mode=${mode || 'MISSING'}  worker=${worker || 'MISSING'}  type=${type || 'MISSING'}`);
+    const body = name === 'Readiness status' ? await response.json() : null;
+    const sourceMatches = name !== 'Readiness status' || body?.source_sha === expectedWorkerSha;
+    const ok = response.status === 200 && worker === expectedWorker && gateway === expectedGateway && mode === 'service-binding' && contentType.test(type) && sourceMatches;
+    console.log(`${ok ? 'PASS' : 'FAIL'}  ${name.padEnd(28)} HTTP ${response.status}  gateway=${gateway || 'MISSING'}  mode=${mode || 'MISSING'}  worker=${worker || 'MISSING'}  source=${name === 'Readiness status' ? (body?.source_sha || 'MISSING') : 'n/a'}  type=${type || 'MISSING'}`);
     if (!ok) failures += 1;
   } catch (error) {
     failures += 1;
