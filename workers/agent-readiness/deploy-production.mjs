@@ -16,7 +16,7 @@ if (git(["status", "--porcelain", "--", "workers/agent-readiness"])) {
   throw new Error("Refusing to deploy Agent Readiness with uncommitted Worker source changes.");
 }
 
-const sourceSha = git(["log", "-1", "--format=%H", "HEAD", "--", "workers/agent-readiness"]).toLowerCase();
+const sourceSha = git(["log", "-1", "--format=%H", "HEAD", "--", "workers/agent-readiness/index.js", "workers/agent-readiness/wrangler.toml"]).toLowerCase();
 if (!/^[0-9a-f]{40}$/.test(sourceSha)) {
   throw new Error("Could not resolve the exact Agent Readiness Worker source commit.");
 }
