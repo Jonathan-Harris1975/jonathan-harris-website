@@ -188,7 +188,8 @@ The Pages project must remain configured consistently with `wrangler.toml`:
 
 - build command: `bash build.sh`
 - output directory: `.`
-- R2 bindings: `TRANSCRIPTS_BUCKET`, `BLOG_BUCKET`, `BLOG_IMAGES_BUCKET`
+- R2 bindings: `TRANSCRIPTS_BUCKET` → `transcripts`, `BLOG_BUCKET` → `blog`, `BLOG_IMAGES_BUCKET` → `blog-images`
+- `/health.json` performs bounded, read-only runtime access checks for all three R2 bindings and reports the exact Pages revision when available; any missing or unreachable binding returns HTTP 503
 - Durable Object binding: `COGNIPAL_RATE_LIMITER`
 - service binding: `AGENT_READINESS` → `agent-readiness`
 - CogniPal variables/secrets described above

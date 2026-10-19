@@ -56,7 +56,17 @@ The focused PDF regression requires deterministic glossary bytes, successful pyp
 
 ## Cloudflare runtime requirements
 
-`wrangler.toml` is the version-controlled binding contract for the Pages project. It defines the transcript/blog R2 buckets, the CogniPal rate-limit Durable Object binding and the Agent Readiness service binding.
+`wrangler.toml` is the version-controlled binding contract for the Pages project. It declares `TRANSCRIPTS_BUCKET` → `transcripts`, `BLOG_BUCKET` → `blog`, and `BLOG_IMAGES_BUCKET` → `blog-images`, plus the CogniPal rate-limit Durable Object and Agent Readiness service bindings. Transcript and blog content storage are required for their dynamic routes; blog images are an optional content feature. If an R2 binding is missing or cannot be reached, `/health.json` returns HTTP 503 and reports configuration presence separately from runtime access. Its bounded `list({ limit: 1 })` checks metadata only and does not read content or alter the bucket. The response carries `CF_PAGES_COMMIT_SHA` when Cloudflare supplies a valid commit SHA.
+
+A read-only Cloudflare control-plane check on 2026-10-19 found all three declared bucket names in the account and the Pages project configuration points production and preview bindings at those names. This supersedes the audit snapshot's missing-`transcripts` inventory finding. It does not prove runtime access, object availability, or absence of user impact. Do not create or rename a bucket based on the earlier snapshot; verify live access with the exact-revision health check and a known transcript request.
+
+### Owner-only Cloudflare controls and OIDC trust
+
+A read-only Cloudflare user check on 2026-10-19 reported `two_factor_authentication_enabled: false` and `two_factor_authentication_locked: false` for the connected administrator, so user MFA is off and the account is not currently requiring it for that identity. The owner must enforce account-level two-factor authentication in Cloudflare and ensure the user identities that administer this account have MFA enabled. Repository code cannot change either control.
+
+The `OIDC readiness` workflow verifies a GitHub-issued token and its signature, audience, repository identity, default branch, workflow path and commit. It does not verify that Cloudflare or another service trusts that identity. Its exact GitHub claims are issuer `https://token.actions.githubusercontent.com`, audience `https://github.com/Jonathan-Harris1975`, repository `Jonathan-Harris1975/jonathan-harris-website`, branch `refs/heads/main`, and workflow `Jonathan-Harris1975/jonathan-harris-website/.github/workflows/oidc-readiness.yml@refs/heads/main`. Keep any provider-specific subject condition exact (the workflow accepts GitHub's legacy or immutable subject formats) and do not use a wildcard repository, branch, workflow or audience. This workflow has no GitHub Environment; if a provider requires one, provision and protect the named environment before changing the workflow. A successful GitHub token check alone is not cloud trust evidence.
+
+Pages and R2 runtime bindings do not use GitHub OIDC credentials. Cloudflare's current GitHub Actions deployment guidance requires a Cloudflare API token and account ID for Wrangler deployments; this repository does not deploy Pages through a GitHub workflow. Do not describe the claim-check workflow as Cloudflare authentication or add a broad Cloudflare token to it. If an ecosystem service that supports GitHub OIDC is connected to this repository, apply the exact issuer, audience, repository, branch and workflow claims above in that service's trust policy. If Cloudflare deployment automation is introduced, use its current documented authentication method and tightly scope any required token.
 
 Deploy the standalone Workers before a Pages deployment that depends on them:
 
@@ -72,7 +82,8 @@ CogniPal Pages secrets/variables must remain in Cloudflare configuration, never 
 
 After deployment, verify at minimum:
 
-- `/health.json`
+- `/health.json` (expect HTTP 200, `ok: true`, exact revision, and every declared R2 binding configured and runtime-accessible)
+- a known existing transcript and a known absent transcript (expect the existing object to be served and the absent object to return the site's normal not-found response)
 - `/`
 - `/ebooks/`
 - one canonical `/ebooks/<slug>/` page

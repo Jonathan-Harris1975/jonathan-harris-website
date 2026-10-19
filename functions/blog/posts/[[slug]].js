@@ -9,6 +9,18 @@ import {
   withCacheHeaders,
 } from "../_utils/blog-r2.js";
 
+function unavailable(reason) {
+  return new Response(JSON.stringify({ error: "blog content unavailable", reason }), {
+    status: 503,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      "Cache-Control": "no-store",
+      "Retry-After": "60",
+      "X-Blog-Content": reason,
+    },
+  });
+}
+
 export async function onRequest(context) {
   const { params, env, request } = context;
   const slugParts = Array.isArray(params.slug) ? params.slug : [params.slug];
@@ -18,7 +30,15 @@ export async function onRequest(context) {
     return context.next();
   }
 
-  const match = await getR2Object(env.BLOG_BUCKET, `posts/${rawPath}`);
+  const bucket = env?.BLOG_BUCKET;
+  if (!bucket || typeof bucket.get !== "function") return unavailable("binding-missing");
+
+  let match;
+  try {
+    match = await getR2Object(bucket, `posts/${rawPath}`);
+  } catch {
+    return unavailable("read-failed");
+  }
   if (!match) {
     return context.next();
   }
