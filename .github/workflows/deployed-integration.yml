@@ -74,9 +74,23 @@ jobs:
             .bindings.BLOG_IMAGES_BUCKET.required == false
           ' >/dev/null
 
-      - name: Verify Agent Readiness service binding
+      - name: Resolve expected Agent Readiness Worker source revision
+        id: agent_readiness_revision
+        env:
+          EXPECTED_DEPLOYMENT_SHA: ${{ inputs.expected_sha || github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          worker_sha="$(git log -1 --format=%H "$EXPECTED_DEPLOYMENT_SHA" -- workers/agent-readiness)"
+          if [[ ! "$worker_sha" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::Could not resolve the exact Agent Readiness Worker source revision." >&2
+            exit 1
+          fi
+          echo "sha=$worker_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Verify Agent Readiness service binding and exact Worker source
         env:
           WEBSITE_ORIGIN: ${{ vars.WEBSITE_BASE_URL || 'https://jonathan-harris.online' }}
+          EXPECTED_AGENT_READINESS_SHA: ${{ steps.agent_readiness_revision.outputs.sha }}
         run: |
           set -euo pipefail
           headers="$(mktemp)"
@@ -86,7 +100,7 @@ jobs:
             --dump-header "$headers" \
             --output "$body" \
             "${WEBSITE_ORIGIN%/}/.well-known/agent-readiness/status"
-          jq -e '.ok == true and .service == "agent-readiness"' "$body" >/dev/null
+          jq -e --arg sha "$EXPECTED_AGENT_READINESS_SHA" '.ok == true and .service == "agent-readiness" and .source_sha == $sha' "$body" >/dev/null
           grep -Eiq '^x-agent-readiness-worker:[[:space:]]*agent-readiness[[:space:]]*$' "$headers"
           grep -Eiq '^x-agent-readiness-gateway:[[:space:]]*cloudflare-pages-service-binding[[:space:]]*$' "$headers"
           grep -Eiq '^x-agent-readiness-gateway-mode:[[:space:]]*service-binding[[:space:]]*$' "$headers"
