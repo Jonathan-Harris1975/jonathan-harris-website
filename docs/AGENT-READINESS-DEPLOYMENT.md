@@ -10,12 +10,20 @@ Do not attach `agent-readiness` to `jonathan-harris.online/*` as a Worker Route.
 
 ### 1. CogniPal rate limiter
 
+Deploy from the repository root. The command refuses dirty checkouts and verifies that the committed Worker file is the file Wrangler will upload:
+
 ```bash
-cd workers/cognipal-rate-limit
-npx wrangler deploy
+if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
+  echo "Refusing to deploy from a dirty worktree." >&2
+  exit 1
+fi
+SOURCE_SHA="$(git rev-parse HEAD)"
+test "${#SOURCE_SHA}" -eq 40
+test "$(git rev-parse "HEAD:workers/cognipal-rate-limit/index.js")" = "$(git hash-object workers/cognipal-rate-limit/index.js)"
+npx wrangler deploy --config workers/cognipal-rate-limit/wrangler.toml --var "COGNIPAL_RATE_LIMIT_SOURCE_SHA:${SOURCE_SHA}"
 ```
 
-No env vars or secrets are required by this Worker. It exports `CogniPalRateLimiter` and its Durable Object storage.
+The Worker keeps its existing `COGNIPAL_RATE_LIMITER` Durable Object binding and `CogniPalRateLimiter` export. Its private health response is queried through the Pages `COGNIPAL_RATE_LIMIT_HEALTH` service binding and reported at `https://jonathan-harris.online/health.json`. A missing or malformed SHA makes the website health endpoint return 503.
 
 ### 2. Agent Readiness Worker
 
@@ -68,6 +76,10 @@ Deploy/redeploy the root Pages project after the Agent Readiness Worker exists. 
 [[services]]
 binding = "AGENT_READINESS"
 service = "agent-readiness"
+
+[[services]]
+binding = "COGNIPAL_RATE_LIMIT_HEALTH"
+service = "cognipal-rate-limit"
 ```
 
 and the existing external Durable Object binding:
