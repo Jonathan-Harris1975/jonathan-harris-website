@@ -25,6 +25,12 @@ npx wrangler deploy --config workers/cognipal-rate-limit/wrangler.toml --var "CO
 
 The Worker keeps its existing `COGNIPAL_RATE_LIMITER` Durable Object binding and `CogniPalRateLimiter` export. Its private health response is queried through the Pages `COGNIPAL_RATE_LIMIT_HEALTH` service binding and reported at `https://jonathan-harris.online/health.json`. A missing or malformed SHA makes the website health endpoint return 503.
 
+The Cloudflare Workers Builds production deploy command for this Worker must inject its actual GitHub commit:
+```sh
+test "${#WORKERS_CI_COMMIT_SHA}" -eq 40 && npx wrangler deploy --var "COGNIPAL_RATE_LIMIT_SOURCE_SHA:${WORKERS_CI_COMMIT_SHA}"
+```
+`WORKERS_CI_COMMIT_SHA` is provided by Workers Builds. Keep the Cloudflare project's deploy command aligned with this runbook; preview uploads are not production releases.
+
 ### 2. Agent Readiness Worker
 
 ```bash
