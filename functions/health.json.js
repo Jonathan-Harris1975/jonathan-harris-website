@@ -19,7 +19,7 @@ async function inspectBucket(env, { binding, required = false }) {
   }
 }
 
-async function inspectCogniPalRateLimiter(env) {
+async function inspectCogniPalRateLimiter(env, expectedRevision) {
   const worker = env?.COGNIPAL_RATE_LIMIT_HEALTH;
   if (!worker || typeof worker.fetch !== "function") {
     return { configured: false, runtime_access: "not-tested", source_commit_sha: null, required: true };
@@ -35,7 +35,8 @@ async function inspectCogniPalRateLimiter(env) {
       : "";
     const valid = payload?.ok === true
       && payload?.service === "cognipal-rate-limit"
-      && /^[0-9a-f]{40}$/.test(sourceCommitSha);
+      && /^[0-9a-f]{40}$/.test(sourceCommitSha)
+      && (!expectedRevision || sourceCommitSha === expectedRevision);
     return {
       configured: true,
       runtime_access: valid ? "available" : "unavailable",
@@ -48,16 +49,16 @@ async function inspectCogniPalRateLimiter(env) {
 }
 
 export async function onRequest({ env }) {
+  const revision = /^[0-9a-f]{40}$/.test(env?.CF_PAGES_COMMIT_SHA || "") ? env.CF_PAGES_COMMIT_SHA : null;
   const [bucketEntries, cognipalRateLimiter] = await Promise.all([
     Promise.all(BUCKETS.map(async (item) => [item.binding, await inspectBucket(env, item)])),
-    inspectCogniPalRateLimiter(env),
+    inspectCogniPalRateLimiter(env, revision),
   ]);
   const bindings = Object.fromEntries([
     ...bucketEntries,
     ["COGNIPAL_RATE_LIMITER", cognipalRateLimiter],
   ]);
   const healthy = Object.values(bindings).every((result) => !result.required || (result.configured && result.runtime_access === "available"));
-  const revision = /^[0-9a-f]{40}$/.test(env?.CF_PAGES_COMMIT_SHA || "") ? env.CF_PAGES_COMMIT_SHA : null;
   const payload = {
     ok: healthy,
     status: healthy ? "healthy" : "degraded",
