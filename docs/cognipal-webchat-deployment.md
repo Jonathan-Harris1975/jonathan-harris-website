@@ -29,6 +29,7 @@ The gateway fails closed with `503 rate_limiter_unavailable` if the Durable Obje
 1. Deploy `workers/cognipal-rate-limit` first from the repository root. It does not need a public route or any secret. Pass the exact checked-out Git commit as a plain-text binding; the Worker's `/health` response fails closed if the binding is absent or malformed:
 
 ```sh
+set -eu
 if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
   echo "Refusing to deploy from a dirty worktree." >&2
   exit 1
