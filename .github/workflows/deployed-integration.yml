@@ -72,7 +72,11 @@ jobs:
             .revision == $sha and
             ([.bindings.TRANSCRIPTS_BUCKET, .bindings.BLOG_BUCKET] |
               all(.[]; .required == true and .configured == true and .runtime_access == "available")) and
-            .bindings.BLOG_IMAGES_BUCKET.required == false
+            .bindings.BLOG_IMAGES_BUCKET.required == false and
+            .bindings.COGNIPAL_RATE_LIMITER.required == true and
+            .bindings.COGNIPAL_RATE_LIMITER.configured == true and
+            .bindings.COGNIPAL_RATE_LIMITER.runtime_access == "available" and
+            .bindings.COGNIPAL_RATE_LIMITER.source_commit_sha == $sha
           ' >/dev/null
 
       - name: Resolve expected Agent Readiness Worker source revision
