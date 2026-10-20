@@ -60,7 +60,7 @@ The target of a Cloudflare Service Binding must already exist before the caller 
 
    ```bash
    cd workers/agent-readiness
-   npx wrangler deploy
+   node deploy-production.mjs
    ```
 
 3. Deploy/redeploy the root Cloudflare Pages project so the `AGENT_READINESS` service binding from the root `wrangler.toml` becomes active. If Pages is Git-connected, push this repository and let the production deployment complete.
@@ -76,10 +76,16 @@ cd workers/agent-readiness
 node verify-production.mjs
 ```
 
+The deploy helper passes the last commit that changed the Worker entrypoint or Wrangler configuration to Wrangler as `AGENT_READINESS_SOURCE_SHA`. Do not deploy this Worker with a plain `wrangler deploy`, because that omits the source attestation.
+
+The production verification workflow resolves that same path-specific commit from the Pages release and requires the live Worker to report the exact SHA. A mismatch means the Worker needs its established separate deployment before the website integration can pass.
+
 A proxied readiness endpoint must contain **both**:
 
 ```text
 X-Agent-Readiness-Gateway: cloudflare-pages-service-binding
+
+The `/.well-known/agent-readiness/status` response must also contain the exact `source_sha` for the deployed Worker revision.
 X-Agent-Readiness-Worker: agent-readiness
 ```
 
