@@ -19,9 +19,43 @@ async function inspectBucket(env, { binding, required = false }) {
   }
 }
 
+async function inspectCogniPalRateLimiter(env) {
+  const worker = env?.COGNIPAL_RATE_LIMIT_HEALTH;
+  if (!worker || typeof worker.fetch !== "function") {
+    return { configured: false, runtime_access: "not-tested", source_commit_sha: null, required: true };
+  }
+  try {
+    const response = await worker.fetch(new Request("https://cognipal-rate-limit.internal/health"));
+    if (!response.ok) {
+      return { configured: true, runtime_access: "unavailable", source_commit_sha: null, required: true };
+    }
+    const payload = await response.json();
+    const sourceCommitSha = typeof payload?.source_commit_sha === "string"
+      ? payload.source_commit_sha.toLowerCase()
+      : "";
+    const valid = payload?.ok === true
+      && payload?.service === "cognipal-rate-limit"
+      && /^[0-9a-f]{40}$/.test(sourceCommitSha);
+    return {
+      configured: true,
+      runtime_access: valid ? "available" : "unavailable",
+      source_commit_sha: valid ? sourceCommitSha : null,
+      required: true,
+    };
+  } catch {
+    return { configured: true, runtime_access: "unavailable", source_commit_sha: null, required: true };
+  }
+}
+
 export async function onRequest({ env }) {
-  const entries = await Promise.all(BUCKETS.map(async (item) => [item.binding, await inspectBucket(env, item)]));
-  const bindings = Object.fromEntries(entries);
+  const [bucketEntries, cognipalRateLimiter] = await Promise.all([
+    Promise.all(BUCKETS.map(async (item) => [item.binding, await inspectBucket(env, item)])),
+    inspectCogniPalRateLimiter(env),
+  ]);
+  const bindings = Object.fromEntries([
+    ...bucketEntries,
+    ["COGNIPAL_RATE_LIMITER", cognipalRateLimiter],
+  ]);
   const healthy = Object.values(bindings).every((result) => !result.required || (result.configured && result.runtime_access === "available"));
   const revision = /^[0-9a-f]{40}$/.test(env?.CF_PAGES_COMMIT_SHA || "") ? env.CF_PAGES_COMMIT_SHA : null;
   const payload = {
