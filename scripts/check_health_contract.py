@@ -31,11 +31,16 @@ for binding in ("TRANSCRIPTS_BUCKET", "BLOG_BUCKET", "BLOG_IMAGES_BUCKET"):
 assert 'list({ limit: 1 })' in health_function, "runtime access must be checked with a bounded read-only listing"
 assert 'runtime_access: "unavailable"' in health_function
 assert "CF_PAGES_COMMIT_SHA" in health_function, "health evidence must identify the deployed source revision"
+assert "COGNIPAL_RATE_LIMIT_HEALTH" in health_function, "health check must probe the private CogniPal Worker"
+assert "source_commit_sha" in health_function, "health check must verify CogniPal's exact source revision"
+
 
 wrangler = (ROOT / "wrangler.toml").read_text(encoding="utf-8")
 for binding, bucket in (("TRANSCRIPTS_BUCKET", "transcripts"), ("BLOG_BUCKET", "blog"), ("BLOG_IMAGES_BUCKET", "blog-images")):
     assert f'binding     = "{binding}"' in wrangler, f"wrangler.toml missing binding {binding}"
     assert f'bucket_name = "{bucket}"' in wrangler, f"wrangler.toml bucket mismatch for {binding}"
+assert 'binding = "COGNIPAL_RATE_LIMIT_HEALTH"' in wrangler, "Pages must privately bind to CogniPal health"
+assert 'service = "cognipal-rate-limit"' in wrangler, "Pages health binding must target the rate-limit Worker"
 
 transcript_function = (ROOT / "functions" / "transcripts" / "[[slug]].js").read_text(encoding="utf-8")
 assert 'binding-missing' in transcript_function, "missing transcript binding must fail clearly"
