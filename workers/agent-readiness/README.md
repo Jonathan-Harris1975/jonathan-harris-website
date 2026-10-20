@@ -84,10 +84,10 @@ A proxied readiness endpoint must contain **both**:
 
 ```text
 X-Agent-Readiness-Gateway: cloudflare-pages-service-binding
-
-The `/.well-known/agent-readiness/status` response must also contain the exact `source_sha` for the deployed Worker revision.
 X-Agent-Readiness-Worker: agent-readiness
 ```
+
+The `/.well-known/agent-readiness/status` response must also contain the exact `source_sha` for the deployed Worker revision.
 
 The homepage must contain:
 

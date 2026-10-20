@@ -21,8 +21,10 @@ No env vars or secrets are required by this Worker. It exports `CogniPalRateLimi
 
 ```bash
 cd workers/agent-readiness
-npx wrangler deploy
+node deploy-production.mjs
 ```
+
+The helper resolves the exact commit that last changed the Worker entrypoint or Wrangler configuration and passes it to Wrangler as `AGENT_READINESS_SOURCE_SHA`. A plain `npx wrangler deploy` omits that attestation, so the deployed Worker cannot report the exact `source_sha` for its own source revision and the `Website deployed integration` workflow fails in `Verify Agent Readiness service binding and exact Worker source`. Never deploy this Worker with a plain Wrangler deploy.
 
 If the standalone Worker is connected directly to Git in Cloudflare, its build configuration must use:
 
@@ -32,6 +34,8 @@ Root directory: workers/agent-readiness
 
 The root is relative to the repository root. Do not use `agent-readiness`, `/workers/agent-readiness`, or the website repository root for the standalone Worker project. A wrong root fails immediately after repository cloning, before Wrangler or Worker code runs.
 
+For a Git-connected project, set the deploy command to `node deploy-production.mjs`. The default deploy command (`npx wrangler deploy`) omits the attestation in the same way as a manual plain deploy.
+
 Expected service name: `agent-readiness`.
 
 Bindings:
@@ -39,7 +43,20 @@ Bindings:
 - `AGENT_READINESS_STATE` Durable Object
 - `CANONICAL_ORIGIN=https://jonathan-harris.online`
 
+Variables:
+
+- `AGENT_READINESS_SOURCE_SHA` is written by `deploy-production.mjs` from the resolved Worker source revision. Never commit a value for it.
+
 No Worker secret is required.
+
+#### Attested source scope
+
+The attested revision covers the Worker runtime source and configuration:
+
+- `workers/agent-readiness/index.js`
+- `workers/agent-readiness/wrangler.toml`
+
+`deploy-production.mjs`, `verify-production.mjs` and the deployed-integration workflow resolve that same scope. A new Worker runtime file must be added to all three lists in the same commit, otherwise a deployment can be attested with a revision that does not contain it.
 
 ### 3. Cloudflare Pages
 
@@ -61,6 +78,8 @@ script_name = "cognipal-rate-limit"
 ```
 
 If the project is Git-connected to Cloudflare Pages, commit/push the repo and allow the production Pages deployment to complete.
+
+The deployed-integration workflow resolves the expected Worker source revision from the released Pages commit, so the Worker must be deployed from that same repository revision before the live `source_sha` can match.
 
 ### 4. Remove obsolete Agent Readiness route
 
@@ -98,3 +117,5 @@ X-Agent-Readiness-Worker: agent-readiness
 ```
 
 If the first is missing, production Pages is not running the updated middleware. If it says `binding-missing`, the Pages service binding is absent. If the first exists but the Worker header is missing, the bound Worker deployment is wrong.
+
+The `Readiness status` check compares the live `source_sha` with the Worker source revision resolved from the repository. `source=MISSING` or a SHA mismatch means the Worker was deployed without `deploy-production.mjs`, or from a different revision. Redeploy it with the helper before expecting the `Website deployed integration` workflow to pass.
