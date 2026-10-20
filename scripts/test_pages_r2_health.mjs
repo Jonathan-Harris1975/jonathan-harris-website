@@ -156,6 +156,26 @@ test('health fails closed when the private CogniPal Worker health binding is abs
   });
 });
 
+test('health fails closed when the private CogniPal Worker SHA differs from the Pages revision', async () => {
+  const env = allBuckets({
+    COGNIPAL_RATE_LIMIT_HEALTH: {
+      async fetch() {
+        return Response.json({ ok: true, service: 'cognipal-rate-limit', source_commit_sha: 'b'.repeat(40) });
+      },
+    },
+  });
+  const response = await onRequest({ env });
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.deepEqual(body.bindings.COGNIPAL_RATE_LIMITER, {
+    configured: true,
+    runtime_access: 'unavailable',
+    source_commit_sha: null,
+    required: true,
+  });
+});
+
 test('health fails closed when the private CogniPal Worker has no valid source SHA', async () => {
   const env = allBuckets({
     COGNIPAL_RATE_LIMIT_HEALTH: {
