@@ -26,7 +26,14 @@ The gateway fails closed with `503 rate_limiter_unavailable` if the Durable Obje
 
 ## Cloudflare deployment order
 
-1. Deploy `workers/cognipal-rate-limit` first with `npx wrangler deploy`. It does not need a public route or any secret.
+1. Deploy `workers/cognipal-rate-limit` first from the repository root. It does not need a public route or any secret. Pass the exact checked-out Git commit as a plain-text binding; the Worker's `/health` response fails closed if the binding is absent or malformed:
+
+```sh
+cd workers/cognipal-rate-limit
+SOURCE_SHA="$(git -C ../.. rev-parse HEAD)"
+test "${#SOURCE_SHA}" -eq 40
+npx wrangler deploy --var "COGNIPAL_RATE_LIMIT_SOURCE_SHA:${SOURCE_SHA}"
+```
 2. Confirm the Worker is named `cognipal-rate-limit` and exports the `CogniPalRateLimiter` Durable Object.
 3. Deploy/redeploy the Pages project. The repository `wrangler.toml` binds `COGNIPAL_RATE_LIMITER` to `CogniPalRateLimiter@cognipal-rate-limit`.
 4. Only after the Pages deployment has the binding should production CogniPal traffic be tested.
