@@ -3,7 +3,7 @@ import test from 'node:test';
 
 import { onRequestPost as messagePost } from '../functions/api/cognipal/message.js';
 import { onRequestPost as syncPost } from '../functions/api/cognipal/sync.js';
-import { CogniPalRateLimiter } from '../workers/cognipal-rate-limit/index.js';
+import worker, { CogniPalRateLimiter } from '../workers/cognipal-rate-limit/index.js';
 
 class FakeStorage {
   constructor() {
@@ -247,4 +247,30 @@ test('blocked client traffic does not exhaust the shared global message allowanc
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+
+test('rate-limit Worker health exposes only a valid full source SHA', async () => {
+  const sourceSha = 'a'.repeat(40);
+  const healthy = await worker.fetch(
+    new Request('https://cognipal-rate-limit.internal/health'),
+    { COGNIPAL_RATE_LIMIT_SOURCE_SHA: sourceSha },
+  );
+  assert.equal(healthy.status, 200);
+  assert.deepEqual(await healthy.json(), {
+    ok: true,
+    service: 'cognipal-rate-limit',
+    source_commit_sha: sourceSha,
+  });
+
+  const missingSha = await worker.fetch(
+    new Request('https://cognipal-rate-limit.internal/health'),
+    {},
+  );
+  assert.equal(missingSha.status, 503);
+  assert.deepEqual(await missingSha.json(), {
+    ok: false,
+    service: 'cognipal-rate-limit',
+    source_commit_sha: null,
+  });
 });

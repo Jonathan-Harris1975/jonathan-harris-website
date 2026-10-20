@@ -25,6 +25,15 @@ function allBuckets(overrides = {}) {
     TRANSCRIPTS_BUCKET: bucket(),
     BLOG_BUCKET: bucket(),
     BLOG_IMAGES_BUCKET: bucket(),
+    COGNIPAL_RATE_LIMIT_HEALTH: {
+      async fetch() {
+        return Response.json({
+          ok: true,
+          service: "cognipal-rate-limit",
+          source_commit_sha: revision,
+        });
+      },
+    },
     ...overrides,
   };
 }
@@ -42,6 +51,12 @@ test('health reports configured and reachable R2 bindings and exact Pages revisi
     assert.deepEqual(body.bindings[name], { configured: true, runtime_access: 'available', required: name !== 'BLOG_IMAGES_BUCKET' });
     assert.equal(env[name].listed(), 1);
   }
+  assert.deepEqual(body.bindings.COGNIPAL_RATE_LIMITER, {
+    configured: true,
+    runtime_access: 'available',
+    source_commit_sha: revision,
+    required: true,
+  });
 });
 
 test('health fails closed and redacts provider errors', async () => {
@@ -125,4 +140,54 @@ test('blog post route reports binding and read failures instead of a false not-f
   const failedBody = await failed.text();
   assert.deepEqual(JSON.parse(failedBody), { error: 'blog content unavailable', reason: 'read-failed' });
   assert.doesNotMatch(failedBody, /private R2 error/);
+});
+
+test('health fails closed when the private CogniPal Worker health binding is absent', async () => {
+  const env = allBuckets({ COGNIPAL_RATE_LIMIT_HEALTH: undefined });
+  const response = await onRequest({ env });
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.deepEqual(body.bindings.COGNIPAL_RATE_LIMITER, {
+    configured: false,
+    runtime_access: 'not-tested',
+    source_commit_sha: null,
+    required: true,
+  });
+});
+
+test('health fails closed when the private CogniPal Worker SHA differs from the Pages revision', async () => {
+  const env = allBuckets({
+    COGNIPAL_RATE_LIMIT_HEALTH: {
+      async fetch() {
+        return Response.json({ ok: true, service: 'cognipal-rate-limit', source_commit_sha: 'b'.repeat(40) });
+      },
+    },
+  });
+  const response = await onRequest({ env });
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.deepEqual(body.bindings.COGNIPAL_RATE_LIMITER, {
+    configured: true,
+    runtime_access: 'unavailable',
+    source_commit_sha: null,
+    required: true,
+  });
+});
+
+test('health fails closed when the private CogniPal Worker has no valid source SHA', async () => {
+  const env = allBuckets({
+    COGNIPAL_RATE_LIMIT_HEALTH: {
+      async fetch() {
+        return Response.json({ ok: false, service: 'cognipal-rate-limit', source_commit_sha: null }, { status: 503 });
+      },
+    },
+  });
+  const response = await onRequest({ env });
+  const body = await response.json();
+  assert.equal(response.status, 503);
+  assert.equal(body.ok, false);
+  assert.equal(body.bindings.COGNIPAL_RATE_LIMITER.runtime_access, 'unavailable');
+  assert.equal(body.bindings.COGNIPAL_RATE_LIMITER.source_commit_sha, null);
 });

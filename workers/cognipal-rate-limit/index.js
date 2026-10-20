@@ -1,5 +1,6 @@
 const MAX_WINDOW_SECONDS = 60;
 const MAX_LIMIT = 10_000;
+const SOURCE_SHA_PATTERN = /^[0-9a-f]{40}$/;
 
 function json(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
@@ -48,7 +49,13 @@ export class CogniPalRateLimiter {
 }
 
 export default {
-  async fetch() {
-    return json({ ok: true, service: 'cognipal-rate-limit' });
+  async fetch(request, env = {}) {
+    const sourceSha = String(env.COGNIPAL_RATE_LIMIT_SOURCE_SHA || '').trim().toLowerCase();
+    const healthy = SOURCE_SHA_PATTERN.test(sourceSha);
+    return json({
+      ok: healthy,
+      service: 'cognipal-rate-limit',
+      source_commit_sha: healthy ? sourceSha : null,
+    }, healthy ? 200 : 503);
   },
 };
