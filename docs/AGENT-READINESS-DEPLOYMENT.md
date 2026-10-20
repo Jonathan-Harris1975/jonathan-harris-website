@@ -13,6 +13,7 @@ Do not attach `agent-readiness` to `jonathan-harris.online/*` as a Worker Route.
 Deploy from the repository root. The command refuses dirty checkouts and verifies that the committed Worker file is the file Wrangler will upload:
 
 ```bash
+set -eu
 if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
   echo "Refusing to deploy from a dirty worktree." >&2
   exit 1
