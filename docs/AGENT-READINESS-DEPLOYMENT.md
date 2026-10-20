@@ -26,7 +26,7 @@ node deploy-production.mjs
 
 The helper resolves the exact commit that last changed the Worker entrypoint or Wrangler configuration and passes it to Wrangler as `AGENT_READINESS_SOURCE_SHA`. A plain `npx wrangler deploy` omits that attestation, so the deployed Worker cannot report the exact `source_sha` for its own source revision and the `Website deployed integration` workflow fails in `Verify Agent Readiness service binding and exact Worker source`. Never deploy this Worker with a plain Wrangler deploy.
 
-The resolution is a `git log` over the repository history, so run it from a checkout that has the history covering the Worker source paths. In a shallow checkout the same command returns the shallow boundary commit instead of the last commit that changed the Worker, which attests the wrong revision.
+The resolution is a `git log` over the repository history, so run it from a checkout that has the history covering the Worker source paths. In a shallow checkout the same command returns the shallow boundary commit instead of the last commit that changed the Worker, which attests the wrong revision. The helper also refuses to deploy while any file under `workers/agent-readiness` has uncommitted changes.
 
 If the standalone Worker is connected directly to Git in Cloudflare, its build configuration must use:
 
@@ -58,7 +58,7 @@ The attested revision covers the Worker runtime source and configuration:
 - `workers/agent-readiness/index.js`
 - `workers/agent-readiness/wrangler.toml`
 
-`deploy-production.mjs`, `verify-production.mjs` and the deployed-integration workflow resolve that same scope with `git log -1 --format=%H <commit> -- <paths>`, so each of them needs the repository history that covers those paths. A new Worker runtime file must be added to all three lists in the same commit, otherwise a deployment can be attested with a revision that does not contain it.
+`deploy-production.mjs`, `verify-production.mjs` and the deployed-integration workflow resolve that same scope with `git log -1 --format=%H <commit> -- <paths>`, so each of them needs the repository history that covers those paths. A new Worker runtime file must be added to all three lists in the same commit, otherwise a deployment can be attested with a revision that does not contain it. Note that the dirty-tree refusal covers the whole `workers/agent-readiness` directory, while the attested revision covers only the two paths above: a change to any other file in that directory blocks the deployment without changing the attested revision.
 
 ### 3. Cloudflare Pages
 
