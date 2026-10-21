@@ -222,3 +222,12 @@ Rollback by selecting a prior Cloudflare Pages deployment or reverting the offen
 - `docs/AGENT-READINESS-DEPLOYMENT.md`
 - `docs/image-publishing-contract.md`
 - `docs/third-party-dependency-matrix.md`
+
+## GitHub PR repair webhooks
+
+Configure these repository Actions secrets with this repository's active Kilo triggers:
+
+- `KILO_REPAIR_TRIGGER_URL`: Kilo Code mode for review-thread findings and explicit repair requests.
+- `KILO_DEBUG_TRIGGER_URL`: Kilo Debug mode for failed PR checks, merge conflicts, and branches that have fallen behind the target branch.
+
+The trusted router sends only verified repair metadata to the selected trigger. Keep the webhook URLs in repository secrets and never commit their values.
