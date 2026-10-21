@@ -6,7 +6,7 @@ on:
   issue_comment:
     types: [created, edited, deleted]
   pull_request_review:
-    types: [submitted, edited]
+    types: [submitted, edited, dismissed]
   pull_request_review_comment:
     types: [created, edited]
   workflow_run: # zizmor: ignore[dangerous-triggers] admission reads workflow/PR metadata but executes only pinned trusted default-branch automation
