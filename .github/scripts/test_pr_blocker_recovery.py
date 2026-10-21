@@ -638,6 +638,17 @@ class Recovery(unittest.TestCase):
             "KILO_REPAIR_TRIGGER_URL",
         )
         self.assertEqual(router.trigger_secret_for("review"), "KILO_REPAIR_TRIGGER_URL")
+    def test_scans_failed_checks_when_only_human_threads_remain(self):
+        self.assertTrue(m.should_scan_current_head_failures(
+            {"state": "review-recovery", "request_status": None}
+        ))
+        self.assertFalse(m.should_scan_current_head_failures(
+            {"state": "review-recovery", "request_status": "requested"}
+        ))
+        self.assertTrue(m.should_scan_current_head_failures(
+            {"state": "no-conflict-or-review-blocker"}
+        ))
+
 
 if __name__ == "__main__":
     unittest.main()
