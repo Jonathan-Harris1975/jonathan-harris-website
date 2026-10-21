@@ -21,7 +21,7 @@ EXPECTED_LOCK = {
     "charset-normalizer": "3.4.7",
     "et-xmlfile": "2.0.0",
     "openpyxl": "3.1.5",
-    "pillow": "12.3.0",
+    "pillow": "13.0.0",
     "pypdf": "6.19.0",
     "reportlab": "5.0.1",
     "soupsieve": "2.9",
