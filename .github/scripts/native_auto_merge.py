@@ -1,153 +1,188 @@
 #!/usr/bin/env python3
-"""Publish non-forgeable, exact-head evidence for trusted autonomous admission."""
+"""Enable GitHub native auto-merge only for trusted, exact-head admissions.
+
+This runs from the trusted default-branch workflow. It reads PR metadata only,
+never checks out or executes PR code, and disables an existing request when a
+current admission or hold condition no longer authorizes merging.
+"""
 from __future__ import annotations
 
 import json
-import math
 import os
 import re
-import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
-from email.utils import parsedate_to_datetime
 from typing import Any
 
 API = "https://api.github.com"
-CHECK_NAME = "Trusted autonomy admission"
-CHECKS_APP_SLUG = "github-actions"
+TOKEN = os.environ.get("NATIVE_MERGE_TOKEN", "")
+REPO = os.environ.get("REPO", "")
+DEFAULT_BRANCH = os.environ.get("DEFAULT_BRANCH", "main")
+ADMISSION_CHECK = "Trusted autonomy admission"
+BLOCKING_LABELS = {
+    "autonomy:human-hold",
+    "autonomy:risk-approval-required",
+    "autonomy:council-freeze",
+    "autonomy:superseded",
+    "autonomy:obsolete",
+    "do-not-merge",
+    "do not merge",
+    "hold",
+    "needs-manual-review",
+    "needs-human-review",
+}
 
 
-def _retry_delay(
-    retry_after: str | None,
-    reset_at: str | None,
-    rate_limit_remaining: str | None,
-    attempt: int,
-) -> float:
-    """Return a bounded delay for delta-seconds or HTTP-date retry headers."""
-    if retry_after:
-        try:
-            delay = float(retry_after)
-        except (TypeError, ValueError):
-            try:
-                retry_at = parsedate_to_datetime(retry_after)
-            except (TypeError, ValueError, OverflowError):
-                retry_at = None
-            if retry_at is not None:
-                if retry_at.tzinfo is None:
-                    retry_at = retry_at.replace(tzinfo=timezone.utc)
-                delay = retry_at.timestamp() - time.time()
-            else:
-                delay = None
-        if delay is not None and math.isfinite(delay):
-            return min(30.0, max(0.0, delay))
-
-    if reset_at and rate_limit_remaining == "0":
-        try:
-            delay = float(reset_at) - time.time() + 1.0
-        except (TypeError, ValueError, OverflowError):
-            delay = None
-        if delay is not None and math.isfinite(delay):
-            return min(30.0, max(1.0, delay))
-
-    return min(8.0, 2.0 ** attempt)
-
-
-def _request(method: str, path: str, data: dict[str, Any] | None = None) -> Any:
-    token = os.environ.get("ADMISSION_TOKEN", "")
-    repo = os.environ.get("REPO", "")
-    if not token or not repo:
-        raise RuntimeError("ADMISSION_TOKEN and REPO are required to publish trusted admission evidence")
+def request(method: str, path: str, data: dict[str, Any] | None = None) -> Any:
     url = path if path.startswith("http") else f"{API}{path}"
-    payload = None if data is None else json.dumps(data).encode("utf-8")
-    req = urllib.request.Request(url, data=payload, method=method)
+    body = None if data is None else json.dumps(data).encode("utf-8")
+    req = urllib.request.Request(url, data=body, method=method)
     req.add_header("Accept", "application/vnd.github+json")
-    req.add_header("Authorization", f"Bearer {token}")
+    req.add_header("Authorization", f"Bearer {TOKEN}")
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
-    if payload is not None:
+    if body is not None:
         req.add_header("Content-Type", "application/json")
-
-    for attempt in range(5):
-        try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                raw = resp.read()
-                return json.loads(raw.decode("utf-8")) if raw else None
-        except urllib.error.HTTPError as exc:
-            body = exc.read().decode("utf-8", "replace")
-            retryable = exc.code == 429 or exc.code >= 500 or (
-                exc.code == 403 and (
-                    exc.headers.get("Retry-After")
-                    or exc.headers.get("X-RateLimit-Remaining") == "0"
-                )
-            )
-            if not retryable or attempt == 4:
-                raise RuntimeError(f"GitHub admission check API HTTP {exc.code}: {body[:500]}") from exc
-            retry_after = exc.headers.get("Retry-After")
-            reset_at = exc.headers.get("X-RateLimit-Reset")
-            delay = _retry_delay(
-                retry_after,
-                reset_at,
-                exc.headers.get("X-RateLimit-Remaining"),
-                attempt,
-            )
-            time.sleep(delay)
-        except urllib.error.URLError:
-            if attempt == 4:
-                raise
-            time.sleep(min(8.0, 2.0 ** attempt))
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            raw = response.read()
+            return json.loads(raw.decode("utf-8")) if raw else None
+    except urllib.error.HTTPError as exc:
+        message = exc.read().decode("utf-8", "replace")
+        raise RuntimeError(f"GitHub API HTTP {exc.code}: {message[:500]}") from exc
 
 
-def set_admission_check(
-    number: int,
-    sha: str,
-    conclusion: str,
-    summary: str,
-    *,
-    create_if_missing: bool = True,
-) -> bool:
-    """Create/update trusted evidence for exactly this PR head; never trusts the label."""
-    if not re.fullmatch(r"[0-9a-fA-F]{40}", sha):
-        raise ValueError("Admission check requires a full 40-character commit SHA")
-    # GitHub returns lowercase SHAs; canonicalize valid case-insensitive hex input.
+def graphql(query: str, variables: dict[str, Any]) -> Any:
+    result = request("POST", "https://api.github.com/graphql", {"query": query, "variables": variables})
+    if result.get("errors"):
+        raise RuntimeError(f"GitHub GraphQL error: {result['errors']}")
+    return result.get("data", {})
+
+
+def pages(path: str) -> list[dict[str, Any]]:
+    items: list[dict[str, Any]] = []
+    for page in range(1, 11):
+        batch = request("GET", f"{path}{'&' if '?' in path else '?'}per_page=100&page={page}") or []
+        items.extend(batch)
+        if len(batch) < 100:
+            return items
+    raise RuntimeError("Open PR listing exceeded the 1,000-item safety limit")
+
+
+def admission_check(number: int, sha: str) -> tuple[bool, bool]:
+    """Return (exact successful admission exists, any admission check exists)."""
+    if not re.fullmatch(r"[0-9a-f]{40}", sha):
+        return False, False
     sha = sha.lower()
-    if conclusion not in {"success", "failure"}:
-        raise ValueError("Admission check conclusion must be success or failure")
-
-    repo = os.environ["REPO"]
-    encoded_name = urllib.parse.quote(CHECK_NAME, safe="")
-    runs = _request(
+    name = urllib.parse.quote(ADMISSION_CHECK, safe="")
+    runs = request(
         "GET",
-        f"/repos/{repo}/commits/{sha}/check-runs?check_name={encoded_name}&filter=all&per_page=100",
-    )
-    external_id = f"trusted-autonomy-admission:{number}:{sha}"
-    owned = [
-        run for run in (runs or {}).get("check_runs", [])
-        if (run.get("app") or {}).get("slug") == CHECKS_APP_SLUG
-        and run.get("name") == CHECK_NAME
+        f"/repos/{REPO}/commits/{sha}/check-runs?check_name={name}&filter=all&per_page=100",
+    ).get("check_runs", [])
+    exact_id = f"trusted-autonomy-admission:{number}:{sha}"
+    exact_runs = [
+        run for run in runs
+        if (run.get("app") or {}).get("slug") == "github-actions"
+        and run.get("name") == ADMISSION_CHECK
         and run.get("head_sha") == sha
-        and run.get("external_id") == external_id
+        and run.get("external_id") == exact_id
     ]
-    owned.sort(key=lambda run: run.get("started_at") or run.get("created_at") or "", reverse=True)
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    payload = {
-        "name": CHECK_NAME,
-        "head_sha": sha,
-        "status": "completed",
-        "conclusion": conclusion,
-        "started_at": now,
-        "completed_at": now,
-        "external_id": external_id,
-        "details_url": f"https://github.com/{repo}/pull/{number}",
-        "output": {
-            "title": "Trusted admission verified" if conclusion == "success" else "Trusted admission withheld",
-            "summary": summary[:65000],
-        },
-    }
-    if owned:
-        _request("PATCH", f"/repos/{repo}/check-runs/{owned[0]['id']}", payload)
-        return True
-    if not create_if_missing:
-        return False
-    _request("POST", f"/repos/{repo}/check-runs", payload)
-    return True
+    success = any(
+        run.get("status") == "completed" and run.get("conclusion") == "success"
+        for run in exact_runs
+    )
+    return success, bool(exact_runs)
+
+
+def merge_request(pr_node_id: str) -> dict[str, Any] | None:
+    result = graphql(
+        "query($id: ID!) { node(id: $id) { ... on PullRequest { autoMergeRequest { enabledAt mergeMethod } } } }",
+        {"id": pr_node_id},
+    )
+    node = result.get("node") or {}
+    return node.get("autoMergeRequest")
+
+
+def merge_method() -> str:
+    settings = request("GET", f"/repos/{REPO}")
+    for setting, method in (
+        ("allow_squash_merge", "SQUASH"),
+        ("allow_merge_commit", "MERGE"),
+        ("allow_rebase_merge", "REBASE"),
+    ):
+        if settings.get(setting):
+            return method
+    raise RuntimeError(f"Repository {REPO} allows no GitHub merge method")
+
+
+def enable(pr_node_id: str) -> None:
+    method = merge_method()
+    graphql(
+        "mutation($id: ID!) { enablePullRequestAutoMerge(input: {pullRequestId: $id, mergeMethod: " + method + "}) { pullRequest { number } } }",
+        {"id": pr_node_id},
+    )
+
+
+def disable(pr_node_id: str) -> None:
+    graphql(
+        "mutation($id: ID!) { disablePullRequestAutoMerge(input: {pullRequestId: $id}) { pullRequest { number } } }",
+        {"id": pr_node_id},
+    )
+
+
+def reconcile(pr_summary: dict[str, Any]) -> None:
+    number = int(pr_summary["number"])
+    labels = {label["name"] for label in pr_summary.get("labels", [])}
+    node_id = str(pr_summary.get("node_id") or "")
+    if not node_id:
+        return
+    active_request = merge_request(node_id)
+
+    # Ignore PRs outside the trusted admission system, including a user's
+    # unrelated native auto-merge request.
+    if "autonomy:admitted" not in labels and active_request is None:
+        return
+
+    pr = request("GET", f"/repos/{REPO}/pulls/{number}")
+    current_labels = {label["name"] for label in pr.get("labels", [])}
+    sha = str((pr.get("head") or {}).get("sha") or "")
+    exact_admission, _has_admission_evidence = admission_check(number, sha) if sha else (False, False)
+    blocked = bool(current_labels.intersection(BLOCKING_LABELS))
+    eligible_except_mergeability = (
+        pr.get("state") == "open"
+        and not pr.get("draft")
+        and pr.get("base", {}).get("ref") == DEFAULT_BRANCH
+        and "autonomy:admitted" in current_labels
+        and not blocked
+        and exact_admission
+    )
+    if eligible_except_mergeability and pr.get("mergeable") is None:
+        # GitHub computes mergeability asynchronously. Preserve active requests
+        # until the result is known instead of flapping them during that window.
+        return
+    eligible = eligible_except_mergeability and bool(pr.get("mergeable"))
+
+    if eligible:
+        if active_request is None:
+            enable(node_id)
+            print(f"Enabled GitHub native auto-merge for admitted PR #{number} at {sha}.")
+        return
+
+    # Only cancel requests with an explicit controller ownership marker.
+    # A failed admission check alone must not cancel a user-owned request.
+    if active_request is not None and "autonomy:admitted" in current_labels:
+        disable(node_id)
+        print(f"Disabled GitHub native auto-merge for PR #{number}; admission or hold conditions no longer pass.")
+
+
+def main() -> int:
+    if not REPO or not TOKEN:
+        raise RuntimeError("REPO and NATIVE_MERGE_TOKEN are required")
+    prs = pages(f"/repos/{REPO}/pulls?state=open")
+    for pr in prs:
+        reconcile(pr)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

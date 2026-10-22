@@ -1,1 +1,35 @@
-cat: /tmp/w129_4_m: No such file or directory
+name = "agent-readiness"
+main = "index.js"
+compatibility_date = "2026-08-24"
+workers_dev = true
+
+# Intentionally NO production Worker Route here.
+# The Cloudflare Pages project exposes this Worker through the AGENT_READINESS
+# Service Binding. This avoids competing with the Pages custom domain and
+# removes wildcard Worker Route precedence from the discovery path.
+
+[vars]
+CANONICAL_ORIGIN = "https://jonathan-harris.online"
+
+[[durable_objects.bindings]]
+name = "AGENT_READINESS_STATE"
+class_name = "AgentReadinessState"
+
+[exports.AgentReadinessState]
+type = "durable-object"
+storage = "sqlite"
+[observability]
+enabled = true
+head_sampling_rate = 0.1
+redact_query_string = true
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 0.1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+persist = true
+head_sampling_rate = 0.1
