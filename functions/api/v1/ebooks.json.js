@@ -19,6 +19,7 @@ function slugify(value) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFKD")
+    .replace(/[\\u0300-\\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }
@@ -79,7 +80,8 @@ export async function onRequestGet({ env }) {
         }
       }
     );
-  } catch {
+  } catch (err) {
+    console.error("KDP D1 ebook catalogue query failed", err);
     return Response.json(
       { error: "Ebook catalogue is temporarily unavailable." },
       {
