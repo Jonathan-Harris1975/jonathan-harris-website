@@ -96,6 +96,11 @@ RISK_HIGH_RISK_SEGMENTS = {
     "auth", "authentication", "authorization", "security", "crypto", "oidc",
     "saml", "rbac", "permissions", "secrets", "migrations", "migration",
 }
+RISK_HIGH_RISK_NAME_STEMS = (
+    "auth", "authentication", "authorization", "security", "crypto", "oidc",
+    "saml", "rbac", "permission", "secret", "session", "middleware", "gateway",
+    "deploy", "deployment",
+)
 
 RISK_LOW_RISK_PREFIXES_BY_REPO = {
     "AIMS": ("routes/", "services/"),
@@ -598,11 +603,14 @@ def sensitive_file(path: str) -> bool:
     parts = folded.split("/")
     if any(part in RISK_HIGH_RISK_SEGMENTS for part in parts):
         return True
-    if any(part in {"test", "tests", "e2e", "spec", "specs", "data"} for part in parts):
+    if any(part in {"e2e", "spec", "specs", "data"} for part in parts):
         return True
     if basename in RISK_HIGH_RISK_BASENAMES or basename.startswith(
         ("dockerfile.", "containerfile.", "requirements-")
     ):
+        return True
+    stem_tokens = re.split(r"[^a-z0-9]+", basename)
+    if any(stem in token for token in stem_tokens for stem in RISK_HIGH_RISK_NAME_STEMS):
         return True
     if basename.endswith((".tf", ".tfvars", ".sql", ".prisma")):
         return True
@@ -610,6 +618,14 @@ def sensitive_file(path: str) -> bool:
     # Documentation is eligible only in its dedicated directory or the two
     # root-level project notes listed below.
     extension = "." + basename.rsplit(".", 1)[-1] if "." in basename else ""
+    # Ordinary source tests can be maintained autonomously. Security/authentication
+    # tests remain high-risk through the path and filename checks above; E2E/spec/data
+    # paths remain high-risk through the explicit directory rule above.
+    if (
+        any(part in {"test", "tests"} for part in parts)
+        and extension in {".py", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs"}
+    ):
+        return False
     if basename in RISK_LOW_RISK_ROOT_FILES:
         return False
     if folded.startswith("docs/") and extension in RISK_LOW_RISK_DOC_EXTENSIONS:
