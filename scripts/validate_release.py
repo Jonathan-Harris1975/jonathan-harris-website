@@ -63,7 +63,8 @@ def main() -> int:
             return 1
         print("[PASS] Ungoverned route check: all routed HTML files are governed.")
 
-    exit_code = run_validate_command(workbook_path=workbook_path)
+    # The workbook above is used only for whole-site route inventory checks. Ebook source parity is no longer checked against it; production ebook data comes from KDP D1.
+    exit_code = run_validate_command(workbook_path=None)
     if exit_code != 0:
         return exit_code
 

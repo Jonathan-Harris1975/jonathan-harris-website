@@ -13,9 +13,9 @@ bash build.sh
 
 The Pages output directory is `.`. CI uses Python 3.13 and Node.js 22. Direct production pins live in `requirements.in`; `requirements.txt` is the fully resolved production closure with repository-controlled SHA-256 hashes. The build validates the reviewed closure, verifies fail-closed hash enforcement, refuses mismatched installed versions and installs with `--require-hashes` when needed.
 
-A release-ready build must run in a connected clean checkout because the governed manuscript-sample stage may download source PDFs. `--skip-manuscript-sync` is a local diagnostic option only and must not be treated as equivalent evidence for production release readiness.
+A release-ready build must run in a connected clean checkout so it can read the KDP D1 ebook API and validate the whole-site route inventory. Production builds fail closed when the D1 API is unavailable.
 
-The build covers the static health contract, repository hygiene, secret scanning, PDF compatibility, eBook source/derivative generation, redirects, crawler governance, shared chrome and assets, CogniPal/Pages/Agent Readiness contracts, CSP checks, release validation and generated-output drift.
+The build covers the static health contract, repository hygiene, secret scanning, PDF compatibility, D1 ebook import and derivative generation, redirects, crawler governance, shared chrome and assets, CogniPal/Pages/Agent Readiness contracts, CSP checks, release validation and generated-output drift.
 
 ## Dependency integrity
 
@@ -40,7 +40,7 @@ A dependency update is incomplete until the direct input (when applicable), full
 
 The PDF pipeline uses:
 
-- `pypdf` for manuscript PDF reading/text extraction;
+- `pypdf` for the standalone manuscript PDF extraction utility;
 - `reportlab` for deterministic glossary PDF generation.
 
 Before accepting a PDF dependency update, upgrade one package at a time and run:
@@ -88,6 +88,7 @@ After deployment, verify at minimum:
 - `/ebooks/`
 - one canonical `/ebooks/<slug>/` page
 - `/api/v1/books.json`
+- `/api/v1/ebooks.json` (expect all active catalogue records; response contains no manuscript or R2 fields)
 - `/robots.txt`
 - `/sitemap.xml`
 - `/llms.txt`
