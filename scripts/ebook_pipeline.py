@@ -6756,8 +6756,21 @@ def has_disallowed_inline_style(text: str) -> bool:
     )
     return bool(re.search(r'\sstyle\s*=', cleaned, re.I))
 
-def run_validate_command(workbook_path: Path | None = None) -> int:
-    effective_workbook = workbook_path or detect_governed_workbook_path()
+class _AutoDetectWorkbook:
+    pass
+
+
+_AUTO_DETECT_WORKBOOK = _AutoDetectWorkbook()
+
+
+def run_validate_command(
+    workbook_path: Path | None | _AutoDetectWorkbook = _AUTO_DETECT_WORKBOOK,
+) -> int:
+    effective_workbook = (
+        detect_governed_workbook_path()
+        if isinstance(workbook_path, _AutoDetectWorkbook)
+        else workbook_path
+    )
     errors = run_release_checks(workbook_path=effective_workbook)
     books = load_master()
     warnings = ebook_title_length_warnings(books)
