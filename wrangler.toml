@@ -16,6 +16,12 @@ compatibility_date = "2024-09-23"
 [vars]
   AIMS_COMMS_HUB_BASE_URL = "https://zeroth-kara-jonathanharris-3296ed37.koyeb.app"
 
+[[d1_databases]]
+  binding        = "KDP_DB"
+  database_name = "KDP"
+  database_id   = "5f42a55b-c2bc-42a0-8337-1318e2c48ae7"
+  migrations_dir = "migrations"
+
 [[r2_buckets]]
   binding     = "TRANSCRIPTS_BUCKET"    # Must match the variable name used in
                                         # functions/transcripts/[[slug]].js
