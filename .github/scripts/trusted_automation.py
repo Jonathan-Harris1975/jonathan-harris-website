@@ -96,6 +96,11 @@ RISK_HIGH_RISK_SEGMENTS = {
     "auth", "authentication", "authorization", "security", "crypto", "oidc",
     "saml", "rbac", "permissions", "secrets", "migrations", "migration",
 }
+RISK_HIGH_RISK_NAME_STEMS = (
+    "auth", "authentication", "authorization", "security", "crypto", "oidc",
+    "saml", "rbac", "permission", "secret", "session", "middleware", "gateway",
+    "deploy", "deployment",
+)
 
 RISK_LOW_RISK_PREFIXES_BY_REPO = {
     "AIMS": ("routes/", "services/"),
@@ -603,6 +608,9 @@ def sensitive_file(path: str) -> bool:
     if basename in RISK_HIGH_RISK_BASENAMES or basename.startswith(
         ("dockerfile.", "containerfile.", "requirements-")
     ):
+        return True
+    stem_tokens = re.split(r"[^a-z0-9]+", basename)
+    if any(stem in token for token in stem_tokens for stem in RISK_HIGH_RISK_NAME_STEMS):
         return True
     if basename.endswith((".tf", ".tfvars", ".sql", ".prisma")):
         return True
