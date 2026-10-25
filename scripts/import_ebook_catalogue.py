@@ -20,40 +20,33 @@ import openpyxl
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_API_URL = "https://jonathan-harris.online/api/v1/ebooks.json"
-SHEET_HEADERS = [
-    "Slug", "Title", "Short description", "Description", "Summary", "Topic",
-    "Tags", "Keywords", "Audience", "Who this book is for",
-    "What this book covers", "What you'll learn", "Why it matters", "Tone",
-    "Author", "Identifier", "ASIN", "Amazon ebook page count",
-    "Publication date", "Book URL", "Buy now URL", "Redirect URL",
-    "Cover art URL", "Legacy alias URL",
+SHEET_FIELDS = [
+    ("Slug", "slug"),
+    ("Title", "title"),
+    ("Short description", "short_description"),
+    ("Description", "description"),
+    ("Summary", "summary"),
+    ("Topic", "topic"),
+    ("Tags", "tags"),
+    ("Keywords", "keywords"),
+    ("Audience", "audience"),
+    ("Who this book is for", "who_for"),
+    ("What this book covers", "what_this_book_covers"),
+    ("What you'll learn", "what_youll_learn"),
+    ("Why it matters", "why_it_matters"),
+    ("Tone", "tone"),
+    ("Author", "author"),
+    ("Identifier", "identifier"),
+    ("ASIN", "asin"),
+    ("Amazon ebook page count", "pages"),
+    ("Publication date", "datePublished"),
+    ("Book URL", "book_url"),
+    ("Buy now URL", "buy_route_full"),
+    ("Redirect URL", "buy_url"),
+    ("Cover art URL", "cover"),
+    ("Legacy alias URL", "legacy_alias_url"),
 ]
-PUBLIC_FIELDS = {
-    "slug": "slug",
-    "title": "title",
-    "short": "short_description",
-    "description": "description",
-    "summary": "summary",
-    "topic": "topic",
-    "tags": "tags",
-    "keywords": "keywords",
-    "audience": "audience",
-    "who_for": "who_for",
-    "what_this_book_covers": "what_book_covers",
-    "what_youll_learn": "what_youll_learn",
-    "why_it_matters": "why_it_matters",
-    "tone": "tone",
-    "author": "author",
-    "identifier": "identifier",
-    "asin": "asin",
-    "pages": "page_count",
-    "publication_date": "publication_date",
-    "book_url": "book_url",
-    "buy_now_url": "buy_now_url",
-    "redirect_url": "buy_url",
-    "cover_art_url": "cover_art_url",
-    "legacy_alias_url": "legacy_alias_url",
-}
+SHEET_HEADERS = [header for header, _field in SHEET_FIELDS]
 
 
 def fetch_books(url: str) -> list[dict[str, Any]]:
@@ -79,8 +72,8 @@ def fetch_books(url: str) -> list[dict[str, Any]]:
             raise ValueError(f"KDP D1 API record {index} has a blank or duplicate slug")
         seen.add(slug)
         missing = [
-            name for name in ("title", "asin", "pages", "book_url", "buy_now_url",
-                              "buy_url", "cover_art_url", "legacy_alias_url")
+            name for name in ("title", "asin", "pages", "book_url", "buy_route_full",
+                              "buy_url", "cover", "legacy_alias_url")
             if book.get(name) in (None, "")
         ]
         if missing:
@@ -101,14 +94,14 @@ def build_import_workbook(books: list[dict[str, Any]], destination: Path) -> Non
     sheet.append(SHEET_HEADERS)
     for book in books:
         row = []
-        for header, field in zip(SHEET_HEADERS, PUBLIC_FIELDS.values()):
+        for _header, field in SHEET_FIELDS:
             row.append(workbook_value(book.get(field)))
         sheet.append(row)
 
     redirects = workbook.create_sheet("BuyNow Redirects")
     redirects.append(["Slug", "Buy now URL", "Redirect URL", "ASIN", "Status", "Notes"])
     for book in books:
-        redirects.append([book["slug"], book.get("buy_now_url", ""), book.get("buy_url", ""), book.get("asin", ""), "active", ""])
+        redirects.append([book["slug"], book.get("buy_route_full", ""), book.get("buy_url", ""), book.get("asin", ""), "active", ""])
     workbook.save(destination)
 
 
