@@ -84,15 +84,6 @@ def main() -> int:
         action="store_true",
         help="When running post-deploy validation, skip curated live page marker checks.",
     )
-    parser.add_argument(
-        "--skip-manuscript-sync",
-        action="store_true",
-        help=(
-                 "Skip remote manuscript download/extraction. Local diagnostics only; governed production builds require every "
-                 "advertised sample to be a genuine extracted chapter, but individual books may omit a sample when extraction "
-                 "is unavailable."
-             ),
-    )
     args = parser.parse_args()
 
     if args.strict_post_deploy_live:
@@ -116,19 +107,15 @@ def main() -> int:
 
     try:
         if workbook_path:
-            run_step("Import workbook into the governed master record", [sys.executable, "scripts/import_ebook_workbook.py", str(workbook_path)])
-            run_step("Generate private manuscript manifest", [sys.executable, "scripts/generate_manuscript_manifest.py", str(workbook_path)])
-            if args.skip_manuscript_sync:
-                print("\n==> Manuscript sample sync skipped")
-                print("Local diagnostics mode: generated sample pages will not be release-ready without a genuine chapter cache.")
-            else:
-                run_step(
-                    "Extract genuine sample chapters from manuscript PDFs",
-                    [sys.executable, "scripts/sync_manuscript_samples.py", "--allow-partial"],
-                )
+            run_step(
+                "Import website ebook catalogue from KDP D1",
+                [sys.executable, "scripts/import_ebook_catalogue.py", str(workbook_path)],
+            )
         else:
-            print("\n==> Workbook import skipped")
-            print("Proceeding without workbook only because --allow-missing-workbook was supplied.")
+            run_step(
+                "Import website ebook catalogue from KDP D1",
+                [sys.executable, "scripts/import_ebook_catalogue.py"],
+            )
 
         run_step("Regenerate canonical ebook pages and metadata", [sys.executable, "scripts/fix_book_head_metadata.py"])
         run_step("Generate curated ebook reading paths", [sys.executable, "scripts/generate_ebook_bundles.py"])
