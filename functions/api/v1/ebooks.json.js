@@ -80,7 +80,8 @@ export async function onRequestGet({ env }) {
         }
       }
     );
-  } catch {
+  } catch (err) {
+    console.error("KDP D1 ebook catalogue query failed", err);
     return Response.json(
       { error: "Ebook catalogue is temporarily unavailable." },
       {
