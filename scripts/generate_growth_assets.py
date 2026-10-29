@@ -335,8 +335,8 @@ def benefit_newsletter_copy() -> None:
 '''
                f'''<section class="card newsletter-card-spaced" aria-labelledby="ai-edge-preview-heading"><h2 '''
                f'''id="ai-edge-preview-heading">Preview the AI Edge format</h2>
-<p class="muted">This is a format preview, not a '''
-               f'''fabricated past issue.</p>
+<p class="muted">Here is how each briefing cuts through the noise.'''
+               f'''</p>
 <div class="newsletter-issue-preview"><p><strong>1. What changed</strong><br/>The '''
                f'''important announcement in two or three sentences, stripped of launch copy.</p><p><strong>2. Why it '''
                f'''matters</strong><br/>The practical consequences for work, business, policy, security or everyday '''
