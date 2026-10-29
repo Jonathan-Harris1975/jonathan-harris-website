@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
-async function embed({ configured = true } = {}) {
+async function embed({ configured = true, clone = false } = {}) {
   const source = await readFile(new URL('../assets/js/newsletter-jotform.min.js', import.meta.url), 'utf8');
   const frameWindow = {};
-  const frame = {
+  let frame = {
     contentWindow: frameWindow,
     dataset: configured ? { jotformBaseSrc: 'https://form.jotform.com/262733359026055' } : {},
     getAttribute: () => null, setAttribute() {},
@@ -14,6 +14,7 @@ async function embed({ configured = true } = {}) {
   let listener;
   const events = [];
   const window = {
+    jotformEmbedHandler: () => { if (clone) frame = { ...frame, contentWindow: {} }; },
     JHAnalytics: { track: (name) => events.push(name) },
     addEventListener: (_name, callback) => { listener = callback; },
   };
@@ -39,5 +40,11 @@ test('newsletter form-completion signals belong to its iframe and are recorded o
   assert.deepEqual(harness.events, ['newsletter_view']);
   harness.message(event);
   harness.message('submission-completed');
+  assert.deepEqual(harness.events, ['newsletter_view', 'newsletter_submit', 'newsletter_success']);
+});
+
+test('completion tracks the live iframe after the provider replaces it', async () => {
+  const harness = await embed({ clone: true });
+  harness.message({ action: 'submission-completed' }, 'https://form.jotform.com', harness.frame.contentWindow);
   assert.deepEqual(harness.events, ['newsletter_view', 'newsletter_submit', 'newsletter_success']);
 });

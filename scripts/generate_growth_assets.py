@@ -301,8 +301,8 @@ def benefit_newsletter_copy() -> None:
 <div class="wrap hero-logo-stage"><img src="https://images.jonathan-harris.online/site-logo" '''
                f'''alt="Jonathan Harris" class="logo-morph hero-logo-effect" loading="eager" fetchpriority="high" width="120" '''
                f'''height="120"/>
-<h1>AI Edge</h1><p>Practical AI analysis: what changed, what matters, and what is mostly '''
-               f'''theatre.</p></div></header>
+<h1>AI Edge</h1><p>AI moves fast. Get a clear view of what matters, what is useful, and what is just '''
+               f'''hype.</p></div></header>
 <main class="main" id="main" role="main" aria-label="AI Edge newsletter sign-up '''
                f'''content"><div class="wrap newsletter-page-shell">
 <section class="card newsletter-signup-card '''
@@ -310,8 +310,8 @@ def benefit_newsletter_copy() -> None:
                f'''data-newsletter-source="newsletter:primary">
 <h2 id="ai-edge-signup-heading">Join AI Edge and get the free AI '''
                f'''glossary</h2>
-<p>The hosted form now collects your name and email address. Subscribe here, then keep the '''
-               f'''glossary as a quick-reference PDF.</p>
+<p>Join me for plain-English AI analysis, practical insights and a healthy dose of scepticism. Get the free AI '''
+               f'''glossary PDF to keep the jargon in check.</p>
 <div class="newsletter-jotform-wrap"><iframe '''
                f'''id="JotFormIFrame-262733359026055" title="AI Edge newsletter sign-up" allowtransparency="true" '''
                f'''allow="geolocation; microphone; camera; fullscreen; payment" src="{jotform_url}" '''
@@ -335,8 +335,8 @@ def benefit_newsletter_copy() -> None:
 '''
                f'''<section class="card newsletter-card-spaced" aria-labelledby="ai-edge-preview-heading"><h2 '''
                f'''id="ai-edge-preview-heading">Preview the AI Edge format</h2>
-<p class="muted">This is a format preview, not a '''
-               f'''fabricated past issue.</p>
+<p class="muted">Here is how each briefing cuts through the noise.'''
+               f'''</p>
 <div class="newsletter-issue-preview"><p><strong>1. What changed</strong><br/>The '''
                f'''important announcement in two or three sentences, stripped of launch copy.</p><p><strong>2. Why it '''
                f'''matters</strong><br/>The practical consequences for work, business, policy, security or everyday '''
