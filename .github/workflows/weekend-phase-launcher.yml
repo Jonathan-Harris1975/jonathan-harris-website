@@ -2,11 +2,11 @@ name: Weekend CI phase launcher
 
 on:
   schedule:
-    - cron: "0 1 * * 6"
-    - cron: "0 0 * * 6"
+    - cron: "30 17 * * 6"
+    - cron: "30 16 * * 6"
     - cron: "17 1 1 * *"
     - cron: "17 0 1 * *"
-    - cron: "30 23 * * 6"
+    - cron: "30 23 * * 0"
     - cron: "30 22 * * 0"
   workflow_dispatch:
     inputs:
@@ -56,11 +56,11 @@ jobs:
             # expression that fired rather than comparing the runner start minute.
             london_offset="$(TZ=Europe/London date '+%z')"
             case "${SCHEDULE_EXPR}:${london_offset}" in
-              "0 0 * * 6:+0100"|"0 1 * * 6:+0000")
+              "30 16 * * 6:+0100"|"30 17 * * 6:+0000")
                 phase="ci"; workflow="production-readiness.yml" ;;
               "0 0 1 * *:+0100"|"0 1 1 * *:+0000")
                 phase="dast"; workflow="dast.yml" ;;
-              "30 22 * * 0:+0100"|"30 23 * * 6:+0000")
+              "30 22 * * 0:+0100"|"30 23 * * 0:+0000")
                 phase="council"; workflow="council.yml" ;;
             esac
           fi
@@ -93,7 +93,7 @@ jobs:
       - name: Record allocated windows
         if: always()
         run: |
-          echo "CI: Sat 01:00–Sat 03:30"
+          echo "CI: Sat 17:30–Sat 20:00"
           echo "DAST: monthly on the 1st at 01:00 Europe/London"
           echo "Council: Sun 23:30–Mon 02:00"
           echo "Weekend operating envelope: Friday 20:00 to Monday 04:00 Europe/London"
