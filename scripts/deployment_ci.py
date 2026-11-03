@@ -160,15 +160,18 @@ def main() -> int:
 
         run_step("Run release validation", validate_command)
 
-        # Cloudflare Pages builds intentionally generate the deployable site inside
-        # the checked-out repository. Those legitimate build artefacts make the Git
-        # worktree dirty, so the local generated-output drift gate must not run in
-        # that environment. Keep the gate enabled everywhere else so developers and
-        # non-Cloudflare CI still catch uncommitted generated-output drift.
-        if os.environ.get("CF_PAGES") == "1":
+        # Hosted builds consume the live KDP D1 catalogue, a moving source of
+        # truth. Regenerating tracked ebook pages can legitimately change them.
+        # Keep the Git cleanliness check for local/offline builds. Hosted CI
+        # continues to enforce release, schema, route and crawler validation.
+        hosted_generated_build = (
+            os.environ.get("CF_PAGES") == "1"
+            or os.environ.get("GITHUB_ACTIONS") == "true"
+        )
+        if hosted_generated_build:
             print(
                 "\n==> Generated-output Git cleanliness check skipped "
-                "during Cloudflare Pages release build."
+                "during hosted live-catalogue release build."
             )
         else:
             run_step(
