@@ -1,7 +1,7 @@
 # Website production operations
 
 **Status:** Production-controlled  
-**Last reviewed:** 21 September 2026
+**Last reviewed:** 4 November 2026
 
 ## Release model
 
@@ -62,7 +62,7 @@ A read-only Cloudflare control-plane check on 2026-10-19 found all three declare
 
 ### Owner-only Cloudflare controls and OIDC smoke test
 
-A read-only Cloudflare user check on 2026-10-19 reported `two_factor_authentication_enabled: false` and `two_factor_authentication_locked: false` for the connected administrator, so user MFA is off and the account is not currently requiring it for that identity. The owner must enforce account-level two-factor authentication in Cloudflare and ensure the user identities that administer this account have MFA enabled. Repository code cannot change either control.
+A read-only Cloudflare API check on 2026-11-04 identified the connected profile as a member of the single account named `Admin@jonathan-harris.online's Account`. The account collection and account-details response both returned `settings.enforce_twofactor: false`, while the separate `GET /user` response returned `two_factor_authentication_enabled: true` and `two_factor_authentication_locked: false`. These fields describe different controls: the connected administrator has enrolled user MFA, but the account API currently reports that account membership does not require 2FA. The account owner reports that account-level enforcement is enabled; that conflicts with the current API response and remains unresolved. Do not treat the profile field as proof of account-level enforcement or call this a security incident. Reconcile the account-level setting using the Cloudflare dashboard's account settings or Cloudflare support, then repeat the read-only account-details check. Repository code cannot change either control.
 
 The `OIDC smoke test` workflow is the only GitHub OIDC use for this repository: it checks that GitHub can issue a short-lived token and that its signature and selected claims match the expected repository run. OIDC is not used to authenticate Cloudflare, Koyeb, or a deployment. Its exact GitHub claims are issuer `https://token.actions.githubusercontent.com`, audience `https://github.com/Jonathan-Harris1975`, repository `Jonathan-Harris1975/jonathan-harris-website`, branch `refs/heads/main`, and workflow `Jonathan-Harris1975/jonathan-harris-website/.github/workflows/oidc-readiness.yml@refs/heads/main`. This smoke test does not establish provider federation, cloud trust, authorization, or deployment health. No provider trust policy is configured or claimed by this workflow.
 
