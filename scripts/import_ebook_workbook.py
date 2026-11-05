@@ -14,6 +14,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Import the ebook workbook into data/ebooks-master.json")
     parser.add_argument("workbook", help="Path to the workbook file")
     parser.add_argument("--check", action="store_true", help="Validate the workbook structure without writing files")
+    parser.add_argument("--preserve-description", action="store_true", help="Preserve the canonical description imported from KDP D1")
     return run_import_command(parser.parse_args())
 
 
