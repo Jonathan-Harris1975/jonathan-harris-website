@@ -269,6 +269,8 @@ def sanitise_record_copy(record: Dict[str, Any]) -> Dict[str, Any]:
     title = clean_paragraph(record.get("title", ""))
     topic = clean_paragraph(record.get("topic", ""))
     for field in TITLE_SUBSTITUTION_FIELD_NAMES:
+        if field == "description" and record.get("description_source") == "kdp-d1":
+            continue
         if field in record:
             record[field] = replace_banned_ebook_phrases(
                 normalise_title_substitution_text(record.get(field, ""), slug=slug, title=title, topic=topic),
@@ -3089,7 +3091,7 @@ def build_default_faq(book: Dict[str, Any]) -> List[Dict[str, Any]]:
     ]
 
 
-def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
+def build_master_from_workbook(workbook_path: Path, *, preserve_description: bool = False) -> List[Dict[str, Any]]:
     order, workbook_map, workbook_content = parse_workbook(workbook_path, sanitise_content=False)
     if not order:
         raise ValueError("No ebook rows found in workbook")
@@ -3133,7 +3135,7 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
         why_it_matters = clean_paragraph(content.get("why_it_matters")) or default_why_it_matters(topic)
         short = strip_pages_from_summary(content.get("short"), pages) or default_short(topic, pages)
         short = BOOK_SPECIFIC_SHORT_OVERRIDES.get(slug, short)
-        description_override = BOOK_SPECIFIC_DESCRIPTION_OVERRIDES.get(slug)
+        description_override = None if preserve_description else BOOK_SPECIFIC_DESCRIPTION_OVERRIDES.get(slug)
         if description_override:
             previous_description = description
             description = description_override
@@ -3193,6 +3195,8 @@ def build_master_from_workbook(workbook_path: Path) -> List[Dict[str, Any]]:
             "distinct_angle": clean_paragraph(content.get("distinct_angle")) or default_distinct_angle(title, topic),
             "notes": workbook.get("notes", ""),
         }
+        if preserve_description:
+            book["description_source"] = "kdp-d1"
         book = sanitise_record_copy(book)
         faq_payload = content.get("faq")
         book["faq"] = faq_payload if isinstance(faq_payload, list) else build_default_faq(book)
@@ -3926,7 +3930,7 @@ height="0" width="0" '''
                f'''<section class="card ebook-section" id="deeper-overview">
       <h2>Deeper overview</h2>
       '''
-               f'''{escape_paragraphs(book['summary'])}
+               f'''{escape_paragraphs(book['description'] if book.get('description_source') == 'kdp-d1' else book['summary'])}
     </section>
 
 
@@ -6569,7 +6573,7 @@ def run_import_command(args: argparse.Namespace) -> int:
         print(f"Workbook check passed: {len(order)} ebook rows found.")
         return 0
 
-    records = build_master_from_workbook(workbook_path)
+    records = build_master_from_workbook(workbook_path, preserve_description=getattr(args, "preserve_description", False))
     save_master(records)
     print(f"Wrote {len(records)} records to {MASTER_PATH.relative_to(ROOT)}")
     return 0

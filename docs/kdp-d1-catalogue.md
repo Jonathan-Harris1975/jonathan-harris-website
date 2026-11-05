@@ -6,6 +6,7 @@ Cloudflare D1 database `KDP` is the source of truth for website ebook metadata. 
 - The 40 initial ebook records were loaded from the approved workbook and reconciled against the R2 object list.
 - `functions/api/v1/ebooks.json.js` provides the read-only website endpoint at `/api/v1/ebooks.json`.
 - `scripts/import_ebook_catalogue.py` fetches that endpoint during the site build and imports the public fields into the generated build master. Production builds fail closed if the endpoint is unavailable.
+- D1 descriptions are preserved through import and later rendering, without legacy workbook copy overrides. The ebook's visible overview and Book schema use that canonical description, so AIMS can verify the website after publication.
 - Local and preview builds may fall back to the workbook while the API is being bootstrapped. That fallback is never used for production.
 - The workbook remains for its whole-site `Pages` route inventory checks; the ebook metadata source has moved to D1.
 - Manuscript PDFs remain in the private `kdp` R2 bucket. D1 stores each exact object key in `manuscript_r2_key`; `manuscript_url` is NULL.

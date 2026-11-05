@@ -128,7 +128,7 @@ def main() -> int:
             temp_workbook = Path(temp_dir) / "kdp-d1-catalogue.xlsx"
             build_import_workbook(books, temp_workbook)
             subprocess.run(
-                [sys.executable, "scripts/import_ebook_workbook.py", str(temp_workbook)],
+                [sys.executable, "scripts/import_ebook_workbook.py", str(temp_workbook), "--preserve-description"],
                 cwd=ROOT,
                 check=True,
             )
