@@ -186,7 +186,7 @@ class ManagedBranchOwnershipTests(unittest.TestCase):
         admit.assert_not_called()
         risk_label.assert_called_once_with(self.pr["number"], [automation.RISK_APPROVAL_LABEL])
 
-    def test_human_hold_label_withdraws_existing_GitHub native auto-merge_admission(self):
+    def test_human_hold_label_withdraws_existing_github_native_auto_merge_admission(self):
         pr = copy.deepcopy(self.pr)
         pr["labels"].extend([{"name": "hold"}, {"name": "autonomy:admitted"}])
         remove = self.enterContext(patch.object(automation, "remove_label"))
