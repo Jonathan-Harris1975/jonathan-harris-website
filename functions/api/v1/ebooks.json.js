@@ -7,11 +7,12 @@ const PUBLIC_COLUMNS = `
 `;
 
 // Reject unverified records and links that are not an exact Amazon UK print ASIN.
-export function publicPrintFormat(row) {
+export function publicPrintFormat(row, kindleAsin = "") {
   if (row?.state !== "live_verified" || !["paperback", "hardcover"].includes(row?.format)) return null;
   const asin = String(row.print_asin || "").trim().toUpperCase();
   const isbn = String(row.isbn || "").trim();
   const verifiedAt = String(row.verified_at || "").trim();
+  if (asin === String(kindleAsin || "").trim().toUpperCase()) return null;
   if (!/^[A-Z0-9]{10}$/.test(asin) || !/^\d{13}$/.test(isbn) || !Number.isFinite(Date.parse(verifiedAt))) return null;
   try {
     const url = new URL(String(row.purchase_url || ""));
@@ -97,9 +98,10 @@ export async function onRequestGet({ env }) {
     } catch (error) {
       console.warn("KDP print format catalogue unavailable; preserving Kindle listings.", error);
     }
+    const kindleAsinById = new Map(books.map((book) => [Number(book.id), book.asin]));
     const byEbookId = new Map();
     for (const row of editions) {
-      const verified = publicPrintFormat(row);
+      const verified = publicPrintFormat(row, kindleAsinById.get(Number(row.ebook_id)));
       if (!verified) continue;
       const formats = byEbookId.get(Number(row.ebook_id)) || {};
       formats[verified.format] = verified;
