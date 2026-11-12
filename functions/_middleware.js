@@ -43,7 +43,7 @@ export async function onRequest(context) {
   const response = await context.next();
   // Inject a single shared progressive enhancement rather than rewriting the 40
   // canonical Kindle pages. The script is inert until a verified print row exists.
-  const isBookPage = /^\/ebooks\/(?:[a-z0-9-]+\/)?$/.test(url.pathname);
+  const isBookPage = /^\/ebooks\/(?:[a-z0-9-]+\/?)?$/.test(url.pathname);
   const isHtml = (response.headers.get("Content-Type") || "").includes("text/html");
   const page = isBookPage && isHtml && response.status === 200
     ? new HTMLRewriter().on("body", {
