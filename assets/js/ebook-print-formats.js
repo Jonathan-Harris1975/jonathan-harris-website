@@ -13,7 +13,7 @@
       try {
         const url = new URL(item.purchase_url);
         return url.protocol === "https:" && ["amazon.co.uk", "www.amazon.co.uk"].includes(url.hostname)
-          && new RegExp("/(?:dp|gp/product)/" + item.asin + "(?:/|$)", "i").test(url.pathname);
+          && new RegExp("^/(?:dp|gp/product)/" + item.asin + "(?:/|$)", "i").test(url.pathname);
       } catch { return false; }
     });
   };
