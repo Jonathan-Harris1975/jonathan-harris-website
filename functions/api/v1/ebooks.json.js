@@ -6,6 +6,22 @@ const PUBLIC_COLUMNS = `
   cover_art_url, legacy_alias_url
 `;
 
+// Reject unverified records and links that are not an exact Amazon UK print ASIN.
+export function publicPrintFormat(row, kindleAsin = "") {
+  if (row?.state !== "live_verified" || !["paperback", "hardcover"].includes(row?.format)) return null;
+  const asin = String(row.print_asin || "").trim().toUpperCase();
+  const isbn = String(row.isbn || "").trim();
+  const verifiedAt = String(row.verified_at || "").trim();
+  if (asin === String(kindleAsin || "").trim().toUpperCase()) return null;
+  if (!/^[A-Z0-9]{10}$/.test(asin) || !/^\d{13}$/.test(isbn) || !Number.isFinite(Date.parse(verifiedAt))) return null;
+  try {
+    const url = new URL(String(row.purchase_url || ""));
+    if (url.protocol !== "https:" || !["amazon.co.uk", "www.amazon.co.uk"].includes(url.hostname)) return null;
+    if (!new RegExp("^/(?:dp|gp/product)/" + asin + "(?:/|$)", "i").test(url.pathname)) return null;
+    return { format: row.format, isbn, asin, purchase_url: url.toString(), verified_at: verifiedAt };
+  } catch { return null; }
+}
+
 function parseList(value) {
   try {
     const parsed = JSON.parse(value || "[]");
@@ -71,6 +87,28 @@ export async function onRequestGet({ env }) {
       .prepare(`SELECT ${PUBLIC_COLUMNS} FROM ebooks ORDER BY ebook_id`)
       .all();
     const books = (result.results || []).map(toWebsiteRecord);
+    // The table is introduced by migration 0002; an unapplied migration must
+    // not take down the original 40 Kindle book listings.
+    let editions = [];
+    try {
+      const print = await env.KDP_DB.prepare(
+        "SELECT ebook_id, format, state, isbn, print_asin, purchase_url, verified_at FROM kdp_print_editions WHERE state = 'live_verified'"
+      ).all();
+      editions = print.results || [];
+    } catch (error) {
+      console.warn("KDP print format catalogue unavailable; preserving Kindle listings.", error);
+    }
+    const kindleAsinById = new Map(books.map((book) => [Number(book.id), book.asin]));
+    const byEbookId = new Map();
+    for (const row of editions) {
+      const verified = publicPrintFormat(row, kindleAsinById.get(Number(row.ebook_id)));
+      if (!verified) continue;
+      const formats = byEbookId.get(Number(row.ebook_id)) || {};
+      formats[verified.format] = verified;
+      byEbookId.set(Number(row.ebook_id), formats);
+    }
+    for (const book of books) book.print_formats = byEbookId.get(Number(book.id)) || {};
+
     return Response.json(
       { books },
       {
