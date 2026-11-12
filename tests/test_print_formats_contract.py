@@ -16,6 +16,8 @@ class VerifiedPrintFormatContract(unittest.TestCase):
         self.assertIn("state = 'live_verified'", js)
         self.assertIn("amazon.co.uk", js)
         self.assertIn("print_formats", js)
+        self.assertIn("kindleAsinById", js)
+        self.assertIn('asin === String(kindleAsin', js)
 
     def test_pages_keep_kindle_and_use_shared_progressive_enhancement(self):
         js = (ROOT / "assets/js/ebook-print-formats.js").read_text()
