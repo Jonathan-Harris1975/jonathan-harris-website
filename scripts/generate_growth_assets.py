@@ -246,7 +246,7 @@ def homepage(count: int) -> None:
                   f'''width="72" height="72"/><h3 class="card__title">{count} AI eBooks</h3><p class="card__desc">Plain-English '''
                   f'''guides covering AI in healthcare, law, banking, manufacturing, education and more.</p><a class="button" '''
                   f'''href="/ebooks/">Browse catalogue</a></article><article class="card card--explore"><img '''
-                  f'''class="card__brand-icon" src="https://podcast-coverart.jonathan-harris.online/cover-art.png" alt="Turing’s '''
+                  f'''class="card__brand-icon" src="https://podcast-coverart.jonathan-harris.online/cover-art-2026-11-13-3000.png" alt="Turing’s '''
                   f'''Torch podcast" loading="lazy" decoding="async" width="72" height="72"/><h3 class="card__title">Turing’s Torch '''
                   f'''Podcast</h3><p class="card__desc">Practical AI analysis with clear context and zero patience for '''
                   f'''buzzwords.</p><a class="button" href="/podcast/">Listen free</a></article><article class="card '''
