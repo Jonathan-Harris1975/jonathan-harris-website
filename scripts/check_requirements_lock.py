@@ -24,7 +24,7 @@ EXPECTED_LOCK = {
     "pillow": "13.0.0",
     "pypdf": "6.21.4",
     "reportlab": "5.0.1",
-    "soupsieve": "2.9",
+    "soupsieve": "4.1",
     "typing-extensions": "4.16.0",
 }
 
