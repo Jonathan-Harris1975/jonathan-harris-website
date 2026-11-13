@@ -255,7 +255,7 @@ dgement, scepticism and a working-person tolerance for less nonsense."), 60);
   const topics = detectTopics(`${title} ${summary}`);
   const entities = detectEntities(`${title} ${summary}`);
   const takeaways = deriveTakeaways({ ...episode, description: summary });
-  const imageUrl = episode.imageUrl || "https://podcast-coverart.jonathan-harris.online/cover-art.png";
+  const imageUrl = episode.imageUrl || "https://podcast-coverart.jonathan-harris.online/cover-art-2026-11-13-3000.png";
   const transcriptUrl = canonicalTranscriptUrl(episode, request);
   const sourceTranscriptUrl = episode.transcriptUrl || "";
   const description = clampWords(summary, 42);
