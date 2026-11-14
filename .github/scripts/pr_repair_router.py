@@ -425,6 +425,12 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
     payload = {"repository": REPO, "source_pr": source, "source_sha": sha,
                "kind": kind, "task": instruction, "findings": findings[:12],
                "ownership_lease": lease}
+    if os.environ.get("AUDIT_WRITER_COORDINATION_ENABLED") == "true":
+        from audit_remediation_worker import guard_pr_repair
+        if not guard_pr_repair(REPO, pr):
+            print("A different durable repository writer owns mutation; repair remains queued.")
+            return "repository-writer-busy"
+
     reservation = api("POST", f"/repos/{REPO}/issues/{number}/comments", {"body":
         f"{marker}\ndispatch-state: pending\nKilo repair handoff reserved for the current {kind} findings. "
         "If delivery outcome is uncertain, inspect Kilo before retrying; the source PR remains governed by its normal checks."})
