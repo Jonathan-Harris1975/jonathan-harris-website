@@ -36,6 +36,11 @@ jobs:
           python -m pip_audit -r requirements.txt
       - run: python scripts/check_health_contract.py
       - run: bash build.sh
+      - name: Verify governed audit regression tests
+        run: |
+          if compgen -G "tests/test_rams_audit_*.py" > /dev/null; then
+            python3 -B -m unittest discover -s tests -p 'test_rams_audit_*.py' -v
+          fi
       - name: Scan committed source for secrets
         run: python scripts/scan_secrets.py
 

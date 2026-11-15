@@ -380,6 +380,9 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
     destination = ("Update this existing Kilo PR branch; do not open a replacement PR. " if existing_kilo_pr else
                    f"Fetch and branch from source PR head {sha}; create one implementation PR to {DEFAULT} "
                    f"including {source} in its PR body. Preserve the source PR's exact commit ancestry. ")
+    if str(pr.get('head', {}).get('ref', '')).startswith('fix/rams-audit-'):
+        destination = (f"Update the exact reserved audit branch {pr['head']['ref']} in place. "
+                       "Do not open a sibling implementation PR. Preserve the immutable audit plan, allowed paths and required regression test. ")
     blocker_prefixes = tuple(BLOCKER_TRIGGER_SECRETS)
     blocker_prefix = next((prefix for prefix in blocker_prefixes if kind.startswith(prefix)), None)
     blocker_recovery = blocker_prefix is not None
@@ -420,11 +423,18 @@ def dispatch(pr: dict, kind: str, findings: list[str]) -> str:
         "If the finding is stale, not reproducible, unsafe to repair, or requires credentials, explain it "
         "without opening a speculative PR."
     )
+    if os.environ.get("AUDIT_WRITER_COORDINATION_ENABLED") == "true":
+        from audit_remediation_worker import guard_pr_repair
+        if not guard_pr_repair(REPO, pr):
+            print("A different durable repository writer owns mutation; repair remains queued.")
+            raise RuntimeError("Repository writer busy; repair remains queued for the next reconciliation")
+
     lease = claim_lease(int(number), "kilo", f"pr-{kind}", f"pr:{number}", sha)
     instruction = machine_contract() + "\n\n" + instruction
     payload = {"repository": REPO, "source_pr": source, "source_sha": sha,
                "kind": kind, "task": instruction, "findings": findings[:12],
                "ownership_lease": lease}
+
     reservation = api("POST", f"/repos/{REPO}/issues/{number}/comments", {"body":
         f"{marker}\ndispatch-state: pending\nKilo repair handoff reserved for the current {kind} findings. "
         "If delivery outcome is uncertain, inspect Kilo before retrying; the source PR remains governed by its normal checks."})
