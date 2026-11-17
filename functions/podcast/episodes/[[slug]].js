@@ -322,8 +322,10 @@ ${episode.audioUrl ? `<a class="button" href="${escapeHtml(episode.audioUrl)}" r
 n" href="/podcast/">Open podcast hub</a>`}
 <a class="button secondary" href="${escapeHtml(transcriptUrl)}">Read the transcript</a>
 <a class="button secondary" href="${escapeHtml(feedUrl || DEFAULT_PODCAST_FEED_URL)}" rel="noopener noreferrer">Subscribe via RSS</a>
-<a class="button secondary" data-podcast-platform="spotify" data-placement="podcast_episode" href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">Follow on Spotify</a>
-<a class="button secondary" data-podcast-platform="apple" data-placement="podcast_episode" href="https://podcasts.apple.com/gb/podcast/turings-torch-ai-weekly/id1862839712" rel="noopener noreferrer" target="_blank">Follow on Apple Podcasts</a>
+<a class="button secondary" data-podcast-platform="spotify" data-placement="podcast_episode"
+  href="https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF" rel="noopener noreferrer" target="_blank">Follow on Spotify</a>
+<a class="button secondary" data-podcast-platform="apple" data-placement="podcast_episode"
+  href="https://podcasts.apple.com/gb/podcast/turings-torch-ai-weekly/id1862839712" rel="noopener noreferrer" target="_blank">Follow on Apple Podcasts</a>
 </div>
 ${episode.audioUrl ? `<audio controls preload="none" data-podcast-audio data-episode-slug="${escapeHtml(episode.slug || slugify(title))}" data-placeme\
 nt="podcast_episode" src="${escapeHtml(episode.audioUrl)}"></audio>` : ""}
