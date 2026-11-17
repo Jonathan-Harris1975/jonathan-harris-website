@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import html
 import json
 import re
@@ -405,6 +406,37 @@ def run_not_found_contract_checks(*, timeout: float, include_explicit_route: boo
     return results
 
 
+def normalise_book_api_for_parity(payload: object) -> list[dict]:
+    """Compare D1-generated catalogue content, not each build's timestamp.
+
+    Pages and the post-deploy runner rebuild the same D1 input independently.
+    Importing changed D1 records can stamp dateModified with each build time,
+    so exact timestamp equality falsely blocks an otherwise correct release.
+    All other fields remain subject to strict equality.
+    """
+    if not isinstance(payload, list):
+        raise ValueError("books catalogue must be a JSON array")
+    normalised: list[dict] = []
+    for index, book in enumerate(payload, start=1):
+        if not isinstance(book, dict):
+            raise ValueError(f"book {index} must be an object")
+        dates: dict[str, datetime] = {}
+        for field in ("datePublished", "dateModified"):
+            raw = book.get(field)
+            if not isinstance(raw, str) or not raw.strip():
+                raise ValueError(f"book {index} has missing {field}")
+            try:
+                dates[field] = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            except ValueError as exc:
+                raise ValueError(f"book {index} has invalid {field}: {raw}") from exc
+        if dates["dateModified"].date() < dates["datePublished"].date():
+            raise ValueError(f"book {index} has dateModified before datePublished")
+        comparable = book.copy()
+        comparable.pop("dateModified")
+        normalised.append(comparable)
+    return normalised
+
+
 def run_api_contract_check(*, timeout: float) -> PageResult:
     live_url = f"{SITE_URL}/api/v1/books.json"
     fetch_result = fetch_url(live_url, timeout=timeout)
@@ -431,7 +463,19 @@ def run_api_contract_check(*, timeout: float) -> PageResult:
         )
 
     governed_payload = json.loads((ROOT / "api" / "v1" / "books.json").read_text(encoding="utf-8"))
-    if live_payload != governed_payload:
+    try:
+        live_comparable = normalise_book_api_for_parity(live_payload)
+        governed_comparable = normalise_book_api_for_parity(governed_payload)
+    except ValueError as exc:
+        return PageResult(
+            label="Public books API parity",
+            ok=False,
+            message=f"Public books API date or schema contract invalid: {exc}",
+            live_url=live_url,
+            missing_markers=[],
+            status_code=fetch_result.status_code,
+        )
+    if live_comparable != governed_comparable:
         return PageResult(
             label="Public books API parity",
             ok=False,
