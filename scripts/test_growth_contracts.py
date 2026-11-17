@@ -284,6 +284,23 @@ def main()->int:
     check('podcast-player-card' not in podcast and 'GROWTH:PODCAST-TOPICS' not in podcast,'duplicate podcast player/topic furniture remains')
     check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')
     check('data-podcast-platform="spotify"' in podcast and 'data-podcast-platform="apple"' in podcast and 'data-podcast-platform="rss"' in podcast,'podcast platform click markers are missing')
+    episode_route=text(ROOT/'functions'/'podcast'/'episodes'/'[[slug]].js')
+    def tracked_episode_link(platform: str, href: str) -> bool:
+        for match in re.finditer(r'<a\b[^>]*>', episode_route, re.S):
+            tag=match.group(0)
+            if (f'data-podcast-platform="{platform}"' in tag
+                    and 'data-placement="podcast_episode"' in tag
+                    and f'href="{href}"' in tag
+                    and 'target="_blank"' in tag):
+                return True
+        return False
+    check(
+        tracked_episode_link('spotify', 'https://open.spotify.com/show/4NluRPjuAIGK59vVf7GcoF')
+        and tracked_episode_link('apple', 'https://podcasts.apple.com/gb/podcast/turings-torch-ai-weekly/id1862839712')
+        and episode_route.count('(opens in new tab)') >= 2
+        and 'data-podcast-audio' in episode_route,
+        'episode pages must offer accessible, correctly attributed Apple and Spotify follow links alongside native audio',
+    )
     check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
 
     # Evidence/resource estate and source provenance.
