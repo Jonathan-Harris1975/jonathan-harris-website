@@ -1,9 +1,13 @@
 """Regression tests for live crawler publication validation."""
 from __future__ import annotations
 
+import json
+from pathlib import Path
+import tempfile
 import unittest
+from unittest import mock
 
-from scripts import check_crawlers
+from scripts import check_crawlers, check_live_pages
 
 
 SITE = "https://jonathan-harris.online"
@@ -132,6 +136,66 @@ class RepositoryCrawlerPublicationTests(unittest.TestCase):
 
         redirects = (check_crawlers.ROOT / "_redirects").read_text(encoding="utf-8")
         self.assertRegex(redirects, r"(?m)^/robot\.txt\s+/robots\.txt\s+301\s*$")
+
+
+class LiveBookApiParityTests(unittest.TestCase):
+    """Guard live KDP catalogue parity without confusing two build clocks."""
+
+    def check(self, live_book: dict, expected_book: dict) -> check_live_pages.PageResult:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            artifact = root / "api" / "v1" / "books.json"
+            artifact.parent.mkdir(parents=True)
+            artifact.write_text(json.dumps([expected_book]), encoding="utf-8")
+            response = check_live_pages.FetchResult(
+                body=json.dumps([live_book]),
+                status_code=200,
+                final_url=f"{SITE}/api/v1/books.json",
+            )
+            with (
+                mock.patch.object(check_live_pages, "ROOT", root),
+                mock.patch.object(check_live_pages, "fetch_url", return_value=response),
+            ):
+                return check_live_pages.run_api_contract_check(timeout=1)
+
+    def book(self) -> dict:
+        return {
+            "id": 1,
+            "slug": "example-ebook",
+            "pages": 227,
+            "datePublished": "2024-12-14",
+            "dateModified": "2026-11-16T22:02:28Z",
+            "buy_url": "https://mybook.to/known-link",
+        }
+
+    def test_independent_build_timestamps_do_not_trigger_false_failure(self) -> None:
+        expected = self.book()
+        live = {**expected, "dateModified": "2026-11-16T22:04:28Z"}
+        self.assertTrue(self.check(live, expected).ok)
+
+    def test_changed_book_page_count_is_still_a_failure(self) -> None:
+        expected = self.book()
+        live = {**expected, "dateModified": "2026-11-16T22:04:28Z", "pages": 240}
+        self.assertFalse(self.check(live, expected).ok)
+
+    def test_changed_purchase_link_is_still_a_failure(self) -> None:
+        expected = self.book()
+        live = {**expected, "buy_url": "https://example.com/different-book"}
+        self.assertFalse(self.check(live, expected).ok)
+
+    def test_invalid_date_modified_fails_closed(self) -> None:
+        expected = self.book()
+        live = {**expected, "dateModified": "not-a-date"}
+        result = self.check(live, expected)
+        self.assertFalse(result.ok)
+        self.assertIn("invalid dateModified", result.message)
+
+    def test_modified_before_publication_fails_closed(self) -> None:
+        expected = self.book()
+        live = {**expected, "dateModified": "2020-01-01"}
+        result = self.check(live, expected)
+        self.assertFalse(result.ok)
+        self.assertIn("before datePublished", result.message)
 
 
 if __name__ == "__main__":
