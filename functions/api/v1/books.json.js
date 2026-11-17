@@ -3,9 +3,19 @@
 // Never return static snapshots or expose private D1/R2 fields.
 import { onRequestGet as getD1Ebooks } from "./ebooks.json.js";
 
-const STOPWORDS = new Set(["a","an","and","are","as","at","be","book","by","for","from","how","in","into","is","it","its","of","on","or","our","that","the","this","through","to","what","when","where","why","with","your","you","ai","artificial","intelligence"]);
-const STEM_SUFFIXES = ["ization","isation","ational","ability","ibility","ation","ition","fulness","ousness","iveness","ingly","ments","ement","ment","able","ible","ness","ship","ance","ence","ally","fully","less","iest","ies","ied","ing","ers","er","ed","ly","ity","s"];
-const LEGACY_KEYS = ["id","key","title","short","short_description","cover","main_image","tags","filter","keywords","buy_url","buy_target_url","slug","asin","pages","datePublished","dateModified","canonical_url","buy_route","buy_route_full","topic_url","related_slugs","title_tokens","topic_tokens"];
+const STOPWORDS = new Set([
+  "a", "an", "and", "are", "as", "at", "be", "book", "by", "for", "from", "how", "in", "into", "is", "it", "its", "of", "on", "or", "our", "that", "the", "this",
+  "through", "to", "what", "when", "where", "why", "with", "your", "you", "ai", "artificial", "intelligence",
+]);
+const STEM_SUFFIXES = [
+  "ization", "isation", "ational", "ability", "ibility", "ation", "ition", "fulness", "ousness", "iveness", "ingly", "ments", "ement", "ment", "able",
+  "ible", "ness", "ship", "ance", "ence", "ally", "fully", "less", "iest", "ies", "ied", "ing", "ers", "er", "ed", "ly", "ity", "s",
+];
+const LEGACY_KEYS = [
+  "id", "key", "title", "short", "short_description", "cover", "main_image", "tags", "filter", "keywords", "buy_url", "buy_target_url", "slug", "asin",
+  "pages", "datePublished", "dateModified", "canonical_url", "buy_route", "buy_route_full", "topic_url", "related_slugs", "title_tokens",
+  "topic_tokens",
+];
 
 function stemToken(token) {
   for(const suffix of STEM_SUFFIXES)if(token.length>suffix.length+2&&token.endsWith(suffix))return token.slice(0,-suffix.length);
@@ -53,7 +63,12 @@ function toLegacyBooks(books) {
         tags=intersectionCount(base.tags,other.tags),keywords=intersectionCount(base.keywords,other.keywords);
       return {candidate,same,score:same*100+title*35+topic*30+tags*18+keywords*8,title,grouped:topic+tags,keywords};
     });
-    ranked.sort((a,b)=>b.same-a.same||b.score-a.score||b.title-a.title||b.grouped-a.grouped||b.keywords-a.keywords||(a.candidate.title.toLowerCase()<b.candidate.title.toLowerCase()?-1:a.candidate.title.toLowerCase()>b.candidate.title.toLowerCase()?1:0));
+    ranked.sort((a,b) =>
+      b.same-a.same || b.score-a.score || b.title-a.title ||
+      b.grouped-a.grouped || b.keywords-a.keywords ||
+      (a.candidate.title.toLowerCase() < b.candidate.title.toLowerCase() ? -1 :
+        a.candidate.title.toLowerCase() > b.candidate.title.toLowerCase() ? 1 : 0)
+    );
     current.related_slugs=ranked.slice(0,4).map(item=>item.candidate.slug);
     if(Object.keys(current).sort().join("|")!==LEGACY_KEYS.slice().sort().join("|"))throw new Error("Legacy contract key drift");
   }
