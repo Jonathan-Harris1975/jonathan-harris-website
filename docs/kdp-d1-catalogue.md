@@ -13,3 +13,9 @@ Cloudflare D1 database `KDP` is the source of truth for website ebook metadata. 
 - The public endpoint and website build never emit R2 keys, manuscript filenames, or manuscript URLs.
 
 Other systems can consume the same D1 catalogue through authenticated Cloudflare bindings or a purpose-built API contract. Do not expose the private R2 metadata when adding those consumers.
+
+## Live v1 books.json contract
+
+`/api/v1/books.json` now reads KDP D1 at request time through the existing same-origin canonical API, then projects **exactly** the 24 legacy fields. This includes the previously omitted `buy_target_url`, `dateModified`, `related_slugs`, `title_tokens`, `topic_tokens` and `filter`. Search tokens and related-book ranking use the same deterministic rules as `scripts/ebook_pipeline.py`. It has `no-store` headers, returns 503 when the canonical database or mapping is invalid, and never serialises private R2 or account data. The full 40-book legacy fixture, dynamic D1 updates and fail-closed cases are checked in `build.sh`.
+
+The three tracked `books.json` copies are generated deployment snapshots, not the live API's source. Cloudflare Pages rebuilds HTML and those snapshots from KDP D1 during deployments. The production post-deploy check continues to compare live endpoint parity with the governed generated release snapshot; an upstream D1 change also warrants a website rebuild to refresh static HTML.
