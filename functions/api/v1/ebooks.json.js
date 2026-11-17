@@ -113,7 +113,10 @@ export async function onRequestGet({ env }) {
       { books },
       {
         headers: {
-          "Cache-Control": "public, max-age=300, s-maxage=300",
+          // Print editions can be verified, revoked or replaced between requests.
+          // Do not cache a previously live format after KDP revokes it, or retain
+          // a Kindle-only snapshot after a newly verified format becomes live.
+          "Cache-Control": "no-store",
           "X-Content-Type-Options": "nosniff"
         }
       }
