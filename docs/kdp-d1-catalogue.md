@@ -19,3 +19,16 @@ Other systems can consume the same D1 catalogue through authenticated Cloudflare
 `/api/v1/books.json` now reads KDP D1 at request time through the existing same-origin canonical API, then projects **exactly** the 24 legacy fields. This includes the previously omitted `buy_target_url`, `dateModified`, `related_slugs`, `title_tokens`, `topic_tokens` and `filter`. Search tokens and related-book ranking use the same deterministic rules as `scripts/ebook_pipeline.py`. It has `no-store` headers, returns 503 when the canonical database or mapping is invalid, and never serialises private R2 or account data. The full 40-book legacy fixture, dynamic D1 updates and fail-closed cases are checked in `build.sh`.
 
 The three tracked `books.json` copies are generated deployment snapshots, not the live API's source. Cloudflare Pages rebuilds HTML and those snapshots from KDP D1 during deployments. The production post-deploy check continues to compare live endpoint parity with the governed generated release snapshot; an upstream D1 change also warrants a website rebuild to refresh static HTML.
+
+### Live API editorial parity after PR #163
+
+The production acceptance check showed that D1 and the website's governed
+generated copy are intentionally different for 36 short descriptions.
+The live API now loads the same-deployment Pages static asset via
+`env.ASSETS.fetch`, preserving its brand-edited `short` and
+`short_description` fields. All KDP factual metadata remains live from D1,
+including pages, ASINs, URLs, titles, tags and search/related-book fields.
+`dateModified` is the later of the website release timestamp or D1's
+updated timestamp. The site returns HTTP 503 if the governed asset is
+missing, malformed, incomplete or mismatched by ID/slug. This maintains
+strict post-deployment API parity without downgrading editorial quality.

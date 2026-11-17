@@ -75,13 +75,61 @@ function toLegacyBooks(books) {
   return mapped;
 }
 
+// The Pages asset owns curated editorial copy and its release timestamp.
+// D1 owns current book facts, including pages, ASINs, title and purchase URLs.
+async function overlayGovernedEditorial(context, books) {
+  if (!context.env?.ASSETS || typeof context.env.ASSETS.fetch !== "function") {
+    throw new Error("Cloudflare Pages ASSETS binding is required");
+  }
+  const response = await context.env.ASSETS.fetch(
+    "https://assets.local/assets/js/books.json"
+  );
+  if (!response.ok) throw new Error("Governed editorial asset unavailable");
+  const governed = await response.json();
+  if (!Array.isArray(governed) || governed.length !== books.length) {
+    throw new Error("Governed editorial count mismatch");
+  }
+  const byId = new Map();
+  for (const record of governed) {
+    if (!record || !Number.isSafeInteger(record.id) || byId.has(record.id)) {
+      throw new Error("Invalid governed editorial book identity");
+    }
+    byId.set(record.id, record);
+  }
+  return books.map(book => {
+    const editorial = byId.get(book.id);
+    if (!editorial || editorial.slug !== book.slug) {
+      throw new Error("Governed editorial slug or ID mismatch");
+    }
+    for (const field of ["short", "short_description", "dateModified"]) {
+      if (typeof editorial[field] !== "string" || !editorial[field].trim()) {
+        throw new Error("Invalid governed editorial field " + field);
+      }
+    }
+    const buildTime = Date.parse(editorial.dateModified);
+    const databaseTime = Date.parse(book.dateModified);
+    if (!Number.isFinite(buildTime) || !Number.isFinite(databaseTime)) {
+      throw new Error("Invalid catalogue modification time");
+    }
+    return {
+      ...book,
+      short: editorial.short,
+      short_description: editorial.short_description,
+      dateModified: databaseTime > buildTime
+        ? book.dateModified : editorial.dateModified,
+    };
+  });
+}
+
 const HEADERS = { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" };
 export async function onRequestGet(context) {
   try {
     const response = await getD1Ebooks(context);
     if (!response.ok) return response;
     const payload = await response.json();
-    return Response.json(toLegacyBooks(payload.books), { headers: HEADERS });
+    const projected = toLegacyBooks(payload.books);
+    const compatible = await overlayGovernedEditorial(context, projected);
+    return Response.json(compatible, { headers: HEADERS });
   } catch (error) {
     console.error("KDP legacy books.json mapping failed", error);
     return Response.json({ error: "Ebook catalogue is temporarily unavailable." }, { status: 503, headers: HEADERS });
