@@ -22,7 +22,12 @@ function envFor(rows, fail=false) {
     }
     if (sql.includes("FROM kdp_print_editions")) return { results: [] };
     throw new Error("Unexpected query");
-  } }; } } };
+  } }; } },
+    ASSETS: { async fetch(url) {
+      assert.equal(new URL(url).pathname, "/assets/js/books.json");
+      return Response.json(legacy);
+    } },
+  };
 }
 async function responseFor(rows = legacy.map(fixtureRow), fail=false) {
   const response = await onRequestGet({ env: envFor(rows, fail) });
@@ -63,4 +68,31 @@ test("unavailable D1 and invalid required fields fail closed, without credential
     assert.equal(outcome.response.status, 503);
     assert.equal(outcome.response.headers.get("Cache-Control"), "no-store");
   }
+});
+
+test("live D1 metadata does not overwrite curated site editorial copy", async () => {
+  const rows = legacy.map(fixtureRow);
+  rows[0].short_description = "Unedited generic D1 description";
+  rows[0].page_count = 312;
+  const { response, body } = await responseFor(rows);
+  assert.equal(response.status, 200);
+  assert.equal(body[0].short, legacy[0].short);
+  assert.equal(body[0].short_description, legacy[0].short_description);
+  assert.equal(body[0].pages, 312);
+  assert.equal(body[0].dateModified, legacy[0].dateModified);
+});
+
+test("D1 modification timestamp advances when newer than website build", async () => {
+  const rows = legacy.map(fixtureRow);
+  rows[0].updated_at = "2030-05-01 12:30:45";
+  const { body } = await responseFor(rows);
+  assert.equal(body[0].dateModified, "2030-05-01T12:30:45Z");
+});
+
+test("missing governed editorial asset returns 503 rather than silent copy degradation", async () => {
+  const env = envFor(legacy.map(fixtureRow));
+  env.ASSETS.fetch = async () => new Response("Missing", { status: 404 });
+  const response = await onRequestGet({ env });
+  assert.equal(response.status, 503);
+  assert.equal(response.headers.get("Cache-Control"), "no-store");
 });
