@@ -25,6 +25,7 @@ Event payloads are allow-listed. They may contain only `book_slug`, `topic`, `pa
 | `podcast_episode_view` | A podcast episode response/page initialises. |
 | `podcast_play` | A governed native audio element emits a real `play` event. Deduplicated per episode. |
 | `podcast_30_seconds` | A governed native audio element reaches at least 30 seconds of playback. Fires once per episode. |
+| `podcast_platform_click` | A marked outbound Apple/Spotify/RSS platform link is intentionally clicked; this does not prove a play or subscription. |
 | `bundle_view` | A reading-path page initialises. The public label is “Reading path”; the event name remains `bundle_view` for continuity. |
 | `bundle_book_click` | A reading-path book action is intentionally clicked. |
 | `book_finder_start` | The deterministic book-finder form is submitted. |
@@ -35,3 +36,5 @@ Event payloads are allow-listed. They may contain only `book_slug`, `topic`, `pa
 `catalogue_card`, `ebook_primary`, `reading_path`, `homepage:hero`, `homepage:inline`, `topic:healthcare`, `podcast:index`, `podcast_episode`, `compare:index`.
 
 GTM should map event names and allow-listed dimensions as custom events/parameters. It should not scrape input values from the DOM and attach them to these events.
+
+The Elfsight embedded player is cross-origin: native audio play/30-second tracking applies to governed native players, not playback inside the Elfsight iframe. Do not infer iframe engagement from page visits.
