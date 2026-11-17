@@ -284,6 +284,14 @@ def main()->int:
     check('podcast-player-card' not in podcast and 'GROWTH:PODCAST-TOPICS' not in podcast,'duplicate podcast player/topic furniture remains')
     check((ROOT/'functions'/'podcast'/'index.js').exists(),'exact /podcast/ Pages Function route is missing')
     check('data-podcast-platform="spotify"' in podcast and 'data-podcast-platform="apple"' in podcast and 'data-podcast-platform="rss"' in podcast,'podcast platform click markers are missing')
+    episode_route=text(ROOT/'functions'/'podcast'/'episodes'/'[[slug]].js')
+    check(
+        'data-podcast-platform="spotify"' in episode_route
+        and 'data-podcast-platform="apple"' in episode_route
+        and 'data-placement="podcast_episode"' in episode_route
+        and 'data-podcast-audio' in episode_route,
+        'episode pages must offer tracked Apple and Spotify follow links without losing native playback',
+    )
     check('"author":{"@id":"https://jonathan-harris.online/#person"}' in podcast,'podcast schema does not reference canonical #person')
 
     # Evidence/resource estate and source provenance.
