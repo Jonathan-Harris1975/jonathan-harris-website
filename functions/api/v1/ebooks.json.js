@@ -3,7 +3,7 @@ const PUBLIC_COLUMNS = `
   tags_json, keywords_json, audience, who_for, what_book_covers,
   what_youll_learn_json, why_it_matters, tone, author, identifier,
   asin, page_count, publication_date, book_url, buy_now_url, redirect_url,
-  cover_art_url, legacy_alias_url
+  cover_art_url, legacy_alias_url, updated_at
 `;
 
 // Reject unverified records and links that are not an exact Amazon UK print ASIN.
@@ -40,6 +40,15 @@ function slugify(value) {
     .replace(/^-|-$/g, "");
 }
 
+function publicModifiedTimestamp(value) {
+  const raw = String(value || "").trim();
+  // Older governed catalogue records use an ISO date without a clock time.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+  if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(raw)) return raw.replace(" ", "T") + "Z";
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z$/.test(raw)) return raw;
+  return "";
+}
+
 function toWebsiteRecord(row) {
   const topicSlug = slugify(row.topic);
   const buyRoute = `/ebooks/${row.slug}/buy-now`;
@@ -69,6 +78,7 @@ function toWebsiteRecord(row) {
     asin: row.asin,
     pages: row.page_count,
     datePublished: row.publication_date,
+    dateModified: publicModifiedTimestamp(row.updated_at),
     book_url: row.book_url,
     canonical_url: row.book_url,
     buy_url: row.redirect_url,
