@@ -67,3 +67,28 @@ a.button.secondary:hover,a.button.secondary:focus,a.button.secondary:focus-visib
   color:#fff!important;
   border-color:var(--season-accent,#4f46e5)!important;
 }
+
+/* JH-EDITORIAL-REFINEMENT-2026: retain brand and seasonal tokens. */
+:root{--jh-editorial-reading-width:68ch}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .hero h1{
+line-height:1.13;letter-spacing:-.025em;text-wrap:balance}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .hero p{text-wrap:pretty}
+body.page-home .hero .hero__title{max-width:22ch;margin-inline:auto}
+:where(.page-blog,.page-newsletter,.page-podcast) .main :is(h2,h3){line-height:1.25;text-wrap:balance}
+:where(.jh-blog-post-main,.page-blog .main,.page-newsletter .main) :is(p,li){line-height:1.72;overflow-wrap:break-word}
+:where(.jh-blog-post-main,.page-blog .main) p{max-width:var(--jh-editorial-reading-width)}
+:where(.jh-blog-post-main,.page-blog .main) a:not(.button):not(.btn){text-decoration:underline;text-decoration-thickness:.07em;text-underline-offset:.16em}
+body.page-home .main .card,body.page-blog .main .card,body.page-newsletter .main .card,
+body.page-podcast .main .card,body.page-ebooks .main .card{
+min-width:0;border-color:var(--border);box-shadow:0 6px 22px color-mix(in srgb,var(--bg-dark) 9%,transparent)}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .main :is(.card,.panel){
+padding:clamp(1rem,1.5vw + .6rem,1.75rem)}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .main :is(.card,.panel):focus-within{
+outline:2px solid var(--accent);outline-offset:2px}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .main :is(a.button,button.button,.btn){
+min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+:where(a,button,input,select,textarea,summary):focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media (max-width:620px){
+body.page-home .hero .hero__title{font-size:clamp(2rem,8vw,2.65rem)}
+:where(.page-home,.page-blog,.page-newsletter,.page-podcast,.page-ebooks) .main{padding-block:clamp(1.5rem,5vw,2rem) 2.5rem}}
+@media (forced-colors:active){:where(a,button,input,select,textarea,summary):focus-visible{outline-color:Highlight}}
