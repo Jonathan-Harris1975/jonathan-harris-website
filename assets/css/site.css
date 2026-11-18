@@ -103,3 +103,4 @@ body.page-home .newsletter-fallback-copy > a{display:inline-flex;align-items:cen
 /* JH-EDITORIAL-NAV-2026: one breadcrumb trail per book; accessible compact links. */
 body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important}
 .jh-breadcrumbs__item a,.breadcrumbs a,.featured-footer-note a{display:inline-flex;align-items:center;min-height:24px}
+@media(max-width:420px){.cky-notice-btn-wrapper{display:grid!important;grid-template-columns:1fr 1fr}.cky-btn{order:0!important}.cky-btn-customize{grid-column:span 2}}
