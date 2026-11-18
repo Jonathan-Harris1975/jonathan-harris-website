@@ -100,3 +100,6 @@ body.ebook-detail .main :is(.ebook-section,.quick-facts) h2,body.page-podcast .p
 
 /* WCAG 2.2 AA target-size remediation: home glossary text link. */
 body.page-home .newsletter-fallback-copy > a{display:inline-flex;align-items:center;min-height:24px}
+/* JH-EDITORIAL-NAV-2026: one breadcrumb trail per book; accessible compact links. */
+body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important}
+.jh-breadcrumbs__item a,.breadcrumbs a,.featured-footer-note a{display:inline-flex;align-items:center;min-height:24px}

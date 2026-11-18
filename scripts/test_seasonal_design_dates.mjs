@@ -77,3 +77,11 @@ test("editorial refinements use existing seasonal-aware accent token", () => {
   assert.match(refinements, /border-color:var\(--border\)/);
   assert.doesNotMatch(refinements, /#[0-9a-fA-F]{3,8}\b/, "no replacement palette in the new design layer");
 });
+// Browser-previewed navigation refinements must remain in the shared design layer.
+test("book detail keeps the category breadcrumb instead of duplicating the trail", () => {
+  assert.match(css, /body\.ebook-detail \.main:has\(\.breadcrumbs\)>\.jh-breadcrumbs\{display:none!important\}/);
+});
+
+test("compact editorial navigation links meet the 24px target minimum", () => {
+  assert.match(css, /\.jh-breadcrumbs__item a,\.breadcrumbs a,\.featured-footer-note a\{display:inline-flex;align-items:center;min-height:24px\}/);
+});
