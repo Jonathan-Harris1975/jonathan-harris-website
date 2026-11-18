@@ -18,7 +18,11 @@ from bs4 import BeautifulSoup
 from openpyxl import load_workbook
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_EXCLUDES = ["/podcast", "/blog"]
+# The hard-gate is the whole-site mobile acceptance check.  A route family may
+# be excluded only when a caller supplies an explicit, documented exception for
+# that single run; silently omitting dynamic editorial routes produces a false
+# completion signal.
+DEFAULT_EXCLUDES: list[str] = []
 
 
 @dataclass(slots=True)

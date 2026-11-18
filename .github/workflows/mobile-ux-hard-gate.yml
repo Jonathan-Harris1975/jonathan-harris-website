@@ -18,9 +18,9 @@ on:
         default: https://jonathan-harris.online
         type: string
       exclude_prefixes:
-        description: Comma-separated route prefixes to exclude
+        description: Comma-separated route prefixes to exclude for a documented exceptional run; leave blank for mandatory whole-site coverage
         required: false
-        default: /podcast,/blog
+        default: ""
         type: string
       callback_url:
         description: AI Management Suite mobile UX callback URL
