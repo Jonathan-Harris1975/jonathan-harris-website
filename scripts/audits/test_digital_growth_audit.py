@@ -52,6 +52,20 @@ class DigitalGrowthAuditTests(unittest.TestCase):
         issues = audit.heuristic_issues([page])
         self.assertFalse(any(row["objective"] == "Newsletter Sign-Up Rate" for row in issues))
 
+  def test_newsletter_fragment_matches_word_boundaries_without_false_positives(self):
+    for href, expected_match in (
+      ("#home_newsletter_cta", True),
+      ("#home.newsletter.2026", True),
+      ("#home-newsletter2", False),
+      ("#home-planetnewsletter-cta", False),
+    ):
+      with self.subTest(href=href):
+        page = {"route": "/", "url": "https://example.test/", "status": 200,
+                "title": "Home", "h1": "Home", "ctas": [{"label": "Get the glossary", "href": href}]}
+        issues = audit.heuristic_issues([page])
+        missing = any(row["objective"] == "Newsletter Sign-Up Rate" for row in issues)
+        self.assertEqual(missing, not expected_match)
+
   def test_unrelated_destinations_cannot_satisfy_newsletter_journey(self):
     for href in ("https://other.test/newsletter/", "/contact?next=/newsletter/", "/newsletter-fake/", "javascript:newsletter()"):
       with self.subTest(href=href):
