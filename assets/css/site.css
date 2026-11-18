@@ -94,7 +94,7 @@ body.page-home .hero .hero__title{font-size:clamp(2rem,8vw,2.65rem)}
 @media (forced-colors:active){:where(a,button,input,select,textarea,summary):focus-visible{outline-color:Highlight}}
 
 /* Keep the catalogue navigation stable before JS and its 26 filters on a single mobile rail. */
-body.ebooks-catalogue>.jh-header{position:fixed!important;inset:0 0 auto}
+body.ebooks-catalogue>.jh-header{position:fixed!important;top:0;left:0;right:0}
 @media(max-width:768px){
   body.ebooks-catalogue #chips{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;max-width:100%;min-height:48px;padding:2px 2px 6px;scrollbar-width:thin;scroll-padding-inline:8px}
   body.ebooks-catalogue #chips>.chip{flex:0 0 auto}
@@ -113,6 +113,6 @@ body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important
 /* Mobile CookieYes layout: keep all choices; fall back to native styling if vendor hooks change. */
 @media(max-width:420px){
   [data-cky-tag="notice-buttons"]{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}
-  [data-cky-tag="notice-buttons"] .cky-btn{order:0!important}
+  [data-cky-tag="notice-buttons"]>[data-cky-tag$="-button"]{order:0!important}
   [data-cky-tag="settings-button"]{grid-column:1/-1}
 }
