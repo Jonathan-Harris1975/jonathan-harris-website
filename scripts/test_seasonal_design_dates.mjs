@@ -85,3 +85,10 @@ test("book detail keeps the category breadcrumb instead of duplicating the trail
 test("compact editorial navigation links meet the 24px target minimum", () => {
   assert.match(css, /\.jh-breadcrumbs__item a,\.breadcrumbs a,\.featured-footer-note a\{display:inline-flex;align-items:center;min-height:24px\}/);
 });
+test("narrow CookieYes notice retains equal prominence for Reject and Accept without hiding choices", () => {
+  const rule = css.slice(css.lastIndexOf("@media(max-width:420px){.cky-notice-btn-wrapper"));
+  assert.ok(rule.startsWith("@media(max-width:420px){.cky-notice-btn-wrapper"));
+  assert.match(rule, /grid-template-columns:1fr 1fr/);
+  assert.match(rule, /\.cky-btn-customize\{grid-column:span 2\}/);
+  assert.doesNotMatch(rule, /display:none|visibility:hidden|#[0-9a-f]{3,8}/i);
+});
