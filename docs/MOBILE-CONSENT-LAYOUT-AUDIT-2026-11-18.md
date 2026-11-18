@@ -20,3 +20,11 @@ The CookieYes notice is a first-visit interaction. The existing banner's 342px h
 - Final production regression remains required after merge. This is not a declaration of full consent accessibility or legal certification.
 
 The selectors target existing CookieYes notice classes. No consent semantics, banner copy, brand palette, seasonal engine, business logic or analytics integration were changed. The responsive rule is restricted to `max-width:420px` to avoid worsening the existing 600px/768px single-row layout.
+## Screenshot pair
+
+At the same 390px viewport, the live first-visit CookieYes layer was recorded before and after injecting the candidate CSS, without changing the user’s stored consent state:
+
+- [Live baseline, 342px banner](../.github/audits/2026-11-18/consent-mobile-baseline.svg)
+- [Candidate, 288px banner](../.github/audits/2026-11-18/consent-mobile-candidate.svg)
+
+These are browser captures embedded in SVG containers for evidence review. The candidate is not a claim of post-production parity; recapture after exact-commit Cloudflare deployment.
