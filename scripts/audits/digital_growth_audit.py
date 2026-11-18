@@ -305,15 +305,29 @@ def heuristic_issues(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
       })
   homepage = next((p for p in pages if p["route"] == "/"), None)
   if homepage:
-    cta_text = " ".join(item["label"].lower() for item in homepage["ctas"])
+    ctas = homepage["ctas"]
+    cta_text = " ".join(item["label"].lower() for item in ctas)
+    destination_paths = {"newsletter": "/newsletter", "podcast": "/podcast", "ebook": "/ebooks"}
+    home = urlparse(homepage["url"])
+
+    def matches_destination(item: dict[str, Any], term: str) -> bool:
+      target = urlparse(urljoin(homepage["url"], item.get("href") or ""))
+      if target.scheme not in ("http", "https") or target.netloc != home.netloc:
+        return False
+      path = target.path.rstrip("/")
+      expected = destination_paths[term]
+      fragment_matches = re.search(rf"(?<![a-z0-9]){re.escape(term)}(?![a-z0-9])", target.fragment.lower()) is not None
+      return (path == expected or path.startswith(expected + "/")
+              or (path == home.path.rstrip("/") and fragment_matches))
+
     for term, objective in (("newsletter", "Newsletter Sign-Up Rate"), ("podcast", "Podcast Click-Throughs"), ("ebook", "Ebook Sales Maximisation")):
-      if term not in cta_text:
+      if term not in cta_text and not any(matches_destination(item, term) for item in ctas):
         issues.append({
           "issueId": f"DG-H-{len(issues)+1:03d}",
           "severity": "Medium",
           "objective": objective,
           "location": homepage["url"],
-          "evidence": f"No CTA label containing '{term}' was identified in the fetched homepage CTA set.",
+          "evidence": f"No CTA label or same-site destination for '{term}' was identified in the fetched homepage CTA set.",
           "issue": f"Homepage CTA prominence for {term} needs human/AI review.",
         })
   return issues[:80]
