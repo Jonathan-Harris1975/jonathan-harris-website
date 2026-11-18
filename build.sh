@@ -53,6 +53,7 @@ node --test workers/agent-readiness/test.mjs
 node --test scripts/agent-readiness-pages.test.mjs
 node --test scripts/test_pages_r2_health.mjs
 node --test scripts/test_print_format_api.mjs
+node --test scripts/test_seasonal_design_dates.mjs
 node --test scripts/kdp-books-live-d1.test.mjs
 node --test scripts/cognipal-rate-limit.test.mjs
 # Publish a commit-specific marker so the post-deploy workflow can distinguish
