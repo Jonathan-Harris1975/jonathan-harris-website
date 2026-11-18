@@ -85,10 +85,27 @@ test("book detail keeps the category breadcrumb instead of duplicating the trail
 test("compact editorial navigation links meet the 24px target minimum", () => {
   assert.match(css, /\.jh-breadcrumbs__item a,\.breadcrumbs a,\.featured-footer-note a\{display:inline-flex;align-items:center;min-height:24px\}/);
 });
-test("narrow CookieYes notice retains equal prominence for Reject and Accept without hiding choices", () => {
-  const rule = css.slice(css.lastIndexOf("@media(max-width:420px){.cky-notice-btn-wrapper"));
-  assert.ok(rule.startsWith("@media(max-width:420px){.cky-notice-btn-wrapper"));
-  assert.match(rule, /grid-template-columns:1fr 1fr/);
-  assert.match(rule, /\.cky-btn-customize\{grid-column:span 2\}/);
-  assert.doesNotMatch(rule, /display:none|visibility:hidden|#[0-9a-f]{3,8}/i);
+test("mobile consent layout retains both equal-width decisions and Customise, without changing palette", () => {
+  const marker = "/* Mobile CookieYes layout:";
+  const start = css.indexOf(marker);
+  assert.ok(start >= 0, "CMP layout marker required");
+  const rule = css.slice(start);
+  assert.match(rule, /\[data-cky-tag="notice-buttons"\]\s*\{\s*display:grid!important/);
+  assert.match(rule, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(rule, /\[data-cky-tag="settings-button"\]\s*\{\s*grid-column:1\/-1/);
+  assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden|(?:^|[;{])\s*(?:color|background(?:-color)?):/im);
+});
+
+test("catalogue mobile topic filters use the stable single-row rail and header", () => {
+  const marker = "/* Keep the catalogue navigation stable";
+  const start = css.indexOf(marker);
+  const end = css.indexOf("/* EBook detail and podcast reading refinements.", start);
+  assert.ok(start >= 0 && end > start);
+  const rule = css.slice(start, end);
+  assert.match(rule, /body\.ebooks-catalogue>\.jh-header\s*\{\s*position:\s*fixed!important/);
+  assert.match(rule, /@media\(max-width:768px\)/);
+  assert.match(rule, /body\.ebooks-catalogue #chips\s*\{[^}]*flex-wrap:\s*nowrap/);
+  assert.match(rule, /body\.ebooks-catalogue #chips\s*\{[^}]*overflow-x:\s*auto/);
+  assert.match(rule, /body\.ebooks-catalogue #chips>\.chip\s*\{\s*flex:\s*0 0 auto/);
+  assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden|(?:^|[;{])\s*(?:color|background(?:-color)?):/im);
 });
