@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { onRequest } from '../functions/health.json.js';
-import { onRequest as transcriptRequest, buildAeoPrelude } from '../functions/transcripts/[[slug]].js';
+import { onRequest as transcriptRequest, buildAeoPrelude, hasExistingTranscriptH1 } from '../functions/transcripts/[[slug]].js';
 import { onRequest as blogManifestRequest } from '../functions/blog/posts.json.js';
 import { onRequest as blogPostRequest } from '../functions/blog/posts/[[slug]].js';
 
@@ -222,4 +222,16 @@ test('transcript introductions do not change stored headings with capitalisation
   const prelude = buildAeoPrelude(episode, new Request('https://jonathan-harris.online/transcripts/sample'), storedHtml);
   assert.doesNotMatch(prelude, /<h1\b/i);
   assert.match(prelude, /<script type="application\/ld\+json">/);
+});
+test('transcript heading tokeniser ignores HTML comments, quoted attributes and inert content', () => {
+  const comments = '<!-- <h1>not an actual heading</h1> --><main><h2>Transcript</h2></main>';
+  const attributes = '<div data-example="<h1>not a heading</h1>">Episode details</div>';
+  const inert = '<script>const example = "<h1>not a heading</h1>";</script><style>h1{display:block}</style><template><h1>Template heading</h1></template><textarea><h1>Input text</h1></textarea>';
+  for (const html of [comments, attributes, inert]) {
+    assert.equal(hasExistingTranscriptH1(html), false, html);
+    const prelude = buildAeoPrelude({ title: 'Actual episode title', summary: 'Episode summary.' }, new Request('https://jonathan-harris.online/transcripts/example'), html);
+    assert.match(prelude, /<h1>Actual episode title<\/h1>/);
+  }
+  assert.equal(hasExistingTranscriptH1('<h1 class="title">A real heading</h1>'), true);
+  assert.equal(hasExistingTranscriptH1('<H1>A real heading</H1>'), true);
 });
