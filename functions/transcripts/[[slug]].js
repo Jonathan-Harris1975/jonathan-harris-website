@@ -89,6 +89,30 @@ book})=>`<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title
 ')}</ul>`;
   }catch{return""}
 }
+// Tokenise markup rather than grep for <h1>: comments, attributes and inert
+// script/style/template/textarea content must not suppress a real page title.
+export function hasExistingTranscriptH1(html) {
+  const tokens = String(html || "").match(/<!--[\\s\\S]*?-->|<(?:\\"[^\\"]*\\"|'[^']*'|[^'\\">])*>/g) || [];
+  let inertTag = "";
+  for (const token of tokens) {
+    if (token.startsWith("<!--")) continue;
+    const match = /^<\\s*(\\/?)\\s*([A-Za-z][\\w:-]*)\\b/.exec(token);
+    if (!match) continue;
+    const closing = Boolean(match[1]);
+    const tag = match[2].toLowerCase();
+    if (inertTag) {
+      if (closing && tag === inertTag) inertTag = "";
+      continue;
+    }
+    if (!closing && ["script", "style", "template", "textarea"].includes(tag)) {
+      inertTag = tag;
+      continue;
+    }
+    if (!closing && tag === "h1") return true;
+  }
+  return false;
+}
+
 export function buildAeoPrelude(episode, request, storedHtml = "") {
   if (!episode) return "";
   const title = firstNonEmpty(episode.title, "Turing's Torch AI Weekly transcript");
@@ -104,10 +128,11 @@ request.url).toString()},"author":{"@id":new URL('/#person',request.url).toStrin
 sPartOf":{"@type":"PodcastEpisode","url":canonicalEpisodeUrl,"name":title},"author":{"@id":new URL('/#person',request.url).toString()},"description":summary,
 "inLanguage":"en-GB"};
   const serialise=o=>JSON.stringify(o,(k,v)=>v===undefined?undefined:v).replace(/<\/script/gi,"<\\/script");
+  const introTitle = hasExistingTranscriptH1(storedHtml) ? "" : `<h1>${escapeHtml(title)}</h1>`;
   return `
 <section class="transcript-aeo-summary" aria-label="Episode transcript introduction">
   <p class="transcript-kicker">Turing's Torch transcript</p>
-  ${/<h1\b[^>]*>/i.test(storedHtml) ? "" : `<h1>${escapeHtml(title)}</h1>`}
+  ${introTitle}
   <p>${escapeHtml(summary)}</p>
   <nav class="actions" aria-label="Transcript links">
     ${audioUrl ? `<a class="button" href="${escapeHtml(audioUrl)}" rel="noopener noreferrer">Listen to episode</a>` : ''}
