@@ -307,13 +307,23 @@ def heuristic_issues(pages: list[dict[str, Any]]) -> list[dict[str, Any]]:
   if homepage:
     cta_text = " ".join(item["label"].lower() for item in homepage["ctas"])
     for term, objective in (("newsletter", "Newsletter Sign-Up Rate"), ("podcast", "Podcast Click-Throughs"), ("ebook", "Ebook Sales Maximisation")):
-      if term not in cta_text:
+      destination_paths = {"newsletter": "/newsletter", "podcast": "/podcast", "ebook": "/ebooks"}
+      home = urlparse(homepage["url"])
+      def matches_destination(item: dict[str, Any]) -> bool:
+        target = urlparse(urljoin(homepage["url"], item.get("href", "")))
+        if target.scheme not in ("http", "https") or target.netloc != home.netloc:
+          return False
+        path = target.path.rstrip("/")
+        expected = destination_paths[term]
+        return (path == expected or path.startswith(expected + "/")
+                or (path == home.path.rstrip("/") and term in target.fragment.lower().split("-")))
+      if term not in cta_text and not any(matches_destination(item) for item in homepage["ctas"]):
         issues.append({
           "issueId": f"DG-H-{len(issues)+1:03d}",
           "severity": "Medium",
           "objective": objective,
           "location": homepage["url"],
-          "evidence": f"No CTA label containing '{term}' was identified in the fetched homepage CTA set.",
+          "evidence": f"No CTA label or same-site destination for '{term}' was identified in the fetched homepage CTA set.",
           "issue": f"Homepage CTA prominence for {term} needs human/AI review.",
         })
   return issues[:80]

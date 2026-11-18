@@ -44,6 +44,22 @@ class DigitalGrowthAuditTests(unittest.TestCase):
     self.assertIn("/audits/digital-growth/callback", workflow)
     self.assertIn("rm -rf artifacts/digital-growth", workflow)
 
+  def test_newsletter_cta_uses_same_site_destination_when_label_is_glossary(self):
+    for href in ("/newsletter/", "/newsletter/?source=homepage", "#home-newsletter-hero"):
+      with self.subTest(href=href):
+        page = {"route": "/", "url": "https://example.test/", "status": 200,
+                "title": "Home", "h1": "Home", "ctas": [{"label": "Get the glossary", "href": href}]}
+        issues = audit.heuristic_issues([page])
+        self.assertFalse(any(row["objective"] == "Newsletter Sign-Up Rate" for row in issues))
+
+  def test_unrelated_destinations_cannot_satisfy_newsletter_journey(self):
+    for href in ("https://other.test/newsletter/", "/contact?next=/newsletter/", "/newsletter-fake/", "javascript:newsletter()"):
+      with self.subTest(href=href):
+        page = {"route": "/", "url": "https://example.test/", "status": 200,
+                "title": "Home", "h1": "Home", "ctas": [{"label": "Get the glossary", "href": href}]}
+        issues = audit.heuristic_issues([page])
+        self.assertTrue(any(row["objective"] == "Newsletter Sign-Up Rate" for row in issues))
+
   def test_success_callback_omits_null_error_and_writes_marker(self):
     posted = []
     original = audit.post_callback
