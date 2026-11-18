@@ -64,3 +64,31 @@ Scores are editorial judgements over the sampled evidence, **not** measured acce
 ## Deployment and governance acceptance
 
 This file does **not** claim the branch is merged or deployed. Required: full `bash build.sh` and independent CI/security/admission checks; protected same-repository PR; successful Cloudflare Pages production deploy; strict post-deploy content/API/crawler checks; verified live screenshots and measured accessibility/performance. No security, publishing or consent controls may be bypassed to accelerate a cosmetic change.
+
+
+## Verification completed during this PR (18 November 2026)
+
+- The governed **production-readiness** job ran `bash build.sh` successfully, including the new deterministic seasonal date test. Other successful suites at the last checked head included security, CodeQL, eBook subsystem and link integrity; all exact-head checks must run again after any new commit.
+- Live Cloudflare browser tests sampled 10 public routes at 390/768/1440px: **30 HTTP 200 responses**, no detected horizontal overflow with either current live or candidate CSS, and exactly one main landmark and H1 on each sample. No image elements without `alt` were detected.
+- In the initial seven-page automated axe WCAG 2.2 target check at 390px, the homepage glossary fallback text link failed `target-size` (19px high); its new targeted CSS remediation passed axe checks at 320/390/768/1440px, with no horizontal overflow.
+- Browser consent **Reject All** flow was used in an isolated session before checking the mobile navigation, which opened, closed with Escape and returned keyboard focus to the controlling button.
+- Automated `color-contrast` checks reported **zero detected violations** for four season settings plus 14 special events on the homepage and catalogue (36 combinations). **All combinations had incomplete/manual-inspection items**, so no universal contrast or WCAG conformance claim follows from this result.
+- The public eBook JSON endpoint returned 40 titles; at the test date there were no public live-verified paperback or hardback options. No user-facing format availability was invented.
+
+### Representative captured before/candidate evidence
+
+Real browser screenshots, captured at 390px width with a 480px crop and the same scroll location for each pair. The candidate rendering uses the changed stylesheet injected into the **live** document, not a post-deployment screenshot. The third-party consent layer was masked solely for content-comparison screenshots (after the rejection interaction where available); the consent configuration is unchanged. Images are JPEG frames embedded in SVG evidence containers, retained under `.github/audits/2026-11-18/`.
+
+| Page | Current live | Candidate stylesheet |
+| --- | --- | --- |
+| Homepage, scrolled 1080px | [Baseline](../.github/audits/2026-11-18/home-mobile-baseline.svg) | [Candidate](../.github/audits/2026-11-18/home-mobile-candidate.svg) |
+| Blog, scrolled 605px | [Baseline](../.github/audits/2026-11-18/blog-mobile-baseline.svg) | [Candidate](../.github/audits/2026-11-18/blog-mobile-candidate.svg) |
+| eBook catalogue, scrolled 955px | [Baseline](../.github/audits/2026-11-18/catalogue-mobile-baseline.svg) | [Candidate](../.github/audits/2026-11-18/catalogue-mobile-candidate.svg) |
+
+This is a deliberately scoped preview set; it does **not** meet the final desktop/tablet/mobile all-route before/after acceptance requirement.
+
+### Follow-up audit and production gates
+
+The outstanding wider design modernisation, complete screenshot inventory, full axe plus manual accessibility checks, field/lab Core Web Vitals and production visual parity are tracked in [issue #170](https://github.com/Jonathan-Harris1975/jonathan-harris-website/issues/170).
+
+The repository's trusted writer logged: **“PR #169 (manual) is held for owner approval of exact head”**. Native auto-merge has been enabled, but repository protection still blocks merge without explicit exact-head admission. A passed Cloudflare PR preview is not verification that production has changed.
