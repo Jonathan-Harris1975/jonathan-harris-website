@@ -46,3 +46,11 @@ Continue premium editorial minimalism, with precise Swiss-style alignment, restr
 Outstanding: full route-by-route visual evidence at desktop/tablet/mobile; measured Core Web Vitals and field data; axe plus manual WCAG 2.2 AA testing; complete seasonal/event contrast checks; consent journeys; dynamic content and print-format purchase links; new post-production screenshots and exact-SHA parity.
 
 **No revised final 9/10 or 10/10 scores are asserted.** Tracked acceptance must remain open until the required checks are independently verified.
+### Reproducible visual pair
+
+The same live book-detail page was captured at 390px with an identical 440px document crop, before and after injecting the candidate CSS:
+
+- [Production baseline](../.github/audits/2026-11-18/ebook-breadcrumb-baseline.svg)
+- [Candidate stylesheet](../.github/audits/2026-11-18/ebook-breadcrumb-candidate.svg)
+
+The screenshots are scoped first-viewport crops, not complete-page, all-breakpoint or **deployed** after-images. They are embedded JPEGs in SVG containers to retain browser captures as reviewable repository evidence. A fresh post-deployment comparison remains required.
