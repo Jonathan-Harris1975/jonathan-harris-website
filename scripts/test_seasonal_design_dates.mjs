@@ -11,7 +11,8 @@ assert.ok(index >= 0, "seasonal calendar module must remain present");
 const calendarModule = ui.slice(index);
 
 function themedDate(iso) {
-  const instant = new Date(iso + "T12:00:00Z");
+  const [year, month, day] = iso.split("-").map(Number);
+  const instant = new Date(year, month - 1, day, 12);
   class Clock extends Date {
     constructor(...args) {
       if (args.length) super(...args);
