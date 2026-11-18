@@ -93,6 +93,8 @@ test("mobile consent layout retains both equal-width decisions and Customise, wi
   assert.match(rule, /\[data-cky-tag="notice-buttons"\]\s*\{\s*display:grid!important/);
   assert.match(rule, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(rule, /\[data-cky-tag="settings-button"\]\s*\{\s*grid-column:1\/-1/);
+  assert.match(rule, /\[data-cky-tag="notice-buttons"\]>\[data-cky-tag\$="-button"\]\s*\{\s*order:0!important/);
+  assert.doesNotMatch(rule, /\.cky-btn\b/, "use stable consent data roles, not vendor CSS classes");
   assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden|(?:^|[;{])\s*(?:color|background(?:-color)?):/im);
 });
 
