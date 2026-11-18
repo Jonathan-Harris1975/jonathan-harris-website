@@ -16,7 +16,7 @@ The CookieYes notice is a first-visit interaction. The existing banner's 342px h
 - Reject All clicked: banner closed, consent cookie set, preference-revisit button visible.
 - Customise clicked: preference centre opened with `aria-modal=true`, Reject All and Save My Preferences still visible, no horizontal overflow.
 - All three initial consent choices remained visible at minimum height 44px.
-- The site stylesheet remains within its evidence-adjusted governed raw-size budget: **142,950 of 143,360 bytes**, with no new dependencies.
+- The site stylesheet remains within its evidence-adjusted governed raw-size budget: **142,973 of 143,360 bytes**, with no new dependencies.
 - Final production regression remains required after merge. This is not a declaration of full consent accessibility or legal certification.
 
 The selectors target existing CookieYes notice classes. No consent semantics, banner copy, brand palette, seasonal engine, business logic or analytics integration were changed. The responsive rule is restricted to `max-width:420px` to avoid worsening the existing 600px/768px single-row layout.
@@ -51,6 +51,13 @@ An earlier direct 390px baseline-vs-candidate browser comparison observed **CLS 
 - [Mobile eBook catalogue baseline, 390px](../.github/audits/2026-11-18/catalogue-filter-mobile-baseline.svg)
 - [Same viewport with candidate scroll rail](../.github/audits/2026-11-18/catalogue-filter-mobile-candidate.svg)
 
-The existing CSS size threshold was increased by exactly **1 KiB**, from 142,336 to **143,360 bytes**, to allow this measured, high-value performance/accessibility improvement without an unbounded stylesheet budget. The actual revised CSS is **142,950 bytes**, 410 bytes below the new ceiling. No colours, fonts, season tokens, covers, book metadata, filters, pricing or publishing logic were changed. Tests run under the existing `bash build.sh` harness.
+The existing CSS size threshold was increased by exactly **1 KiB**, from 142,336 to **143,360 bytes**, to allow this measured, high-value performance/accessibility improvement without an unbounded stylesheet budget. The actual revised CSS is **142,973 bytes**, 387 bytes below the new ceiling. No colours, fonts, season tokens, covers, book metadata, filters, pricing or publishing logic were changed. Tests run under the existing `bash build.sh` harness.
 
 Production verification is still required after the correct commit merges: inspect actual mobile CLS again, test selection and keyboard navigation of all topic buttons, monitor desktop and tablet layout, and confirm no publishing regressions.
+### Post-review verification on exact-functionality preview
+
+The Cloudflare preview of the catalogue patch returned HTTP 200 with all 26 filters. In a 390px browser run the real preview recorded **CLS 0.0815**, compared with the approximately 0.53 current-production baseline. At 320px the preview still recorded **CLS 0.14**, so this remains an explicitly open follow-up. Keyboard testing on the proposed rail reached the last topic button by Tab and automatically scrolled the rail into view; clicking Healthcare filtered the catalogue to 3 of 40 titles without page overflow.
+
+The header needs `position:fixed!important` to counter the existing late hero-mode layout contract: a controlled browser interception without this override reproduced **CLS ~0.516**, compared with approximately 0.083 with the override. It is a deliberately scoped compatibility rule, not a generic preference for `!important`.
+
+The CMP uses `data-cky-tag` notice, settings, accept and reject hooks instead of depending on its class names. If a future CookieYes update changes its HTML hooks, the original CookieYes banner remains available rather than having any choice hidden. Vendor updates still merit a first-visit smoke test.
