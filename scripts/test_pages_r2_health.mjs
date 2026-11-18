@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { onRequest } from '../functions/health.json.js';
-import { onRequest as transcriptRequest } from '../functions/transcripts/[[slug]].js';
+import { onRequest as transcriptRequest, buildAeoPrelude } from '../functions/transcripts/[[slug]].js';
 import { onRequest as blogManifestRequest } from '../functions/blog/posts.json.js';
 import { onRequest as blogPostRequest } from '../functions/blog/posts/[[slug]].js';
 
@@ -190,4 +190,36 @@ test('health fails closed when the private CogniPal Worker has no valid source S
   assert.equal(body.ok, false);
   assert.equal(body.bindings.COGNIPAL_RATE_LIMITER.runtime_access, 'unavailable');
   assert.equal(body.bindings.COGNIPAL_RATE_LIMITER.source_commit_sha, null);
+});
+test('transcript SEO introduction does not duplicate the existing R2 page H1', () => {
+  const episode = {
+    title: 'Episode with a title',
+    summary: 'Practical and independent analysis of this episode, with sufficient detail for its summary.',
+    slug: 'episode-with-a-title',
+  };
+  const request = new Request('https://jonathan-harris.online/transcripts/TT-example.html');
+  const storedHtml = '<!doctype html><html><body><header><h1 class="episode-title">Episode with a title</h1></header><main><h2>Full transcript</h2></main></body></html>';
+  const prelude = buildAeoPrelude(episode, request, storedHtml);
+  assert.match(prelude, /transcript-aeo-summary/);
+  assert.match(prelude, /"PodcastEpisode"/);
+  assert.match(prelude, /All transcripts/);
+  assert.equal((storedHtml + prelude).match(/<h1\b/gi).length, 1);
+  assert.doesNotMatch(prelude, /<h1\b/);
+});
+
+test('transcript SEO introduction still supplies a single accessible H1 when R2 lacks one', () => {
+  const episode = { title: 'Title & accessibility', summary: 'This is an episode summary.' };
+  const request = new Request('https://jonathan-harris.online/transcripts/TT-example.html');
+  const storedHtml = '<html><body><main><h2>Transcript</h2></main></body></html>';
+  const prelude = buildAeoPrelude(episode, request, storedHtml);
+  assert.match(prelude, /<h1>Title &amp; accessibility<\/h1>/);
+  assert.equal((storedHtml + prelude).match(/<h1\b/gi).length, 1);
+});
+
+test('transcript introductions do not change stored headings with capitalisation or attributes', () => {
+  const episode = { title: 'Episode title', summary: 'This is an episode summary.' };
+  const storedHtml = '<html><body><H1 id="title">Existing heading</H1></body></html>';
+  const prelude = buildAeoPrelude(episode, new Request('https://jonathan-harris.online/transcripts/sample'), storedHtml);
+  assert.doesNotMatch(prelude, /<h1\b/i);
+  assert.match(prelude, /<script type="application\/ld\+json">/);
 });
