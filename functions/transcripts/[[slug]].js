@@ -92,11 +92,11 @@ book})=>`<li><a href="/ebooks/${escapeHtml(book.slug)}/">${escapeHtml(book.title
 // Tokenise markup rather than grep for <h1>: comments, attributes and inert
 // script/style/template/textarea content must not suppress a real page title.
 export function hasExistingTranscriptH1(html) {
-  const tokens = String(html || "").match(/<!--[\\s\\S]*?-->|<(?:\\"[^\\"]*\\"|'[^']*'|[^'\\">])*>/g) || [];
+  const tokens = String(html || "").match(/<!--[\s\S]*?-->|<(?:"[^"]*"|'[^']*'|[^'">])*>/g) || [];
   let inertTag = "";
   for (const token of tokens) {
     if (token.startsWith("<!--")) continue;
-    const match = /^<\\s*(\\/?)\\s*([A-Za-z][\\w:-]*)\\b/.exec(token);
+    const match = /^<\s*(\/?)\s*([A-Za-z][\w:-]*)\b/.exec(token);
     if (!match) continue;
     const closing = Boolean(match[1]);
     const tag = match[2].toLowerCase();
