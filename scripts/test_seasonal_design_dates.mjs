@@ -48,6 +48,7 @@ test("special event themes and their end boundaries are preserved", () => {
     ["2026-02-10", "safer-internet-day"],
     ["2026-02-14", "valentines"],
     ["2026-03-08", "international-womens-day"],
+    ["2026-03-15", "mothering-sunday"],
     ["2026-03-17", "st-patricks-day"],
     ["2026-04-03", "easter"],
     ["2026-04-22", "earth-day"],
