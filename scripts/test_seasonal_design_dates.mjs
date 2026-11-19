@@ -143,3 +143,22 @@ test("home intent navigation stays two columns below 440px", () => {
   assert.doesNotMatch(css, /@media \(max-width:440px\)\{[^}]*\.home-intent nav/);
   assert.match(css, /\.home-intent a\{[^}]*min-height:44px/);
 });
+
+test("automatic seasonal themes cover every calendar day including leap years", () => {
+  for (const year of [2026, 2027, 2028]) {
+    const start = Date.UTC(year, 0, 1);
+    const end = Date.UTC(year + 1, 0, 1);
+    for (let time = start; time < end; time += 86400000) {
+      const date = new Date(time).toISOString().slice(0, 10);
+      const theme = themedDate(date);
+      assert.ok(["winter", "spring", "summer", "autumn"].includes(theme.season),
+        `Unrecognised season on ${date}`);
+      assert.ok(css.includes('data-season="' + theme.season + '"'),
+        `Missing seasonal CSS on ${date}`);
+      if (theme.event !== undefined) {
+        assert.ok(css.includes('data-event="' + theme.event + '"'),
+          `Missing event CSS for ${theme.event} on ${date}`);
+      }
+    }
+  }
+});
