@@ -255,3 +255,7 @@ body.page-newsletter main .newsletter-signup-card--primary>p{text-align:left;max
 body.page-podcast .podcast-player-frame{height:840px}
 @media(max-width:620px){body.page-podcast .podcast-player-frame{height:760px}}
 @media(prefers-reduced-motion:reduce){body.ebooks-catalogue #booksGrid>article.card{transition:none}}
+
+/* Compact book breadcrumbs: separate segments without changing destinations. */
+body.ebook-detail .main nav.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;line-height:1.45}
+body.ebook-detail .main nav.breadcrumbs>span:last-child{overflow-wrap:anywhere}
