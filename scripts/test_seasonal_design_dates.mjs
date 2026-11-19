@@ -111,3 +111,17 @@ test("catalogue mobile topic filters use the stable single-row rail and header",
   assert.match(rule, /body\.ebooks-catalogue #chips>\.chip\s*\{\s*flex:\s*0 0 auto/);
   assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden|(?:^|[;{])\s*(?:color|background(?:-color)?):/im);
 });
+
+
+test("catalogue header keeps the no-JS navigation available without expanding the mobile row", () => {
+  const marker = "/* Prevent pre-boot desktop navigation";
+  const start = css.indexOf(marker);
+  assert.ok(start >= 0, "pre-boot mobile navigation rule required");
+  const rule = css.slice(start);
+  assert.match(rule, /@media\(max-width:768px\)/);
+  assert.match(rule, /body\.ebooks-catalogue \.jh-nav-desktop\s*\{[^}]*position:absolute/);
+  assert.match(rule, /max-height:calc\(100svh - 72px\)/);
+  assert.match(rule, /overflow-y:auto/);
+  assert.match(rule, /background:var\(--bg-dark\)/);
+  assert.doesNotMatch(rule, /display:none|visibility:hidden|#[0-9a-fA-F]{3,8}\b/, "retain fallback navigation and brand palette");
+});
