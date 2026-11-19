@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 
 const read = (path) => readFileSync(new URL("../" + path, import.meta.url), "utf8");
 const css = read("assets/css/site.css");
@@ -77,4 +77,25 @@ test("new design consumes existing theme tokens and honours reduced motion", () 
   assert.doesNotMatch(block, /#[0-9a-fA-F]{3,8}\b|display:\s*none|visibility:\s*hidden/);
   assert.match(block, /var\(--season-accent,var\(--accent\)\)/);
   assert.match(block, /@media\(prefers-reduced-motion:reduce\)/);
+});
+
+test("all 40 book detail pages lead with cover and buying actions, before quick facts", () => {
+  const dirs = readdirSync(new URL("../ebooks/", import.meta.url), { withFileTypes: true });
+  let count = 0;
+  for (const dir of dirs) {
+    if (!dir.isDirectory()) continue;
+    const path = new URL("../ebooks/" + dir.name + "/index.html", import.meta.url);
+    if (!existsSync(path)) continue;
+    const page = readFileSync(path, "utf8");
+    if (!page.includes('<body class="ebook-detail"')) continue;
+    before(page, '<section class="ebook-showcase">', '<section class="card ebook-section quick-facts">');
+    assert.match(page, /class="cover ebook-showcase__cover"/, "Original cover must remain");
+    assert.match(page, /data-placement="ebook_primary"/, "Original purchase route must remain");
+    assert.match(page, /<h2>Quick facts<\/h2>/, "Existing factual content must remain");
+    count++;
+  }
+  assert.equal(count, 40, "Every canonical book page must use the same content-first order");
+  const validator = read("scripts/ebook_pipeline.py").split("TEMPLATE_ORDERED_MARKERS = [")[1]?.split("]")[0];
+  assert.ok(validator, "Generated canonical page order is governed by a validator");
+  before(validator, "'<section class=\"ebook-showcase\">'", "'<section class=\"card ebook-section quick-facts\">'");
 });
