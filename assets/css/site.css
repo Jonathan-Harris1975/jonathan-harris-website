@@ -116,3 +116,6 @@ body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important
   [data-cky-tag="notice-buttons"]>[data-cky-tag$="-button"]{order:0!important}
   [data-cky-tag="settings-button"]{grid-column:1/-1}
 }
+
+/* Prevent pre-boot desktop navigation from expanding the narrow catalogue header; retain a usable no-JS fallback. */
+@media(max-width:768px){body.ebooks-catalogue .jh-nav-desktop{position:absolute;top:100%;left:12px;right:12px;max-height:calc(100svh - 72px);overflow-y:auto;background:var(--bg-dark);border-radius:var(--radius)}}
