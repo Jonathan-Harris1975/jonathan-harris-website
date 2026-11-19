@@ -4,6 +4,7 @@ import { onRequest } from '../functions/health.json.js';
 import { onRequest as transcriptRequest, buildAeoPrelude, hasExistingTranscriptH1 } from '../functions/transcripts/[[slug]].js';
 import { onRequest as blogManifestRequest } from '../functions/blog/posts.json.js';
 import { onRequest as blogPostRequest } from '../functions/blog/posts/[[slug]].js';
+import { onRequest as sitemapRequest, loadPublishedBlogRoutes } from '../functions/sitemap.xml.js';
 
 const revision = 'a'.repeat(40);
 function bucket({ fail = false } = {}) {
@@ -234,4 +235,87 @@ test('transcript heading tokeniser ignores HTML comments, quoted attributes and 
   }
   assert.equal(hasExistingTranscriptH1('<h1 class="title">A real heading</h1>'), true);
   assert.equal(hasExistingTranscriptH1('<H1>A real heading</H1>'), true);
+});
+
+const baseSitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://jonathan-harris.online/</loc></url>\n  <url><loc>https://jonathan-harris.online/blog/weekly/</loc></url>\n</urlset>';
+
+function sitemapContext(items, bucketOverride) {
+  const get = async (key) => {
+    assert.equal(key, 'blog/posts.json');
+    return { json: async () => ({ items }) };
+  };
+  return {
+    request: new Request('https://jonathan-harris.online/sitemap.xml'),
+    env: {
+      BLOG_BUCKET: bucketOverride || { get },
+      PODCAST_RSS_RETRY_ATTEMPTS: 1,
+      ASSETS: {
+        async fetch() {
+          return Response.json({ routes: [{ loc: 'https://jonathan-harris.online/other-dynamic/' }] });
+        },
+      },
+    },
+    next: async () => new Response(baseSitemap, { status: 200, headers: { 'content-type': 'application/xml; charset=utf-8' } }),
+  };
+}
+
+test('R2 blog sitemap generates canonical article locations and accurate publication dates', async () => {
+  const routes = await loadPublishedBlogRoutes(sitemapContext([
+    { slug: '2026-w46-first-article', published_at: '2026-11-16T10:11:51.961Z' },
+    { slug: '2026-w45-second', published_at: '2026-11-09T10:19:14.926Z', updated_at: '2026-11-17T09:00:00Z' },
+    { slug: '2026-w46-first-article', published_at: '2026-11-16T10:11:51.961Z' },
+  ]).env);
+  assert.deepEqual(routes, { routes: [
+    { loc: 'https://jonathan-harris.online/blog/posts/2026-w46-first-article/', lastmod: '2026-11-16' },
+    { loc: 'https://jonathan-harris.online/blog/posts/2026-w45-second/', lastmod: '2026-11-17' },
+  ] });
+});
+
+test('canonical sitemap combines static, dynamic and R2 blog entries without a redeploy', async () => {
+  const items = [{ slug: '2026-w46-first', published_at: '2026-11-16T10:11:51.961Z' }];
+  const context = sitemapContext(items);
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response('RSS temporarily unavailable', { status: 503 });
+  try {
+    let response = await sitemapRequest(context);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('x-blog-sitemap-source'), 'r2');
+    assert.equal(response.headers.get('x-blog-posts-in-sitemap'), '1');
+    assert.equal(response.headers.get('cache-control'), 'public, max-age=300, s-maxage=300');
+    let xml = await response.text();
+    assert.match(xml, /<loc>https:\/\/jonathan-harris.online\/blog\/posts\/2026-w46-first\/<\/loc>/);
+    assert.match(xml, /<lastmod>2026-11-16<\/lastmod>/);
+    assert.match(xml, /<loc>https:\/\/jonathan-harris.online\/other-dynamic\/<\/loc>/);
+    assert.match(xml, /<loc>https:\/\/jonathan-harris.online\/<\/loc>/);
+
+    items.push({ slug: '2026-w47-new-weekly-post', published_at: '2026-11-23T09:00:00Z' });
+    response = await sitemapRequest(context);
+    xml = await response.text();
+    assert.equal(response.headers.get('x-blog-posts-in-sitemap'), '2');
+    assert.match(xml, /<loc>https:\/\/jonathan-harris.online\/blog\/posts\/2026-w47-new-weekly-post\/<\/loc>/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('empty published manifest removes empty weekly archive but preserves base sitemap', async () => {
+  const result = await loadPublishedBlogRoutes(sitemapContext([]).env);
+  assert.deepEqual(result, { routes: [] });
+});
+
+test('sitemap refuses a misleading success when R2 blog publishing is unavailable', async () => {
+  for (const [reason, env] of [
+    ['binding-missing', { BLOG_BUCKET: undefined }],
+    ['read-failed', { BLOG_BUCKET: { async get() { throw Error('secret R2 failure'); } } }],
+    ['object-missing', { BLOG_BUCKET: { async get() { return null; } } }],
+    ['invalid-manifest', { BLOG_BUCKET: { async get() { return { async json() { return { items: [{ slug: '../bad' }] }; } }; } } }],
+  ]) {
+    const response = await sitemapRequest({ ...sitemapContext([]), env });
+    assert.equal(response.status, 503);
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    assert.equal(response.headers.get('x-blog-sitemap-state'), 'unavailable');
+    const text = await response.text();
+    assert.deepEqual(JSON.parse(text), { error: 'sitemap unavailable', reason });
+    assert.doesNotMatch(text, /secret R2 failure/);
+  }
 });

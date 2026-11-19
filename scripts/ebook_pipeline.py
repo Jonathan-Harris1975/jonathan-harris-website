@@ -6490,8 +6490,8 @@ def run_release_checks(books: List[Dict[str, Any]] | None = None, workbook_path:
         errors.append("functions/sitemap.xml.js is missing; sitemap visibility would drift from the live publication manifest.")
     else:
         sitemap_runtime_text = sitemap_runtime_js.read_text(encoding="utf-8")
-        if "/blog/posts.json" not in sitemap_runtime_text:
-            errors.append("functions/sitemap.xml.js must read the same-origin /blog/posts.json publication manifest.")
+        if not all(token in sitemap_runtime_text for token in ("BLOG_BUCKET", "blog/posts.json", "loadPublishedBlogRoutes")):
+            errors.append("functions/sitemap.xml.js must enrich the sitemap from the governed BLOG_BUCKET blog/posts.json R2 manifest.")
 
     if not blog_manifest_runtime_js.exists():
         errors.append("functions/blog/posts.json.js is missing; /blog/posts.json would stay pinned to the stale committed snapshot instead of the live R2 manifest.")
