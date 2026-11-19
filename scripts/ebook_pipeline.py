@@ -920,7 +920,7 @@ def render_inline_newsletter_form(
     next_path: str = "/downloads/ai-glossary-cheat-sheet/",
     cta: str = "Join AI Edge",
     heading: str = "Get the free AI glossary with AI Edge",
-    description: str = "Practical AI analysis, plus the plain-English AI glossary. No duplicate form, no second signup route.",
+    description: str = "Practical AI analysis, plus the plain-English AI glossary.",
 ) -> str:
     """Render a lightweight tracked route into the single governed Jotform signup.
 
