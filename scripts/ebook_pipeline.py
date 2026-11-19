@@ -116,8 +116,8 @@ TEMPLATE_REQUIRED_FRAGMENTS = [
 ]
 
 TEMPLATE_ORDERED_MARKERS = [
-    '<section class="card ebook-section quick-facts">',
     '<section class="ebook-showcase">',
+    '<section class="card ebook-section quick-facts">',
     '<h2>Who this book is for</h2>',
     '<h2>Key themes</h2>',
     '<h2>What you’ll learn</h2>',
@@ -3830,20 +3830,6 @@ height="0" width="0" '''
     <nav aria-label="Breadcrumb" '''
                f'''class="breadcrumbs">{render_breadcrumbs(book)}</nav>
 
-    <section class="card ebook-section quick-facts">
-   '''
-               f'''   <h2>Quick facts</h2>
-      <ul class="ebook-facts">
-        <li><strong>Topic:</strong> '''
-               f'''{html.escape(book['topic'])}</li>
-        <li><strong>Tags:</strong> '''
-               f'''{html.escape(', '.join(book['tags']))}</li>
-        <li><strong>Length:</strong> {book['pages']} pages</li>
-  '''
-               f'''      <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
-      </ul>
-    </section>
-
     '''
                f'''<section class="ebook-showcase">
       <article class="card ebook-showcase__media">
@@ -3891,6 +3877,20 @@ height="0" width="0" '''
      '''
                f'''   </div>
       </article>
+    </section>
+
+    <section class="card ebook-section quick-facts">
+   '''
+               f'''   <h2>Quick facts</h2>
+      <ul class="ebook-facts">
+        <li><strong>Topic:</strong> '''
+               f'''{html.escape(book['topic'])}</li>
+        <li><strong>Tags:</strong> '''
+               f'''{html.escape(', '.join(book['tags']))}</li>
+        <li><strong>Length:</strong> {book['pages']} pages</li>
+  '''
+               f'''      <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
+      </ul>
     </section>
 
     <section class="card ebook-section">
@@ -4556,17 +4556,13 @@ new '''
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
   '''
-               f'''  <section class="card ebook-index-intro">
-      <h2>How to use this page</h2>
-      <p>Start with a topic '''
-               f'''guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject '''
-               f'''you care about and want the relevant books without playing hide-and-seek.</p>
-    </section>
-    <section '''
-               f'''class="card ebook-index-intro">
+               f'''  <section class="ebook-index-intro topic-guides-intro">
       <h2>Topic guides</h2>
       <p>These pages explain the subject before '''
                f'''you choose a book, so you are not buying your way through a fog bank.</p>
+      <details class="topic-guides-help"><summary>How to use these guides</summary><p>Start with a topic '''
+               f'''guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject '''
+               f'''you care about and want the relevant books without playing hide-and-seek.</p></details>
     </section>
     <section '''
                f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>

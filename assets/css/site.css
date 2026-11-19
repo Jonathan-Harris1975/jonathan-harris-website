@@ -152,3 +152,110 @@ body.page-blog .main>.wrap>.answer-first{border-top:1px solid var(--border);padd
 body.page-podcast .podcast-main>.answer-first{border-bottom:1px solid var(--border);padding:0 0 20px;margin:0 auto 24px}
 :where(body.page-blog,body.page-podcast) .answer-first h2{font-size:clamp(1.2rem,2vw,1.5rem);margin:0 0 8px;letter-spacing:-.02em;line-height:1.2}
 :where(body.page-blog,body.page-podcast) .answer-first p{max-width:68ch;line-height:1.65;margin:0;text-align:left}
+
+/* JH-PUBLICATION-SURFACES-2026: content-first layouts; reuse brand and seasonal tokens. */
+:root{--jh-publication-shadow:0 6px 22px color-mix(in srgb,var(--bg-dark) 7%,transparent)}
+:where(body.page-contact,body.page-newsletter,body.page-transcripts,body.page-blog-weekly,body.topics-index,body.ebooks-catalogue) main .card{
+  border-color:var(--border);box-shadow:var(--jh-publication-shadow)!important
+}
+body.page-contact main>.card[aria-label="Contact form"]{max-width:920px;margin:0 auto 22px}
+body.page-contact main>.card:not([aria-label="Contact form"]){max-width:920px;margin-inline:auto}
+body.page-contact main>.card[aria-label="Contact form"]>h2{
+  font-size:clamp(1.5rem,2.3vw,2rem);letter-spacing:-.025em;text-align:left
+}
+body.page-contact main .fallback-form-wrap{border:1px solid var(--border);border-radius:14px;margin:12px 0 20px;padding:16px}
+body.page-contact main .fallback-form-wrap h3{margin:0 0 4px;font-size:1rem}
+body.page-contact main .fallback-form-wrap p{margin:0 0 10px}
+body.topics-index main .ebook-index-intro{
+  background:transparent;border:0;box-shadow:none!important;min-height:0;
+  padding:0;margin:8px 0 20px;text-align:left
+}
+body.topics-index main .ebook-index-intro h2{font-size:clamp(1.45rem,2.3vw,1.85rem);letter-spacing:-.025em;margin:0 0 8px}
+body.topics-index main .ebook-index-intro p{margin:0;max-width:68ch;line-height:1.6}
+body.topics-index main .topic-guides-help{margin:12px 0 0;max-width:68ch;border-top:1px solid var(--border)}
+body.topics-index main .topic-guides-help summary{
+  display:flex;align-items:center;min-height:44px;font-weight:700;
+  color:var(--season-accent-hover,var(--accent-hover));cursor:pointer
+}
+body.topics-index main .topic-guides-help p{margin:0 0 12px}
+body.topics-index main .topic-card{text-align:left;min-width:0}
+body.topics-index main .topic-card :is(h2,p){text-align:left}
+body.topics-index main .topic-card h2{margin-top:0;line-height:1.25}
+body.topics-index main .topic-card a{text-underline-offset:.18em}
+body.page-transcripts main .transcript-archive-page{margin:8px auto 28px;max-width:980px}
+body.page-transcripts main>.answer-first{
+  max-width:980px;margin:22px auto;padding:16px 0;border:0;
+  border-top:1px solid var(--border);box-shadow:none!important;background:transparent;text-align:left
+}
+body.page-transcripts main>.answer-first :is(h2,p){text-align:left;max-width:68ch}
+body.page-transcripts main>.grid{margin-top:20px}
+body.page-blog-weekly .main>.wrap>[aria-label="Weekly briefings archive"]{margin-top:0}
+body.page-blog-weekly .main>.wrap>[aria-label="Weekly briefings archive"] h2{
+  font-size:clamp(1.45rem,2.2vw,1.9rem);letter-spacing:-.02em
+}
+body.page-blog-weekly .main>.wrap>[aria-label="Weekly briefings overview"],
+body.page-blog-weekly .main>.wrap>.answer-first{
+  background:transparent;border:0;border-top:1px solid var(--border);box-shadow:none!important;
+  border-radius:0;padding:18px 0;margin:20px 0;text-align:left;min-height:0
+}
+body.page-blog-weekly .main>.wrap>:is([aria-label="Weekly briefings overview"],.answer-first) :is(h2,p){
+  text-align:left;max-width:68ch;line-height:1.6
+}
+body.ebooks-catalogue #booksGrid>article.card{
+  min-width:0;gap:10px;text-align:left!important;box-shadow:var(--jh-publication-shadow)!important;
+  border-color:var(--border);transition:box-shadow .2s ease,border-color .2s ease
+}
+body.ebooks-catalogue #booksGrid>article.card:is(:hover,:focus-within){
+  border-color:var(--season-accent,var(--accent));
+  box-shadow:0 10px 25px color-mix(in srgb,var(--bg-dark) 10%,transparent)!important
+}
+body.ebooks-catalogue #booksGrid>article.card>.cover{max-height:315px;object-fit:contain}
+body.ebooks-catalogue #booksGrid>article.card>h2{
+  font-size:clamp(1.1rem,1.55vw,1.3rem);line-height:1.3;text-wrap:pretty;
+  text-align:left!important;margin-block:6px 8px
+}
+body.ebooks-catalogue #booksGrid>article.card>p{text-align:left!important;line-height:1.58}
+body.ebooks-catalogue #booksGrid>article.card .tags{gap:5px;margin-block:3px 8px}
+body.ebooks-catalogue #booksGrid>article.card .tag{font-size:.76rem;padding:4px 8px}
+body.ebooks-catalogue .book-finder-bridge{min-height:0;padding:16px 18px!important}
+body.ebooks-catalogue .book-finder-bridge h2{margin:0 0 4px;font-size:1.08rem}
+body.ebooks-catalogue .book-finder-bridge p{margin:0 0 10px}
+@media(min-width:780px){
+  body.ebooks-catalogue .book-finder-bridge{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 20px;align-items:center;text-align:left}
+  body.ebooks-catalogue .book-finder-bridge>a{grid-column:2;grid-row:1/span 2;align-self:center;min-width:210px}
+}
+@media(max-width:620px){
+  body.ebooks-catalogue #booksGrid>article.card{
+    display:grid;grid-template-columns:minmax(0,110px) minmax(0,1fr);
+    gap:10px 14px;align-content:start;min-height:0
+  }
+  body.ebooks-catalogue #booksGrid>article.card>.cover{
+    grid-column:1;grid-row:1/span 2;width:100%;max-height:190px;margin:0
+  }
+  body.ebooks-catalogue #booksGrid>article.card>h2{
+    grid-column:2;grid-row:1;font-size:1.02rem;line-height:1.27;margin:0
+  }
+  body.ebooks-catalogue #booksGrid>article.card>.topic-chip-wrap{grid-column:2;grid-row:2}
+  body.ebooks-catalogue #booksGrid>article.card>:is(p,.tags,.book-avail,.actions,details){grid-column:1/-1}
+}
+@media(max-width:359px){
+  body.ebooks-catalogue #booksGrid>article.card{grid-template-columns:minmax(0,96px) minmax(0,1fr)}
+}
+body.page-newsletter main .newsletter-signup-card--primary>h2{
+  font-size:clamp(1.45rem,2vw,1.9rem);letter-spacing:-.02em;text-align:left
+}
+body.page-newsletter main .newsletter-signup-card--primary>p{text-align:left;max-width:60ch}
+@media(min-width:980px){
+  body.page-newsletter main .newsletter-page-shell{
+    grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr);align-items:start
+  }
+  body.page-newsletter main .newsletter-signup-card--primary{grid-column:1;grid-row:1/span 3}
+  body.page-newsletter main .newsletter-page-shell>section:nth-child(n+2){grid-column:2}
+}
+body.page-podcast .podcast-player-frame{height:840px}
+@media(max-width:620px){body.page-podcast .podcast-player-frame{height:760px}}
+@media(prefers-reduced-motion:reduce){body.ebooks-catalogue #booksGrid>article.card{transition:none}}
+
+/* Compact book breadcrumbs: separate segments without changing destinations. */
+body.ebook-detail .main nav.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;line-height:1.45}
+body.ebook-detail .main nav.breadcrumbs>span:last-child{overflow-wrap:anywhere}
