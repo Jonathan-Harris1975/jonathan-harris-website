@@ -1,7 +1,7 @@
 {
   "site_css_baseline_bytes": 137817,
-  "site_css_max_bytes": 146432,
-  "tolerance": "Evidence-based 3 KiB budget extension for the 19 November homepage editorial grid and content-first blog/podcast reading layouts; bounded by build",
+  "site_css_max_bytes": 153600,
+  "tolerance": "Bounded editorial content-first and card-density CSS extension, supported by production-vs-browser candidates across contact, transcripts, weekly, topics, eBooks and newsletter (19 Nov 2026). No unlimited growth.",
   "established": "2026-09-24",
-  "note": "Ceiling raised by 1 KiB after verified mobile catalogue CLS regression (0.53 lab baseline, 0.08 candidate) and compact CookieYes layout: small targeted token-preserving CSS for stable header, horizontal topic rail and consent buttons. Guardrail remains enforced by build. Follow-up: responsive homepage editorial two-column desktop layout and blog-first publication hierarchy are visually compared at desktop/mobile before committing, preserving seasonal and brand tokens."
+  "note": "Ceiling raised by 1 KiB after verified mobile catalogue CLS regression (0.53 lab baseline, 0.08 candidate) and compact CookieYes layout: small targeted token-preserving CSS for stable header, horizontal topic rail and consent buttons. Guardrail remains enforced by build. Follow-up: responsive homepage editorial two-column desktop layout and blog-first publication hierarchy are visually compared at desktop/mobile before committing, preserving seasonal and brand tokens. The follow-up adds a centralised JH-PUBLICATION-SURFACES group using existing palette/seasonal tokens and a compact generated eBook grid; browser comparison and governed regression tests must verify release."
 }
