@@ -259,3 +259,8 @@ body.page-podcast .podcast-player-frame{height:840px}
 /* Compact book breadcrumbs: separate segments without changing destinations. */
 body.ebook-detail .main nav.breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;line-height:1.45}
 body.ebook-detail .main nav.breadcrumbs>span:last-child{overflow-wrap:anywhere}
+
+/* Final editorial polish: shared rhythm, readable headings and keyboard clarity. */
+:where(body.page-contact,body.page-newsletter,body.page-transcripts,body.page-blog-weekly,body.topics-index,body.ebooks-catalogue) main :is(h1,h2,h3){text-wrap:balance}
+:where(body.page-contact,body.page-newsletter,body.page-transcripts,body.page-blog-weekly,body.topics-index,body.ebooks-catalogue) main :is(p,li){text-wrap:pretty}
+:where(body.page-contact,body.page-newsletter,body.page-transcripts,body.page-blog-weekly,body.topics-index,body.ebooks-catalogue) main :is(a,button,input,select,textarea,summary):focus-visible{outline:3px solid var(--season-accent,var(--accent));outline-offset:3px}
