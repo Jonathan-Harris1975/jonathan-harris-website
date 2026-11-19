@@ -103,3 +103,29 @@ test("all 40 book detail pages lead with cover and buying actions, before quick 
   assert.ok(validator, "Generated canonical page order is governed by a validator");
   before(validator, "'<section class=\"ebook-showcase\">'", "'<section class=\"card ebook-section quick-facts\">'");
 });
+
+test("automated publishing retains discoverable metadata on every canonical book page", () => {
+  const dirs = readdirSync(new URL("../ebooks/", import.meta.url), { withFileTypes: true });
+  let checked = 0;
+  for (const dir of dirs) {
+    if (!dir.isDirectory()) continue;
+    const url = new URL("../ebooks/" + dir.name + "/index.html", import.meta.url);
+    if (!existsSync(url)) continue;
+    const page = readFileSync(url, "utf8");
+    if (!page.includes('<body class="ebook-detail"')) continue;
+    assert.match(page, /<title>[^<]+<\/title>/i, `Missing title: ${dir.name}`);
+    assert.match(page, /<meta\s+name="description"\s+content="[^"]+"/i,
+      `Missing description: ${dir.name}`);
+    assert.match(page, /<link\s+rel="canonical"\s+href="https:\/\/[^"]+"/i,
+      `Missing canonical: ${dir.name}`);
+    assert.match(page, /<h1\b[^>]*>[^<]+<\/h1>/i, `Missing H1: ${dir.name}`);
+    checked++;
+  }
+  assert.equal(checked, 40);
+});
+
+test("mobile catalogue remains scrollable without hiding topic filters", () => {
+  assert.match(css, /body\.ebooks-catalogue #chips\s*\{[^}]*overflow-x:\s*auto/);
+  assert.match(css, /body\.ebooks-catalogue #chips>\.chip\s*\{\s*flex:\s*0 0 auto/);
+  assert.match(catalogue, /id="booksGrid"/);
+});
