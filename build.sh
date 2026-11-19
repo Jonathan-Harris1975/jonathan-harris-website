@@ -46,6 +46,8 @@ if [[ -n "${AMAZON_BOOK_SIGNALS_SOURCE:-}" ]]; then
 fi
 
 python3 scripts/check_health_contract.py
+# Enforce existing WCAG AA core palette contrast checks on every release build.
+python3 scripts/check_colour_contrast.py
 python3 scripts/check_repository_hygiene.py
 python3 scripts/scan_secrets.py
 python3 -m unittest scripts.test_pdf_pipeline scripts.test_wait_for_live_release scripts.test_kdp_description_import
