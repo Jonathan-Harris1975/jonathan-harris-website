@@ -89,7 +89,10 @@ test("mobile consent layout retains both equal-width decisions and Customise, wi
   const marker = "/* Mobile CookieYes layout:";
   const start = css.indexOf(marker);
   assert.ok(start >= 0, "CMP layout marker required");
-  const rule = css.slice(start);
+  const mediaStart = css.indexOf("@media(max-width:420px){", start);
+  const mediaEnd = css.indexOf("\n}\n", mediaStart);
+  assert.ok(mediaStart > start && mediaEnd > mediaStart, "CMP media block must be complete");
+  const rule = css.slice(start, mediaEnd + 2);
   assert.match(rule, /\[data-cky-tag="notice-buttons"\]\s*\{\s*display:grid!important/);
   assert.match(rule, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
   assert.match(rule, /\[data-cky-tag="settings-button"\]\s*\{\s*grid-column:1\/-1/);
@@ -131,4 +134,12 @@ test("R2 transcript navigation keeps accessible 44px touch targets", () => {
     css.includes(".transcript-nav>a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}"),
     "all R2 transcript navigation links must be 44px high"
   );
+});
+
+// Retain editorial discovery density on narrow screens without losing any navigation routes.
+test("home intent navigation stays two columns below 440px", () => {
+  assert.match(css, /\.home-intent nav\{display:grid;grid-template-columns:1fr 1fr\}/);
+  assert.match(css, /@media \(max-width:440px\)\{\.home-trust-strip\{grid-template-columns:1fr\}\}/);
+  assert.doesNotMatch(css, /@media \(max-width:440px\)\{[^}]*\.home-intent nav/);
+  assert.match(css, /\.home-intent a\{[^}]*min-height:44px/);
 });
