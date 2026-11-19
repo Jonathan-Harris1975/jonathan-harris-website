@@ -69,3 +69,15 @@ The cloud-browser comparisons cover desktop 1440px and mobile 320/390px homepage
 The original provisional design scores (7/10 or 8/10 on sampled categories) are retained rather than inflated. A reviewable visual improvement is not equivalent to passing the full public-route WCAG, performance, seasonal and dynamic-content acceptance requirements of issue #170. New measured scores and post-deploy parity may only be published once the required checks actually complete.
 
 **Governance:** this candidate remains behind exact-head CI, independent review and `autonomy:risk-approval-required`. Do not merge without the authorised exact-commit owner admission.
+
+### Stored exact-browser visual comparisons
+
+The production baseline and preview at source commit `a5c147661f70ec278fd93bf1f9c73d3ae5c41984` were independently rendered by Cloudflare's browser at identical viewport sizes. The consent overlay was suppressed in both only for the layout screenshot; actual consent settings were not changed.
+
+| Page and size | Production baseline | Verified candidate preview |
+| --- | --- | --- |
+| Homepage, desktop 1440×900 | [Before](../.github/audits/2026-11-19/home-editorial-desktop-baseline.svg) | [Preview](../.github/audits/2026-11-19/home-editorial-desktop-preview.svg) |
+| Latest blog, mobile 390×1100 | [Before](../.github/audits/2026-11-19/blog-latest-mobile-baseline.svg) | [Preview](../.github/audits/2026-11-19/blog-latest-mobile-preview.svg) |
+| Podcast cover, mobile 390×750 | [Before](../.github/audits/2026-11-19/podcast-cover-mobile-baseline.svg) | [Preview](../.github/audits/2026-11-19/podcast-cover-mobile-preview.svg) |
+
+The podcast image regression had a verified root cause: the owned cover-art host returned Cloudflare **1011 hotlink denied** for a `pages.dev` request referrer and successfully returned the same unchanged artwork with production or no referrer. Source `referrerpolicy="no-referrer"` on the existing images restores preview rendering; global Cloudflare hotlink policy remains unchanged. Full post-production and cross-route verification remain required.
