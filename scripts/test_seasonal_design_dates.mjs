@@ -127,5 +127,8 @@ test("catalogue header keeps the no-JS navigation available without expanding th
 });
 
 test("R2 transcript navigation keeps accessible 44px touch targets", () => {
-  assert.match(css, /\\.transcript-nav>a\\{display:inline-flex;align-items:center;min-height:44px;padding:0 6px\\}/);
+  assert.ok(
+    css.includes(".transcript-nav>a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}"),
+    "all R2 transcript navigation links must be 44px high"
+  );
 });
