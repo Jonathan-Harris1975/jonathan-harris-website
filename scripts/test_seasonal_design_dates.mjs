@@ -132,3 +132,11 @@ test("R2 transcript navigation keeps accessible 44px touch targets", () => {
     "all R2 transcript navigation links must be 44px high"
   );
 });
+
+// Retain editorial discovery density on narrow screens without losing any navigation routes.
+test("home intent navigation stays two columns below 440px", () => {
+  assert.match(css, /@media \(max-width:760px\)\{[^}]*\.home-intent nav\{display:grid;grid-template-columns:1fr 1fr\}/);
+  assert.match(css, /@media \(max-width:440px\)\{\.home-trust-strip\{grid-template-columns:1fr\}\}/);
+  assert.doesNotMatch(css, /@media \(max-width:440px\)\{[^}]*\.home-intent nav/);
+  assert.match(css, /\.home-intent a\{[^}]*min-height:44px/);
+});
