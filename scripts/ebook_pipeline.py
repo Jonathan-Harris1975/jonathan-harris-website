@@ -116,8 +116,8 @@ TEMPLATE_REQUIRED_FRAGMENTS = [
 ]
 
 TEMPLATE_ORDERED_MARKERS = [
-    '<section class="card ebook-section quick-facts">',
     '<section class="ebook-showcase">',
+    '<section class="card ebook-section quick-facts">',
     '<h2>Who this book is for</h2>',
     '<h2>Key themes</h2>',
     '<h2>What you’ll learn</h2>',
@@ -3830,20 +3830,6 @@ height="0" width="0" '''
     <nav aria-label="Breadcrumb" '''
                f'''class="breadcrumbs">{render_breadcrumbs(book)}</nav>
 
-    <section class="card ebook-section quick-facts">
-   '''
-               f'''   <h2>Quick facts</h2>
-      <ul class="ebook-facts">
-        <li><strong>Topic:</strong> '''
-               f'''{html.escape(book['topic'])}</li>
-        <li><strong>Tags:</strong> '''
-               f'''{html.escape(', '.join(book['tags']))}</li>
-        <li><strong>Length:</strong> {book['pages']} pages</li>
-  '''
-               f'''      <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
-      </ul>
-    </section>
-
     '''
                f'''<section class="ebook-showcase">
       <article class="card ebook-showcase__media">
@@ -3891,6 +3877,20 @@ height="0" width="0" '''
      '''
                f'''   </div>
       </article>
+    </section>
+
+    <section class="card ebook-section quick-facts">
+   '''
+               f'''   <h2>Quick facts</h2>
+      <ul class="ebook-facts">
+        <li><strong>Topic:</strong> '''
+               f'''{html.escape(book['topic'])}</li>
+        <li><strong>Tags:</strong> '''
+               f'''{html.escape(', '.join(book['tags']))}</li>
+        <li><strong>Length:</strong> {book['pages']} pages</li>
+  '''
+               f'''      <li><strong>Best for:</strong> {html.escape(book['audience'])}</li>
+      </ul>
     </section>
 
     <section class="card ebook-section">
