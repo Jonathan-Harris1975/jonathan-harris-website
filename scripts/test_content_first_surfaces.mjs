@@ -114,9 +114,9 @@ test("automated publishing retains discoverable metadata on every canonical book
     const page = readFileSync(url, "utf8");
     if (!page.includes('<body class="ebook-detail"')) continue;
     assert.match(page, /<title>[^<]+<\/title>/i, `Missing title: ${dir.name}`);
-    assert.match(page, /<meta\s+name="description"\s+content="[^"]+"/i,
+    assert.match(page, /<meta\b(?=[^>]*\bname="description")(?=[^>]*\bcontent="[^"]+")[^>]*>/i,
       `Missing description: ${dir.name}`);
-    assert.match(page, /<link\s+rel="canonical"\s+href="https:\/\/[^"]+"/i,
+    assert.match(page, /<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="https:\/\/[^"]+")[^>]*>/i,
       `Missing canonical: ${dir.name}`);
     assert.match(page, /<h1\b[^>]*>[^<]+<\/h1>/i, `Missing H1: ${dir.name}`);
     checked++;
