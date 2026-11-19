@@ -26,6 +26,7 @@ test("latest live briefing remains before the evergreen explanation, without los
   assert.match(css, /body\.page-blog \.main>\.wrap>\.answer-first\{/);
 });
 test("podcast player and original transcripts remain while intro is visually de-emphasised", () => {
+  assert.match(podcast, /referrerpolicy="no-referrer" src="https:\/\/podcast-coverart\.jonathan-harris\.online\//);
   assert.match(podcast, /aria-label="Podcast player"/);
   assert.match(podcast, /href="\/transcripts\/"/);
   assert.match(css, /body\.page-podcast \.podcast-main>\.answer-first\{/);
