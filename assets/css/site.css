@@ -104,8 +104,9 @@ body.ebooks-catalogue>.jh-header{position:fixed!important;top:0;left:0;right:0}
 body.ebook-detail .ebook-showcase__lead{max-width:var(--jh-editorial-reading-width)}
 body.ebook-detail .main :is(.ebook-section,.quick-facts) h2,body.page-podcast .podcast-main h2{line-height:1.25;text-wrap:balance}
 @media(max-width:620px){body.ebook-detail .ebook-actions a{min-height:44px}}
+.transcript-nav>a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
 
-/* WCAG 2.2 AA target-size remediation: home glossary text link. */
+/* Home glossary tap target. */
 body.page-home .newsletter-fallback-copy > a{display:inline-flex;align-items:center;min-height:24px}
 /* JH-EDITORIAL-NAV-2026: one breadcrumb trail per book; accessible compact links. */
 body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important}

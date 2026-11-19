@@ -125,3 +125,7 @@ test("catalogue header keeps the no-JS navigation available without expanding th
   assert.match(rule, /background:var\(--bg-dark\)/);
   assert.doesNotMatch(rule, /display:none|visibility:hidden|#[0-9a-fA-F]{3,8}\b/, "retain fallback navigation and brand palette");
 });
+
+test("R2 transcript navigation keeps accessible 44px touch targets", () => {
+  assert.match(css, /\\.transcript-nav>a\\{display:inline-flex;align-items:center;min-height:44px;padding:0 6px\\}/);
+});
