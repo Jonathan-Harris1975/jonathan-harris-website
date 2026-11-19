@@ -4565,7 +4565,7 @@ new '''
                f'''you care about and want the relevant books without playing hide-and-seek.</p></details>
     </section>
     <section '''
-                              f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
+               f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
     <section class="card '''
                f'''ebook-index-intro u-mt40">
       <h2>Browse by catalogue</h2>
