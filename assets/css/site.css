@@ -110,12 +110,13 @@ body.page-home .newsletter-fallback-copy > a{display:inline-flex;align-items:cen
 /* JH-EDITORIAL-NAV-2026: one breadcrumb trail per book; accessible compact links. */
 body.ebook-detail .main:has(.breadcrumbs)>.jh-breadcrumbs{display:none!important}
 .jh-breadcrumbs__item a,.breadcrumbs a,.featured-footer-note a{display:inline-flex;align-items:center;min-height:24px}
+
+/* Prevent pre-boot desktop navigation from expanding the narrow catalogue header; retain a usable no-JS fallback. */
+@media(max-width:768px){body.ebooks-catalogue .jh-nav-desktop{position:absolute;top:100%;left:12px;right:12px;max-height:calc(100svh - 72px);overflow-y:auto;background:var(--bg-dark);border-radius:var(--radius)}}
+
 /* Mobile CookieYes layout: keep all choices; fall back to native styling if vendor hooks change. */
 @media(max-width:420px){
   [data-cky-tag="notice-buttons"]{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))}
   [data-cky-tag="notice-buttons"]>[data-cky-tag$="-button"]{order:0!important}
   [data-cky-tag="settings-button"]{grid-column:1/-1}
 }
-
-/* Prevent pre-boot desktop navigation from expanding the narrow catalogue header; retain a usable no-JS fallback. */
-@media(max-width:768px){body.ebooks-catalogue .jh-nav-desktop{position:absolute;top:100%;left:12px;right:12px;max-height:calc(100svh - 72px);overflow-y:auto;background:var(--bg-dark);border-radius:var(--radius)}}
