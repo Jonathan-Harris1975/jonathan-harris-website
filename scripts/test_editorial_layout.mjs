@@ -40,3 +40,17 @@ test("editorial composition cannot introduce new hard-coded colours or hidden co
   assert.match(block, /var\(--border\)/);
   assert.match(css, /\.home-intent a\{[^}]*min-height:44px/);
 });
+
+test("final editorial polish uses theme tokens and retains visible keyboard focus", () => {
+  const marker = "Final editorial polish: shared rhythm";
+  const start = css.indexOf(marker);
+  assert.ok(start > 0);
+  const polish = css.slice(start);
+  assert.match(polish, /text-wrap:balance/);
+  assert.match(polish, /text-wrap:pretty/);
+  assert.match(polish, /:focus-visible\{outline:3px solid var\(--season-accent,var\(--accent\)\)/);
+  assert.doesNotMatch(polish, /#[0-9a-fA-F]{3,8}\b|display:\s*none|visibility:\s*hidden/);
+  const budget = JSON.parse(readFileSync(new URL("../config/css-budget.json", import.meta.url), "utf8"));
+  assert.equal(budget.site_css_max_bytes, 163840, "Keep the approved 160 KiB ceiling");
+  assert.ok(Buffer.byteLength(css, "utf8") <= budget.site_css_max_bytes, "Site CSS budget must remain bounded");
+});
