@@ -38,6 +38,10 @@ test("topics show guides immediately, preserving accessible how-to copy", () => 
   assert.equal(topics.split('class="topic-guides-help"').length, 2);
   assert.match(topics, /<summary>How to use these guides<\/summary>/);
   assert.match(topics, /href="\/topics\/ai-for-beginners\/"/);
+  const generator = read("scripts/ebook_pipeline.py");
+  assert.match(generator, /class="ebook-index-intro topic-guides-intro"/);
+  assert.match(generator, /class="topic-guides-help"/);
+  assert.doesNotMatch(generator.slice(generator.indexOf("def render_topics_index"), generator.indexOf("def path_to_public_url")), /<h2>How to use this page<\/h2>/);
   assert.match(topics, /aria-label="Catalogue pages"/);
 });
 
