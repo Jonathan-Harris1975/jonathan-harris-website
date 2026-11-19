@@ -111,6 +111,15 @@ def main() -> int:
             errors.append(f"shared chrome reveal contract is missing required rule: {snippet}")
     if ".jh-header.jh-header--hero-mode:not(.is-visible){opacity:1!important" in css:
         errors.append("shared chrome still forces the compact header visible before the hero has scrolled away")
+    # Guard against historical fixed-header padding reintroducing blank bands above heroes.
+    for snippet in (
+        "main section:not(.hero){margin-top:1.4rem}",
+        ".hero--has-fixed-nav{padding-top:32px}",
+        "body:not(.home):not(:has(.hero)) main.wrap:first-of-type",
+        "body.page-bio .hero,body.page-newsletter .hero--newsletter,body.page-topics .hero,body.page-ebooks .hero,body.page-compare .hero{padding-top:36px}",
+    ):
+        if snippet not in css:
+            errors.append(f"shared chrome hero spacing contract is missing: {snippet}")
 
     if not SHARED_CHROME_HELPER.exists():
         errors.append("functions/_shared/chrome.js: shared runtime chrome helper is missing")
