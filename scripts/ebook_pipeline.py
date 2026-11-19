@@ -4556,20 +4556,16 @@ new '''
 <main class="main" id="main" role="main">
   <div class="wrap ebook-shell">
   '''
-               f'''  <section class="card ebook-index-intro">
-      <h2>How to use this page</h2>
-      <p>Start with a topic '''
-               f'''guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject '''
-               f'''you care about and want the relevant books without playing hide-and-seek.</p>
-    </section>
-    <section '''
-               f'''class="card ebook-index-intro">
+               f'''  <section class="ebook-index-intro topic-guides-intro">
       <h2>Topic guides</h2>
       <p>These pages explain the subject before '''
                f'''you choose a book, so you are not buying your way through a fog bank.</p>
+      <details class="topic-guides-help"><summary>How to use these guides</summary><p>Start with a topic '''
+               f'''guide if you want the plain-English explanation first. Use the catalogue grid if you already know the subject '''
+               f'''you care about and want the relevant books without playing hide-and-seek.</p></details>
     </section>
     <section '''
-               f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
+                              f'''class="grid topic-grid" aria-label="Topic guides">{guide_cards_html}</section>
     <section class="card '''
                f'''ebook-index-intro u-mt40">
       <h2>Browse by catalogue</h2>
