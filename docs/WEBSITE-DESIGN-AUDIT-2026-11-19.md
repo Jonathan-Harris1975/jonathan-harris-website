@@ -49,3 +49,23 @@ Existing merged upgrades (#169, #171–#175 and #178) cover editorial reading wi
 ## Release controls
 
 Before merge: full `bash build.sh`, all required exact-head CI/security/admission gates, and Cloudflare preview acceptance. After merge: inspect production Pages deployment SHA, 320/390/768/1440px home layout and seasonal/consent journeys. Report any unverified item as outstanding, not completed.
+
+
+## Expanded editorial modernisation candidate (same PR, 19 November follow-up)
+
+A second visual comparison exposed further serious design-quality gaps that the first tiny mobile-only patch could not address. The scoped preview now also changes:
+
+- **Homepage, desktop:** primary copy, logo, book and glossary actions form a strong left editorial column; existing topic discovery and newsletter sign-up form a balanced right column. The former fully centred, single-column hero delayed the next content block and made every action compete at the same level. At 1440px the selected split surfaces the next section within the first viewport.
+- **Homepage, mobile:** Inter, semantic heading, links and minimum touch targets are untouched. Existing two-column topic navigation and smaller 80px logo reduce hero height without hiding any links.
+- **Blog archive:** actual latest weekly R2/RSS-backed story comes before the generic explanation. The `blogStatus` live region, `blogList` renderer, article URLs and all original copy remain. This is a **source HTML change**, not a JavaScript-only reordering.
+- **Blog and podcast:** content-leading, restrained separators replace visually dominant introductory cards; the actual player and dynamic content remain unchanged. Source-backed articles are not replaced by stock art.
+- **Bounded CSS trade-off:** the new shared editorial CSS is about 3 KiB of additional source; `config/css-budget.json` increases the finite ceiling from 143,360 to 146,432 bytes, and the current candidate is **146,296 bytes**. The new block contains no new literal palette colours or concealed interactive controls. Consolidation of older CSS remains a measured performance backlog item, not a claim this change improves field CWV.
+- **Regression:** `scripts/test_editorial_layout.mjs` now participates in `bash build.sh`, and existing seasonal/consent tests are retained. One former consent test read **all future CSS**, erroneously treating unrelated `background:transparent` editorial styling as a change to CookieYes. Its scope has been corrected to the actual narrow-screen CookieYes media block; the checks themselves remain strict.
+
+### Additional before/after evidence
+
+The cloud-browser comparisons cover desktop 1440px and mobile 320/390px homepage, desktop/mobile blog and podcast. Real production baseline and exact-SHA Cloudflare **preview** images are stored alongside the first mobile pair. The comparisons suppress the third-party consent overlay in the test browser on both sides only for the editorial visual crop. Browser consent settings, accept/reject/customise semantics and analytics source are never changed.
+
+The original provisional design scores (7/10 or 8/10 on sampled categories) are retained rather than inflated. A reviewable visual improvement is not equivalent to passing the full public-route WCAG, performance, seasonal and dynamic-content acceptance requirements of issue #170. New measured scores and post-deploy parity may only be published once the required checks actually complete.
+
+**Governance:** this candidate remains behind exact-head CI, independent review and `autonomy:risk-approval-required`. Do not merge without the authorised exact-commit owner admission.
