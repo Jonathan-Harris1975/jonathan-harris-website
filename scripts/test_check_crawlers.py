@@ -52,6 +52,33 @@ class LiveSitemapValidationTests(unittest.TestCase):
         )
         self.assertIsNone(self.validate(live))
 
+    def test_runtime_r2_blog_article_entries_are_allowed_with_valid_lastmod(self) -> None:
+        live = sitemap(
+            (f"{SITE}/", "2026-08-23"),
+            (f"{SITE}/blog/weekly/", ""),
+            (f"{SITE}/podcast/", ""),
+            (f"{SITE}/transcripts/", ""),
+            (f"{SITE}/blog/posts/2026-w46-first-article/", "2026-11-16"),
+            (f"{SITE}/blog/posts/2026-w47-new-article/", ""),
+        )
+        self.assertIsNone(self.validate(live))
+
+    def test_blog_article_sitemap_rejects_untrusted_paths_and_bad_dates(self) -> None:
+        for bad_url, lastmod in (
+            (f"{SITE}/blog/posts/../other/", "2026-11-16"),
+            (f"{SITE}/blog/posts/2026-w46-first?preview=true", "2026-11-16"),
+            ("https://evil.example/blog/posts/2026-w46-first/", "2026-11-16"),
+            (f"{SITE}/blog/posts/2026-w46-first/", "2026-99-99"),
+        ):
+            live = sitemap(
+                (f"{SITE}/", "2026-08-23"),
+                (f"{SITE}/blog/weekly/", ""),
+                (f"{SITE}/podcast/", ""),
+                (f"{SITE}/transcripts/", ""),
+                (bad_url, lastmod),
+            )
+            self.assertIn("ungoverned entries", self.validate(live) or "", bad_url)
+
     def test_empty_weekly_archive_may_be_removed_at_runtime(self) -> None:
         live = sitemap(
             (f"{SITE}/", "2026-08-23"),

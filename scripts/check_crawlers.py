@@ -242,7 +242,8 @@ def _is_runtime_sitemap_entry(loc: str, lastmod: str) -> bool:
     path = parsed.path
     is_podcast_episode = re.fullmatch(r"/podcast/episodes/[^/]+/", path) is not None
     is_transcript = re.fullmatch(r"/transcripts/[^/]+", path) is not None
-    if not (is_podcast_episode or is_transcript):
+    is_blog_article = re.fullmatch(r"/blog/posts/[a-z0-9]+(?:-[a-z0-9]+)*/", path) is not None
+    if not (is_podcast_episode or is_transcript or is_blog_article):
         return False
 
     if not lastmod:
@@ -257,8 +258,9 @@ def _validate_live_sitemap_entries(body: str, expected_text: str) -> str | None:
     """Validate the static contract while allowing the sitemap's governed runtime enrichment.
 
     The Pages sitemap function may append current podcast episode/transcript URLs from
-    the external podcast feed and may remove /blog/weekly/ when the live R2 publication
-    manifest is empty. Everything else must remain identical to the governed snapshot.
+    the external podcast feed, and canonical /blog/posts/<slug>/ URLs from the live R2
+    publication manifest. It may remove /blog/weekly/ when that manifest is empty.
+    All other URLs and static metadata must remain identical to the governed snapshot.
     """
     actual = _sitemap_loc_lastmod_map(body)
     expected = _sitemap_loc_lastmod_map(expected_text)
