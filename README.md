@@ -49,6 +49,10 @@ See `workers/agent-readiness/README.md` and `docs/AGENT-READINESS-DEPLOYMENT.md`
 
 Browser JavaScript is kept under repository control and is checked by the build for governed third-party usage, executable inline-script CSP hashes, shared chrome behaviour and size/layout contracts. Any new third-party dependency must also be reconciled with `docs/third-party-dependency-matrix.md` and the CSP in `_headers`.
 
+## Editorial, accessibility and commercial surfaces
+
+The content-first website design spans publishing pages, the catalogue, resources, newsletter and affiliate directory. Preserve the shared heading rhythm, visible keyboard focus, mobile consent/layout behaviour, seasonal theme regressions and WCAG AA core brand contrast gate. The stylesheet ceiling is governed by configuration (the reviewed 160 KiB budget), not an independently hardcoded test limit. The affiliate directory lives at `affiliate/index.html`; keep approved visible entries and structured data consistent and do not imply an affiliate relationship merely because a tool is listed. The newsletter invitation and contribution surfaces remain independent of optional analytics. See [shared chrome](docs/SHARED-CHROME-LAYOUT.md), [design acceptance](docs/WEBSITE-DESIGN-CONTENT-FIRST-ACCEPTANCE-2026-11-19.md), [mobile consent review](docs/MOBILE-CONSENT-LAYOUT-AUDIT-2026-11-18.md) and [KDP reconciliation](docs/KDP-RECONCILIATION.md).
+
 ## Prerequisites
 
 CI uses:
@@ -223,3 +227,9 @@ Configure these repository Actions secrets with this repository's active Kilo tr
 - `KILO_DEBUG_TRIGGER_URL`: Kilo Debug mode for failed PR checks, merge conflicts, and branches that have fallen behind the target branch.
 
 The trusted router sends only verified repair metadata to the selected trigger. Keep the webhook URLs in repository secrets and never commit their values.
+
+The PR repair router distinguishes accepted Kilo hand-offs from verified implementation. A stale accepted hand-off with no implementation evidence is eligible for bounded recovery after six hours; the two-attempt limit requires escalation rather than an endless retry loop. See [PR blocker recovery](docs/PR_BLOCKER_RECOVERY.md).
+
+## Ecosystem integration and evidence
+
+The eight governed repositories are [HIVE](https://github.com/Jonathan-Harris1975/HIVE), [HIVE-UI](https://github.com/Jonathan-Harris1975/HIVE-UI), [AIMS](https://github.com/Jonathan-Harris1975/AIMS), [AIMS-UI](https://github.com/Jonathan-Harris1975/AIMS-UI), [MAST](https://github.com/Jonathan-Harris1975/MAST), [RAMS](https://github.com/Jonathan-Harris1975/RAMS), [IRS](https://github.com/Jonathan-Harris1975/IRS) and the [public website](https://github.com/Jonathan-Harris1975/jonathan-harris-website). MAST owns schedules; AIMS owns content and communications execution; HIVE and HIVE-UI provide governed intelligence and operator visibility; RAMS performs bounded remediation; IRS and the website own public delivery boundaries. Keep this README aligned with changes to those contracts. A merged change, a healthy HTTP process and verified live functional acceptance are separate evidence; preserve exact-SHA CI and deployment receipts and never report unverified provider delivery as success.
